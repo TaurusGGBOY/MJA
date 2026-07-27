@@ -17,3 +17,8 @@ install/
 downloads/
 debug/
 .mja-state/
+
+# Python test/build cache
+__pycache__/
+*.py[cod]
+.pytest_cache/
