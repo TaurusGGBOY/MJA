@@ -77,6 +77,21 @@ def test_prepare_saves_before_resize_and_restore_is_idempotent(tmp_path) -> None
     assert backend.calls.count(("restore_frontmost", "com.apple.Terminal")) == 1
 
 
+def test_prepare_accepts_a_fixed_size_game_window(tmp_path) -> None:
+    backend = FakeBackend()
+
+    def fixed_set_bounds(window: GameWindow, bounds: Bounds) -> None:
+        backend.calls.append(("set_bounds", bounds))
+
+    backend.set_bounds = fixed_set_bounds  # type: ignore[method-assign]
+    lifecycle = make_lifecycle(tmp_path, backend)
+
+    prepared = lifecycle.prepare(timeout_seconds=0)
+
+    assert prepared.bounds == Bounds(10, 20, 1366, 1024)
+    assert lifecycle.has_pending_restore()
+
+
 def test_prepare_distinguishes_launch_timeout_from_missing_window(tmp_path) -> None:
     backend = FakeBackend()
     backend.running = False

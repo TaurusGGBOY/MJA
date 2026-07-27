@@ -11,6 +11,7 @@ def test_pinned_contract_and_ignored_runtime_paths() -> None:
         "Pillow==12.1.1",
         "pyobjc-core==12.2.1",
         "pyobjc-framework-Cocoa==12.2.1",
+        "pyobjc-framework-ApplicationServices==12.2.1",
         "pyobjc-framework-Quartz==12.2.1",
         "pytest==9.1.1",
         "ruff==0.16.0",
@@ -19,5 +20,12 @@ def test_pinned_contract_and_ignored_runtime_paths() -> None:
     assert manifest["schema_version"] == 1
     assert {item["id"] for item in manifest["artifacts"]} == {"maafw", "mfa"}
     ignored = (ROOT / ".gitignore").read_text().splitlines()
-    for path in (".venv/", "install/", "downloads/", "debug/", ".mja-state/"):
+    for path in (
+        ".venv/",
+        "install/",
+        "downloads/",
+        "debug/",
+        "diagnostics/",
+        ".mja-state/",
+    ):
         assert path in ignored

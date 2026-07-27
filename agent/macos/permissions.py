@@ -33,13 +33,31 @@ Probe = Callable[[], bool]
 
 def _screen_capture_probe() -> bool:
     try:
-        from Quartz import CGPreflightScreenCaptureAccess
+        from Quartz import (
+            CGPreflightScreenCaptureAccess,
+            CGRectInfinite,
+            CGWindowListCreateImage,
+            kCGNullWindowID,
+            kCGWindowListOptionOnScreenOnly,
+        )
     except Exception as exc:  # pragma: no cover - depends on the macOS runtime
         raise MJAError(
             ErrorCode.PERMISSION_SCREEN_CAPTURE,
             "screen recording probe is unavailable",
         ) from exc
-    return bool(CGPreflightScreenCaptureAccess())
+    if CGPreflightScreenCaptureAccess():
+        return True
+    # On some macOS releases the preflight flag remains false for a Homebrew
+    # Python process even though the process can capture the on-screen image.
+    # Probe the capability that MJA actually needs before reporting a failure.
+    return bool(
+        CGWindowListCreateImage(
+            CGRectInfinite,
+            kCGWindowListOptionOnScreenOnly,
+            kCGNullWindowID,
+            0,
+        )
+    )
 
 
 def _accessibility_probe() -> bool:

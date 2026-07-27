@@ -267,10 +267,20 @@ def assemble_install(
     runtime_root.mkdir(exist_ok=True)
     for artifact_id, source in extracted.items():
         if artifact_id == "maafw":
-            cli = _find_named(source, "MaaPiCli")
-            if cli is None:
+            bin_root = source / "bin"
+            cli = bin_root / "MaaPiCli"
+            if not cli.is_file():
                 raise RuntimeError("MaaFramework archive does not contain MaaPiCli")
-            shutil.copy2(cli, install_root / "MaaPiCli")
+            # MaaPiCli uses @rpath for the framework and control-unit dylibs;
+            # keep the official bin layout beside the CLI in the assembled
+            # install so dyld can resolve those dependencies.
+            for runtime_file in bin_root.iterdir():
+                if runtime_file.is_file():
+                    shutil.copy2(runtime_file, install_root / runtime_file.name)
+            legacy_plugin_dir = install_root / "plugins" / "osx-arm64"
+            if legacy_plugin_dir.is_dir():
+                shutil.rmtree(legacy_plugin_dir)
+            cli = install_root / "MaaPiCli"
             (install_root / "MaaPiCli").chmod(0o755)
             target = runtime_root / "maafw"
             _atomic_copytree(source, target)
@@ -292,6 +302,9 @@ def assemble_install(
                 # beside the executable.
                 shutil.copytree(source, install_root, dirs_exist_ok=True)
                 (install_root / "MFAAvalonia").chmod(0o755)
+                nested_plugin_dir = install_root / "plugins" / "osx-arm64"
+                if nested_plugin_dir.is_dir():
+                    shutil.rmtree(nested_plugin_dir)
             target = runtime_root / "mfa"
             _atomic_copytree(source, target)
             (target / "VERSION").write_text("2.13.0-beta.5\n", encoding="utf-8")

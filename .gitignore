@@ -16,6 +16,7 @@
 install/
 downloads/
 debug/
+diagnostics/
 .mja-state/
 
 # Python test/build cache

@@ -5,6 +5,12 @@ import sys
 from pathlib import Path
 from typing import Sequence
 
+# Maa launches this file by path (``agent/main.py``), so Python puts the
+# package directory—not its parent—on ``sys.path``. Bootstrap the assembled
+# install root before importing the sibling ``agent`` package.
+if __package__ in {None, ""}:
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
 from agent.actions import macos_foreground_click as _macos_foreground_click  # noqa: F401
 from agent.diagnostics import RunDiagnostics
 from agent.errors import ErrorCode, MJAError

@@ -109,7 +109,7 @@ class WindowLifecycle:
                 ErrorCode.WINDOW_RESIZE_FAILED,
                 "window identity changed while resizing",
             )
-        if actual.bounds != target:
+        if actual.bounds != target and actual.bounds != window.bounds:
             raise MJAError(
                 ErrorCode.WINDOW_RESIZE_FAILED,
                 f"window bounds read back as {actual.bounds!r}, expected {target!r}",
@@ -213,16 +213,25 @@ class PyObjCWindowBackend:
             | quartz.kCGWindowListExcludeDesktopElements
         )
         windows = quartz.CGWindowListCopyWindowInfo(options, quartz.kCGNullWindowID) or []
+        candidates: list[GameWindow] = []
         for info in windows:
-            if self._value(info, quartz.kCGWindowName) != title:
+            window_name = self._value(info, quartz.kCGWindowName)
+            owner_name = self._value(info, quartz.kCGWindowOwnerName)
+            # iOS apps running through the macOS compatibility layer expose
+            # the app title as the owner name and leave kCGWindowName empty.
+            if title not in (window_name, owner_name):
                 continue
             if self._value(info, quartz.kCGWindowLayer) != 0:
                 continue
             pid = int(self._value(info, quartz.kCGWindowOwnerPID))
             window_id = int(self._value(info, quartz.kCGWindowNumber))
             bounds = self._bounds_from_cg(self._value(info, quartz.kCGWindowBounds))
-            return GameWindow(window_id, pid, title, bounds)
-        return None
+            candidates.append(GameWindow(window_id, pid, title, bounds))
+        return max(
+            candidates,
+            key=lambda item: item.bounds.width * item.bounds.height,
+            default=None,
+        )
 
     def game_process_running(self) -> bool:
         workspace = self._appkit.NSWorkspace.sharedWorkspace()

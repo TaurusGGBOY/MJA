@@ -10,6 +10,7 @@ from pathlib import Path
 import pytest
 
 from tools.setup import (
+    assemble_install,
     assert_supported_platform,
     ensure_venv,
     extract_archive,
@@ -108,3 +109,16 @@ def test_artifact_from_manifest_requires_all_integrity_fields(tmp_path: Path) ->
 
     with pytest.raises(ValueError, match="id"):
         load_manifest(manifest)
+
+
+def test_assemble_copies_maafw_bin_runtime_files_beside_cli(tmp_path: Path) -> None:
+    source = tmp_path / "maafw"
+    (source / "bin").mkdir(parents=True)
+    (source / "bin" / "MaaPiCli").write_bytes(b"cli")
+    (source / "bin" / "libMaaToolkit.dylib").write_bytes(b"toolkit")
+
+    install = tmp_path / "install"
+    assemble_install(install, {"maafw": source}, project_root=tmp_path / "project")
+
+    assert (install / "MaaPiCli").read_bytes() == b"cli"
+    assert (install / "libMaaToolkit.dylib").read_bytes() == b"toolkit"
