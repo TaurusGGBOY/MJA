@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "artifacts": [
+    {
+      "id": "maafw",
+      "version": "5.12.2",
+      "filename": "MAA-macos-aarch64-v5.12.2.zip",
+      "size": 24888096,
+      "sha256": "67c05e2b34e77017a79a6e252ccc9fab701eddb1a579bc17cc40a2931f08c87e",
+      "url": "https://github.com/MaaXYZ/MaaFramework/releases/download/v5.12.2/MAA-macos-aarch64-v5.12.2.zip"
+    },
+    {
+      "id": "mfa",
+      "version": "2.13.0-beta.5",
+      "filename": "MFAAvalonia-v2.13.0-beta.5-osx-arm64.tar.gz",
+      "size": 87343871,
+      "sha256": "ba9618ff6404d7468e146bab45b74f0ee48bbfc28d0c15cb056676e4c2593a93",
+      "url": "https://github.com/MaaXYZ/MFAAvalonia/releases/download/v2.13.0-beta.5/MFAAvalonia-v2.13.0-beta.5-osx-arm64.tar.gz"
+    }
+  ]
+}

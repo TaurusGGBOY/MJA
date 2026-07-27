@@ -10,3 +10,10 @@
 .env
 .env.*
 !.env.example
+
+# Generated runtime, diagnostics, and local state
+.venv/
+install/
+downloads/
+debug/
+.mja-state/
