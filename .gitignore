@@ -1,0 +1,12 @@
+.DS_Store
+
+# Local editor and IDE state
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
