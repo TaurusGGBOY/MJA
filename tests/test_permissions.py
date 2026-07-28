@@ -1,6 +1,11 @@
 import pytest
 
-from agent.macos.permissions import ErrorCode, MJAError, ensure_permissions
+from agent.macos.permissions import (
+    ErrorCode,
+    MJAError,
+    ensure_permissions,
+    request_permissions,
+)
 
 
 @pytest.mark.parametrize(
@@ -36,3 +41,23 @@ def test_probe_exception_maps_to_stable_permission_error() -> None:
         ensure_permissions(lambda: 1 / 0, lambda: True)
 
     assert caught.value.code == ErrorCode.PERMISSION_SCREEN_CAPTURE
+
+
+def test_screen_request_exception_maps_to_stable_permission_error() -> None:
+    with pytest.raises(MJAError) as caught:
+        request_permissions(
+            screen_request=lambda: 1 / 0,
+            accessibility_request=lambda: None,
+        )
+
+    assert caught.value.code == ErrorCode.PERMISSION_SCREEN_CAPTURE
+
+
+def test_accessibility_request_exception_maps_to_stable_permission_error() -> None:
+    with pytest.raises(MJAError) as caught:
+        request_permissions(
+            screen_request=lambda: None,
+            accessibility_request=lambda: 1 / 0,
+        )
+
+    assert caught.value.code == ErrorCode.PERMISSION_ACCESSIBILITY

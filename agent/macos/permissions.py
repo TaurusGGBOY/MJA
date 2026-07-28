@@ -86,7 +86,7 @@ def ensure_permissions(
     screen_probe: Probe | None = None,
     accessibility_probe: Probe | None = None,
 ) -> None:
-    """Validate required macOS permissions without requesting them.
+    """Validate required macOS permissions without requesting or prompting.
 
     The probes are injectable so unit tests and future platform adapters do not
     need to invoke macOS APIs. Screen recording is checked first because image
@@ -109,10 +109,11 @@ def request_permissions(
     screen_request: Callable[[], Any] | None = None,
     accessibility_request: Callable[[], Any] | None = None,
 ) -> None:
-    """Request permissions for an explicit setup/CLI action only.
+    """Request permissions for an explicit one-shot setup/CLI action only.
 
     Normal task execution calls :func:`ensure_permissions`, never this function,
-    so no system prompt can appear during an unattended task run.
+    so no system prompt can appear during an unattended task run. The caller
+    should run :func:`ensure_permissions` afterward to verify the result.
     """
 
     if screen_request is None:
