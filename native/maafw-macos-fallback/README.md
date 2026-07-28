@@ -17,8 +17,14 @@ into that checkout.
 - Source notice: `SOURCE.md`
 - Upstream license copy: `LICENSE.md`
 
-The patch, build script, manifest, and dylib are added by later implementation tasks. This
-contract deliberately does not commit an unattested manifest or an empty library.
+The patch is applied only inside a temporary clone of the clean tagged source. The build
+script checks the source tag, commit, and clean status; initializes only the MaaFramework
+submodules needed by the native target; downloads the pinned `arm64-osx` MaaDeps target;
+configures the official Ninja Multi-Config preset for arm64; builds only
+`MaaMacOSControlUnit`; verifies the Mach-O slice; applies an ad-hoc signature; and writes the
+library and manifest through a staging directory. It never modifies the reference checkout.
+
+The manifest and dylib are committed only after the build has been performed and verified.
 
 ## Manifest contract
 

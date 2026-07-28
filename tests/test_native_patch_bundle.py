@@ -22,6 +22,7 @@ PATCH_PATH = (
     / "patches"
     / "0001-macos-coregraphics-region-fallback.patch"
 )
+BUILD_SCRIPT = ROOT / "native" / "maafw-macos-fallback" / "build.sh"
 LIBRARY_NAME = "libMaaMacOSControlUnit.dylib"
 EXPECTED_LICENSE_SHA256 = "446e755fae55ff034bbb21be44670b5f116c2b2667947e7036f2bfe6632539a8"
 EXPECTED_SOURCE_SHA256 = "26c9c62f6038e76d66e5da53d4e8bed3ab22f2c597908865c2bc9a2133c353e7"
@@ -107,6 +108,14 @@ def test_manifest_parser_accepts_a_digest_bound_temp_bundle(tmp_path: Path) -> N
     assert bundle.library == library
     assert bundle.manifest["patched_library_size"] == len(b"arm64-test-library")
     assert set(bundle.manifest) == EXPECTED_MANIFEST_FIELDS
+
+
+def test_committed_patched_bundle_is_attested() -> None:
+    bundle = load_patched_bundle(NOTICE_ROOT, require_library=True)
+    assert bundle.library is not None
+    assert bundle.manifest["base_library_sha256"] == (
+        "f9f341ca13db62ef6f8bd642862510d191efbfc55de896fdec523b5b507ffc9a"
+    )
 
 
 def test_optional_library_may_be_absent_while_schema_and_notices_are_validated(
@@ -502,3 +511,105 @@ def test_fallback_patch_switches_backend_only_after_success() -> None:
     assert decision_rule.search(added)
     assert added.count("backend_ = CaptureBackend::CoreGraphicsRegion;") == 1
     assert added.count("CaptureBackend::ScreenCaptureKit") == 1
+
+
+def test_build_script_help_is_available() -> None:
+    result = subprocess.run(
+        [os.fspath(BUILD_SCRIPT), "--help"],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    assert "--official-bin" in result.stdout
+
+
+def _clean_source_clone(tmp_path: Path) -> Path:
+    source_root = os.environ.get("MJA_MAAFRAME_SOURCE")
+    if not source_root:
+        pytest.skip("set MJA_MAAFRAME_SOURCE for build-script integration tests")
+    clone = tmp_path / "source"
+    subprocess.run(
+        ["git", "clone", "--no-local", "--quiet", source_root, os.fspath(clone)],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    return clone
+
+
+def _run_build_script(
+    source: Path, official_bin: Path, output: Path
+) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        [
+            os.fspath(BUILD_SCRIPT),
+            "--source",
+            os.fspath(source),
+            "--official-bin",
+            os.fspath(official_bin),
+            "--output",
+            os.fspath(output),
+        ],
+        capture_output=True,
+        text=True,
+    )
+
+
+def test_build_script_rejects_a_dirty_source_checkout(tmp_path: Path) -> None:
+    source = _clean_source_clone(tmp_path)
+    (source / "uncommitted.txt").write_text("dirty\n", encoding="utf-8")
+    official_bin = tmp_path / "official-bin"
+    official_bin.mkdir()
+
+    result = _run_build_script(source, official_bin, tmp_path / "output")
+
+    assert result.returncode != 0
+    assert "dirty" in result.stderr
+
+
+def test_build_script_rejects_a_source_without_the_exact_tag(tmp_path: Path) -> None:
+    source = _clean_source_clone(tmp_path)
+    subprocess.run(
+        ["git", "-C", os.fspath(source), "tag", "-d", "v5.12.2"],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    official_bin = tmp_path / "official-bin"
+    official_bin.mkdir()
+
+    result = _run_build_script(source, official_bin, tmp_path / "output")
+
+    assert result.returncode != 0
+    assert "exactly tagged v5.12.2" in result.stderr
+
+
+def test_build_script_rejects_a_missing_official_base_library(tmp_path: Path) -> None:
+    source = _clean_source_clone(tmp_path)
+    official_bin = tmp_path / "official-bin"
+    official_bin.mkdir()
+
+    result = _run_build_script(source, official_bin, tmp_path / "output")
+
+    assert result.returncode != 0
+    assert "official base library is missing" in result.stderr
+
+
+def test_build_script_checks_arm64_and_manifest_contract_order() -> None:
+    script = BUILD_SCRIPT.read_text(encoding="utf-8")
+    assert "/usr/bin/lipo -archs" in script
+    assert 'python3 tools/maadeps-download.py arm64-osx' in script
+    assert "CMAKE_OSX_DEPLOYMENT_TARGET=13.3" in script
+    assert "OFFICIAL_BASE_SHA256" in script
+    fields = [
+        '"schema_version": 1',
+        '"upstream_repository":',
+        '"upstream_tag":',
+        '"target":',
+        '"base_library_sha256":',
+        '"patch_sha256":',
+        '"patched_library_sha256":',
+        '"patched_library_size":',
+    ]
+    positions = [script.index(field) for field in fields]
+    assert positions == sorted(positions)
