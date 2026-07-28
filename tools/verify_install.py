@@ -1,16 +1,25 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import subprocess
 from pathlib import Path
 from typing import Any, Callable, Iterable
 
+from tools.native_bundle import load_patched_bundle
+
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CLICLICK = Path("/opt/homebrew/bin/cliclick")
 REQUIRED_VERSIONS = {"maafw": "5.12.2", "mfa": "2.13.0-beta.5"}
 FORBIDDEN_ACTIONS = {"Click", "Swipe", "Key", "Input", "StartApp"}
+CONTROL_UNIT_NAME = "libMaaMacOSControlUnit.dylib"
+DEFAULT_CONTROL_UNIT_BUNDLE = ROOT / "vendor" / "maafw" / "v5.12.2" / "macos-arm64"
+FILE_TOOL = "/usr/bin/file"
+LIPO_TOOL = "/usr/bin/lipo"
+CODESIGN_TOOL = "/usr/bin/codesign"
+OTOOL_TOOL = "/usr/bin/otool"
 
 
 def _walk_strings(value: Any) -> Iterable[str]:
@@ -75,12 +84,119 @@ def _check_runtime_versions(install_root: Path, errors: list[str]) -> None:
             errors.append(f"runtime/{artifact_id}/VERSION does not match manifest")
 
 
+def _sha256_and_size(path: Path) -> tuple[str, int] | None:
+    digest = hashlib.sha256()
+    size = 0
+    try:
+        with path.open("rb") as handle:
+            for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+                digest.update(chunk)
+                size += len(chunk)
+    except OSError:
+        return None
+    return digest.hexdigest(), size
+
+
+def _command_result(
+    runner: Callable[..., Any],
+    argv: list[str],
+) -> Any | None:
+    try:
+        return runner(argv, check=False, capture_output=True, text=True)
+    except OSError:
+        return None
+
+
+def _command_output(result: Any) -> str:
+    return "\n".join(
+        value
+        for value in (getattr(result, "stdout", ""), getattr(result, "stderr", ""))
+        if isinstance(value, str)
+    )
+
+
+def verify_patched_control_unit(
+    install_root: Path,
+    *,
+    bundle_root: Path,
+    runner: Callable[..., Any] = subprocess.run,
+) -> list[str]:
+    """Verify the attested patched control-unit dylib in both install locations."""
+
+    install_root = Path(install_root)
+    errors: list[str] = []
+    try:
+        bundle = load_patched_bundle(Path(bundle_root), require_library=True)
+    except (OSError, ValueError) as exc:
+        return [f"invalid patched control-unit bundle: {exc}"]
+
+    expected_digest = bundle.manifest["patched_library_sha256"]
+    expected_size = bundle.manifest["patched_library_size"]
+    installed = {
+        "root": install_root / CONTROL_UNIT_NAME,
+        "runtime": install_root / "runtime" / "maafw" / "bin" / CONTROL_UNIT_NAME,
+    }
+    present: list[tuple[str, Path]] = []
+    for label, path in installed.items():
+        if not path.is_file():
+            errors.append(f"missing {label} control-unit dylib: {path}")
+            continue
+        present.append((label, path))
+        actual = _sha256_and_size(path)
+        if actual is None:
+            errors.append(f"unable to read {label} control-unit dylib: {path}")
+            continue
+        digest, size = actual
+        if size != expected_size:
+            errors.append(
+                f"{label} control-unit size mismatch: expected {expected_size}, got {size}"
+            )
+        if digest != expected_digest:
+            errors.append(
+                f"{label} control-unit SHA-256 mismatch: "
+                f"expected {expected_digest}, got {digest}"
+            )
+
+    for label, path in present:
+        display = f"{label} control-unit"
+        file_result = _command_result(runner, [FILE_TOOL, str(path)])
+        if file_result is None or getattr(file_result, "returncode", 1) != 0:
+            errors.append(f"{display} file inspection failed")
+        elif "Mach-O" not in _command_output(file_result):
+            errors.append(f"{display} is not a Mach-O binary")
+
+        lipo_result = _command_result(runner, [LIPO_TOOL, "-archs", str(path)])
+        if lipo_result is None or getattr(lipo_result, "returncode", 1) != 0:
+            errors.append(f"{display} lipo inspection failed")
+        elif "arm64" not in _command_output(lipo_result).split():
+            errors.append(f"{display} is missing the arm64 architecture")
+
+        signature_result = _command_result(
+            runner,
+            [CODESIGN_TOOL, "--verify", "--strict", str(path)],
+        )
+        if signature_result is None or getattr(signature_result, "returncode", 1) != 0:
+            errors.append(f"{display} signature verification failed")
+
+        linkage_result = _command_result(runner, [OTOOL_TOOL, "-L", str(path)])
+        if linkage_result is None or getattr(linkage_result, "returncode", 1) != 0:
+            errors.append(f"{display} linkage inspection failed")
+        else:
+            linkage = _command_output(linkage_result)
+            for framework in ("ApplicationServices", "ScreenCaptureKit", "CoreGraphics"):
+                if framework not in linkage:
+                    errors.append(f"{display} is missing {framework} linkage")
+
+    return errors
+
+
 def verify_install(
     install_root: Path,
     *,
     runner: Callable[..., Any] = subprocess.run,
     cliclick_path: Path = DEFAULT_CLICLICK,
     run_runtime_checks: bool = True,
+    bundle_root: Path | None = None,
 ) -> list[str]:
     install_root = Path(install_root)
     errors: list[str] = []
@@ -135,6 +251,13 @@ def verify_install(
             result = runner([str(cliclick_path), "-V"], check=False, capture_output=True, text=True)
             if getattr(result, "returncode", 1) != 0:
                 errors.append("cliclick -V failed")
+        errors.extend(
+            verify_patched_control_unit(
+                install_root,
+                bundle_root=bundle_root or DEFAULT_CONTROL_UNIT_BUNDLE,
+                runner=runner,
+            )
+        )
     return errors
 
 
