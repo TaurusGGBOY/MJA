@@ -1,0 +1,473 @@
+diff --git a/source/MaaMacOSControlUnit/Screencap/ScreenCaptureKitScreencap.h b/source/MaaMacOSControlUnit/Screencap/ScreenCaptureKitScreencap.h
+index d82a01efda17e6c7631449316f24f3b8a3c8a4ba..0bc1a491631904e375d6dc63e1eae6c27a1aa2c7 100644
+--- a/source/MaaMacOSControlUnit/Screencap/ScreenCaptureKitScreencap.h
++++ b/source/MaaMacOSControlUnit/Screencap/ScreenCaptureKitScreencap.h
+@@ -9,6 +9,12 @@ MAA_CTRL_UNIT_NS_BEGIN
+ class ScreenCaptureKitScreencap : public ScreencapBase
+ {
+ public:
++    enum class CaptureBackend
++    {
++        ScreenCaptureKit,
++        CoreGraphicsRegion,
++    };
++
+     explicit ScreenCaptureKitScreencap(uint32_t window_id)
+         : window_id_(window_id)
+     {
+@@ -20,10 +26,22 @@ public: // from ScreencapBase
+     virtual std::optional<cv::Mat> screencap() override;
+ 
+ private:
+-    std::optional<cv::Mat> screencap_window(uint32_t wid);
++    struct LogicalWindowBounds
++    {
++        double x = 0.0;
++        double y = 0.0;
++        double width = 0.0;
++        double height = 0.0;
++    };
++
++    std::optional<LogicalWindowBounds> validate_window(uint32_t wid);
++    std::optional<cv::Mat> screencap_window_screen_capture_kit(uint32_t wid);
++    std::optional<cv::Mat> screencap_window_core_graphics(uint32_t wid);
+     std::optional<cv::Mat> screencap_display();
+ 
++    CaptureBackend backend_ = CaptureBackend::ScreenCaptureKit;
+     uint32_t window_id_ = 0;
++    std::optional<LogicalWindowBounds> stable_window_bounds_;
+ };
+ 
+ MAA_CTRL_UNIT_NS_END
+diff --git a/source/MaaMacOSControlUnit/Screencap/ScreenCaptureKitScreencap.mm b/source/MaaMacOSControlUnit/Screencap/ScreenCaptureKitScreencap.mm
+index 411ea98920c0cc33212be53546338cadbcf3cb97..34f6a0a7027cdf919ef026ce27a647e096b667a0 100644
+--- a/source/MaaMacOSControlUnit/Screencap/ScreenCaptureKitScreencap.mm
++++ b/source/MaaMacOSControlUnit/Screencap/ScreenCaptureKitScreencap.mm
+@@ -4,6 +4,11 @@
+ #include <opencv2/core.hpp>
+ #include <opencv2/imgproc.hpp>
+ 
++#include <cmath>
++#include <cstdint>
++#include <limits>
++#include <vector>
++
+ #include <ApplicationServices/ApplicationServices.h>
+ #include <CoreFoundation/CoreFoundation.h>
+ #include <CoreMedia/CoreMedia.h>
+@@ -12,6 +17,102 @@
+ 
+ MAA_CTRL_UNIT_NS_BEGIN
+ 
++namespace
++{
++
++constexpr double kMinimumWindowWidth = 640.0;
++constexpr double kMaximumWindowWidth = 4096.0;
++constexpr double kMinimumWindowHeight = 360.0;
++constexpr double kMaximumWindowHeight = 2160.0;
++
++template <typename T, void (*Release)(T)>
++class ScopedResource
++{
++public:
++    explicit ScopedResource(T resource)
++        : resource_(resource)
++    {
++    }
++
++    ~ScopedResource()
++    {
++        if (resource_) {
++            Release(resource_);
++        }
++    }
++
++    ScopedResource(const ScopedResource&) = delete;
++    ScopedResource& operator=(const ScopedResource&) = delete;
++
++    T get() const { return resource_; }
++    explicit operator bool() const { return resource_ != nullptr; }
++
++private:
++    T resource_ = nullptr;
++};
++
++void release_window_list(CFArrayRef window_list)
++{
++    CFRelease(window_list);
++}
++
++bool read_number(CFDictionaryRef dictionary, CFStringRef key, CFNumberType type, void* output)
++{
++    if (!dictionary || !output) {
++        return false;
++    }
++
++    CFTypeRef value = CFDictionaryGetValue(dictionary, key);
++    if (!value || CFGetTypeID(value) != CFNumberGetTypeID()) {
++        return false;
++    }
++    return CFNumberGetValue(static_cast<CFNumberRef>(value), type, output);
++}
++
++bool read_bool(CFDictionaryRef dictionary, CFStringRef key, bool& output)
++{
++    if (!dictionary) {
++        return false;
++    }
++
++    CFTypeRef value = CFDictionaryGetValue(dictionary, key);
++    if (!value || CFGetTypeID(value) != CFBooleanGetTypeID()) {
++        return false;
++    }
++    output = CFBooleanGetValue(static_cast<CFBooleanRef>(value));
++    return true;
++}
++
++bool read_bounds(CFDictionaryRef dictionary, CGRect& output)
++{
++    if (!dictionary) {
++        return false;
++    }
++
++    CFTypeRef value = CFDictionaryGetValue(dictionary, kCGWindowBounds);
++    if (!value || CFGetTypeID(value) != CFDictionaryGetTypeID()) {
++        return false;
++    }
++    return CGRectMakeWithDictionaryRepresentation(static_cast<CFDictionaryRef>(value), &output);
++}
++
++bool has_finite_geometry(const CGRect& bounds)
++{
++    return !CGRectIsNull(bounds) && !CGRectIsInfinite(bounds) && std::isfinite(bounds.origin.x)
++           && std::isfinite(bounds.origin.y) && std::isfinite(bounds.size.width) && std::isfinite(bounds.size.height);
++}
++
++const char* error_description(NSError* error)
++{
++    if (!error) {
++        return "unknown error";
++    }
++    const char* description = error.localizedDescription.UTF8String;
++    return description ? description : "unknown error";
++}
++
++} // namespace
++
+ // 将 CMSampleBuffer 中的 BGRA 像素缓冲区转换为 BGR cv::Mat
+ cv::Mat image_from_sample_buffer(CMSampleBufferRef sample_buffer)
+ {
+@@ -20,7 +121,9 @@ cv::Mat image_from_sample_buffer(CMSampleBufferRef sample_buffer)
+         return {};
+     }
+ 
+-    CVPixelBufferLockBaseAddress(pixel_buffer, kCVPixelBufferLock_ReadOnly);
++    if (CVPixelBufferLockBaseAddress(pixel_buffer, kCVPixelBufferLock_ReadOnly) != kCVReturnSuccess) {
++        return {};
++    }
+ 
+     void* base = CVPixelBufferGetBaseAddress(pixel_buffer);
+     int width = static_cast<int>(CVPixelBufferGetWidth(pixel_buffer));
+@@ -29,8 +132,13 @@ cv::Mat image_from_sample_buffer(CMSampleBufferRef sample_buffer)
+ 
+     cv::Mat result;
+     if (base && width > 0 && height > 0) {
+-        cv::Mat raw_image(height, width, CV_8UC4, base, bytes_per_row);
+-        cv::cvtColor(raw_image, result, cv::COLOR_BGRA2BGR);
++        try {
++            cv::Mat raw_image(height, width, CV_8UC4, base, bytes_per_row);
++            cv::cvtColor(raw_image, result, cv::COLOR_BGRA2BGR);
++        }
++        catch (const cv::Exception& error) {
++            LogError << "ScreenCaptureKit BGRA to BGR conversion failed:" << error.what();
++        }
+     }
+ 
+     CVPixelBufferUnlockBaseAddress(pixel_buffer, kCVPixelBufferLock_ReadOnly);
+@@ -40,20 +148,149 @@ cv::Mat image_from_sample_buffer(CMSampleBufferRef sample_buffer)
+ std::optional<cv::Mat> ScreenCaptureKitScreencap::screencap()
+ {
+     if (window_id_ != 0) {
+-        return screencap_window(window_id_);
++        if (backend_ == CaptureBackend::CoreGraphicsRegion) {
++            return screencap_window_core_graphics(window_id_);
++        }
++        if (auto image = screencap_window_screen_capture_kit(window_id_)) {
++            return image;
++        }
++        if (auto image = screencap_window_core_graphics(window_id_)) {
++            backend_ = CaptureBackend::CoreGraphicsRegion;
++            LogWarn << "MJA screencap backend switched to CoreGraphicsRegion";
++            return image;
++        }
++        return std::nullopt;
+     }
+     return screencap_display();
+ }
+ 
+-std::optional<cv::Mat> ScreenCaptureKitScreencap::screencap_window(uint32_t wid)
++std::optional<ScreenCaptureKitScreencap::LogicalWindowBounds> ScreenCaptureKitScreencap::validate_window(uint32_t wid)
++{
++    ScopedResource<CFArrayRef, release_window_list> window_list(
++        CGWindowListCopyWindowInfo(kCGWindowListOptionOnScreenOnly, kCGNullWindowID));
++    if (!window_list) {
++        LogError << "MJA window metadata enumeration failed for window" << wid;
++        return std::nullopt;
++    }
++
++    const CFIndex window_count = CFArrayGetCount(window_list.get());
++    CFIndex target_index = -1;
++    CFDictionaryRef target = nullptr;
++    for (CFIndex index = 0; index < window_count; ++index) {
++        CFTypeRef item = CFArrayGetValueAtIndex(window_list.get(), index);
++        if (!item || CFGetTypeID(item) != CFDictionaryGetTypeID()) {
++            continue;
++        }
++
++        auto dictionary = static_cast<CFDictionaryRef>(item);
++        std::int64_t candidate_window_id = -1;
++        if (!read_number(dictionary, kCGWindowNumber, kCFNumberSInt64Type, &candidate_window_id)) {
++            continue;
++        }
++        if (candidate_window_id == static_cast<std::int64_t>(wid)) {
++            target_index = index;
++            target = dictionary;
++            break;
++        }
++    }
++
++    if (target_index < 0 || !target) {
++        LogError << "MJA target window is missing or not on screen:" << wid;
++        return std::nullopt;
++    }
++
++    std::int64_t target_layer = -1;
++    std::int64_t target_owner_pid = -1;
++    double target_alpha = 0.0;
++    bool target_is_onscreen = false;
++    CGRect bounds = CGRectNull;
++    if (!read_number(target, kCGWindowLayer, kCFNumberSInt64Type, &target_layer)
++        || !read_number(target, kCGWindowOwnerPID, kCFNumberSInt64Type, &target_owner_pid)
++        || !read_number(target, kCGWindowAlpha, kCFNumberDoubleType, &target_alpha)
++        || !read_bool(target, kCGWindowIsOnscreen, target_is_onscreen) || !read_bounds(target, bounds)) {
++        LogError << "MJA target window metadata is incomplete:" << wid;
++        return std::nullopt;
++    }
++
++    if (target_layer != 0 || target_owner_pid <= 0 || !target_is_onscreen || !std::isfinite(target_alpha)
++        || target_alpha <= 0.0 || !has_finite_geometry(bounds) || bounds.size.width <= 0.0
++        || bounds.size.height <= 0.0 || bounds.size.width <= bounds.size.height
++        || bounds.size.width < kMinimumWindowWidth || bounds.size.width > kMaximumWindowWidth
++        || bounds.size.height < kMinimumWindowHeight || bounds.size.height > kMaximumWindowHeight) {
++        LogError << "MJA target window failed layer, alpha, onscreen, or logical-bounds validation:" << wid;
++        return std::nullopt;
++    }
++
++    for (CFIndex front_index = 0; front_index < target_index; ++front_index) {
++        CFTypeRef item = CFArrayGetValueAtIndex(window_list.get(), front_index);
++        if (!item || CFGetTypeID(item) != CFDictionaryGetTypeID()) {
++            LogError << "MJA front-window metadata is malformed";
++            return std::nullopt;
++        }
++
++        auto front = static_cast<CFDictionaryRef>(item);
++        std::int64_t front_layer = -1;
++        if (!read_number(front, kCGWindowLayer, kCFNumberSInt64Type, &front_layer)) {
++            LogError << "MJA front-window layer is missing";
++            return std::nullopt;
++        }
++        if (front_layer != 0) {
++            continue;
++        }
++
++        std::int64_t front_owner_pid = -1;
++        CGRect front_bounds = CGRectNull;
++        if (!read_number(front, kCGWindowOwnerPID, kCFNumberSInt64Type, &front_owner_pid)
++            || !read_bounds(front, front_bounds) || !has_finite_geometry(front_bounds)) {
++            LogError << "MJA front layer-zero window metadata is incomplete";
++            return std::nullopt;
++        }
++
++        if (front_owner_pid != target_owner_pid && !CGRectIsEmpty(front_bounds)) {
++            const CGRect intersection = CGRectIntersection(front_bounds, bounds);
++            if (!CGRectIsNull(intersection) && !CGRectIsEmpty(intersection)) {
++                LogError << "MJA CoreGraphicsRegion rejected occluded target window:" << wid;
++                return std::nullopt;
++            }
++        }
++    }
++
++    const LogicalWindowBounds logical_bounds {
++        bounds.origin.x,
++        bounds.origin.y,
++        bounds.size.width,
++        bounds.size.height,
++    };
++    if (stable_window_bounds_) {
++        const bool same_bounds = stable_window_bounds_->x == logical_bounds.x
++                                 && stable_window_bounds_->y == logical_bounds.y
++                                 && stable_window_bounds_->width == logical_bounds.width
++                                 && stable_window_bounds_->height == logical_bounds.height;
++        if (!same_bounds) {
++            LogError << "MJA target window bounds changed during the controller connection:" << wid;
++            return std::nullopt;
++        }
++    }
++    else {
++        stable_window_bounds_ = logical_bounds;
++    }
++
++    return logical_bounds;
++}
++
++std::optional<cv::Mat> ScreenCaptureKitScreencap::screencap_window_screen_capture_kit(uint32_t wid)
+ {
++    if (!validate_window(wid)) {
++        return std::nullopt;
++    }
++
+     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+     __block cv::Mat captured_image;
+     __block bool capture_success = false;
+ 
+     [SCShareableContent getShareableContentWithCompletionHandler:^(SCShareableContent* content, NSError* error) {
+         if (error || !content) {
+-            LogError << "Failed to get shareable content";
++            LogError << "Failed to get shareable content: " << error_description(error);
+             dispatch_semaphore_signal(semaphore);
+             return;
+         }
+@@ -93,10 +330,13 @@ std::optional<cv::Mat> ScreenCaptureKitScreencap::screencap_window(uint32_t wid)
+                             completionHandler:^(CMSampleBufferRef sampleBuffer, NSError* err) {
+                                 if (!err && sampleBuffer) {
+                                     captured_image = image_from_sample_buffer(sampleBuffer);
+-                                    capture_success = true;
++                                    capture_success = !captured_image.empty();
++                                    if (!capture_success) {
++                                        LogError << "Screenshot returned an empty image";
++                                    }
+                                 }
+                                 else {
+-                                    LogError << "Screenshot failed";
++                                    LogError << "Screenshot failed: " << error_description(err);
+                                 }
+                                 [filter release];
+                                 [config release];
+@@ -116,6 +356,116 @@ std::optional<cv::Mat> ScreenCaptureKitScreencap::screencap_window(uint32_t wid)
+     return std::nullopt;
+ }
+ 
++std::optional<cv::Mat> ScreenCaptureKitScreencap::screencap_window_core_graphics(uint32_t wid)
++{
++    auto logical_bounds = validate_window(wid);
++    if (!logical_bounds) {
++        return std::nullopt;
++    }
++
++    const CGRect bounds = CGRectMake(
++        logical_bounds->x,
++        logical_bounds->y,
++        logical_bounds->width,
++        logical_bounds->height);
++    const long rounded_width = std::lround(logical_bounds->width);
++    const long rounded_height = std::lround(logical_bounds->height);
++    if (rounded_width <= 0 || rounded_height <= 0 || rounded_width > std::numeric_limits<int>::max()
++        || rounded_height > std::numeric_limits<int>::max()) {
++        LogError << "MJA CoreGraphicsRegion rejected invalid rounded dimensions";
++        return std::nullopt;
++    }
++
++    ScopedResource<CGImageRef, CGImageRelease> image(CGWindowListCreateImage(
++        bounds,
++        kCGWindowListOptionOnScreenOnly,
++        kCGNullWindowID,
++        kCGWindowImageBoundsIgnoreFraming | kCGWindowImageNominalResolution));
++    if (!image) {
++        LogError << "MJA CoreGraphicsRegion capture failed; check Screen Recording permission";
++        return std::nullopt;
++    }
++
++    const size_t expected_width = static_cast<size_t>(rounded_width);
++    const size_t expected_height = static_cast<size_t>(rounded_height);
++    const size_t image_width = CGImageGetWidth(image.get());
++    const size_t image_height = CGImageGetHeight(image.get());
++    if (image_width == 0 || image_height == 0 || image_width != expected_width || image_height != expected_height) {
++        LogError << "MJA CoreGraphicsRegion returned non-nominal image dimensions";
++        return std::nullopt;
++    }
++
++    if (expected_width > std::numeric_limits<size_t>::max() / 4) {
++        LogError << "MJA CoreGraphicsRegion row stride overflow";
++        return std::nullopt;
++    }
++    const size_t bytes_per_row = expected_width * 4;
++    if (expected_height > std::numeric_limits<size_t>::max() / bytes_per_row) {
++        LogError << "MJA CoreGraphicsRegion image buffer overflow";
++        return std::nullopt;
++    }
++
++    std::vector<std::uint8_t> bgra(bytes_per_row * expected_height, 0);
++    ScopedResource<CGColorSpaceRef, CGColorSpaceRelease> color_space(CGColorSpaceCreateDeviceRGB());
++    if (!color_space) {
++        LogError << "MJA CoreGraphicsRegion failed to create device RGB color space";
++        return std::nullopt;
++    }
++
++    const CGBitmapInfo bitmap_info = static_cast<CGBitmapInfo>(
++        static_cast<std::uint32_t>(kCGBitmapByteOrder32Little)
++        | static_cast<std::uint32_t>(kCGImageAlphaPremultipliedFirst));
++    ScopedResource<CGContextRef, CGContextRelease> context(CGBitmapContextCreate(
++        bgra.data(),
++        expected_width,
++        expected_height,
++        8,
++        bytes_per_row,
++        color_space.get(),
++        bitmap_info));
++    if (!context) {
++        LogError << "MJA CoreGraphicsRegion failed to create bitmap context";
++        return std::nullopt;
++    }
++
++    const size_t actual_bytes_per_row = CGBitmapContextGetBytesPerRow(context.get());
++    if (actual_bytes_per_row != bytes_per_row) {
++        LogError << "MJA CoreGraphicsRegion bitmap context changed the row stride";
++        return std::nullopt;
++    }
++
++    CGContextSetBlendMode(context.get(), kCGBlendModeCopy);
++    CGContextSetInterpolationQuality(context.get(), kCGInterpolationNone);
++    CGContextTranslateCTM(context.get(), 0.0, static_cast<CGFloat>(expected_height));
++    CGContextScaleCTM(context.get(), 1.0, -1.0);
++    CGContextDrawImage(
++        context.get(),
++        CGRectMake(0.0, 0.0, static_cast<CGFloat>(expected_width), static_cast<CGFloat>(expected_height)),
++        image.get());
++    CGContextFlush(context.get());
++
++    cv::Mat owned_bgr;
++    try {
++        cv::Mat bgra_view(
++            static_cast<int>(expected_height),
++            static_cast<int>(expected_width),
++            CV_8UC4,
++            bgra.data(),
++            actual_bytes_per_row);
++        cv::cvtColor(bgra_view, owned_bgr, cv::COLOR_BGRA2BGR);
++    }
++    catch (const cv::Exception& error) {
++        LogError << "MJA CoreGraphicsRegion BGRA to BGR conversion failed:" << error.what();
++        return std::nullopt;
++    }
++
++    if (owned_bgr.empty() || owned_bgr.cols != rounded_width || owned_bgr.rows != rounded_height) {
++        LogError << "MJA CoreGraphicsRegion produced an invalid BGR image";
++        return std::nullopt;
++    }
++    return owned_bgr;
++}
++
+ std::optional<cv::Mat> ScreenCaptureKitScreencap::screencap_display()
+ {
+     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);

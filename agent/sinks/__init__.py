@@ -1,0 +1,1 @@
+"""Maa task event sinks."""

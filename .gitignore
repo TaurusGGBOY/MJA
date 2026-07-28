@@ -10,3 +10,16 @@
 .env
 .env.*
 !.env.example
+
+# Generated runtime, diagnostics, and local state
+.venv/
+install/
+downloads/
+debug/
+diagnostics/
+.mja-state/
+
+# Python test/build cache
+__pycache__/
+*.py[cod]
+.pytest_cache/

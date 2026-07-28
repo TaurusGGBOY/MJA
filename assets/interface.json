@@ -1,0 +1,56 @@
+{
+  "interface_version": 2,
+  "name": "mja",
+  "label": "对决剑之川 MJA",
+  "title": "对决！剑之川 · MJA",
+  "version": "0.1.0",
+  "description": "macOS 前台邮件菜单闭环测试。不会领取邮件、领取奖励或执行其他游戏操作。",
+  "license": "Private project",
+  "controller": [
+    {
+      "name": "macos",
+      "label": "macOS 原生窗口",
+      "type": "MacOS",
+      "display_short_side": 720,
+      "display_raw": false,
+      "macos": {
+        "title_regex": "^对决！剑之川$",
+        "screencap": "ScreenCaptureKit",
+        "input": "GlobalEvent"
+      }
+    }
+  ],
+  "resource": [
+    {
+      "name": "mja",
+      "label": "MJA 安全邮件测试资源",
+      "path": [
+        "resource"
+      ],
+      "controller": [
+        "macos"
+      ]
+    }
+  ],
+  "task": [
+    {
+      "name": "mail_smoke_test",
+      "label": "邮件菜单闭环测试",
+      "entry": "MJA_Start",
+      "default_check": true,
+      "resource": [
+        "mja"
+      ],
+      "controller": [
+        "macos"
+      ]
+    }
+  ],
+  "agent": {
+    "child_exec": ".venv/bin/python3",
+    "child_args": [
+      "agent/main.py"
+    ],
+    "identifier": "mja-python-agent"
+  }
+}

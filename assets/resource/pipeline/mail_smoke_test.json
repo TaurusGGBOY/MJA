@@ -1,0 +1,86 @@
+{
+  "MJA_Start": {
+    "recognition": "TemplateMatch",
+    "template": "home/home_marker.png",
+    "roi": [750, 0, 173, 110],
+    "threshold": 0.85,
+    "timeout": 30000,
+    "action": "DoNothing",
+    "next": ["MJA_OpenPanel"]
+  },
+  "MJA_OpenPanel": {
+    "recognition": "TemplateMatch",
+    "template": "home/panel_open.png",
+    "roi": [865, 0, 58, 100],
+    "threshold": 0.9,
+    "timeout": 10000,
+    "action": "Custom",
+    "custom_action": "MacOSForegroundClick",
+    "next": ["MJA_ConfirmPanel"]
+  },
+  "MJA_ConfirmPanel": {
+    "recognition": "TemplateMatch",
+    "template": "panel/panel_marker.png",
+    "roi": [606, 0, 202, 160],
+    "threshold": 0.88,
+    "timeout": 10000,
+    "action": "DoNothing",
+    "next": ["MJA_OpenMail"]
+  },
+  "MJA_OpenMail": {
+    "recognition": "TemplateMatch",
+    "template": "panel/mail_entry.png",
+    "roi": [807, 115, 115, 210],
+    "threshold": 0.88,
+    "timeout": 10000,
+    "action": "Custom",
+    "custom_action": "MacOSForegroundClick",
+    "next": ["MJA_ConfirmMail"]
+  },
+  "MJA_ConfirmMail": {
+    "recognition": "TemplateMatch",
+    "template": "mail/mail_marker.png",
+    "roi": [0, 0, 231, 140],
+    "threshold": 0.88,
+    "timeout": 10000,
+    "action": "DoNothing",
+    "next": ["MJA_CloseMail"]
+  },
+  "MJA_CloseMail": {
+    "recognition": "TemplateMatch",
+    "template": "mail/mail_close.png",
+    "roi": [750, 80, 115, 160],
+    "threshold": 0.9,
+    "timeout": 10000,
+    "action": "Custom",
+    "custom_action": "MacOSForegroundClick",
+    "next": ["MJA_ConfirmPanelAfterMail"]
+  },
+  "MJA_ConfirmPanelAfterMail": {
+    "recognition": "TemplateMatch",
+    "template": "panel/panel_marker.png",
+    "roi": [606, 0, 202, 160],
+    "threshold": 0.88,
+    "timeout": 10000,
+    "action": "DoNothing",
+    "next": ["MJA_ClosePanel"]
+  },
+  "MJA_ClosePanel": {
+    "recognition": "TemplateMatch",
+    "template": "panel/panel_close.png",
+    "roi": [865, 0, 58, 100],
+    "threshold": 0.9,
+    "timeout": 10000,
+    "action": "Custom",
+    "custom_action": "MacOSForegroundClick",
+    "next": ["MJA_ConfirmHome"]
+  },
+  "MJA_ConfirmHome": {
+    "recognition": "TemplateMatch",
+    "template": "home/home_marker.png",
+    "roi": [750, 0, 173, 110],
+    "threshold": 0.85,
+    "timeout": 10000,
+    "action": "DoNothing"
+  }
+}
