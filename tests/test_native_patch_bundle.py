@@ -2,7 +2,10 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
+import re
 import shutil
+import subprocess
 from pathlib import Path
 from typing import Any
 
@@ -12,6 +15,13 @@ from tools.native_bundle import load_patched_bundle
 
 ROOT = Path(__file__).resolve().parents[1]
 NOTICE_ROOT = ROOT / "vendor" / "maafw" / "v5.12.2" / "macos-arm64"
+PATCH_PATH = (
+    ROOT
+    / "native"
+    / "maafw-macos-fallback"
+    / "patches"
+    / "0001-macos-coregraphics-region-fallback.patch"
+)
 LIBRARY_NAME = "libMaaMacOSControlUnit.dylib"
 EXPECTED_LICENSE_SHA256 = "446e755fae55ff034bbb21be44670b5f116c2b2667947e7036f2bfe6632539a8"
 EXPECTED_SOURCE_SHA256 = "26c9c62f6038e76d66e5da53d4e8bed3ab22f2c597908865c2bc9a2133c353e7"
@@ -25,6 +35,23 @@ EXPECTED_MANIFEST_FIELDS = {
     "patched_library_sha256",
     "patched_library_size",
 }
+
+
+def extract_added_lines(patch_text: str) -> list[str]:
+    return [
+        line[1:]
+        for line in patch_text.splitlines()
+        if line.startswith("+") and not line.startswith("+++")
+    ]
+
+
+def extract_added_tokens(patch_text: str) -> list[str]:
+    return re.findall(r"[A-Za-z_][A-Za-z0-9_:]*", "\n".join(extract_added_lines(patch_text)))
+
+
+def _fallback_patch_text() -> str:
+    assert PATCH_PATH.is_file(), f"missing native fallback patch: {PATCH_PATH}"
+    return PATCH_PATH.read_text(encoding="utf-8")
 
 
 def _manifest_for(library: Path | None = None) -> dict[str, Any]:
@@ -338,3 +365,140 @@ def test_library_must_be_a_regular_file(tmp_path: Path) -> None:
 
     with pytest.raises(ValueError, match="regular file"):
         load_patched_bundle(tmp_path, require_library=True)
+
+
+def test_fallback_patch_changes_only_the_two_screencap_sources() -> None:
+    patch_text = _fallback_patch_text()
+    changed_paths = {
+        line.split()[2].removeprefix("a/")
+        for line in patch_text.splitlines()
+        if line.startswith("diff --git ")
+    }
+
+    assert changed_paths == {
+        "source/MaaMacOSControlUnit/Screencap/ScreenCaptureKitScreencap.h",
+        "source/MaaMacOSControlUnit/Screencap/ScreenCaptureKitScreencap.mm",
+    }
+
+
+def test_fallback_patch_applies_to_a_clean_source_snapshot(tmp_path: Path) -> None:
+    source_root = os.environ.get("MJA_MAAFRAME_SOURCE")
+    if not source_root:
+        pytest.skip("set MJA_MAAFRAME_SOURCE to run the clean-source patch integration test")
+
+    source = Path(source_root)
+    if not source.is_dir():
+        pytest.fail(f"MJA_MAAFRAME_SOURCE is not a directory: {source}")
+    clone = tmp_path / "source"
+    subprocess.run(
+        ["git", "clone", "--no-local", "--quiet", os.fspath(source), os.fspath(clone)],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    status = subprocess.run(
+        ["git", "-C", os.fspath(clone), "status", "--porcelain"],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    assert status.stdout == ""
+    subprocess.run(
+        ["git", "-C", os.fspath(clone), "apply", "--check", os.fspath(PATCH_PATH)],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+
+
+def test_fallback_patch_contains_required_semantic_anchors() -> None:
+    patch_text = _fallback_patch_text()
+    added_lines = "\n".join(extract_added_lines(patch_text))
+    required = {
+        "CaptureBackend::CoreGraphicsRegion",
+        "kCGWindowListOptionOnScreenOnly",
+        "kCGNullWindowID",
+        "kCGWindowImageBoundsIgnoreFraming",
+        "kCGWindowImageNominalResolution",
+        "kCGWindowLayer",
+        "kCGWindowAlpha",
+        "cv::COLOR_BGRA2BGR",
+    }
+
+    assert required <= set(extract_added_tokens(patch_text))
+    assert "kCGWindowListOptionIncludingWindow" not in added_lines
+
+
+def test_fallback_patch_validates_exact_onscreen_window_and_stable_bounds() -> None:
+    added = "\n".join(extract_added_lines(_fallback_patch_text()))
+    required = {
+        "CGWindowListCopyWindowInfo",
+        "kCGWindowNumber",
+        "kCGWindowOwnerPID",
+        "kCGWindowIsOnscreen",
+        "CGRectMakeWithDictionaryRepresentation",
+        "stable_window_bounds_",
+        "same_bounds",
+        "kMinimumWindowWidth = 640.0",
+        "kMaximumWindowWidth = 4096.0",
+        "kMinimumWindowHeight = 360.0",
+        "kMaximumWindowHeight = 2160.0",
+        "bounds.size.width <= bounds.size.height",
+    }
+
+    assert all(anchor in added for anchor in required)
+
+
+def test_fallback_patch_rejects_front_window_occlusion() -> None:
+    added = "\n".join(extract_added_lines(_fallback_patch_text()))
+    required = {
+        "front_index < target_index",
+        "front_layer != 0",
+        "front_owner_pid != target_owner_pid",
+        "CGRectIntersection",
+        "CGRectIsEmpty",
+        "MJA CoreGraphicsRegion rejected occluded target window",
+    }
+
+    assert all(anchor in added for anchor in required)
+
+
+def test_fallback_patch_owns_nominal_resolution_bgr_pixels() -> None:
+    added = "\n".join(extract_added_lines(_fallback_patch_text()))
+    required = {
+        "CGWindowListCreateImage",
+        "CGImageGetWidth",
+        "CGImageGetHeight",
+        "std::lround",
+        "std::vector<std::uint8_t>",
+        "CGColorSpaceCreateDeviceRGB",
+        "CGBitmapContextCreate",
+        "CGBitmapContextGetBytesPerRow",
+        "CV_8UC4",
+        "cv::cvtColor",
+        "owned_bgr",
+        "ScopedResource<CGImageRef, CGImageRelease>",
+        "ScopedResource<CGColorSpaceRef, CGColorSpaceRelease>",
+        "ScopedResource<CGContextRef, CGContextRelease>",
+    }
+
+    assert all(anchor in added for anchor in required)
+
+
+def test_fallback_patch_switches_backend_only_after_success() -> None:
+    added = "\n".join(extract_added_lines(_fallback_patch_text()))
+    decision_rule = re.compile(
+        r"if \(backend_ == CaptureBackend::CoreGraphicsRegion\) \{\s*"
+        r"return screencap_window_core_graphics\(window_id_\);\s*\}\s*"
+        r"if \(auto image = screencap_window_screen_capture_kit\(window_id_\)\) \{\s*"
+        r"return image;\s*\}\s*"
+        r"if \(auto image = screencap_window_core_graphics\(window_id_\)\) \{\s*"
+        r"backend_ = CaptureBackend::CoreGraphicsRegion;\s*"
+        r"LogWarn << \"MJA screencap backend switched to CoreGraphicsRegion\";\s*"
+        r"return image;\s*\}\s*return std::nullopt;",
+        re.MULTILINE,
+    )
+
+    assert decision_rule.search(added)
+    assert added.count("backend_ = CaptureBackend::CoreGraphicsRegion;") == 1
+    assert added.count("CaptureBackend::ScreenCaptureKit") == 1
