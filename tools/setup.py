@@ -6,6 +6,7 @@ import json
 import os
 import platform
 import shutil
+import stat
 import subprocess
 import tarfile
 import tempfile
@@ -16,9 +17,17 @@ from pathlib import Path, PurePosixPath, PureWindowsPath
 from typing import Any, Callable, Mapping
 from urllib.parse import urlsplit
 
+from tools.native_bundle import load_patched_bundle
+
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CLICLICK = Path("/opt/homebrew/bin/cliclick")
 CHUNK_SIZE = 1024 * 1024
+MAAFW_VERSION = "5.12.2"
+MACOS_CONTROL_UNIT_LIBRARY = "libMaaMacOSControlUnit.dylib"
+OFFICIAL_BASE_LIBRARY_SHA256 = (
+    "f9f341ca13db62ef6f8bd642862510d191efbfc55de896fdec523b5b507ffc9a"
+)
+OVERLAY_JOURNAL_NAME = ".mja-macos-control-unit-overlay.json"
 
 
 @dataclass(frozen=True)
@@ -77,6 +86,14 @@ def verify_download(path: Path, expected_size: int, expected_sha256: str) -> Non
             digest.update(chunk)
     if digest.hexdigest().lower() != expected_sha256.lower():
         raise ValueError("SHA-256 digest mismatch")
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(CHUNK_SIZE), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 def _require_https(url: str) -> None:
@@ -254,7 +271,199 @@ def _atomic_copytree(source: Path, destination: Path) -> None:
     staging.replace(destination)
 
 
-def assemble_install(
+def _fsync_copy(source: Path, destination: Path) -> None:
+    shutil.copyfile(source, destination)
+    with destination.open("rb") as handle:
+        os.fsync(handle.fileno())
+
+
+def _require_install_scope(install_root: Path) -> Path:
+    root = Path(os.path.abspath(install_root))
+    for ancestor in root.parents:
+        try:
+            if stat.S_ISLNK(ancestor.lstat().st_mode):
+                raise ValueError(f"install root ancestor must not be a symlink: {ancestor}")
+        except OSError as exc:
+            raise ValueError(f"install root ancestor is unavailable: {ancestor}") from exc
+    if root.is_symlink() or not root.is_dir():
+        raise ValueError(f"install root must be a real directory: {root}")
+    for directory in (
+        root,
+        root / "runtime",
+        root / "runtime" / "maafw",
+        root / "runtime" / "maafw" / "bin",
+    ):
+        try:
+            mode = directory.lstat().st_mode
+        except OSError as exc:
+            raise ValueError(f"install directory is unavailable: {directory}") from exc
+        if stat.S_ISLNK(mode) or not stat.S_ISDIR(mode):
+            raise ValueError(f"install directory must not be a symlink: {directory}")
+    return root
+
+
+def _validate_bundle_base(bundle_root: Path, base_library: Path) -> None:
+    bundle = load_patched_bundle(bundle_root, require_library=True)
+    if bundle.manifest["base_library_sha256"] != OFFICIAL_BASE_LIBRARY_SHA256:
+        raise ValueError("patched bundle is not bound to the official base library")
+    if base_library.is_symlink() or not base_library.is_file():
+        raise ValueError(f"official base library is missing: {base_library}")
+    if sha256_file(base_library) != OFFICIAL_BASE_LIBRARY_SHA256:
+        raise ValueError(f"official base library digest mismatch: {base_library}")
+
+
+def _remove_file(path: Path) -> None:
+    try:
+        path.unlink()
+    except FileNotFoundError:
+        pass
+
+
+def _write_overlay_journal(path: Path, payload: Mapping[str, Any]) -> None:
+    staging = path.with_name(path.name + ".staging")
+    try:
+        staging.write_text(json.dumps(payload, sort_keys=True) + "\n", encoding="utf-8")
+        with staging.open("rb") as handle:
+            os.fsync(handle.fileno())
+        os.replace(staging, path)
+    finally:
+        _remove_file(staging)
+
+
+def _recover_overlay_journal(root: Path, destinations: tuple[Path, ...]) -> None:
+    journal_path = root / OVERLAY_JOURNAL_NAME
+    if not journal_path.exists():
+        return
+    recovered = False
+    try:
+        payload = json.loads(journal_path.read_text(encoding="utf-8"))
+        backup_names = payload["backup_names"]
+        if payload.get("schema_version") != 1 or not isinstance(backup_names, list):
+            raise ValueError("invalid overlay journal")
+        expected = {path.name for path in destinations}
+        if len(backup_names) != len(expected) or {
+            item.get("destination") if isinstance(item, dict) else None for item in backup_names
+        } != expected:
+            raise ValueError("invalid overlay journal destinations")
+        for item in backup_names:
+            if (
+                not isinstance(item, dict)
+                or not isinstance(item.get("backup"), str)
+                or Path(item["backup"]).name != item["backup"]
+            ):
+                raise ValueError("invalid overlay journal destination")
+        for destination in destinations:
+            item = next(item for item in backup_names if item["destination"] == destination.name)
+            backup = destination.with_name(item["backup"])
+            if backup.is_symlink() or backup.parent != destination.parent:
+                raise ValueError("overlay journal backup is unavailable")
+            if backup.is_file():
+                os.replace(backup, destination)
+            elif (
+                destination.is_file()
+                and not destination.is_symlink()
+                and sha256_file(destination) == OFFICIAL_BASE_LIBRARY_SHA256
+            ):
+                # The prior recovery may have completed this destination before
+                # the process crashed. Treat that state as already restored.
+                continue
+            else:
+                raise ValueError("overlay journal backup is unavailable")
+        recovered = True
+    finally:
+        if recovered:
+            _remove_file(journal_path)
+
+
+def overlay_patched_macos_control_unit(install_root: Path, bundle_root: Path) -> None:
+    """Safely replace both installed macOS control-unit copies with the patch."""
+
+    root = _require_install_scope(install_root)
+    destinations = (
+        root / MACOS_CONTROL_UNIT_LIBRARY,
+        root / "runtime" / "maafw" / "bin" / MACOS_CONTROL_UNIT_LIBRARY,
+    )
+    _recover_overlay_journal(root, destinations)
+    bundle = load_patched_bundle(bundle_root, require_library=True)
+    if bundle.library is None:  # pragma: no cover - require_library enforces this
+        raise ValueError(f"patched library is missing: {MACOS_CONTROL_UNIT_LIBRARY}")
+    if bundle.manifest["base_library_sha256"] != OFFICIAL_BASE_LIBRARY_SHA256:
+        raise ValueError("patched bundle is not bound to the official base library")
+
+    version_path = root / "runtime" / "maafw" / "VERSION"
+    try:
+        installed_version = version_path.read_text(encoding="utf-8")
+    except (OSError, UnicodeError) as exc:
+        raise ValueError("installed MaaFramework version is unavailable") from exc
+    if installed_version != f"{MAAFW_VERSION}\n":
+        raise ValueError(f"installed MaaFramework version must be {MAAFW_VERSION}")
+
+    expected_base = bundle.manifest["base_library_sha256"]
+    for destination in destinations:
+        if destination.is_symlink() or not destination.is_file():
+            raise ValueError(f"installed base library is missing: {destination}")
+        if sha256_file(destination) != expected_base:
+            raise ValueError(f"installed base library digest mismatch: {destination}")
+
+    stages = tuple(
+        destination.with_name(destination.name + ".staging") for destination in destinations
+    )
+    backup_paths: list[Path] = []
+    backup_candidates: list[Path] = []
+    journal_path = root / OVERLAY_JOURNAL_NAME
+    committed = False
+    rollback_ok = True
+    try:
+        for stage in stages:
+            _remove_file(stage)
+        for stage in stages:
+            _fsync_copy(bundle.library, stage)
+
+        for destination in destinations:
+            fd, name = tempfile.mkstemp(
+                prefix=f".{destination.name}.backup.", dir=destination.parent
+            )
+            os.close(fd)
+            backup = Path(name)
+            backup_candidates.append(backup)
+            _remove_file(backup)
+            _fsync_copy(destination, backup)
+            backup_paths.append(backup)
+        _write_overlay_journal(
+            journal_path,
+            {
+                "schema_version": 1,
+                "backup_names": [
+                    {"destination": destination.name, "backup": backup.name}
+                    for destination, backup in zip(destinations, backup_paths)
+                ],
+            },
+        )
+        for stage, destination in zip(stages, destinations):
+            os.replace(stage, destination)
+        committed = True
+    except Exception:
+        if backup_paths:
+            for destination, backup in zip(destinations, backup_paths):
+                if backup.exists():
+                    try:
+                        os.replace(backup, destination)
+                    except OSError:
+                        rollback_ok = False
+        raise
+    finally:
+        for stage in stages:
+            _remove_file(stage)
+        if committed or rollback_ok:
+            _remove_file(journal_path)
+            for backup in backup_paths:
+                _remove_file(backup)
+        for backup in backup_candidates:
+            if backup not in backup_paths:
+                _remove_file(backup)
+
+
+def _assemble_install_in_place(
     install_root: Path,
     extracted: Mapping[str, Path],
     *,
@@ -262,9 +471,25 @@ def assemble_install(
 ) -> None:
     """Assemble only known project/runtime destinations under install_root."""
 
+    if install_root.exists() and install_root.is_symlink():
+        raise ValueError(f"install root must not be a symlink: {install_root}")
     install_root.mkdir(parents=True, exist_ok=True)
     runtime_root = install_root / "runtime"
+    if runtime_root.exists() and runtime_root.is_symlink():
+        raise ValueError(f"install directory must not be a symlink: {runtime_root}")
     runtime_root.mkdir(exist_ok=True)
+    for directory in (
+        runtime_root / "maafw",
+        runtime_root / "maafw" / "bin",
+    ):
+        if directory.exists() and directory.is_symlink():
+            raise ValueError(f"install directory must not be a symlink: {directory}")
+    for artifact_id, source in extracted.items():
+        if artifact_id == "maafw":
+            _validate_bundle_base(
+                project_root / "vendor" / "maafw" / "v5.12.2" / "macos-arm64",
+                source / "bin" / MACOS_CONTROL_UNIT_LIBRARY,
+            )
     for artifact_id, source in extracted.items():
         if artifact_id == "maafw":
             bin_root = source / "bin"
@@ -284,7 +509,11 @@ def assemble_install(
             (install_root / "MaaPiCli").chmod(0o755)
             target = runtime_root / "maafw"
             _atomic_copytree(source, target)
-            (target / "VERSION").write_text("5.12.2\n", encoding="utf-8")
+            (target / "VERSION").write_text(f"{MAAFW_VERSION}\n", encoding="utf-8")
+            overlay_patched_macos_control_unit(
+                install_root,
+                project_root / "vendor" / "maafw" / "v5.12.2" / "macos-arm64",
+            )
         elif artifact_id == "mfa":
             app = _find_named(source, "MFAAvalonia.app", directory=True)
             if app is not None:
@@ -320,6 +549,48 @@ def assemble_install(
         shutil.copytree(agent, install_root / "agent", dirs_exist_ok=True)
 
 
+def assemble_install(
+    install_root: Path,
+    extracted: Mapping[str, Path],
+    *,
+    project_root: Path = ROOT,
+) -> None:
+    """Assemble into a sibling staging tree and swap it into place on success."""
+
+    install_root = Path(install_root)
+    if install_root.exists() and install_root.is_symlink():
+        raise ValueError(f"install root must not be a symlink: {install_root}")
+    parent = install_root.parent
+    parent.mkdir(parents=True, exist_ok=True)
+    for ancestor in Path(os.path.abspath(install_root)).parents:
+        if stat.S_ISLNK(ancestor.lstat().st_mode):
+            raise ValueError(f"install root ancestor must not be a symlink: {ancestor}")
+
+    staging = Path(tempfile.mkdtemp(prefix=f".{install_root.name}.staging-", dir=parent))
+    staging.rmdir()
+    backup: Path | None = None
+    try:
+        if install_root.exists():
+            shutil.copytree(install_root, staging, symlinks=True, dirs_exist_ok=True)
+        _assemble_install_in_place(staging, extracted, project_root=project_root)
+        if install_root.exists():
+            backup = Path(tempfile.mkdtemp(prefix=f".{install_root.name}.backup-", dir=parent))
+            backup.rmdir()
+            install_root.replace(backup)
+        staging.replace(install_root)
+    except Exception:
+        if backup is not None and backup.exists() and not install_root.exists():
+            backup.replace(install_root)
+        raise
+    else:
+        if backup is not None and backup.exists():
+            shutil.rmtree(backup)
+        backup = None
+    finally:
+        if staging.exists():
+            shutil.rmtree(staging)
+
+
 def setup(root: Path) -> Path:
     assert_supported_platform()
     if not DEFAULT_CLICLICK.is_file() or not os.access(DEFAULT_CLICLICK, os.X_OK):
@@ -341,7 +612,10 @@ def setup(root: Path) -> Path:
         assemble_install(install_root, extracted, project_root=root)
     from tools.verify_install import verify_install
 
-    errors = verify_install(install_root)
+    errors = verify_install(
+        install_root,
+        bundle_root=root / "vendor" / "maafw" / "v5.12.2" / "macos-arm64",
+    )
     if errors:
         raise RuntimeError("installation verification failed: " + "; ".join(errors))
     return install_root
