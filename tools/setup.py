@@ -292,7 +292,12 @@ def _require_install_scope(install_root: Path) -> Path:
         root / "runtime",
         root / "runtime" / "maafw",
         root / "runtime" / "maafw" / "bin",
+        root / "runtimes",
+        root / "runtimes" / "osx-arm64",
+        root / "runtimes" / "osx-arm64" / "native",
     ):
+        if not directory.exists() and not directory.is_symlink():
+            continue
         try:
             mode = directory.lstat().st_mode
         except OSError as exc:
@@ -300,6 +305,22 @@ def _require_install_scope(install_root: Path) -> Path:
         if stat.S_ISLNK(mode) or not stat.S_ISDIR(mode):
             raise ValueError(f"install directory must not be a symlink: {directory}")
     return root
+
+
+def _control_unit_destinations(root: Path) -> tuple[Path, ...]:
+    destinations = [
+        root / MACOS_CONTROL_UNIT_LIBRARY,
+        root / "runtime" / "maafw" / "bin" / MACOS_CONTROL_UNIT_LIBRARY,
+    ]
+    native_copy = root / "runtimes" / "osx-arm64" / "native" / MACOS_CONTROL_UNIT_LIBRARY
+    if native_copy.exists() or native_copy.is_symlink():
+        destinations.append(native_copy)
+    for candidate in (root / ".venv" / "lib").glob(
+        f"python*/site-packages/maa/bin/{MACOS_CONTROL_UNIT_LIBRARY}"
+    ):
+        if candidate.exists() or candidate.is_symlink():
+            destinations.append(candidate)
+    return tuple(destinations)
 
 
 def _validate_bundle_base(bundle_root: Path, base_library: Path) -> None:
@@ -379,10 +400,7 @@ def overlay_patched_macos_control_unit(install_root: Path, bundle_root: Path) ->
     """Safely replace both installed macOS control-unit copies with the patch."""
 
     root = _require_install_scope(install_root)
-    destinations = (
-        root / MACOS_CONTROL_UNIT_LIBRARY,
-        root / "runtime" / "maafw" / "bin" / MACOS_CONTROL_UNIT_LIBRARY,
-    )
+    destinations = _control_unit_destinations(root)
     _recover_overlay_journal(root, destinations)
     bundle = load_patched_bundle(bundle_root, require_library=True)
     if bundle.library is None:  # pragma: no cover - require_library enforces this
@@ -399,10 +417,11 @@ def overlay_patched_macos_control_unit(install_root: Path, bundle_root: Path) ->
         raise ValueError(f"installed MaaFramework version must be {MAAFW_VERSION}")
 
     expected_base = bundle.manifest["base_library_sha256"]
+    expected_patched = bundle.manifest["patched_library_sha256"]
     for destination in destinations:
         if destination.is_symlink() or not destination.is_file():
             raise ValueError(f"installed base library is missing: {destination}")
-        if sha256_file(destination) != expected_base:
+        if sha256_file(destination) not in {expected_base, expected_patched}:
             raise ValueError(f"installed base library digest mismatch: {destination}")
 
     stages = tuple(
@@ -510,10 +529,6 @@ def _assemble_install_in_place(
             target = runtime_root / "maafw"
             _atomic_copytree(source, target)
             (target / "VERSION").write_text(f"{MAAFW_VERSION}\n", encoding="utf-8")
-            overlay_patched_macos_control_unit(
-                install_root,
-                project_root / "vendor" / "maafw" / "v5.12.2" / "macos-arm64",
-            )
         elif artifact_id == "mfa":
             app = _find_named(source, "MFAAvalonia.app", directory=True)
             if app is not None:
@@ -537,6 +552,16 @@ def _assemble_install_in_place(
             target = runtime_root / "mfa"
             _atomic_copytree(source, target)
             (target / "VERSION").write_text("2.13.0-beta.5\n", encoding="utf-8")
+
+    if "maafw" in extracted:
+        # The Python Maa binding loads the control unit from the .NET native
+        # runtime directory, not only from the MaaFramework bin directory.
+        # Apply the attested overlay after MFA extraction has created that
+        # directory so the library actually used by the controller is patched.
+        overlay_patched_macos_control_unit(
+            install_root,
+            project_root / "vendor" / "maafw" / "v5.12.2" / "macos-arm64",
+        )
 
     interface = project_root / "assets/interface.json"
     if interface.exists():

@@ -170,12 +170,26 @@ class WindowLifecycle:
         return self.store.load_pending() is not None
 
     def current_prepared_window(self) -> GameWindow:
-        if self._prepared is None:
-            raise MJAError(
-                ErrorCode.WINDOW_NOT_FOUND,
-                "game window has not been prepared",
-            )
-        return self._prepared
+        if self._prepared is not None:
+            return self._prepared
+
+        # Maa runs custom actions in a separate AgentServer process. Rehydrate
+        # the pending preparation from the shared state file and revalidate the
+        # live window identity before allowing an input event.
+        snapshot = self.store.load_pending()
+        if snapshot is not None:
+            current = self.backend.read_window(snapshot.window_id, snapshot.pid)
+            if (
+                current is not None
+                and current.window_id == snapshot.window_id
+                and current.pid == snapshot.pid
+            ):
+                self._prepared = current
+                return current
+        raise MJAError(
+            ErrorCode.WINDOW_NOT_FOUND,
+            "game window has not been prepared",
+        )
 
     def _discover(self, deadline: float) -> GameWindow | None:
         while True:

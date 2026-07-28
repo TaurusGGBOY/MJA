@@ -2,7 +2,7 @@
   "MJA_Start": {
     "recognition": "TemplateMatch",
     "template": "home/home_marker.png",
-    "roi": [1040, 0, 240, 110],
+    "roi": [750, 0, 173, 110],
     "threshold": 0.85,
     "timeout": 30000,
     "action": "DoNothing",
@@ -11,7 +11,7 @@
   "MJA_OpenPanel": {
     "recognition": "TemplateMatch",
     "template": "home/panel_open.png",
-    "roi": [1200, 0, 80, 100],
+    "roi": [865, 0, 58, 100],
     "threshold": 0.9,
     "timeout": 10000,
     "action": "Custom",
@@ -21,7 +21,7 @@
   "MJA_ConfirmPanel": {
     "recognition": "TemplateMatch",
     "template": "panel/panel_marker.png",
-    "roi": [840, 0, 280, 160],
+    "roi": [606, 0, 202, 160],
     "threshold": 0.88,
     "timeout": 10000,
     "action": "DoNothing",
@@ -30,7 +30,7 @@
   "MJA_OpenMail": {
     "recognition": "TemplateMatch",
     "template": "panel/mail_entry.png",
-    "roi": [1120, 115, 160, 210],
+    "roi": [807, 115, 115, 210],
     "threshold": 0.88,
     "timeout": 10000,
     "action": "Custom",
@@ -40,7 +40,7 @@
   "MJA_ConfirmMail": {
     "recognition": "TemplateMatch",
     "template": "mail/mail_marker.png",
-    "roi": [0, 0, 320, 140],
+    "roi": [0, 0, 231, 140],
     "threshold": 0.88,
     "timeout": 10000,
     "action": "DoNothing",
@@ -49,7 +49,7 @@
   "MJA_CloseMail": {
     "recognition": "TemplateMatch",
     "template": "mail/mail_close.png",
-    "roi": [1040, 80, 160, 160],
+    "roi": [750, 80, 115, 160],
     "threshold": 0.9,
     "timeout": 10000,
     "action": "Custom",
@@ -59,7 +59,7 @@
   "MJA_ConfirmPanelAfterMail": {
     "recognition": "TemplateMatch",
     "template": "panel/panel_marker.png",
-    "roi": [840, 0, 280, 160],
+    "roi": [606, 0, 202, 160],
     "threshold": 0.88,
     "timeout": 10000,
     "action": "DoNothing",
@@ -68,7 +68,7 @@
   "MJA_ClosePanel": {
     "recognition": "TemplateMatch",
     "template": "panel/panel_close.png",
-    "roi": [1200, 0, 80, 100],
+    "roi": [865, 0, 58, 100],
     "threshold": 0.9,
     "timeout": 10000,
     "action": "Custom",
@@ -78,7 +78,7 @@
   "MJA_ConfirmHome": {
     "recognition": "TemplateMatch",
     "template": "home/home_marker.png",
-    "roi": [1040, 0, 240, 110],
+    "roi": [750, 0, 173, 110],
     "threshold": 0.85,
     "timeout": 10000,
     "action": "DoNothing"

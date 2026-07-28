@@ -24,6 +24,13 @@ def test_box_center_uses_capture_to_window_ratio() -> None:
     )
 
 
+def test_box_center_supports_observed_ios_window_geometry() -> None:
+    assert map_box_center((750, 0, 173, 110), (923, 720), (197, 47, 1051, 820)) == (
+        1150,
+        110,
+    )
+
+
 @pytest.mark.parametrize(
     "box",
     [None, (0, 0, 0, 20), (-1, 0, 20, 20), (0, 0, 20, 20, 1), "1,2,3,4"],

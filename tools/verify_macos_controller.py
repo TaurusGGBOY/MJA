@@ -132,6 +132,33 @@ def _read_backend(log_path: Path | None) -> Backend:
     return "CoreGraphicsRegion"
 
 
+def _effective_log_path(log_path: Path | None) -> Path | None:
+    """Resolve Maa's fixed ``maafw.log`` filename within the requested dir."""
+
+    if log_path is None or log_path.is_file():
+        return log_path
+    native_log_path = log_path.parent / "maafw.log"
+    return native_log_path if native_log_path.is_file() else log_path
+
+
+def _configure_maa_log_dir(log_path: Path) -> None:
+    """Make the native Maa logger write the evidence file we inspect."""
+
+    try:
+        from maa.tasker import Tasker
+    except Exception as exc:  # pragma: no cover - depends on the assembled runtime
+        raise MJAError(
+            ErrorCode.CONTROLLER_PROBE_FAILED,
+            "Maa logger is unavailable",
+        ) from exc
+    log_path.parent.mkdir(parents=True, exist_ok=True)
+    if not Tasker.set_log_dir(log_path.parent):
+        raise MJAError(
+            ErrorCode.CONTROLLER_PROBE_FAILED,
+            f"could not configure Maa evidence log directory: {log_path.parent}",
+        )
+
+
 def _validate_window_id(window_id: int) -> None:
     if isinstance(window_id, bool) or not isinstance(window_id, int) or window_id <= 0:
         raise MJAError(
@@ -217,7 +244,7 @@ def probe_controller(
             )
         nonempty_frames += 1
 
-    backend = _read_backend(log_path)
+    backend = _read_backend(_effective_log_path(log_path))
     assert expected_size is not None
     return ProbeResult(
         window_id=window_id,
@@ -255,6 +282,8 @@ def main(argv: list[str] | None = None) -> int:
             args.evidence_root.mkdir(parents=True, exist_ok=True)
             if args.log_path is None:
                 args.log_path = args.evidence_root / "maafw.log"
+        if args.log_path is not None:
+            _configure_maa_log_dir(args.log_path)
         result = probe_controller(
             args.window_id,
             frames=args.frames,

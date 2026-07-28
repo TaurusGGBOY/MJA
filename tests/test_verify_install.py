@@ -62,6 +62,14 @@ def _make_complete_install(root: Path) -> Path:
     runtime_library = root / "runtime/maafw/bin" / CONTROL_UNIT_NAME
     runtime_library.parent.mkdir(parents=True)
     runtime_library.write_bytes(payload)
+    native_library = root / "runtimes/osx-arm64/native" / CONTROL_UNIT_NAME
+    native_library.parent.mkdir(parents=True)
+    native_library.write_bytes(payload)
+    python_library = (
+        root / ".venv/lib/python3.14/site-packages/maa/bin" / CONTROL_UNIT_NAME
+    )
+    python_library.parent.mkdir(parents=True)
+    python_library.write_bytes(payload)
     return bundle_root
 
 

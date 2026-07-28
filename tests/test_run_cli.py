@@ -107,3 +107,20 @@ def test_sigint_is_forwarded_and_restore_still_runs(tmp_path) -> None:
     assert child.signals == [signal.SIGINT]
     assert lifecycle.calls[-1] == "restore"
 
+
+def test_cli_reports_task_failure_when_maapi_cli_returns_zero(tmp_path) -> None:
+    lifecycle = FakeLifecycle()
+    child = FakeChild(returncode=0)
+    debug_dir = tmp_path / "install" / "debug" / "runs"
+    debug_dir.mkdir(parents=True)
+    (debug_dir / "maafw.log").write_text("Tasker.Task.Failed\n", encoding="utf-8")
+
+    result = run_cli(
+        lifecycle,
+        install_root=tmp_path / "install",
+        launch=lambda: None,
+        spawn=lambda argv: child,
+    )
+
+    assert result == 3
+    assert lifecycle.calls[-1] == "restore"

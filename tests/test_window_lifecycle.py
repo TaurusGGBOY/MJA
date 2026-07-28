@@ -92,6 +92,16 @@ def test_prepare_accepts_a_fixed_size_game_window(tmp_path) -> None:
     assert lifecycle.has_pending_restore()
 
 
+def test_current_prepared_window_rehydrates_in_agent_process(tmp_path) -> None:
+    backend = FakeBackend()
+    parent = make_lifecycle(tmp_path, backend)
+    parent.prepare(timeout_seconds=0)
+
+    child = WindowLifecycle(backend, WindowStateStore(tmp_path / "window.json"))
+
+    assert child.current_prepared_window() == backend.window
+
+
 def test_prepare_distinguishes_launch_timeout_from_missing_window(tmp_path) -> None:
     backend = FakeBackend()
     backend.running = False

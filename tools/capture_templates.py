@@ -156,6 +156,32 @@ def validate_crop_profile(
         _validate_crop(crop, calibration.maa_capture_size)
 
 
+def _crops_for_calibration(
+    crops: Mapping[str, Crop], calibration: CaptureCalibration
+) -> dict[str, Crop]:
+    """Project the legacy 1280x720 crop contract into a calibrated frame."""
+
+    if calibration == TRUE_1280_CALIBRATION:
+        return dict(crops)
+    source_width, source_height = TRUE_1280_CALIBRATION.maa_capture_size
+    target_width, target_height = calibration.maa_capture_size
+    scale_x = target_width / source_width
+    scale_y = target_height / source_height
+
+    def scale(value: int, factor: float) -> int:
+        return int(round(value * factor))
+
+    return {
+        name: Crop(
+            x=scale(crop.x, scale_x),
+            y=scale(crop.y, scale_y),
+            width=max(1, scale(crop.width, scale_x)),
+            height=max(1, scale(crop.height, scale_y)),
+        )
+        for name, crop in crops.items()
+    }
+
+
 def crop_templates(
     source: str | Path,
     output_dir: str | Path,
@@ -254,6 +280,7 @@ def capture_profile(
         calibration=calibration,
         controller_factory=controller_factory,
     )
+    crops = _crops_for_calibration(crops, calibration)
     target_dir = Path(output_root) / directory
     temporary = target_dir / ".capture-source.png"
     target_dir.mkdir(parents=True, exist_ok=True)

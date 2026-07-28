@@ -135,7 +135,12 @@ def verify_patched_control_unit(
     installed = {
         "root": install_root / CONTROL_UNIT_NAME,
         "runtime": install_root / "runtime" / "maafw" / "bin" / CONTROL_UNIT_NAME,
+        "native": install_root / "runtimes" / "osx-arm64" / "native" / CONTROL_UNIT_NAME,
     }
+    for candidate in (install_root / ".venv" / "lib").glob(
+        f"python*/site-packages/maa/bin/{CONTROL_UNIT_NAME}"
+    ):
+        installed["python"] = candidate
     present: list[tuple[str, Path]] = []
     for label, path in installed.items():
         if not path.is_file():

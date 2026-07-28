@@ -62,6 +62,9 @@ def _make_install(install_root: Path, base: bytes, version: str = "5.12.2\n") ->
     (runtime_root / "VERSION").write_text(version, encoding="utf-8")
     (install_root / CONTROL_UNIT_NAME).write_bytes(base)
     (runtime_root / "bin" / CONTROL_UNIT_NAME).write_bytes(base)
+    native_root = install_root / "runtimes" / "osx-arm64" / "native"
+    native_root.mkdir(parents=True)
+    (native_root / CONTROL_UNIT_NAME).write_bytes(base)
     return install_root
 
 
@@ -167,6 +170,9 @@ def test_overlay_uses_exact_pinned_base_and_replaces_both_copies(tmp_path: Path)
 
     assert (install / CONTROL_UNIT_NAME).read_bytes() == patched
     assert (install / "runtime" / "maafw" / "bin" / CONTROL_UNIT_NAME).read_bytes() == patched
+    assert (
+        install / "runtimes" / "osx-arm64" / "native" / CONTROL_UNIT_NAME
+    ).read_bytes() == patched
     assert not list(install.rglob("*.staging"))
     assert not list(install.rglob("*.backup"))
 

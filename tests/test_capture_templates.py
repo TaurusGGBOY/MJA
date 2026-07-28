@@ -14,6 +14,7 @@ from tools.capture_templates import (
     TRUE_1280_CALIBRATION,
     CaptureCalibration,
     Crop,
+    _crops_for_calibration,
     calibration_from_mapping,
     capture_screen,
     crop_templates,
@@ -101,6 +102,13 @@ def test_crop_templates_accept_non_1280_calibrated_source(tmp_path: Path) -> Non
         calibration=OBSERVED_IOS_CALIBRATION,
     )
     assert Image.open(outputs["observed_marker"]).size == (200, 100)
+
+
+def test_legacy_crops_project_into_observed_capture_size() -> None:
+    crops = _crops_for_calibration(
+        {"home_marker": Crop(1040, 0, 240, 110)}, OBSERVED_IOS_CALIBRATION
+    )
+    assert crops["home_marker"] == Crop(750, 0, 173, 110)
 
 
 def test_crop_templates_refuse_live_size_mismatch(tmp_path: Path) -> None:

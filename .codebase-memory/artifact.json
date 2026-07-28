@@ -1,11 +1,11 @@
 {
     "schema_version": 2,
-    "commit": "",
-    "indexed_at": "2026-07-27T12:20:56Z",
+    "commit": "b5bac5d487ba8b492f048f0e399f01c86637db14",
+    "indexed_at": "2026-07-28T05:22:04Z",
     "project": "MJA",
-    "nodes": 5,
-    "edges": 4,
-    "original_size": 1179648,
-    "compressed_size": 2386,
-    "compression_level": 9
+    "nodes": 550,
+    "edges": 2175,
+    "original_size": 2359296,
+    "compressed_size": 205889,
+    "compression_level": 3
 }

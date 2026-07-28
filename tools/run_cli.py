@@ -13,6 +13,7 @@ from typing import Any, Protocol
 GAME_APP_NAME = "对决！剑之川"
 PREPARE_TIMEOUT_SECONDS = 60
 CLI_COMMAND = ["./MaaPiCli", "-d"]
+TASK_FAILED_MARKER = "Tasker.Task.Failed"
 
 
 class Lifecycle(Protocol):
@@ -71,6 +72,17 @@ def _default_spawn(
     return subprocess.Popen(list(argv), cwd=install_root, env=environment)
 
 
+def _task_failed(debug_dir: Path) -> bool:
+    log_paths = (debug_dir / "maafw.log", debug_dir.parent / "maafw.log")
+    for log_path in log_paths:
+        try:
+            if TASK_FAILED_MARKER in log_path.read_text(encoding="utf-8", errors="replace"):
+                return True
+        except OSError:
+            continue
+    return False
+
+
 def run_cli(
     lifecycle: Lifecycle,
     *,
@@ -83,6 +95,10 @@ def run_cli(
     config_path = root / "config" / "maa_pi_config.json"
     environment = os.environ.copy()
     environment["MJA_DEBUG_DIR"] = str(root / "debug" / "runs")
+    state_store = getattr(lifecycle, "store", None)
+    state_path = getattr(state_store, "path", None)
+    if state_path is not None:
+        environment["MJA_WINDOW_STATE"] = str(Path(state_path).resolve())
     child: ChildProcess | None = None
     previous_sigint = signal.getsignal(signal.SIGINT)
 
@@ -99,7 +115,10 @@ def run_cli(
             child = _default_spawn(CLI_COMMAND, install_root=root, environment=environment)
         else:
             child = spawn(CLI_COMMAND)
-        return child.wait()
+        result = child.wait()
+        if result == 0 and _task_failed(root / "debug" / "runs"):
+            return 3
+        return result
     finally:
         signal.signal(signal.SIGINT, previous_sigint)
         active_exception = sys.exc_info()[0]
@@ -128,4 +147,3 @@ if __name__ == "__main__":  # pragma: no cover - CLI exercised on the target Mac
 
 
 __all__ = ["CLI_COMMAND", "main", "run_cli"]
-
