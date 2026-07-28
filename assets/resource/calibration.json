@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "logical_window_size": [1051, 820],
+  "maa_capture_size": [923, 720],
+  "display_short_side": 720,
+  "profiles": {
+    "observed_ios_window": {
+      "logical_window_size": [1051, 820],
+      "maa_capture_size": [923, 720],
+      "display_short_side": 720,
+      "status": "verified_dimensions_only",
+      "live_capture_assets": false
+    },
+    "true_1280_legacy_assets": {
+      "logical_window_size": [1280, 720],
+      "maa_capture_size": [1280, 720],
+      "display_short_side": 720,
+      "status": "asset_compatible",
+      "live_capture_assets": false
+    }
+  },
+  "template_contract": {
+    "profile": "true_1280_legacy_assets",
+    "capture_size": [1280, 720],
+    "status": "live_recalibration_pending",
+    "reason": "The observed 923x720 frame has no authorized live template capture yet; existing PNGs remain unchanged."
+  }
+}
