@@ -245,7 +245,8 @@ class PlanJianlinChallenge(CustomAction):
                     safe_multipliers,
                 )
             branch = (
-                f"MJA_JIANLIN_SET_COUNT_COUNT_{plan.count}_MULTIPLIER_{plan.multiplier}"
+                "剑林凝结体体力-设置-倍率-次数-"
+                f"{plan.count}-倍率-{plan.multiplier}"
             )
             get_node_data = getattr(context, "get_node_data")
             if get_node_data(dispatch_node) is None or get_node_data(branch) is None:

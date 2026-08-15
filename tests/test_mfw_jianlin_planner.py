@@ -112,14 +112,14 @@ def test_plan_safe_challenge_rejects_unsafe_inputs(
 def test_planner_action_selects_declared_branch_without_input_access():
     context = FakeContext(nodes={
         "剑林凝结体体力-计划-派遣",
-        "剑林凝结体体力-设置-次数-次数-2-倍率-3",
+        "剑林凝结体体力-设置-倍率-次数-2-倍率-3",
     })
 
     assert PlanJianlinChallenge().run(context, _argv()) is True
     assert context.next_overrides == [
         (
             "剑林凝结体体力-计划-派遣",
-            ["剑林凝结体体力-设置-次数-次数-2-倍率-3"],
+            ["剑林凝结体体力-设置-倍率-次数-2-倍率-3"],
         )
     ]
     assert context.controller.actions == []
@@ -128,14 +128,14 @@ def test_planner_action_selects_declared_branch_without_input_access():
 def test_planner_accepts_a_safe_current_live_slider_selection():
     context = FakeContext(nodes={
         "剑林凝结体体力-计划-派遣",
-        "剑林凝结体体力-设置-次数-次数-6-倍率-3",
+        "剑林凝结体体力-设置-倍率-次数-6-倍率-3",
     })
 
     assert PlanJianlinChallenge().run(context, _selected_argv()) is True
     assert context.next_overrides == [
         (
             "剑林凝结体体力-计划-派遣",
-            ["剑林凝结体体力-设置-次数-次数-6-倍率-3"],
+            ["剑林凝结体体力-设置-倍率-次数-6-倍率-3"],
         )
     ]
 
@@ -160,7 +160,7 @@ def test_planner_reduces_an_unsafe_default_selection_to_an_affordable_plan():
     }
     context = FakeContext(nodes={
         "剑林凝结体体力-计划-派遣",
-        "剑林凝结体体力-设置-次数-次数-1-倍率-2",
+        "剑林凝结体体力-设置-倍率-次数-1-倍率-2",
     })
 
     assert PlanJianlinChallenge().run(
@@ -173,7 +173,7 @@ def test_planner_reduces_an_unsafe_default_selection_to_an_affordable_plan():
     assert context.next_overrides == [
         (
             "剑林凝结体体力-计划-派遣",
-            ["剑林凝结体体力-设置-次数-次数-1-倍率-2"],
+            ["剑林凝结体体力-设置-倍率-次数-1-倍率-2"],
         )
     ]
 

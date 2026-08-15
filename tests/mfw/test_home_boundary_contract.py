@@ -17,7 +17,7 @@ def test_run_store_seals_business_result_before_home_boundary() -> None:
     store = TaskRunStore()
     store.begin(TASK_ID)
 
-    store.seal_business_result(TASK_ID, TaskOutcomeStatus.SUCCESS, "邮件奖励-邮件-空", None)
+    store.seal_business_result(TASK_ID, TaskOutcomeStatus.SUCCESS, "mail.empty", None)
     snapshot = store.snapshot(TASK_ID)
 
     assert snapshot["business_result_sealed"] is True
@@ -34,7 +34,7 @@ def test_run_store_seals_business_result_before_home_boundary() -> None:
 def test_sealed_run_allows_only_declared_boundary_cleanup_actions() -> None:
     store = TaskRunStore()
     store.begin(TASK_ID)
-    store.seal_business_result(TASK_ID, TaskOutcomeStatus.SUCCESS, "邮件奖励-邮件-空", None)
+    store.seal_business_result(TASK_ID, TaskOutcomeStatus.SUCCESS, "mail.empty", None)
 
     assert store.increment(TASK_ID, "close_reward_popup") == 1
     assert store.increment(TASK_ID, "close_mail") == 1
@@ -51,7 +51,7 @@ def test_sealed_run_allows_only_declared_boundary_cleanup_actions() -> None:
 def test_run_store_home_boundary_is_the_final_success_transition() -> None:
     store = TaskRunStore()
     store.begin(TASK_ID)
-    store.seal_business_result(TASK_ID, TaskOutcomeStatus.SUCCESS, "邮件奖励-邮件-空", None)
+    store.seal_business_result(TASK_ID, TaskOutcomeStatus.SUCCESS, "mail.empty", None)
 
     store.complete_home_boundary(TASK_ID)
     snapshot = store.snapshot(TASK_ID)
@@ -69,7 +69,7 @@ def test_run_store_home_boundary_is_the_final_success_transition() -> None:
 def test_run_store_boundary_failure_preserves_business_evidence() -> None:
     store = TaskRunStore()
     store.begin(TASK_ID)
-    store.seal_business_result(TASK_ID, TaskOutcomeStatus.SUCCESS, "邮件奖励-邮件-空", None)
+    store.seal_business_result(TASK_ID, TaskOutcomeStatus.SUCCESS, "mail.empty", None)
 
     store.fail_home_boundary(TASK_ID, "home.boundary", "HOME_BOUNDARY_TIMEOUT")
     snapshot = store.snapshot(TASK_ID)
@@ -89,7 +89,7 @@ def test_diagnostics_persists_two_phase_result_and_business_evidence(tmp_path: P
     diagnostics.seal_business_result(
         TASK_ID,
         TaskOutcomeStatus.SUCCESS,
-        "邮件奖励-邮件-空",
+        "mail.empty",
         None,
     )
 
@@ -123,7 +123,7 @@ def test_diagnostics_boundary_failure_keeps_original_business_postcondition(
     diagnostics.seal_business_result(
         TASK_ID,
         TaskOutcomeStatus.SUCCESS,
-        "邮件奖励-邮件-空",
+        "mail.empty",
         None,
     )
     diagnostics.fail_home_boundary(TASK_ID, "home.boundary", "HOME_BOUNDARY_TIMEOUT")
