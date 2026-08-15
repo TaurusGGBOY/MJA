@@ -1,6 +1,9 @@
 {
   "破阵武学-任务入口": {
-    "recognition": "DirectHit",
+    "recognition": {
+      "type": "And",
+      "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}
+    },
     "action": "Custom",
     "custom_action": "BeginTask",
     "custom_action_param": {"task_id": "BREAK_ARRAY_MARTIAL_DAILY"},
@@ -10,7 +13,7 @@
       "破阵武学-活动-探测",
       "破阵武学-主页-探测"
     ],
-    "on_error": ["破阵武学-记录-失败"],
+    "on_error": ["[JumpBack]启动-游戏启动", "破阵武学-记录-失败"],
     "retry_times": 0
   },
   "破阵武学-主页-探测": {
@@ -557,12 +560,6 @@
     },
     "action": "DoNothing"
   },
-  "破阵武学-突破-阵法-启动-加载": {
-    "recognition": "OCR",
-    "expected": ["穿梭入世", "穿梭入世中", "加载中"],
-    "roi": [350, 580, 900, 140],
-    "action": "DoNothing"
-  },
   "破阵武学-活动-入口": {
     "recognition": "OCR",
     "expected": ["活动", "活动中心"],
@@ -573,13 +570,6 @@
     "recognition": "OCR",
     "expected": ["破阵演武", "破阵"],
     "roi": [0, 120, 1280, 600],
-    "action": "DoNothing"
-  },
-  "破阵武学-活动-关闭": {
-    "recognition": "TemplateMatch",
-    "template": "home/modal_close.png",
-    "roi": [1120, 0, 160, 140],
-    "threshold": 0.375,
     "action": "DoNothing"
   },
   "破阵武学-突破-阵法-入口": {
@@ -846,13 +836,6 @@
     "recognition": "OCR",
     "expected": ["确认", "继续", "点击空白处关闭", "返回"],
     "roi": [760, 420, 440, 260],
-    "action": "DoNothing"
-  },
-  "破阵武学-突破-阵法-关闭": {
-    "recognition": "TemplateMatch",
-    "template": "home/modal_close.png",
-    "roi": [1120, 0, 160, 140],
-    "threshold": 0.375,
     "action": "DoNothing"
   },
   "破阵武学-突破-阵法-未知-对话框": {

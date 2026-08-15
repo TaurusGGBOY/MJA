@@ -1,11 +1,15 @@
 {
   "试剑-任务入口": {
-    "recognition": "DirectHit",
+    "recognition": {
+      "type": "And",
+      "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}
+    },
     "action": "Custom",
     "custom_action": "BeginTask",
     "custom_action_param": {
       "task_id": "TRIAL_SWORD_DAILY"
     },
+    "timeout": 8000,
     "max_hit": 1,
     "next": [
       "[JumpBack]公共-已知-画卷-关闭",
@@ -14,7 +18,7 @@
       "试剑-领取-奖励",
       "试剑-打开-试炼"
     ],
-    "on_error": ["试剑-记录-失败"],
+    "on_error": ["[JumpBack]启动-游戏启动", "试剑-记录-失败"],
     "retry_times": 0
   },
   "试剑-领取-奖励": {
@@ -290,7 +294,7 @@
     "recognition": "TemplateMatch",
     "template": "daily/TRIAL_SWORD_DAILY/trial_close.png",
     "roi": [1160, 0, 100, 100],
-    "threshold": 0.36,
+    "threshold": 0.72,
     "action": "DoNothing"
   }
 }

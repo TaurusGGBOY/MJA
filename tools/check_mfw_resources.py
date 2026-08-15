@@ -54,7 +54,6 @@ _SHARED_CONVERGENCE_NAMES = frozenset(
     {
         "启动-游戏启动",
         "启动-游戏就绪",
-        "公共-主页恢复",
         "MJA_COMMON_ENTRY",
         "MJA_STATE_CONVERGENCE",
     }
@@ -619,6 +618,99 @@ def check_task_entry_contracts(
     return diagnostics
 
 
+def validate_guarded_input_evidence(
+    nodes: Mapping[str, Mapping[str, Any]],
+) -> list[str]:
+    """Validate GuardedInput indices and names against its And recognition.
+
+    GuardedInput validates all evidence against the same Maa ``And`` result.
+    When a pipeline removes an ``all_of`` member but keeps the old evidence
+    indices, the recognition can still succeed while the input is denied.
+    Keep this structural contract in the offline resource validator so that a
+    simplification cannot silently create that runtime-only failure.
+    """
+
+    errors: list[str] = []
+    indexed_fields = (
+        "page_index",
+        "target_index",
+        "resource_index",
+        "amount_index",
+        "material_index",
+        "owned_index",
+        "required_index",
+        "material_relation_index",
+    )
+    name_fields = (
+        ("page_index", "page_name"),
+        ("target_index", "target_name"),
+    )
+
+    for node_name, node in nodes.items():
+        if node.get("custom_action") != "GuardedInput":
+            continue
+
+        params = node.get("custom_action_param")
+        if not isinstance(params, Mapping):
+            errors.append(f"{node_name} GuardedInput has malformed custom_action_param")
+            continue
+
+        recognition = node.get("recognition")
+        if not isinstance(recognition, Mapping) or str(
+            recognition.get("type", "")
+        ).casefold() != "and":
+            errors.append(f"{node_name} GuardedInput requires And recognition")
+            continue
+
+        recognition_param = recognition.get("param")
+        all_of = (
+            recognition_param.get("all_of")
+            if isinstance(recognition_param, Mapping)
+            else None
+        )
+        if not isinstance(all_of, list) or not all_of:
+            errors.append(f"{node_name} GuardedInput requires non-empty And.all_of")
+            continue
+
+        evidence = params.get("evidence")
+        if not isinstance(evidence, Mapping):
+            errors.append(f"{node_name} GuardedInput has malformed evidence")
+            continue
+
+        for field in indexed_fields:
+            if field not in evidence and field not in params:
+                continue
+            value = evidence.get(field) if field in evidence else params.get(field)
+            if (
+                isinstance(value, bool)
+                or not isinstance(value, int)
+                or value < 0
+                or value >= len(all_of)
+            ):
+                errors.append(
+                    f"{node_name} GuardedInput {field}={value!r} is outside "
+                    f"And.all_of (size {len(all_of)})"
+                )
+
+        for index_field, name_field in name_fields:
+            if name_field not in evidence:
+                continue
+            index = evidence.get(index_field)
+            name = evidence.get(name_field)
+            if (
+                isinstance(index, int)
+                and not isinstance(index, bool)
+                and 0 <= index < len(all_of)
+                and name != all_of[index]
+            ):
+                errors.append(
+                    f"{node_name} GuardedInput {name_field}={name!r} does not "
+                    f"match And.all_of[{index}]={all_of[index]!r}"
+                )
+
+    return errors
+
+
 def validate_nodes(nodes: dict[str, dict[str, Any]]) -> list[str]:
     errors: list[str] = []
     serialized = json.dumps(nodes, ensure_ascii=False).lower()
@@ -650,6 +742,7 @@ def validate_nodes(nodes: dict[str, dict[str, Any]]) -> list[str]:
 
     for name in _has_unbounded_cycle(nodes):
         errors.append(f"unbounded cycle at {name}")
+    errors.extend(validate_guarded_input_evidence(nodes))
     return errors
 
 

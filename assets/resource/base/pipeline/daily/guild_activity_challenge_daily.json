@@ -1,6 +1,9 @@
 {
   "帮派活动挑战-任务入口": {
-    "recognition": "DirectHit",
+    "recognition": {
+      "type": "And",
+      "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}
+    },
     "action": "Custom",
     "custom_action": "BeginTask",
     "custom_action_param": {
@@ -8,7 +11,7 @@
     },
     "timeout": 8000,
     "next": ["帮派活动挑战-主页-探测"],
-    "on_error": ["帮派活动挑战-记录-失败"],
+    "on_error": ["[JumpBack]启动-游戏启动", "帮派活动挑战-记录-失败"],
     "retry_times": 0
   },
   "帮派活动挑战-页面-探测": {

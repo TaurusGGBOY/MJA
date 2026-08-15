@@ -1,11 +1,15 @@
 {
   "商店免费礼包-任务入口": {
-    "recognition": "DirectHit",
+    "recognition": {
+      "type": "And",
+      "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}
+    },
     "action": "Custom",
     "custom_action": "BeginTask",
     "custom_action_param": {
       "task_id": "SHOP_FREE_GIFT_DAILY"
     },
+    "timeout": 8000,
     "max_hit": 1,
     "next": [
       "商店免费礼包-打开-周期",
@@ -15,6 +19,7 @@
       "商店免费礼包-主页-探测"
     ],
     "on_error": [
+      "[JumpBack]启动-游戏启动",
       "商店免费礼包-运行时-恢复-尝试-1",
       "商店免费礼包-运行时-恢复-耗尽"
     ]
@@ -37,7 +42,7 @@
     "roi": [0, 100, 1280, 620],
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["商店免费礼包-状态-探测"],
+    "next": ["商店免费礼包-领取-门禁", "商店免费礼包-状态-探测"],
     "on_error": [
       "商店免费礼包-运行时-恢复-尝试-1",
       "商店免费礼包-运行时-恢复-耗尽"

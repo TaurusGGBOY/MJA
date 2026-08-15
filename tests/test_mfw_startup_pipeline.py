@@ -22,15 +22,24 @@ def _startup() -> dict[str, dict]:
     return json.loads(STARTUP_PATH.read_text(encoding="utf-8"))
 
 
-def test_game_start_entry_is_a_probe_and_does_not_start_app() -> None:
+def test_game_start_entry_launches_app_before_readiness_checks() -> None:
     node = _startup()["启动-游戏入口"]
 
     assert node["recognition"] == "DirectHit"
-    assert node["action"] == "DoNothing"
+    assert node["action"] == "StartApp"
+    assert node["package"] == "com.hanjiasongshu.dr22/.MainActivity"
     assert node["max_hit"] == 1
+    assert node["repeat"] == 5
+    assert node["repeat_delay"] == 1000
     assert node["timeout"] == 1000
     assert node["next"] == ["启动-游戏启动"]
     assert node["on_error"] == ["公共-通用-启动恢复-重启"]
+
+
+def test_game_start_pipeline_has_no_post_delay() -> None:
+    startup = _startup()
+
+    assert all("post_delay" not in node for node in startup.values())
 
 
 def test_game_start_only_short_circuits_on_home_ocr() -> None:
@@ -41,12 +50,12 @@ def test_game_start_only_short_circuits_on_home_ocr() -> None:
 
     expected = {
         "recognition": "OCR",
-        "expected": "^画[卷券]$",
-        "roi": [1080, 0, 200, 120],
+        "expected": "已击破",
+        "roi": [940, 660, 140, 40],
     }
     assert start["recognition"] == "DirectHit"
     assert start["action"] == "DoNothing"
-    assert start["timeout"] == 1000
+    assert start["timeout"] == 20000
     assert start["next"] == [
         "[JumpBack]启动-可选点击空白关闭",
         "[JumpBack]启动-可选关闭月签到奖励页",
@@ -61,7 +70,7 @@ def test_game_start_only_short_circuits_on_home_ocr() -> None:
     assert {key: home[key] for key in expected} == expected
 
 
-def test_restart_handoff_waits_twenty_seconds_then_clicks_both_buttons() -> None:
+def test_restart_handoff_clicks_both_buttons_without_post_delay() -> None:
     startup = _startup()
     terminal = load_nodes(ROOT / "assets/resource/base/pipeline")[
         "公共-通用-启动恢复-重启"
@@ -79,7 +88,7 @@ def test_restart_handoff_waits_twenty_seconds_then_clicks_both_buttons() -> None
 
     assert wait_after_restart["recognition"] == "DirectHit"
     assert wait_after_restart["action"] == "DoNothing"
-    assert wait_after_restart["post_delay"] == 20000
+    assert "post_delay" not in wait_after_restart
     assert wait_after_restart["max_hit"] == 1
     assert wait_after_restart["next"] == ["启动-游戏-按钮-之后-重启"]
 
@@ -90,20 +99,21 @@ def test_restart_handoff_waits_twenty_seconds_then_clicks_both_buttons() -> None
         "^点击开始游戏[！!]?$",
     ]
     assert start_button["action"] == "Click"
-    assert start_button["post_delay"] == 5000
+    assert "post_delay" not in start_button
     assert start_button["next"] == ["启动-进入-游戏-按钮-之后-重启"]
     assert start_button["on_error"] == ["启动-游戏启动重试-2"]
 
     assert enter_button["recognition"] == "OCR"
     assert enter_button["expected"] == ["^进入游戏[！!]?$", "^点击进入游戏[！!]?$"]
     assert enter_button["action"] == "Click"
-    assert enter_button["post_delay"] == 0
+    assert "post_delay" not in enter_button
     assert enter_button["next"] == ["启动-进入游戏后等待"]
     assert enter_button["on_error"] == ["公共-游戏启动进入按钮未找到"]
 
     assert wait_after_enter["recognition"] == "DirectHit"
     assert wait_after_enter["action"] == "DoNothing"
-    assert wait_after_enter["post_delay"] == 30000
+    assert wait_after_enter["timeout"] == 30000
+    assert "post_delay" not in wait_after_enter
     assert wait_after_enter["next"] == [
         "[JumpBack]启动-可选点击空白关闭",
         "[JumpBack]启动-可选关闭月签到奖励页",
@@ -132,7 +142,7 @@ def test_restart_handoff_relaunches_at_most_five_times_when_start_button_is_miss
             else "公共-游戏启动开始按钮未找到"
         )
 
-        assert wait["post_delay"] == 20000
+        assert "post_delay" not in wait
         assert wait["max_hit"] == 1
         assert wait["next"] == [button_name]
         assert wait["on_error"] == [next_failure]
@@ -193,7 +203,6 @@ def test_startup_route_has_no_legacy_page_gate_or_restart_recursion() -> None:
         "公共-已知-战斗胜利结果关闭",
         "公共-已知-战斗结果关闭",
         "启动-过期-宝箱-奖励-恢复",
-        "启动-影-页面-返回",
         "启动-影-探索-页面-返回",
         "公共-已知-点击空白关闭",
         "公共-已知-月签到-关闭",
@@ -240,7 +249,6 @@ def test_startup_graph_is_bounded_and_old_nodes_are_not_deleted_accidentally() -
     startup = _startup()
     for name in (
         "启动-过期-宝箱-奖励-恢复",
-        "启动-影-页面-返回",
         "启动-影-探索-页面-返回",
         "启动-持续黑屏恢复",
     ):

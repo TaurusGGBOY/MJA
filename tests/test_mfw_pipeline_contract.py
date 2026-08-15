@@ -2,7 +2,11 @@ from pathlib import Path
 
 import pytest
 
-from tools.check_mfw_resources import load_pipeline_nodes, validate_nodes
+from tools.check_mfw_resources import (
+    load_pipeline_nodes,
+    validate_guarded_input_evidence,
+    validate_nodes,
+)
 
 
 def test_base_resource_contains_ocr_and_common_terminals() -> None:
@@ -47,3 +51,8 @@ def test_pipeline_validator_rejects_missing_target_and_unbounded_cycle() -> None
 def test_pipeline_validator_rejects_node_reference_as_recognition_type() -> None:
     errors = validate_nodes({"PROBE": {"recognition": "page.home", "action": "DoNothing"}})
     assert any("unknown recognition type page.home" in error for error in errors)
+
+
+def test_all_guarded_input_evidence_matches_its_and_results() -> None:
+    nodes = load_pipeline_nodes(Path("assets/resource/base/pipeline"))
+    assert validate_guarded_input_evidence(nodes) == []

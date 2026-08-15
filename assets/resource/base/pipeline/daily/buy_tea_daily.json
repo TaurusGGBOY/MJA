@@ -1,17 +1,21 @@
 {
   "买茶-任务入口": {
-    "recognition": "DirectHit",
+    "recognition": {
+      "type": "And",
+      "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}
+    },
     "action": "Custom",
     "custom_action": "BeginTask", "max_hit": 1,
     "custom_action_param": {
       "task_id": "BUY_TEA_DAILY"
     },
+    "timeout": 8000,
     "next": [
       "买茶-主页-探测",
       "买茶-面板-探测",
       "买茶-游戏启动恢复"
     ],
-    "on_error": ["买茶-游戏启动恢复失败"]
+    "on_error": ["[JumpBack]启动-游戏启动", "买茶-游戏启动恢复失败"]
   },
   "买茶-游戏启动恢复": {
     "recognition": "DirectHit",
@@ -332,14 +336,14 @@
       "action_id": "buy_tea",
       "kind": "click",
       "resource_id": "文",
-      "resource_index": 2,
-      "amount_index": 3,
+      "resource_index": 0,
+      "amount_index": 0,
       "observed_amount": 500,
       "budget_amount": 500,
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "买茶-茶-数量-面板",
+        "page_name": "买茶-茶-消耗-500",
         "target_name": "买茶-茶-购买-确认"
       }
     },
@@ -477,14 +481,14 @@
     "recognition": "TemplateMatch",
     "template": "daily/BUY_TEA_DAILY/tea_item.png",
     "roi": [180, 130, 650, 400],
-    "threshold": 0.39,
+    "threshold": 0.78,
     "action": "DoNothing"
   },
   "买茶-茶-滚动-区域": {
     "recognition": "TemplateMatch",
     "template": "daily/BUY_TEA_DAILY/tea_shop_page.png",
     "roi": [180, 300, 650, 230],
-    "threshold": 0.35,
+    "threshold": 0.70,
     "action": "DoNothing"
   },
   "买茶-茶-详情": {
@@ -494,24 +498,26 @@
     "action": "DoNothing"
   },
   "买茶-茶-售罄": {
-    "recognition": "TemplateMatch",
-    "template": "daily/BUY_TEA_DAILY/sold_out.png",
-    "roi": [850, 170, 370, 120],
-    "threshold": 0.39,
+    "recognition": "OCR",
+    "expected": [
+      "每日限购[:：]?\\s*0\\s*/\\s*10",
+      "售罄"
+    ],
+    "roi": [820, 100, 430, 230],
     "action": "DoNothing"
   },
   "买茶-茶-购买-控制": {
     "recognition": "TemplateMatch",
     "template": "daily/BUY_TEA_DAILY/purchase_control.png",
     "roi": [850, 170, 370, 120],
-    "threshold": 0.39,
+    "threshold": 0.78,
     "action": "DoNothing"
   },
   "买茶-茶-数量-面板": {
     "recognition": "TemplateMatch",
     "template": "daily/BUY_TEA_DAILY/quantity_panel.png",
     "roi": [200, 70, 520, 180],
-    "threshold": 0.39,
+    "threshold": 0.78,
     "action": "DoNothing"
   },
   "买茶-茶-数量-标题": {
@@ -524,14 +530,14 @@
     "recognition": "TemplateMatch",
     "template": "daily/BUY_TEA_DAILY/max_quantity.png",
     "roi": [900, 400, 150, 120],
-    "threshold": 0.4,
+    "threshold": 0.8,
     "action": "DoNothing"
   },
   "买茶-茶-购买-确认": {
     "recognition": "TemplateMatch",
     "template": "daily/BUY_TEA_DAILY/buy_confirm.png",
     "roi": [650, 500, 400, 150],
-    "threshold": 0.4,
+    "threshold": 0.8,
     "action": "DoNothing"
   },
   "买茶-茶-消耗-500": {
@@ -544,7 +550,7 @@
     "recognition": "TemplateMatch",
     "template": "daily/BUY_TEA_DAILY/purchase_result.png",
     "roi": [560, 260, 260, 200],
-    "threshold": 0.375,
+    "threshold": 0.75,
     "action": "DoNothing"
   },
   "买茶-茶-购买-结果-关闭": {

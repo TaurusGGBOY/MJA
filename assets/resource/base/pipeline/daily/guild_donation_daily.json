@@ -1,6 +1,9 @@
 {
   "帮派捐献-任务入口": {
-    "recognition": "DirectHit",
+    "recognition": {
+      "type": "And",
+      "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}
+    },
     "action": "Custom",
     "custom_action": "BeginTask",
     "custom_action_param": {
@@ -9,7 +12,7 @@
     "max_hit": 1,
     "timeout": 8000,
     "next": ["帮派捐献-开始-安全-探测"],
-    "on_error": ["帮派捐献-记录-失败"]
+    "on_error": ["[JumpBack]启动-游戏启动", "帮派捐献-记录-失败"]
   },
   "帮派捐献-开始-安全-探测": {
     "recognition": "OCR",
@@ -371,7 +374,7 @@
           "帮派捐献-帮派-捐献-帮派-主页-页面",
           "帮派捐献-帮派-捐献-帮派-主页-关闭"
         ],
-        "box_index": 2
+        "box_index": 1
       }
     },
     "action": "Custom",
@@ -383,7 +386,7 @@
       "kind": "click",
       "evidence": {
         "page_index": 0,
-        "target_index": 2,
+        "target_index": 1,
         "page_name": "帮派捐献-帮派-捐献-帮派-主页-页面",
         "target_name": "帮派捐献-帮派-捐献-帮派-主页-关闭"
       }

@@ -1,11 +1,15 @@
 {
   "吃体力食物-任务入口": {
-    "recognition": "DirectHit",
+    "recognition": {
+      "type": "And",
+      "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}
+    },
     "action": "Custom",
     "custom_action": "BeginTask", "max_hit": 1,
     "custom_action_param": {
       "task_id": "EAT_STAMINA_FOOD_DAILY"
     },
+    "timeout": 8000,
     "next": [
       "吃体力食物-关闭-剑林-页面",
       "吃体力食物-面板-探测",
@@ -18,7 +22,7 @@
       "吃体力食物-打开-资源",
       "吃体力食物-游戏启动恢复"
     ],
-    "on_error": ["吃体力食物-游戏启动恢复失败"],
+    "on_error": ["[JumpBack]启动-游戏启动", "吃体力食物-游戏启动恢复失败"],
     "retry_times": 0
   },
   "吃体力食物-关闭-剑林-页面": {
@@ -785,14 +789,14 @@
     "recognition": "TemplateMatch",
     "template": "daily/EAT_STAMINA_FOOD_DAILY/food_bag_title_live.png",
     "roi": [0, 0, 150, 120],
-    "threshold": 0.4,
+    "threshold": 0.8,
     "action": "DoNothing"
   },
   "吃体力食物-食物-分类": {
     "recognition": "TemplateMatch",
     "template": "daily/EAT_STAMINA_FOOD_DAILY/food_category_icon_live.png",
     "roi": [0, 130, 150, 180],
-    "threshold": 0.4,
+    "threshold": 0.8,
     "action": "DoNothing"
   },
   "吃体力食物-食物-分类-页面": {
@@ -821,7 +825,7 @@
     "recognition": "TemplateMatch",
     "template": "daily/EAT_STAMINA_FOOD_DAILY/longjing_shrimp.png",
     "roi": [120, 80, 680, 540],
-    "threshold": 0.39,
+    "threshold": 0.78,
     "action": "DoNothing"
   },
   "吃体力食物-食物-详情": {
@@ -932,7 +936,7 @@
     "recognition": "TemplateMatch",
     "template": "home/modal_close.png",
     "roi": [1160, 0, 100, 100],
-    "threshold": 0.39,
+    "threshold": 0.78,
     "action": "DoNothing"
   }
 }

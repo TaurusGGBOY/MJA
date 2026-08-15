@@ -75,17 +75,19 @@ def test_r20_start_routes_resume_and_launcher_recovery_as_siblings() -> None:
     assert "on_error" not in recovery_failed
 
 
-def test_r20_function_panel_entry_uses_stable_text_not_background_color() -> None:
+def test_r20_function_panel_entry_is_distinct_from_home_power_ocr() -> None:
     nodes = load_task_nodes(MARTIAL)
     home = nodes["武学突破-武学-主页"]
     panel = nodes["武学突破-武学-面板-打开"]
     panel_entry = nodes["公共-游戏功能面板-入口"]
 
-    # The home boundary remains template-backed, while the function-panel
-    # entry is text-backed so its recognition does not depend on the changing
-    # game background behind the icon.
-    archived_home_score = 0.825888
-    assert archived_home_score > home["threshold"] == 0.75
+    # “已击破” is only the OCR boundary proving that the current surface is the
+    # main UI.  The click target is the separate round function-panel button in
+    # the upper-right corner, not the homepage marker.
+    assert home["recognition"] == {
+        "type": "And",
+        "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0},
+    }
     assert panel == {
         "recognition": {
             "type": "And",
@@ -97,9 +99,15 @@ def test_r20_function_panel_entry_uses_stable_text_not_background_color() -> Non
         "action": "DoNothing",
     }
     assert panel_entry == {
-        "recognition": "OCR",
-        "expected": "^画[卷券]$",
-        "roi": [1080, 0, 200, 120],
+        "recognition": "ColorMatch",
+        "method": 4,
+        "lower": [165, 135, 75],
+        "upper": [255, 225, 180],
+        "roi": [1170, 10, 60, 60],
+        "connected": True,
+        "count": 80,
+        "order_by": "Area",
+        "index": 0,
         "action": "DoNothing",
     }
 

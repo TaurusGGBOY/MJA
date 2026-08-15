@@ -1,8 +1,11 @@
 {
   "启动-游戏入口": {
     "recognition": "DirectHit",
-    "action": "DoNothing",
+    "action": "StartApp",
+    "package": "com.hanjiasongshu.dr22/.MainActivity",
     "max_hit": 1,
+    "repeat": 5,
+    "repeat_delay": 1000,
     "timeout": 1000,
     "next": ["启动-游戏启动"],
     "on_error": ["公共-通用-启动恢复-重启"]
@@ -10,7 +13,7 @@
   "启动-游戏启动": {
     "recognition": "DirectHit",
     "action": "DoNothing",
-    "timeout": 1000,
+    "timeout": 20000,
     "next": [
       "[JumpBack]启动-可选点击空白关闭",
       "[JumpBack]启动-可选关闭月签到奖励页",
@@ -22,45 +25,10 @@
   "启动-游戏重启后": {
     "recognition": "DirectHit",
     "action": "DoNothing",
-    "post_delay": 20000,
     "max_hit": 1,
     "timeout": 1000,
     "next": ["启动-游戏-按钮-之后-重启"],
     "on_error": ["公共-通用-启动恢复-耗尽"]
-  },
-  "启动-影-页面-返回": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": [
-          "启动-影-页面-标题",
-          "启动-影-卡片-列表"
-        ],
-        "box_index": 0
-      }
-    },
-    "timeout": 5000,
-    "max_hit": 1,
-    "action": "Custom",
-    "custom_action": "RestartGameSurface",
-    "custom_action_param": {
-      "package": "com.hanjiasongshu.dr22",
-      "activity": "com.hanjiasongshu.dr22/.MainActivity"
-    },
-    "post_delay": 5000,
-    "next": ["启动-游戏启动"]
-  },
-  "启动-影-页面-标题": {
-    "recognition": "OCR",
-    "expected": "蜃影武墟",
-    "roi": [250, 300, 1000, 400],
-    "action": "DoNothing"
-  },
-  "启动-影-卡片-列表": {
-    "recognition": "OCR",
-    "expected": "当前武墟等级",
-    "roi": [600, 400, 300, 100],
-    "action": "DoNothing"
   },
   "启动-可选点击空白关闭": {
     "recognition": "OCR",
@@ -72,8 +40,7 @@
     "roi": [350, 580, 600, 140],
     "timeout": 1500,
     "max_hit": 1,
-    "action": "Click",
-    "post_delay": 500
+    "action": "Click"
   },
   "启动-可选关闭月签到奖励页": {
     "recognition": "OCR",
@@ -82,17 +49,15 @@
     "timeout": 1500,
     "max_hit": 1,
     "action": "Click",
-    "target": [1060, 152, 16, 16],
-    "post_delay": 750
+    "target": [1060, 152, 16, 16]
   },
   "启动-游戏就绪": {
     "recognition": "OCR",
-    "expected": "^画[卷券]$",
-    "roi": [1080, 0, 200, 120],
+    "expected": "已击破",
+    "roi": [940, 660, 140, 40],
     "timeout": 10000,
     "action": "Custom",
-    "custom_action": "RuntimeHealth",
-    "post_delay": 750
+    "custom_action": "RuntimeHealth"
   },
   "启动-游戏-按钮-之后-重启": {
     "recognition": "OCR",
@@ -105,7 +70,6 @@
     "timeout": 10000,
     "max_hit": 1,
     "action": "Click",
-    "post_delay": 5000,
     "next": ["启动-进入-游戏-按钮-之后-重启"],
     "on_error": ["公共-游戏启动开始按钮未找到"]
   },
@@ -116,16 +80,14 @@
     "timeout": 10000,
     "max_hit": 1,
     "action": "Click",
-    "post_delay": 0,
     "next": ["启动-进入游戏后等待"],
     "on_error": ["公共-游戏启动进入按钮未找到"]
   },
   "启动-进入游戏后等待": {
     "recognition": "DirectHit",
     "action": "DoNothing",
-    "post_delay": 30000,
     "max_hit": 1,
-    "timeout": 1000,
+    "timeout": 30000,
     "next": [
       "[JumpBack]启动-可选点击空白关闭",
       "[JumpBack]启动-可选关闭月签到奖励页",

@@ -1,18 +1,22 @@
 {
   "采集部署-任务入口": {
-    "recognition": "DirectHit",
+    "recognition": {
+      "type": "And",
+      "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}
+    },
     "action": "Custom",
     "custom_action": "BeginTask",
     "custom_action_param": {
       "task_id": "COLLECTION_DEPLOYMENT_DAILY"
     },
+    "timeout": 8000,
     "max_hit": 1,
     "next": [
       "采集部署-恢复继续-奖励-探测",
       "采集部署-页面-探测",
       "采集部署-主页-探测"
     ],
-    "on_error": ["采集部署-记录-失败"]
+    "on_error": ["[JumpBack]启动-游戏启动", "采集部署-记录-失败"]
   },
   "采集部署-恢复继续-奖励-探测": {
     "recognition": {
@@ -372,7 +376,7 @@
     "recognition": "TemplateMatch",
     "template": "daily/HERO_DISPATCH_DAILY/painting_close.png",
     "roi": [1175, 5, 75, 75],
-    "threshold": 0.35,
+    "threshold": 0.70,
     "green_mask": true,
     "action": "DoNothing"
   }

@@ -1,14 +1,18 @@
 {
   "周一免费礼包-任务入口": {
-    "recognition": "DirectHit",
+    "recognition": {
+      "type": "And",
+      "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}
+    },
     "action": "Custom",
     "custom_action": "BeginTask",
     "custom_action_param": {
       "task_id": "WEEKLY_FREE_GIFT_MONDAY"
     },
+    "timeout": 8000,
     "max_hit": 1,
     "next": ["周一免费礼包-恢复继续-奖励-探测"],
-    "on_error": ["周一免费礼包-记录-失败"]
+    "on_error": ["[JumpBack]启动-游戏启动", "周一免费礼包-记录-失败"]
   },
   "周一免费礼包-恢复继续-奖励-探测": {
     "recognition": {

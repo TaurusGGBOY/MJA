@@ -1,11 +1,15 @@
 {
   "消耗凝结体-任务入口": {
-    "recognition": "DirectHit",
+    "recognition": {
+      "type": "And",
+      "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}
+    },
     "action": "Custom",
     "custom_action": "BeginTask", "max_hit": 1,
     "custom_action_param": {
       "task_id": "SPEND_CONDENSATE_DAILY"
     },
+    "timeout": 8000,
     "next": [
       "[JumpBack]公共-已知-茶-详情-关闭",
       "[JumpBack]公共-已知-茶-商店-关闭",
@@ -15,7 +19,7 @@
       "消耗凝结体-偃武-页面-探测",
       "消耗凝结体-云州-页面-探测"
     ],
-    "on_error": ["消耗凝结体-记录-失败"]
+    "on_error": ["[JumpBack]启动-游戏启动", "消耗凝结体-记录-失败"]
   },
   "消耗凝结体-关闭-偃武-奖励": {
     "recognition": {
@@ -421,7 +425,7 @@
     "recognition": "TemplateMatch",
     "template": "daily/SPEND_CONDENSATE_DAILY/yunzhou_world_page.png",
     "roi": [60, 200, 300, 130],
-    "threshold": 0.36,
+    "threshold": 0.72,
     "timeout": 8000,
     "action": "DoNothing",
     "next": ["消耗凝结体-打开-云州-恢复"],
@@ -755,7 +759,7 @@
     "recognition": "TemplateMatch",
     "template": "home/modal_close.png",
     "roi": [1160, 0, 100, 100],
-    "threshold": 0.39,
+    "threshold": 0.78,
     "action": "DoNothing"
   },
   "消耗凝结体-凝结体-偃武-最大-数量": {
@@ -793,7 +797,7 @@
     "recognition": "TemplateMatch",
     "template": "daily/SPEND_CONDENSATE_DAILY/yunzhou_world_page.png",
     "roi": [60, 200, 300, 130],
-    "threshold": 0.36,
+    "threshold": 0.72,
     "action": "DoNothing"
   },
   "消耗凝结体-凝结体-云州-货币-入口": {
@@ -818,7 +822,7 @@
     "recognition": "TemplateMatch",
     "template": "home/modal_close.png",
     "roi": [1160, 0, 100, 100],
-    "threshold": 0.39,
+    "threshold": 0.78,
     "action": "DoNothing"
   },
   "消耗凝结体-凝结体-云州-最大-数量": {

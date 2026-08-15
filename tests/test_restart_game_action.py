@@ -90,6 +90,48 @@ def test_restart_orders_stop_wait_bounded_cooldown_then_start(
     ]
 
 
+def test_restart_can_start_the_game_package_five_times(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    events: list[tuple[object, ...]] = []
+    monkeypatch.setattr(
+        restart_game,
+        "sleep",
+        lambda seconds: events.append(("cooldown", seconds)),
+        raising=False,
+    )
+    params = {
+        "package": GAME_PACKAGE,
+        "activity": GAME_ACTIVITY,
+        "cooldown_ms": 1_000,
+        "start_repeat": 5,
+        "start_repeat_delay_ms": 1_000,
+    }
+
+    assert restart_game.RestartGameSurface().run(
+        _context(events), FakeArgv(json.dumps(params))
+    )
+    assert events == [
+        ("stop", GAME_PACKAGE),
+        ("stop_wait",),
+        ("cooldown", 1.0),
+        ("start", GAME_ACTIVITY),
+        ("start_wait",),
+        ("cooldown", 1.0),
+        ("start", GAME_ACTIVITY),
+        ("start_wait",),
+        ("cooldown", 1.0),
+        ("start", GAME_ACTIVITY),
+        ("start_wait",),
+        ("cooldown", 1.0),
+        ("start", GAME_ACTIVITY),
+        ("start_wait",),
+        ("cooldown", 1.0),
+        ("start", GAME_ACTIVITY),
+        ("start_wait",),
+    ]
+
+
 @pytest.mark.parametrize(
     "params",
     [

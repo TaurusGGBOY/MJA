@@ -39,5 +39,5 @@
 
 ## tips
 
-- 当需要修改和查看pipeline的时候，必须使用，MaaPipelineEditor，禁止直接修改json文件
+- 用户如果需要查看pipeline，可以使用MaaPipelineEditor(MPE)
 

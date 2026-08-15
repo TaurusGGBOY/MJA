@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import hashlib
-import re
 from pathlib import Path
 
 from PIL import Image
@@ -74,24 +73,17 @@ def test_r22_fixture_is_the_immutable_archived_reward_popup() -> None:
         assert image.size == (1280, 720)
 
 
-def test_r22_popup_uses_stable_action_text_as_the_result_anchor() -> None:
+def test_r22_popup_uses_top_right_close_template_as_the_result_anchor() -> None:
     nodes = load_task_nodes(APPRAISAL)
     popup = nodes["免费鉴定-鉴定-结果-弹窗"]
     assert popup == {
-        "recognition": "OCR",
-        "expected": ["^鉴宝一次$", "^鉴宝十次$"],
-        "roi": [350, 560, 600, 100],
+        "recognition": "TemplateMatch",
+        "template": "daily/BUY_TEA_DAILY/shop_close.png",
+        "roi": [1170, 0, 110, 110],
+        "threshold": 0.39,
         "action": "DoNothing",
     }
-    for text in ("鉴宝一次", "鉴宝十次"):
-        assert any(re.fullmatch(pattern, text) for pattern in popup["expected"])
-    for button_box in ([407, 596, 207, 47], [666, 596, 207, 47]):
-        assert _contains(popup["roi"], button_box)
-
-    # Both the archived and the live reward surfaces expose these controls;
-    # no item name, quantity, or inventory postcondition is needed to record
-    # the result popup.
-    assert "免费鉴定-鉴定-免费-一次" not in popup["expected"]
+    assert _contains(popup["roi"], [1198, 30, 29, 25])
 
 
 def test_r22_top_right_close_target_is_real_and_cannot_hit_paid_buttons() -> None:

@@ -1,15 +1,20 @@
 {
   "影之遗迹-任务入口": {
-    "recognition": "DirectHit",
+    "recognition": {
+      "type": "And",
+      "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}
+    },
     "action": "Custom",
     "custom_action": "BeginTask",
     "custom_action_param": {
       "task_id": "SHADOW_RUINS_DAILY"
     },
+    "timeout": 8000,
     "next": [
       "影之遗迹-主页-探测"
     ],
     "on_error": [
+      "[JumpBack]启动-游戏启动",
       "影之遗迹-入口-未知"
     ]
   },

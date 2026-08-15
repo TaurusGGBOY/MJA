@@ -1,12 +1,15 @@
 {
   "擂台挑战-任务入口": {
-    "recognition": "DirectHit",
+    "recognition": {
+      "type": "And",
+      "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}
+    },
     "action": "Custom",
     "custom_action": "BeginTask",
     "custom_action_param": {"task_id": "RING_CHALLENGE_DAILY"},
     "timeout": 8000,
     "next": ["擂台挑战-页面-探测", "擂台挑战-日常-页面", "擂台挑战-面板-探测", "擂台挑战-主页-探测"],
-    "on_error": ["擂台挑战-记录-失败"],
+    "on_error": ["[JumpBack]启动-游戏启动", "擂台挑战-记录-失败"],
     "retry_times": 0
   },
   "擂台挑战-主页-探测": {

@@ -14,7 +14,9 @@
     "custom_action": "RestartGameSurface",
     "custom_action_param": {
       "package": "com.hanjiasongshu.dr22",
-      "activity": "com.hanjiasongshu.dr22/.MainActivity"
+      "activity": "com.hanjiasongshu.dr22/.MainActivity",
+      "start_repeat": 5,
+      "start_repeat_delay_ms": 1000
     },
     "timeout": 1000,
     "max_hit": 1,

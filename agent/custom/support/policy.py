@@ -69,6 +69,7 @@ _POLICIES = {
             "close_shop": 1,
             "close_function_panel": 1,
         },
+        cleanup_actions=frozenset({"close_shop", "close_function_panel"}),
     ),
     "WEEKLY_FREE_GIFT_MONDAY": _policy(
         "WEEKLY_FREE_GIFT_MONDAY",
@@ -84,6 +85,7 @@ _POLICIES = {
             "dismiss_weekly_reward": 1,
             "close_shop": 1,
         },
+        cleanup_actions=frozenset({"dismiss_weekly_reward", "close_shop"}),
         monday_only=True,
     ),
     "TRIAL_SWORD_DAILY": _policy(
@@ -475,6 +477,9 @@ _POLICIES = {
             "close_guild_home": 1,
             "close_function_panel": 1,
         },
+        cleanup_actions=frozenset(
+            {"close_guild_donation", "close_guild_home", "close_function_panel"}
+        ),
     ),
     "DAILY_TASK_REWARD_CLAIM_DAILY": _policy(
         "DAILY_TASK_REWARD_CLAIM_DAILY",

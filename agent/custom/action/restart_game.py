@@ -18,6 +18,12 @@ GAME_ACTIVITY = "com.hanjiasongshu.dr22/.MainActivity"
 DEFAULT_PROCESS_DETACH_COOLDOWN_MS = 2_000
 MIN_PROCESS_DETACH_COOLDOWN_MS = 1_000
 MAX_PROCESS_DETACH_COOLDOWN_MS = 5_000
+DEFAULT_START_REPEAT = 1
+MIN_START_REPEAT = 1
+MAX_START_REPEAT = 5
+DEFAULT_START_REPEAT_DELAY_MS = 1_000
+MIN_START_REPEAT_DELAY_MS = 0
+MAX_START_REPEAT_DELAY_MS = 5_000
 
 
 def _payload(argv: Any) -> Mapping[str, Any]:
@@ -52,6 +58,31 @@ def _process_detach_cooldown_seconds(params: Mapping[str, Any]) -> float:
     return cooldown_ms / 1_000
 
 
+def _start_repeat(params: Mapping[str, Any]) -> int:
+    value = params.get("start_repeat", DEFAULT_START_REPEAT)
+    if isinstance(value, bool) or not isinstance(value, Integral):
+        raise ValueError("start_repeat must be an integer")
+    repeat = int(value)
+    if not MIN_START_REPEAT <= repeat <= MAX_START_REPEAT:
+        raise ValueError(
+            f"start_repeat must be between {MIN_START_REPEAT} and {MAX_START_REPEAT}"
+        )
+    return repeat
+
+
+def _start_repeat_delay_seconds(params: Mapping[str, Any]) -> float:
+    value = params.get("start_repeat_delay_ms", DEFAULT_START_REPEAT_DELAY_MS)
+    if isinstance(value, bool) or not isinstance(value, Integral):
+        raise ValueError("start_repeat_delay_ms must be an integer")
+    delay_ms = int(value)
+    if not MIN_START_REPEAT_DELAY_MS <= delay_ms <= MAX_START_REPEAT_DELAY_MS:
+        raise ValueError(
+            f"start_repeat_delay_ms must be between {MIN_START_REPEAT_DELAY_MS} and "
+            f"{MAX_START_REPEAT_DELAY_MS}"
+        )
+    return delay_ms / 1_000
+
+
 @AgentServer.custom_action("RestartGameSurface")
 class RestartGameSurface(CustomAction):
     """Force-stop and relaunch only the configured game package.
@@ -60,6 +91,9 @@ class RestartGameSurface(CustomAction):
     ``蜃影武墟`` card-list surface has been recognized and has ignored both
     visual close controls and Android Back.  Maa's controller remains the
     only transport; this does not clear application data or shell out to ADB.
+    ``start_repeat`` can issue a bounded burst of package starts after the
+    single force-stop, matching the startup pipeline's repeated StartApp
+    behavior without repeating the stop operation.
     """
 
     def run(self, context: Any, argv: CustomAction.RunArg) -> bool:
@@ -70,6 +104,8 @@ class RestartGameSurface(CustomAction):
             if package != GAME_PACKAGE or activity != GAME_ACTIVITY:
                 return False
             cooldown_seconds = _process_detach_cooldown_seconds(params)
+            start_repeat = _start_repeat(params)
+            start_repeat_delay_seconds = _start_repeat_delay_seconds(params)
 
             controller = context.tasker.controller
             stop_app = getattr(controller, "post_stop_app", None)
@@ -79,7 +115,10 @@ class RestartGameSurface(CustomAction):
 
             _wait_job(stop_app(package))
             sleep(cooldown_seconds)
-            _wait_job(start_app(activity))
+            for index in range(start_repeat):
+                if index:
+                    sleep(start_repeat_delay_seconds)
+                _wait_job(start_app(activity))
         except Exception:
             return False
         return True

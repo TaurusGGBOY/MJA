@@ -1,6 +1,9 @@
 {
   "免费鉴定-任务入口": {
-    "recognition": "DirectHit",
+    "recognition": {
+      "type": "And",
+      "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}
+    },
     "action": "Custom",
     "custom_action": "BeginTask",
     "custom_action_param": {"task_id": "FREE_APPRAISAL_DAILY"},
@@ -11,7 +14,7 @@
       "免费鉴定-页面-探测",
       "免费鉴定-主页-探测"
     ],
-    "on_error": ["免费鉴定-记录-失败"],
+    "on_error": ["[JumpBack]启动-游戏启动", "免费鉴定-记录-失败"],
     "retry_times": 0
   },
   "免费鉴定-页面-探测": {
@@ -221,7 +224,7 @@
     "recognition": "TemplateMatch",
     "template": "daily/BUY_TEA_DAILY/shop_close.png",
     "roi": [1170, 0, 110, 110],
-    "threshold": 0.39,
+    "threshold": 0.78,
     "action": "DoNothing"
   },
   "免费鉴定-鉴定-免费-一次": {
@@ -237,9 +240,10 @@
     "action": "DoNothing"
   },
   "免费鉴定-鉴定-结果-弹窗": {
-    "recognition": "OCR",
-    "expected": ["^鉴宝一次$", "^鉴宝十次$"],
-    "roi": [350, 560, 600, 100],
+    "recognition": "TemplateMatch",
+    "template": "daily/BUY_TEA_DAILY/shop_close.png",
+    "roi": [1170, 0, 110, 110],
+    "threshold": 0.78,
     "action": "DoNothing"
   },
   "免费鉴定-鉴定-弹窗-关闭": {

@@ -1,9 +1,13 @@
 {
   "武学突破-任务入口": {
-    "recognition": "DirectHit",
+    "recognition": {
+      "type": "And",
+      "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}
+    },
     "action": "Custom",
     "custom_action": "BeginTask", "max_hit": 1,
     "custom_action_param": {"task_id": "MARTIAL_STUDY_BREAKTHROUGH_DAILY"},
+    "timeout": 8000,
     "next": [
       "[JumpBack]公共-已知-茶-详情-关闭",
       "[JumpBack]公共-已知-茶-商店-关闭",
@@ -12,8 +16,7 @@
       "武学突破-打开-研习",
       "武学突破-武学-主页"
     ],
-    "timeout": 8000,
-    "on_error": ["武学突破-记录-失败"],
+    "on_error": ["[JumpBack]启动-游戏启动", "武学突破-记录-失败"],
     "retry_times": 0
   },
   "武学突破-打开-面板": {
@@ -86,7 +89,7 @@
   "武学突破-武学-面板-页面": {"recognition": {"type": "And", "param": {"all_of": ["公共-游戏侧边面板-打开"], "box_index": 0}}, "action": "DoNothing"},
   "武学突破-武学-入口": {"recognition": "OCR", "expected": ["武学研习", "研习"], "roi": [650, 120, 600, 560], "action": "DoNothing"},
   "武学突破-武学-页面": {"recognition": "OCR", "expected": "武学研习", "roi": [0, 0, 500, 420], "action": "DoNothing"},
-  "武学突破-武学-成功-卡片": {"recognition": "TemplateMatch", "template": "daily/MARTIAL_STUDY_BREAKTHROUGH_DAILY/success.png", "roi": [760, 350, 500, 330], "threshold": 0.36, "action": "DoNothing"},
+  "武学突破-武学-成功-卡片": {"recognition": "TemplateMatch", "template": "daily/MARTIAL_STUDY_BREAKTHROUGH_DAILY/success.png", "roi": [760, 350, 500, 330], "threshold": 0.72, "action": "DoNothing"},
   "武学突破-武学-成功-结果": {"recognition": "OCR", "expected": ["研习成功", "恭喜获得"], "roi": [0, 100, 1280, 620], "action": "DoNothing"},
   "武学突破-武学-结果-关闭": {"recognition": "OCR", "expected": ["点击空白处关闭", "点击任意空白区域关闭"], "roi": [350, 580, 600, 140], "action": "DoNothing"}
 }

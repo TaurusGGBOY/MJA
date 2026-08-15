@@ -204,9 +204,10 @@ def test_appraisal_flow_guards_every_side_effect_and_has_truthful_outcomes() -> 
     assert nodes[APPRAISAL.entry]["next"][0] == "[JumpBack]公共-已知-画卷-关闭"
     assert nodes[APPRAISAL.entry]["next"][1] == "[JumpBack]免费鉴定-额外-弹窗-关闭"
     assert nodes["免费鉴定-鉴定-结果-弹窗"] == {
-        "recognition": "OCR",
-        "expected": ["^鉴宝一次$", "^鉴宝十次$"],
-        "roi": [350, 560, 600, 100],
+        "recognition": "TemplateMatch",
+        "template": "daily/BUY_TEA_DAILY/shop_close.png",
+        "roi": [1170, 0, 110, 110],
+        "threshold": 0.39,
         "action": "DoNothing",
     }
     assert nodes["免费鉴定-关闭-奖励"]["next"] == [

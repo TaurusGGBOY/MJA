@@ -1,6 +1,9 @@
 {
   "帮派事务-任务入口": {
-    "recognition": "DirectHit",
+    "recognition": {
+      "type": "And",
+      "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}
+    },
     "action": "Custom",
     "custom_action": "BeginTask",
     "custom_action_param": {"task_id": "GUILD_AFFAIRS_DAILY"},
@@ -11,7 +14,7 @@
       "帮派事务-主页-探测",
       "帮派事务-打开-帮派"
     ],
-    "on_error": ["帮派事务-记录-失败"]
+    "on_error": ["[JumpBack]启动-游戏启动", "帮派事务-记录-失败"]
   },
   "帮派事务-事务-页面-探测": {
     "recognition": "OCR",
@@ -629,10 +632,6 @@
     "Abort": true,
     "next": ["公共-通用中止"]
   },
-  "帮派事务-帮派事务-主页-页面": {
-    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}},
-    "action": "DoNothing"
-  },
   "帮派事务-帮派事务-帮派-入口": {
     "recognition": "OCR",
     "expected": "帮会",
@@ -779,14 +778,14 @@
     "recognition": "TemplateMatch",
     "template": "daily/GUILD_AFFAIRS_DAILY/reward_popup_live.png",
     "roi": [120, 180, 180, 380],
-    "threshold": 0.39,
+    "threshold": 0.78,
     "action": "DoNothing"
   },
   "帮派事务-帮派事务-奖励-弹窗-关闭": {
     "recognition": "TemplateMatch",
     "template": "daily/GUILD_AFFAIRS_DAILY/reward_popup_close_live.png",
     "roi": [450, 600, 400, 120],
-    "threshold": 0.36,
+    "threshold": 0.72,
     "action": "DoNothing"
   }
 }

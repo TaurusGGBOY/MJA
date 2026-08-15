@@ -117,15 +117,17 @@ def test_start_task_is_declared_exactly_once_with_mja_entry() -> None:
     }
 
 
-def test_game_start_entry_is_a_native_probe_and_restart_owns_start_app() -> None:
+def test_game_start_entry_starts_the_game_before_readiness_checks() -> None:
     startup = _read_json(ROOT / "assets/resource/base/pipeline/startup/game_start.json")
     entry = startup["启动-游戏入口"]
 
     assert entry["recognition"] == "DirectHit"
-    assert entry["action"] == "DoNothing"
+    assert entry["action"] == "StartApp"
+    assert entry["package"] == "com.hanjiasongshu.dr22/.MainActivity"
     assert entry["max_hit"] == 1
+    assert entry["repeat"] == 5
+    assert entry["repeat_delay"] == 1000
     assert entry["timeout"] == 1000
-    assert "package" not in entry
 
 
 def test_cfa_setting_has_exact_embedded_contract() -> None:
