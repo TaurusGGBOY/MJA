@@ -7,11 +7,7 @@
       "task_id": "SHADOW_RUINS_DAILY"
     },
     "next": [
-      "影之遗迹-页面-探测",
-      "影之遗迹-画卷-页面",
-      "影之遗迹-主页-探测",
-      "影之遗迹-探索-页面",
-      "影之遗迹-战斗-结果-探测"
+      "影之遗迹-主页-探测"
     ],
     "on_error": [
       "影之遗迹-入口-未知"
@@ -59,8 +55,7 @@
       }
     },
     "next": [
-      "影之遗迹-画卷-页面",
-      "影之遗迹-主页-恢复-探测"
+      "影之遗迹-画卷-页面"
     ],
     "on_error": [
       "影之遗迹-入口-未知"
@@ -84,56 +79,6 @@
     "on_error": [
       "影之遗迹-入口-未知"
     ]
-  },
-  "影之遗迹-主页-恢复-探测": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": [
-          "影之遗迹-影-主页-页面"
-        ]
-      }
-    },
-    "action": "DoNothing",
-    "next": [
-      "影之遗迹-打开-画卷-恢复"
-    ],
-    "on_error": [
-      "影之遗迹-入口-未知"
-    ]
-  },
-  "影之遗迹-打开-画卷-恢复": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": [
-          "影之遗迹-影-主页-页面",
-          "影之遗迹-影-画卷-入口"
-        ],
-        "box_index": 1
-      }
-    },
-    "action": "Custom",
-    "custom_action": "GuardedInput",
-    "custom_action_param": {
-      "task_id": "SHADOW_RUINS_DAILY",
-      "action_id": "open_painting_scroll",
-      "kind": "click",
-      "evidence": {
-        "page_index": 0,
-        "target_index": 1,
-        "page_name": "影之遗迹-影-主页-页面",
-        "target_name": "影之遗迹-影-画卷-入口"
-      }
-    },
-    "next": [
-      "影之遗迹-画卷-页面"
-    ],
-    "on_error": [
-      "影之遗迹-入口-未知"
-    ],
-    "max_hit": 1,
-    "retry_times": 0
   },
   "影之遗迹-打开-影": {
     "recognition": {
@@ -268,99 +213,6 @@
       "影之遗迹-记录-失败"
     ]
   },
-  "影之遗迹-前台-左": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": [
-          "影之遗迹-影-关卡-页面",
-          "影之遗迹-影-前台-左"
-        ]
-      }
-    },
-    "action": "Custom",
-    "custom_action": "GuardedInput",
-    "custom_action_param": {
-      "task_id": "SHADOW_RUINS_DAILY",
-      "action_id": "move_shadow_foreground_left",
-      "kind": "click",
-      "evidence": {
-        "page_index": 0,
-        "target_index": 1,
-        "page_name": "影之遗迹-影-关卡-页面",
-        "target_name": "影之遗迹-影-前台-左"
-      }
-    },
-    "next": [
-      "影之遗迹-前台-中心"
-    ],
-    "on_error": [
-      "影之遗迹-前台-中心"
-    ],
-    "retry_times": 0
-  },
-  "影之遗迹-前台-中心": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": [
-          "影之遗迹-影-关卡-页面",
-          "影之遗迹-影-前台-中心"
-        ]
-      }
-    },
-    "action": "Custom",
-    "custom_action": "GuardedInput",
-    "custom_action_param": {
-      "task_id": "SHADOW_RUINS_DAILY",
-      "action_id": "move_shadow_foreground_center",
-      "kind": "click",
-      "evidence": {
-        "page_index": 0,
-        "target_index": 1,
-        "page_name": "影之遗迹-影-关卡-页面",
-        "target_name": "影之遗迹-影-前台-中心"
-      }
-    },
-    "next": [
-      "影之遗迹-前台-右"
-    ],
-    "on_error": [
-      "影之遗迹-前台-右"
-    ],
-    "retry_times": 0
-  },
-  "影之遗迹-前台-右": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": [
-          "影之遗迹-影-关卡-页面",
-          "影之遗迹-影-前台-右"
-        ]
-      }
-    },
-    "action": "Custom",
-    "custom_action": "GuardedInput",
-    "custom_action_param": {
-      "task_id": "SHADOW_RUINS_DAILY",
-      "action_id": "move_shadow_foreground_right",
-      "kind": "click",
-      "evidence": {
-        "page_index": 0,
-        "target_index": 1,
-        "page_name": "影之遗迹-影-关卡-页面",
-        "target_name": "影之遗迹-影-前台-右"
-      }
-    },
-    "next": [
-      "影之遗迹-探索-页面"
-    ],
-    "on_error": [
-      "影之遗迹-探索-页面"
-    ],
-    "retry_times": 0
-  },
   "影之遗迹-探索-页面": {
     "recognition": {
       "type": "And",
@@ -372,154 +224,10 @@
     },
     "action": "DoNothing",
     "next": [
-      "影之遗迹-战斗-结果-探测",
-      "影之遗迹-战斗-中-进度-等待",
-      "影之遗迹-奖励-探测",
-      "影之遗迹-前台-门禁",
-      "影之遗迹-战斗-门禁",
-      "影之遗迹-最终-探测",
-      "影之遗迹-黑屏-冻结-恢复"
+      "影之遗迹-最终-探测"
     ],
     "on_error": [
       "影之遗迹-记录-失败"
-    ]
-  },
-  "影之遗迹-黑屏-冻结-恢复": {
-    "recognition": "ColorMatch",
-    "upper": [
-      0,
-      0,
-      0
-    ],
-    "lower": [
-      0,
-      0,
-      0
-    ],
-    "connected": true,
-    "count": 80000,
-    "timeout": 5000,
-    "max_hit": 1,
-    "retry_times": 0,
-    "action": "Custom",
-    "custom_action": "RestartGameSurface",
-    "custom_action_param": {
-      "package": "com.hanjiasongshu.dr22",
-      "activity": "com.hanjiasongshu.dr22/.MainActivity"
-    },
-    "post_delay": 5000,
-    "next": [
-      "影之遗迹-黑屏-冻结-恢复继续"
-    ],
-    "on_error": [
-      "影之遗迹-记录-失败"
-    ]
-  },
-  "影之遗迹-黑屏-冻结-恢复继续": {
-    "recognition": "DirectHit",
-    "action": "DoNothing",
-    "timeout": 120000,
-    "retry_times": 0,
-    "next": [
-      "影之遗迹-主页-探测",
-      "[JumpBack]启动-游戏启动"
-    ],
-    "on_error": [
-      "影之遗迹-记录-失败"
-    ]
-  },
-  "影之遗迹-前台-门禁": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": [
-          "影之遗迹-影-探索-页面",
-          "影之遗迹-影-前台-就绪"
-        ]
-      }
-    },
-    "action": "DoNothing",
-    "next": [
-      "影之遗迹-前台-循环"
-    ],
-    "on_error": [
-      "影之遗迹-战斗-门禁"
-    ]
-  },
-  "影之遗迹-战斗-门禁": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": [
-          "影之遗迹-影-挑战-页面",
-          "影之遗迹-影-挑战-目标"
-        ],
-        "box_index": 1
-      }
-    },
-    "action": "DoNothing",
-    "next": [
-      "影之遗迹-战斗-循环"
-    ],
-    "on_error": [
-      "影之遗迹-最终-探测",
-      "影之遗迹-记录-失败"
-    ]
-  },
-  "影之遗迹-前台-循环": {
-    "max_hit": 40,
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": [
-          "影之遗迹-影-探索-页面",
-          "影之遗迹-影-前台-就绪"
-        ]
-      }
-    },
-    "action": "Custom",
-    "custom_action": "GuardedInput",
-    "custom_action_param": {
-      "task_id": "SHADOW_RUINS_DAILY",
-      "action_id": "advance_shadow_foreground_triplet",
-      "kind": "click",
-      "fixed_click_boxes": [
-        [
-          436,
-          536,
-          24,
-          24
-        ],
-        [
-          629,
-          536,
-          24,
-          24
-        ],
-        [
-          822,
-          536,
-          24,
-          24
-        ]
-      ],
-      "evidence": {
-        "page_index": 0,
-        "target_index": 1,
-        "page_name": "影之遗迹-影-探索-页面",
-        "target_name": "影之遗迹-影-前台-就绪"
-      }
-    },
-    "next": [
-      "影之遗迹-战斗-结果-探测",
-      "影之遗迹-战斗-中-进度-等待",
-      "影之遗迹-战斗-门禁",
-      "影之遗迹-黑屏-冻结-恢复",
-      "影之遗迹-探索-页面"
-    ],
-    "on_error": [
-      "影之遗迹-战斗-门禁",
-      "影之遗迹-前台-循环-耗尽"
     ]
   },
   "影之遗迹-战斗-循环": {
@@ -622,201 +330,13 @@
       }
     },
     "next": [
-      "影之遗迹-领取-胜利-宝箱-首个"
-    ],
-    "on_error": [
-      "影之遗迹-记录-失败"
-    ],
-    "retry_times": 0,
-    "timeout": 50000
-  },
-  "影之遗迹-领取-胜利-宝箱-首个": {
-    "max_hit": 12,
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": [
-          "影之遗迹-影-探索-页面",
-          "影之遗迹-影-前台-就绪"
-        ]
-      }
-    },
-    "action": "Custom",
-    "custom_action": "GuardedInput",
-    "custom_action_param": {
-      "task_id": "SHADOW_RUINS_DAILY",
-      "action_id": "advance_shadow_foreground_triplet",
-      "kind": "click",
-      "fixed_click_boxes": [
-        [
-          436,
-          536,
-          24,
-          24
-        ],
-        [
-          629,
-          536,
-          24,
-          24
-        ],
-        [
-          822,
-          536,
-          24,
-          24
-        ]
-      ],
-      "evidence": {
-        "page_index": 0,
-        "target_index": 1,
-        "page_name": "影之遗迹-影-探索-页面",
-        "target_name": "影之遗迹-影-前台-就绪"
-      }
-    },
-    "next": [
-      "影之遗迹-最终-探测",
-      "影之遗迹-奖励-探测",
-      "影之遗迹-胜利-宝箱-奖励-探测",
-      "影之遗迹-领取-胜利-宝箱-重试"
-    ],
-    "on_error": [
-      "影之遗迹-最终-探测",
-      "影之遗迹-奖励-探测",
-      "影之遗迹-胜利-宝箱-奖励-探测",
-      "影之遗迹-记录-失败"
-    ],
-    "retry_times": 0,
-    "timeout": 50000
-  },
-  "影之遗迹-领取-胜利-宝箱-重试": {
-    "max_hit": 12,
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": [
-          "影之遗迹-影-探索-页面",
-          "影之遗迹-影-前台-就绪"
-        ]
-      }
-    },
-    "action": "Custom",
-    "custom_action": "GuardedInput",
-    "custom_action_param": {
-      "task_id": "SHADOW_RUINS_DAILY",
-      "action_id": "advance_shadow_foreground_triplet",
-      "kind": "click",
-      "fixed_click_boxes": [
-        [
-          436,
-          536,
-          24,
-          24
-        ],
-        [
-          629,
-          536,
-          24,
-          24
-        ],
-        [
-          822,
-          536,
-          24,
-          24
-        ]
-      ],
-      "evidence": {
-        "page_index": 0,
-        "target_index": 1,
-        "page_name": "影之遗迹-影-探索-页面",
-        "target_name": "影之遗迹-影-前台-就绪"
-      }
-    },
-    "next": [
-      "影之遗迹-最终-探测",
-      "影之遗迹-奖励-探测",
-      "影之遗迹-胜利-宝箱-奖励-探测",
-      "影之遗迹-胜利-宝箱-之后-重试-等待"
-    ],
-    "on_error": [
-      "影之遗迹-最终-探测",
-      "影之遗迹-奖励-探测",
-      "影之遗迹-胜利-宝箱-奖励-探测",
-      "影之遗迹-胜利-宝箱-之后-重试-等待"
-    ],
-    "retry_times": 0,
-    "timeout": 50000
-  },
-  "影之遗迹-胜利-宝箱-之后-重试-等待": {
-    "max_hit": 12,
-    "recognition": "DirectHit",
-    "action": "DoNothing",
-    "post_delay": 1000,
-    "next": [
-      "影之遗迹-最终-探测",
-      "影之遗迹-奖励-探测",
-      "影之遗迹-胜利-宝箱-奖励-探测",
-      "影之遗迹-记录-失败"
-    ],
-    "on_error": [
-      "影之遗迹-记录-失败"
-    ],
-    "retry_times": 0
-  },
-  "影之遗迹-胜利-宝箱-奖励-探测": {
-    "max_hit": 12,
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": [
-          "影之遗迹-影-胜利-宝箱-奖励"
-        ]
-      }
-    },
-    "action": "DoNothing",
-    "next": [
-      "影之遗迹-关闭-胜利-宝箱-奖励"
-    ],
-    "on_error": [
-      "影之遗迹-记录-失败"
-    ],
-    "retry_times": 0,
-    "timeout": 8000
-  },
-  "影之遗迹-关闭-胜利-宝箱-奖励": {
-    "max_hit": 12,
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": [
-          "影之遗迹-影-胜利-宝箱-奖励"
-        ]
-      }
-    },
-    "action": "Custom",
-    "custom_action": "GuardedInput",
-    "custom_action_param": {
-      "task_id": "SHADOW_RUINS_DAILY",
-      "action_id": "dismiss_shadow_reward_popup",
-      "kind": "click",
-      "fixed_click_mode": "shadow_reward_blank",
-      "evidence": {
-        "page_index": 0,
-        "target_index": 0,
-        "page_name": "影之遗迹-影-胜利-宝箱-奖励",
-        "target_name": "影之遗迹-影-胜利-宝箱-奖励"
-      }
-    },
-    "next": [
       "影之遗迹-探索-页面"
     ],
     "on_error": [
       "影之遗迹-记录-失败"
     ],
     "retry_times": 0,
-    "timeout": 8000,
-    "post_delay": 750
+    "timeout": 50000
   },
   "影之遗迹-战斗-结果-失败": {
     "recognition": {
@@ -866,68 +386,6 @@
     "next": [
       "公共-通用中止"
     ]
-  },
-  "影之遗迹-奖励-探测": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": [
-          "影之遗迹-影-奖励-关闭"
-        ]
-      }
-    },
-    "action": "DoNothing",
-    "next": [
-      "影之遗迹-关闭-奖励"
-    ],
-    "on_error": [
-      "影之遗迹-奖励-等待"
-    ]
-  },
-  "影之遗迹-奖励-等待": {
-    "recognition": "DirectHit",
-    "action": "DoNothing",
-    "post_delay": 1000,
-    "max_hit": 35,
-    "next": [
-      "影之遗迹-奖励-探测"
-    ],
-    "on_error": [
-      "影之遗迹-记录-失败"
-    ]
-  },
-  "影之遗迹-关闭-奖励": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": [
-          "影之遗迹-影-奖励",
-          "影之遗迹-影-奖励-关闭"
-        ]
-      }
-    },
-    "action": "Custom",
-    "custom_action": "GuardedInput",
-    "custom_action_param": {
-      "task_id": "SHADOW_RUINS_DAILY",
-      "action_id": "dismiss_shadow_reward_popup",
-      "kind": "click",
-      "fixed_click_mode": "shadow_reward_blank",
-      "evidence": {
-        "page_index": 0,
-        "target_index": 1,
-        "page_name": "影之遗迹-影-奖励",
-        "target_name": "影之遗迹-影-奖励-关闭"
-      }
-    },
-    "next": [
-      "影之遗迹-探索-页面"
-    ],
-    "on_error": [
-      "影之遗迹-记录-失败"
-    ],
-    "retry_times": 0,
-    "post_delay": 750
   },
   "影之遗迹-最终-探测": {
     "recognition": {
@@ -1076,22 +534,6 @@
       "公共-通用中止"
     ]
   },
-  "影之遗迹-前台-循环-耗尽": {
-    "recognition": "DirectHit",
-    "action": "Custom",
-    "custom_action": "RecordTaskOutcome",
-    "custom_action_param": {
-      "task_id": "SHADOW_RUINS_DAILY",
-      "status": "failed",
-      "error_code": "SHADOW_FOREGROUND_LIMIT",
-      "postcondition": "shadow.exploration.progress_known",
-      "native_fail_after_record": true
-    },
-    "Abort": true,
-    "next": [
-      "公共-通用中止"
-    ]
-  },
   "影之遗迹-战斗-循环-耗尽": {
     "recognition": "DirectHit",
     "action": "Custom",
@@ -1142,28 +584,6 @@
   },
   "影之遗迹-影-主页-页面": {
     "recognition": {"type": "And", "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}},
-    "action": "DoNothing"
-  },
-  "影之遗迹-影-主页-副本": {
-    "recognition": "OCR",
-    "expected": "^副本$",
-    "roi": [
-      1035,
-      45,
-      80,
-      40
-    ],
-    "action": "DoNothing"
-  },
-  "影之遗迹-影-主页-试炼": {
-    "recognition": "OCR",
-    "expected": "^试剑$",
-    "roi": [
-      965,
-      620,
-      100,
-      70
-    ],
     "action": "DoNothing"
   },
   "影之遗迹-影-画卷-入口": {
@@ -1257,21 +677,6 @@
       430,
       720,
       270
-    ],
-    "action": "DoNothing"
-  },
-  "影之遗迹-影-挑战": {
-    "recognition": "OCR",
-    "expected": [
-      "可探索",
-      "探索中",
-      "蜃影武墟"
-    ],
-    "roi": [
-      900,
-      480,
-      350,
-      220
     ],
     "action": "DoNothing"
   },
@@ -1376,50 +781,6 @@
     ],
     "action": "DoNothing"
   },
-  "影之遗迹-影-前台-就绪": {
-    "recognition": "OCR",
-    "expected": "^第.+层$",
-    "roi": [
-      1000,
-      40,
-      220,
-      120
-    ],
-    "action": "DoNothing"
-  },
-  "影之遗迹-影-前台-左": {
-    "recognition": "OCR",
-    "expected": "左",
-    "roi": [
-      280,
-      500,
-      300,
-      80
-    ],
-    "action": "DoNothing"
-  },
-  "影之遗迹-影-前台-中心": {
-    "recognition": "OCR",
-    "expected": "中",
-    "roi": [
-      500,
-      500,
-      300,
-      80
-    ],
-    "action": "DoNothing"
-  },
-  "影之遗迹-影-前台-右": {
-    "recognition": "OCR",
-    "expected": "右",
-    "roi": [
-      720,
-      500,
-      300,
-      80
-    ],
-    "action": "DoNothing"
-  },
   "影之遗迹-影-战斗-结果-页面": {
     "recognition": "OCR",
     "expected": [
@@ -1456,31 +817,6 @@
       0,
       630,
       260
-    ],
-    "action": "DoNothing"
-  },
-  "影之遗迹-影-失败-关闭": {
-    "recognition": "OCR",
-    "expected": [
-      "确定",
-      "关闭"
-    ],
-    "roi": [
-      760,
-      430,
-      250,
-      150
-    ],
-    "action": "DoNothing"
-  },
-  "影之遗迹-影-胜利-宝箱-奖励": {
-    "recognition": "OCR",
-    "expected": "^恭喜获得$",
-    "roi": [
-      150,
-      200,
-      90,
-      290
     ],
     "action": "DoNothing"
   },
@@ -1544,10 +880,11 @@
     },
     "action": "DoNothing",
     "next": [
-      "影之遗迹-战斗-门禁"
+      "影之遗迹-战斗-循环"
     ],
     "on_error": [
-      "影之遗迹-跳过-准备-点击"
+      "影之遗迹-跳过-准备-点击",
+      "影之遗迹-战斗-循环"
     ]
   },
   "影之遗迹-跳过-准备-点击": {
@@ -1575,10 +912,10 @@
       }
     },
     "next": [
-      "影之遗迹-战斗-门禁"
+      "影之遗迹-战斗-循环"
     ],
     "on_error": [
-      "影之遗迹-记录-失败"
+      "影之遗迹-战斗-循环"
     ],
     "retry_times": 0
   },
