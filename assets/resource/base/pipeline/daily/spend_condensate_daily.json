@@ -9,8 +9,6 @@
     "next": [
       "[JumpBack]公共-已知-茶-详情-关闭",
       "[JumpBack]公共-已知-茶-商店-关闭",
-      "消耗凝结体-恢复继续-偃武-奖励-探测",
-      "消耗凝结体-恢复继续-云州-奖励-探测",
       "消耗凝结体-日常-页面-探测",
       "消耗凝结体-主页-探测",
       "消耗凝结体-画卷-页面-探测",
@@ -18,30 +16,6 @@
       "消耗凝结体-云州-页面-探测"
     ],
     "on_error": ["消耗凝结体-记录-失败"]
-  },
-  "消耗凝结体-恢复继续-偃武-奖励-探测": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": ["消耗凝结体-凝结体-偃武-奖励", "消耗凝结体-凝结体-奖励-关闭"],
-        "box_index": 1
-      }
-    },
-    "action": "DoNothing",
-    "next": ["消耗凝结体-关闭-偃武-奖励"],
-    "on_error": ["消耗凝结体-恢复继续-云州-奖励-探测"]
-  },
-  "消耗凝结体-恢复继续-云州-奖励-探测": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": ["消耗凝结体-凝结体-云州-奖励", "消耗凝结体-凝结体-奖励-关闭"],
-        "box_index": 1
-      }
-    },
-    "action": "DoNothing",
-    "next": ["消耗凝结体-关闭-云州-奖励"],
-    "on_error": ["消耗凝结体-日常-页面-探测"]
   },
   "消耗凝结体-关闭-偃武-奖励": {
     "recognition": {
@@ -64,7 +38,7 @@
         "target_name": "消耗凝结体-凝结体-奖励-关闭"
       }
     },
-    "next": ["消耗凝结体-偃武-之后-校验"],
+    "next": ["消耗凝结体-选择-云州-之后-购买"],
     "on_error": ["消耗凝结体-记录-失败"]
   },
   "消耗凝结体-关闭-云州-奖励": {
@@ -88,7 +62,7 @@
         "target_name": "消耗凝结体-凝结体-奖励-关闭"
       }
     },
-    "next": ["消耗凝结体-云州-之后-校验"],
+    "next": ["消耗凝结体-成功"],
     "on_error": ["消耗凝结体-记录-失败"]
   },
   "消耗凝结体-日常-页面-探测": {
@@ -98,7 +72,7 @@
     "timeout": 8000,
     "action": "DoNothing",
     "next": ["消耗凝结体-关闭-日常"],
-    "on_error": ["消耗凝结体-主页-探测"]
+    "on_error": ["消耗凝结体-记录-失败"]
   },
   "消耗凝结体-关闭-日常": {
     "recognition": {
@@ -121,23 +95,8 @@
         "target_name": "消耗凝结体-凝结体-日常-关闭"
       }
     },
-    "next": ["消耗凝结体-面板-之后-日常-探测"],
-    "on_error": ["消耗凝结体-记录-失败"]
-  },
-  "消耗凝结体-面板-之后-日常-探测": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": ["消耗凝结体-凝结体-面板-页面", "消耗凝结体-凝结体-面板-关闭"],
-        "box_index": 1
-      }
-    },
-    "timeout": 8000,
-    "max_hit": 1,
-    "action": "DoNothing",
     "next": ["消耗凝结体-关闭-面板-之后-日常"],
-    "on_error": ["消耗凝结体-记录-失败"],
-    "retry_times": 0
+    "on_error": ["消耗凝结体-记录-失败"]
   },
   "消耗凝结体-关闭-面板-之后-日常": {
     "recognition": {
@@ -220,19 +179,6 @@
         "target_name": "消耗凝结体-凝结体-面板-打开"
       }
     },
-    "next": ["消耗凝结体-面板-探测"],
-    "on_error": ["消耗凝结体-记录-失败"]
-  },
-  "消耗凝结体-面板-探测": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": ["消耗凝结体-凝结体-面板-页面", "消耗凝结体-凝结体-日常-入口"],
-        "box_index": 0
-      }
-    },
-    "timeout": 8000,
-    "action": "DoNothing",
     "next": ["消耗凝结体-打开-日常"],
     "on_error": ["消耗凝结体-记录-失败"]
   },
@@ -394,7 +340,7 @@
         "target_name": "消耗凝结体-凝结体-偃武-关闭"
       }
     },
-    "next": ["消耗凝结体-选择-云州-之后-售罄"],
+    "next": ["消耗凝结体-选择-云州-之后-购买"],
     "on_error": ["消耗凝结体-记录-失败"]
   },
   "消耗凝结体-设置-偃武-最大": {
@@ -471,18 +417,6 @@
     "next": ["消耗凝结体-关闭-偃武-奖励"],
     "on_error": ["消耗凝结体-记录-失败"]
   },
-  "消耗凝结体-偃武-之后-校验": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": ["消耗凝结体-凝结体-偃武-页面", "消耗凝结体-凝结体-偃武-之后"],
-        "box_index": 1
-      }
-    },
-    "action": "DoNothing",
-    "next": ["消耗凝结体-选择-云州-之后-购买"],
-    "on_error": ["消耗凝结体-记录-失败"]
-  },
   "消耗凝结体-云州-页面-探测": {
     "recognition": "TemplateMatch",
     "template": "daily/SPEND_CONDENSATE_DAILY/yunzhou_world_page.png",
@@ -492,30 +426,6 @@
     "action": "DoNothing",
     "next": ["消耗凝结体-打开-云州-恢复"],
     "on_error": ["[JumpBack]启动-游戏启动"]
-  },
-  "消耗凝结体-选择-云州-之后-售罄": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": ["消耗凝结体-凝结体-偃武-页面", "消耗凝结体-凝结体-云州-标签"],
-        "box_index": 1
-      }
-    },
-    "action": "Custom",
-    "custom_action": "GuardedInput", "max_hit": 1,
-    "custom_action_param": {
-      "task_id": "SPEND_CONDENSATE_DAILY",
-      "action_id": "select_yunzhou",
-      "kind": "click",
-      "evidence": {
-        "page_index": 0,
-        "target_index": 1,
-        "page_name": "消耗凝结体-凝结体-偃武-页面",
-        "target_name": "消耗凝结体-凝结体-云州-标签"
-      }
-    },
-    "next": ["消耗凝结体-云州-页面-之后-售罄"],
-    "on_error": ["消耗凝结体-记录-失败"]
   },
   "消耗凝结体-选择-云州-之后-购买": {
     "recognition": {
@@ -538,27 +448,7 @@
         "target_name": "消耗凝结体-凝结体-云州-标签"
       }
     },
-    "next": ["消耗凝结体-云州-页面-之后-购买"],
-    "on_error": ["消耗凝结体-记录-失败"]
-  },
-  "消耗凝结体-云州-页面-之后-售罄": {
-    "recognition": "TemplateMatch",
-    "template": "daily/SPEND_CONDENSATE_DAILY/yunzhou_world_page.png",
-    "roi": [60, 200, 300, 130],
-    "threshold": 0.36,
-    "timeout": 8000,
-    "action": "DoNothing",
-    "next": ["消耗凝结体-打开-云州-之后-售罄"],
-    "on_error": ["消耗凝结体-记录-失败"]
-  },
-  "消耗凝结体-云州-页面-之后-购买": {
-    "recognition": "TemplateMatch",
-    "template": "daily/SPEND_CONDENSATE_DAILY/yunzhou_world_page.png",
-    "roi": [60, 200, 300, 130],
-    "threshold": 0.36,
-    "timeout": 8000,
-    "action": "DoNothing",
-    "next": ["消耗凝结体-打开-云州-之后-购买"],
+    "next": ["消耗凝结体-云州-页面-探测"],
     "on_error": ["消耗凝结体-记录-失败"]
   },
   "消耗凝结体-打开-云州-恢复": {
@@ -585,54 +475,6 @@
     "next": ["消耗凝结体-云州-购买-页面-恢复"],
     "on_error": ["消耗凝结体-记录-失败"]
   },
-  "消耗凝结体-打开-云州-之后-售罄": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": ["消耗凝结体-凝结体-云州-页面", "消耗凝结体-凝结体-云州-货币-入口"],
-        "box_index": 1
-      }
-    },
-    "action": "Custom",
-    "custom_action": "GuardedInput", "max_hit": 1,
-    "custom_action_param": {
-      "task_id": "SPEND_CONDENSATE_DAILY",
-      "action_id": "open_yunzhou_currency_purchase",
-      "kind": "click",
-      "evidence": {
-        "page_index": 0,
-        "target_index": 1,
-        "page_name": "消耗凝结体-凝结体-云州-页面",
-        "target_name": "消耗凝结体-凝结体-云州-货币-入口"
-      }
-    },
-    "next": ["消耗凝结体-云州-购买-页面-之后-售罄"],
-    "on_error": ["消耗凝结体-记录-失败"]
-  },
-  "消耗凝结体-打开-云州-之后-购买": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": ["消耗凝结体-凝结体-云州-页面", "消耗凝结体-凝结体-云州-货币-入口"],
-        "box_index": 1
-      }
-    },
-    "action": "Custom",
-    "custom_action": "GuardedInput", "max_hit": 1,
-    "custom_action_param": {
-      "task_id": "SPEND_CONDENSATE_DAILY",
-      "action_id": "open_yunzhou_currency_purchase",
-      "kind": "click",
-      "evidence": {
-        "page_index": 0,
-        "target_index": 1,
-        "page_name": "消耗凝结体-凝结体-云州-页面",
-        "target_name": "消耗凝结体-凝结体-云州-货币-入口"
-      }
-    },
-    "next": ["消耗凝结体-云州-购买-页面-之后-购买"],
-    "on_error": ["消耗凝结体-记录-失败"]
-  },
   "消耗凝结体-云州-购买-页面-恢复": {
     "recognition": "OCR",
     "expected": ["购买", "南北通宝"],
@@ -642,30 +484,6 @@
     "next": [
       "消耗凝结体-云州-售罄-恢复",
       "消耗凝结体-设置-云州-最大-恢复"
-    ],
-    "on_error": ["消耗凝结体-记录-失败"]
-  },
-  "消耗凝结体-云州-购买-页面-之后-售罄": {
-    "recognition": "OCR",
-    "expected": ["购买", "南北通宝"],
-    "roi": [0, 100, 1280, 620],
-    "timeout": 8000,
-    "action": "DoNothing",
-    "next": [
-      "消耗凝结体-云州-售罄-之后-售罄",
-      "消耗凝结体-设置-云州-最大-之后-售罄"
-    ],
-    "on_error": ["消耗凝结体-记录-失败"]
-  },
-  "消耗凝结体-云州-购买-页面-之后-购买": {
-    "recognition": "OCR",
-    "expected": ["购买", "南北通宝"],
-    "roi": [0, 100, 1280, 620],
-    "timeout": 8000,
-    "action": "DoNothing",
-    "next": [
-      "消耗凝结体-云州-售罄-之后-购买",
-      "消耗凝结体-设置-云州-最大-之后-购买"
     ],
     "on_error": ["消耗凝结体-记录-失败"]
   },
@@ -683,36 +501,6 @@
     "action": "DoNothing",
     "next": ["消耗凝结体-关闭-云州-恢复"],
     "on_error": ["消耗凝结体-设置-云州-最大-恢复"]
-  },
-  "消耗凝结体-云州-售罄-之后-售罄": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": [
-          "消耗凝结体-凝结体-云州-购买-页面",
-          "消耗凝结体-凝结体-云州-售罄"
-        ],
-        "box_index": 1
-      }
-    },
-    "action": "DoNothing",
-    "next": ["消耗凝结体-关闭-云州-之后-售罄"],
-    "on_error": ["消耗凝结体-设置-云州-最大-之后-售罄"]
-  },
-  "消耗凝结体-云州-售罄-之后-购买": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": [
-          "消耗凝结体-凝结体-云州-购买-页面",
-          "消耗凝结体-凝结体-云州-售罄"
-        ],
-        "box_index": 1
-      }
-    },
-    "action": "DoNothing",
-    "next": ["消耗凝结体-关闭-云州-之后-购买"],
-    "on_error": ["消耗凝结体-设置-云州-最大-之后-购买"]
   },
   "消耗凝结体-关闭-云州-恢复": {
     "recognition": {
@@ -742,62 +530,6 @@
     "next": ["消耗凝结体-已完成"],
     "on_error": ["消耗凝结体-记录-失败"]
   },
-  "消耗凝结体-关闭-云州-之后-售罄": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": [
-          "消耗凝结体-凝结体-云州-购买-页面",
-          "消耗凝结体-凝结体-云州-售罄",
-          "消耗凝结体-凝结体-云州-关闭"
-        ],
-        "box_index": 2
-      }
-    },
-    "action": "Custom",
-    "custom_action": "GuardedInput", "max_hit": 1,
-    "custom_action_param": {
-      "task_id": "SPEND_CONDENSATE_DAILY",
-      "action_id": "close_yunzhou_currency_purchase",
-      "kind": "click",
-      "evidence": {
-        "page_index": 0,
-        "target_index": 2,
-        "page_name": "消耗凝结体-凝结体-云州-购买-页面",
-        "target_name": "消耗凝结体-凝结体-云州-关闭"
-      }
-    },
-    "next": ["消耗凝结体-已完成"],
-    "on_error": ["消耗凝结体-记录-失败"]
-  },
-  "消耗凝结体-关闭-云州-之后-购买": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": [
-          "消耗凝结体-凝结体-云州-购买-页面",
-          "消耗凝结体-凝结体-云州-售罄",
-          "消耗凝结体-凝结体-云州-关闭"
-        ],
-        "box_index": 2
-      }
-    },
-    "action": "Custom",
-    "custom_action": "GuardedInput", "max_hit": 1,
-    "custom_action_param": {
-      "task_id": "SPEND_CONDENSATE_DAILY",
-      "action_id": "close_yunzhou_currency_purchase",
-      "kind": "click",
-      "evidence": {
-        "page_index": 0,
-        "target_index": 2,
-        "page_name": "消耗凝结体-凝结体-云州-购买-页面",
-        "target_name": "消耗凝结体-凝结体-云州-关闭"
-      }
-    },
-    "next": ["消耗凝结体-成功"],
-    "on_error": ["消耗凝结体-记录-失败"]
-  },
   "消耗凝结体-设置-云州-最大-恢复": {
     "recognition": {
       "type": "And",
@@ -823,60 +555,6 @@
       }
     },
     "next": ["消耗凝结体-购买-云州-恢复"],
-    "on_error": ["消耗凝结体-预算-不安全"]
-  },
-  "消耗凝结体-设置-云州-最大-之后-售罄": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": [
-          "消耗凝结体-凝结体-云州-购买-页面",
-          "消耗凝结体-凝结体-云州-最大-数量"
-        ],
-        "box_index": 1
-      }
-    },
-    "action": "Custom",
-    "custom_action": "GuardedInput", "max_hit": 1,
-    "custom_action_param": {
-      "task_id": "SPEND_CONDENSATE_DAILY",
-      "action_id": "set_yunzhou_quantity_max",
-      "kind": "click",
-      "evidence": {
-        "page_index": 0,
-        "target_index": 1,
-        "page_name": "消耗凝结体-凝结体-云州-购买-页面",
-        "target_name": "消耗凝结体-凝结体-云州-最大-数量"
-      }
-    },
-    "next": ["消耗凝结体-购买-云州-之后-售罄"],
-    "on_error": ["消耗凝结体-预算-不安全"]
-  },
-  "消耗凝结体-设置-云州-最大-之后-购买": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": [
-          "消耗凝结体-凝结体-云州-购买-页面",
-          "消耗凝结体-凝结体-云州-最大-数量"
-        ],
-        "box_index": 1
-      }
-    },
-    "action": "Custom",
-    "custom_action": "GuardedInput", "max_hit": 1,
-    "custom_action_param": {
-      "task_id": "SPEND_CONDENSATE_DAILY",
-      "action_id": "set_yunzhou_quantity_max",
-      "kind": "click",
-      "evidence": {
-        "page_index": 0,
-        "target_index": 1,
-        "page_name": "消耗凝结体-凝结体-云州-购买-页面",
-        "target_name": "消耗凝结体-凝结体-云州-最大-数量"
-      }
-    },
-    "next": ["消耗凝结体-购买-云州-之后-购买"],
     "on_error": ["消耗凝结体-预算-不安全"]
   },
   "消耗凝结体-购买-云州-恢复": {
@@ -914,76 +592,6 @@
     "next": ["消耗凝结体-云州-奖励-探测-恢复"],
     "on_error": ["消耗凝结体-预算-不安全"]
   },
-  "消耗凝结体-购买-云州-之后-售罄": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": [
-          "消耗凝结体-凝结体-云州-购买-页面",
-          "消耗凝结体-凝结体-云州-购买-确认",
-          "消耗凝结体-凝结体-货币",
-          "消耗凝结体-凝结体-云州-消耗-50000"
-        ],
-        "box_index": 1
-      }
-    },
-    "action": "Custom",
-    "custom_action": "GuardedInput", "max_hit": 1,
-    "custom_action_param": {
-      "task_id": "SPEND_CONDENSATE_DAILY",
-      "action_id": "buy_yunzhou_currency_max",
-      "kind": "click",
-      "resource_id": "凝晶",
-      "resource_index": 2,
-      "amount_index": 3,
-      "resource_evidence_name": "消耗凝结体-凝结体-货币",
-      "observed_amount": 50000,
-      "budget_amount": 50000,
-      "evidence": {
-        "page_index": 0,
-        "target_index": 1,
-        "page_name": "消耗凝结体-凝结体-云州-购买-页面",
-        "target_name": "消耗凝结体-凝结体-云州-购买-确认"
-      }
-    },
-    "next": ["消耗凝结体-云州-奖励-探测-之后-售罄"],
-    "on_error": ["消耗凝结体-预算-不安全"]
-  },
-  "消耗凝结体-购买-云州-之后-购买": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": [
-          "消耗凝结体-凝结体-云州-购买-页面",
-          "消耗凝结体-凝结体-云州-购买-确认",
-          "消耗凝结体-凝结体-货币",
-          "消耗凝结体-凝结体-云州-消耗-50000"
-        ],
-        "box_index": 1
-      }
-    },
-    "action": "Custom",
-    "custom_action": "GuardedInput", "max_hit": 1,
-    "custom_action_param": {
-      "task_id": "SPEND_CONDENSATE_DAILY",
-      "action_id": "buy_yunzhou_currency_max",
-      "kind": "click",
-      "resource_id": "凝晶",
-      "resource_index": 2,
-      "amount_index": 3,
-      "resource_evidence_name": "消耗凝结体-凝结体-货币",
-      "observed_amount": 50000,
-      "budget_amount": 50000,
-      "evidence": {
-        "page_index": 0,
-        "target_index": 1,
-        "page_name": "消耗凝结体-凝结体-云州-购买-页面",
-        "target_name": "消耗凝结体-凝结体-云州-购买-确认"
-      }
-    },
-    "next": ["消耗凝结体-云州-奖励-探测-之后-购买"],
-    "on_error": ["消耗凝结体-预算-不安全"]
-  },
   "消耗凝结体-云州-奖励-探测-恢复": {
     "recognition": {
       "type": "And",
@@ -994,42 +602,6 @@
     },
     "action": "DoNothing",
     "next": ["消耗凝结体-关闭-云州-奖励"],
-    "on_error": ["消耗凝结体-记录-失败"]
-  },
-  "消耗凝结体-云州-奖励-探测-之后-售罄": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": ["消耗凝结体-凝结体-云州-奖励", "消耗凝结体-凝结体-奖励-关闭"],
-        "box_index": 1
-      }
-    },
-    "action": "DoNothing",
-    "next": ["消耗凝结体-关闭-云州-奖励"],
-    "on_error": ["消耗凝结体-记录-失败"]
-  },
-  "消耗凝结体-云州-奖励-探测-之后-购买": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": ["消耗凝结体-凝结体-云州-奖励", "消耗凝结体-凝结体-奖励-关闭"],
-        "box_index": 1
-      }
-    },
-    "action": "DoNothing",
-    "next": ["消耗凝结体-关闭-云州-奖励"],
-    "on_error": ["消耗凝结体-记录-失败"]
-  },
-  "消耗凝结体-云州-之后-校验": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": ["消耗凝结体-凝结体-云州-页面", "消耗凝结体-凝结体-云州-之后"],
-        "box_index": 1
-      }
-    },
-    "action": "DoNothing",
-    "next": ["消耗凝结体-成功"],
     "on_error": ["消耗凝结体-记录-失败"]
   },
   "消耗凝结体-已完成": {
@@ -1211,12 +783,6 @@
     "roi": [0, 100, 1280, 620],
     "action": "DoNothing"
   },
-  "消耗凝结体-凝结体-偃武-之后": {
-    "recognition": "OCR",
-    "expected": ["偃武世界", "0/12500"],
-    "roi": [0, 100, 1000, 620],
-    "action": "DoNothing"
-  },
   "消耗凝结体-凝结体-云州-标签": {
     "recognition": "OCR",
     "expected": "云州",
@@ -1278,12 +844,6 @@
     "recognition": "OCR",
     "expected": ["恭喜获得", "获得"],
     "roi": [0, 100, 1280, 620],
-    "action": "DoNothing"
-  },
-  "消耗凝结体-凝结体-云州-之后": {
-    "recognition": "OCR",
-    "expected": ["云州", "0/12500"],
-    "roi": [0, 100, 1000, 620],
     "action": "DoNothing"
   },
   "消耗凝结体-凝结体-货币": {
