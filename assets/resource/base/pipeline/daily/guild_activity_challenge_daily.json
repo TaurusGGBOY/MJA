@@ -7,244 +7,8 @@
       "task_id": "GUILD_ACTIVITY_CHALLENGE_DAILY"
     },
     "timeout": 8000,
-    "next": [
-      "帮派活动挑战-帮派-开始-安全-探测",
-      "帮派活动挑战-帮派-开始-付费-探测",
-      "帮派活动挑战-帮派-恢复继续-结果-探测",
-      "帮派活动挑战-帮派-恢复-副本-页面-探测",
-      "帮派活动挑战-帮派-恢复-剑林-页面-探测",
-      "帮派活动挑战-帮派-恢复-日常-页面-探测",
-      "启动-影-页面-返回",
-      "帮派活动挑战-页面-探测",
-      "帮派活动挑战-页面-探测-2",
-      "帮派活动挑战-面板-探测",
-      "帮派活动挑战-主页-探测"
-    ],
-    "on_error": [
-      "帮派活动挑战-游戏启动恢复",
-      "帮派活动挑战-记录-失败"
-    ],
-    "retry_times": 0
-  },
-  "帮派活动挑战-游戏启动恢复": {
-    "recognition": "DirectHit",
-    "max_hit": 1,
-    "timeout": 30000,
-    "action": "StartApp",
-    "package": "com.hanjiasongshu.dr22/.MainActivity",
-    "post_delay": 5000,
-    "next": [
-      "帮派活动挑战-帮派-开始-安全-探测",
-      "帮派活动挑战-帮派-开始-付费-探测",
-      "帮派活动挑战-帮派-恢复继续-结果-探测",
-      "帮派活动挑战-帮派-恢复-副本-页面-探测",
-      "帮派活动挑战-帮派-恢复-剑林-页面-探测",
-      "帮派活动挑战-帮派-恢复-日常-页面-探测",
-      "启动-影-页面-返回",
-      "帮派活动挑战-页面-探测",
-      "帮派活动挑战-页面-探测-2",
-      "帮派活动挑战-面板-探测",
-      "帮派活动挑战-主页-探测"
-    ],
-    "on_error": ["帮派活动挑战-记录-失败"],
-    "retry_times": 0
-  },
-  "帮派活动挑战-帮派-恢复-公告": {
-    "recognition": "OCR",
-    "expected": ["公告", "公告说明", "版本更新"],
-    "roi": [0, 0, 1280, 720],
-    "timeout": 5000,
-    "action": "Click",
-    "target": [1048, 125, 60, 50],
-    "post_delay": 1000,
-    "next": ["帮派活动挑战-帮派-恢复-状态-探测"],
-    "on_error": [],
-    "retry_times": 0
-  },
-  "帮派活动挑战-帮派-恢复-标题": {
-    "recognition": "OCR",
-    "expected": ["点击开始游戏", "点击开始游戏！", "点击开始游戏!", "进入游戏"],
-    "roi": [350, 540, 580, 170],
-    "timeout": 5000,
-    "action": "Click",
-    "max_hit": 1,
-    "post_delay": 500,
-    "next": ["帮派活动挑战-帮派-恢复-状态-探测"],
-    "on_error": []
-  },
-  "帮派活动挑战-帮派-恢复-标题-模板": {
-    "recognition": "TemplateMatch",
-    "template": "home/start_game_button.png",
-    "roi": [560, 638, 180, 45],
-    "threshold": 0.225,
-    "timeout": 5000,
-    "action": "Click",
-    "max_hit": 1,
-    "post_delay": 500,
-    "next": ["帮派活动挑战-帮派-恢复-状态-探测"],
-    "on_error": []
-  },
-  "帮派活动挑战-帮派-恢复-状态-探测": {
-    "recognition": "DirectHit",
-    "action": "DoNothing",
-    "timeout": 30000,
-    "next": [
-      "帮派活动挑战-帮派-开始-安全-探测",
-      "帮派活动挑战-帮派-开始-付费-探测",
-      "帮派活动挑战-帮派-恢复继续-结果-探测",
-      "帮派活动挑战-帮派-恢复-副本-页面-探测",
-      "帮派活动挑战-帮派-恢复-剑林-页面-探测",
-      "帮派活动挑战-帮派-恢复-日常-页面-探测",
-      "启动-影-页面-返回",
-      "帮派活动挑战-页面-探测",
-      "帮派活动挑战-页面-探测-2",
-      "帮派活动挑战-面板-探测",
-      "帮派活动挑战-主页-探测"
-    ],
-    "on_error": ["帮派活动挑战-帮派-游戏启动恢复-重新启动"],
-    "retry_times": 0
-  },
-  "帮派活动挑战-帮派-游戏启动恢复-重新启动": {
-    "recognition": "DirectHit",
-    "max_hit": 2,
-    "timeout": 120000,
-    "action": "StartApp",
-    "package": "com.hanjiasongshu.dr22/.MainActivity",
-    "post_delay": 30000,
-    "retry_times": 0,
-    "next": [
-      "帮派活动挑战-帮派-恢复-公告",
-      "帮派活动挑战-帮派-恢复-标题",
-      "帮派活动挑战-帮派-恢复-标题-模板",
-      "帮派活动挑战-帮派-恢复-状态-探测"
-    ],
-    "on_error": ["帮派活动挑战-记录-失败"]
-  },
-  "帮派活动挑战-帮派-开始-安全-探测": {
-    "recognition": "OCR",
-    "expected": ["验证码", "安全验证"],
-    "roi": [0, 0, 1280, 720],
-    "timeout": 2500,
-    "action": "DoNothing",
-    "next": ["帮派活动挑战-帮派-危险-停止"],
-    "on_error": ["帮派活动挑战-帮派-开始-付费-探测"]
-  },
-  "帮派活动挑战-帮派-开始-付费-探测": {
-    "recognition": "OCR",
-    "expected": ["购买元宝", "充值", "支付", "Apple Pay"],
-    "roi": [280, 160, 720, 420],
-    "timeout": 2500,
-    "action": "DoNothing",
-    "next": ["帮派活动挑战-帮派-危险-停止"],
-    "on_error": ["帮派活动挑战-帮派-恢复继续-结果-探测"]
-  },
-  "帮派活动挑战-帮派-恢复继续-结果-探测": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": ["帮派活动挑战-帮派-结果-页面", "帮派活动挑战-帮派-结果-已知"],
-        "box_index": 1
-      }
-    },
-    "action": "DoNothing",
-    "next": [
-      "帮派活动挑战-帮派-结果-胜利-探测",
-      "帮派活动挑战-帮派-结果-失败-探测"
-    ],
-    "on_error": ["帮派活动挑战-页面-探测"]
-  },
-  "帮派活动挑战-帮派-恢复-副本-页面-探测": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": ["副本扫荡-副本-页面", "副本扫荡-副本-关闭"],
-        "box_index": 1
-      }
-    },
-    "timeout": 8000,
-    "action": "DoNothing",
-    "next": ["帮派活动挑战-帮派-关闭-副本-用于-恢复"],
-    "on_error": ["帮派活动挑战-页面-探测"]
-  },
-  "帮派活动挑战-帮派-关闭-副本-用于-恢复": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": ["副本扫荡-副本-页面", "副本扫荡-副本-关闭"],
-        "box_index": 1
-      }
-    },
-    "timeout": 8000,
-    "action": "Custom",
-    "custom_action": "GuardedInput",
-    "custom_action_param": {
-      "task_id": "GUILD_ACTIVITY_CHALLENGE_DAILY",
-      "action_id": "close_dungeon_for_guild",
-      "kind": "click",
-      "evidence": {
-        "page_index": 0,
-        "target_index": 1,
-        "page_name": "副本扫荡-副本-页面",
-        "target_name": "副本扫荡-副本-关闭"
-      }
-    },
-    "post_delay": 1000,
     "next": ["帮派活动挑战-主页-探测"],
     "on_error": ["帮派活动挑战-记录-失败"],
-    "retry_times": 0
-  },
-  "帮派活动挑战-帮派-恢复-剑林-页面-探测": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": ["剑林凝结体体力-剑林-页面", "副本扫荡-副本-关闭"],
-        "box_index": 1
-      }
-    },
-    "timeout": 8000,
-    "action": "Custom",
-    "custom_action": "GuardedInput",
-    "custom_action_param": {
-      "task_id": "GUILD_ACTIVITY_CHALLENGE_DAILY",
-      "action_id": "close_jianlin_for_guild",
-      "kind": "click",
-      "evidence": {
-        "page_index": 0,
-        "target_index": 1,
-        "page_name": "剑林凝结体体力-剑林-页面",
-        "target_name": "副本扫荡-副本-关闭"
-      }
-    },
-    "post_delay": 1000,
-    "next": ["帮派活动挑战-主页-探测"],
-    "on_error": ["帮派活动挑战-记录-失败"],
-    "retry_times": 0
-  },
-  "帮派活动挑战-帮派-恢复-日常-页面-探测": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": ["剑林凝结体体力-剑林-日常-页面", "剑林凝结体体力-剑林-日常-关闭"],
-        "box_index": 1
-      }
-    },
-    "timeout": 8000,
-    "action": "Custom",
-    "custom_action": "GuardedInput",
-    "custom_action_param": {
-      "task_id": "GUILD_ACTIVITY_CHALLENGE_DAILY",
-      "action_id": "close_daily_tasks_for_guild",
-      "kind": "click",
-      "evidence": {
-        "page_index": 0,
-        "target_index": 1,
-        "page_name": "剑林凝结体体力-剑林-日常-页面",
-        "target_name": "剑林凝结体体力-剑林-日常-关闭"
-      }
-    },
-    "post_delay": 1000,
-    "next": ["帮派活动挑战-面板-探测"],
-    "on_error": ["帮派活动挑战-页面-探测"],
     "retry_times": 0
   },
   "帮派活动挑战-页面-探测": {
@@ -374,15 +138,6 @@
       }
     },
     "post_delay": 1200,
-    "next": ["帮派活动挑战-帮派-已完成-退出-功能-面板-探测"],
-    "on_error": ["帮派活动挑战-帮派-退出-记录-失败"],
-    "retry_times": 0
-  },
-  "帮派活动挑战-帮派-已完成-退出-功能-面板-探测": {
-    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏侧边面板-打开"], "box_index": 0}},
-    "timeout": 8000,
-    "max_hit": 1,
-    "action": "DoNothing",
     "next": ["帮派活动挑战-帮派-已完成-退出-功能-面板"],
     "on_error": ["帮派活动挑战-帮派-退出-记录-失败"],
     "retry_times": 0
@@ -455,8 +210,8 @@
     "next": [
       "帮派活动挑战-帮派-挑战-过渡-危险-探测",
       "帮派活动挑战-帮派-挑战-过渡-校验-探测",
-      "帮派活动挑战-帮派-挑战-过渡-探测",
-      "帮派活动挑战-帮派-挑战-准备-探测"
+      "帮派活动挑战-帮派-挑战-确认",
+      "帮派活动挑战-帮派-挑战-开始"
     ],
     "on_error": ["帮派活动挑战-帮派-挑战-过渡-未知"]
   },
@@ -476,19 +231,7 @@
     "timeout": 2500,
     "action": "DoNothing",
     "next": ["帮派活动挑战-帮派-危险-停止"],
-    "on_error": ["帮派活动挑战-帮派-挑战-过渡-探测"]
-  },
-  "帮派活动挑战-帮派-挑战-过渡-探测": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": ["帮派活动挑战-帮派-挑战-确认-页面", "帮派活动挑战-帮派-挑战-确认-2"],
-        "box_index": 1
-      }
-    },
-    "action": "DoNothing",
-    "next": ["帮派活动挑战-帮派-挑战-确认"],
-    "on_error": ["帮派活动挑战-帮派-挑战-准备-探测"]
+    "on_error": ["帮派活动挑战-帮派-挑战-确认"]
   },
   "帮派活动挑战-帮派-挑战-确认": {
     "recognition": {
@@ -514,24 +257,12 @@
     "next": [
       "帮派活动挑战-帮派-结果-危险-探测",
       "帮派活动挑战-帮派-结果-校验-探测",
-      "帮派活动挑战-帮派-挑战-准备-探测",
+      "帮派活动挑战-帮派-挑战-开始",
       "帮派活动挑战-帮派-结果-胜利-探测",
       "帮派活动挑战-帮派-结果-失败-探测"
     ],
     "on_error": ["帮派活动挑战-记录-失败"],
     "retry_times": 0
-  },
-  "帮派活动挑战-帮派-挑战-准备-探测": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": ["帮派活动挑战-帮派-挑战-准备-页面", "帮派活动挑战-帮派-挑战-开始-2"],
-        "box_index": 1
-      }
-    },
-    "action": "DoNothing",
-    "next": ["帮派活动挑战-帮派-挑战-开始"],
-    "on_error": ["帮派活动挑战-帮派-挑战-过渡-未知"]
   },
   "帮派活动挑战-帮派-挑战-开始": {
     "recognition": {
@@ -619,6 +350,32 @@
     "next": ["帮派活动挑战-帮派-结果-关闭-探测"],
     "on_error": ["帮派活动挑战-帮派-结果-失败-探测"]
   },
+  "帮派活动挑战-帮派-结果-关闭-探测": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["帮派活动挑战-帮派-结果-页面", "帮派活动挑战-帮派-结果-胜利"],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "GUILD_ACTIVITY_CHALLENGE_DAILY",
+      "action_id": "dismiss_guild_result",
+      "kind": "click",
+      "fixed_click_mode": "guild_result_blank",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "帮派活动挑战-帮派-结果-页面",
+        "target_name": "帮派活动挑战-帮派-结果-胜利"
+      }
+    },
+    "next": ["帮派活动挑战-帮派-成功-退出-活动"],
+    "on_error": ["帮派活动挑战-帮派-未知结果"],
+    "retry_times": 0
+  },
   "帮派活动挑战-帮派-结果-失败-探测": {
     "recognition": {
       "type": "And",
@@ -656,32 +413,6 @@
     },
     "next": ["帮派活动挑战-帮派-结果-失败"],
     "on_error": ["帮派活动挑战-帮派-结果-失败"],
-    "retry_times": 0
-  },
-  "帮派活动挑战-帮派-结果-关闭-探测": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": ["帮派活动挑战-帮派-结果-页面", "帮派活动挑战-帮派-结果-胜利"],
-        "box_index": 1
-      }
-    },
-    "action": "Custom",
-    "custom_action": "GuardedInput",
-    "custom_action_param": {
-      "task_id": "GUILD_ACTIVITY_CHALLENGE_DAILY",
-      "action_id": "dismiss_guild_result",
-      "kind": "click",
-      "fixed_click_mode": "guild_result_blank",
-      "evidence": {
-        "page_index": 0,
-        "target_index": 1,
-        "page_name": "帮派活动挑战-帮派-结果-页面",
-        "target_name": "帮派活动挑战-帮派-结果-胜利"
-      }
-    },
-    "next": ["帮派活动挑战-帮派-成功-退出-活动"],
-    "on_error": ["帮派活动挑战-帮派-未知结果"],
     "retry_times": 0
   },
   "帮派活动挑战-帮派-结果-失败": {
@@ -787,15 +518,6 @@
       }
     },
     "post_delay": 1200,
-    "next": ["帮派活动挑战-帮派-成功-退出-功能-面板-探测"],
-    "on_error": ["帮派活动挑战-帮派-退出-记录-失败"],
-    "retry_times": 0
-  },
-  "帮派活动挑战-帮派-成功-退出-功能-面板-探测": {
-    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏侧边面板-打开"], "box_index": 0}},
-    "timeout": 8000,
-    "max_hit": 1,
-    "action": "DoNothing",
     "next": ["帮派活动挑战-帮派-成功-退出-功能-面板"],
     "on_error": ["帮派活动挑战-帮派-退出-记录-失败"],
     "retry_times": 0
@@ -882,34 +604,6 @@
     "next": ["公共-通用中止"]
 
   },
-  "帮派活动挑战-帮派-未知-页面": {
-    "recognition": "DirectHit",
-    "action": "Custom",
-    "custom_action": "RecordTaskOutcome",
-    "custom_action_param": {
-      "task_id": "GUILD_ACTIVITY_CHALLENGE_DAILY",
-      "status": "failed",
-      "error_code": "GUILD_UNKNOWN_PAGE",
-      "postcondition": "guild.known_page",
-      "native_fail_after_record": true
-    },
-    "Abort": true,
-    "next": ["公共-通用中止"]
-
-  },
-  "帮派活动挑战-页面-探测-2": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": ["帮派活动挑战-帮派-活动-挑战-页面", "帮派活动挑战-帮派-活动-入口"],
-        "box_index": 1
-      }
-    },
-    "timeout": 8000,
-    "action": "DoNothing",
-    "next": ["帮派活动挑战-帮派-打开-活动"],
-    "on_error": ["帮派活动挑战-面板-探测"]
-  },
   "帮派活动挑战-帮派-打开-活动": {
     "recognition": {
       "type": "And",
@@ -940,7 +634,7 @@
     "timeout": 8000,
     "action": "DoNothing",
     "next": ["帮派活动挑战-打开-帮派"],
-    "on_error": ["帮派活动挑战-主页-探测"]
+    "on_error": ["帮派活动挑战-记录-失败"]
   },
   "帮派活动挑战-打开-帮派": {
     "recognition": {
@@ -963,7 +657,7 @@
         "target_name": "帮派活动挑战-帮派-面板-入口"
       }
     },
-    "next": ["帮派活动挑战-页面-探测-2"],
+    "next": ["帮派活动挑战-帮派-打开-活动"],
     "on_error": ["帮派活动挑战-记录-失败"],
     "retry_times": 0
   },
@@ -1068,16 +762,6 @@
     "roi": [980, 540, 300, 100],
     "action": "DoNothing"
   },
-  "帮派活动挑战-帮派-剩余-任意": {
-    "recognition": "OCR",
-    "expected": [
-      "今日剩余征讨次数\\s*[:：]?\\s*(?:0|1|2)\\s*/\\s*2",
-      "剩余征讨次数\\s*[:：]?\\s*(?:0|1|2)\\s*/\\s*2",
-      "(?:0|1|2)\\s*/\\s*2"
-    ],
-    "roi": [980, 540, 300, 100],
-    "action": "DoNothing"
-  },
   "帮派活动挑战-帮派-剩余-耗尽": {
     "recognition": "OCR",
     "expected": [
@@ -1174,12 +858,6 @@
     "timeout": 30000,
     "action": "DoNothing"
   },
-  "帮派活动挑战-帮派-结果-已知": {
-    "recognition": "OCR",
-    "expected": ["^战斗胜利$", "^战斗失败$"],
-    "roi": [700, 70, 580, 210],
-    "action": "DoNothing"
-  },
   "帮派活动挑战-帮派-结果-胜利": {
     "recognition": "OCR",
     "expected": "^战斗胜利$",
@@ -1206,24 +884,6 @@
         "box_index": 0
       }
     },
-    "action": "DoNothing"
-  },
-  "帮派活动挑战-帮派-结果-关闭-空白": {
-    "recognition": "OCR",
-    "expected": "点击(?:空白处|任意位置)关闭",
-    "roi": [300, 560, 700, 160],
-    "action": "DoNothing"
-  },
-  "帮派活动挑战-帮派-结果-关闭-按钮": {
-    "recognition": "OCR",
-    "expected": ["确定", "返回", "关闭"],
-    "roi": [820, 380, 420, 260],
-    "action": "DoNothing"
-  },
-  "帮派活动挑战-帮派-结果-关闭-任意": {
-    "recognition": "OCR",
-    "expected": ["点击(?:空白处|任意位置)关闭", "确定", "返回", "关闭"],
-    "roi": [300, 380, 940, 340],
     "action": "DoNothing"
   },
   "帮派活动挑战-帮派-危险-付费": {
