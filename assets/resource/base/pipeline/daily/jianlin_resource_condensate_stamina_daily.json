@@ -5459,9 +5459,9 @@
     "expected": "^前往$",
     "roi": [
       980,
-      400,
+      500,
       240,
-      100
+      130
     ],
     "timeout": 8000,
     "action": "DoNothing"

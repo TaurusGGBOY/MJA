@@ -41,7 +41,7 @@
   "副本扫荡-副本-风雪-神道": {"recognition": "OCR", "expected": "风雪神道", "roi": [0, 300, 1000, 420], "action": "DoNothing"},
   "副本扫荡-副本-风雪-神道-标题": {"recognition": "OCR", "expected": "风雪神道", "roi": [300, 300, 700, 180], "action": "DoNothing"},
   "副本扫荡-副本-背包-已满": {"recognition": "OCR", "expected": ["背包已满", "装备分解", "再进行扫荡"], "roi": [300, 300, 900, 220], "action": "DoNothing"},
-  "副本扫荡-副本-扫荡-目标": {"recognition": "OCR", "expected": ["扫荡", "未解锁扫荡"], "roi": [940, 560, 220, 120], "action": "DoNothing"},
+  "副本扫荡-副本-扫荡-目标": {"recognition": "OCR", "expected": ["扫荡", "未解锁扫荡"], "roi": [860, 560, 300, 130], "action": "DoNothing"},
   "副本扫荡-副本-扫荡-目标-视觉": {"recognition": "ColorMatch", "method": 4, "lower": [200, 80, 20], "upper": [255, 170, 90], "roi": [940, 560, 220, 120], "connected": true, "count": 1800, "order_by": "Area", "index": 0, "action": "DoNothing"},
   "副本扫荡-副本-扫荡-可操作": {"recognition": {"type": "Or", "param": {"any_of": ["副本扫荡-副本-扫荡-目标", "副本扫荡-副本-扫荡-目标-视觉"]}}, "action": "DoNothing"},
   "副本扫荡-副本-扫荡-不可用-已确认": {"recognition": {"type": "Or", "param": {"any_of": ["副本扫荡-副本-扫荡-不可用-标记", "副本扫荡-副本-扫荡-不可用-要求"]}}, "action": "DoNothing"},

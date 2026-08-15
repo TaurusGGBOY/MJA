@@ -11,6 +11,7 @@
     "next": [
       "[JumpBack]公共-已知-茶-详情-关闭",
       "[JumpBack]公共-已知-茶-商店-关闭",
+      "武学突破-面板-已开-探测",
       "武学突破-领取-循环",
       "武学突破-无-成功-突破",
       "武学突破-打开-研习",
@@ -141,9 +142,17 @@
   "武学突破-武学-主页": {
     "recognition": {"type": "And", "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}},
     "action": "DoNothing",
-    "next": ["武学突破-打开-面板"],
+    "next": ["武学突破-面板-已开-探测", "武学突破-打开-面板"],
     "timeout": 8000,
     "on_error": ["武学突破-记录-失败"],
+    "retry_times": 0
+  },
+  "武学突破-面板-已开-探测": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏侧边面板-打开"], "box_index": 0}},
+    "action": "DoNothing",
+    "next": ["武学突破-打开-研习"],
+    "timeout": 8000,
+    "on_error": ["武学突破-打开-面板"],
     "retry_times": 0
   },
   "武学突破-武学-面板-打开": {"recognition": {"type": "And", "param": {"all_of": ["公共-游戏功能面板-入口"], "box_index": 0}}, "action": "DoNothing"},

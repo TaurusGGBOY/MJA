@@ -346,7 +346,7 @@
   },
   "采集部署-采集-画卷-滚动-入口": {
     "recognition": "OCR",
-    "expected": "^画卷$",
+    "expected": "画卷",
     "roi": [800, 40, 370, 50],
     "action": "DoNothing"
   },

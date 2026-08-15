@@ -188,8 +188,8 @@
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["公共-游戏主页-页面"],
-        "box_index": 0
+        "all_of": ["公共-游戏主页-页面", "试剑-试炼-主页-入口"],
+        "box_index": 1
       }
     },
     "action": "Custom",
@@ -199,12 +199,11 @@
       "task_id": "TRIAL_SWORD_DAILY",
       "action_id": "open_trial_sword",
       "kind": "click",
-      "fixed_click_mode": "trial_entry_button",
       "evidence": {
         "page_index": 0,
-        "target_index": 0,
+        "target_index": 1,
         "page_name": "公共-游戏主页-页面",
-        "target_name": "公共-游戏主页-页面"
+        "target_name": "试剑-试炼-主页-入口"
       }
     },
     "next": ["试剑-领取-奖励"],
@@ -248,6 +247,12 @@
     "next": ["公共-主页边界"],
     "on_error": ["试剑-记录-失败"],
     "retry_times": 0
+  },
+  "试剑-试炼-主页-入口": {
+    "recognition": "OCR",
+    "expected": "试剑",
+    "roi": [930, 610, 180, 70],
+    "action": "DoNothing"
   },
   "试剑-试炼-页面": {
     "recognition": "OCR",

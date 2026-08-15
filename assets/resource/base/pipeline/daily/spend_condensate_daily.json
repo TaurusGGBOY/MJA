@@ -159,8 +159,16 @@
     "recognition": {"type": "And", "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}},
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["消耗凝结体-打开-面板"],
+    "next": ["消耗凝结体-面板-已开-探测", "消耗凝结体-打开-面板"],
     "on_error": ["消耗凝结体-画卷-页面-探测"]
+  },
+  "消耗凝结体-面板-已开-探测": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏侧边面板-打开"], "box_index": 0}},
+    "timeout": 8000,
+    "action": "DoNothing",
+    "next": ["消耗凝结体-打开-日常"],
+    "on_error": ["消耗凝结体-打开-面板"],
+    "retry_times": 0
   },
   "消耗凝结体-打开-面板": {
     "recognition": {

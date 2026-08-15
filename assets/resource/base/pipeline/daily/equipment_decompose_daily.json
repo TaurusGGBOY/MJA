@@ -28,7 +28,7 @@
   "分解装备-装备-分解-页面": {"recognition": {"type": "And", "param": {"all_of": ["分解装备-装备-页面", "分解装备-装备-品质-筛选"], "box_index": 1}}, "action": "DoNothing"},
   "分解装备-装备-品质-筛选": {"recognition": "OCR", "expected": "品质", "roi": [0, 520, 500, 200], "action": "DoNothing"},
   "分解装备-装备-品质-对话框": {"recognition": "OCR", "expected": "品质", "roi": [100, 400, 320, 260], "action": "DoNothing"},
-  "分解装备-装备-品质-乙级或以下": {"recognition": "OCR", "expected": "乙级及以下", "roi": [100, 400, 320, 260], "action": "DoNothing"},
+  "分解装备-装备-品质-乙级或以下": {"recognition": "OCR", "expected": "乙品质及以下", "roi": [100, 400, 320, 260], "action": "DoNothing"},
   "分解装备-装备-等级-筛选": {"recognition": "OCR", "expected": "级", "roi": [0, 520, 500, 200], "action": "DoNothing"},
   "分解装备-装备-等级-对话框": {"recognition": "OCR", "expected": "级及以下", "roi": [100, 400, 320, 260], "action": "DoNothing"},
   "分解装备-装备-等级-选项-80-或-以下": {"recognition": "OCR", "expected": "80", "roi": [100, 400, 320, 260], "action": "DoNothing"},
