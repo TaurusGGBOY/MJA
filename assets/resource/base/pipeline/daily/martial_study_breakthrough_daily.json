@@ -73,8 +73,69 @@
   "武学突破-领取-循环": {"max_hit": 3, "recognition": {"type": "And", "param": {"all_of": ["武学突破-武学-页面", "武学突破-武学-成功-卡片"]}}, "action": "Custom", "custom_action": "GuardedInput", "custom_action_param": {"task_id": "MARTIAL_STUDY_BREAKTHROUGH_DAILY", "action_id": "claim_success_card", "kind": "click", "evidence": {"page_index": 0, "target_index": 1, "page_name": "武学突破-武学-页面", "target_name": "武学突破-武学-成功-卡片"}}, "next": ["武学突破-领取-结果"], "timeout": 8000, "on_error": ["武学突破-领取-循环-耗尽"]},
   "武学突破-领取-结果": {"recognition": {"type": "And", "param": {"all_of": ["武学突破-武学-成功-结果", "武学突破-武学-结果-关闭"]}}, "action": "DoNothing", "next": ["武学突破-关闭-奖励"], "timeout": 8000, "on_error": ["武学突破-记录-失败"], "retry_times": 0},
   "武学突破-关闭-奖励": {"recognition": {"type": "And", "param": {"all_of": ["武学突破-武学-成功-结果", "武学突破-武学-结果-关闭"]}}, "action": "Custom", "custom_action": "GuardedInput", "max_hit": 3, "custom_action_param": {"task_id": "MARTIAL_STUDY_BREAKTHROUGH_DAILY", "action_id": "close_reward_popup", "kind": "click", "evidence": {"page_index": 0, "target_index": 1, "page_name": "武学突破-武学-成功-结果", "target_name": "武学突破-武学-结果-关闭"}}, "next": ["武学突破-领取-循环", "武学突破-无-成功-突破"], "timeout": 8000, "on_error": ["武学突破-记录-失败"], "retry_times": 0},
-  "武学突破-无-成功-突破": {"recognition": {"type": "And", "param": {"all_of": ["武学突破-武学-页面"], "box_index": 0}}, "action": "DoNothing", "next": ["武学突破-成功-无-领取"], "timeout": 8000, "on_error": ["武学突破-记录-失败"], "retry_times": 0},
-  "武学突破-成功-无-领取": {"recognition": "DirectHit", "action": "Custom", "custom_action": "RecordTaskOutcome", "custom_action_param": {"task_id": "MARTIAL_STUDY_BREAKTHROUGH_DAILY", "status": "success", "postcondition": "martial.claim_flow_completed"}, "timeout": 8000, "next": ["公共-通用停止"], "on_error": ["武学突破-记录-失败"]},
+  "武学突破-主页-收尾-探测": {
+    "recognition": {"type": "And", "param": {
+      "all_of": ["公共-游戏主页-页面"],
+      "box_index": 0
+    }},
+    "action": "DoNothing",
+    "next": ["武学突破-成功-无-领取"],
+    "timeout": 8000,
+    "on_error": ["武学突破-记录-失败"],
+    "retry_times": 0
+  },
+  "武学突破-无-成功-突破": {"recognition": {"type": "And", "param": {"all_of": ["武学突破-武学-页面"], "box_index": 0}}, "action": "DoNothing", "next": ["武学突破-关闭-页面-用于-成功"], "timeout": 8000, "on_error": ["武学突破-记录-失败"], "retry_times": 0},
+  "武学突破-关闭-页面-用于-成功": {
+    "max_hit": 1,
+    "recognition": {"type": "And", "param": {
+      "all_of": ["武学突破-武学-页面", "武学突破-武学-关闭"],
+      "box_index": 1
+    }},
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "MARTIAL_STUDY_BREAKTHROUGH_DAILY",
+      "action_id": "close_martial_page",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "武学突破-武学-页面",
+        "target_name": "武学突破-武学-关闭"
+      }
+    },
+    "next": ["武学突破-最终-面板-探测"],
+    "timeout": 8000,
+    "on_error": ["武学突破-记录-失败"],
+    "retry_times": 0
+  },
+  "武学突破-最终-面板-探测": {
+    "recognition": {"type": "Or", "param": {
+      "any_of": ["武学突破-武学-面板-页面", "武学突破-武学-主页"]
+    }},
+    "action": "DoNothing",
+    "next": [
+      "武学突破-关闭-面板-用于-成功",
+      "武学突破-主页-收尾-探测"
+    ],
+    "timeout": 8000,
+    "on_error": ["武学突破-记录-失败"],
+    "retry_times": 0
+  },
+  "武学突破-关闭-面板-用于-成功": {
+    "max_hit": 1,
+    "recognition": {"type": "And", "param": {
+      "all_of": ["武学突破-武学-面板-页面", "武学突破-武学-关闭"],
+      "box_index": 1
+    }},
+    "action": "Click",
+    "next": ["武学突破-主页-收尾-探测"],
+    "timeout": 8000,
+    "on_error": ["武学突破-记录-失败"],
+    "retry_times": 0
+  },
+
+  "武学突破-成功-无-领取": {"recognition": "DirectHit", "action": "Custom", "custom_action": "RecordTaskOutcome", "custom_action_param": {"task_id": "MARTIAL_STUDY_BREAKTHROUGH_DAILY", "status": "success", "postcondition": "martial.claim_flow_completed"}, "timeout": 8000, "next": ["公共-主页边界"], "on_error": ["武学突破-记录-失败"]},
   "武学突破-领取-循环-耗尽": {"recognition": "DirectHit", "action": "Custom", "custom_action": "RecordTaskOutcome", "custom_action_param": {"task_id": "MARTIAL_STUDY_BREAKTHROUGH_DAILY", "status": "failed", "error_code": "MARTIAL_CLAIM_LIMIT", "postcondition": "martial.claim_state_known", "native_fail_after_record": true}, "Abort": true, "next": ["公共-通用中止"]},
   "武学突破-记录-失败": {"recognition": "DirectHit", "action": "Custom", "custom_action": "RecordTaskOutcome", "custom_action_param": {"task_id": "MARTIAL_STUDY_BREAKTHROUGH_DAILY", "status": "failed", "error_code": "MARTIAL_POSTCONDITION_MISSING", "postcondition": "martial.state_known", "native_fail_after_record": true}, "Abort": true, "next": ["公共-通用中止"]},
   "武学突破-武学-主页": {
@@ -91,5 +152,13 @@
   "武学突破-武学-页面": {"recognition": "OCR", "expected": "武学研习", "roi": [0, 0, 500, 420], "action": "DoNothing"},
   "武学突破-武学-成功-卡片": {"recognition": "TemplateMatch", "template": "daily/MARTIAL_STUDY_BREAKTHROUGH_DAILY/success.png", "roi": [760, 350, 500, 330], "threshold": 0.72, "action": "DoNothing"},
   "武学突破-武学-成功-结果": {"recognition": "OCR", "expected": ["研习成功", "恭喜获得"], "roi": [0, 100, 1280, 620], "action": "DoNothing"},
-  "武学突破-武学-结果-关闭": {"recognition": "OCR", "expected": ["点击空白处关闭", "点击任意空白区域关闭"], "roi": [350, 580, 600, 140], "action": "DoNothing"}
+  "武学突破-武学-结果-关闭": {"recognition": "OCR", "expected": ["点击空白处关闭", "点击任意空白区域关闭"], "roi": [350, 580, 600, 140], "action": "DoNothing"},
+  "武学突破-武学-关闭": {
+    "recognition": "TemplateMatch",
+    "template": "daily/HERO_DISPATCH_DAILY/dispatch_close.png",
+    "roi": [1175, 5, 75, 75],
+    "threshold": 0.70,
+    "green_mask": true,
+    "action": "DoNothing"
+  }
 }
