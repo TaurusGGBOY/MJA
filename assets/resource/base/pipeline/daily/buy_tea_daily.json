@@ -254,9 +254,10 @@
     "custom_action_param": {
       "task_id": "BUY_TEA_DAILY",
       "status": "already_complete",
-      "postcondition": "tea.sold_out"
+      "postcondition": "tea.sold_out",
+      "defer_home_boundary": true
     },
-    "next": ["公共-通用停止"]
+    "next": ["买茶-完成-收尾"]
   },
   "买茶-打开-购买": {
     "recognition": {
@@ -383,9 +384,10 @@
     "custom_action_param": {
       "task_id": "BUY_TEA_DAILY",
       "status": "success",
-      "postcondition": "tea.purchase_result_seen"
+      "postcondition": "tea.purchase_result_seen",
+      "defer_home_boundary": true
     },
-    "next": ["公共-通用停止"],
+    "next": ["买茶-完成-收尾"],
     "on_error": ["买茶-记录-失败"]
   },
   "买茶-关闭-购买-结果": {
@@ -412,6 +414,29 @@
     "next": ["买茶-结果-成功"],
     "on_error": ["买茶-记录-失败"]
   },
+  "买茶-完成-收尾": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "max_hit": 4,
+    "timeout": 8000,
+    "next": [
+      "[JumpBack]公共-已知-茶-详情-关闭",
+      "[JumpBack]公共-已知-茶-商店-关闭",
+      "[JumpBack]公共-已知-画卷-关闭",
+      "买茶-完成-主页-探测"
+    ],
+    "on_error": ["买茶-记录-失败"]
+  },
+  "买茶-完成-主页-探测": {
+    "recognition": {
+      "type": "And",
+      "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}
+    },
+    "timeout": 8000,
+    "action": "DoNothing",
+    "next": ["公共-主页边界"],
+    "on_error": ["买茶-记录-失败"]
+  },
   "买茶-记录-失败": {
     "recognition": "DirectHit",
     "action": "Custom",
@@ -433,9 +458,10 @@
     "custom_action_param": {
       "task_id": "BUY_TEA_DAILY",
       "status": "already_complete",
-      "postcondition": "tea.no_remaining_stock"
+      "postcondition": "tea.no_remaining_stock",
+      "defer_home_boundary": true
     },
-    "next": ["公共-通用停止"]
+    "next": ["买茶-完成-收尾"]
   },
   "买茶-茶-主页-页面": {
     "recognition": {"type": "And", "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}},
