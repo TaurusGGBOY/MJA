@@ -10,6 +10,7 @@ from tests.mfw.task_contract import (
     assert_no_side_effect_retry,
     assert_ordered_actions,
     assert_outcome,
+    assert_reachable,
     assert_task_contract,
     load_task_nodes,
 )
@@ -55,6 +56,24 @@ def test_equipment_decompose_task_has_the_explicit_contract() -> None:
         assert_no_side_effect_retry(nodes, action_id)
 
 
+def test_equipment_success_closes_before_deferred_home_boundary() -> None:
+    nodes = load_task_nodes(EQUIPMENT)
+
+    outcome = nodes["分解装备-分解-成功"]
+    assert outcome["custom_action_param"]["defer_home_boundary"] is True
+    assert outcome["next"] == ["分解装备-关闭-探测"]
+    assert nodes["分解装备-关闭-探测"]["next"] == ["公共-主页边界"]
+    assert nodes["分解装备-关闭-探测"]["on_error"] == ["分解装备-记录-失败"]
+
+    # The GuardedInput close must happen while the business result is still
+    # mutable; the outcome is sealed only after the home probe succeeds.
+    assert nodes["分解装备-之后-确认-探测"]["next"] == ["分解装备-关闭"]
+    assert nodes["分解装备-关闭"]["next"] == ["分解装备-主页-之后-关闭"]
+    assert nodes["分解装备-主页-之后-关闭"]["next"] == ["分解装备-分解-成功"]
+    assert nodes["分解装备-关闭"]["on_error"] == ["分解装备-记录-失败"]
+    assert_reachable(nodes, "分解装备-分解-成功", "公共-通用停止")
+
+
 def test_equipment_decompose_uses_the_requested_quality_and_level_filters() -> None:
     nodes = load_task_nodes(EQUIPMENT)
     assert nodes["分解装备-装备-分解-页面"]["recognition"] == {
@@ -66,7 +85,7 @@ def test_equipment_decompose_uses_the_requested_quality_and_level_filters() -> N
     }
     assert nodes["分解装备-装备-品质-筛选"]["expected"] == "品质"
     assert nodes["分解装备-装备-品质-对话框"]["expected"] == "品质"
-    assert nodes["分解装备-装备-品质-乙级或以下"]["expected"] == "乙"
+    assert nodes["分解装备-装备-品质-乙级或以下"]["expected"] == "乙级及以下"
     assert nodes["分解装备-装备-等级-筛选"]["expected"] == "级"
     assert nodes["分解装备-装备-等级-对话框"]["expected"] == "级及以下"
     assert nodes["分解装备-装备-等级-选项-80-或-以下"]["expected"] == "80"
