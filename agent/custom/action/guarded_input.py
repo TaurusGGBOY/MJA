@@ -334,7 +334,7 @@ _FIXED_CLICK_MODES: Mapping[tuple[str, str], tuple[int, int, int, int]] = {
     (
         "open_trial_sword",
         "trial_entry_button",
-    ): (987, 599, 52, 66),
+    ): (987, 530, 52, 60),
     (
         "enter_shadow_stage",
         "shadow_stage_entry_button",

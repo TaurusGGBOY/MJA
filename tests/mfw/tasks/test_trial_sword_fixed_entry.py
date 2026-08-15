@@ -30,4 +30,4 @@ def test_trial_entry_uses_fixed_button_after_same_frame_home_evidence() -> None:
     )
 
     assert GuardedInput().run(context, argv) is True
-    assert context.tasker.controller.actions == [("click", (1013, 632))]
+    assert context.tasker.controller.actions == [("click", (1013, 560))]
