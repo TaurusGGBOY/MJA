@@ -408,7 +408,8 @@
     "custom_action_param": {
       "task_id": "HERO_DISPATCH_DAILY",
       "status": "success",
-      "postcondition": "hero.claim_state_known"
+      "postcondition": "hero.claim_state_known",
+      "defer_home_boundary": true
     },
     "next": [
       "英雄派遣-关闭-派遣"
@@ -485,7 +486,8 @@
     "custom_action_param": {
       "task_id": "HERO_DISPATCH_DAILY",
       "status": "success",
-      "postcondition": "hero.first_task_in_progress"
+      "postcondition": "hero.first_task_in_progress",
+      "defer_home_boundary": true
     },
     "next": [
       "英雄派遣-关闭-派遣"
@@ -498,7 +500,8 @@
     "custom_action_param": {
       "task_id": "HERO_DISPATCH_DAILY",
       "status": "success",
-      "postcondition": "hero.no_dispatch_tasks"
+      "postcondition": "hero.no_dispatch_tasks",
+      "defer_home_boundary": true
     },
     "next": [
       "英雄派遣-关闭-派遣"
@@ -511,7 +514,8 @@
     "custom_action_param": {
       "task_id": "HERO_DISPATCH_DAILY",
       "status": "already_complete",
-      "postcondition": "hero.all_completed"
+      "postcondition": "hero.all_completed",
+      "defer_home_boundary": true
     },
     "next": [
       "英雄派遣-关闭-派遣"
@@ -524,7 +528,8 @@
     "custom_action_param": {
       "task_id": "HERO_DISPATCH_DAILY",
       "status": "already_complete",
-      "postcondition": "hero.first_task_in_progress"
+      "postcondition": "hero.first_task_in_progress",
+      "defer_home_boundary": true
     },
     "next": [
       "英雄派遣-关闭-派遣"
@@ -537,7 +542,8 @@
     "custom_action_param": {
       "task_id": "HERO_DISPATCH_DAILY",
       "status": "already_complete",
-      "postcondition": "hero.all_dispatched_waiting"
+      "postcondition": "hero.all_dispatched_waiting",
+      "defer_home_boundary": true
     },
     "max_hit": 1,
     "retry_times": 0,
@@ -640,7 +646,7 @@
     "timeout": 8000,
     "action": "DoNothing",
     "next": [
-      "公共-通用停止"
+      "公共-主页边界"
     ],
     "on_error": [
       "英雄派遣-边界-失败"
