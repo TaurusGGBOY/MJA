@@ -11,26 +11,13 @@
     "action": "DoNothing",
     "next": ["启动-游戏就绪"]
   },
-  "公共-主页恢复-安全公告": {
-    "recognition": "OCR",
-    "expected": ["公告", "公告说明", "版本更新"],
-    "roi": [0, 0, 1280, 720],
-    "action": "DoNothing"
-  },
-  "公共-主页恢复-安全公告-关闭-图标": {
-    "recognition": "TemplateMatch",
-    "template": "home/modal_close.png",
-    "roi": [1180, 10, 70, 70],
-    "threshold": 0.39,
-    "action": "DoNothing"
-  },
   "公共-主页恢复-弹窗": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "公共-主页恢复-安全公告",
-          "公共-主页恢复-安全公告-关闭-图标"
+          "公共-已知-安全公告",
+          "公共-已知-安全公告-关闭-图标"
         ],
         "box_index": 1
       }
@@ -107,12 +94,6 @@
     "roi": [1000, 180, 280, 130],
     "action": "DoNothing"
   },
-  "公共-游戏主页-世界-标题": {
-    "recognition": "OCR",
-    "expected": "^画[卷券]$",
-    "roi": [1080, 0, 200, 120],
-    "action": "DoNothing"
-  },
   "公共-游戏侧边面板-商店": {
     "recognition": "OCR",
     "expected": "^商城$",
@@ -142,28 +123,6 @@
     "recognition": "OCR",
     "expected": "^画[卷券]$",
     "roi": [1080, 0, 200, 120],
-    "action": "DoNothing"
-  },
-  "公共-游戏主页-面板-打开": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": ["公共-游戏功能面板-入口"],
-        "box_index": 0
-      }
-    },
-    "action": "DoNothing"
-  },
-  "公共-游戏主页-世界-页面": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": [
-          "公共-游戏主页-面板-打开"
-        ],
-        "box_index": 0
-      }
-    },
     "action": "DoNothing"
   }
 }
