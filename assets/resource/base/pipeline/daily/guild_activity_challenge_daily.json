@@ -81,9 +81,11 @@
     "custom_action_param": {
       "task_id": "GUILD_ACTIVITY_CHALLENGE_DAILY",
       "status": "already_complete",
-      "postcondition": "guild.home_restored"
+      "postcondition": "guild.home_restored",
+      "defer_home_boundary": true
     },
-    "next": ["公共-通用停止"]
+    "next": ["帮派活动挑战-收尾-主页-探测"],
+    "on_error": ["帮派活动挑战-帮派-退出-记录-失败"]
   },
   "帮派活动挑战-帮派-已完成-退出-活动": {
     "recognition": {
@@ -461,9 +463,11 @@
     "custom_action_param": {
       "task_id": "GUILD_ACTIVITY_CHALLENGE_DAILY",
       "status": "success",
-      "postcondition": "guild.challenge_result_known"
+      "postcondition": "guild.challenge_result_known",
+      "defer_home_boundary": true
     },
-    "next": ["公共-通用停止"]
+    "next": ["帮派活动挑战-收尾-主页-探测"],
+    "on_error": ["帮派活动挑战-帮派-退出-记录-失败"]
   },
   "帮派活动挑战-帮派-成功-退出-活动": {
     "recognition": {
@@ -560,6 +564,14 @@
     "max_hit": 1,
     "action": "DoNothing",
     "next": ["帮派活动挑战-成功"],
+    "on_error": ["帮派活动挑战-帮派-退出-记录-失败"]
+  },
+  "帮派活动挑战-收尾-主页-探测": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}},
+    "timeout": 8000,
+    "max_hit": 1,
+    "action": "DoNothing",
+    "next": ["公共-主页边界"],
     "on_error": ["帮派活动挑战-帮派-退出-记录-失败"]
   },
   "帮派活动挑战-帮派-退出-记录-失败": {
