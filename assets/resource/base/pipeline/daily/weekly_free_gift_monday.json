@@ -28,8 +28,8 @@
     "roi": [0, 100, 1280, 620],
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["周一免费礼包-免费-领取"],
-    "on_error": ["周一免费礼包-礼包-页面-探测"]
+    "next": ["周一免费礼包-状态-已领取-探测"],
+    "on_error": ["周一免费礼包-主页-探测"]
   },
   "周一免费礼包-免费-领取": {
     "recognition": {
@@ -72,7 +72,7 @@
     "custom_action_param": {
       "task_id": "WEEKLY_FREE_GIFT_MONDAY",
       "status": "success",
-      "postcondition": "weekly_gift.reward_popup_seen",
+      "postcondition": "weekly_gift.claimed",
       "defer_home_boundary": true
     },
     "next": ["周一免费礼包-关闭-奖励"],
@@ -103,14 +103,49 @@
     "next": ["周一免费礼包-关闭"],
     "on_error": ["周一免费礼包-记录-失败"]
   },
-  "周一免费礼包-领取-成功": {
+  "周一免费礼包-状态-已领取-探测": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["周一免费礼包-商店-每周-页面", "周一免费礼包-商店-每周-幸运-背包-已领取"],
+        "box_index": 1
+      }
+    },
+    "action": "DoNothing",
+    "next": ["周一免费礼包-已完成"],
+    "on_error": ["周一免费礼包-付费-探测"]
+  },
+  "周一免费礼包-已完成": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
     "custom_action_param": {
       "task_id": "WEEKLY_FREE_GIFT_MONDAY",
-      "status": "success",
-      "postcondition": "weekly_gift.reward_popup_seen"
+      "status": "already_complete",
+      "postcondition": "weekly_gift.claimed"
+    },
+    "next": ["周一免费礼包-关闭"]
+  },
+  "周一免费礼包-付费-探测": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["周一免费礼包-商店-每周-页面", "周一免费礼包-商店-每周-付费"],
+        "box_index": 1
+      }
+    },
+    "action": "DoNothing",
+    "next": ["周一免费礼包-付费-不可领取"],
+    "on_error": ["周一免费礼包-免费-领取"]
+  },
+  "周一免费礼包-付费-不可领取": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "RecordTaskOutcome",
+    "custom_action_param": {
+      "task_id": "WEEKLY_FREE_GIFT_MONDAY",
+      "status": "not_eligible",
+      "postcondition": "weekly_gift.no_free_offer"
     },
     "next": ["周一免费礼包-关闭"]
   },
@@ -189,17 +224,8 @@
         "target_name": "商店免费礼包-商店-入口"
       }
     },
-    "next": ["周一免费礼包-商店-页面-探测"],
-    "on_error": ["周一免费礼包-记录-失败"]
-  },
-  "周一免费礼包-商店-页面-探测": {
-    "recognition": "OCR",
-    "expected": "商城",
-    "roi": [0, 0, 1280, 720],
-    "timeout": 8000,
-    "action": "DoNothing",
     "next": ["周一免费礼包-打开-礼包-标签"],
-    "on_error": ["周一免费礼包-面板-页面-探测"]
+    "on_error": ["周一免费礼包-记录-失败"]
   },
   "周一免费礼包-打开-礼包-标签": {
     "recognition": {
@@ -223,17 +249,8 @@
         "target_name": "周一免费礼包-商店-礼包-标签"
       }
     },
-    "next": ["周一免费礼包-礼包-页面-探测"],
-    "on_error": ["周一免费礼包-记录-失败"]
-  },
-  "周一免费礼包-礼包-页面-探测": {
-    "recognition": "OCR",
-    "expected": "礼包",
-    "roi": [0, 100, 1280, 620],
-    "timeout": 8000,
-    "action": "DoNothing",
     "next": ["周一免费礼包-打开-每周"],
-    "on_error": ["周一免费礼包-主页-探测"]
+    "on_error": ["周一免费礼包-记录-失败"]
   },
   "周一免费礼包-打开-每周": {
     "recognition": {
@@ -257,16 +274,7 @@
         "target_name": "周一免费礼包-商店-每周-必须-购买"
       }
     },
-    "next": ["周一免费礼包-已打开-页面-探测"],
-    "on_error": ["周一免费礼包-记录-失败"]
-  },
-  "周一免费礼包-已打开-页面-探测": {
-    "recognition": "OCR",
-    "expected": ["每周必买", "每周必购"],
-    "roi": [0, 100, 1280, 620],
-    "timeout": 8000,
-    "action": "DoNothing",
-    "next": ["周一免费礼包-免费-领取"],
+    "next": ["周一免费礼包-状态-已领取-探测"],
     "on_error": ["周一免费礼包-记录-失败"]
   },
   "周一免费礼包-关闭": {
@@ -327,12 +335,6 @@
   "周一免费礼包-商店-每周-付费": {
     "recognition": "OCR",
     "expected": "每周特价",
-    "roi": [300, 120, 900, 480],
-    "action": "DoNothing"
-  },
-  "周一免费礼包-商店-每周-价格-冲突": {
-    "recognition": "OCR",
-    "expected": ["￥", "¥", "元", "价格"],
     "roi": [300, 120, 900, 480],
     "action": "DoNothing"
   },
