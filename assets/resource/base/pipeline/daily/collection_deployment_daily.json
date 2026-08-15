@@ -8,30 +8,11 @@
     },
     "max_hit": 1,
     "next": [
-      "[JumpBack]采集部署-已知-采集-过期-商店-关闭",
       "采集部署-恢复继续-奖励-探测",
       "采集部署-页面-探测",
       "采集部署-主页-探测"
     ],
     "on_error": ["采集部署-记录-失败"]
-  },
-  "采集部署-已知-采集-过期-商店-关闭": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": [
-          "采集部署-采集-万用-商店-边界",
-          "采集部署-采集-万用-商店-关闭"
-        ],
-        "box_index": 1
-      }
-    },
-    "timeout": 5000,
-    "max_hit": 1,
-    "action": "Click",
-    "post_delay": 750,
-    "on_error": ["采集部署-记录-失败"],
-    "retry_times": 0
   },
   "采集部署-恢复继续-奖励-探测": {
     "recognition": {
@@ -93,15 +74,6 @@
       "postcondition": "collection.harvest_clicked",
       "defer_home_boundary": true
     },
-    "next": ["采集部署-关闭-奖励"],
-    "on_error": ["采集部署-记录-失败"]
-  },
-  "采集部署-奖励-探测": {
-    "recognition": "OCR",
-    "expected": ["恭喜获得", "获得", "据传太吾旧影"],
-    "roi": [0, 120, 1280, 520],
-    "timeout": 8000,
-    "action": "DoNothing",
     "next": ["采集部署-关闭-奖励"],
     "on_error": ["采集部署-记录-失败"]
   },
@@ -285,47 +257,6 @@
     "next": ["采集部署-领取"],
     "on_error": ["采集部署-记录-失败"]
   },
-  "采集部署-关闭": {
-    "max_hit": 1,
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": ["采集部署-采集-页面", "采集部署-采集-关闭"],
-        "box_index": 1
-      }
-    },
-    "action": "Custom",
-    "custom_action": "GuardedInput",
-    "custom_action_param": {
-      "task_id": "COLLECTION_DEPLOYMENT_DAILY",
-      "action_id": "close_collection_deployment",
-      "kind": "click",
-      "evidence": {
-        "page_index": 0,
-        "target_index": 1,
-        "page_name": "采集部署-采集-页面",
-        "target_name": "采集部署-采集-关闭"
-      }
-    },
-    "next": [
-      "采集部署-画卷-之后-关闭-探测",
-      "采集部署-主页边界-探测"
-    ],
-    "on_error": ["采集部署-边界-失败"],
-    "retry_times": 0
-  },
-  "采集部署-画卷-之后-关闭-探测": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": ["采集部署-采集-画卷-页面"]
-      }
-    },
-    "timeout": 8000,
-    "action": "DoNothing",
-    "next": ["采集部署-关闭-画卷"],
-    "on_error": ["采集部署-边界-失败"]
-  },
   "采集部署-关闭-画卷": {
     "max_hit": 1,
     "recognition": {
@@ -383,18 +314,6 @@
     "recognition": {"type": "And", "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}},
     "action": "DoNothing"
   },
-  "采集部署-采集-主页-副本": {
-    "recognition": "OCR",
-    "expected": "^副本$",
-    "roi": [1035, 45, 80, 40],
-    "action": "DoNothing"
-  },
-  "采集部署-采集-主页-试炼": {
-    "recognition": "OCR",
-    "expected": "^试剑$",
-    "roi": [965, 620, 100, 70],
-    "action": "DoNothing"
-  },
   "采集部署-采集-画卷-滚动-入口": {
     "recognition": "OCR",
     "expected": "^画卷$",
@@ -443,23 +362,10 @@
     "roi": [0, 120, 1280, 520],
     "action": "DoNothing"
   },
-  "采集部署-采集-奖励-标题": {
-    "recognition": "OCR",
-    "expected": "据传太吾旧影",
-    "roi": [360, 120, 620, 180],
-    "action": "DoNothing"
-  },
   "采集部署-采集-弹窗-关闭": {
     "recognition": "OCR",
     "expected": "点击空白处关闭",
     "roi": [350, 580, 600, 140],
-    "action": "DoNothing"
-  },
-  "采集部署-采集-关闭": {
-    "recognition": "TemplateMatch",
-    "template": "daily/TRIAL_SWORD_DAILY/trial_close.png",
-    "roi": [1160, 0, 100, 100],
-    "threshold": 0.36,
     "action": "DoNothing"
   },
   "采集部署-采集-画卷-关闭": {
@@ -468,19 +374,6 @@
     "roi": [1175, 5, 75, 75],
     "threshold": 0.35,
     "green_mask": true,
-    "action": "DoNothing"
-  },
-  "采集部署-采集-万用-商店-边界": {
-    "recognition": "OCR",
-    "expected": "玉盟商会",
-    "roi": [0, 0, 320, 120],
-    "action": "DoNothing"
-  },
-  "采集部署-采集-万用-商店-关闭": {
-    "recognition": "TemplateMatch",
-    "template": "daily/BUY_TEA_DAILY/shop_close.png",
-    "roi": [1160, 0, 100, 100],
-    "threshold": 0.36,
     "action": "DoNothing"
   }
 }
