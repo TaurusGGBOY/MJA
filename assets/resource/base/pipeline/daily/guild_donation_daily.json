@@ -420,9 +420,23 @@
       }
     },
     "post_delay": 750,
-    "next": ["公共-主页边界"],
+    "next": ["帮派捐献-收尾-主页-探测"],
     "on_error": ["帮派捐献-记录-失败"],
     "retry_times": 0
+  },
+  "帮派捐献-收尾-主页-探测": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["公共-游戏主页-页面"],
+        "box_index": 0
+      }
+    },
+    "timeout": 5000,
+    "max_hit": 1,
+    "action": "DoNothing",
+    "next": ["公共-主页边界"],
+    "on_error": ["帮派捐献-记录-失败"]
   },
   "帮派捐献-计数-未知": {
     "recognition": "DirectHit",
