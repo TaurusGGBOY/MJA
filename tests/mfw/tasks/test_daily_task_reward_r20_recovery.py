@@ -4,6 +4,7 @@ from agent.custom.support.policy import TASK_POLICIES
 from tests.mfw.task_contract import (
     TaskContract,
     assert_no_side_effect_retry,
+    assert_reachable,
     guarded_nodes_for_action,
     load_task_nodes,
 )
@@ -45,14 +46,14 @@ def test_r20_home_failure_fans_out_all_resume_surfaces_as_siblings() -> None:
         "日常任务奖励-面板-探测",
         "日常任务奖励-主页-探测",
     ]
-    assert start["on_error"] == [RECORD_FAILURE]
+    assert start["on_error"] == ["[JumpBack]启动-游戏启动", RECORD_FAILURE]
     assert nodes["日常任务奖励-恢复继续-奖励-探测"]["on_error"] == [
         RECORD_FAILURE
     ]
     assert not any(
         "启动-游戏启动" in target
         for name, node in nodes.items()
-        if name.startswith("日常任务奖励-")
+        if name.startswith("日常任务奖励-") and name != DAILY.entry
         for target in node.get("on_error", [])
     )
 
@@ -272,16 +273,20 @@ def test_success_outcomes_require_fresh_explicit_or_exhaustive_empty_state() -> 
         "日常任务奖励-变更-已领取-耗尽-探测",
     }
 
-    assert nodes["日常任务奖励-奖励-无"]["custom_action_param"] == {
-        "task_id": DAILY.task_id,
-        "status": "already_complete",
-        "postcondition": "daily_reward.no_claimable",
-    }
-    assert nodes["日常任务奖励-奖励-完成"]["custom_action_param"] == {
-        "task_id": DAILY.task_id,
-        "status": "success",
-        "postcondition": "daily_reward.no_claimable",
-    }
+    for name, status in (
+        ("日常任务奖励-奖励-无", "already_complete"),
+        ("日常任务奖励-奖励-完成", "success"),
+    ):
+        params = nodes[name]["custom_action_param"]
+        assert params == {
+            "task_id": DAILY.task_id,
+            "status": status,
+            "postcondition": "daily_reward.no_claimable",
+            "defer_home_boundary": True,
+        }
+        assert nodes[name]["next"] == ["日常任务奖励-关闭"]
+        assert_reachable(nodes, name, "公共-主页边界")
+        assert_reachable(nodes, name, "公共-通用停止")
 
 
 def test_unknown_states_record_fresh_failed_then_native_abort() -> None:
@@ -353,8 +358,5 @@ def test_success_cleanup_requires_a_fresh_home_boundary() -> None:
         "type": "And",
         "param": {"all_of": ["日常任务奖励-日常-主页-页面"]},
     }
-    assert nodes["日常任务奖励-主页边界-探测"]["next"] == [
-        "公共-通用停止",
-        "[JumpBack]启动-游戏启动",
-    ]
+    assert nodes["日常任务奖励-主页边界-探测"]["next"] == ["公共-主页边界"]
     assert nodes["日常任务奖励-主页边界-探测"]["on_error"] == [HOME_FAILURE]

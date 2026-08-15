@@ -12,12 +12,24 @@
     "timeout": 8000,
     "max_hit": 1,
     "next": [
-      "日常任务奖励-奖励-探测",
+      "日常任务奖励-恢复继续-奖励-探测",
       "日常任务奖励-页面-探测",
       "日常任务奖励-面板-探测",
       "日常任务奖励-主页-探测"
     ],
     "on_error": ["[JumpBack]启动-游戏启动", "日常任务奖励-记录-失败"]
+  },
+  "日常任务奖励-恢复继续-奖励-探测": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["日常任务奖励-日常-奖励-弹窗", "日常任务奖励-日常-奖励-弹窗-关闭"],
+        "box_index": 1
+      }
+    },
+    "action": "DoNothing",
+    "next": ["日常任务奖励-关闭-奖励"],
+    "on_error": ["日常任务奖励-记录-失败"]
   },
   "日常任务奖励-关闭-奖励": {
     "max_hit": 60,
@@ -41,13 +53,26 @@
         "target_name": "日常任务奖励-日常-奖励-弹窗-关闭"
       }
     },
-    "next": [
-      "日常任务奖励-奖励-扫描",
-      "日常任务奖励-扫描-无-可领取-完成-探测",
-      "日常任务奖励-扫描-已领取-完成-探测"
-    ],
+    "next": ["日常任务奖励-奖励-页面-校验"],
     "on_error": ["日常任务奖励-记录-失败"],
     "retry_times": 0
+  },
+  "日常任务奖励-奖励-页面-校验": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["日常任务奖励-日常-页面"]
+      }
+    },
+    "timeout": 8000,
+    "action": "DoNothing",
+    "next": [
+      "日常任务奖励-变更-行-探测",
+      "日常任务奖励-变更-宝箱-探测",
+      "日常任务奖励-变更-无-领取-探测",
+      "日常任务奖励-奖励-扫描-之后-变更"
+    ],
+    "on_error": ["日常任务奖励-记录-失败"]
   },
   "日常任务奖励-页面-探测": {
     "recognition": {
@@ -59,12 +84,35 @@
     "timeout": 8000,
     "action": "DoNothing",
     "next": [
-      "日常任务奖励-领取-行",
-      "日常任务奖励-领取-宝箱",
+      "日常任务奖励-初始-行-探测",
+      "日常任务奖励-初始-宝箱-探测",
       "日常任务奖励-初始-无-领取-探测",
-      "日常任务奖励-初始-已领取-耗尽-探测",
       "日常任务奖励-奖励-扫描"
     ],
+    "on_error": ["日常任务奖励-记录-失败"]
+  },
+  "日常任务奖励-初始-行-探测": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["日常任务奖励-日常-页面", "日常任务奖励-日常-已完成-行-领取"],
+        "box_index": 1
+      }
+    },
+    "action": "DoNothing",
+    "next": ["日常任务奖励-领取-行"],
+    "on_error": ["日常任务奖励-记录-失败"]
+  },
+  "日常任务奖励-初始-宝箱-探测": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["日常任务奖励-日常-页面", "日常任务奖励-日常-已解锁-活动-宝箱"],
+        "box_index": 1
+      }
+    },
+    "action": "DoNothing",
+    "next": ["日常任务奖励-领取-宝箱"],
     "on_error": ["日常任务奖励-记录-失败"]
   },
   "日常任务奖励-初始-无-领取-探测": {
@@ -104,17 +152,58 @@
         "duration_ms": 350
       }
     },
-    "next": [
-      "日常任务奖励-领取-行",
-      "日常任务奖励-领取-宝箱",
-      "日常任务奖励-奖励-扫描"
-    ],
+    "next": ["日常任务奖励-页面-探测"],
     "on_error": [
-      "日常任务奖励-扫描-无-可领取-完成-探测",
-      "日常任务奖励-扫描-已领取-完成-探测",
+      "日常任务奖励-初始-扫描-耗尽-探测",
+      "日常任务奖励-初始-已领取-耗尽-探测",
       "日常任务奖励-扫描-耗尽"
     ],
     "retry_times": 0
+  },
+  "日常任务奖励-奖励-扫描-之后-变更": {
+    "max_hit": 5,
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["日常任务奖励-日常-页面", "日常任务奖励-日常-滚动-区域"],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "DAILY_TASK_REWARD_CLAIM_DAILY",
+      "action_id": "scroll_daily_reward_rows",
+      "kind": "swipe",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "日常任务奖励-日常-页面",
+        "target_name": "日常任务奖励-日常-滚动-区域",
+        "dx": 0,
+        "dy": -300,
+        "duration_ms": 350
+      }
+    },
+    "next": ["日常任务奖励-奖励-页面-校验"],
+    "on_error": [
+      "日常任务奖励-变更-扫描-耗尽-探测",
+      "日常任务奖励-变更-已领取-耗尽-探测",
+      "日常任务奖励-扫描-耗尽"
+    ],
+    "retry_times": 0
+  },
+  "日常任务奖励-初始-扫描-耗尽-探测": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["日常任务奖励-日常-页面", "日常任务奖励-日常-无-可领取-全局"],
+        "box_index": 1
+      }
+    },
+    "action": "DoNothing",
+    "next": ["日常任务奖励-奖励-无"],
+    "on_error": ["日常任务奖励-扫描-耗尽"]
   },
   "日常任务奖励-初始-已领取-耗尽-探测": {
     "recognition": {
@@ -128,7 +217,43 @@
     "next": ["日常任务奖励-奖励-无"],
     "on_error": ["日常任务奖励-扫描-耗尽"]
   },
-  "日常任务奖励-扫描-无-可领取-完成-探测": {
+  "日常任务奖励-变更-行-探测": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["日常任务奖励-日常-页面", "日常任务奖励-日常-已完成-行-领取"],
+        "box_index": 1
+      }
+    },
+    "action": "DoNothing",
+    "next": ["日常任务奖励-领取-行"],
+    "on_error": ["日常任务奖励-记录-失败"]
+  },
+  "日常任务奖励-变更-宝箱-探测": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["日常任务奖励-日常-页面", "日常任务奖励-日常-已解锁-活动-宝箱"],
+        "box_index": 1
+      }
+    },
+    "action": "DoNothing",
+    "next": ["日常任务奖励-领取-宝箱"],
+    "on_error": ["日常任务奖励-记录-失败"]
+  },
+  "日常任务奖励-变更-无-领取-探测": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["日常任务奖励-日常-页面", "日常任务奖励-日常-无-可领取-全局"],
+        "box_index": 1
+      }
+    },
+    "action": "DoNothing",
+    "next": ["日常任务奖励-奖励-完成"],
+    "on_error": ["日常任务奖励-记录-失败"]
+  },
+  "日常任务奖励-变更-扫描-耗尽-探测": {
     "recognition": {
       "type": "And",
       "param": {
@@ -140,7 +265,7 @@
     "next": ["日常任务奖励-奖励-完成"],
     "on_error": ["日常任务奖励-扫描-耗尽"]
   },
-  "日常任务奖励-扫描-已领取-完成-探测": {
+  "日常任务奖励-变更-已领取-耗尽-探测": {
     "recognition": {
       "type": "And",
       "param": {
@@ -175,7 +300,8 @@
       }
     },
     "next": [
-      "日常任务奖励-奖励-探测"
+      "日常任务奖励-奖励-探测",
+      "日常任务奖励-奖励-页面-校验"
     ],
     "on_error": ["日常任务奖励-记录-失败"],
     "retry_times": 0
@@ -203,7 +329,8 @@
       }
     },
     "next": [
-      "日常任务奖励-奖励-探测"
+      "日常任务奖励-奖励-探测",
+      "日常任务奖励-奖励-页面-校验"
     ],
     "on_error": ["日常任务奖励-记录-失败"],
     "retry_times": 0
@@ -224,7 +351,8 @@
     "custom_action_param": {
       "task_id": "DAILY_TASK_REWARD_CLAIM_DAILY",
       "status": "already_complete",
-      "postcondition": "daily_reward.no_claimable"
+      "postcondition": "daily_reward.no_claimable",
+      "defer_home_boundary": true
     },
     "next": ["日常任务奖励-关闭"]
   },
@@ -235,7 +363,8 @@
     "custom_action_param": {
       "task_id": "DAILY_TASK_REWARD_CLAIM_DAILY",
       "status": "success",
-      "postcondition": "daily_reward.no_claimable"
+      "postcondition": "daily_reward.no_claimable",
+      "defer_home_boundary": true
     },
     "next": ["日常任务奖励-关闭"]
   },
@@ -368,9 +497,22 @@
         "target_name": "日常任务奖励-日常-关闭"
       }
     },
-    "next": ["日常任务奖励-关闭-面板", "日常任务奖励-主页边界-探测"],
+    "next": ["日常任务奖励-面板关闭后", "日常任务奖励-主页边界-探测"],
     "on_error": ["日常任务奖励-主页边界-失败"],
     "retry_times": 0
+  },
+  "日常任务奖励-面板关闭后": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["日常任务奖励-日常-面板-页面", "日常任务奖励-日常-面板-关闭"],
+        "box_index": 0
+      }
+    },
+    "timeout": 8000,
+    "action": "DoNothing",
+    "next": ["日常任务奖励-关闭-面板", "日常任务奖励-主页边界-探测"],
+    "on_error": ["日常任务奖励-主页边界-失败"]
   },
   "日常任务奖励-关闭-面板": {
     "max_hit": 1,
@@ -408,7 +550,7 @@
     },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["公共-通用停止", "[JumpBack]启动-游戏启动"],
+    "next": ["公共-主页边界"],
     "on_error": ["日常任务奖励-主页边界-失败"]
   },
   "日常任务奖励-主页边界-失败": {
