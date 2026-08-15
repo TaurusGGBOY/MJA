@@ -259,7 +259,7 @@
     "method": 4,
     "lower": [100, 100, 90],
     "upper": [255, 255, 255],
-    "roi": [980, 590, 85, 85],
+    "roi": [987, 599, 52, 66],
     "connected": true,
     "count": 1200,
     "order_by": "Area",

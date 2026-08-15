@@ -341,7 +341,7 @@ def test_trial_r19_home_entry_uses_a_narrow_calibrated_same_frame_target() -> No
         "method": 4,
         "lower": [100, 100, 90],
         "upper": [255, 255, 255],
-        "roi": [980, 590, 85, 85],
+        "roi": [987, 599, 52, 66],
         "connected": True,
         "count": 1200,
         "order_by": "Area",
