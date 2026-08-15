@@ -1,5 +1,5 @@
 {
-  "MJA_GAME_STOP": {
+  "启动-游戏停止": {
     "action": "StopApp",
     "package": "com.hanjiasongshu.dr22"
   }

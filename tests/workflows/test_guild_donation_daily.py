@@ -45,7 +45,7 @@ def test_navigation_path_is_bounded_and_uses_free_target_only():
     assert guild.transition is not None
     assert guild.transition.intent.action_id == "open_guild"
 
-    donation = DEFINITION.decide(snapshot("guild", "guild.donation.entry"), {})
+    donation = DEFINITION.decide(snapshot("guild", "帮派捐献-帮派-捐献-入口"), {})
     assert donation.transition is not None
     assert donation.transition.intent.action_id == "open_guild_donation"
 
@@ -54,10 +54,10 @@ def test_9_of_10_is_already_complete_without_clicking():
     decision = DEFINITION.decide(
         snapshot(
             "donation",
-            "guild.donation.page",
-            "guild.donation.context",
-            "guild.donation.remaining_9_of_10",
-            "guild.donation.free",
+            "帮派捐献-帮派-捐献-页面",
+            "帮派捐献-帮派-捐献-上下文",
+            "帮派捐献-帮派-捐献-剩余-9-共-10",
+            "帮派捐献-帮派-捐献-免费",
             texts=("今日可捐献次数 9/10",),
         ),
         {},
@@ -69,10 +69,10 @@ def test_only_10_of_10_authorizes_one_free_donation():
     decision = DEFINITION.decide(
         snapshot(
             "donation",
-            "guild.donation.page",
-            "guild.donation.context",
-            "guild.donation.remaining_10_of_10",
-            "guild.donation.free",
+            "帮派捐献-帮派-捐献-页面",
+            "帮派捐献-帮派-捐献-上下文",
+            "帮派捐献-帮派-捐献-剩余-10-共-10",
+            "帮派捐献-帮派-捐献-免费",
             texts=("今日可捐献次数 10/10",),
         ),
         {},
@@ -87,9 +87,9 @@ def test_postcondition_requires_one_click_and_exact_9_of_10():
     completed = DEFINITION.decide(
         snapshot(
             "verify",
-            "guild.donation.page",
-            "guild.donation.context",
-            "guild.donation.remaining_9_of_10",
+            "帮派捐献-帮派-捐献-页面",
+            "帮派捐献-帮派-捐献-上下文",
+            "帮派捐献-帮派-捐献-剩余-9-共-10",
             texts=("今日可捐献次数 9/10",),
         ),
         {"donate_guild_free_once": 1},
@@ -99,9 +99,9 @@ def test_postcondition_requires_one_click_and_exact_9_of_10():
     no_click = DEFINITION.decide(
         snapshot(
             "verify",
-            "guild.donation.page",
-            "guild.donation.context",
-            "guild.donation.remaining_9_of_10",
+            "帮派捐献-帮派-捐献-页面",
+            "帮派捐献-帮派-捐献-上下文",
+            "帮派捐献-帮派-捐献-剩余-9-共-10",
             texts=("今日可捐献次数 9/10",),
         ),
         {},
@@ -111,8 +111,8 @@ def test_postcondition_requires_one_click_and_exact_9_of_10():
     wrong_counter = DEFINITION.decide(
         snapshot(
             "verify",
-            "guild.donation.page",
-            "guild.donation.context",
+            "帮派捐献-帮派-捐献-页面",
+            "帮派捐献-帮派-捐献-上下文",
             texts=("今日可捐献次数 8/10",),
         ),
         {"donate_guild_free_once": 1},
@@ -124,10 +124,10 @@ def test_paid_or_unknown_surface_fails_closed_and_terminal_marker_is_stable():
     decision = DEFINITION.decide(
         snapshot(
             "donation",
-            "guild.donation.page",
-            "guild.donation.context",
-            "guild.donation.remaining_10_of_10",
-            "guild.donation.free",
+            "帮派捐献-帮派-捐献-页面",
+            "帮派捐献-帮派-捐献-上下文",
+            "帮派捐献-帮派-捐献-剩余-10-共-10",
+            "帮派捐献-帮派-捐献-免费",
             "guild.donation.paid",
         ),
         {},

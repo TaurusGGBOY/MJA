@@ -5,7 +5,7 @@
       "label": "商城每日免费礼包",
       "default_check": true,
       "group": ["日常"],
-      "entry": "MJA_SHOP_FREE_GIFT_DAILY_START"
+      "entry": "商店免费礼包-任务入口"
     }
   ]
 }

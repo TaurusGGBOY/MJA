@@ -1,5 +1,5 @@
 {
-  "MJA_EAT_STAMINA_FOOD_DAILY_START": {
+  "吃体力食物-任务入口": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "BeginTask", "max_hit": 1,
@@ -7,38 +7,38 @@
       "task_id": "EAT_STAMINA_FOOD_DAILY"
     },
     "next": [
-      "MJA_FOOD_JIANLIN_PAGE_PROBE",
-      "MJA_FOOD_PANEL_PROBE",
-      "MJA_FOOD_DUNGEON_PAGE_PROBE",
-      "MJA_FOOD_RESUME_REPLACE_PROBE",
-      "MJA_FOOD_PAGE_PROBE",
-      "MJA_FOOD_BAG_PAGE_PROBE",
-      "MJA_FOOD_OPEN_RESOURCE",
-      "MJA_FOOD_GAME_START_RECOVERY"
+      "吃体力食物-剑林-页面-探测",
+      "吃体力食物-面板-探测",
+      "吃体力食物-副本-页面-探测",
+      "吃体力食物-恢复继续-替换-探测",
+      "吃体力食物-页面-探测",
+      "吃体力食物-背包-页面-探测",
+      "吃体力食物-打开-资源",
+      "吃体力食物-游戏启动恢复"
     ],
-    "on_error": ["MJA_FOOD_GAME_START_RECOVERY_FAILED"],
+    "on_error": ["吃体力食物-游戏启动恢复失败"],
     "retry_times": 0
   },
-  "MJA_FOOD_JIANLIN_PAGE_PROBE": {
+  "吃体力食物-剑林-页面-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["jianlin.page"],
+        "all_of": ["剑林凝结体体力-剑林-页面"],
         "box_index": 0
       }
     },
     "timeout": 8000,
     "max_hit": 1,
     "action": "DoNothing",
-    "next": ["MJA_FOOD_CLOSE_JIANLIN_PAGE"],
-    "on_error": ["MJA_FOOD_PANEL_PROBE"],
+    "next": ["吃体力食物-关闭-剑林-页面"],
+    "on_error": ["吃体力食物-面板-探测"],
     "retry_times": 0
   },
-  "MJA_FOOD_CLOSE_JIANLIN_PAGE": {
+  "吃体力食物-关闭-剑林-页面": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["jianlin.page"],
+        "all_of": ["剑林凝结体体力-剑林-页面"],
         "box_index": 0
       }
     },
@@ -53,30 +53,30 @@
       "evidence": {
         "page_index": 0,
         "target_index": 0,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.page"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-页面"
       },
       "fixed_click_mode": "jianlin_page_close"
     },
     "post_delay": 1000,
-    "next": ["MJA_FOOD_OPEN_RESOURCE"],
-    "on_error": ["MJA_FOOD_RECORD_FAILURE"],
+    "next": ["吃体力食物-打开-资源"],
+    "on_error": ["吃体力食物-记录-失败"],
     "retry_times": 0
   },
-  "MJA_FOOD_PANEL_PROBE": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_SIDE_PANEL_OPEN"], "box_index": 0}},
+  "吃体力食物-面板-探测": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏侧边面板-打开"], "box_index": 0}},
     "timeout": 8000,
     "max_hit": 1,
     "action": "DoNothing",
-    "next": ["MJA_FOOD_PANEL_CLOSE"],
-    "on_error": ["MJA_FOOD_RECORD_FAILURE"],
+    "next": ["吃体力食物-面板-关闭"],
+    "on_error": ["吃体力食物-记录-失败"],
     "retry_times": 0
   },
-  "MJA_FOOD_PANEL_CLOSE": {
+  "吃体力食物-面板-关闭": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["MJA_KNOWN_PANEL_MARKER", "MJA_KNOWN_PANEL_CLOSE"],
+        "all_of": ["公共-已知-面板-标记", "公共-已知-面板-关闭"],
         "box_index": 1
       }
     },
@@ -92,20 +92,20 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "MJA_KNOWN_PANEL_MARKER",
-        "target_name": "MJA_KNOWN_PANEL_CLOSE"
+        "page_name": "公共-已知-面板-标记",
+        "target_name": "公共-已知-面板-关闭"
       }
     },
     "post_delay": 1000,
-    "next": ["MJA_FOOD_OPEN_RESOURCE"],
-    "on_error": ["MJA_FOOD_RECORD_FAILURE"],
+    "next": ["吃体力食物-打开-资源"],
+    "on_error": ["吃体力食物-记录-失败"],
     "retry_times": 0
   },
-  "MJA_FOOD_DUNGEON_PAGE_PROBE": {
+  "吃体力食物-副本-页面-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["dungeon.page", "dungeon.close"],
+        "all_of": ["副本扫荡-副本-页面", "副本扫荡-副本-关闭"],
         "box_index": 1
       }
     },
@@ -119,36 +119,36 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "dungeon.page",
-        "target_name": "dungeon.close"
+        "page_name": "副本扫荡-副本-页面",
+        "target_name": "副本扫荡-副本-关闭"
       }
     },
     "post_delay": 1000,
-    "next": ["MJA_FOOD_OPEN_RESOURCE"],
-    "on_error": ["MJA_FOOD_RECORD_FAILURE"],
+    "next": ["吃体力食物-打开-资源"],
+    "on_error": ["吃体力食物-记录-失败"],
     "retry_times": 0
   },
-  "MJA_FOOD_RESUME_REPLACE_PROBE": {
+  "吃体力食物-恢复继续-替换-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "food.replace.prompt",
-          "food.replace.confirm",
-          "food.longjing_name"
+          "吃体力食物-食物-替换-提示",
+          "吃体力食物-食物-替换-确认",
+          "吃体力食物-食物-龙井虾仁-名称"
         ],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_FOOD_REPLACE_CONFIRM_LOOP"],
-    "on_error": ["MJA_FOOD_RECORD_FAILURE"]
+    "next": ["吃体力食物-替换-确认-循环"],
+    "on_error": ["吃体力食物-记录-失败"]
   },
-  "MJA_FOOD_OPEN_RESOURCE": {
+  "吃体力食物-打开-资源": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["food.home.page", "food.resource_entry"],
+        "all_of": ["吃体力食物-食物-主页-页面", "吃体力食物-食物-资源-入口"],
         "box_index": 1
       }
     },
@@ -161,40 +161,40 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "food.home.page",
-        "target_name": "food.resource_entry"
+        "page_name": "吃体力食物-食物-主页-页面",
+        "target_name": "吃体力食物-食物-资源-入口"
       }
     },
-    "next": ["MJA_FOOD_BAG_PAGE_PROBE"],
-    "on_error": ["MJA_FOOD_RECORD_FAILURE"],
+    "next": ["吃体力食物-背包-页面-探测"],
+    "on_error": ["吃体力食物-记录-失败"],
     "retry_times": 0
   },
-  "MJA_FOOD_GAME_START_RECOVERY": {
+  "吃体力食物-游戏启动恢复": {
     "recognition": "DirectHit",
     "max_hit": 1,
     "action": "StartApp",
     "package": "com.hanjiasongshu.dr22/.MainActivity",
     "post_delay": 5000,
     "retry_times": 0,
-    "next": ["MJA_FOOD_RECOVERY_STATE_PROBE"],
-    "on_error": ["MJA_FOOD_GAME_START_RECOVERY_FAILED"]
+    "next": ["吃体力食物-恢复-状态-探测"],
+    "on_error": ["吃体力食物-游戏启动恢复失败"]
   },
-  "MJA_FOOD_RECOVERY_STATE_PROBE": {
+  "吃体力食物-恢复-状态-探测": {
     "recognition": "DirectHit",
     "action": "DoNothing",
     "timeout": 30000,
     "next": [
-      "MJA_FOOD_JIANLIN_PAGE_PROBE",
-      "MJA_FOOD_PANEL_PROBE",
-      "MJA_FOOD_DUNGEON_PAGE_PROBE",
-      "MJA_FOOD_RESUME_REPLACE_PROBE",
-      "MJA_FOOD_PAGE_PROBE",
-      "MJA_FOOD_BAG_PAGE_PROBE",
-      "MJA_FOOD_OPEN_RESOURCE"
+      "吃体力食物-剑林-页面-探测",
+      "吃体力食物-面板-探测",
+      "吃体力食物-副本-页面-探测",
+      "吃体力食物-恢复继续-替换-探测",
+      "吃体力食物-页面-探测",
+      "吃体力食物-背包-页面-探测",
+      "吃体力食物-打开-资源"
     ],
-    "on_error": ["MJA_FOOD_GAME_START_RECOVERY_FAILED"]
+    "on_error": ["吃体力食物-游戏启动恢复失败"]
   },
-  "MJA_FOOD_GAME_START_RECOVERY_FAILED": {
+  "吃体力食物-游戏启动恢复失败": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -206,23 +206,23 @@
       "native_fail_after_record": true
     },
     "Abort": true,
-    "next": ["MJA_COMMON_ABORT"]
+    "next": ["公共-通用中止"]
 
   },
-  "MJA_FOOD_BAG_PAGE_PROBE": {
+  "吃体力食物-背包-页面-探测": {
     "recognition": "OCR",
     "expected": "资源",
     "roi": [0, 0, 150, 120],
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_FOOD_OPEN_CATEGORY"],
-    "on_error": ["MJA_FOOD_RECORD_FAILURE"]
+    "next": ["吃体力食物-打开-分类"],
+    "on_error": ["吃体力食物-记录-失败"]
   },
-  "MJA_FOOD_OPEN_CATEGORY": {
+  "吃体力食物-打开-分类": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["food.bag.page", "food.category"],
+        "all_of": ["吃体力食物-食物-背包-页面", "吃体力食物-食物-分类"],
         "box_index": 1
       }
     },
@@ -235,27 +235,27 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "food.bag.page",
-        "target_name": "food.category"
+        "page_name": "吃体力食物-食物-背包-页面",
+        "target_name": "吃体力食物-食物-分类"
       }
     },
-    "next": ["MJA_FOOD_CATEGORY_PAGE_PROBE"],
-    "on_error": ["MJA_FOOD_RECORD_FAILURE"]
+    "next": ["吃体力食物-分类-页面-探测"],
+    "on_error": ["吃体力食物-记录-失败"]
   },
-  "MJA_FOOD_CATEGORY_PAGE_PROBE": {
+  "吃体力食物-分类-页面-探测": {
     "recognition": "OCR",
     "expected": ["消耗品", "食物", "料理"],
     "roi": [0, 0, 500, 720],
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_FOOD_SELECT_TAB"],
-    "on_error": ["MJA_FOOD_RECORD_FAILURE"]
+    "next": ["吃体力食物-选择-标签"],
+    "on_error": ["吃体力食物-记录-失败"]
   },
-  "MJA_FOOD_SELECT_TAB": {
+  "吃体力食物-选择-标签": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["food.category.page", "food.food_tab"],
+        "all_of": ["吃体力食物-食物-分类-页面", "吃体力食物-食物-食物-标签"],
         "box_index": 1
       }
     },
@@ -268,47 +268,47 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "food.category.page",
-        "target_name": "food.food_tab"
+        "page_name": "吃体力食物-食物-分类-页面",
+        "target_name": "吃体力食物-食物-食物-标签"
       }
     },
-    "next": ["MJA_FOOD_PAGE_PROBE"],
-    "on_error": ["MJA_FOOD_RECORD_FAILURE"]
+    "next": ["吃体力食物-页面-探测"],
+    "on_error": ["吃体力食物-记录-失败"]
   },
-  "MJA_FOOD_PAGE_PROBE": {
+  "吃体力食物-页面-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["food.category.page", "food.food_tab"],
+        "all_of": ["吃体力食物-食物-分类-页面", "吃体力食物-食物-食物-标签"],
         "box_index": 1
       }
     },
     "timeout": 8000,
     "action": "DoNothing",
     "next": [
-      "MJA_FOOD_RECHECK_FULL",
-      "MJA_FOOD_CANDIDATE_LOOP"
+      "吃体力食物-重新检查-已满",
+      "吃体力食物-候选-循环"
     ],
-    "on_error": ["MJA_FOOD_NO_SAFE_CARD"]
+    "on_error": ["吃体力食物-无安全卡"]
   },
-  "MJA_FOOD_RECHECK_FULL": {
+  "吃体力食物-重新检查-已满": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["food.food.page", "food.overfull"],
+        "all_of": ["吃体力食物-食物-食物-页面", "吃体力食物-食物-已超上限"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_FOOD_STAMINA_FULL"],
-    "on_error": ["MJA_FOOD_RECORD_FAILURE"]
+    "next": ["吃体力食物-体力-已满"],
+    "on_error": ["吃体力食物-记录-失败"]
   },
-  "MJA_FOOD_CANDIDATE_LOOP": {
+  "吃体力食物-候选-循环": {
     "max_hit": 6,
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["food.food.page", "food.candidate"],
+        "all_of": ["吃体力食物-食物-食物-页面", "吃体力食物-食物-候选"],
         "box_index": 1
       }
     },
@@ -321,140 +321,140 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "food.food.page",
-        "target_name": "food.candidate"
+        "page_name": "吃体力食物-食物-食物-页面",
+        "target_name": "吃体力食物-食物-候选"
       }
     },
-    "next": ["MJA_FOOD_DETAIL_PROBE"],
-    "on_error": ["MJA_FOOD_RECORD_FAILURE"]
+    "next": ["吃体力食物-详情-探测"],
+    "on_error": ["吃体力食物-记录-失败"]
   },
-  "MJA_FOOD_DETAIL_PROBE": {
+  "吃体力食物-详情-探测": {
     "recognition": "OCR",
     "expected": ["物品", "龙井虾仁"],
     "roi": [800, 100, 450, 300],
     "timeout": 5000,
     "action": "DoNothing",
     "next": [
-      "MJA_FOOD_COUNT_6_PROBE",
-      "MJA_FOOD_COUNT_5_PROBE",
-      "MJA_FOOD_COUNT_4_PROBE",
-      "MJA_FOOD_COUNT_3_PROBE",
-      "MJA_FOOD_COUNT_2_PROBE",
-      "MJA_FOOD_COUNT_1_PROBE"
+      "吃体力食物-次数-6-探测",
+      "吃体力食物-次数-5-探测",
+      "吃体力食物-次数-4-探测",
+      "吃体力食物-次数-3-探测",
+      "吃体力食物-次数-2-探测",
+      "吃体力食物-次数-1-探测"
     ],
-    "on_error": ["MJA_FOOD_NO_SAFE_CARD"]
+    "on_error": ["吃体力食物-无安全卡"]
   },
-  "MJA_FOOD_COUNT_6_PROBE": {
+  "吃体力食物-次数-6-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "food.detail",
-          "food.longjing_name",
-          "food.available_6",
-          "food.use_target"
+          "吃体力食物-食物-详情",
+          "吃体力食物-食物-龙井虾仁-名称",
+          "吃体力食物-食物-可用-6",
+          "吃体力食物-食物-使用-目标"
         ],
         "box_index": 3
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_FOOD_EAT_COUNT_6"],
-    "on_error": ["MJA_FOOD_RECORD_FAILURE"]
+    "next": ["吃体力食物-食用-次数-6"],
+    "on_error": ["吃体力食物-记录-失败"]
   },
-  "MJA_FOOD_COUNT_5_PROBE": {
+  "吃体力食物-次数-5-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "food.detail",
-          "food.longjing_name",
-          "food.available_5",
-          "food.use_target"
+          "吃体力食物-食物-详情",
+          "吃体力食物-食物-龙井虾仁-名称",
+          "吃体力食物-食物-可用-5",
+          "吃体力食物-食物-使用-目标"
         ],
         "box_index": 3
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_FOOD_EAT_COUNT_5"],
-    "on_error": ["MJA_FOOD_RECORD_FAILURE"]
+    "next": ["吃体力食物-食用-次数-5"],
+    "on_error": ["吃体力食物-记录-失败"]
   },
-  "MJA_FOOD_COUNT_4_PROBE": {
+  "吃体力食物-次数-4-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "food.detail",
-          "food.longjing_name",
-          "food.available_4",
-          "food.use_target"
+          "吃体力食物-食物-详情",
+          "吃体力食物-食物-龙井虾仁-名称",
+          "吃体力食物-食物-可用-4",
+          "吃体力食物-食物-使用-目标"
         ],
         "box_index": 3
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_FOOD_EAT_COUNT_4"],
-    "on_error": ["MJA_FOOD_RECORD_FAILURE"]
+    "next": ["吃体力食物-食用-次数-4"],
+    "on_error": ["吃体力食物-记录-失败"]
   },
-  "MJA_FOOD_COUNT_3_PROBE": {
+  "吃体力食物-次数-3-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "food.detail",
-          "food.longjing_name",
-          "food.available_3",
-          "food.use_target"
+          "吃体力食物-食物-详情",
+          "吃体力食物-食物-龙井虾仁-名称",
+          "吃体力食物-食物-可用-3",
+          "吃体力食物-食物-使用-目标"
         ],
         "box_index": 3
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_FOOD_EAT_COUNT_3"],
-    "on_error": ["MJA_FOOD_RECORD_FAILURE"]
+    "next": ["吃体力食物-食用-次数-3"],
+    "on_error": ["吃体力食物-记录-失败"]
   },
-  "MJA_FOOD_COUNT_2_PROBE": {
+  "吃体力食物-次数-2-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "food.detail",
-          "food.longjing_name",
-          "food.available_2",
-          "food.use_target"
+          "吃体力食物-食物-详情",
+          "吃体力食物-食物-龙井虾仁-名称",
+          "吃体力食物-食物-可用-2",
+          "吃体力食物-食物-使用-目标"
         ],
         "box_index": 3
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_FOOD_EAT_COUNT_2"],
-    "on_error": ["MJA_FOOD_RECORD_FAILURE"]
+    "next": ["吃体力食物-食用-次数-2"],
+    "on_error": ["吃体力食物-记录-失败"]
   },
-  "MJA_FOOD_COUNT_1_PROBE": {
+  "吃体力食物-次数-1-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "food.detail",
-          "food.longjing_name",
-          "food.available_1",
-          "food.use_target"
+          "吃体力食物-食物-详情",
+          "吃体力食物-食物-龙井虾仁-名称",
+          "吃体力食物-食物-可用-1",
+          "吃体力食物-食物-使用-目标"
         ],
         "box_index": 3
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_FOOD_EAT_COUNT_1"],
-    "on_error": ["MJA_FOOD_RECORD_FAILURE"]
+    "next": ["吃体力食物-食用-次数-1"],
+    "on_error": ["吃体力食物-记录-失败"]
   },
-  "MJA_FOOD_EAT_COUNT_6": {
+  "吃体力食物-食用-次数-6": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "food.detail",
-          "food.longjing_name",
-          "food.available_6",
-          "food.use_target"
+          "吃体力食物-食物-详情",
+          "吃体力食物-食物-龙井虾仁-名称",
+          "吃体力食物-食物-可用-6",
+          "吃体力食物-食物-使用-目标"
         ],
         "box_index": 3
       }
@@ -474,27 +474,27 @@
       "evidence": {
         "page_index": 0,
         "target_index": 3,
-        "page_name": "food.detail",
-        "target_name": "food.use_target"
+        "page_name": "吃体力食物-食物-详情",
+        "target_name": "吃体力食物-食物-使用-目标"
       }
     },
     "next": [
-      "MJA_FOOD_OVERFULL_AFTER_EAT_PROBE",
-      "MJA_FOOD_REPLACEMENT_PROBE",
-      "MJA_FOOD_USE_RESULT_PROBE"
+      "吃体力食物-已超上限-之后-食用-探测",
+      "吃体力食物-替换-探测",
+      "吃体力食物-使用-结果-探测"
     ],
-    "on_error": ["MJA_FOOD_RECORD_FAILURE"],
+    "on_error": ["吃体力食物-记录-失败"],
     "retry_times": 0
   },
-  "MJA_FOOD_EAT_COUNT_5": {
+  "吃体力食物-食用-次数-5": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "food.detail",
-          "food.longjing_name",
-          "food.available_5",
-          "food.use_target"
+          "吃体力食物-食物-详情",
+          "吃体力食物-食物-龙井虾仁-名称",
+          "吃体力食物-食物-可用-5",
+          "吃体力食物-食物-使用-目标"
         ],
         "box_index": 3
       }
@@ -513,27 +513,27 @@
       "evidence": {
         "page_index": 0,
         "target_index": 3,
-        "page_name": "food.detail",
-        "target_name": "food.use_target"
+        "page_name": "吃体力食物-食物-详情",
+        "target_name": "吃体力食物-食物-使用-目标"
       }
     },
     "next": [
-      "MJA_FOOD_OVERFULL_AFTER_EAT_PROBE",
-      "MJA_FOOD_REPLACEMENT_PROBE",
-      "MJA_FOOD_USE_RESULT_PROBE"
+      "吃体力食物-已超上限-之后-食用-探测",
+      "吃体力食物-替换-探测",
+      "吃体力食物-使用-结果-探测"
     ],
-    "on_error": ["MJA_FOOD_RECORD_FAILURE"],
+    "on_error": ["吃体力食物-记录-失败"],
     "retry_times": 0
   },
-  "MJA_FOOD_EAT_COUNT_4": {
+  "吃体力食物-食用-次数-4": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "food.detail",
-          "food.longjing_name",
-          "food.available_4",
-          "food.use_target"
+          "吃体力食物-食物-详情",
+          "吃体力食物-食物-龙井虾仁-名称",
+          "吃体力食物-食物-可用-4",
+          "吃体力食物-食物-使用-目标"
         ],
         "box_index": 3
       }
@@ -552,27 +552,27 @@
       "evidence": {
         "page_index": 0,
         "target_index": 3,
-        "page_name": "food.detail",
-        "target_name": "food.use_target"
+        "page_name": "吃体力食物-食物-详情",
+        "target_name": "吃体力食物-食物-使用-目标"
       }
     },
     "next": [
-      "MJA_FOOD_OVERFULL_AFTER_EAT_PROBE",
-      "MJA_FOOD_REPLACEMENT_PROBE",
-      "MJA_FOOD_USE_RESULT_PROBE"
+      "吃体力食物-已超上限-之后-食用-探测",
+      "吃体力食物-替换-探测",
+      "吃体力食物-使用-结果-探测"
     ],
-    "on_error": ["MJA_FOOD_RECORD_FAILURE"],
+    "on_error": ["吃体力食物-记录-失败"],
     "retry_times": 0
   },
-  "MJA_FOOD_EAT_COUNT_3": {
+  "吃体力食物-食用-次数-3": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "food.detail",
-          "food.longjing_name",
-          "food.available_3",
-          "food.use_target"
+          "吃体力食物-食物-详情",
+          "吃体力食物-食物-龙井虾仁-名称",
+          "吃体力食物-食物-可用-3",
+          "吃体力食物-食物-使用-目标"
         ],
         "box_index": 3
       }
@@ -591,27 +591,27 @@
       "evidence": {
         "page_index": 0,
         "target_index": 3,
-        "page_name": "food.detail",
-        "target_name": "food.use_target"
+        "page_name": "吃体力食物-食物-详情",
+        "target_name": "吃体力食物-食物-使用-目标"
       }
     },
     "next": [
-      "MJA_FOOD_OVERFULL_AFTER_EAT_PROBE",
-      "MJA_FOOD_REPLACEMENT_PROBE",
-      "MJA_FOOD_USE_RESULT_PROBE"
+      "吃体力食物-已超上限-之后-食用-探测",
+      "吃体力食物-替换-探测",
+      "吃体力食物-使用-结果-探测"
     ],
-    "on_error": ["MJA_FOOD_RECORD_FAILURE"],
+    "on_error": ["吃体力食物-记录-失败"],
     "retry_times": 0
   },
-  "MJA_FOOD_EAT_COUNT_2": {
+  "吃体力食物-食用-次数-2": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "food.detail",
-          "food.longjing_name",
-          "food.available_2",
-          "food.use_target"
+          "吃体力食物-食物-详情",
+          "吃体力食物-食物-龙井虾仁-名称",
+          "吃体力食物-食物-可用-2",
+          "吃体力食物-食物-使用-目标"
         ],
         "box_index": 3
       }
@@ -630,27 +630,27 @@
       "evidence": {
         "page_index": 0,
         "target_index": 3,
-        "page_name": "food.detail",
-        "target_name": "food.use_target"
+        "page_name": "吃体力食物-食物-详情",
+        "target_name": "吃体力食物-食物-使用-目标"
       }
     },
     "next": [
-      "MJA_FOOD_OVERFULL_AFTER_EAT_PROBE",
-      "MJA_FOOD_REPLACEMENT_PROBE",
-      "MJA_FOOD_USE_RESULT_PROBE"
+      "吃体力食物-已超上限-之后-食用-探测",
+      "吃体力食物-替换-探测",
+      "吃体力食物-使用-结果-探测"
     ],
-    "on_error": ["MJA_FOOD_RECORD_FAILURE"],
+    "on_error": ["吃体力食物-记录-失败"],
     "retry_times": 0
   },
-  "MJA_FOOD_EAT_COUNT_1": {
+  "吃体力食物-食用-次数-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "food.detail",
-          "food.longjing_name",
-          "food.available_1",
-          "food.use_target"
+          "吃体力食物-食物-详情",
+          "吃体力食物-食物-龙井虾仁-名称",
+          "吃体力食物-食物-可用-1",
+          "吃体力食物-食物-使用-目标"
         ],
         "box_index": 3
       }
@@ -669,55 +669,55 @@
       "evidence": {
         "page_index": 0,
         "target_index": 3,
-        "page_name": "food.detail",
-        "target_name": "food.use_target"
+        "page_name": "吃体力食物-食物-详情",
+        "target_name": "吃体力食物-食物-使用-目标"
       }
     },
     "next": [
-      "MJA_FOOD_OVERFULL_AFTER_EAT_PROBE",
-      "MJA_FOOD_REPLACEMENT_PROBE",
-      "MJA_FOOD_USE_RESULT_PROBE"
+      "吃体力食物-已超上限-之后-食用-探测",
+      "吃体力食物-替换-探测",
+      "吃体力食物-使用-结果-探测"
     ],
-    "on_error": ["MJA_FOOD_RECORD_FAILURE"],
+    "on_error": ["吃体力食物-记录-失败"],
     "retry_times": 0
   },
-  "MJA_FOOD_OVERFULL_AFTER_EAT_PROBE": {
+  "吃体力食物-已超上限-之后-食用-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["food.food.page", "food.overfull"],
+        "all_of": ["吃体力食物-食物-食物-页面", "吃体力食物-食物-已超上限"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_FOOD_STAMINA_FULL"],
-    "on_error": ["MJA_FOOD_RECORD_FAILURE"]
+    "next": ["吃体力食物-体力-已满"],
+    "on_error": ["吃体力食物-记录-失败"]
   },
-  "MJA_FOOD_REPLACEMENT_PROBE": {
+  "吃体力食物-替换-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "food.replace.prompt",
-          "food.replace.confirm",
-          "food.longjing_name"
+          "吃体力食物-食物-替换-提示",
+          "吃体力食物-食物-替换-确认",
+          "吃体力食物-食物-龙井虾仁-名称"
         ],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_FOOD_REPLACE_CONFIRM_LOOP"],
-    "on_error": ["MJA_FOOD_RECORD_FAILURE"]
+    "next": ["吃体力食物-替换-确认-循环"],
+    "on_error": ["吃体力食物-记录-失败"]
   },
-  "MJA_FOOD_REPLACE_CONFIRM_LOOP": {
+  "吃体力食物-替换-确认-循环": {
     "max_hit": 6,
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "food.replace.prompt",
-          "food.replace.confirm",
-          "food.longjing_name"
+          "吃体力食物-食物-替换-提示",
+          "吃体力食物-食物-替换-确认",
+          "吃体力食物-食物-龙井虾仁-名称"
         ],
         "box_index": 1
       }
@@ -731,36 +731,36 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "food.replace.prompt",
-        "target_name": "food.replace.confirm"
+        "page_name": "吃体力食物-食物-替换-提示",
+        "target_name": "吃体力食物-食物-替换-确认"
       }
     },
     "next": [
-      "MJA_FOOD_OVERFULL_AFTER_EAT_PROBE",
-      "MJA_FOOD_USE_RESULT_PROBE"
+      "吃体力食物-已超上限-之后-食用-探测",
+      "吃体力食物-使用-结果-探测"
     ],
-    "on_error": ["MJA_FOOD_RECORD_FAILURE"]
+    "on_error": ["吃体力食物-记录-失败"]
   },
-  "MJA_FOOD_USE_RESULT_PROBE": {
+  "吃体力食物-使用-结果-探测": {
     "recognition": {
       "type": "Or",
       "param": {
-        "any_of": ["food.use_result", "food.post_use_state"]
+        "any_of": ["吃体力食物-食物-使用-结果", "吃体力食物-食物-之后-使用-状态"]
       }
     },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_FOOD_POST_USE_PROGRESS_PROBE"],
-    "on_error": ["MJA_FOOD_RECORD_FAILURE"]
+    "next": ["吃体力食物-之后-使用-进度-探测"],
+    "on_error": ["吃体力食物-记录-失败"]
   },
-  "MJA_FOOD_POST_USE_PROGRESS_PROBE": {
+  "吃体力食物-之后-使用-进度-探测": {
     "max_hit": 4,
     "recognition": "DirectHit",
     "action": "DoNothing",
-    "next": ["MJA_FOOD_PAGE_PROBE"],
-    "on_error": ["MJA_FOOD_SUCCESS"]
+    "next": ["吃体力食物-页面-探测"],
+    "on_error": ["吃体力食物-成功"]
   },
-  "MJA_FOOD_STAMINA_FULL": {
+  "吃体力食物-体力-已满": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -769,9 +769,9 @@
       "status": "success",
       "postcondition": "food.stamina_full"
     },
-    "next": ["MJA_FOOD_CLOSE_BAG"]
+    "next": ["吃体力食物-关闭-背包"]
   },
-  "MJA_FOOD_SUCCESS": {
+  "吃体力食物-成功": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -780,9 +780,9 @@
       "status": "success",
       "postcondition": "food.used_five_times"
     },
-    "next": ["MJA_FOOD_CLOSE_BAG"]
+    "next": ["吃体力食物-关闭-背包"]
   },
-  "MJA_FOOD_NO_SAFE_CARD": {
+  "吃体力食物-无安全卡": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -791,9 +791,9 @@
       "status": "not_eligible",
       "postcondition": "food.longjing_shrimp_unavailable"
     },
-    "next": ["MJA_FOOD_CLOSE_BAG"]
+    "next": ["吃体力食物-关闭-背包"]
   },
-  "MJA_FOOD_RECORD_FAILURE": {
+  "吃体力食物-记录-失败": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -805,14 +805,14 @@
       "native_fail_after_record": true
     },
     "Abort": true,
-    "next": ["MJA_COMMON_ABORT"]
+    "next": ["公共-通用中止"]
 
   },
-  "MJA_FOOD_CLOSE_BAG": {
+  "吃体力食物-关闭-背包": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["food.food.page", "food.close"],
+        "all_of": ["吃体力食物-食物-食物-页面", "吃体力食物-食物-关闭"],
         "box_index": 1
       }
     },
@@ -825,18 +825,18 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "food.food.page",
-        "target_name": "food.close"
+        "page_name": "吃体力食物-食物-食物-页面",
+        "target_name": "吃体力食物-食物-关闭"
       }
     },
-    "next": ["MJA_COMMON_STOP"],
-    "on_error": ["MJA_COMMON_STOP"]
+    "next": ["公共-通用停止"],
+    "on_error": ["公共-通用停止"]
   },
-  "food.home.page": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_HOME_PAGE"], "box_index": 0}},
+  "吃体力食物-食物-主页-页面": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}},
     "action": "DoNothing"
   },
-  "food.resource_entry": {
+  "吃体力食物-食物-资源-入口": {
     "recognition": "ColorMatch",
     "method": 4,
     "lower": [100, 100, 90],
@@ -848,145 +848,145 @@
     "index": 0,
     "action": "DoNothing"
   },
-  "food.bag.page": {
+  "吃体力食物-食物-背包-页面": {
     "recognition": "TemplateMatch",
     "template": "daily/EAT_STAMINA_FOOD_DAILY/food_bag_title_live.png",
     "roi": [0, 0, 150, 120],
     "threshold": 0.4,
     "action": "DoNothing"
   },
-  "food.category": {
+  "吃体力食物-食物-分类": {
     "recognition": "TemplateMatch",
     "template": "daily/EAT_STAMINA_FOOD_DAILY/food_category_icon_live.png",
     "roi": [0, 130, 150, 180],
     "threshold": 0.4,
     "action": "DoNothing"
   },
-  "food.category.page": {
+  "吃体力食物-食物-分类-页面": {
     "recognition": "OCR",
     "expected": ["消耗品", "食物", "料理"],
     "roi": [0, 0, 500, 720],
     "action": "DoNothing"
   },
-  "food.food_tab": {
+  "吃体力食物-食物-食物-标签": {
     "recognition": "OCR",
     "expected": "食物",
     "roi": [300, 30, 180, 75],
     "action": "DoNothing"
   },
-  "food.food.page": {
+  "吃体力食物-食物-食物-页面": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["food.category.page", "food.food_tab"],
+        "all_of": ["吃体力食物-食物-分类-页面", "吃体力食物-食物-食物-标签"],
         "box_index": 1
       }
     },
     "action": "DoNothing"
   },
-  "food.candidate": {
+  "吃体力食物-食物-候选": {
     "recognition": "TemplateMatch",
     "template": "daily/EAT_STAMINA_FOOD_DAILY/longjing_shrimp.png",
     "roi": [120, 80, 680, 540],
     "threshold": 0.39,
     "action": "DoNothing"
   },
-  "food.detail": {
+  "吃体力食物-食物-详情": {
     "recognition": "OCR",
     "expected": "物品",
     "roi": [800, 100, 450, 300],
     "action": "DoNothing"
   },
-  "food.longjing_name": {
+  "吃体力食物-食物-龙井虾仁-名称": {
     "recognition": "OCR",
     "expected": "龙井虾仁",
     "roi": [800, 100, 450, 300],
     "action": "DoNothing"
   },
-  "food.use_target": {
+  "吃体力食物-食物-使用-目标": {
     "recognition": "OCR",
     "expected": "使用",
     "roi": [1000, 600, 250, 120],
     "action": "DoNothing"
   },
-  "food.available_6": {
+  "吃体力食物-食物-可用-6": {
     "recognition": "OCR",
     "expected": "(?<!\\d)(?:[6-9]|[1-9][0-9]+)(?!\\d)",
     "roi": [1060, 180, 200, 100],
     "action": "DoNothing"
   },
-  "food.available_5": {
+  "吃体力食物-食物-可用-5": {
     "recognition": "OCR",
     "expected": "(?<!\\d)5(?!\\d)",
     "roi": [1060, 180, 200, 100],
     "action": "DoNothing"
   },
-  "food.available_4": {
+  "吃体力食物-食物-可用-4": {
     "recognition": "OCR",
     "expected": "(?<!\\d)4(?!\\d)",
     "roi": [1060, 180, 200, 100],
     "action": "DoNothing"
   },
-  "food.available_3": {
+  "吃体力食物-食物-可用-3": {
     "recognition": "OCR",
     "expected": "(?<!\\d)3(?!\\d)",
     "roi": [1060, 180, 200, 100],
     "action": "DoNothing"
   },
-  "food.available_2": {
+  "吃体力食物-食物-可用-2": {
     "recognition": "OCR",
     "expected": "(?<!\\d)2(?!\\d)",
     "roi": [1060, 180, 200, 100],
     "action": "DoNothing"
   },
-  "food.available_1": {
+  "吃体力食物-食物-可用-1": {
     "recognition": "OCR",
     "expected": "(?<!\\d)1(?!\\d)",
     "roi": [1060, 180, 200, 100],
     "action": "DoNothing"
   },
-  "food.available_positive": {
+  "吃体力食物-食物-可用-正向": {
     "recognition": "OCR",
     "expected": "(?<!\\d)[1-9][0-9]*(?!\\d)",
     "roi": [1060, 180, 200, 100],
     "action": "DoNothing"
   },
-  "food.post_use_state": {
+  "吃体力食物-食物-之后-使用-状态": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "food.detail",
-          "food.longjing_name",
-          "food.available_positive",
-          "food.use_target"
+          "吃体力食物-食物-详情",
+          "吃体力食物-食物-龙井虾仁-名称",
+          "吃体力食物-食物-可用-正向",
+          "吃体力食物-食物-使用-目标"
         ],
         "box_index": 3
       }
     },
     "action": "DoNothing"
   },
-  "food.replace.prompt": {
+  "吃体力食物-食物-替换-提示": {
     "recognition": "TemplateMatch",
     "template": "daily/EAT_STAMINA_FOOD_DAILY/food_buff_replace_prompt.png",
     "roi": [250, 130, 800, 500],
     "threshold": 0.35,
     "action": "DoNothing"
   },
-  "food.replace.confirm": {
+  "吃体力食物-食物-替换-确认": {
     "recognition": "TemplateMatch",
     "template": "daily/EAT_STAMINA_FOOD_DAILY/food_buff_replace_confirm.png",
     "roi": [780, 450, 250, 100],
     "threshold": 0.35,
     "action": "DoNothing"
   },
-  "food.overfull": {
+  "吃体力食物-食物-已超上限": {
     "recognition": "OCR",
     "expected": ["吃得太撑", "手抚腹部", "歇着"],
     "roi": [250, 250, 800, 250],
     "action": "DoNothing"
   },
-  "food.use_result": {
+  "吃体力食物-食物-使用-结果": {
     "recognition": "OCR",
     "expected": [
       "正在恢复体力",
@@ -995,7 +995,7 @@
     "roi": [0, 0, 1280, 720],
     "action": "DoNothing"
   },
-  "food.close": {
+  "吃体力食物-食物-关闭": {
     "recognition": "TemplateMatch",
     "template": "home/modal_close.png",
     "roi": [1160, 0, 100, 100],

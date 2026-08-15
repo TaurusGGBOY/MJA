@@ -13,7 +13,7 @@ BATTLE_PASS = TaskContract(
     "BATTLE_PASS_REWARD_DAILY",
     "daily/battle_pass_reward_daily.json",
 )
-FAILURE = "MJA_BP_RECORD_FAILURE"
+FAILURE = "战令奖励-记录-失败"
 
 
 def _contains(roi: list[int], box: list[int]) -> bool:
@@ -29,15 +29,15 @@ def _contains(roi: list[int], box: list[int]) -> bool:
 
 def test_r20_start_uses_finite_page_and_entry_siblings() -> None:
     nodes = load_task_nodes(BATTLE_PASS)
-    start = nodes["MJA_BATTLE_PASS_REWARD_DAILY_START"]
+    start = nodes["战令奖励-任务入口"]
 
     assert start["next"] == [
-        "MJA_BP_RESUME_REWARD_PROBE",
-        "MJA_BP_RESUME_ITEM_PROBE",
-        "MJA_BP_TASKS_PAGE_PROBE",
-        "MJA_BP_REWARDS_START_PROBE",
-        "MJA_BP_PAGE_PROBE",
-        "MJA_BP_HOME_PROBE",
+        "战令奖励-恢复继续-奖励-探测",
+        "战令奖励-恢复继续-物品-探测",
+        "战令奖励-任务-页面-探测",
+        "战令奖励-奖励-开始-探测",
+        "战令奖励-页面-探测",
+        "战令奖励-主页-探测",
     ]
     assert start["on_error"] == [FAILURE]
     assert "MJA_BP_OPEN_PANEL" not in nodes
@@ -45,9 +45,9 @@ def test_r20_start_uses_finite_page_and_entry_siblings() -> None:
     assert "open_function_panel" not in TASK_POLICIES[BATTLE_PASS.task_id].action_caps
 
     for name, node in nodes.items():
-        if not name.startswith("MJA_BP_"):
+        if not name.startswith("战令奖励-"):
             continue
-        if name in {"MJA_BP_ALL_CLAIMED", "MJA_BP_ALL_CLAIMED_SUCCESS"}:
+        if name in {"战令奖励-全部已领取", "战令奖励-全部已领取-成功"}:
             continue
         for edge in (*node.get("next", []), *node.get("on_error", [])):
             assert not edge.startswith("[JumpBack]"), edge
@@ -55,18 +55,18 @@ def test_r20_start_uses_finite_page_and_entry_siblings() -> None:
 
 def test_r20_home_ocr_proves_direct_top_level_battle_pass_entry() -> None:
     nodes = load_task_nodes(BATTLE_PASS)
-    home = nodes["battle_pass.home.page"]
-    entry = nodes["battle_pass.open"]
+    home = nodes["战令奖励-战斗-战令-主页-页面"]
+    entry = nodes["战令奖励-战斗-战令-打开"]
 
     assert home == {
         "recognition": {
             "type": "And",
             "param": {
                 "all_of": [
-                    "battle_pass.home.activity",
-                    "battle_pass.home.pray",
-                    "battle_pass.home.dungeon",
-                    "battle_pass.home.painting",
+                    "战令奖励-战斗-战令-主页-活动",
+                    "战令奖励-战斗-战令-主页-祈福",
+                    "战令奖励-战斗-战令-主页-副本",
+                    "战令奖励-战斗-战令-主页-画卷",
                 ],
                 "box_index": 0,
             },
@@ -82,19 +82,19 @@ def test_r20_home_ocr_proves_direct_top_level_battle_pass_entry() -> None:
 
     # Fresh r20 OCR from the failed formal ticket.
     assert _contains(entry["roi"], [824, 56, 30, 18])
-    assert _contains(nodes["battle_pass.home.activity"]["roi"], [882, 58, 35, 14])
-    assert _contains(nodes["battle_pass.home.pray"]["roi"], [1001, 58, 31, 14])
-    assert _contains(nodes["battle_pass.home.dungeon"]["roi"], [1057, 58, 36, 14])
-    assert _contains(nodes["battle_pass.home.painting"]["roi"], [1116, 58, 32, 14])
+    assert _contains(nodes["战令奖励-战斗-战令-主页-活动"]["roi"], [882, 58, 35, 14])
+    assert _contains(nodes["战令奖励-战斗-战令-主页-祈福"]["roi"], [1001, 58, 31, 14])
+    assert _contains(nodes["战令奖励-战斗-战令-主页-副本"]["roi"], [1057, 58, 36, 14])
+    assert _contains(nodes["战令奖励-战斗-战令-主页-画卷"]["roi"], [1116, 58, 32, 14])
 
-    probe = nodes["MJA_BP_HOME_PROBE"]
+    probe = nodes["战令奖励-主页-探测"]
     assert probe["recognition"]["param"] == {
-        "all_of": ["battle_pass.home.page", "battle_pass.open"],
+        "all_of": ["战令奖励-战斗-战令-主页-页面", "战令奖励-战斗-战令-打开"],
         "box_index": 0,
     }
-    opened = nodes["MJA_BP_OPEN_BATTLE_PASS"]
+    opened = nodes["战令奖励-打开-战斗-战令"]
     assert opened["recognition"]["param"] == {
-        "all_of": ["battle_pass.home.page", "battle_pass.open"],
+        "all_of": ["战令奖励-战斗-战令-主页-页面", "战令奖励-战斗-战令-打开"],
         "box_index": 1,
     }
     assert opened["max_hit"] == 1
@@ -103,52 +103,52 @@ def test_r20_home_ocr_proves_direct_top_level_battle_pass_entry() -> None:
 
 def test_r20_task_rewards_require_same_frame_page_and_exact_claim() -> None:
     nodes = load_task_nodes(BATTLE_PASS)
-    page = nodes["MJA_BP_TASKS_PAGE_PROBE"]
-    assert nodes["battle_pass.tasks"]["recognition"]["param"] == {
+    page = nodes["战令奖励-任务-页面-探测"]
+    assert nodes["战令奖励-战斗-战令-任务"]["recognition"]["param"] == {
         "all_of": [
-            "battle_pass.page",
-            "battle_pass.tasks_tab",
-            "battle_pass.tasks_content",
+            "战令奖励-战斗-战令-页面",
+            "战令奖励-战斗-战令-任务-标签",
+            "战令奖励-战斗-战令-任务-内容",
         ],
         "box_index": 0,
     }
-    assert nodes["battle_pass.tasks_content"]["expected"] == [
+    assert nodes["战令奖励-战斗-战令-任务-内容"]["expected"] == [
         "^每周任务$",
         "^当期任务$",
         "^追赶任务$",
     ]
     assert page["next"] == [
-        "MJA_BP_TASK_CLAIM_LOOP",
-        "MJA_BP_TASK_INITIAL_NO_CLAIM_PROBE",
+        "战令奖励-任务-领取-循环",
+        "战令奖励-任务-初始-无-领取-探测",
     ]
 
     for name in (
-        "MJA_BP_TASK_CLAIM_LOOP",
-        "MJA_BP_TASK_CLAIM_LOOP_AFTER_CLAIM",
+        "战令奖励-任务-领取-循环",
+        "战令奖励-任务-领取-循环-之后-领取",
     ):
         claim = nodes[name]
         assert claim["recognition"]["param"] == {
-            "all_of": ["battle_pass.tasks", "battle_pass.task_reward_claim"],
+            "all_of": ["战令奖励-战斗-战令-任务", "战令奖励-战斗-战令-任务-奖励-领取"],
             "box_index": 1,
         }
         assert claim["custom_action_param"]["evidence"] == {
             "page_index": 0,
             "target_index": 1,
-            "page_name": "battle_pass.tasks",
-            "target_name": "battle_pass.task_reward_claim",
+            "page_name": "战令奖励-战斗-战令-任务",
+            "target_name": "战令奖励-战斗-战令-任务-奖励-领取",
         }
         assert claim["max_hit"] == 50
         assert claim["retry_times"] == 0
         assert claim["next"] == [
-            "MJA_BP_TASK_REWARD_PROBE",
-            "MJA_BP_TASK_ITEM_PROBE",
-            "MJA_BP_TASK_REWARD_VERIFY",
+            "战令奖励-任务-奖励-探测",
+            "战令奖励-任务-物品-探测",
+            "战令奖励-任务-奖励-校验",
         ]
 
-    target = nodes["battle_pass.task_reward_claim"]
+    target = nodes["战令奖励-战斗-战令-任务-奖励-领取"]
     assert target["expected"] == "^领取$"
     assert target["roi"] == [700, 190, 220, 180]
-    no_claim = nodes["battle_pass.task_no_claimable"]
+    no_claim = nodes["战令奖励-战斗-战令-任务-无-可领取"]
     assert no_claim["expected"] == [
         "^已领取$",
         "^暂无可领取$",
@@ -156,7 +156,7 @@ def test_r20_task_rewards_require_same_frame_page_and_exact_claim() -> None:
         "^前往$",
     ]
     assert "已完成" not in no_claim["expected"]
-    assert nodes["battle_pass.reward_popup"]["expected"] == [
+    assert nodes["战令奖励-战斗-战令-奖励-弹窗"]["expected"] == [
         "^恭喜获得$",
         "^恭喜$",
         "^喜获得$",
@@ -170,17 +170,17 @@ def test_r20_task_rewards_require_same_frame_page_and_exact_claim() -> None:
 def test_r20_basic_rewards_prioritize_tight_red_dot_before_claimed_state() -> None:
     nodes = load_task_nodes(BATTLE_PASS)
 
-    assert nodes["MJA_BP_INITIAL_REWARDS_PAGE_PROBE"]["next"] == [
-        "MJA_BP_BASIC_CLAIM_LOOP",
-        "MJA_BP_INITIAL_BASIC_STATUS_PROBE",
-        "MJA_BP_INITIAL_BASIC_CHECK_PROBE",
+    assert nodes["战令奖励-初始-奖励-页面-探测"]["next"] == [
+        "战令奖励-基础-领取-循环",
+        "战令奖励-初始-基础-状态-探测",
+        "战令奖励-初始-基础-检查-探测",
     ]
-    assert nodes["MJA_BP_MUTATED_REWARDS_PAGE_PROBE"]["next"] == [
-        "MJA_BP_MUTATED_BASIC_CLAIM_LOOP",
-        "MJA_BP_MUTATED_BASIC_STATUS_PROBE",
-        "MJA_BP_MUTATED_BASIC_CHECK_PROBE",
+    assert nodes["战令奖励-变更后-奖励-页面-探测"]["next"] == [
+        "战令奖励-变更后-基础-领取-循环",
+        "战令奖励-变更后-基础-状态-探测",
+        "战令奖励-变更后-基础-检查-探测",
     ]
-    assert nodes["battle_pass.basic_red_dot_reward"] == {
+    assert nodes["战令奖励-战斗-战令-基础-红色-红点-奖励"] == {
         "recognition": "ColorMatch",
         "method": 4,
         "lower": [180, 0, 0],
@@ -192,8 +192,8 @@ def test_r20_basic_rewards_prioritize_tight_red_dot_before_claimed_state() -> No
         "index": 0,
         "action": "DoNothing",
     }
-    assert nodes["battle_pass.basic_all_claimed"]["expected"] == "^已领取$"
-    assert nodes["battle_pass.basic_claimed_check"] == {
+    assert nodes["战令奖励-战斗-战令-基础-全部已领取"]["expected"] == "^已领取$"
+    assert nodes["战令奖励-战斗-战令-基础-已领取-检查"] == {
         "recognition": "TemplateMatch",
         "template": "daily/BATTLE_PASS_REWARD_DAILY/basic_claimed.png",
         "roi": [250, 320, 300, 150],
@@ -201,67 +201,67 @@ def test_r20_basic_rewards_prioritize_tight_red_dot_before_claimed_state() -> No
         "action": "DoNothing",
     }
 
-    for name in ("MJA_BP_BASIC_CLAIM_LOOP", "MJA_BP_MUTATED_BASIC_CLAIM_LOOP"):
+    for name in ("战令奖励-基础-领取-循环", "战令奖励-变更后-基础-领取-循环"):
         claim = nodes[name]
         assert claim["recognition"]["param"] == {
-            "all_of": ["battle_pass.rewards", "battle_pass.basic_red_dot_reward"],
+            "all_of": ["战令奖励-战斗-战令-奖励", "战令奖励-战斗-战令-基础-红色-红点-奖励"],
             "box_index": 1,
         }
         assert claim["custom_action_param"]["evidence"] == {
             "page_index": 0,
             "target_index": 1,
-            "page_name": "battle_pass.rewards",
-            "target_name": "battle_pass.basic_red_dot_reward",
+            "page_name": "战令奖励-战斗-战令-奖励",
+            "target_name": "战令奖励-战斗-战令-基础-红色-红点-奖励",
         }
         assert claim["max_hit"] == 50
         assert claim["retry_times"] == 0
         assert claim["next"] == [
-            "MJA_BP_BASIC_REWARD_PROBE",
-            "MJA_BP_BASIC_ITEM_PROBE",
-            "MJA_BP_BASIC_REWARD_VERIFY",
+            "战令奖励-基础-奖励-探测",
+            "战令奖励-基础-物品-探测",
+            "战令奖励-基础-奖励-校验",
         ]
 
-    assert nodes["MJA_BP_BASIC_REWARD_PROBE"]["timeout"] == 12000
-    assert nodes["MJA_BP_BASIC_ITEM_PROBE"]["timeout"] == 12000
-    assert nodes["MJA_BP_BASIC_REWARD_PROBE"]["on_error"] == [
-        "MJA_BP_BASIC_REWARD_WAIT"
+    assert nodes["战令奖励-基础-奖励-探测"]["timeout"] == 12000
+    assert nodes["战令奖励-基础-物品-探测"]["timeout"] == 12000
+    assert nodes["战令奖励-基础-奖励-探测"]["on_error"] == [
+        "战令奖励-基础-奖励-等待"
     ]
-    assert nodes["MJA_BP_BASIC_REWARD_WAIT"] == {
+    assert nodes["战令奖励-基础-奖励-等待"] == {
         "recognition": "DirectHit",
         "action": "DoNothing",
         "post_delay": 1000,
         "max_hit": 12,
-        "next": ["MJA_BP_BASIC_REWARD_PROBE"],
-        "on_error": ["MJA_BP_RECORD_FAILURE"],
+        "next": ["战令奖励-基础-奖励-探测"],
+        "on_error": ["战令奖励-记录-失败"],
     }
 
 
 def test_r20_task_and_basic_mutations_have_fresh_postconditions() -> None:
     nodes = load_task_nodes(BATTLE_PASS)
 
-    assert nodes["MJA_BP_TASK_INITIAL_NO_CLAIM_PROBE"]["next"] == [
-        "MJA_BP_OPEN_REWARDS_INITIAL"
+    assert nodes["战令奖励-任务-初始-无-领取-探测"]["next"] == [
+        "战令奖励-打开-奖励-初始"
     ]
-    assert nodes["MJA_BP_TASK_AFTER_CLAIM_NO_CLAIM_PROBE"]["next"] == [
-        "MJA_BP_OPEN_REWARDS_MUTATED"
+    assert nodes["战令奖励-任务-之后-领取-无-领取-探测"]["next"] == [
+        "战令奖励-打开-奖励-变更后"
     ]
-    assert nodes["MJA_BP_INITIAL_BASIC_STATUS_PROBE"]["next"] == [
-        "MJA_BP_CLOSE_ALREADY_COMPLETE"
+    assert nodes["战令奖励-初始-基础-状态-探测"]["next"] == [
+        "战令奖励-关闭-已完成"
     ]
-    assert nodes["MJA_BP_MUTATED_BASIC_STATUS_PROBE"]["next"] == [
-        "MJA_BP_CLOSE_SUCCESS"
+    assert nodes["战令奖励-变更后-基础-状态-探测"]["next"] == [
+        "战令奖励-关闭-成功"
     ]
-    assert nodes["MJA_BP_INITIAL_BASIC_CHECK_PROBE"]["next"] == [
-        "MJA_BP_CLOSE_ALREADY_COMPLETE"
+    assert nodes["战令奖励-初始-基础-检查-探测"]["next"] == [
+        "战令奖励-关闭-已完成"
     ]
-    assert nodes["MJA_BP_MUTATED_BASIC_CHECK_PROBE"]["next"] == [
-        "MJA_BP_CLOSE_SUCCESS"
+    assert nodes["战令奖励-变更后-基础-检查-探测"]["next"] == [
+        "战令奖励-关闭-成功"
     ]
-    assert nodes["MJA_BP_BASIC_REWARD_VERIFY"]["next"] == [
-        "MJA_BP_MUTATED_REWARDS_PAGE_PROBE"
+    assert nodes["战令奖励-基础-奖励-校验"]["next"] == [
+        "战令奖励-变更后-奖励-页面-探测"
     ]
-    assert nodes["battle_pass.item_popup"]["recognition"]["param"] == {
-        "all_of": ["battle_pass.item_popup_type", "battle_pass.item_popup_owned"],
+    assert nodes["战令奖励-战斗-战令-物品-弹窗"]["recognition"]["param"] == {
+        "all_of": ["战令奖励-战斗-战令-物品-弹窗-类型", "战令奖励-战斗-战令-物品-弹窗-拥有"],
         "box_index": 0,
     }
 
@@ -269,7 +269,7 @@ def test_r20_task_and_basic_mutations_have_fresh_postconditions() -> None:
 def test_r20_result_is_recorded_only_after_safe_exit_reaches_home() -> None:
     nodes = load_task_nodes(BATTLE_PASS)
 
-    assert nodes["battle_pass.close"] == {
+    assert nodes["战令奖励-战斗-战令-关闭"] == {
         "recognition": "TemplateMatch",
         "template": "daily/BUY_TEA_DAILY/shop_close.png",
         "roi": [1170, 0, 110, 110],
@@ -279,32 +279,32 @@ def test_r20_result_is_recorded_only_after_safe_exit_reaches_home() -> None:
 
     routes = (
         (
-            "MJA_BP_CLOSE_ALREADY_COMPLETE",
-            "MJA_BP_HOME_AFTER_ALREADY_COMPLETE",
-            "MJA_BP_ALL_CLAIMED",
+            "战令奖励-关闭-已完成",
+            "战令奖励-主页已完成后",
+            "战令奖励-全部已领取",
             "already_complete",
         ),
         (
-            "MJA_BP_CLOSE_SUCCESS",
-            "MJA_BP_HOME_AFTER_SUCCESS",
-            "MJA_BP_ALL_CLAIMED_SUCCESS",
+            "战令奖励-关闭-成功",
+            "战令奖励-主页成功后",
+            "战令奖励-全部已领取-成功",
             "success",
         ),
     )
     for close_name, home_name, outcome_name, status in routes:
         close = nodes[close_name]
         assert close["recognition"]["param"] == {
-            "all_of": ["battle_pass.rewards", "battle_pass.close"],
+            "all_of": ["战令奖励-战斗-战令-奖励", "战令奖励-战斗-战令-关闭"],
             "box_index": 1,
         }
         assert close["max_hit"] == 1
         assert close["retry_times"] == 0
         assert close["next"] == [home_name]
-        assert close["on_error"] == ["MJA_BP_HOME_BOUNDARY_FAILURE"]
+        assert close["on_error"] == ["战令奖励-主页边界-失败"]
 
         home = nodes[home_name]
         assert home["recognition"]["param"] == {
-            "all_of": ["battle_pass.home.page", "battle_pass.open"],
+            "all_of": ["战令奖励-战斗-战令-主页-页面", "战令奖励-战斗-战令-打开"],
             "box_index": 0,
         }
         assert home["next"] == [outcome_name]
@@ -319,9 +319,9 @@ def test_r20_result_is_recorded_only_after_safe_exit_reaches_home() -> None:
 def test_r20_unknown_states_record_fresh_failure_then_native_fail() -> None:
     nodes = load_task_nodes(BATTLE_PASS)
     for name in (
-        "MJA_BP_TASKS_AMBIGUOUS",
-        "MJA_BP_REWARDS_AMBIGUOUS",
-        "MJA_BP_HOME_BOUNDARY_FAILURE",
+        "战令奖励-任务-歧义",
+        "战令奖励-奖励-歧义",
+        "战令奖励-主页边界-失败",
         FAILURE,
     ):
         node = nodes[name]
@@ -331,7 +331,7 @@ def test_r20_unknown_states_record_fresh_failure_then_native_fail() -> None:
         assert params["error_code"]
         assert params["native_fail_after_record"] is True
         assert node["Abort"] is True
-        assert node["next"] == ["MJA_COMMON_ABORT"]
+        assert node["next"] == ["公共-通用中止"]
         assert "on_error" not in node
 
 

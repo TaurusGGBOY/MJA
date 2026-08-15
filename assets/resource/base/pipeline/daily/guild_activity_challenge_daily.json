@@ -1,5 +1,5 @@
 {
-  "MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_START": {
+  "帮派活动挑战-任务入口": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "BeginTask",
@@ -8,25 +8,25 @@
     },
     "timeout": 8000,
     "next": [
-      "MJA_GUILD_START_SAFETY_PROBE",
-      "MJA_GUILD_START_PAID_PROBE",
-      "MJA_GUILD_RESUME_RESULT_PROBE",
-      "MJA_GUILD_RECOVERY_DUNGEON_PAGE_PROBE",
-      "MJA_GUILD_RECOVERY_JIANLIN_PAGE_PROBE",
-      "MJA_GUILD_RECOVERY_DAILY_PAGE_PROBE",
-      "MJA_START_SHADOW_PAGE_BACK",
-      "MJA_GUILD_ACTIVITY_PAGE_PROBE",
-      "MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_PAGE_PROBE",
-      "MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_PANEL_PROBE",
-      "MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_HOME_PROBE"
+      "帮派活动挑战-帮派-开始-安全-探测",
+      "帮派活动挑战-帮派-开始-付费-探测",
+      "帮派活动挑战-帮派-恢复继续-结果-探测",
+      "帮派活动挑战-帮派-恢复-副本-页面-探测",
+      "帮派活动挑战-帮派-恢复-剑林-页面-探测",
+      "帮派活动挑战-帮派-恢复-日常-页面-探测",
+      "启动-影-页面-返回",
+      "帮派活动挑战-页面-探测",
+      "帮派活动挑战-页面-探测-2",
+      "帮派活动挑战-面板-探测",
+      "帮派活动挑战-主页-探测"
     ],
     "on_error": [
-      "MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_GAME_START_RECOVERY",
-      "MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_RECORD_FAILURE"
+      "帮派活动挑战-游戏启动恢复",
+      "帮派活动挑战-记录-失败"
     ],
     "retry_times": 0
   },
-  "MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_GAME_START_RECOVERY": {
+  "帮派活动挑战-游戏启动恢复": {
     "recognition": "DirectHit",
     "max_hit": 1,
     "timeout": 30000,
@@ -34,22 +34,22 @@
     "package": "com.hanjiasongshu.dr22/.MainActivity",
     "post_delay": 5000,
     "next": [
-      "MJA_GUILD_START_SAFETY_PROBE",
-      "MJA_GUILD_START_PAID_PROBE",
-      "MJA_GUILD_RESUME_RESULT_PROBE",
-      "MJA_GUILD_RECOVERY_DUNGEON_PAGE_PROBE",
-      "MJA_GUILD_RECOVERY_JIANLIN_PAGE_PROBE",
-      "MJA_GUILD_RECOVERY_DAILY_PAGE_PROBE",
-      "MJA_START_SHADOW_PAGE_BACK",
-      "MJA_GUILD_ACTIVITY_PAGE_PROBE",
-      "MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_PAGE_PROBE",
-      "MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_PANEL_PROBE",
-      "MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_HOME_PROBE"
+      "帮派活动挑战-帮派-开始-安全-探测",
+      "帮派活动挑战-帮派-开始-付费-探测",
+      "帮派活动挑战-帮派-恢复继续-结果-探测",
+      "帮派活动挑战-帮派-恢复-副本-页面-探测",
+      "帮派活动挑战-帮派-恢复-剑林-页面-探测",
+      "帮派活动挑战-帮派-恢复-日常-页面-探测",
+      "启动-影-页面-返回",
+      "帮派活动挑战-页面-探测",
+      "帮派活动挑战-页面-探测-2",
+      "帮派活动挑战-面板-探测",
+      "帮派活动挑战-主页-探测"
     ],
-    "on_error": ["MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_RECORD_FAILURE"],
+    "on_error": ["帮派活动挑战-记录-失败"],
     "retry_times": 0
   },
-  "MJA_GUILD_RECOVERY_ANNOUNCEMENT": {
+  "帮派活动挑战-帮派-恢复-公告": {
     "recognition": "OCR",
     "expected": ["公告", "公告说明", "版本更新"],
     "roi": [0, 0, 1280, 720],
@@ -57,11 +57,11 @@
     "action": "Click",
     "target": [1048, 125, 60, 50],
     "post_delay": 1000,
-    "next": ["MJA_GUILD_RECOVERY_STATE_PROBE"],
+    "next": ["帮派活动挑战-帮派-恢复-状态-探测"],
     "on_error": [],
     "retry_times": 0
   },
-  "MJA_GUILD_RECOVERY_TITLE": {
+  "帮派活动挑战-帮派-恢复-标题": {
     "recognition": "OCR",
     "expected": ["点击开始游戏", "点击开始游戏！", "点击开始游戏!", "进入游戏"],
     "roi": [350, 540, 580, 170],
@@ -69,10 +69,10 @@
     "action": "Click",
     "max_hit": 1,
     "post_delay": 500,
-    "next": ["MJA_GUILD_RECOVERY_STATE_PROBE"],
+    "next": ["帮派活动挑战-帮派-恢复-状态-探测"],
     "on_error": []
   },
-  "MJA_GUILD_RECOVERY_TITLE_TEMPLATE": {
+  "帮派活动挑战-帮派-恢复-标题-模板": {
     "recognition": "TemplateMatch",
     "template": "home/start_game_button.png",
     "roi": [560, 638, 180, 45],
@@ -81,30 +81,30 @@
     "action": "Click",
     "max_hit": 1,
     "post_delay": 500,
-    "next": ["MJA_GUILD_RECOVERY_STATE_PROBE"],
+    "next": ["帮派活动挑战-帮派-恢复-状态-探测"],
     "on_error": []
   },
-  "MJA_GUILD_RECOVERY_STATE_PROBE": {
+  "帮派活动挑战-帮派-恢复-状态-探测": {
     "recognition": "DirectHit",
     "action": "DoNothing",
     "timeout": 30000,
     "next": [
-      "MJA_GUILD_START_SAFETY_PROBE",
-      "MJA_GUILD_START_PAID_PROBE",
-      "MJA_GUILD_RESUME_RESULT_PROBE",
-      "MJA_GUILD_RECOVERY_DUNGEON_PAGE_PROBE",
-      "MJA_GUILD_RECOVERY_JIANLIN_PAGE_PROBE",
-      "MJA_GUILD_RECOVERY_DAILY_PAGE_PROBE",
-      "MJA_START_SHADOW_PAGE_BACK",
-      "MJA_GUILD_ACTIVITY_PAGE_PROBE",
-      "MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_PAGE_PROBE",
-      "MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_PANEL_PROBE",
-      "MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_HOME_PROBE"
+      "帮派活动挑战-帮派-开始-安全-探测",
+      "帮派活动挑战-帮派-开始-付费-探测",
+      "帮派活动挑战-帮派-恢复继续-结果-探测",
+      "帮派活动挑战-帮派-恢复-副本-页面-探测",
+      "帮派活动挑战-帮派-恢复-剑林-页面-探测",
+      "帮派活动挑战-帮派-恢复-日常-页面-探测",
+      "启动-影-页面-返回",
+      "帮派活动挑战-页面-探测",
+      "帮派活动挑战-页面-探测-2",
+      "帮派活动挑战-面板-探测",
+      "帮派活动挑战-主页-探测"
     ],
-    "on_error": ["MJA_GUILD_GAME_START_RECOVERY_RELAUNCH"],
+    "on_error": ["帮派活动挑战-帮派-游戏启动恢复-重新启动"],
     "retry_times": 0
   },
-  "MJA_GUILD_GAME_START_RECOVERY_RELAUNCH": {
+  "帮派活动挑战-帮派-游戏启动恢复-重新启动": {
     "recognition": "DirectHit",
     "max_hit": 2,
     "timeout": 120000,
@@ -113,64 +113,64 @@
     "post_delay": 30000,
     "retry_times": 0,
     "next": [
-      "MJA_GUILD_RECOVERY_ANNOUNCEMENT",
-      "MJA_GUILD_RECOVERY_TITLE",
-      "MJA_GUILD_RECOVERY_TITLE_TEMPLATE",
-      "MJA_GUILD_RECOVERY_STATE_PROBE"
+      "帮派活动挑战-帮派-恢复-公告",
+      "帮派活动挑战-帮派-恢复-标题",
+      "帮派活动挑战-帮派-恢复-标题-模板",
+      "帮派活动挑战-帮派-恢复-状态-探测"
     ],
-    "on_error": ["MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_RECORD_FAILURE"]
+    "on_error": ["帮派活动挑战-记录-失败"]
   },
-  "MJA_GUILD_START_SAFETY_PROBE": {
+  "帮派活动挑战-帮派-开始-安全-探测": {
     "recognition": "OCR",
     "expected": ["验证码", "安全验证"],
     "roi": [0, 0, 1280, 720],
     "timeout": 2500,
     "action": "DoNothing",
-    "next": ["MJA_GUILD_DANGER_STOP"],
-    "on_error": ["MJA_GUILD_START_PAID_PROBE"]
+    "next": ["帮派活动挑战-帮派-危险-停止"],
+    "on_error": ["帮派活动挑战-帮派-开始-付费-探测"]
   },
-  "MJA_GUILD_START_PAID_PROBE": {
+  "帮派活动挑战-帮派-开始-付费-探测": {
     "recognition": "OCR",
     "expected": ["购买元宝", "充值", "支付", "Apple Pay"],
     "roi": [280, 160, 720, 420],
     "timeout": 2500,
     "action": "DoNothing",
-    "next": ["MJA_GUILD_DANGER_STOP"],
-    "on_error": ["MJA_GUILD_RESUME_RESULT_PROBE"]
+    "next": ["帮派活动挑战-帮派-危险-停止"],
+    "on_error": ["帮派活动挑战-帮派-恢复继续-结果-探测"]
   },
-  "MJA_GUILD_RESUME_RESULT_PROBE": {
+  "帮派活动挑战-帮派-恢复继续-结果-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["guild.result.page", "guild.result.known"],
+        "all_of": ["帮派活动挑战-帮派-结果-页面", "帮派活动挑战-帮派-结果-已知"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_GUILD_RESULT_VICTORY_PROBE",
-      "MJA_GUILD_RESULT_DEFEAT_PROBE"
+      "帮派活动挑战-帮派-结果-胜利-探测",
+      "帮派活动挑战-帮派-结果-失败-探测"
     ],
-    "on_error": ["MJA_GUILD_ACTIVITY_PAGE_PROBE"]
+    "on_error": ["帮派活动挑战-页面-探测"]
   },
-  "MJA_GUILD_RECOVERY_DUNGEON_PAGE_PROBE": {
+  "帮派活动挑战-帮派-恢复-副本-页面-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["dungeon.page", "dungeon.close"],
+        "all_of": ["副本扫荡-副本-页面", "副本扫荡-副本-关闭"],
         "box_index": 1
       }
     },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_GUILD_CLOSE_DUNGEON_FOR_RECOVERY"],
-    "on_error": ["MJA_GUILD_ACTIVITY_PAGE_PROBE"]
+    "next": ["帮派活动挑战-帮派-关闭-副本-用于-恢复"],
+    "on_error": ["帮派活动挑战-页面-探测"]
   },
-  "MJA_GUILD_CLOSE_DUNGEON_FOR_RECOVERY": {
+  "帮派活动挑战-帮派-关闭-副本-用于-恢复": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["dungeon.page", "dungeon.close"],
+        "all_of": ["副本扫荡-副本-页面", "副本扫荡-副本-关闭"],
         "box_index": 1
       }
     },
@@ -184,20 +184,20 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "dungeon.page",
-        "target_name": "dungeon.close"
+        "page_name": "副本扫荡-副本-页面",
+        "target_name": "副本扫荡-副本-关闭"
       }
     },
     "post_delay": 1000,
-    "next": ["MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_HOME_PROBE"],
-    "on_error": ["MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_RECORD_FAILURE"],
+    "next": ["帮派活动挑战-主页-探测"],
+    "on_error": ["帮派活动挑战-记录-失败"],
     "retry_times": 0
   },
-  "MJA_GUILD_RECOVERY_JIANLIN_PAGE_PROBE": {
+  "帮派活动挑战-帮派-恢复-剑林-页面-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["jianlin.page", "dungeon.close"],
+        "all_of": ["剑林凝结体体力-剑林-页面", "副本扫荡-副本-关闭"],
         "box_index": 1
       }
     },
@@ -211,20 +211,20 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "jianlin.page",
-        "target_name": "dungeon.close"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "副本扫荡-副本-关闭"
       }
     },
     "post_delay": 1000,
-    "next": ["MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_HOME_PROBE"],
-    "on_error": ["MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_RECORD_FAILURE"],
+    "next": ["帮派活动挑战-主页-探测"],
+    "on_error": ["帮派活动挑战-记录-失败"],
     "retry_times": 0
   },
-  "MJA_GUILD_RECOVERY_DAILY_PAGE_PROBE": {
+  "帮派活动挑战-帮派-恢复-日常-页面-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["jianlin.daily.page", "jianlin.daily.close"],
+        "all_of": ["剑林凝结体体力-剑林-日常-页面", "剑林凝结体体力-剑林-日常-关闭"],
         "box_index": 1
       }
     },
@@ -238,76 +238,76 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "jianlin.daily.page",
-        "target_name": "jianlin.daily.close"
+        "page_name": "剑林凝结体体力-剑林-日常-页面",
+        "target_name": "剑林凝结体体力-剑林-日常-关闭"
       }
     },
     "post_delay": 1000,
-    "next": ["MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_PANEL_PROBE"],
-    "on_error": ["MJA_GUILD_ACTIVITY_PAGE_PROBE"],
+    "next": ["帮派活动挑战-面板-探测"],
+    "on_error": ["帮派活动挑战-页面-探测"],
     "retry_times": 0
   },
-  "MJA_GUILD_ACTIVITY_PAGE_PROBE": {
+  "帮派活动挑战-页面-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["guild.activity.page", "guild.activity.context"],
+        "all_of": ["帮派活动挑战-帮派-活动-页面", "帮派活动挑战-帮派-活动-上下文"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_GUILD_ACTIVITY_PAID_PROBE",
-      "MJA_GUILD_ACTIVITY_VERIFICATION_PROBE",
-      "MJA_GUILD_INITIAL_ZERO_PROBE",
-      "MJA_GUILD_CHALLENGE_LOOP"
+      "帮派活动挑战-付费-探测",
+      "帮派活动挑战-校验-探测",
+      "帮派活动挑战-帮派-初始-零-探测",
+      "帮派活动挑战-帮派-挑战-循环"
     ],
-    "on_error": ["MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_RECORD_FAILURE"]
+    "on_error": ["帮派活动挑战-记录-失败"]
   },
-  "MJA_GUILD_ACTIVITY_PAID_PROBE": {
+  "帮派活动挑战-付费-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["guild.activity.page", "guild.danger.paid"],
+        "all_of": ["帮派活动挑战-帮派-活动-页面", "帮派活动挑战-帮派-危险-付费"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_GUILD_DANGER_STOP"],
-    "on_error": ["MJA_GUILD_ACTIVITY_VERIFICATION_PROBE"]
+    "next": ["帮派活动挑战-帮派-危险-停止"],
+    "on_error": ["帮派活动挑战-校验-探测"]
   },
-  "MJA_GUILD_ACTIVITY_VERIFICATION_PROBE": {
+  "帮派活动挑战-校验-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["guild.activity.page", "guild.safety.verification"],
+        "all_of": ["帮派活动挑战-帮派-活动-页面", "帮派活动挑战-帮派-安全-校验"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_GUILD_DANGER_STOP"],
-    "on_error": ["MJA_GUILD_INITIAL_ZERO_PROBE"]
+    "next": ["帮派活动挑战-帮派-危险-停止"],
+    "on_error": ["帮派活动挑战-帮派-初始-零-探测"]
   },
-  "MJA_GUILD_INITIAL_ZERO_PROBE": {
+  "帮派活动挑战-帮派-初始-零-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "guild.activity.page",
-          "guild.activity.context",
-          "guild.remaining.exhausted"
+          "帮派活动挑战-帮派-活动-页面",
+          "帮派活动挑战-帮派-活动-上下文",
+          "帮派活动挑战-帮派-剩余-耗尽"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_GUILD_ALREADY_COMPLETE_EXIT_ACTIVITY",
-      "MJA_GUILD_EXIT_RECORD_FAILURE"
+      "帮派活动挑战-帮派-已完成-退出-活动",
+      "帮派活动挑战-帮派-退出-记录-失败"
     ],
-    "on_error": ["MJA_GUILD_CHALLENGE_LOOP"]
+    "on_error": ["帮派活动挑战-帮派-挑战-循环"]
   },
-  "MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_ALREADY_COMPLETE": {
+  "帮派活动挑战-已完成": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -316,16 +316,16 @@
       "status": "already_complete",
       "postcondition": "guild.home_restored"
     },
-    "next": ["MJA_COMMON_STOP"]
+    "next": ["公共-通用停止"]
   },
-  "MJA_GUILD_ALREADY_COMPLETE_EXIT_ACTIVITY": {
+  "帮派活动挑战-帮派-已完成-退出-活动": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "guild.activity.page",
-          "guild.activity.context",
-          "guild.page.close"
+          "帮派活动挑战-帮派-活动-页面",
+          "帮派活动挑战-帮派-活动-上下文",
+          "帮派活动挑战-帮派-页面-关闭"
         ],
         "box_index": 2
       }
@@ -341,20 +341,20 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "guild.activity.page",
-        "target_name": "guild.page.close"
+        "page_name": "帮派活动挑战-帮派-活动-页面",
+        "target_name": "帮派活动挑战-帮派-页面-关闭"
       }
     },
     "post_delay": 1200,
-    "next": ["MJA_GUILD_ALREADY_COMPLETE_EXIT_GUILD_HOME"],
-    "on_error": ["MJA_GUILD_EXIT_RECORD_FAILURE"],
+    "next": ["帮派活动挑战-帮派-已完成-退出-帮派-主页"],
+    "on_error": ["帮派活动挑战-帮派-退出-记录-失败"],
     "retry_times": 0
   },
-  "MJA_GUILD_ALREADY_COMPLETE_EXIT_GUILD_HOME": {
+  "帮派活动挑战-帮派-已完成-退出-帮派-主页": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["guild.home.page", "guild.page.close"],
+        "all_of": ["帮派活动挑战-帮派-主页-页面", "帮派活动挑战-帮派-页面-关闭"],
         "box_index": 1
       }
     },
@@ -369,29 +369,29 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "guild.home.page",
-        "target_name": "guild.page.close"
+        "page_name": "帮派活动挑战-帮派-主页-页面",
+        "target_name": "帮派活动挑战-帮派-页面-关闭"
       }
     },
     "post_delay": 1200,
-    "next": ["MJA_GUILD_ALREADY_COMPLETE_EXIT_FUNCTION_PANEL_PROBE"],
-    "on_error": ["MJA_GUILD_EXIT_RECORD_FAILURE"],
+    "next": ["帮派活动挑战-帮派-已完成-退出-功能-面板-探测"],
+    "on_error": ["帮派活动挑战-帮派-退出-记录-失败"],
     "retry_times": 0
   },
-  "MJA_GUILD_ALREADY_COMPLETE_EXIT_FUNCTION_PANEL_PROBE": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_SIDE_PANEL_OPEN"], "box_index": 0}},
+  "帮派活动挑战-帮派-已完成-退出-功能-面板-探测": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏侧边面板-打开"], "box_index": 0}},
     "timeout": 8000,
     "max_hit": 1,
     "action": "DoNothing",
-    "next": ["MJA_GUILD_ALREADY_COMPLETE_EXIT_FUNCTION_PANEL"],
-    "on_error": ["MJA_GUILD_EXIT_RECORD_FAILURE"],
+    "next": ["帮派活动挑战-帮派-已完成-退出-功能-面板"],
+    "on_error": ["帮派活动挑战-帮派-退出-记录-失败"],
     "retry_times": 0
   },
-  "MJA_GUILD_ALREADY_COMPLETE_EXIT_FUNCTION_PANEL": {
+  "帮派活动挑战-帮派-已完成-退出-功能-面板": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["guild.function.panel.page", "guild.function.panel.close"],
+        "all_of": ["帮派活动挑战-帮派-功能-面板-页面", "帮派活动挑战-帮派-功能-面板-关闭"],
         "box_index": 1
       }
     },
@@ -407,34 +407,34 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "guild.function.panel.page",
-        "target_name": "guild.function.panel.close"
+        "page_name": "帮派活动挑战-帮派-功能-面板-页面",
+        "target_name": "帮派活动挑战-帮派-功能-面板-关闭"
       }
     },
     "post_delay": 1200,
-    "next": ["MJA_GUILD_ALREADY_COMPLETE_EXIT_HOME_PROBE"],
-    "on_error": ["MJA_GUILD_EXIT_RECORD_FAILURE"],
+    "next": ["帮派活动挑战-帮派-已完成-退出-主页-探测"],
+    "on_error": ["帮派活动挑战-帮派-退出-记录-失败"],
     "retry_times": 0
   },
-  "MJA_GUILD_ALREADY_COMPLETE_EXIT_HOME_PROBE": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_HOME_PAGE"], "box_index": 0}},
+  "帮派活动挑战-帮派-已完成-退出-主页-探测": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}},
     "timeout": 8000,
     "max_hit": 1,
     "action": "DoNothing",
-    "next": ["MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_ALREADY_COMPLETE"],
-    "on_error": ["MJA_GUILD_EXIT_RECORD_FAILURE"]
+    "next": ["帮派活动挑战-已完成"],
+    "on_error": ["帮派活动挑战-帮派-退出-记录-失败"]
   },
-  "MJA_GUILD_CHALLENGE_LOOP": {
+  "帮派活动挑战-帮派-挑战-循环": {
     "max_hit": 2,
     "retry_times": 0,
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "guild.activity.page",
-          "guild.activity.context",
-          "guild.remaining.available",
-          "guild.challenge.target"
+          "帮派活动挑战-帮派-活动-页面",
+          "帮派活动挑战-帮派-活动-上下文",
+          "帮派活动挑战-帮派-剩余-可用",
+          "帮派活动挑战-帮派-挑战-目标"
         ],
         "box_index": 3
       }
@@ -448,53 +448,53 @@
       "evidence": {
         "page_index": 0,
         "target_index": 3,
-        "page_name": "guild.activity.page",
-        "target_name": "guild.challenge.target"
+        "page_name": "帮派活动挑战-帮派-活动-页面",
+        "target_name": "帮派活动挑战-帮派-挑战-目标"
       }
     },
     "next": [
-      "MJA_GUILD_CHALLENGE_TRANSITION_DANGER_PROBE",
-      "MJA_GUILD_CHALLENGE_TRANSITION_VERIFICATION_PROBE",
-      "MJA_GUILD_CHALLENGE_TRANSITION_PROBE",
-      "MJA_GUILD_CHALLENGE_PREPARE_PROBE"
+      "帮派活动挑战-帮派-挑战-过渡-危险-探测",
+      "帮派活动挑战-帮派-挑战-过渡-校验-探测",
+      "帮派活动挑战-帮派-挑战-过渡-探测",
+      "帮派活动挑战-帮派-挑战-准备-探测"
     ],
-    "on_error": ["MJA_GUILD_CHALLENGE_TRANSITION_UNKNOWN"]
+    "on_error": ["帮派活动挑战-帮派-挑战-过渡-未知"]
   },
-  "MJA_GUILD_CHALLENGE_TRANSITION_DANGER_PROBE": {
+  "帮派活动挑战-帮派-挑战-过渡-危险-探测": {
     "recognition": "OCR",
     "expected": ["购买元宝", "充值", "支付", "Apple Pay"],
     "roi": [280, 160, 720, 420],
     "timeout": 2500,
     "action": "DoNothing",
-    "next": ["MJA_GUILD_DANGER_STOP"],
-    "on_error": ["MJA_GUILD_CHALLENGE_TRANSITION_VERIFICATION_PROBE"]
+    "next": ["帮派活动挑战-帮派-危险-停止"],
+    "on_error": ["帮派活动挑战-帮派-挑战-过渡-校验-探测"]
   },
-  "MJA_GUILD_CHALLENGE_TRANSITION_VERIFICATION_PROBE": {
+  "帮派活动挑战-帮派-挑战-过渡-校验-探测": {
     "recognition": "OCR",
     "expected": ["验证码", "安全验证"],
     "roi": [0, 0, 1280, 720],
     "timeout": 2500,
     "action": "DoNothing",
-    "next": ["MJA_GUILD_DANGER_STOP"],
-    "on_error": ["MJA_GUILD_CHALLENGE_TRANSITION_PROBE"]
+    "next": ["帮派活动挑战-帮派-危险-停止"],
+    "on_error": ["帮派活动挑战-帮派-挑战-过渡-探测"]
   },
-  "MJA_GUILD_CHALLENGE_TRANSITION_PROBE": {
+  "帮派活动挑战-帮派-挑战-过渡-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["guild.challenge.confirm.page", "guild.challenge.confirm"],
+        "all_of": ["帮派活动挑战-帮派-挑战-确认-页面", "帮派活动挑战-帮派-挑战-确认-2"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_GUILD_CHALLENGE_CONFIRM"],
-    "on_error": ["MJA_GUILD_CHALLENGE_PREPARE_PROBE"]
+    "next": ["帮派活动挑战-帮派-挑战-确认"],
+    "on_error": ["帮派活动挑战-帮派-挑战-准备-探测"]
   },
-  "MJA_GUILD_CHALLENGE_CONFIRM": {
+  "帮派活动挑战-帮派-挑战-确认": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["guild.challenge.confirm.page", "guild.challenge.confirm"],
+        "all_of": ["帮派活动挑战-帮派-挑战-确认-页面", "帮派活动挑战-帮派-挑战-确认-2"],
         "box_index": 1
       }
     },
@@ -507,37 +507,37 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "guild.challenge.confirm.page",
-        "target_name": "guild.challenge.confirm"
+        "page_name": "帮派活动挑战-帮派-挑战-确认-页面",
+        "target_name": "帮派活动挑战-帮派-挑战-确认-2"
       }
     },
     "next": [
-      "MJA_GUILD_RESULT_DANGER_PROBE",
-      "MJA_GUILD_RESULT_VERIFICATION_PROBE",
-      "MJA_GUILD_CHALLENGE_PREPARE_PROBE",
-      "MJA_GUILD_RESULT_VICTORY_PROBE",
-      "MJA_GUILD_RESULT_DEFEAT_PROBE"
+      "帮派活动挑战-帮派-结果-危险-探测",
+      "帮派活动挑战-帮派-结果-校验-探测",
+      "帮派活动挑战-帮派-挑战-准备-探测",
+      "帮派活动挑战-帮派-结果-胜利-探测",
+      "帮派活动挑战-帮派-结果-失败-探测"
     ],
-    "on_error": ["MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_RECORD_FAILURE"],
+    "on_error": ["帮派活动挑战-记录-失败"],
     "retry_times": 0
   },
-  "MJA_GUILD_CHALLENGE_PREPARE_PROBE": {
+  "帮派活动挑战-帮派-挑战-准备-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["guild.challenge.prepare.page", "guild.challenge.start"],
+        "all_of": ["帮派活动挑战-帮派-挑战-准备-页面", "帮派活动挑战-帮派-挑战-开始-2"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_GUILD_CHALLENGE_START"],
-    "on_error": ["MJA_GUILD_CHALLENGE_TRANSITION_UNKNOWN"]
+    "next": ["帮派活动挑战-帮派-挑战-开始"],
+    "on_error": ["帮派活动挑战-帮派-挑战-过渡-未知"]
   },
-  "MJA_GUILD_CHALLENGE_START": {
+  "帮派活动挑战-帮派-挑战-开始": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["guild.challenge.prepare.page", "guild.challenge.start"],
+        "all_of": ["帮派活动挑战-帮派-挑战-准备-页面", "帮派活动挑战-帮派-挑战-开始-2"],
         "box_index": 1
       }
     },
@@ -550,30 +550,30 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "guild.challenge.prepare.page",
-        "target_name": "guild.challenge.start"
+        "page_name": "帮派活动挑战-帮派-挑战-准备-页面",
+        "target_name": "帮派活动挑战-帮派-挑战-开始-2"
       }
     },
     "next": [
-      "MJA_GUILD_RESULT_DANGER_PROBE",
-      "MJA_GUILD_RESULT_VERIFICATION_PROBE",
-      "MJA_GUILD_BATTLE_ACTIVE_PROBE",
-      "MJA_GUILD_RESULT_VICTORY_PROBE",
-      "MJA_GUILD_RESULT_DEFEAT_PROBE"
+      "帮派活动挑战-帮派-结果-危险-探测",
+      "帮派活动挑战-帮派-结果-校验-探测",
+      "帮派活动挑战-帮派-战斗-进行中-探测",
+      "帮派活动挑战-帮派-结果-胜利-探测",
+      "帮派活动挑战-帮派-结果-失败-探测"
     ],
-    "on_error": ["MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_RECORD_FAILURE"],
+    "on_error": ["帮派活动挑战-记录-失败"],
     "retry_times": 0
   },
-  "MJA_GUILD_BATTLE_ACTIVE_PROBE": {
+  "帮派活动挑战-帮派-战斗-进行中-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "guild.challenge.battle.timer",
-          "guild.challenge.battle.boss",
-          "guild.challenge.battle.auto.top",
-          "guild.challenge.battle.pause",
-          "guild.challenge.battle.auto.bottom"
+          "帮派活动挑战-帮派-挑战-战斗-计时器",
+          "帮派活动挑战-帮派-挑战-战斗-首领",
+          "帮派活动挑战-帮派-挑战-战斗-自动-顶部",
+          "帮派活动挑战-帮派-挑战-战斗-暂停",
+          "帮派活动挑战-帮派-挑战-战斗-自动-底部"
         ],
         "box_index": 0
       }
@@ -581,61 +581,61 @@
     "timeout": 180000,
     "action": "DoNothing",
     "next": [
-      "MJA_GUILD_RESULT_DANGER_PROBE",
-      "MJA_GUILD_RESULT_VERIFICATION_PROBE",
-      "MJA_GUILD_RESULT_VICTORY_PROBE",
-      "MJA_GUILD_RESULT_DEFEAT_PROBE"
+      "帮派活动挑战-帮派-结果-危险-探测",
+      "帮派活动挑战-帮派-结果-校验-探测",
+      "帮派活动挑战-帮派-结果-胜利-探测",
+      "帮派活动挑战-帮派-结果-失败-探测"
     ],
-    "on_error": ["MJA_GUILD_RESULT_UNKNOWN"],
+    "on_error": ["帮派活动挑战-帮派-未知结果"],
     "retry_times": 0
   },
-  "MJA_GUILD_RESULT_DANGER_PROBE": {
+  "帮派活动挑战-帮派-结果-危险-探测": {
     "recognition": "OCR",
     "expected": ["购买元宝", "充值", "支付", "Apple Pay"],
     "roi": [280, 160, 720, 420],
     "timeout": 2500,
     "action": "DoNothing",
-    "next": ["MJA_GUILD_DANGER_STOP"],
-    "on_error": ["MJA_GUILD_RESULT_VERIFICATION_PROBE"]
+    "next": ["帮派活动挑战-帮派-危险-停止"],
+    "on_error": ["帮派活动挑战-帮派-结果-校验-探测"]
   },
-  "MJA_GUILD_RESULT_VERIFICATION_PROBE": {
+  "帮派活动挑战-帮派-结果-校验-探测": {
     "recognition": "OCR",
     "expected": ["验证码", "安全验证"],
     "roi": [0, 0, 1280, 720],
     "timeout": 2500,
     "action": "DoNothing",
-    "next": ["MJA_GUILD_DANGER_STOP"],
-    "on_error": ["MJA_GUILD_RESULT_VICTORY_PROBE"]
+    "next": ["帮派活动挑战-帮派-危险-停止"],
+    "on_error": ["帮派活动挑战-帮派-结果-胜利-探测"]
   },
-  "MJA_GUILD_RESULT_VICTORY_PROBE": {
+  "帮派活动挑战-帮派-结果-胜利-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["guild.result.page", "guild.result.victory"],
+        "all_of": ["帮派活动挑战-帮派-结果-页面", "帮派活动挑战-帮派-结果-胜利"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_GUILD_RESULT_DISMISS_PROBE"],
-    "on_error": ["MJA_GUILD_RESULT_DEFEAT_PROBE"]
+    "next": ["帮派活动挑战-帮派-结果-关闭-探测"],
+    "on_error": ["帮派活动挑战-帮派-结果-失败-探测"]
   },
-  "MJA_GUILD_RESULT_DEFEAT_PROBE": {
+  "帮派活动挑战-帮派-结果-失败-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["guild.result.defeat.page"],
+        "all_of": ["帮派活动挑战-帮派-结果-失败-页面"],
         "box_index": 0
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_GUILD_RESULT_DEFEAT_DISMISS_PROBE"],
-    "on_error": ["MJA_GUILD_RESULT_UNKNOWN"]
+    "next": ["帮派活动挑战-帮派-结果-失败-关闭-探测"],
+    "on_error": ["帮派活动挑战-帮派-未知结果"]
   },
-  "MJA_GUILD_RESULT_DEFEAT_DISMISS_PROBE": {
+  "帮派活动挑战-帮派-结果-失败-关闭-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["guild.result.defeat", "guild.result.defeat.improve"],
+        "all_of": ["帮派活动挑战-帮派-结果-失败-2", "帮派活动挑战-帮派-结果-失败-提升"],
         "box_index": 0
       }
     },
@@ -650,19 +650,19 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "guild.result.defeat",
-        "target_name": "guild.result.defeat.improve"
+        "page_name": "帮派活动挑战-帮派-结果-失败-2",
+        "target_name": "帮派活动挑战-帮派-结果-失败-提升"
       }
     },
-    "next": ["MJA_GUILD_RESULT_DEFEAT"],
-    "on_error": ["MJA_GUILD_RESULT_DEFEAT"],
+    "next": ["帮派活动挑战-帮派-结果-失败"],
+    "on_error": ["帮派活动挑战-帮派-结果-失败"],
     "retry_times": 0
   },
-  "MJA_GUILD_RESULT_DISMISS_PROBE": {
+  "帮派活动挑战-帮派-结果-关闭-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["guild.result.page", "guild.result.victory"],
+        "all_of": ["帮派活动挑战-帮派-结果-页面", "帮派活动挑战-帮派-结果-胜利"],
         "box_index": 1
       }
     },
@@ -676,20 +676,20 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "guild.result.page",
-        "target_name": "guild.result.victory"
+        "page_name": "帮派活动挑战-帮派-结果-页面",
+        "target_name": "帮派活动挑战-帮派-结果-胜利"
       }
     },
-    "next": ["MJA_GUILD_SUCCESS_EXIT_ACTIVITY"],
-    "on_error": ["MJA_GUILD_RESULT_UNKNOWN"],
+    "next": ["帮派活动挑战-帮派-成功-退出-活动"],
+    "on_error": ["帮派活动挑战-帮派-未知结果"],
     "retry_times": 0
   },
-  "MJA_GUILD_RESULT_DEFEAT": {
+  "帮派活动挑战-帮派-结果-失败": {
     "recognition": "DirectHit",
     "action": "DoNothing",
-    "next": ["MJA_GUILD_SUCCESS_EXIT_ACTIVITY"]
+    "next": ["帮派活动挑战-帮派-成功-退出-活动"]
   },
-  "MJA_GUILD_RESULT_UNKNOWN": {
+  "帮派活动挑战-帮派-未知结果": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -701,10 +701,10 @@
       "native_fail_after_record": true
     },
     "Abort": true,
-    "next": ["MJA_COMMON_ABORT"]
+    "next": ["公共-通用中止"]
 
   },
-  "MJA_GUILD_CHALLENGE_TRANSITION_UNKNOWN": {
+  "帮派活动挑战-帮派-挑战-过渡-未知": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -717,10 +717,10 @@
     },
     "Abort": true,
     "retry_times": 0,
-    "next": ["MJA_COMMON_ABORT"]
+    "next": ["公共-通用中止"]
 
   },
-  "MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_SUCCESS": {
+  "帮派活动挑战-成功": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -729,16 +729,16 @@
       "status": "success",
       "postcondition": "guild.challenge_result_known"
     },
-    "next": ["MJA_COMMON_STOP"]
+    "next": ["公共-通用停止"]
   },
-  "MJA_GUILD_SUCCESS_EXIT_ACTIVITY": {
+  "帮派活动挑战-帮派-成功-退出-活动": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "guild.activity.page",
-          "guild.activity.context",
-          "guild.page.close"
+          "帮派活动挑战-帮派-活动-页面",
+          "帮派活动挑战-帮派-活动-上下文",
+          "帮派活动挑战-帮派-页面-关闭"
         ],
         "box_index": 2
       }
@@ -754,20 +754,20 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "guild.activity.page",
-        "target_name": "guild.page.close"
+        "page_name": "帮派活动挑战-帮派-活动-页面",
+        "target_name": "帮派活动挑战-帮派-页面-关闭"
       }
     },
     "post_delay": 1200,
-    "next": ["MJA_GUILD_SUCCESS_EXIT_GUILD_HOME"],
-    "on_error": ["MJA_GUILD_EXIT_RECORD_FAILURE"],
+    "next": ["帮派活动挑战-帮派-成功-退出-帮派-主页"],
+    "on_error": ["帮派活动挑战-帮派-退出-记录-失败"],
     "retry_times": 0
   },
-  "MJA_GUILD_SUCCESS_EXIT_GUILD_HOME": {
+  "帮派活动挑战-帮派-成功-退出-帮派-主页": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["guild.home.page", "guild.page.close"],
+        "all_of": ["帮派活动挑战-帮派-主页-页面", "帮派活动挑战-帮派-页面-关闭"],
         "box_index": 1
       }
     },
@@ -782,29 +782,29 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "guild.home.page",
-        "target_name": "guild.page.close"
+        "page_name": "帮派活动挑战-帮派-主页-页面",
+        "target_name": "帮派活动挑战-帮派-页面-关闭"
       }
     },
     "post_delay": 1200,
-    "next": ["MJA_GUILD_SUCCESS_EXIT_FUNCTION_PANEL_PROBE"],
-    "on_error": ["MJA_GUILD_EXIT_RECORD_FAILURE"],
+    "next": ["帮派活动挑战-帮派-成功-退出-功能-面板-探测"],
+    "on_error": ["帮派活动挑战-帮派-退出-记录-失败"],
     "retry_times": 0
   },
-  "MJA_GUILD_SUCCESS_EXIT_FUNCTION_PANEL_PROBE": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_SIDE_PANEL_OPEN"], "box_index": 0}},
+  "帮派活动挑战-帮派-成功-退出-功能-面板-探测": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏侧边面板-打开"], "box_index": 0}},
     "timeout": 8000,
     "max_hit": 1,
     "action": "DoNothing",
-    "next": ["MJA_GUILD_SUCCESS_EXIT_FUNCTION_PANEL"],
-    "on_error": ["MJA_GUILD_EXIT_RECORD_FAILURE"],
+    "next": ["帮派活动挑战-帮派-成功-退出-功能-面板"],
+    "on_error": ["帮派活动挑战-帮派-退出-记录-失败"],
     "retry_times": 0
   },
-  "MJA_GUILD_SUCCESS_EXIT_FUNCTION_PANEL": {
+  "帮派活动挑战-帮派-成功-退出-功能-面板": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["guild.function.panel.page", "guild.function.panel.close"],
+        "all_of": ["帮派活动挑战-帮派-功能-面板-页面", "帮派活动挑战-帮派-功能-面板-关闭"],
         "box_index": 1
       }
     },
@@ -820,24 +820,24 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "guild.function.panel.page",
-        "target_name": "guild.function.panel.close"
+        "page_name": "帮派活动挑战-帮派-功能-面板-页面",
+        "target_name": "帮派活动挑战-帮派-功能-面板-关闭"
       }
     },
     "post_delay": 1200,
-    "next": ["MJA_GUILD_SUCCESS_EXIT_HOME_PROBE"],
-    "on_error": ["MJA_GUILD_EXIT_RECORD_FAILURE"],
+    "next": ["帮派活动挑战-帮派-成功-退出-主页-探测"],
+    "on_error": ["帮派活动挑战-帮派-退出-记录-失败"],
     "retry_times": 0
   },
-  "MJA_GUILD_SUCCESS_EXIT_HOME_PROBE": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_HOME_PAGE"], "box_index": 0}},
+  "帮派活动挑战-帮派-成功-退出-主页-探测": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}},
     "timeout": 8000,
     "max_hit": 1,
     "action": "DoNothing",
-    "next": ["MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_SUCCESS"],
-    "on_error": ["MJA_GUILD_EXIT_RECORD_FAILURE"]
+    "next": ["帮派活动挑战-成功"],
+    "on_error": ["帮派活动挑战-帮派-退出-记录-失败"]
   },
-  "MJA_GUILD_EXIT_RECORD_FAILURE": {
+  "帮派活动挑战-帮派-退出-记录-失败": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -849,10 +849,10 @@
       "native_fail_after_record": true
     },
     "Abort": true,
-    "next": ["MJA_COMMON_ABORT"]
+    "next": ["公共-通用中止"]
 
   },
-  "MJA_GUILD_DANGER_STOP": {
+  "帮派活动挑战-帮派-危险-停止": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -864,10 +864,10 @@
       "native_fail_after_record": true
     },
     "Abort": true,
-    "next": ["MJA_COMMON_ABORT"]
+    "next": ["公共-通用中止"]
 
   },
-  "MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_RECORD_FAILURE": {
+  "帮派活动挑战-记录-失败": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -879,10 +879,10 @@
       "native_fail_after_record": true
     },
     "Abort": true,
-    "next": ["MJA_COMMON_ABORT"]
+    "next": ["公共-通用中止"]
 
   },
-  "MJA_GUILD_UNKNOWN_PAGE": {
+  "帮派活动挑战-帮派-未知-页面": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -894,27 +894,27 @@
       "native_fail_after_record": true
     },
     "Abort": true,
-    "next": ["MJA_COMMON_ABORT"]
+    "next": ["公共-通用中止"]
 
   },
-  "MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_PAGE_PROBE": {
+  "帮派活动挑战-页面-探测-2": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["guild.activity_challenge.page", "guild.activity.entry"],
+        "all_of": ["帮派活动挑战-帮派-活动-挑战-页面", "帮派活动挑战-帮派-活动-入口"],
         "box_index": 1
       }
     },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_GUILD_OPEN_ACTIVITY"],
-    "on_error": ["MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_PANEL_PROBE"]
+    "next": ["帮派活动挑战-帮派-打开-活动"],
+    "on_error": ["帮派活动挑战-面板-探测"]
   },
-  "MJA_GUILD_OPEN_ACTIVITY": {
+  "帮派活动挑战-帮派-打开-活动": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["guild.activity_challenge.page", "guild.activity.entry"],
+        "all_of": ["帮派活动挑战-帮派-活动-挑战-页面", "帮派活动挑战-帮派-活动-入口"],
         "box_index": 1
       }
     },
@@ -927,26 +927,26 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "guild.activity_challenge.page",
-        "target_name": "guild.activity.entry"
+        "page_name": "帮派活动挑战-帮派-活动-挑战-页面",
+        "target_name": "帮派活动挑战-帮派-活动-入口"
       }
     },
-    "next": ["MJA_GUILD_ACTIVITY_PAGE_PROBE"],
-    "on_error": ["MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_RECORD_FAILURE"],
+    "next": ["帮派活动挑战-页面-探测"],
+    "on_error": ["帮派活动挑战-记录-失败"],
     "retry_times": 0
   },
-  "MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_PANEL_PROBE": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_SIDE_PANEL_OPEN"], "box_index": 0}},
+  "帮派活动挑战-面板-探测": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏侧边面板-打开"], "box_index": 0}},
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_OPEN_GUILD"],
-    "on_error": ["MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_HOME_PROBE"]
+    "next": ["帮派活动挑战-打开-帮派"],
+    "on_error": ["帮派活动挑战-主页-探测"]
   },
-  "MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_OPEN_GUILD": {
+  "帮派活动挑战-打开-帮派": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["panel.page", "guild.panel.entry"],
+        "all_of": ["邮件奖励-面板-页面", "帮派活动挑战-帮派-面板-入口"],
         "box_index": 1
       }
     },
@@ -959,26 +959,26 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "panel.page",
-        "target_name": "guild.panel.entry"
+        "page_name": "邮件奖励-面板-页面",
+        "target_name": "帮派活动挑战-帮派-面板-入口"
       }
     },
-    "next": ["MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_PAGE_PROBE"],
-    "on_error": ["MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_RECORD_FAILURE"],
+    "next": ["帮派活动挑战-页面-探测-2"],
+    "on_error": ["帮派活动挑战-记录-失败"],
     "retry_times": 0
   },
-  "MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_HOME_PROBE": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_HOME_PAGE"], "box_index": 0}},
+  "帮派活动挑战-主页-探测": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}},
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_OPEN_PANEL"],
-    "on_error": ["MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_RECORD_FAILURE"]
+    "next": ["帮派活动挑战-打开-面板"],
+    "on_error": ["帮派活动挑战-记录-失败"]
   },
-  "MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_OPEN_PANEL": {
+  "帮派活动挑战-打开-面板": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["home.page", "home.panel_open"],
+        "all_of": ["邮件奖励-主页-页面", "邮件奖励-主页-面板-打开"],
         "box_index": 1
       }
     },
@@ -991,47 +991,47 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "home.page",
-        "target_name": "home.panel_open"
+        "page_name": "邮件奖励-主页-页面",
+        "target_name": "邮件奖励-主页-面板-打开"
       }
     },
-    "next": ["MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_PANEL_PROBE"],
-    "on_error": ["MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_RECORD_FAILURE"],
+    "next": ["帮派活动挑战-面板-探测"],
+    "on_error": ["帮派活动挑战-记录-失败"],
     "retry_times": 0
   },
-  "guild.panel.entry": {
+  "帮派活动挑战-帮派-面板-入口": {
     "recognition": "OCR",
     "expected": "帮会",
     "roi": [600, 100, 680, 580],
     "action": "DoNothing"
   },
-  "guild.activity_challenge.page": {
+  "帮派活动挑战-帮派-活动-挑战-页面": {
     "recognition": "OCR",
     "expected": "浮生城",
     "roi": [0, 0, 380, 100],
     "action": "DoNothing"
   },
-  "guild.activity.entry": {
+  "帮派活动挑战-帮派-活动-入口": {
     "recognition": "OCR",
     "expected": "帮会活动",
     "roi": [600, 250, 360, 230],
     "action": "DoNothing"
   },
-  "guild.home.page": {
+  "帮派活动挑战-帮派-主页-页面": {
     "recognition": "OCR",
     "expected": "浮生城",
     "roi": [0, 0, 380, 100],
     "action": "DoNothing"
   },
-  "guild.function.panel.page": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_SIDE_PANEL_OPEN"], "box_index": 0}},
+  "帮派活动挑战-帮派-功能-面板-页面": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏侧边面板-打开"], "box_index": 0}},
     "action": "DoNothing"
   },
-  "guild.function.panel.close": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_SIDE_PANEL_OPEN"], "box_index": 0}},
+  "帮派活动挑战-帮派-功能-面板-关闭": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏侧边面板-打开"], "box_index": 0}},
     "action": "DoNothing"
   },
-  "guild.page.close": {
+  "帮派活动挑战-帮派-页面-关闭": {
     "recognition": "ColorMatch",
     "lower": [0, 0, 0],
     "upper": [125, 125, 125],
@@ -1040,25 +1040,25 @@
     "count": 180,
     "action": "DoNothing"
   },
-  "guild.activity.page": {
+  "帮派活动挑战-帮派-活动-页面": {
     "recognition": "OCR",
     "expected": "幻境征讨",
     "roi": [0, 0, 620, 190],
     "action": "DoNothing"
   },
-  "guild.activity.context": {
+  "帮派活动挑战-帮派-活动-上下文": {
     "recognition": "OCR",
     "expected": ["讨伐中", "今日剩余征讨次数"],
     "roi": [200, 120, 1080, 540],
     "action": "DoNothing"
   },
-  "guild.challenge.target": {
+  "帮派活动挑战-帮派-挑战-目标": {
     "recognition": "OCR",
     "expected": ["挑战", "开始挑战"],
     "roi": [940, 580, 340, 110],
     "action": "DoNothing"
   },
-  "guild.remaining.available": {
+  "帮派活动挑战-帮派-剩余-可用": {
     "recognition": "OCR",
     "expected": [
       "今日剩余征讨次数\\s*[:：]?\\s*(?:1|2)\\s*/\\s*2",
@@ -1068,7 +1068,7 @@
     "roi": [980, 540, 300, 100],
     "action": "DoNothing"
   },
-  "guild.remaining.any": {
+  "帮派活动挑战-帮派-剩余-任意": {
     "recognition": "OCR",
     "expected": [
       "今日剩余征讨次数\\s*[:：]?\\s*(?:0|1|2)\\s*/\\s*2",
@@ -1078,7 +1078,7 @@
     "roi": [980, 540, 300, 100],
     "action": "DoNothing"
   },
-  "guild.remaining.exhausted": {
+  "帮派活动挑战-帮派-剩余-耗尽": {
     "recognition": "OCR",
     "expected": [
       "今日剩余征讨次数\\s*[:：]?\\s*0\\s*/\\s*2",
@@ -1088,44 +1088,44 @@
     "roi": [980, 540, 300, 100],
     "action": "DoNothing"
   },
-  "guild.challenge.confirm.page": {
+  "帮派活动挑战-帮派-挑战-确认-页面": {
     "recognition": "OCR",
     "expected": ["确认挑战", "是否开始征讨", "今日剩余征讨次数"],
     "roi": [280, 160, 720, 360],
     "action": "DoNothing"
   },
-  "guild.challenge.confirm": {
+  "帮派活动挑战-帮派-挑战-确认-2": {
     "recognition": "OCR",
     "expected": "确认",
     "roi": [760, 380, 460, 200],
     "action": "DoNothing"
   },
-  "guild.challenge.prepare.page": {
+  "帮派活动挑战-帮派-挑战-准备-页面": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "guild.challenge.prepare.world_boss_title",
-          "guild.challenge.prepare.battle_title"
+          "帮派活动挑战-帮派-挑战-准备-世界-首领-标题",
+          "帮派活动挑战-帮派-挑战-准备-战斗-标题"
         ],
         "box_index": 1
       }
     },
     "action": "DoNothing"
   },
-  "guild.challenge.prepare.world_boss_title": {
+  "帮派活动挑战-帮派-挑战-准备-世界-首领-标题": {
     "recognition": "OCR",
     "expected": "世界首领",
     "roi": [60, 0, 180, 80],
     "action": "DoNothing"
   },
-  "guild.challenge.prepare.battle_title": {
+  "帮派活动挑战-帮派-挑战-准备-战斗-标题": {
     "recognition": "OCR",
     "expected": "首领战斗",
     "roi": [1020, 60, 220, 100],
     "action": "DoNothing"
   },
-  "guild.challenge.start": {
+  "帮派活动挑战-帮派-挑战-开始-2": {
     "recognition": "ColorMatch",
     "method": 4,
     "lower": [200, 80, 20],
@@ -1137,102 +1137,102 @@
     "index": 0,
     "action": "DoNothing"
   },
-  "guild.challenge.battle.timer": {
+  "帮派活动挑战-帮派-挑战-战斗-计时器": {
     "recognition": "OCR",
     "expected": "^\\d{2}:\\d{2}$",
     "roi": [170, 5, 120, 65],
     "action": "DoNothing"
   },
-  "guild.challenge.battle.boss": {
+  "帮派活动挑战-帮派-挑战-战斗-首领": {
     "recognition": "OCR",
     "expected": "^\\d+级.+",
     "roi": [390, 0, 240, 60],
     "action": "DoNothing"
   },
-  "guild.challenge.battle.auto.top": {
+  "帮派活动挑战-帮派-挑战-战斗-自动-顶部": {
     "recognition": "OCR",
     "expected": "自动中",
     "roi": [1090, 25, 100, 65],
     "action": "DoNothing"
   },
-  "guild.challenge.battle.pause": {
+  "帮派活动挑战-帮派-挑战-战斗-暂停": {
     "recognition": "OCR",
     "expected": "暂停",
     "roi": [1175, 25, 80, 65],
     "action": "DoNothing"
   },
-  "guild.challenge.battle.auto.bottom": {
+  "帮派活动挑战-帮派-挑战-战斗-自动-底部": {
     "recognition": "OCR",
     "expected": "自动中",
     "roi": [1130, 590, 130, 70],
     "action": "DoNothing"
   },
-  "guild.result.page": {
+  "帮派活动挑战-帮派-结果-页面": {
     "recognition": "OCR",
     "expected": ["^战斗胜利$", "^战斗失败$"],
     "roi": [700, 70, 580, 210],
     "timeout": 30000,
     "action": "DoNothing"
   },
-  "guild.result.known": {
+  "帮派活动挑战-帮派-结果-已知": {
     "recognition": "OCR",
     "expected": ["^战斗胜利$", "^战斗失败$"],
     "roi": [700, 70, 580, 210],
     "action": "DoNothing"
   },
-  "guild.result.victory": {
+  "帮派活动挑战-帮派-结果-胜利": {
     "recognition": "OCR",
     "expected": "^战斗胜利$",
     "roi": [700, 70, 580, 210],
     "action": "DoNothing"
   },
-  "guild.result.defeat": {
+  "帮派活动挑战-帮派-结果-失败-2": {
     "recognition": "OCR",
     "expected": "^战斗失败$",
     "roi": [700, 70, 580, 210],
     "action": "DoNothing"
   },
-  "guild.result.defeat.improve": {
+  "帮派活动挑战-帮派-结果-失败-提升": {
     "recognition": "OCR",
     "expected": "^可以通过以下途径提升$",
     "roi": [840, 390, 340, 90],
     "action": "DoNothing"
   },
-  "guild.result.defeat.page": {
+  "帮派活动挑战-帮派-结果-失败-页面": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["guild.result.defeat", "guild.result.defeat.improve"],
+        "all_of": ["帮派活动挑战-帮派-结果-失败-2", "帮派活动挑战-帮派-结果-失败-提升"],
         "box_index": 0
       }
     },
     "action": "DoNothing"
   },
-  "guild.result.dismiss.blank": {
+  "帮派活动挑战-帮派-结果-关闭-空白": {
     "recognition": "OCR",
     "expected": "点击(?:空白处|任意位置)关闭",
     "roi": [300, 560, 700, 160],
     "action": "DoNothing"
   },
-  "guild.result.dismiss.button": {
+  "帮派活动挑战-帮派-结果-关闭-按钮": {
     "recognition": "OCR",
     "expected": ["确定", "返回", "关闭"],
     "roi": [820, 380, 420, 260],
     "action": "DoNothing"
   },
-  "guild.result.dismiss.any": {
+  "帮派活动挑战-帮派-结果-关闭-任意": {
     "recognition": "OCR",
     "expected": ["点击(?:空白处|任意位置)关闭", "确定", "返回", "关闭"],
     "roi": [300, 380, 940, 340],
     "action": "DoNothing"
   },
-  "guild.danger.paid": {
+  "帮派活动挑战-帮派-危险-付费": {
     "recognition": "OCR",
     "expected": ["购买元宝", "充值", "支付", "Apple Pay"],
     "roi": [280, 160, 720, 420],
     "action": "DoNothing"
   },
-  "guild.safety.verification": {
+  "帮派活动挑战-帮派-安全-校验": {
     "recognition": "OCR",
     "expected": ["验证码", "安全验证"],
     "roi": [0, 0, 1280, 720],

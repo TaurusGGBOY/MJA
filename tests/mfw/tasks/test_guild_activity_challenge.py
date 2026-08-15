@@ -30,27 +30,27 @@ def test_guild_activity_task_contract_is_registered_as_a_standalone_mfw_task() -
 def test_guild_activity_start_has_one_bounded_task_local_recovery() -> None:
     nodes = load_task_nodes(GUILD_ACTIVITY)
     start = nodes[GUILD_ACTIVITY.entry]
-    recovery = nodes["MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_GAME_START_RECOVERY"]
+    recovery = nodes["帮派活动挑战-游戏启动恢复"]
     probes = [
-        "MJA_GUILD_START_SAFETY_PROBE",
-        "MJA_GUILD_START_PAID_PROBE",
-        "MJA_GUILD_RESUME_RESULT_PROBE",
-        "MJA_GUILD_RECOVERY_DUNGEON_PAGE_PROBE",
-        "MJA_GUILD_RECOVERY_JIANLIN_PAGE_PROBE",
-        "MJA_GUILD_RECOVERY_DAILY_PAGE_PROBE",
-        "MJA_START_SHADOW_PAGE_BACK",
-        "MJA_GUILD_ACTIVITY_PAGE_PROBE",
-        "MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_PAGE_PROBE",
-        "MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_PANEL_PROBE",
-        "MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_HOME_PROBE",
+        "帮派活动挑战-帮派-开始-安全-探测",
+        "帮派活动挑战-帮派-开始-付费-探测",
+        "帮派活动挑战-帮派-恢复继续-结果-探测",
+        "帮派活动挑战-帮派-恢复-副本-页面-探测",
+        "帮派活动挑战-帮派-恢复-剑林-页面-探测",
+        "帮派活动挑战-帮派-恢复-日常-页面-探测",
+        "启动-影-页面-返回",
+        "帮派活动挑战-页面-探测",
+        "帮派活动挑战-页面-探测-2",
+        "帮派活动挑战-面板-探测",
+        "帮派活动挑战-主页-探测",
     ]
 
     assert start["timeout"] == 8000
     assert start["retry_times"] == 0
     assert start["next"] == probes
     assert start["on_error"] == [
-        "MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_GAME_START_RECOVERY",
-        "MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_RECORD_FAILURE",
+        "帮派活动挑战-游戏启动恢复",
+        "帮派活动挑战-记录-失败",
     ]
     assert "JumpBack" not in str(start)
 
@@ -63,19 +63,19 @@ def test_guild_activity_start_has_one_bounded_task_local_recovery() -> None:
     assert recovery["retry_times"] == 0
     assert recovery["next"] == probes
     assert recovery["on_error"] == [
-        "MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_RECORD_FAILURE"
+        "帮派活动挑战-记录-失败"
     ]
 
-    resume = nodes["MJA_GUILD_RESUME_RESULT_PROBE"]
+    resume = nodes["帮派活动挑战-帮派-恢复继续-结果-探测"]
     assert resume["next"] == [
-        "MJA_GUILD_RESULT_VICTORY_PROBE",
-        "MJA_GUILD_RESULT_DEFEAT_PROBE",
+        "帮派活动挑战-帮派-结果-胜利-探测",
+        "帮派活动挑战-帮派-结果-失败-探测",
     ]
 
     # A known home frame that fails to open the panel is a task failure; only
     # the root start boundary may request the one shared startup recovery.
-    assert nodes["MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_HOME_PROBE"]["on_error"] == [
-        "MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_RECORD_FAILURE"
+    assert nodes["帮派活动挑战-主页-探测"]["on_error"] == [
+        "帮派活动挑战-记录-失败"
     ]
 
 
@@ -112,29 +112,29 @@ def test_guild_activity_challenge_is_bounded_and_requires_exact_zero_of_two() ->
         "close_jianlin_for_guild"
     ] == 1
 
-    loop = nodes["MJA_GUILD_CHALLENGE_LOOP"]
+    loop = nodes["帮派活动挑战-帮派-挑战-循环"]
     assert loop["max_hit"] == 2
     assert loop["retry_times"] == 0
-    assert loop["on_error"] == ["MJA_GUILD_CHALLENGE_TRANSITION_UNKNOWN"]
-    assert_reachable(nodes, "MJA_GUILD_CHALLENGE_LOOP", "MJA_GUILD_CHALLENGE_CONFIRM")
-    assert_reachable(nodes, "MJA_GUILD_CHALLENGE_LOOP", "MJA_GUILD_CHALLENGE_START")
-    assert_reachable(nodes, "MJA_GUILD_CHALLENGE_LOOP", "MJA_GUILD_RESULT_DISMISS_PROBE")
+    assert loop["on_error"] == ["帮派活动挑战-帮派-挑战-过渡-未知"]
+    assert_reachable(nodes, "帮派活动挑战-帮派-挑战-循环", "帮派活动挑战-帮派-挑战-确认")
+    assert_reachable(nodes, "帮派活动挑战-帮派-挑战-循环", "帮派活动挑战-帮派-挑战-开始")
+    assert_reachable(nodes, "帮派活动挑战-帮派-挑战-循环", "帮派活动挑战-帮派-结果-关闭-探测")
 
-    available = nodes["guild.remaining.available"]["expected"]
-    exhausted = nodes["guild.remaining.exhausted"]["expected"]
+    available = nodes["帮派活动挑战-帮派-剩余-可用"]["expected"]
+    exhausted = nodes["帮派活动挑战-帮派-剩余-耗尽"]["expected"]
     assert all("0" not in pattern for pattern in available)
     assert any("0\\s*/\\s*2" in pattern for pattern in exhausted)
     final_zero_evidence = nodes["MJA_GUILD_FINAL_ZERO_PROBE"]["recognition"]["param"]["all_of"]
-    assert "guild.remaining.exhausted" in final_zero_evidence
+    assert "帮派活动挑战-帮派-剩余-耗尽" in final_zero_evidence
     assert_outcome(
         nodes,
-        "MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_SUCCESS",
+        "帮派活动挑战-成功",
         "success",
         "guild.remaining_conquest_0_of_2",
     )
     assert_outcome(
         nodes,
-        "MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_ALREADY_COMPLETE",
+        "帮派活动挑战-已完成",
         "already_complete",
         "guild.remaining_conquest_0_of_2",
     )
@@ -152,51 +152,51 @@ def test_guild_activity_handles_both_result_types_without_replaying_side_effects
     ):
         assert_no_side_effect_retry(nodes, action_id)
 
-    assert_reachable(nodes, "MJA_GUILD_RESULT_VICTORY_PROBE", "MJA_GUILD_RESULT_DISMISS_PROBE")
+    assert_reachable(nodes, "帮派活动挑战-帮派-结果-胜利-探测", "帮派活动挑战-帮派-结果-关闭-探测")
     assert_reachable(
         nodes,
-        "MJA_GUILD_RESULT_DEFEAT_PROBE",
-        "MJA_GUILD_RESULT_DEFEAT_DISMISS_PROBE",
+        "帮派活动挑战-帮派-结果-失败-探测",
+        "帮派活动挑战-帮派-结果-失败-关闭-探测",
     )
     assert_reachable(
         nodes,
-        "MJA_GUILD_RESULT_DEFEAT_DISMISS_PROBE",
-        "MJA_GUILD_RESULT_DEFEAT",
+        "帮派活动挑战-帮派-结果-失败-关闭-探测",
+        "帮派活动挑战-帮派-结果-失败",
     )
     assert_outcome(
         nodes,
-        "MJA_GUILD_RESULT_DEFEAT",
+        "帮派活动挑战-帮派-结果-失败",
         "failed",
         "guild.challenge_result_known",
     )
-    assert_abort_code(nodes, "MJA_GUILD_RESULT_DEFEAT", "GUILD_RESULT_DEFEAT")
-    assert_reachable(nodes, "MJA_GUILD_RESULT_UNKNOWN", "MJA_COMMON_ABORT")
-    assert_abort_code(nodes, "MJA_GUILD_RESULT_UNKNOWN", "GUILD_RESULT_UNKNOWN")
+    assert_abort_code(nodes, "帮派活动挑战-帮派-结果-失败", "GUILD_RESULT_DEFEAT")
+    assert_reachable(nodes, "帮派活动挑战-帮派-未知结果", "公共-通用中止")
+    assert_abort_code(nodes, "帮派活动挑战-帮派-未知结果", "GUILD_RESULT_UNKNOWN")
     assert_abort_code(
         nodes,
-        "MJA_GUILD_CHALLENGE_TRANSITION_UNKNOWN",
+        "帮派活动挑战-帮派-挑战-过渡-未知",
         "GUILD_CHALLENGE_TRANSITION_UNKNOWN",
     )
-    assert_abort_code(nodes, "MJA_GUILD_DANGER_STOP", "GUILD_DANGEROUS_PAGE")
+    assert_abort_code(nodes, "帮派活动挑战-帮派-危险-停止", "GUILD_DANGEROUS_PAGE")
     assert_abort_code(
         nodes,
-        "MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_RECORD_FAILURE",
+        "帮派活动挑战-记录-失败",
         "GUILD_POSTCONDITION_MISSING",
     )
     assert_abort_code(
         nodes,
-        "MJA_GUILD_EXIT_RECORD_FAILURE",
+        "帮派活动挑战-帮派-退出-记录-失败",
         "GUILD_HOME_RETURN_FAILED",
     )
 
     failure_nodes = (
-        "MJA_GUILD_CHALLENGE_TRANSITION_UNKNOWN",
-        "MJA_GUILD_RESULT_DEFEAT",
-        "MJA_GUILD_RESULT_UNKNOWN",
-        "MJA_GUILD_DANGER_STOP",
-        "MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_RECORD_FAILURE",
-        "MJA_GUILD_EXIT_RECORD_FAILURE",
-        "MJA_GUILD_UNKNOWN_PAGE",
+        "帮派活动挑战-帮派-挑战-过渡-未知",
+        "帮派活动挑战-帮派-结果-失败",
+        "帮派活动挑战-帮派-未知结果",
+        "帮派活动挑战-帮派-危险-停止",
+        "帮派活动挑战-记录-失败",
+        "帮派活动挑战-帮派-退出-记录-失败",
+        "帮派活动挑战-帮派-未知-页面",
     )
     for node_name in failure_nodes:
         assert nodes[node_name]["custom_action_param"]["native_fail_after_record"] is True
@@ -205,10 +205,10 @@ def test_guild_activity_handles_both_result_types_without_replaying_side_effects
 def test_guild_activity_result_partition_is_exact_mutually_exclusive_and_fail_closed() -> None:
     nodes = load_task_nodes(GUILD_ACTIVITY)
 
-    page = nodes["guild.result.page"]
-    known = nodes["guild.result.known"]
-    victory = nodes["guild.result.victory"]
-    defeat = nodes["guild.result.defeat"]
+    page = nodes["帮派活动挑战-帮派-结果-页面"]
+    known = nodes["帮派活动挑战-帮派-结果-已知"]
+    victory = nodes["帮派活动挑战-帮派-结果-胜利"]
+    defeat = nodes["帮派活动挑战-帮派-结果-失败-2"]
 
     assert page["expected"] == [r"^战斗胜利$", r"^战斗失败$"]
     assert known["expected"] == page["expected"]
@@ -229,16 +229,16 @@ def test_guild_activity_result_partition_is_exact_mutually_exclusive_and_fail_cl
         )
         assert observed == expected
 
-    victory_probe = nodes["MJA_GUILD_RESULT_VICTORY_PROBE"]
-    defeat_probe = nodes["MJA_GUILD_RESULT_DEFEAT_PROBE"]
-    dismiss_probe = nodes["MJA_GUILD_RESULT_DISMISS_PROBE"]
+    victory_probe = nodes["帮派活动挑战-帮派-结果-胜利-探测"]
+    defeat_probe = nodes["帮派活动挑战-帮派-结果-失败-探测"]
+    dismiss_probe = nodes["帮派活动挑战-帮派-结果-关闭-探测"]
     assert victory_probe["recognition"]["param"] == {
-        "all_of": ["guild.result.page", "guild.result.victory"],
+        "all_of": ["帮派活动挑战-帮派-结果-页面", "帮派活动挑战-帮派-结果-胜利"],
         "box_index": 1,
     }
-    assert victory_probe["on_error"] == ["MJA_GUILD_RESULT_DEFEAT_PROBE"]
+    assert victory_probe["on_error"] == ["帮派活动挑战-帮派-结果-失败-探测"]
     assert dismiss_probe["recognition"]["param"] == {
-        "all_of": ["guild.result.page", "guild.result.victory"],
+        "all_of": ["帮派活动挑战-帮派-结果-页面", "帮派活动挑战-帮派-结果-胜利"],
         "box_index": 1,
     }
     assert dismiss_probe["custom_action"] == "GuardedInput"
@@ -246,19 +246,19 @@ def test_guild_activity_result_partition_is_exact_mutually_exclusive_and_fail_cl
     assert dismiss_probe["custom_action_param"]["evidence"] == {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "guild.result.page",
-        "target_name": "guild.result.victory",
+        "page_name": "帮派活动挑战-帮派-结果-页面",
+        "target_name": "帮派活动挑战-帮派-结果-胜利",
     }
     assert defeat_probe["recognition"]["param"] == {
-        "all_of": ["guild.result.defeat.page"],
+        "all_of": ["帮派活动挑战-帮派-结果-失败-页面"],
         "box_index": 0,
     }
-    assert defeat_probe["next"] == ["MJA_GUILD_RESULT_DEFEAT_DISMISS_PROBE"]
-    assert defeat_probe["on_error"] == ["MJA_GUILD_RESULT_UNKNOWN"]
+    assert defeat_probe["next"] == ["帮派活动挑战-帮派-结果-失败-关闭-探测"]
+    assert defeat_probe["on_error"] == ["帮派活动挑战-帮派-未知结果"]
 
-    defeat_dismiss_probe = nodes["MJA_GUILD_RESULT_DEFEAT_DISMISS_PROBE"]
+    defeat_dismiss_probe = nodes["帮派活动挑战-帮派-结果-失败-关闭-探测"]
     assert defeat_dismiss_probe["recognition"]["param"] == {
-        "all_of": ["guild.result.defeat", "guild.result.defeat.improve"],
+        "all_of": ["帮派活动挑战-帮派-结果-失败-2", "帮派活动挑战-帮派-结果-失败-提升"],
         "box_index": 0,
     }
     assert defeat_dismiss_probe["custom_action"] == "GuardedInput"
@@ -270,19 +270,19 @@ def test_guild_activity_result_partition_is_exact_mutually_exclusive_and_fail_cl
         "evidence": {
             "page_index": 0,
             "target_index": 1,
-            "page_name": "guild.result.defeat",
-            "target_name": "guild.result.defeat.improve",
+            "page_name": "帮派活动挑战-帮派-结果-失败-2",
+            "target_name": "帮派活动挑战-帮派-结果-失败-提升",
         },
     }
-    assert defeat_dismiss_probe["next"] == ["MJA_GUILD_RESULT_DEFEAT"]
-    assert defeat_dismiss_probe["on_error"] == ["MJA_GUILD_RESULT_DEFEAT"]
+    assert defeat_dismiss_probe["next"] == ["帮派活动挑战-帮派-结果-失败"]
+    assert defeat_dismiss_probe["on_error"] == ["帮派活动挑战-帮派-结果-失败"]
 
-    defeat_page = nodes["guild.result.defeat.page"]
+    defeat_page = nodes["帮派活动挑战-帮派-结果-失败-页面"]
     assert defeat_page["recognition"]["param"] == {
-        "all_of": ["guild.result.defeat", "guild.result.defeat.improve"],
+        "all_of": ["帮派活动挑战-帮派-结果-失败-2", "帮派活动挑战-帮派-结果-失败-提升"],
         "box_index": 0,
     }
-    improve = nodes["guild.result.defeat.improve"]
+    improve = nodes["帮派活动挑战-帮派-结果-失败-提升"]
     assert improve == {
         "recognition": "OCR",
         "expected": r"^可以通过以下途径提升$",
@@ -306,10 +306,10 @@ def test_guild_activity_result_title_roi_contains_r19_archived_batch_ocr_box() -
     assert old_roi[0] + old_roi[2] < batch_box[0] + batch_box[2]
 
     result_names = (
-        "guild.result.page",
-        "guild.result.known",
-        "guild.result.victory",
-        "guild.result.defeat",
+        "帮派活动挑战-帮派-结果-页面",
+        "帮派活动挑战-帮派-结果-已知",
+        "帮派活动挑战-帮派-结果-胜利",
+        "帮派活动挑战-帮派-结果-失败-2",
     )
     rois = {tuple(nodes[name]["roi"]) for name in result_names}
     assert len(rois) == 1
@@ -324,7 +324,7 @@ def test_guild_activity_result_title_roi_contains_r19_archived_batch_ocr_box() -
 
     # The independent result-page context was OCR'd at [888, 420, 217, 23].
     improve_box = [888, 420, 217, 23]
-    improve_roi = nodes["guild.result.defeat.improve"]["roi"]
+    improve_roi = nodes["帮派活动挑战-帮派-结果-失败-提升"]["roi"]
     improve_x, improve_y, improve_width, improve_height = improve_roi
     assert improve_x <= improve_box[0]
     assert improve_y <= improve_box[1]
@@ -337,24 +337,24 @@ def test_guild_activity_result_title_roi_contains_r19_archived_batch_ocr_box() -
 def test_guild_activity_world_boss_prepare_page_uses_live_same_frame_boundary() -> None:
     nodes = load_task_nodes(GUILD_ACTIVITY)
 
-    prepare = nodes["guild.challenge.prepare.page"]
+    prepare = nodes["帮派活动挑战-帮派-挑战-准备-页面"]
     assert prepare["recognition"]["param"] == {
         "all_of": [
-            "guild.challenge.prepare.world_boss_title",
-            "guild.challenge.prepare.battle_title",
+            "帮派活动挑战-帮派-挑战-准备-世界-首领-标题",
+            "帮派活动挑战-帮派-挑战-准备-战斗-标题",
         ],
         "box_index": 1,
     }
 
-    world_boss = nodes["guild.challenge.prepare.world_boss_title"]
+    world_boss = nodes["帮派活动挑战-帮派-挑战-准备-世界-首领-标题"]
     assert world_boss["expected"] == "世界首领"
     assert world_boss["roi"] == [60, 0, 180, 80]
 
-    battle_title = nodes["guild.challenge.prepare.battle_title"]
+    battle_title = nodes["帮派活动挑战-帮派-挑战-准备-战斗-标题"]
     assert battle_title["expected"] == "首领战斗"
     assert battle_title["roi"] == [1020, 60, 220, 100]
 
-    start = nodes["guild.challenge.start"]
+    start = nodes["帮派活动挑战-帮派-挑战-开始-2"]
     assert start == {
         "recognition": "ColorMatch",
         "method": 4,
@@ -368,18 +368,18 @@ def test_guild_activity_world_boss_prepare_page_uses_live_same_frame_boundary() 
         "action": "DoNothing",
     }
 
-    for node_name in ("MJA_GUILD_CHALLENGE_PREPARE_PROBE", "MJA_GUILD_CHALLENGE_START"):
+    for node_name in ("帮派活动挑战-帮派-挑战-准备-探测", "帮派活动挑战-帮派-挑战-开始"):
         assert nodes[node_name]["recognition"]["param"] == {
-            "all_of": ["guild.challenge.prepare.page", "guild.challenge.start"],
+            "all_of": ["帮派活动挑战-帮派-挑战-准备-页面", "帮派活动挑战-帮派-挑战-开始-2"],
             "box_index": 1,
         }
 
-    start_action = nodes["MJA_GUILD_CHALLENGE_START"]
+    start_action = nodes["帮派活动挑战-帮派-挑战-开始"]
     assert start_action["custom_action_param"]["evidence"] == {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "guild.challenge.prepare.page",
-        "target_name": "guild.challenge.start",
+        "page_name": "帮派活动挑战-帮派-挑战-准备-页面",
+        "target_name": "帮派活动挑战-帮派-挑战-开始-2",
     }
 
 
@@ -388,33 +388,33 @@ def test_guild_activity_post_result_checks_zero_before_reentering_bounded_loop()
 
     assert nodes["MJA_GUILD_POST_RESULT_PROBE"]["next"] == [
         "MJA_GUILD_FINAL_ZERO_PROBE",
-        "MJA_GUILD_CHALLENGE_LOOP",
+        "帮派活动挑战-帮派-挑战-循环",
     ]
-    assert "MJA_GUILD_CHALLENGE_PREPARE_PROBE" in nodes[
-        "MJA_GUILD_CHALLENGE_CONFIRM"
+    assert "帮派活动挑战-帮派-挑战-准备-探测" in nodes[
+        "帮派活动挑战-帮派-挑战-确认"
     ]["next"]
 
 
 def test_guild_activity_accepts_live_battle_then_waits_without_input() -> None:
     nodes = load_task_nodes(GUILD_ACTIVITY)
 
-    start_next = nodes["MJA_GUILD_CHALLENGE_START"]["next"]
+    start_next = nodes["帮派活动挑战-帮派-挑战-开始"]["next"]
     assert start_next == [
-        "MJA_GUILD_RESULT_DANGER_PROBE",
-        "MJA_GUILD_RESULT_VERIFICATION_PROBE",
-        "MJA_GUILD_BATTLE_ACTIVE_PROBE",
-        "MJA_GUILD_RESULT_VICTORY_PROBE",
-        "MJA_GUILD_RESULT_DEFEAT_PROBE",
+        "帮派活动挑战-帮派-结果-危险-探测",
+        "帮派活动挑战-帮派-结果-校验-探测",
+        "帮派活动挑战-帮派-战斗-进行中-探测",
+        "帮派活动挑战-帮派-结果-胜利-探测",
+        "帮派活动挑战-帮派-结果-失败-探测",
     ]
 
-    battle = nodes["MJA_GUILD_BATTLE_ACTIVE_PROBE"]
+    battle = nodes["帮派活动挑战-帮派-战斗-进行中-探测"]
     assert battle["recognition"]["param"] == {
         "all_of": [
-            "guild.challenge.battle.timer",
-            "guild.challenge.battle.boss",
-            "guild.challenge.battle.auto.top",
-            "guild.challenge.battle.pause",
-            "guild.challenge.battle.auto.bottom",
+            "帮派活动挑战-帮派-挑战-战斗-计时器",
+            "帮派活动挑战-帮派-挑战-战斗-首领",
+            "帮派活动挑战-帮派-挑战-战斗-自动-顶部",
+            "帮派活动挑战-帮派-挑战-战斗-暂停",
+            "帮派活动挑战-帮派-挑战-战斗-自动-底部",
         ],
         "box_index": 0,
     }
@@ -423,19 +423,19 @@ def test_guild_activity_accepts_live_battle_then_waits_without_input() -> None:
     assert battle["timeout"] == 180000
     assert battle["retry_times"] == 0
     assert battle["next"] == [
-        "MJA_GUILD_RESULT_DANGER_PROBE",
-        "MJA_GUILD_RESULT_VERIFICATION_PROBE",
-        "MJA_GUILD_RESULT_VICTORY_PROBE",
-        "MJA_GUILD_RESULT_DEFEAT_PROBE",
+        "帮派活动挑战-帮派-结果-危险-探测",
+        "帮派活动挑战-帮派-结果-校验-探测",
+        "帮派活动挑战-帮派-结果-胜利-探测",
+        "帮派活动挑战-帮派-结果-失败-探测",
     ]
-    assert battle["on_error"] == ["MJA_GUILD_RESULT_UNKNOWN"]
+    assert battle["on_error"] == ["帮派活动挑战-帮派-未知结果"]
 
     expected_controls = {
-        "guild.challenge.battle.timer": ("^\\d{2}:\\d{2}$", [170, 5, 120, 65]),
-        "guild.challenge.battle.boss": ("^\\d+级.+", [390, 0, 240, 60]),
-        "guild.challenge.battle.auto.top": ("自动中", [1090, 25, 100, 65]),
-        "guild.challenge.battle.pause": ("暂停", [1175, 25, 80, 65]),
-        "guild.challenge.battle.auto.bottom": ("自动中", [1130, 590, 130, 70]),
+        "帮派活动挑战-帮派-挑战-战斗-计时器": ("^\\d{2}:\\d{2}$", [170, 5, 120, 65]),
+        "帮派活动挑战-帮派-挑战-战斗-首领": ("^\\d+级.+", [390, 0, 240, 60]),
+        "帮派活动挑战-帮派-挑战-战斗-自动-顶部": ("自动中", [1090, 25, 100, 65]),
+        "帮派活动挑战-帮派-挑战-战斗-暂停": ("暂停", [1175, 25, 80, 65]),
+        "帮派活动挑战-帮派-挑战-战斗-自动-底部": ("自动中", [1130, 590, 130, 70]),
     }
     for node_name, (expected, roi) in expected_controls.items():
         control = nodes[node_name]
@@ -450,31 +450,31 @@ def test_guild_activity_accepts_live_battle_then_waits_without_input() -> None:
 def test_guild_activity_home_probe_uses_the_live_guild_home_regions() -> None:
     nodes = load_task_nodes(GUILD_ACTIVITY)
 
-    page_probe = nodes["MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_PAGE_PROBE"]
+    page_probe = nodes["帮派活动挑战-页面-探测-2"]
     assert page_probe["recognition"]["param"] == {
-        "all_of": ["guild.activity_challenge.page", "guild.activity.entry"],
+        "all_of": ["帮派活动挑战-帮派-活动-挑战-页面", "帮派活动挑战-帮派-活动-入口"],
         "box_index": 1,
     }
-    assert page_probe["next"] == ["MJA_GUILD_OPEN_ACTIVITY"]
+    assert page_probe["next"] == ["帮派活动挑战-帮派-打开-活动"]
 
-    guild_home = nodes["guild.activity_challenge.page"]
+    guild_home = nodes["帮派活动挑战-帮派-活动-挑战-页面"]
     assert guild_home["expected"] == "浮生城"
     assert guild_home["roi"] == [0, 0, 380, 100]
 
-    activity_entry = nodes["guild.activity.entry"]
+    activity_entry = nodes["帮派活动挑战-帮派-活动-入口"]
     assert activity_entry["expected"] == "帮会活动"
     assert activity_entry["roi"] == [600, 250, 360, 230]
 
-    open_activity = nodes["MJA_GUILD_OPEN_ACTIVITY"]
+    open_activity = nodes["帮派活动挑战-帮派-打开-活动"]
     assert open_activity["recognition"]["param"] == {
-        "all_of": ["guild.activity_challenge.page", "guild.activity.entry"],
+        "all_of": ["帮派活动挑战-帮派-活动-挑战-页面", "帮派活动挑战-帮派-活动-入口"],
         "box_index": 1,
     }
     assert open_activity["custom_action_param"]["evidence"] == {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "guild.activity_challenge.page",
-        "target_name": "guild.activity.entry",
+        "page_name": "帮派活动挑战-帮派-活动-挑战-页面",
+        "target_name": "帮派活动挑战-帮派-活动-入口",
     }
 
 
@@ -483,22 +483,22 @@ def test_guild_activity_terminal_outcomes_restore_home_before_recording() -> Non
 
     branches = (
         (
-            "MJA_GUILD_INITIAL_ZERO_PROBE",
-            "MJA_GUILD_ALREADY_COMPLETE_EXIT_ACTIVITY",
-            "MJA_GUILD_ALREADY_COMPLETE_EXIT_GUILD_HOME",
-            "MJA_GUILD_ALREADY_COMPLETE_EXIT_FUNCTION_PANEL_PROBE",
-            "MJA_GUILD_ALREADY_COMPLETE_EXIT_FUNCTION_PANEL",
-            "MJA_GUILD_ALREADY_COMPLETE_EXIT_HOME_PROBE",
-            "MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_ALREADY_COMPLETE",
+            "帮派活动挑战-帮派-初始-零-探测",
+            "帮派活动挑战-帮派-已完成-退出-活动",
+            "帮派活动挑战-帮派-已完成-退出-帮派-主页",
+            "帮派活动挑战-帮派-已完成-退出-功能-面板-探测",
+            "帮派活动挑战-帮派-已完成-退出-功能-面板",
+            "帮派活动挑战-帮派-已完成-退出-主页-探测",
+            "帮派活动挑战-已完成",
         ),
         (
             "MJA_GUILD_FINAL_ZERO_PROBE",
-            "MJA_GUILD_SUCCESS_EXIT_ACTIVITY",
-            "MJA_GUILD_SUCCESS_EXIT_GUILD_HOME",
-            "MJA_GUILD_SUCCESS_EXIT_FUNCTION_PANEL_PROBE",
-            "MJA_GUILD_SUCCESS_EXIT_FUNCTION_PANEL",
-            "MJA_GUILD_SUCCESS_EXIT_HOME_PROBE",
-            "MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_SUCCESS",
+            "帮派活动挑战-帮派-成功-退出-活动",
+            "帮派活动挑战-帮派-成功-退出-帮派-主页",
+            "帮派活动挑战-帮派-成功-退出-功能-面板-探测",
+            "帮派活动挑战-帮派-成功-退出-功能-面板",
+            "帮派活动挑战-帮派-成功-退出-主页-探测",
+            "帮派活动挑战-成功",
         ),
     )
 
@@ -513,7 +513,7 @@ def test_guild_activity_terminal_outcomes_restore_home_before_recording() -> Non
     ) in branches:
         assert nodes[source]["next"] == [
             exit_activity,
-            "MJA_GUILD_EXIT_RECORD_FAILURE",
+            "帮派活动挑战-帮派-退出-记录-失败",
         ]
         assert_reachable(nodes, source, home_probe)
         assert_reachable(nodes, source, outcome)
@@ -521,9 +521,9 @@ def test_guild_activity_terminal_outcomes_restore_home_before_recording() -> Non
         first_close = nodes[exit_activity]
         assert first_close["recognition"]["param"] == {
             "all_of": [
-                "guild.activity.page",
-                "guild.activity.context",
-                "guild.page.close",
+                "帮派活动挑战-帮派-活动-页面",
+                "帮派活动挑战-帮派-活动-上下文",
+                "帮派活动挑战-帮派-页面-关闭",
             ],
             "box_index": 2,
         }
@@ -532,17 +532,17 @@ def test_guild_activity_terminal_outcomes_restore_home_before_recording() -> Non
         assert first_close["custom_action_param"]["evidence"] == {
             "page_index": 0,
             "target_index": 2,
-            "page_name": "guild.activity.page",
-            "target_name": "guild.page.close",
+            "page_name": "帮派活动挑战-帮派-活动-页面",
+            "target_name": "帮派活动挑战-帮派-页面-关闭",
         }
         assert first_close["max_hit"] == 1
         assert first_close["retry_times"] == 0
         assert first_close["next"] == [exit_guild]
-        assert first_close["on_error"] == ["MJA_GUILD_EXIT_RECORD_FAILURE"]
+        assert first_close["on_error"] == ["帮派活动挑战-帮派-退出-记录-失败"]
 
         second_close = nodes[exit_guild]
         assert second_close["recognition"]["param"] == {
-            "all_of": ["guild.home.page", "guild.page.close"],
+            "all_of": ["帮派活动挑战-帮派-主页-页面", "帮派活动挑战-帮派-页面-关闭"],
             "box_index": 1,
         }
         assert second_close["custom_action"] == "GuardedInput"
@@ -550,14 +550,14 @@ def test_guild_activity_terminal_outcomes_restore_home_before_recording() -> Non
         assert second_close["max_hit"] == 1
         assert second_close["retry_times"] == 0
         assert second_close["next"] == [panel_probe]
-        assert second_close["on_error"] == ["MJA_GUILD_EXIT_RECORD_FAILURE"]
+        assert second_close["on_error"] == ["帮派活动挑战-帮派-退出-记录-失败"]
 
         outer_panel = nodes[panel_probe]
         assert outer_panel == {
             "recognition": {
                 "type": "And",
                 "param": {
-                    "all_of": ["MJA_GAME_SIDE_PANEL_OPEN"],
+                    "all_of": ["公共-游戏侧边面板-打开"],
                     "box_index": 0,
                 },
             },
@@ -565,13 +565,13 @@ def test_guild_activity_terminal_outcomes_restore_home_before_recording() -> Non
             "max_hit": 1,
             "action": "DoNothing",
             "next": [panel_close],
-            "on_error": ["MJA_GUILD_EXIT_RECORD_FAILURE"],
+            "on_error": ["帮派活动挑战-帮派-退出-记录-失败"],
             "retry_times": 0,
         }
 
         third_close = nodes[panel_close]
         assert third_close["recognition"]["param"] == {
-            "all_of": ["guild.function.panel.page", "guild.function.panel.close"],
+            "all_of": ["帮派活动挑战-帮派-功能-面板-页面", "帮派活动挑战-帮派-功能-面板-关闭"],
             "box_index": 1,
         }
         assert third_close["custom_action"] == "GuardedInput"
@@ -583,14 +583,14 @@ def test_guild_activity_terminal_outcomes_restore_home_before_recording() -> Non
             "evidence": {
                 "page_index": 0,
                 "target_index": 1,
-                "page_name": "guild.function.panel.page",
-                "target_name": "guild.function.panel.close",
+                "page_name": "帮派活动挑战-帮派-功能-面板-页面",
+                "target_name": "帮派活动挑战-帮派-功能-面板-关闭",
             },
         }
         assert third_close["max_hit"] == 1
         assert third_close["retry_times"] == 0
         assert third_close["next"] == [home_probe]
-        assert third_close["on_error"] == ["MJA_GUILD_EXIT_RECORD_FAILURE"]
+        assert third_close["on_error"] == ["帮派活动挑战-帮派-退出-记录-失败"]
 
         home = nodes[home_probe]
         assert home["template"] == "home/home_marker.png"
@@ -599,9 +599,9 @@ def test_guild_activity_terminal_outcomes_restore_home_before_recording() -> Non
         assert home["timeout"] == 8000
         assert home["max_hit"] == 1
         assert home["next"] == [outcome]
-        assert home["on_error"] == ["MJA_GUILD_EXIT_RECORD_FAILURE"]
+        assert home["on_error"] == ["帮派活动挑战-帮派-退出-记录-失败"]
 
-    close = nodes["guild.page.close"]
+    close = nodes["帮派活动挑战-帮派-页面-关闭"]
     assert close == {
         "recognition": "ColorMatch",
         "lower": [0, 0, 0],
@@ -612,24 +612,24 @@ def test_guild_activity_terminal_outcomes_restore_home_before_recording() -> Non
         "action": "DoNothing",
     }
 
-    assert nodes["guild.home.page"]["expected"] == "浮生城"
-    assert nodes["guild.home.page"]["roi"] == [0, 0, 380, 100]
+    assert nodes["帮派活动挑战-帮派-主页-页面"]["expected"] == "浮生城"
+    assert nodes["帮派活动挑战-帮派-主页-页面"]["roi"] == [0, 0, 380, 100]
 
-    assert nodes["guild.function.panel.page"] == {
+    assert nodes["帮派活动挑战-帮派-功能-面板-页面"] == {
         "recognition": {
             "type": "And",
             "param": {
-                "all_of": ["MJA_GAME_SIDE_PANEL_OPEN"],
+                "all_of": ["公共-游戏侧边面板-打开"],
                 "box_index": 0,
             },
         },
         "action": "DoNothing",
     }
-    assert nodes["guild.function.panel.close"] == {
+    assert nodes["帮派活动挑战-帮派-功能-面板-关闭"] == {
         "recognition": {
             "type": "And",
             "param": {
-                "all_of": ["MJA_GAME_SIDE_PANEL_OPEN"],
+                "all_of": ["公共-游戏侧边面板-打开"],
                 "box_index": 0,
             },
         },
@@ -652,10 +652,10 @@ def test_r20_already_complete_screenshot_requires_outer_panel_cleanup() -> None:
     )
     assert evidence["visible_state"] == "outer_function_panel"
     assert evidence["template_scores"]["panel_marker"] >= nodes[
-        "guild.function.panel.page"
+        "帮派活动挑战-帮派-功能-面板-页面"
     ]["threshold"]
     assert evidence["template_scores"]["panel_close"] >= nodes[
-        "guild.function.panel.close"
+        "帮派活动挑战-帮派-功能-面板-关闭"
     ]["threshold"]
     assert evidence["template_scores"]["home_marker"] < 0.75
     assert evidence["action_trace"] == [
@@ -667,13 +667,13 @@ def test_r20_already_complete_screenshot_requires_outer_panel_cleanup() -> None:
     ]
 
     already_complete_close = nodes[
-        "MJA_GUILD_ALREADY_COMPLETE_EXIT_FUNCTION_PANEL"
+        "帮派活动挑战-帮派-已完成-退出-功能-面板"
     ]
     assert already_complete_close["custom_action_param"]["action_id"] == (
         "close_function_panel"
     )
     assert already_complete_close["next"] == [
-        "MJA_GUILD_ALREADY_COMPLETE_EXIT_HOME_PROBE"
+        "帮派活动挑战-帮派-已完成-退出-主页-探测"
     ]
 
 
@@ -682,7 +682,7 @@ def test_all_guild_activity_failures_persist_then_fail_native() -> None:
     failures = {
         name: node
         for name, node in nodes.items()
-        if name.startswith("MJA_GUILD_")
+        if name.startswith("帮派活动挑战-")
         and node.get("custom_action") == "RecordTaskOutcome"
         and node.get("custom_action_param", {}).get("task_id")
         == GUILD_ACTIVITY.task_id
@@ -692,19 +692,19 @@ def test_all_guild_activity_failures_persist_then_fail_native() -> None:
     for name, node in failures.items():
         assert node["custom_action_param"]["native_fail_after_record"] is True, name
         assert node["Abort"] is True, name
-        assert node["next"] == ["MJA_COMMON_ABORT"], name
+        assert node["next"] == ["公共-通用中止"], name
         assert "on_error" not in node, name
 
 
 def test_guild_activity_uses_live_huanjing_title_with_context() -> None:
     nodes = load_task_nodes(GUILD_ACTIVITY)
 
-    activity_page = nodes["guild.activity.page"]
+    activity_page = nodes["帮派活动挑战-帮派-活动-页面"]
     assert activity_page["recognition"] == "OCR"
     assert activity_page["expected"] == "幻境征讨"
     assert activity_page["roi"] == [0, 0, 620, 190]
 
-    activity_context = nodes["guild.activity.context"]
+    activity_context = nodes["帮派活动挑战-帮派-活动-上下文"]
     assert activity_context["expected"] == ["讨伐中", "今日剩余征讨次数"]
     context_x, context_y, context_width, _ = activity_context["roi"]
     assert context_x > 0
@@ -713,27 +713,27 @@ def test_guild_activity_uses_live_huanjing_title_with_context() -> None:
     assert activity_context["roi"] != [200, 120, 900, 500]
 
     context_bound_nodes = (
-        "MJA_GUILD_ACTIVITY_PAGE_PROBE",
-        "MJA_GUILD_INITIAL_ZERO_PROBE",
-        "MJA_GUILD_CHALLENGE_LOOP",
+        "帮派活动挑战-页面-探测",
+        "帮派活动挑战-帮派-初始-零-探测",
+        "帮派活动挑战-帮派-挑战-循环",
         "MJA_GUILD_POST_RESULT_PROBE",
         "MJA_GUILD_FINAL_ZERO_PROBE",
-        "MJA_GUILD_ALREADY_COMPLETE_EXIT_ACTIVITY",
-        "MJA_GUILD_SUCCESS_EXIT_ACTIVITY",
+        "帮派活动挑战-帮派-已完成-退出-活动",
+        "帮派活动挑战-帮派-成功-退出-活动",
     )
     for node_name in context_bound_nodes:
         all_of = nodes[node_name]["recognition"]["param"]["all_of"]
-        assert "guild.activity.page" in all_of
-        assert "guild.activity.context" in all_of
+        assert "帮派活动挑战-帮派-活动-页面" in all_of
+        assert "帮派活动挑战-帮派-活动-上下文" in all_of
 
 
 def test_guild_activity_live_controls_cover_the_right_edge_without_full_screen_ocr() -> None:
     nodes = load_task_nodes(GUILD_ACTIVITY)
 
     for remaining_name in (
-        "guild.remaining.available",
-        "guild.remaining.any",
-        "guild.remaining.exhausted",
+        "帮派活动挑战-帮派-剩余-可用",
+        "帮派活动挑战-帮派-剩余-任意",
+        "帮派活动挑战-帮派-剩余-耗尽",
     ):
         remaining = nodes[remaining_name]
         x, y, width, height = remaining["roi"]
@@ -744,7 +744,7 @@ def test_guild_activity_live_controls_cover_the_right_edge_without_full_screen_o
         assert height < 150
         assert remaining["roi"] != [300, 120, 700, 260]
 
-    challenge = nodes["guild.challenge.target"]
+    challenge = nodes["帮派活动挑战-帮派-挑战-目标"]
     x, y, width, height = challenge["roi"]
     assert x <= 1040
     assert x + width >= 1250

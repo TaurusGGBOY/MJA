@@ -10,15 +10,15 @@ PIPELINE = (
     / "assets/resource/base/pipeline/daily/shadow_ruins_daily.json"
 )
 
-EXPLORATION = "MJA_SHADOW_EXPLORATION_PAGE"
-FOREGROUND = "MJA_SHADOW_FOREGROUND_LOOP"
-RECOVERY = "MJA_SHADOW_BLACK_FREEZE_RECOVERY"
-RESUME = "MJA_SHADOW_BLACK_FREEZE_RESUME"
-START = "MJA_SHADOW_RUINS_DAILY_START"
-HOME = "MJA_SHADOW_HOME_PROBE"
-TERMINAL_HOME = "MJA_SHADOW_HOME_BOUNDARY_PROBE"
-SUCCESS = "MJA_SHADOW_RECORD_SUCCESS"
-FAILURE = "MJA_SHADOW_RECORD_FAILURE"
+EXPLORATION = "影之遗迹-探索-页面"
+FOREGROUND = "影之遗迹-前台-循环"
+RECOVERY = "影之遗迹-黑屏-冻结-恢复"
+RESUME = "影之遗迹-黑屏-冻结-恢复继续"
+START = "影之遗迹-任务入口"
+HOME = "影之遗迹-主页-探测"
+TERMINAL_HOME = "影之遗迹-主页边界-探测"
+SUCCESS = "影之遗迹-记录-成功"
+FAILURE = "影之遗迹-记录-失败"
 
 
 def _nodes() -> dict[str, dict[str, object]]:
@@ -76,7 +76,7 @@ def test_r31_black_freeze_recovery_is_private_to_exploration_successors() -> Non
     ].index(EXPLORATION)
 
     for source in incoming[RECOVERY]:
-        assert source.startswith("MJA_SHADOW_")
+        assert source.startswith("影之遗迹-")
     assert RECOVERY not in nodes[START].get("next", [])
     assert RECOVERY not in nodes[START].get("on_error", [])
 
@@ -100,13 +100,13 @@ def test_r31_recovery_resumes_same_task_through_shared_start_without_success_esc
     assert resume["action"] == "DoNothing"
     assert resume["timeout"] == 120000
     assert resume["retry_times"] == 0
-    assert resume["next"] == [HOME, "[JumpBack]MJA_GAME_START"]
+    assert resume["next"] == [HOME, "[JumpBack]启动-游戏启动"]
     assert resume["on_error"] == [FAILURE]
 
     assert TERMINAL_HOME not in resume["next"]
     assert SUCCESS not in resume["next"]
     assert START not in resume["next"]
-    assert nodes[HOME]["next"] == ["MJA_SHADOW_OPEN_PAINTING"]
+    assert nodes[HOME]["next"] == ["影之遗迹-打开-画卷"]
 
     begin_nodes = {
         name
@@ -120,4 +120,4 @@ def test_r31_recovery_resumes_same_task_through_shared_start_without_success_esc
     assert failure["custom_action_param"]["status"] == "failed"
     assert failure["custom_action_param"]["native_fail_after_record"] is True
     assert failure["Abort"] is True
-    assert failure["next"] == ["MJA_COMMON_ABORT"]
+    assert failure["next"] == ["公共-通用中止"]

@@ -55,7 +55,7 @@ def candidate(tmp_path: Path) -> Path:
     )
     write_json(
         candidate / "tasks/game.json",
-        {"task": [{"name": "GAME_START", "entry": "MJA_GAME_START"}]},
+        {"task": [{"name": "GAME_START", "entry": "启动-游戏启动"}]},
     )
     write_json(
         candidate / "tasks/alpha.json",

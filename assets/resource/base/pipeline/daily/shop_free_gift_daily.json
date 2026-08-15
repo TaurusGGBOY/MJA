@@ -1,5 +1,5 @@
 {
-  "MJA_SHOP_FREE_GIFT_DAILY_START": {
+  "商店免费礼包-任务入口": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "BeginTask",
@@ -8,97 +8,97 @@
     },
     "max_hit": 1,
     "next": [
-      "MJA_SHOP_DIRECT_STATUS_PROBE",
-      "MJA_SHOP_DIRECT_CLAIM_GATE",
-      "MJA_SHOP_OPEN_PERIOD",
-      "MJA_SHOP_BENEFITS_PAGE_PROBE",
-      "MJA_SHOP_PANEL_PROBE",
-      "MJA_SHOP_PAGE_PROBE",
-      "MJA_SHOP_HOME_PROBE"
+      "商店免费礼包-直接-状态-探测",
+      "商店免费礼包-直接-领取-门禁",
+      "商店免费礼包-打开-周期",
+      "商店免费礼包-权益-页面-探测",
+      "商店免费礼包-面板-探测",
+      "商店免费礼包-页面-探测",
+      "商店免费礼包-主页-探测"
     ],
     "on_error": [
-      "MJA_SHOP_RUNTIME_RECOVERY_ATTEMPT_1",
-      "MJA_SHOP_RUNTIME_RECOVERY_ATTEMPT_2",
-      "MJA_SHOP_RUNTIME_RECOVERY_EXHAUSTED"
+      "商店免费礼包-运行时-恢复-尝试-1",
+      "商店免费礼包-运行时-恢复-尝试-2",
+      "商店免费礼包-运行时-恢复-耗尽"
     ]
   },
-  "MJA_SHOP_PAGE_PROBE": {
+  "商店免费礼包-页面-探测": {
     "recognition": "OCR",
     "expected": "商城",
     "roi": [0, 0, 1280, 720],
     "timeout": 8000,
     "action": "DoNothing",
     "next": [
-      "MJA_SHOP_DIRECT_STATUS_PROBE",
-      "MJA_SHOP_DIRECT_CLAIM_GATE",
-      "MJA_SHOP_OPEN_PERIOD",
-      "MJA_SHOP_BENEFITS_PAGE_PROBE"
+      "商店免费礼包-直接-状态-探测",
+      "商店免费礼包-直接-领取-门禁",
+      "商店免费礼包-打开-周期",
+      "商店免费礼包-权益-页面-探测"
     ],
     "on_error": [
-      "MJA_SHOP_RUNTIME_RECOVERY_ATTEMPT_1",
-      "MJA_SHOP_RUNTIME_RECOVERY_ATTEMPT_2",
-      "MJA_SHOP_RUNTIME_RECOVERY_EXHAUSTED"
+      "商店免费礼包-运行时-恢复-尝试-1",
+      "商店免费礼包-运行时-恢复-尝试-2",
+      "商店免费礼包-运行时-恢复-耗尽"
     ]
   },
-  "MJA_SHOP_BENEFITS_PAGE_PROBE": {
+  "商店免费礼包-权益-页面-探测": {
     "recognition": "OCR",
     "expected": "周期福利",
     "roi": [0, 100, 1280, 620],
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_SHOP_STATUS_PROBE", "MJA_SHOP_CLAIM_GATE"],
+    "next": ["商店免费礼包-状态-探测", "商店免费礼包-领取-门禁"],
     "on_error": [
-      "MJA_SHOP_RUNTIME_RECOVERY_ATTEMPT_1",
-      "MJA_SHOP_RUNTIME_RECOVERY_ATTEMPT_2",
-      "MJA_SHOP_RUNTIME_RECOVERY_EXHAUSTED"
+      "商店免费礼包-运行时-恢复-尝试-1",
+      "商店免费礼包-运行时-恢复-尝试-2",
+      "商店免费礼包-运行时-恢复-耗尽"
     ]
   },
-  "MJA_SHOP_STATUS_PROBE": {
+  "商店免费礼包-状态-探测": {
     "recognition": "OCR",
     "expected": ["已领取", "今日已领取", "领取完毕"],
     "roi": [0, 100, 1280, 620],
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_SHOP_ALREADY_COMPLETE"],
+    "next": ["商店免费礼包-已完成"],
     "on_error": [
-      "MJA_SHOP_CLAIM_GATE",
-      "MJA_SHOP_RUNTIME_RECOVERY_ATTEMPT_1",
-      "MJA_SHOP_RUNTIME_RECOVERY_ATTEMPT_2",
-      "MJA_SHOP_RUNTIME_RECOVERY_EXHAUSTED"
+      "商店免费礼包-领取-门禁",
+      "商店免费礼包-运行时-恢复-尝试-1",
+      "商店免费礼包-运行时-恢复-尝试-2",
+      "商店免费礼包-运行时-恢复-耗尽"
     ]
   },
-  "MJA_SHOP_DIRECT_STATUS_PROBE": {
+  "商店免费礼包-直接-状态-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["shop.page", "shop.daily_free_gift_claimed"],
+        "all_of": ["商店免费礼包-商店-页面", "商店免费礼包-商店-日常-免费-礼包-已领取"],
         "box_index": 1
       }
     },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_SHOP_ALREADY_COMPLETE"],
+    "next": ["商店免费礼包-已完成"],
     "on_error": [
-      "MJA_SHOP_DIRECT_CLAIM_GATE",
-      "MJA_SHOP_BENEFITS_PAGE_PROBE",
-      "MJA_SHOP_PAGE_PROBE",
-      "MJA_SHOP_HOME_PROBE",
-      "MJA_SHOP_RUNTIME_RECOVERY_ATTEMPT_1",
-      "MJA_SHOP_RUNTIME_RECOVERY_ATTEMPT_2",
-      "MJA_SHOP_RUNTIME_RECOVERY_EXHAUSTED"
+      "商店免费礼包-直接-领取-门禁",
+      "商店免费礼包-权益-页面-探测",
+      "商店免费礼包-页面-探测",
+      "商店免费礼包-主页-探测",
+      "商店免费礼包-运行时-恢复-尝试-1",
+      "商店免费礼包-运行时-恢复-尝试-2",
+      "商店免费礼包-运行时-恢复-耗尽"
     ]
   },
-  "MJA_SHOP_ALREADY_COMPLETE": {
+  "商店免费礼包-已完成": {
     "recognition": "DirectHit",
     "action": "DoNothing",
-    "next": ["MJA_SHOP_CLOSE_ALREADY_COMPLETE"],
-    "on_error": ["MJA_SHOP_RECORD_FAILURE"]
+    "next": ["商店免费礼包-关闭-已完成"],
+    "on_error": ["商店免费礼包-记录-失败"]
   },
-  "MJA_SHOP_CLAIM": {
+  "商店免费礼包-领取": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["shop.period_benefits.page", "shop.daily_free_gift"],
+        "all_of": ["商店免费礼包-商店-周期-权益-页面", "商店免费礼包-商店-日常-免费-礼包"],
         "box_index": 1
       }
     },
@@ -112,38 +112,38 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "shop.period_benefits.page",
-        "target_name": "shop.daily_free_gift"
+        "page_name": "商店免费礼包-商店-周期-权益-页面",
+        "target_name": "商店免费礼包-商店-日常-免费-礼包"
       }
     },
-    "next": ["MJA_SHOP_REWARD_PROBE"],
-    "on_error": ["MJA_SHOP_RECORD_FAILURE"],
+    "next": ["商店免费礼包-奖励-探测"],
+    "on_error": ["商店免费礼包-记录-失败"],
     "retry_times": 0
   },
-  "MJA_SHOP_DIRECT_CLAIM_GATE": {
+  "商店免费礼包-直接-领取-门禁": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["shop.page", "shop.daily_free_gift"],
+        "all_of": ["商店免费礼包-商店-页面", "商店免费礼包-商店-日常-免费-礼包"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_SHOP_DIRECT_CLAIM"],
+    "next": ["商店免费礼包-直接-领取"],
     "on_error": [
-      "MJA_SHOP_BENEFITS_PAGE_PROBE",
-      "MJA_SHOP_PAGE_PROBE",
-      "MJA_SHOP_HOME_PROBE",
-      "MJA_SHOP_RUNTIME_RECOVERY_ATTEMPT_1",
-      "MJA_SHOP_RUNTIME_RECOVERY_ATTEMPT_2",
-      "MJA_SHOP_RUNTIME_RECOVERY_EXHAUSTED"
+      "商店免费礼包-权益-页面-探测",
+      "商店免费礼包-页面-探测",
+      "商店免费礼包-主页-探测",
+      "商店免费礼包-运行时-恢复-尝试-1",
+      "商店免费礼包-运行时-恢复-尝试-2",
+      "商店免费礼包-运行时-恢复-耗尽"
     ]
   },
-  "MJA_SHOP_DIRECT_CLAIM": {
+  "商店免费礼包-直接-领取": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["shop.page", "shop.daily_free_gift"],
+        "all_of": ["商店免费礼包-商店-页面", "商店免费礼包-商店-日常-免费-礼包"],
         "box_index": 1
       }
     },
@@ -157,32 +157,32 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "shop.page",
-        "target_name": "shop.daily_free_gift"
+        "page_name": "商店免费礼包-商店-页面",
+        "target_name": "商店免费礼包-商店-日常-免费-礼包"
       }
     },
-    "next": ["MJA_SHOP_REWARD_PROBE"],
-    "on_error": ["MJA_SHOP_RECORD_FAILURE"],
+    "next": ["商店免费礼包-奖励-探测"],
+    "on_error": ["商店免费礼包-记录-失败"],
     "retry_times": 0
   },
-  "MJA_SHOP_REWARD_PROBE": {
+  "商店免费礼包-奖励-探测": {
     "recognition": "OCR",
     "expected": ["恭喜获得", "点击空白处关闭"],
     "roi": [0, 120, 1280, 600],
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_SHOP_CLOSE_REWARD"],
+    "next": ["商店免费礼包-关闭-奖励"],
     "on_error": [
-      "MJA_SHOP_POST_CLAIM_RECOVERY_ATTEMPT_1",
-      "MJA_SHOP_POST_CLAIM_RECOVERY_ATTEMPT_2",
-      "MJA_SHOP_POST_CLAIM_RECOVERY_EXHAUSTED"
+      "商店免费礼包-领取后-恢复-尝试-1",
+      "商店免费礼包-领取后-恢复-尝试-2",
+      "商店免费礼包-领取后-恢复-耗尽"
     ]
   },
-  "MJA_SHOP_CLOSE_REWARD": {
+  "商店免费礼包-关闭-奖励": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["shop.free_gift.reward", "shop.free_gift.dismiss"],
+        "all_of": ["商店免费礼包-商店-免费-礼包-奖励", "商店免费礼包-商店-免费-礼包-关闭"],
         "box_index": 1
       }
     },
@@ -196,57 +196,57 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "shop.free_gift.reward",
-        "target_name": "shop.free_gift.dismiss"
+        "page_name": "商店免费礼包-商店-免费-礼包-奖励",
+        "target_name": "商店免费礼包-商店-免费-礼包-关闭"
       }
     },
-    "next": ["MJA_SHOP_CLAIM_VERIFY", "MJA_SHOP_DIRECT_CLAIM_VERIFY"],
+    "next": ["商店免费礼包-领取-校验", "商店免费礼包-直接-领取-校验"],
     "on_error": [
-      "MJA_SHOP_POST_CLAIM_RECOVERY_ATTEMPT_1",
-      "MJA_SHOP_POST_CLAIM_RECOVERY_ATTEMPT_2",
-      "MJA_SHOP_POST_CLAIM_RECOVERY_EXHAUSTED"
+      "商店免费礼包-领取后-恢复-尝试-1",
+      "商店免费礼包-领取后-恢复-尝试-2",
+      "商店免费礼包-领取后-恢复-耗尽"
     ],
     "retry_times": 0
   },
-  "MJA_SHOP_CLAIM_VERIFY": {
+  "商店免费礼包-领取-校验": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["shop.period_benefits.page", "shop.daily_free_gift_claimed"],
+        "all_of": ["商店免费礼包-商店-周期-权益-页面", "商店免费礼包-商店-日常-免费-礼包-已领取"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_SHOP_SUCCESS"],
+    "next": ["商店免费礼包-成功"],
     "on_error": [
-      "MJA_SHOP_POST_CLAIM_RECOVERY_ATTEMPT_1",
-      "MJA_SHOP_POST_CLAIM_RECOVERY_ATTEMPT_2",
-      "MJA_SHOP_POST_CLAIM_RECOVERY_EXHAUSTED"
+      "商店免费礼包-领取后-恢复-尝试-1",
+      "商店免费礼包-领取后-恢复-尝试-2",
+      "商店免费礼包-领取后-恢复-耗尽"
     ]
   },
-  "MJA_SHOP_DIRECT_CLAIM_VERIFY": {
+  "商店免费礼包-直接-领取-校验": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["shop.page", "shop.daily_free_gift_claimed"],
+        "all_of": ["商店免费礼包-商店-页面", "商店免费礼包-商店-日常-免费-礼包-已领取"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_SHOP_SUCCESS"],
+    "next": ["商店免费礼包-成功"],
     "on_error": [
-      "MJA_SHOP_POST_CLAIM_RECOVERY_ATTEMPT_1",
-      "MJA_SHOP_POST_CLAIM_RECOVERY_ATTEMPT_2",
-      "MJA_SHOP_POST_CLAIM_RECOVERY_EXHAUSTED"
+      "商店免费礼包-领取后-恢复-尝试-1",
+      "商店免费礼包-领取后-恢复-尝试-2",
+      "商店免费礼包-领取后-恢复-耗尽"
     ]
   },
-  "MJA_SHOP_SUCCESS": {
+  "商店免费礼包-成功": {
     "recognition": "DirectHit",
     "action": "DoNothing",
-    "next": ["MJA_SHOP_CLOSE"],
-    "on_error": ["MJA_SHOP_RECORD_FAILURE"]
+    "next": ["商店免费礼包-关闭"],
+    "on_error": ["商店免费礼包-记录-失败"]
   },
-  "MJA_SHOP_RECORD_SUCCESS": {
+  "商店免费礼包-记录-成功": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -255,10 +255,10 @@
       "status": "success",
       "postcondition": "shop.daily_free_gift_claimed"
     },
-    "next": ["MJA_COMMON_STOP"]
+    "next": ["公共-通用停止"]
 
   },
-  "MJA_SHOP_RECORD_ALREADY_COMPLETE": {
+  "商店免费礼包-记录-已完成": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -267,10 +267,10 @@
       "status": "already_complete",
       "postcondition": "shop.daily_free_gift_claimed"
     },
-    "next": ["MJA_COMMON_STOP"]
+    "next": ["公共-通用停止"]
 
   },
-  "MJA_SHOP_RECORD_FAILURE": {
+  "商店免费礼包-记录-失败": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -282,24 +282,24 @@
       "native_fail_after_record": true
     },
     "Abort": true,
-    "next": ["MJA_COMMON_ABORT"]
+    "next": ["公共-通用中止"]
   },
-  "MJA_SHOP_HOME_PROBE": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_HOME_PAGE"], "box_index": 0}},
+  "商店免费礼包-主页-探测": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}},
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_SHOP_OPEN_PANEL"],
+    "next": ["商店免费礼包-打开-面板"],
     "on_error": [
-      "MJA_SHOP_RUNTIME_RECOVERY_ATTEMPT_1",
-      "MJA_SHOP_RUNTIME_RECOVERY_ATTEMPT_2",
-      "MJA_SHOP_RUNTIME_RECOVERY_EXHAUSTED"
+      "商店免费礼包-运行时-恢复-尝试-1",
+      "商店免费礼包-运行时-恢复-尝试-2",
+      "商店免费礼包-运行时-恢复-耗尽"
     ]
   },
-  "MJA_SHOP_OPEN_PANEL": {
+  "商店免费礼包-打开-面板": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["home.page", "home.panel_open"],
+        "all_of": ["邮件奖励-主页-页面", "邮件奖励-主页-面板-打开"],
         "box_index": 1
       }
     },
@@ -313,34 +313,34 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "home.page",
-        "target_name": "home.panel_open"
+        "page_name": "邮件奖励-主页-页面",
+        "target_name": "邮件奖励-主页-面板-打开"
       }
     },
-    "next": ["MJA_SHOP_PANEL_PROBE"],
+    "next": ["商店免费礼包-面板-探测"],
     "on_error": [
-      "MJA_SHOP_RUNTIME_RECOVERY_ATTEMPT_1",
-      "MJA_SHOP_RUNTIME_RECOVERY_ATTEMPT_2",
-      "MJA_SHOP_RUNTIME_RECOVERY_EXHAUSTED"
+      "商店免费礼包-运行时-恢复-尝试-1",
+      "商店免费礼包-运行时-恢复-尝试-2",
+      "商店免费礼包-运行时-恢复-耗尽"
     ],
     "retry_times": 0
   },
-  "MJA_SHOP_PANEL_PROBE": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_SIDE_PANEL_OPEN"], "box_index": 0}},
+  "商店免费礼包-面板-探测": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏侧边面板-打开"], "box_index": 0}},
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_SHOP_OPEN_SHOP"],
+    "next": ["商店免费礼包-打开-商店"],
     "on_error": [
-      "MJA_SHOP_RUNTIME_RECOVERY_ATTEMPT_1",
-      "MJA_SHOP_RUNTIME_RECOVERY_ATTEMPT_2",
-      "MJA_SHOP_RUNTIME_RECOVERY_EXHAUSTED"
+      "商店免费礼包-运行时-恢复-尝试-1",
+      "商店免费礼包-运行时-恢复-尝试-2",
+      "商店免费礼包-运行时-恢复-耗尽"
     ]
   },
-  "MJA_SHOP_OPEN_SHOP": {
+  "商店免费礼包-打开-商店": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["panel.page", "shop.entry"],
+        "all_of": ["邮件奖励-面板-页面", "商店免费礼包-商店-入口"],
         "box_index": 1
       }
     },
@@ -354,23 +354,23 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "panel.page",
-        "target_name": "shop.entry"
+        "page_name": "邮件奖励-面板-页面",
+        "target_name": "商店免费礼包-商店-入口"
       }
     },
-    "next": ["MJA_SHOP_PAGE_PROBE"],
+    "next": ["商店免费礼包-页面-探测"],
     "on_error": [
-      "MJA_SHOP_RUNTIME_RECOVERY_ATTEMPT_1",
-      "MJA_SHOP_RUNTIME_RECOVERY_ATTEMPT_2",
-      "MJA_SHOP_RUNTIME_RECOVERY_EXHAUSTED"
+      "商店免费礼包-运行时-恢复-尝试-1",
+      "商店免费礼包-运行时-恢复-尝试-2",
+      "商店免费礼包-运行时-恢复-耗尽"
     ],
     "retry_times": 0
   },
-  "MJA_SHOP_OPEN_PERIOD": {
+  "商店免费礼包-打开-周期": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["shop.page", "shop.period_benefits"],
+        "all_of": ["商店免费礼包-商店-页面", "商店免费礼包-商店-周期-权益"],
         "box_index": 1
       }
     },
@@ -384,23 +384,23 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "shop.page",
-        "target_name": "shop.period_benefits"
+        "page_name": "商店免费礼包-商店-页面",
+        "target_name": "商店免费礼包-商店-周期-权益"
       }
     },
-    "next": ["MJA_SHOP_BENEFITS_PAGE_PROBE"],
+    "next": ["商店免费礼包-权益-页面-探测"],
     "on_error": [
-      "MJA_SHOP_RUNTIME_RECOVERY_ATTEMPT_1",
-      "MJA_SHOP_RUNTIME_RECOVERY_ATTEMPT_2",
-      "MJA_SHOP_RUNTIME_RECOVERY_EXHAUSTED"
+      "商店免费礼包-运行时-恢复-尝试-1",
+      "商店免费礼包-运行时-恢复-尝试-2",
+      "商店免费礼包-运行时-恢复-耗尽"
     ],
     "retry_times": 0
   },
-  "MJA_SHOP_CLOSE": {
+  "商店免费礼包-关闭": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["shop.page", "shop.close"],
+        "all_of": ["商店免费礼包-商店-页面", "商店免费礼包-商店-关闭"],
         "box_index": 1
       }
     },
@@ -414,25 +414,25 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "shop.page",
-        "target_name": "shop.close"
+        "page_name": "商店免费礼包-商店-页面",
+        "target_name": "商店免费礼包-商店-关闭"
       }
     },
-    "next": ["MJA_SHOP_PANEL_AFTER_CLOSE"],
-    "on_error": ["MJA_SHOP_RECORD_FAILURE"]
+    "next": ["商店免费礼包-面板关闭后"],
+    "on_error": ["商店免费礼包-记录-失败"]
   },
-  "MJA_SHOP_PANEL_AFTER_CLOSE": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_SIDE_PANEL_OPEN"], "box_index": 0}},
+  "商店免费礼包-面板关闭后": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏侧边面板-打开"], "box_index": 0}},
     "timeout": 5000,
     "action": "DoNothing",
-    "next": ["MJA_SHOP_CLOSE_PANEL"],
-    "on_error": ["MJA_SHOP_RECORD_FAILURE"]
+    "next": ["商店免费礼包-关闭-面板"],
+    "on_error": ["商店免费礼包-记录-失败"]
   },
-  "MJA_SHOP_CLOSE_PANEL": {
+  "商店免费礼包-关闭-面板": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["panel.page", "panel.close"],
+        "all_of": ["邮件奖励-面板-页面", "邮件奖励-面板-关闭"],
         "box_index": 1
       }
     },
@@ -446,67 +446,67 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "panel.page",
-        "target_name": "panel.close"
+        "page_name": "邮件奖励-面板-页面",
+        "target_name": "邮件奖励-面板-关闭"
       }
     },
-    "next": ["MJA_SHOP_HOME_RETURN_PROBE"],
-    "on_error": ["MJA_SHOP_RECORD_FAILURE"]
+    "next": ["商店免费礼包-主页-返回-探测"],
+    "on_error": ["商店免费礼包-记录-失败"]
   },
-  "MJA_SHOP_CLAIM_GATE": {
+  "商店免费礼包-领取-门禁": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["shop.period_benefits.page", "shop.daily_free_gift"],
+        "all_of": ["商店免费礼包-商店-周期-权益-页面", "商店免费礼包-商店-日常-免费-礼包"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_SHOP_CLAIM"],
+    "next": ["商店免费礼包-领取"],
     "on_error": [
-      "MJA_SHOP_RUNTIME_RECOVERY_ATTEMPT_1",
-      "MJA_SHOP_RUNTIME_RECOVERY_ATTEMPT_2",
-      "MJA_SHOP_RUNTIME_RECOVERY_EXHAUSTED"
+      "商店免费礼包-运行时-恢复-尝试-1",
+      "商店免费礼包-运行时-恢复-尝试-2",
+      "商店免费礼包-运行时-恢复-耗尽"
     ]
   },
-  "MJA_SHOP_RUNTIME_RECOVERY_ATTEMPT_1": {
+  "商店免费礼包-运行时-恢复-尝试-1": {
     "max_hit": 2,
     "recognition": "DirectHit",
     "timeout": 30000,
     "action": "DoNothing",
     "next": [
-      "MJA_SHOP_DIRECT_STATUS_PROBE",
-      "MJA_SHOP_DIRECT_CLAIM_GATE",
-      "MJA_SHOP_OPEN_PERIOD",
-      "MJA_SHOP_BENEFITS_PAGE_PROBE",
-      "MJA_SHOP_PANEL_PROBE",
-      "MJA_SHOP_PAGE_PROBE",
-      "MJA_SHOP_HOME_PROBE",
-      "[JumpBack]MJA_GAME_START"
+      "商店免费礼包-直接-状态-探测",
+      "商店免费礼包-直接-领取-门禁",
+      "商店免费礼包-打开-周期",
+      "商店免费礼包-权益-页面-探测",
+      "商店免费礼包-面板-探测",
+      "商店免费礼包-页面-探测",
+      "商店免费礼包-主页-探测",
+      "[JumpBack]启动-游戏启动"
     ],
     "on_error": [
-      "MJA_SHOP_RUNTIME_RECOVERY_ATTEMPT_2",
-      "MJA_SHOP_RUNTIME_RECOVERY_EXHAUSTED"
+      "商店免费礼包-运行时-恢复-尝试-2",
+      "商店免费礼包-运行时-恢复-耗尽"
     ]
   },
-  "MJA_SHOP_RUNTIME_RECOVERY_ATTEMPT_2": {
+  "商店免费礼包-运行时-恢复-尝试-2": {
     "max_hit": 2,
     "recognition": "DirectHit",
     "timeout": 30000,
     "action": "DoNothing",
     "next": [
-      "MJA_SHOP_DIRECT_STATUS_PROBE",
-      "MJA_SHOP_DIRECT_CLAIM_GATE",
-      "MJA_SHOP_OPEN_PERIOD",
-      "MJA_SHOP_BENEFITS_PAGE_PROBE",
-      "MJA_SHOP_PANEL_PROBE",
-      "MJA_SHOP_PAGE_PROBE",
-      "MJA_SHOP_HOME_PROBE",
-      "[JumpBack]MJA_GAME_START"
+      "商店免费礼包-直接-状态-探测",
+      "商店免费礼包-直接-领取-门禁",
+      "商店免费礼包-打开-周期",
+      "商店免费礼包-权益-页面-探测",
+      "商店免费礼包-面板-探测",
+      "商店免费礼包-页面-探测",
+      "商店免费礼包-主页-探测",
+      "[JumpBack]启动-游戏启动"
     ],
-    "on_error": ["MJA_SHOP_RUNTIME_RECOVERY_EXHAUSTED"]
+    "on_error": ["商店免费礼包-运行时-恢复-耗尽"]
   },
-  "MJA_SHOP_RUNTIME_RECOVERY_EXHAUSTED": {
+  "商店免费礼包-运行时-恢复-耗尽": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -518,38 +518,38 @@
       "native_fail_after_record": true
     },
     "Abort": true,
-    "next": ["MJA_COMMON_ABORT"]
+    "next": ["公共-通用中止"]
   },
-  "MJA_SHOP_POST_CLAIM_RECOVERY_ATTEMPT_1": {
+  "商店免费礼包-领取后-恢复-尝试-1": {
     "max_hit": 2,
     "recognition": "DirectHit",
     "timeout": 30000,
     "action": "DoNothing",
     "next": [
-      "MJA_SHOP_CLAIM_VERIFY",
-      "MJA_SHOP_DIRECT_CLAIM_VERIFY",
-      "MJA_SHOP_POST_CLAIM_HOME_PROBE",
-      "[JumpBack]MJA_GAME_START"
+      "商店免费礼包-领取-校验",
+      "商店免费礼包-直接-领取-校验",
+      "商店免费礼包-领取后-主页-探测",
+      "[JumpBack]启动-游戏启动"
     ],
     "on_error": [
-      "MJA_SHOP_POST_CLAIM_RECOVERY_ATTEMPT_2",
-      "MJA_SHOP_POST_CLAIM_RECOVERY_EXHAUSTED"
+      "商店免费礼包-领取后-恢复-尝试-2",
+      "商店免费礼包-领取后-恢复-耗尽"
     ]
   },
-  "MJA_SHOP_POST_CLAIM_RECOVERY_ATTEMPT_2": {
+  "商店免费礼包-领取后-恢复-尝试-2": {
     "max_hit": 2,
     "recognition": "DirectHit",
     "timeout": 30000,
     "action": "DoNothing",
     "next": [
-      "MJA_SHOP_CLAIM_VERIFY",
-      "MJA_SHOP_DIRECT_CLAIM_VERIFY",
-      "MJA_SHOP_POST_CLAIM_HOME_PROBE",
-      "[JumpBack]MJA_GAME_START"
+      "商店免费礼包-领取-校验",
+      "商店免费礼包-直接-领取-校验",
+      "商店免费礼包-领取后-主页-探测",
+      "[JumpBack]启动-游戏启动"
     ],
-    "on_error": ["MJA_SHOP_POST_CLAIM_RECOVERY_EXHAUSTED"]
+    "on_error": ["商店免费礼包-领取后-恢复-耗尽"]
   },
-  "MJA_SHOP_POST_CLAIM_RECOVERY_EXHAUSTED": {
+  "商店免费礼包-领取后-恢复-耗尽": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -561,24 +561,24 @@
       "native_fail_after_record": true
     },
     "Abort": true,
-    "next": ["MJA_COMMON_ABORT"]
+    "next": ["公共-通用中止"]
   },
-  "MJA_SHOP_POST_CLAIM_HOME_PROBE": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_HOME_PAGE"], "box_index": 0}},
+  "商店免费礼包-领取后-主页-探测": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}},
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_SHOP_POST_CLAIM_OPEN_PANEL"],
+    "next": ["商店免费礼包-领取后-打开-面板"],
     "on_error": [
-      "MJA_SHOP_POST_CLAIM_RECOVERY_ATTEMPT_1",
-      "MJA_SHOP_POST_CLAIM_RECOVERY_ATTEMPT_2",
-      "MJA_SHOP_POST_CLAIM_RECOVERY_EXHAUSTED"
+      "商店免费礼包-领取后-恢复-尝试-1",
+      "商店免费礼包-领取后-恢复-尝试-2",
+      "商店免费礼包-领取后-恢复-耗尽"
     ]
   },
-  "MJA_SHOP_POST_CLAIM_OPEN_PANEL": {
+  "商店免费礼包-领取后-打开-面板": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["home.page", "home.panel_open"],
+        "all_of": ["邮件奖励-主页-页面", "邮件奖励-主页-面板-打开"],
         "box_index": 1
       }
     },
@@ -592,34 +592,34 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "home.page",
-        "target_name": "home.panel_open"
+        "page_name": "邮件奖励-主页-页面",
+        "target_name": "邮件奖励-主页-面板-打开"
       }
     },
-    "next": ["MJA_SHOP_POST_CLAIM_PANEL_PROBE"],
+    "next": ["商店免费礼包-领取后-面板-探测"],
     "on_error": [
-      "MJA_SHOP_POST_CLAIM_RECOVERY_ATTEMPT_1",
-      "MJA_SHOP_POST_CLAIM_RECOVERY_ATTEMPT_2",
-      "MJA_SHOP_POST_CLAIM_RECOVERY_EXHAUSTED"
+      "商店免费礼包-领取后-恢复-尝试-1",
+      "商店免费礼包-领取后-恢复-尝试-2",
+      "商店免费礼包-领取后-恢复-耗尽"
     ],
     "retry_times": 0
   },
-  "MJA_SHOP_POST_CLAIM_PANEL_PROBE": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_SIDE_PANEL_OPEN"], "box_index": 0}},
+  "商店免费礼包-领取后-面板-探测": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏侧边面板-打开"], "box_index": 0}},
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_SHOP_POST_CLAIM_OPEN_SHOP"],
+    "next": ["商店免费礼包-领取后-打开-商店"],
     "on_error": [
-      "MJA_SHOP_POST_CLAIM_RECOVERY_ATTEMPT_1",
-      "MJA_SHOP_POST_CLAIM_RECOVERY_ATTEMPT_2",
-      "MJA_SHOP_POST_CLAIM_RECOVERY_EXHAUSTED"
+      "商店免费礼包-领取后-恢复-尝试-1",
+      "商店免费礼包-领取后-恢复-尝试-2",
+      "商店免费礼包-领取后-恢复-耗尽"
     ]
   },
-  "MJA_SHOP_POST_CLAIM_OPEN_SHOP": {
+  "商店免费礼包-领取后-打开-商店": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["panel.page", "shop.entry"],
+        "all_of": ["邮件奖励-面板-页面", "商店免费礼包-商店-入口"],
         "box_index": 1
       }
     },
@@ -633,39 +633,39 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "panel.page",
-        "target_name": "shop.entry"
+        "page_name": "邮件奖励-面板-页面",
+        "target_name": "商店免费礼包-商店-入口"
       }
     },
-    "next": ["MJA_SHOP_POST_CLAIM_PAGE_PROBE"],
+    "next": ["商店免费礼包-领取后-页面-探测"],
     "on_error": [
-      "MJA_SHOP_POST_CLAIM_RECOVERY_ATTEMPT_1",
-      "MJA_SHOP_POST_CLAIM_RECOVERY_ATTEMPT_2",
-      "MJA_SHOP_POST_CLAIM_RECOVERY_EXHAUSTED"
+      "商店免费礼包-领取后-恢复-尝试-1",
+      "商店免费礼包-领取后-恢复-尝试-2",
+      "商店免费礼包-领取后-恢复-耗尽"
     ],
     "retry_times": 0
   },
-  "MJA_SHOP_POST_CLAIM_PAGE_PROBE": {
+  "商店免费礼包-领取后-页面-探测": {
     "recognition": "OCR",
     "expected": "商城",
     "roi": [0, 0, 1280, 720],
     "timeout": 8000,
     "action": "DoNothing",
     "next": [
-      "MJA_SHOP_DIRECT_CLAIM_VERIFY",
-      "MJA_SHOP_POST_CLAIM_OPEN_PERIOD"
+      "商店免费礼包-直接-领取-校验",
+      "商店免费礼包-领取后-打开-周期"
     ],
     "on_error": [
-      "MJA_SHOP_POST_CLAIM_RECOVERY_ATTEMPT_1",
-      "MJA_SHOP_POST_CLAIM_RECOVERY_ATTEMPT_2",
-      "MJA_SHOP_POST_CLAIM_RECOVERY_EXHAUSTED"
+      "商店免费礼包-领取后-恢复-尝试-1",
+      "商店免费礼包-领取后-恢复-尝试-2",
+      "商店免费礼包-领取后-恢复-耗尽"
     ]
   },
-  "MJA_SHOP_POST_CLAIM_OPEN_PERIOD": {
+  "商店免费礼包-领取后-打开-周期": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["shop.page", "shop.period_benefits"],
+        "all_of": ["商店免费礼包-商店-页面", "商店免费礼包-商店-周期-权益"],
         "box_index": 1
       }
     },
@@ -679,30 +679,30 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "shop.page",
-        "target_name": "shop.period_benefits"
+        "page_name": "商店免费礼包-商店-页面",
+        "target_name": "商店免费礼包-商店-周期-权益"
       }
     },
-    "next": ["MJA_SHOP_CLAIM_VERIFY"],
+    "next": ["商店免费礼包-领取-校验"],
     "on_error": [
-      "MJA_SHOP_POST_CLAIM_RECOVERY_ATTEMPT_1",
-      "MJA_SHOP_POST_CLAIM_RECOVERY_ATTEMPT_2",
-      "MJA_SHOP_POST_CLAIM_RECOVERY_EXHAUSTED"
+      "商店免费礼包-领取后-恢复-尝试-1",
+      "商店免费礼包-领取后-恢复-尝试-2",
+      "商店免费礼包-领取后-恢复-耗尽"
     ],
     "retry_times": 0
   },
-  "MJA_SHOP_HOME_RETURN_PROBE": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_HOME_PAGE"], "box_index": 0}},
+  "商店免费礼包-主页-返回-探测": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}},
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_SHOP_RECORD_SUCCESS"],
-    "on_error": ["MJA_SHOP_RECORD_FAILURE"]
+    "next": ["商店免费礼包-记录-成功"],
+    "on_error": ["商店免费礼包-记录-失败"]
   },
-  "MJA_SHOP_CLOSE_ALREADY_COMPLETE": {
+  "商店免费礼包-关闭-已完成": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["shop.page", "shop.close"],
+        "all_of": ["商店免费礼包-商店-页面", "商店免费礼包-商店-关闭"],
         "box_index": 1
       }
     },
@@ -716,25 +716,25 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "shop.page",
-        "target_name": "shop.close"
+        "page_name": "商店免费礼包-商店-页面",
+        "target_name": "商店免费礼包-商店-关闭"
       }
     },
-    "next": ["MJA_SHOP_PANEL_AFTER_CLOSE_ALREADY_COMPLETE"],
-    "on_error": ["MJA_SHOP_RECORD_FAILURE"]
+    "next": ["商店免费礼包-面板关闭后-已完成"],
+    "on_error": ["商店免费礼包-记录-失败"]
   },
-  "MJA_SHOP_PANEL_AFTER_CLOSE_ALREADY_COMPLETE": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_SIDE_PANEL_OPEN"], "box_index": 0}},
+  "商店免费礼包-面板关闭后-已完成": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏侧边面板-打开"], "box_index": 0}},
     "timeout": 5000,
     "action": "DoNothing",
-    "next": ["MJA_SHOP_CLOSE_PANEL_ALREADY_COMPLETE"],
-    "on_error": ["MJA_SHOP_RECORD_FAILURE"]
+    "next": ["商店免费礼包-关闭-面板-已完成"],
+    "on_error": ["商店免费礼包-记录-失败"]
   },
-  "MJA_SHOP_CLOSE_PANEL_ALREADY_COMPLETE": {
+  "商店免费礼包-关闭-面板-已完成": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["panel.page", "panel.close"],
+        "all_of": ["邮件奖励-面板-页面", "邮件奖励-面板-关闭"],
         "box_index": 1
       }
     },
@@ -749,69 +749,69 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "panel.page",
-        "target_name": "panel.close"
+        "page_name": "邮件奖励-面板-页面",
+        "target_name": "邮件奖励-面板-关闭"
       }
     },
-    "next": ["MJA_SHOP_HOME_RETURN_PROBE_ALREADY_COMPLETE"],
-    "on_error": ["MJA_SHOP_RECORD_FAILURE"]
+    "next": ["商店免费礼包-主页-返回-探测-已完成"],
+    "on_error": ["商店免费礼包-记录-失败"]
   },
-  "MJA_SHOP_HOME_RETURN_PROBE_ALREADY_COMPLETE": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_HOME_PAGE"], "box_index": 0}},
+  "商店免费礼包-主页-返回-探测-已完成": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}},
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_SHOP_RECORD_ALREADY_COMPLETE"],
-    "on_error": ["MJA_SHOP_RECORD_FAILURE"]
+    "next": ["商店免费礼包-记录-已完成"],
+    "on_error": ["商店免费礼包-记录-失败"]
   },
-  "shop.page": {
+  "商店免费礼包-商店-页面": {
     "recognition": "OCR",
     "expected": "商城",
     "roi": [0, 0, 1280, 720],
     "action": "DoNothing"
   },
-  "shop.entry": {
+  "商店免费礼包-商店-入口": {
     "recognition": "OCR",
     "expected": "商城",
     "roi": [700, 150, 500, 500],
     "action": "DoNothing"
   },
-  "shop.period_benefits": {
+  "商店免费礼包-商店-周期-权益": {
     "recognition": "OCR",
     "expected": "周期福利",
     "roi": [0, 100, 1280, 620],
     "action": "DoNothing"
   },
-  "shop.period_benefits.page": {
+  "商店免费礼包-商店-周期-权益-页面": {
     "recognition": "OCR",
     "expected": "周期福利",
     "roi": [0, 100, 1280, 620],
     "action": "DoNothing"
   },
-  "shop.daily_free_gift": {
+  "商店免费礼包-商店-日常-免费-礼包": {
     "recognition": "OCR",
     "expected": "免费领取",
     "roi": [1000, 150, 280, 160],
     "action": "DoNothing"
   },
-  "shop.daily_free_gift_claimed": {
+  "商店免费礼包-商店-日常-免费-礼包-已领取": {
     "recognition": "OCR",
     "expected": ["已领取", "今日已领取", "领取完毕"],
     "roi": [0, 100, 1280, 620],
     "action": "DoNothing"
   },
-  "shop.free_gift.reward": {
+  "商店免费礼包-商店-免费-礼包-奖励": {
     "recognition": "OCR",
     "expected": ["恭喜获得", "点击空白处关闭"],
     "roi": [0, 120, 1280, 600],
     "action": "DoNothing"
   },
-  "shop.free_gift.dismiss": {
+  "商店免费礼包-商店-免费-礼包-关闭": {
     "recognition": "OCR",
     "expected": "点击空白处关闭",
     "roi": [300, 560, 700, 160],
     "action": "DoNothing"
   },
-  "shop.close": {
+  "商店免费礼包-商店-关闭": {
     "recognition": "ColorMatch",
     "lower": [0, 0, 0],
     "upper": [125, 125, 125],

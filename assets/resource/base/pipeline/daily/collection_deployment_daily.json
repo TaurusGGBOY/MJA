@@ -1,5 +1,5 @@
 {
-  "MJA_COLLECTION_DEPLOYMENT_DAILY_START": {
+  "采集部署-任务入口": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "BeginTask",
@@ -8,20 +8,20 @@
     },
     "max_hit": 1,
     "next": [
-      "[JumpBack]MJA_KNOWN_COLLECTION_STALE_SHOP_CLOSE",
-      "MJA_COLLECTION_RESUME_REWARD_PROBE",
-      "MJA_COLLECTION_PAGE_PROBE",
-      "MJA_COLLECTION_HOME_PROBE"
+      "[JumpBack]采集部署-已知-采集-过期-商店-关闭",
+      "采集部署-恢复继续-奖励-探测",
+      "采集部署-页面-探测",
+      "采集部署-主页-探测"
     ],
-    "on_error": ["MJA_COLLECTION_RECORD_FAILURE"]
+    "on_error": ["采集部署-记录-失败"]
   },
-  "MJA_KNOWN_COLLECTION_STALE_SHOP_CLOSE": {
+  "采集部署-已知-采集-过期-商店-关闭": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "collection.universal_shop.boundary",
-          "collection.universal_shop.close"
+          "采集部署-采集-万用-商店-边界",
+          "采集部署-采集-万用-商店-关闭"
         ],
         "box_index": 1
       }
@@ -30,39 +30,39 @@
     "max_hit": 1,
     "action": "Click",
     "post_delay": 750,
-    "on_error": ["MJA_COLLECTION_RECORD_FAILURE"],
+    "on_error": ["采集部署-记录-失败"],
     "retry_times": 0
   },
-  "MJA_COLLECTION_RESUME_REWARD_PROBE": {
+  "采集部署-恢复继续-奖励-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "collection.reward_popup",
-          "collection.popup_close"
+          "采集部署-采集-奖励-弹窗",
+          "采集部署-采集-弹窗-关闭"
         ],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_COLLECTION_HARVEST_SUCCESS"],
-    "on_error": ["MJA_COLLECTION_RECORD_FAILURE"]
+    "next": ["采集部署-收获-成功"],
+    "on_error": ["采集部署-记录-失败"]
   },
-  "MJA_COLLECTION_PAGE_PROBE": {
+  "采集部署-页面-探测": {
     "recognition": "OCR",
     "expected": "采集部署",
     "roi": [0, 0, 420, 110],
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_COLLECTION_CLAIM"],
-    "on_error": ["MJA_COLLECTION_RECORD_FAILURE"]
+    "next": ["采集部署-领取"],
+    "on_error": ["采集部署-记录-失败"]
   },
-  "MJA_COLLECTION_CLAIM": {
+  "采集部署-领取": {
     "max_hit": 1,
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["collection.page", "collection.harvest_all"],
+        "all_of": ["采集部署-采集-页面", "采集部署-采集-收获-全部"],
         "box_index": 1
       }
     },
@@ -75,15 +75,15 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "collection.page",
-        "target_name": "collection.harvest_all"
+        "page_name": "采集部署-采集-页面",
+        "target_name": "采集部署-采集-收获-全部"
       }
     },
-    "next": ["MJA_COLLECTION_HARVEST_SUCCESS"],
-    "on_error": ["MJA_COLLECTION_RECORD_FAILURE"],
+    "next": ["采集部署-收获-成功"],
+    "on_error": ["采集部署-记录-失败"],
     "retry_times": 0
   },
-  "MJA_COLLECTION_HARVEST_SUCCESS": {
+  "采集部署-收获-成功": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -93,26 +93,26 @@
       "postcondition": "collection.harvest_clicked",
       "defer_home_boundary": true
     },
-    "next": ["MJA_COLLECTION_CLOSE_REWARD"],
-    "on_error": ["MJA_COLLECTION_RECORD_FAILURE"]
+    "next": ["采集部署-关闭-奖励"],
+    "on_error": ["采集部署-记录-失败"]
   },
-  "MJA_COLLECTION_REWARD_PROBE": {
+  "采集部署-奖励-探测": {
     "recognition": "OCR",
     "expected": ["恭喜获得", "获得", "据传太吾旧影"],
     "roi": [0, 120, 1280, 520],
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_COLLECTION_CLOSE_REWARD"],
-    "on_error": ["MJA_COLLECTION_RECORD_FAILURE"]
+    "next": ["采集部署-关闭-奖励"],
+    "on_error": ["采集部署-记录-失败"]
   },
-  "MJA_COLLECTION_CLOSE_REWARD": {
+  "采集部署-关闭-奖励": {
     "max_hit": 1,
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "collection.reward_popup",
-          "collection.popup_close"
+          "采集部署-采集-奖励-弹窗",
+          "采集部署-采集-弹窗-关闭"
         ],
         "box_index": 1
       }
@@ -126,27 +126,27 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "collection.reward_popup",
-        "target_name": "collection.popup_close"
+        "page_name": "采集部署-采集-奖励-弹窗",
+        "target_name": "采集部署-采集-弹窗-关闭"
       }
     },
-    "next": ["MJA_COLLECTION_REWARD_PAINTING_PROBE"],
-    "on_error": ["MJA_COLLECTION_RECORD_FAILURE"],
+    "next": ["采集部署-奖励-画卷-探测"],
+    "on_error": ["采集部署-记录-失败"],
     "retry_times": 0
   },
-  "MJA_COLLECTION_REWARD_PAINTING_PROBE": {
+  "采集部署-奖励-画卷-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["collection.painting.page"]
+        "all_of": ["采集部署-采集-画卷-页面"]
       }
     },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_COLLECTION_CLOSE_PAINTING"],
-    "on_error": ["MJA_COLLECTION_RECORD_FAILURE"]
+    "next": ["采集部署-关闭-画卷"],
+    "on_error": ["采集部署-记录-失败"]
   },
-  "MJA_COLLECTION_RECORD_FAILURE": {
+  "采集部署-记录-失败": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -158,31 +158,31 @@
       "native_fail_after_record": true
     },
     "Abort": true,
-    "next": ["MJA_COMMON_ABORT"]
+    "next": ["公共-通用中止"]
 
   },
-  "MJA_COLLECTION_HOME_PROBE": {
+  "采集部署-主页-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "collection.home.page",
-          "collection.painting_scroll.entry"
+          "采集部署-采集-主页-页面",
+          "采集部署-采集-画卷-滚动-入口"
         ],
         "box_index": 0
       }
     },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_COLLECTION_OPEN_PAINTING"],
-    "on_error": ["MJA_COLLECTION_RECORD_FAILURE"]
+    "next": ["采集部署-打开-画卷"],
+    "on_error": ["采集部署-记录-失败"]
   },
-  "MJA_COLLECTION_OPEN_PAINTING": {
+  "采集部署-打开-画卷": {
     "max_hit": 1,
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["collection.home.page", "collection.painting_scroll.entry"],
+        "all_of": ["采集部署-采集-主页-页面", "采集部署-采集-画卷-滚动-入口"],
         "box_index": 1
       }
     },
@@ -195,32 +195,32 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "collection.home.page",
-        "target_name": "collection.painting_scroll.entry"
+        "page_name": "采集部署-采集-主页-页面",
+        "target_name": "采集部署-采集-画卷-滚动-入口"
       }
     },
-    "next": ["MJA_COLLECTION_PAINTING_PROBE"],
-    "on_error": ["MJA_COLLECTION_RECORD_FAILURE"],
+    "next": ["采集部署-画卷-探测"],
+    "on_error": ["采集部署-记录-失败"],
     "retry_times": 0
   },
-  "MJA_COLLECTION_PAINTING_PROBE": {
+  "采集部署-画卷-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["collection.painting.page"]
+        "all_of": ["采集部署-采集-画卷-页面"]
       }
     },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_COLLECTION_OPEN_YANWU"],
-    "on_error": ["MJA_COLLECTION_RECORD_FAILURE"]
+    "next": ["采集部署-打开-偃武"],
+    "on_error": ["采集部署-记录-失败"]
   },
-  "MJA_COLLECTION_OPEN_YANWU": {
+  "采集部署-打开-偃武": {
     "max_hit": 1,
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["collection.painting.page", "collection.yanwu_world"],
+        "all_of": ["采集部署-采集-画卷-页面", "采集部署-采集-偃武-世界"],
         "box_index": 1
       }
     },
@@ -233,29 +233,29 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "collection.painting.page",
-        "target_name": "collection.yanwu_world"
+        "page_name": "采集部署-采集-画卷-页面",
+        "target_name": "采集部署-采集-偃武-世界"
       }
     },
-    "next": ["MJA_COLLECTION_YANWU_PROBE"],
-    "on_error": ["MJA_COLLECTION_RECORD_FAILURE"],
+    "next": ["采集部署-偃武-探测"],
+    "on_error": ["采集部署-记录-失败"],
     "retry_times": 0
   },
-  "MJA_COLLECTION_YANWU_PROBE": {
+  "采集部署-偃武-探测": {
     "recognition": "OCR",
     "expected": "偃武世界",
     "roi": [0, 100, 600, 620],
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_COLLECTION_OPEN_COLLECTION"],
-    "on_error": ["MJA_COLLECTION_RECORD_FAILURE"]
+    "next": ["采集部署-打开-采集"],
+    "on_error": ["采集部署-记录-失败"]
   },
-  "MJA_COLLECTION_OPEN_COLLECTION": {
+  "采集部署-打开-采集": {
     "max_hit": 1,
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["collection.yanwu.page", "collection.open"],
+        "all_of": ["采集部署-采集-偃武-页面", "采集部署-采集-打开"],
         "box_index": 1
       }
     },
@@ -268,29 +268,29 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "collection.yanwu.page",
-        "target_name": "collection.open"
+        "page_name": "采集部署-采集-偃武-页面",
+        "target_name": "采集部署-采集-打开"
       }
     },
-    "next": ["MJA_COLLECTION_POST_OPEN_PAGE_PROBE"],
-    "on_error": ["MJA_COLLECTION_RECORD_FAILURE"],
+    "next": ["采集部署-之后-打开-页面-探测"],
+    "on_error": ["采集部署-记录-失败"],
     "retry_times": 0
   },
-  "MJA_COLLECTION_POST_OPEN_PAGE_PROBE": {
+  "采集部署-之后-打开-页面-探测": {
     "recognition": "OCR",
     "expected": "采集部署",
     "roi": [0, 0, 420, 110],
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_COLLECTION_CLAIM"],
-    "on_error": ["MJA_COLLECTION_RECORD_FAILURE"]
+    "next": ["采集部署-领取"],
+    "on_error": ["采集部署-记录-失败"]
   },
-  "MJA_COLLECTION_CLOSE": {
+  "采集部署-关闭": {
     "max_hit": 1,
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["collection.page", "collection.close"],
+        "all_of": ["采集部署-采集-页面", "采集部署-采集-关闭"],
         "box_index": 1
       }
     },
@@ -303,35 +303,35 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "collection.page",
-        "target_name": "collection.close"
+        "page_name": "采集部署-采集-页面",
+        "target_name": "采集部署-采集-关闭"
       }
     },
     "next": [
-      "MJA_COLLECTION_PAINTING_AFTER_CLOSE_PROBE",
-      "MJA_COLLECTION_HOME_BOUNDARY_PROBE"
+      "采集部署-画卷-之后-关闭-探测",
+      "采集部署-主页边界-探测"
     ],
-    "on_error": ["MJA_COLLECTION_BOUNDARY_FAILURE"],
+    "on_error": ["采集部署-边界-失败"],
     "retry_times": 0
   },
-  "MJA_COLLECTION_PAINTING_AFTER_CLOSE_PROBE": {
+  "采集部署-画卷-之后-关闭-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["collection.painting.page"]
+        "all_of": ["采集部署-采集-画卷-页面"]
       }
     },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_COLLECTION_CLOSE_PAINTING"],
-    "on_error": ["MJA_COLLECTION_BOUNDARY_FAILURE"]
+    "next": ["采集部署-关闭-画卷"],
+    "on_error": ["采集部署-边界-失败"]
   },
-  "MJA_COLLECTION_CLOSE_PAINTING": {
+  "采集部署-关闭-画卷": {
     "max_hit": 1,
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["collection.painting.page", "collection.painting.close"],
+        "all_of": ["采集部署-采集-画卷-页面", "采集部署-采集-画卷-关闭"],
         "box_index": 1
       }
     },
@@ -344,27 +344,27 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "collection.painting.page",
-        "target_name": "collection.painting.close"
+        "page_name": "采集部署-采集-画卷-页面",
+        "target_name": "采集部署-采集-画卷-关闭"
       }
     },
-    "next": ["MJA_COLLECTION_HOME_BOUNDARY_PROBE"],
-    "on_error": ["MJA_COLLECTION_BOUNDARY_FAILURE"],
+    "next": ["采集部署-主页边界-探测"],
+    "on_error": ["采集部署-边界-失败"],
     "retry_times": 0
   },
-  "MJA_COLLECTION_HOME_BOUNDARY_PROBE": {
+  "采集部署-主页边界-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["collection.home.page"]
+        "all_of": ["采集部署-采集-主页-页面"]
       }
     },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_HOME_BOUNDARY"],
-    "on_error": ["MJA_COLLECTION_BOUNDARY_FAILURE"]
+    "next": ["公共-主页边界"],
+    "on_error": ["采集部署-边界-失败"]
   },
-  "MJA_COLLECTION_BOUNDARY_FAILURE": {
+  "采集部署-边界-失败": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -376,93 +376,93 @@
       "native_fail_after_record": true
     },
     "Abort": true,
-    "next": ["MJA_COMMON_ABORT"]
+    "next": ["公共-通用中止"]
 
   },
-  "collection.home.page": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_HOME_PAGE"], "box_index": 0}},
+  "采集部署-采集-主页-页面": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}},
     "action": "DoNothing"
   },
-  "collection.home.dungeon": {
+  "采集部署-采集-主页-副本": {
     "recognition": "OCR",
     "expected": "^副本$",
     "roi": [1035, 45, 80, 40],
     "action": "DoNothing"
   },
-  "collection.home.trial": {
+  "采集部署-采集-主页-试炼": {
     "recognition": "OCR",
     "expected": "^试剑$",
     "roi": [965, 620, 100, 70],
     "action": "DoNothing"
   },
-  "collection.painting_scroll.entry": {
+  "采集部署-采集-画卷-滚动-入口": {
     "recognition": "OCR",
     "expected": "^画卷$",
     "roi": [800, 40, 370, 50],
     "action": "DoNothing"
   },
-  "collection.painting.page": {
+  "采集部署-采集-画卷-页面": {
     "recognition": "OCR",
     "expected": ["偃武世界", "云州", "蜃影武墟"],
     "roi": [0, 0, 1280, 720],
     "action": "DoNothing"
   },
-  "collection.yanwu_world": {
+  "采集部署-采集-偃武-世界": {
     "recognition": "OCR",
     "expected": "偃武世界",
     "roi": [0, 100, 600, 620],
     "action": "DoNothing"
   },
-  "collection.yanwu.page": {
+  "采集部署-采集-偃武-页面": {
     "recognition": "OCR",
     "expected": "偃武世界",
     "roi": [0, 100, 600, 620],
     "action": "DoNothing"
   },
-  "collection.open": {
+  "采集部署-采集-打开": {
     "recognition": "OCR",
     "expected": "采集部署",
     "roi": [0, 350, 500, 370],
     "action": "DoNothing"
   },
-  "collection.page": {
+  "采集部署-采集-页面": {
     "recognition": "OCR",
     "expected": "采集部署",
     "roi": [0, 0, 420, 110],
     "action": "DoNothing"
   },
-  "collection.harvest_all": {
+  "采集部署-采集-收获-全部": {
     "recognition": "OCR",
     "expected": "^(?:一)?键收获$",
     "roi": [880, 610, 320, 85],
     "action": "DoNothing"
   },
-  "collection.reward_popup": {
+  "采集部署-采集-奖励-弹窗": {
     "recognition": "OCR",
     "expected": ["恭喜获得", "获得", "据传太吾旧影"],
     "roi": [0, 120, 1280, 520],
     "action": "DoNothing"
   },
-  "collection.reward_title": {
+  "采集部署-采集-奖励-标题": {
     "recognition": "OCR",
     "expected": "据传太吾旧影",
     "roi": [360, 120, 620, 180],
     "action": "DoNothing"
   },
-  "collection.popup_close": {
+  "采集部署-采集-弹窗-关闭": {
     "recognition": "OCR",
     "expected": "点击空白处关闭",
     "roi": [350, 580, 600, 140],
     "action": "DoNothing"
   },
-  "collection.close": {
+  "采集部署-采集-关闭": {
     "recognition": "TemplateMatch",
     "template": "daily/TRIAL_SWORD_DAILY/trial_close.png",
     "roi": [1160, 0, 100, 100],
     "threshold": 0.36,
     "action": "DoNothing"
   },
-  "collection.painting.close": {
+  "采集部署-采集-画卷-关闭": {
     "recognition": "TemplateMatch",
     "template": "daily/HERO_DISPATCH_DAILY/painting_close.png",
     "roi": [1175, 5, 75, 75],
@@ -470,13 +470,13 @@
     "green_mask": true,
     "action": "DoNothing"
   },
-  "collection.universal_shop.boundary": {
+  "采集部署-采集-万用-商店-边界": {
     "recognition": "OCR",
     "expected": "玉盟商会",
     "roi": [0, 0, 320, 120],
     "action": "DoNothing"
   },
-  "collection.universal_shop.close": {
+  "采集部署-采集-万用-商店-关闭": {
     "recognition": "TemplateMatch",
     "template": "daily/BUY_TEA_DAILY/shop_close.png",
     "roi": [1160, 0, 100, 100],

@@ -29,9 +29,9 @@ def policy() -> TaskPolicy:
 def evidence() -> VisualEvidence:
     return VisualEvidence(
         "frame-1",
-        {"shop.page": 0},
+        {"商店免费礼包-商店-页面": 0},
         {"shop.target": 0},
-        {"unknown_dialog": 1, "safety.paid": 1},
+        {"unknown_dialog": 1, "破阵武学-安全-付费": 1},
         {},
         ("支付", "验证码"),
         ("未知货币",),
@@ -62,7 +62,7 @@ def test_authorization_is_always_allowed_for_missing_and_ambiguous_evidence():
 def test_authorization_does_not_block_purchase_or_verification_signals():
     decision = authorize_action(
         evidence(),
-        ActionIntent("buy", "shop.page", "shop.target", approved_resource="凝晶"),
+        ActionIntent("buy", "商店免费礼包-商店-页面", "shop.target", approved_resource="凝晶"),
         policy(),
         {"buy": 1},
     )
@@ -70,5 +70,5 @@ def test_authorization_does_not_block_purchase_or_verification_signals():
     assert decision == SafetyDecision(
         True,
         SafetyReason.ALLOWED,
-        ("unknown_dialog", "safety.paid", "支付", "验证码"),
+        ("unknown_dialog", "破阵武学-安全-付费", "支付", "验证码"),
     )

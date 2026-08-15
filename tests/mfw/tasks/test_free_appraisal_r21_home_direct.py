@@ -8,8 +8,8 @@ APPRAISAL = TaskContract(
     "FREE_APPRAISAL_DAILY",
     "daily/free_appraisal_daily.json",
 )
-RECORD_FAILURE = "MJA_APPRAISAL_RECORD_FAILURE"
-RUNTIME_RECOVERY = "MJA_APPRAISAL_RUNTIME_RECOVERY_ATTEMPT"
+RECORD_FAILURE = "免费鉴定-记录-失败"
+RUNTIME_RECOVERY = "免费鉴定-运行时-恢复-尝试"
 
 
 def _contains(roi: list[int], box: list[int]) -> bool:
@@ -26,29 +26,29 @@ def _contains(roi: list[int], box: list[int]) -> bool:
 def test_r21_start_uses_home_top_appraisal_and_panel_recovery_as_siblings() -> None:
     nodes = load_task_nodes(APPRAISAL)
 
-    start = nodes["MJA_FREE_APPRAISAL_DAILY_START"]
+    start = nodes["免费鉴定-任务入口"]
     assert start["next"] == [
-        "[JumpBack]MJA_KNOWN_PAINTING_CLOSE",
-        "[JumpBack]MJA_APPRAISAL_EXTRA_POPUP_CLOSE",
-        "[JumpBack]MJA_APPRAISAL_KNOWN_TEA_SHOP_CLOSE",
-        "MJA_APPRAISAL_REWARD_PROBE",
-        "MJA_APPRAISAL_PAGE_PROBE",
-        "MJA_APPRAISAL_HOME_PROBE",
-        "MJA_APPRAISAL_CLOSE_RECOVERED_PANEL",
+        "[JumpBack]公共-已知-画卷-关闭",
+        "[JumpBack]免费鉴定-额外-弹窗-关闭",
+        "[JumpBack]免费鉴定-已知-茶-商店-关闭",
+        "免费鉴定-奖励-探测",
+        "免费鉴定-页面-探测",
+        "免费鉴定-主页-探测",
+        "免费鉴定-关闭-已恢复-面板",
     ]
     assert start["timeout"] == 8000
     assert start["retry_times"] == 0
     assert start["on_error"] == [RUNTIME_RECOVERY, RECORD_FAILURE]
 
-    same_frame_home = ["appraisal.home.page", "appraisal.home.entry"]
-    home_probe = nodes["MJA_APPRAISAL_HOME_PROBE"]
+    same_frame_home = ["免费鉴定-鉴定-主页-页面", "免费鉴定-鉴定-主页-入口"]
+    home_probe = nodes["免费鉴定-主页-探测"]
     assert home_probe["recognition"]["param"] == {
         "all_of": same_frame_home,
         "box_index": 0,
     }
-    assert home_probe["next"] == ["MJA_APPRAISAL_OPEN_APPRAISAL"]
+    assert home_probe["next"] == ["免费鉴定-打开-鉴定"]
 
-    open_appraisal = nodes["MJA_APPRAISAL_OPEN_APPRAISAL"]
+    open_appraisal = nodes["免费鉴定-打开-鉴定"]
     assert open_appraisal["recognition"]["param"] == {
         "all_of": same_frame_home,
         "box_index": 1,
@@ -60,11 +60,11 @@ def test_r21_start_uses_home_top_appraisal_and_panel_recovery_as_siblings() -> N
         "evidence": {
             "page_index": 0,
             "target_index": 1,
-            "page_name": "appraisal.home.page",
-            "target_name": "appraisal.home.entry",
+            "page_name": "免费鉴定-鉴定-主页-页面",
+            "target_name": "免费鉴定-鉴定-主页-入口",
         },
     }
-    assert open_appraisal["next"] == ["MJA_APPRAISAL_PAGE_PROBE"]
+    assert open_appraisal["next"] == ["免费鉴定-页面-探测"]
 
     # r21 proved that opening the function panel hides the real top-level
     # 鉴宝 entry. The old open-panel -> panel appraisal route must not return.
@@ -83,11 +83,11 @@ def test_r21_root_recovery_is_bounded_and_reuses_shared_startup_without_input() 
     assert recovery["timeout"] == 30000
     assert recovery["retry_times"] == 0
     assert recovery["next"] == [
-        "MJA_APPRAISAL_REWARD_PROBE",
-        "MJA_APPRAISAL_PAGE_PROBE",
-        "MJA_APPRAISAL_HOME_PROBE",
-        "MJA_APPRAISAL_CLOSE_RECOVERED_PANEL",
-        "[JumpBack]MJA_GAME_START",
+        "免费鉴定-奖励-探测",
+        "免费鉴定-页面-探测",
+        "免费鉴定-主页-探测",
+        "免费鉴定-关闭-已恢复-面板",
+        "[JumpBack]启动-游戏启动",
     ]
     assert recovery["on_error"] == [RECORD_FAILURE]
 
@@ -99,8 +99,8 @@ def test_r21_root_recovery_is_bounded_and_reuses_shared_startup_without_input() 
 
 def test_r21_ocr_boxes_are_covered_by_top_appraisal_target_variants() -> None:
     nodes = load_task_nodes(APPRAISAL)
-    home = nodes["appraisal.home.page"]
-    appraisal = nodes["appraisal.home.entry"]
+    home = nodes["免费鉴定-鉴定-主页-页面"]
+    appraisal = nodes["免费鉴定-鉴定-主页-入口"]
 
     assert home == {
         "recognition": "OCR",
@@ -129,7 +129,7 @@ def test_r21_ocr_boxes_are_covered_by_top_appraisal_target_variants() -> None:
 
     # 秘宝 is only a function-panel boundary anchor. It is never an appraisal
     # click target and is outside the fixed top-level 鉴宝 ROI.
-    panel = nodes["appraisal.panel.page"]
+    panel = nodes["免费鉴定-鉴定-面板-页面"]
     assert "^秘宝$" in panel["expected"]
     assert "鉴宝" not in "".join(panel["expected"])
     assert appraisal["expected"] == ["^鉴宝$", "^宝$"]
@@ -137,10 +137,10 @@ def test_r21_ocr_boxes_are_covered_by_top_appraisal_target_variants() -> None:
 
 def test_r21_open_panel_recovery_closes_once_then_reenters_home_route() -> None:
     nodes = load_task_nodes(APPRAISAL)
-    recovery = nodes["MJA_APPRAISAL_CLOSE_RECOVERED_PANEL"]
+    recovery = nodes["免费鉴定-关闭-已恢复-面板"]
 
     assert recovery["recognition"]["param"] == {
-        "all_of": ["appraisal.panel.page", "appraisal.panel.close"],
+        "all_of": ["免费鉴定-鉴定-面板-页面", "免费鉴定-鉴定-面板-关闭"],
         "box_index": 1,
     }
     assert recovery["custom_action_param"] == {
@@ -151,22 +151,22 @@ def test_r21_open_panel_recovery_closes_once_then_reenters_home_route() -> None:
         "evidence": {
             "page_index": 0,
             "target_index": 1,
-            "page_name": "appraisal.panel.page",
-            "target_name": "appraisal.panel.close",
+            "page_name": "免费鉴定-鉴定-面板-页面",
+            "target_name": "免费鉴定-鉴定-面板-关闭",
         },
     }
     assert recovery["max_hit"] == 1
     assert recovery["retry_times"] == 0
     assert recovery["timeout"] == 8000
-    assert recovery["next"] == ["MJA_APPRAISAL_HOME_PROBE"]
+    assert recovery["next"] == ["免费鉴定-主页-探测"]
     assert recovery["on_error"] == [RECORD_FAILURE]
 
-    close = nodes["appraisal.panel.close"]
+    close = nodes["免费鉴定-鉴定-面板-关闭"]
     assert close == {
         "recognition": {
             "type": "And",
             "param": {
-                "all_of": ["MJA_GAME_SIDE_PANEL_OPEN"],
+                "all_of": ["公共-游戏侧边面板-打开"],
                 "box_index": 0,
             },
         },
@@ -218,21 +218,21 @@ def test_r21_free_claim_and_return_home_remain_bounded_and_truthful() -> None:
         assert node["max_hit"] == 1
         assert node["retry_times"] == 0
 
-    page = nodes["MJA_APPRAISAL_PAGE_PROBE"]
-    assert page["next"] == ["MJA_APPRAISAL_CLAIM", "MJA_APPRAISAL_STATUS_PROBE"]
-    claim = nodes["MJA_APPRAISAL_CLAIM"]
+    page = nodes["免费鉴定-页面-探测"]
+    assert page["next"] == ["免费鉴定-领取", "MJA_APPRAISAL_STATUS_PROBE"]
+    claim = nodes["免费鉴定-领取"]
     assert claim["recognition"]["param"] == {
-        "all_of": ["appraisal.page", "appraisal.free_once"],
+        "all_of": ["免费鉴定-鉴定-页面", "免费鉴定-鉴定-免费-一次"],
         "box_index": 1,
     }
-    assert nodes["appraisal.free_once"]["expected"] == "^免费鉴宝$"
+    assert nodes["免费鉴定-鉴定-免费-一次"]["expected"] == "^免费鉴宝$"
     assert "付费" not in str(claim)
 
     assert nodes["MJA_APPRAISAL_STATUS_PROBE"]["next"] == [
         "MJA_APPRAISAL_CLOSE_ALREADY_COMPLETE_PAGE"
     ]
     assert nodes["MJA_APPRAISAL_VERIFY"]["next"] == [
-        "MJA_APPRAISAL_CLOSE_SUCCESS_PAGE"
+        "免费鉴定-关闭-成功-页面"
     ]
     for close_name, home_name, outcome_name in (
         (
@@ -241,20 +241,20 @@ def test_r21_free_claim_and_return_home_remain_bounded_and_truthful() -> None:
             "MJA_APPRAISAL_ALREADY_COMPLETE",
         ),
         (
-            "MJA_APPRAISAL_CLOSE_SUCCESS_PAGE",
-            "MJA_APPRAISAL_HOME_AFTER_SUCCESS",
-            "MJA_APPRAISAL_SUCCESS",
+            "免费鉴定-关闭-成功-页面",
+            "免费鉴定-主页成功后",
+            "免费鉴定-成功",
         ),
     ):
         close_node = nodes[close_name]
         assert close_node["recognition"]["param"] == {
-            "all_of": ["appraisal.page", "appraisal.page.close"],
+            "all_of": ["免费鉴定-鉴定-页面", "免费鉴定-鉴定-页面-关闭"],
             "box_index": 1,
         }
         assert close_node["custom_action_param"]["action_id"] == "close_appraisal_page"
         assert close_node["next"] == [home_name]
         assert nodes[home_name]["recognition"]["param"] == {
-            "all_of": ["appraisal.home.page", "appraisal.home.entry"],
+            "all_of": ["免费鉴定-鉴定-主页-页面", "免费鉴定-鉴定-主页-入口"],
             "box_index": 0,
         }
         assert nodes[home_name]["next"] == [outcome_name]
@@ -262,30 +262,30 @@ def test_r21_free_claim_and_return_home_remain_bounded_and_truthful() -> None:
     assert_outcome(
         nodes, "MJA_APPRAISAL_ALREADY_COMPLETE", "already_complete", "appraisal.used"
     )
-    assert_outcome(nodes, "MJA_APPRAISAL_SUCCESS", "success", "appraisal.used")
+    assert_outcome(nodes, "免费鉴定-成功", "success", "appraisal.used")
 
 
 def test_r21_every_unknown_or_timeout_records_fresh_failure_then_native_fails() -> None:
     nodes = load_task_nodes(APPRAISAL)
     for name in (
-        "MJA_APPRAISAL_PAGE_PROBE",
+        "免费鉴定-页面-探测",
         "MJA_APPRAISAL_STATUS_PROBE",
-        "MJA_APPRAISAL_CLAIM",
-        "MJA_APPRAISAL_REWARD_PROBE",
-        "MJA_APPRAISAL_CLOSE_REWARD",
+        "免费鉴定-领取",
+        "免费鉴定-奖励-探测",
+        "免费鉴定-关闭-奖励",
         "MJA_APPRAISAL_VERIFY",
         "MJA_APPRAISAL_CLOSE_ALREADY_COMPLETE_PAGE",
         "MJA_APPRAISAL_HOME_AFTER_ALREADY_COMPLETE",
-        "MJA_APPRAISAL_CLOSE_SUCCESS_PAGE",
-        "MJA_APPRAISAL_HOME_AFTER_SUCCESS",
-        "MJA_APPRAISAL_HOME_AFTER_REWARD",
-        "MJA_APPRAISAL_HOME_PROBE",
-        "MJA_APPRAISAL_OPEN_APPRAISAL",
-        "MJA_APPRAISAL_CLOSE_RECOVERED_PANEL",
+        "免费鉴定-关闭-成功-页面",
+        "免费鉴定-主页成功后",
+        "免费鉴定-主页-之后-奖励",
+        "免费鉴定-主页-探测",
+        "免费鉴定-打开-鉴定",
+        "免费鉴定-关闭-已恢复-面板",
     ):
         assert nodes[name]["on_error"] == [RECORD_FAILURE], name
 
-    assert nodes["MJA_FREE_APPRAISAL_DAILY_START"]["on_error"] == [
+    assert nodes["免费鉴定-任务入口"]["on_error"] == [
         RUNTIME_RECOVERY,
         RECORD_FAILURE,
     ]
@@ -300,5 +300,5 @@ def test_r21_every_unknown_or_timeout_records_fresh_failure_then_native_fails() 
     failure = nodes[RECORD_FAILURE]
     assert failure["custom_action_param"]["native_fail_after_record"] is True
     assert failure["Abort"] is True
-    assert failure["next"] == ["MJA_COMMON_ABORT"]
+    assert failure["next"] == ["公共-通用中止"]
     assert "on_error" not in failure

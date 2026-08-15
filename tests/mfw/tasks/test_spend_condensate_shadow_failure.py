@@ -12,23 +12,23 @@ CONDENSATE = TaskContract(
 def test_shadow_world_surface_fails_closed_without_recovery_or_paid_input() -> None:
     nodes = load_task_nodes(CONDENSATE)
 
-    painting = nodes["MJA_CONDENSATE_PAINTING_PAGE_PROBE"]
-    assert painting["next"] == ["MJA_CONDENSATE_SELECT_YANWU"]
+    painting = nodes["消耗凝结体-画卷-页面-探测"]
+    assert painting["next"] == ["消耗凝结体-选择-偃武"]
     assert painting["on_error"] == [
-        "MJA_CONDENSATE_SHADOW_PAGE_PROBE",
-        "MJA_CONDENSATE_RECORD_FAILURE",
+        "消耗凝结体-影-页面-探测",
+        "消耗凝结体-记录-失败",
     ]
     assert painting["retry_times"] == 0
 
-    shadow = nodes["MJA_CONDENSATE_SHADOW_PAGE_PROBE"]
+    shadow = nodes["消耗凝结体-影-页面-探测"]
     assert shadow == {
         "recognition": "OCR",
         "expected": "蜃影武墟",
         "roi": [250, 350, 450, 160],
         "timeout": 8000,
         "action": "DoNothing",
-        "next": ["MJA_CONDENSATE_RECORD_FAILURE"],
-        "on_error": ["MJA_CONDENSATE_RECORD_FAILURE"],
+        "next": ["消耗凝结体-记录-失败"],
+        "on_error": ["消耗凝结体-记录-失败"],
         "retry_times": 0,
     }
 
@@ -41,18 +41,18 @@ def test_shadow_world_surface_fails_closed_without_recovery_or_paid_input() -> N
     assert shadow["action"] == "DoNothing"
     assert_reachable(
         nodes,
-        "MJA_CONDENSATE_SHADOW_PAGE_PROBE",
-        "MJA_CONDENSATE_RECORD_FAILURE",
+        "消耗凝结体-影-页面-探测",
+        "消耗凝结体-记录-失败",
     )
-    assert_reachable(nodes, "MJA_CONDENSATE_SHADOW_PAGE_PROBE", "MJA_COMMON_ABORT")
-    assert nodes["MJA_CONDENSATE_RECORD_FAILURE"]["custom_action"] == "RecordTaskOutcome"
-    assert nodes["MJA_COMMON_ABORT"]["Abort"] is True
+    assert_reachable(nodes, "消耗凝结体-影-页面-探测", "公共-通用中止")
+    assert nodes["消耗凝结体-记录-失败"]["custom_action"] == "RecordTaskOutcome"
+    assert nodes["公共-通用中止"]["Abort"] is True
 
 
 def test_painting_probe_no_longer_jumps_to_unverified_world_or_game_start() -> None:
     nodes = load_task_nodes(CONDENSATE)
-    on_error = nodes["MJA_CONDENSATE_PAINTING_PAGE_PROBE"]["on_error"]
+    on_error = nodes["消耗凝结体-画卷-页面-探测"]["on_error"]
 
-    assert "MJA_CONDENSATE_YANWU_PAGE_PROBE" not in on_error
-    assert "[JumpBack]MJA_GAME_START" not in on_error
-    assert "MJA_CONDENSATE_RECORD_FAILURE" in on_error
+    assert "消耗凝结体-偃武-页面-探测" not in on_error
+    assert "[JumpBack]启动-游戏启动" not in on_error
+    assert "消耗凝结体-记录-失败" in on_error

@@ -26,13 +26,13 @@ def test_weekly_policy_is_monday_only():
 
 
 def test_paid_weekly_tab_is_not_eligible_without_free_claim_target():
-    assert "shop.weekly_paid" in WEEKLY_FREE_GIFT_MONDAY_DEFINITION.recognizers("gift_tab")
-    assert "shop.weekly_paid" in WEEKLY_FREE_GIFT_MONDAY_DEFINITION.recognizers("weekly")
+    assert "周一免费礼包-商店-每周-付费" in WEEKLY_FREE_GIFT_MONDAY_DEFINITION.recognizers("gift_tab")
+    assert "周一免费礼包-商店-每周-付费" in WEEKLY_FREE_GIFT_MONDAY_DEFINITION.recognizers("weekly")
 
     decision, safety = evaluate_decision(
         WEEKLY_FREE_GIFT_MONDAY_DEFINITION,
         "weekly",
-        ("shop.weekly.page", "shop.weekly_paid"),
+        ("周一免费礼包-商店-每周-页面", "周一免费礼包-商店-每周-付费"),
         texts=("每周特价", "￥6.00"),
     )
 
@@ -56,10 +56,10 @@ def test_weekly_reward_can_resume_from_the_initial_state():
     frame = CapturedFrame("weekly-reward", (1280, 720))
     evidence = VisualEvidence(
         frame.frame_id,
-        {"shop.weekly.reward": 1},
-        {"shop.weekly.reward_close": 1},
+        {"周一免费礼包-商店-每周-奖励": 1},
+        {"周一免费礼包-商店-每周-奖励-关闭": 1},
         {},
-        {"shop.weekly.reward": frame.frame_id, "shop.weekly.reward_close": frame.frame_id},
+        {"周一免费礼包-商店-每周-奖励": frame.frame_id, "周一免费礼包-商店-每周-奖励-关闭": frame.frame_id},
         (),
         (),
     )
@@ -91,11 +91,11 @@ def test_weekly_route_survives_slow_android_frames_and_reaches_free_claim(monkey
                 name: 1
                 for name in names
                 if (
-                    name not in {"shop.weekly.reward", "shop.weekly.reward_close"}
+                    name not in {"周一免费礼包-商店-每周-奖励", "周一免费礼包-商店-每周-奖励-关闭"}
                     or "claim_weekly_lucky_bag" in self.actions
                 )
                 and (
-                    name != "shop.weekly_lucky_bag_claimed"
+                    name != "周一免费礼包-商店-每周-幸运-背包-已领取"
                     or "dismiss_weekly_reward" in self.actions
                 )
             }

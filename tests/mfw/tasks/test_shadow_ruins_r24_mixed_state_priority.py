@@ -24,31 +24,31 @@ def test_mixed_completed_and_active_cards_prioritize_active_selection() -> None:
     """r7 saw 已击破 and three 可探索 cards in the same Maa OCR frame."""
 
     nodes = _nodes()
-    branches = nodes["MJA_SHADOW_PAGE_PROBE"]["next"]
+    branches = nodes["影之遗迹-页面-探测"]["next"]
 
-    assert "可探索" in nodes["shadow.active"]["expected"]
+    assert "可探索" in nodes["影之遗迹-影-进行中"]["expected"]
     assert "已击破" in nodes["shadow.no_active"]["expected"]
     assert branches == [
-        "MJA_SHADOW_SELECT_ACTIVE",
+        "影之遗迹-选择-进行中",
         "MJA_SHADOW_STATUS_PROBE",
     ]
     assert _first_matching_branch(
         branches,
         {
-            "MJA_SHADOW_SELECT_ACTIVE": True,
+            "影之遗迹-选择-进行中": True,
             "MJA_SHADOW_STATUS_PROBE": True,
         },
-    ) == "MJA_SHADOW_SELECT_ACTIVE"
+    ) == "影之遗迹-选择-进行中"
 
 
 def test_completed_card_is_terminal_only_when_no_active_card_matches() -> None:
     nodes = _nodes()
-    branches = nodes["MJA_SHADOW_PAGE_PROBE"]["next"]
+    branches = nodes["影之遗迹-页面-探测"]["next"]
 
     assert _first_matching_branch(
         branches,
         {
-            "MJA_SHADOW_SELECT_ACTIVE": False,
+            "影之遗迹-选择-进行中": False,
             "MJA_SHADOW_STATUS_PROBE": True,
         },
     ) == "MJA_SHADOW_STATUS_PROBE"

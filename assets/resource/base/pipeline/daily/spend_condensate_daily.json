@@ -1,5 +1,5 @@
 {
-  "MJA_SPEND_CONDENSATE_DAILY_START": {
+  "消耗凝结体-任务入口": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "BeginTask", "max_hit": 1,
@@ -7,47 +7,47 @@
       "task_id": "SPEND_CONDENSATE_DAILY"
     },
     "next": [
-      "[JumpBack]MJA_KNOWN_TEA_DETAIL_CLOSE",
-      "[JumpBack]MJA_KNOWN_TEA_SHOP_CLOSE",
-      "MJA_CONDENSATE_RESUME_YANWU_REWARD_PROBE",
-      "MJA_CONDENSATE_RESUME_YUNZHOU_REWARD_PROBE",
-      "MJA_CONDENSATE_DAILY_PAGE_PROBE",
-      "MJA_CONDENSATE_HOME_PROBE",
-      "MJA_CONDENSATE_PAINTING_PAGE_PROBE",
-      "MJA_CONDENSATE_YANWU_PAGE_PROBE",
-      "MJA_CONDENSATE_YUNZHOU_PAGE_PROBE"
+      "[JumpBack]公共-已知-茶-详情-关闭",
+      "[JumpBack]公共-已知-茶-商店-关闭",
+      "消耗凝结体-恢复继续-偃武-奖励-探测",
+      "消耗凝结体-恢复继续-云州-奖励-探测",
+      "消耗凝结体-日常-页面-探测",
+      "消耗凝结体-主页-探测",
+      "消耗凝结体-画卷-页面-探测",
+      "消耗凝结体-偃武-页面-探测",
+      "消耗凝结体-云州-页面-探测"
     ],
-    "on_error": ["MJA_CONDENSATE_RECORD_FAILURE"]
+    "on_error": ["消耗凝结体-记录-失败"]
   },
-  "MJA_CONDENSATE_RESUME_YANWU_REWARD_PROBE": {
+  "消耗凝结体-恢复继续-偃武-奖励-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["condensate.yanwu.reward", "condensate.reward_close"],
+        "all_of": ["消耗凝结体-凝结体-偃武-奖励", "消耗凝结体-凝结体-奖励-关闭"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_CONDENSATE_DISMISS_YANWU_REWARD"],
-    "on_error": ["MJA_CONDENSATE_RESUME_YUNZHOU_REWARD_PROBE"]
+    "next": ["消耗凝结体-关闭-偃武-奖励"],
+    "on_error": ["消耗凝结体-恢复继续-云州-奖励-探测"]
   },
-  "MJA_CONDENSATE_RESUME_YUNZHOU_REWARD_PROBE": {
+  "消耗凝结体-恢复继续-云州-奖励-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["condensate.yunzhou.reward", "condensate.reward_close"],
+        "all_of": ["消耗凝结体-凝结体-云州-奖励", "消耗凝结体-凝结体-奖励-关闭"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_CONDENSATE_DISMISS_YUNZHOU_REWARD"],
-    "on_error": ["MJA_CONDENSATE_DAILY_PAGE_PROBE"]
+    "next": ["消耗凝结体-关闭-云州-奖励"],
+    "on_error": ["消耗凝结体-日常-页面-探测"]
   },
-  "MJA_CONDENSATE_DISMISS_YANWU_REWARD": {
+  "消耗凝结体-关闭-偃武-奖励": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["condensate.yanwu.reward", "condensate.reward_close"],
+        "all_of": ["消耗凝结体-凝结体-偃武-奖励", "消耗凝结体-凝结体-奖励-关闭"],
         "box_index": 1
       }
     },
@@ -60,18 +60,18 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "condensate.yanwu.reward",
-        "target_name": "condensate.reward_close"
+        "page_name": "消耗凝结体-凝结体-偃武-奖励",
+        "target_name": "消耗凝结体-凝结体-奖励-关闭"
       }
     },
-    "next": ["MJA_CONDENSATE_YANWU_POST_VERIFY"],
-    "on_error": ["MJA_CONDENSATE_RECORD_FAILURE"]
+    "next": ["消耗凝结体-偃武-之后-校验"],
+    "on_error": ["消耗凝结体-记录-失败"]
   },
-  "MJA_CONDENSATE_DISMISS_YUNZHOU_REWARD": {
+  "消耗凝结体-关闭-云州-奖励": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["condensate.yunzhou.reward", "condensate.reward_close"],
+        "all_of": ["消耗凝结体-凝结体-云州-奖励", "消耗凝结体-凝结体-奖励-关闭"],
         "box_index": 1
       }
     },
@@ -84,27 +84,27 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "condensate.yunzhou.reward",
-        "target_name": "condensate.reward_close"
+        "page_name": "消耗凝结体-凝结体-云州-奖励",
+        "target_name": "消耗凝结体-凝结体-奖励-关闭"
       }
     },
-    "next": ["MJA_CONDENSATE_YUNZHOU_POST_VERIFY"],
-    "on_error": ["MJA_CONDENSATE_RECORD_FAILURE"]
+    "next": ["消耗凝结体-云州-之后-校验"],
+    "on_error": ["消耗凝结体-记录-失败"]
   },
-  "MJA_CONDENSATE_DAILY_PAGE_PROBE": {
+  "消耗凝结体-日常-页面-探测": {
     "recognition": "OCR",
     "expected": ["日常任务", "活跃度"],
     "roi": [0, 0, 620, 190],
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_CONDENSATE_CLOSE_DAILY"],
-    "on_error": ["MJA_CONDENSATE_HOME_PROBE"]
+    "next": ["消耗凝结体-关闭-日常"],
+    "on_error": ["消耗凝结体-主页-探测"]
   },
-  "MJA_CONDENSATE_CLOSE_DAILY": {
+  "消耗凝结体-关闭-日常": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["condensate.daily.page", "condensate.daily.close"],
+        "all_of": ["消耗凝结体-凝结体-日常-页面", "消耗凝结体-凝结体-日常-关闭"],
         "box_index": 1
       }
     },
@@ -117,33 +117,33 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "condensate.daily.page",
-        "target_name": "condensate.daily.close"
+        "page_name": "消耗凝结体-凝结体-日常-页面",
+        "target_name": "消耗凝结体-凝结体-日常-关闭"
       }
     },
-    "next": ["MJA_CONDENSATE_PANEL_AFTER_DAILY_PROBE"],
-    "on_error": ["MJA_CONDENSATE_RECORD_FAILURE"]
+    "next": ["消耗凝结体-面板-之后-日常-探测"],
+    "on_error": ["消耗凝结体-记录-失败"]
   },
-  "MJA_CONDENSATE_PANEL_AFTER_DAILY_PROBE": {
+  "消耗凝结体-面板-之后-日常-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["condensate.panel.page", "condensate.panel.close"],
+        "all_of": ["消耗凝结体-凝结体-面板-页面", "消耗凝结体-凝结体-面板-关闭"],
         "box_index": 1
       }
     },
     "timeout": 8000,
     "max_hit": 1,
     "action": "DoNothing",
-    "next": ["MJA_CONDENSATE_CLOSE_PANEL_AFTER_DAILY"],
-    "on_error": ["MJA_CONDENSATE_RECORD_FAILURE"],
+    "next": ["消耗凝结体-关闭-面板-之后-日常"],
+    "on_error": ["消耗凝结体-记录-失败"],
     "retry_times": 0
   },
-  "MJA_CONDENSATE_CLOSE_PANEL_AFTER_DAILY": {
+  "消耗凝结体-关闭-面板-之后-日常": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["condensate.panel.page", "condensate.panel.close"],
+        "all_of": ["消耗凝结体-凝结体-面板-页面", "消耗凝结体-凝结体-面板-关闭"],
         "box_index": 1
       }
     },
@@ -159,20 +159,20 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "condensate.panel.page",
-        "target_name": "condensate.panel.close"
+        "page_name": "消耗凝结体-凝结体-面板-页面",
+        "target_name": "消耗凝结体-凝结体-面板-关闭"
       }
     },
     "post_delay": 1200,
-    "next": ["MJA_CONDENSATE_OPEN_PAINTING_AFTER_DAILY"],
-    "on_error": ["MJA_CONDENSATE_RECORD_FAILURE"],
+    "next": ["消耗凝结体-打开-画卷-之后-日常"],
+    "on_error": ["消耗凝结体-记录-失败"],
     "retry_times": 0
   },
-  "MJA_CONDENSATE_OPEN_PAINTING_AFTER_DAILY": {
+  "消耗凝结体-打开-画卷-之后-日常": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["condensate.home.page", "condensate.painting_scroll.entry"],
+        "all_of": ["消耗凝结体-凝结体-主页-页面", "消耗凝结体-凝结体-画卷-滚动-入口"],
         "box_index": 1
       }
     },
@@ -185,25 +185,25 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "condensate.home.page",
-        "target_name": "condensate.painting_scroll.entry"
+        "page_name": "消耗凝结体-凝结体-主页-页面",
+        "target_name": "消耗凝结体-凝结体-画卷-滚动-入口"
       }
     },
-    "next": ["MJA_CONDENSATE_PAINTING_PAGE_PROBE"],
-    "on_error": ["MJA_CONDENSATE_RECORD_FAILURE"]
+    "next": ["消耗凝结体-画卷-页面-探测"],
+    "on_error": ["消耗凝结体-记录-失败"]
   },
-  "MJA_CONDENSATE_HOME_PROBE": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_HOME_PAGE"], "box_index": 0}},
+  "消耗凝结体-主页-探测": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}},
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_CONDENSATE_OPEN_PANEL"],
-    "on_error": ["MJA_CONDENSATE_PAINTING_PAGE_PROBE"]
+    "next": ["消耗凝结体-打开-面板"],
+    "on_error": ["消耗凝结体-画卷-页面-探测"]
   },
-  "MJA_CONDENSATE_OPEN_PANEL": {
+  "消耗凝结体-打开-面板": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["condensate.home.page", "condensate.panel_open"],
+        "all_of": ["消耗凝结体-凝结体-主页-页面", "消耗凝结体-凝结体-面板-打开"],
         "box_index": 1
       }
     },
@@ -216,32 +216,32 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "condensate.home.page",
-        "target_name": "condensate.panel_open"
+        "page_name": "消耗凝结体-凝结体-主页-页面",
+        "target_name": "消耗凝结体-凝结体-面板-打开"
       }
     },
-    "next": ["MJA_CONDENSATE_PANEL_PROBE"],
-    "on_error": ["MJA_CONDENSATE_RECORD_FAILURE"]
+    "next": ["消耗凝结体-面板-探测"],
+    "on_error": ["消耗凝结体-记录-失败"]
   },
-  "MJA_CONDENSATE_PANEL_PROBE": {
+  "消耗凝结体-面板-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["condensate.panel.page", "condensate.daily.entry"],
+        "all_of": ["消耗凝结体-凝结体-面板-页面", "消耗凝结体-凝结体-日常-入口"],
         "box_index": 0
       }
     },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_CONDENSATE_OPEN_DAILY"],
-    "on_error": ["MJA_CONDENSATE_RECORD_FAILURE"]
+    "next": ["消耗凝结体-打开-日常"],
+    "on_error": ["消耗凝结体-记录-失败"]
   },
-  "MJA_CONDENSATE_OPEN_DAILY": {
+  "消耗凝结体-打开-日常": {
     "max_hit": 1,
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["condensate.panel.page", "condensate.daily.entry"],
+        "all_of": ["消耗凝结体-凝结体-面板-页面", "消耗凝结体-凝结体-日常-入口"],
         "box_index": 1
       }
     },
@@ -254,42 +254,42 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "condensate.panel.page",
-        "target_name": "condensate.daily.entry"
+        "page_name": "消耗凝结体-凝结体-面板-页面",
+        "target_name": "消耗凝结体-凝结体-日常-入口"
       }
     },
-    "next": ["MJA_CONDENSATE_DAILY_PAGE_PROBE"],
-    "on_error": ["MJA_CONDENSATE_RECORD_FAILURE"],
+    "next": ["消耗凝结体-日常-页面-探测"],
+    "on_error": ["消耗凝结体-记录-失败"],
     "retry_times": 0
   },
-  "MJA_CONDENSATE_PAINTING_PAGE_PROBE": {
+  "消耗凝结体-画卷-页面-探测": {
     "recognition": "OCR",
     "expected": ["画卷", "偃武世界", "云州", "蜃影武墟"],
     "roi": [0, 0, 1280, 720],
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_CONDENSATE_SELECT_YANWU"],
+    "next": ["消耗凝结体-选择-偃武"],
     "on_error": [
-      "MJA_CONDENSATE_SHADOW_PAGE_PROBE",
-      "MJA_CONDENSATE_RECORD_FAILURE"
+      "消耗凝结体-影-页面-探测",
+      "消耗凝结体-记录-失败"
     ],
     "retry_times": 0
   },
-  "MJA_CONDENSATE_SHADOW_PAGE_PROBE": {
+  "消耗凝结体-影-页面-探测": {
     "recognition": "OCR",
     "expected": "蜃影武墟",
     "roi": [250, 350, 450, 160],
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_CONDENSATE_RECORD_FAILURE"],
-    "on_error": ["MJA_CONDENSATE_RECORD_FAILURE"],
+    "next": ["消耗凝结体-记录-失败"],
+    "on_error": ["消耗凝结体-记录-失败"],
     "retry_times": 0
   },
-  "MJA_CONDENSATE_SELECT_YANWU": {
+  "消耗凝结体-选择-偃武": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["condensate.painting.page", "condensate.yanwu.tab"],
+        "all_of": ["消耗凝结体-凝结体-画卷-页面", "消耗凝结体-凝结体-偃武-标签"],
         "box_index": 1
       }
     },
@@ -302,27 +302,27 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "condensate.painting.page",
-        "target_name": "condensate.yanwu.tab"
+        "page_name": "消耗凝结体-凝结体-画卷-页面",
+        "target_name": "消耗凝结体-凝结体-偃武-标签"
       }
     },
-    "next": ["MJA_CONDENSATE_YANWU_PAGE_PROBE"],
-    "on_error": ["MJA_CONDENSATE_RECORD_FAILURE"]
+    "next": ["消耗凝结体-偃武-页面-探测"],
+    "on_error": ["消耗凝结体-记录-失败"]
   },
-  "MJA_CONDENSATE_YANWU_PAGE_PROBE": {
+  "消耗凝结体-偃武-页面-探测": {
     "recognition": "OCR",
     "expected": ["偃武世界", "无名雪谷"],
     "roi": [0, 100, 1000, 620],
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_CONDENSATE_OPEN_YANWU"],
-    "on_error": ["MJA_CONDENSATE_YUNZHOU_PAGE_PROBE"]
+    "next": ["消耗凝结体-打开-偃武"],
+    "on_error": ["消耗凝结体-云州-页面-探测"]
   },
-  "MJA_CONDENSATE_OPEN_YANWU": {
+  "消耗凝结体-打开-偃武": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["condensate.yanwu.page", "condensate.yanwu.currency_entry"],
+        "all_of": ["消耗凝结体-凝结体-偃武-页面", "消耗凝结体-凝结体-偃武-货币-入口"],
         "box_index": 1
       }
     },
@@ -335,48 +335,48 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "condensate.yanwu.page",
-        "target_name": "condensate.yanwu.currency_entry"
+        "page_name": "消耗凝结体-凝结体-偃武-页面",
+        "target_name": "消耗凝结体-凝结体-偃武-货币-入口"
       }
     },
-    "next": ["MJA_CONDENSATE_YANWU_PURCHASE_PAGE_PROBE"],
-    "on_error": ["MJA_CONDENSATE_RECORD_FAILURE"]
+    "next": ["消耗凝结体-偃武-购买-页面-探测"],
+    "on_error": ["消耗凝结体-记录-失败"]
   },
-  "MJA_CONDENSATE_YANWU_PURCHASE_PAGE_PROBE": {
+  "消耗凝结体-偃武-购买-页面-探测": {
     "recognition": "OCR",
     "expected": ["购买", "长定壹钱"],
     "roi": [0, 100, 1280, 620],
     "timeout": 8000,
     "action": "DoNothing",
     "next": [
-      "MJA_CONDENSATE_YANWU_SOLD_OUT_PROBE",
-      "MJA_CONDENSATE_SET_YANWU_MAX"
+      "消耗凝结体-偃武-售罄-探测",
+      "消耗凝结体-设置-偃武-最大"
     ],
-    "on_error": ["MJA_CONDENSATE_RECORD_FAILURE"]
+    "on_error": ["消耗凝结体-记录-失败"]
   },
-  "MJA_CONDENSATE_YANWU_SOLD_OUT_PROBE": {
+  "消耗凝结体-偃武-售罄-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "condensate.yanwu.purchase.page",
-          "condensate.yanwu.sold_out"
+          "消耗凝结体-凝结体-偃武-购买-页面",
+          "消耗凝结体-凝结体-偃武-售罄"
         ],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_CONDENSATE_CLOSE_YANWU_SOLD_OUT"],
-    "on_error": ["MJA_CONDENSATE_SET_YANWU_MAX"]
+    "next": ["消耗凝结体-关闭-偃武-售罄"],
+    "on_error": ["消耗凝结体-设置-偃武-最大"]
   },
-  "MJA_CONDENSATE_CLOSE_YANWU_SOLD_OUT": {
+  "消耗凝结体-关闭-偃武-售罄": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "condensate.yanwu.purchase.page",
-          "condensate.yanwu.sold_out",
-          "condensate.yanwu.close"
+          "消耗凝结体-凝结体-偃武-购买-页面",
+          "消耗凝结体-凝结体-偃武-售罄",
+          "消耗凝结体-凝结体-偃武-关闭"
         ],
         "box_index": 2
       }
@@ -390,20 +390,20 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "condensate.yanwu.purchase.page",
-        "target_name": "condensate.yanwu.close"
+        "page_name": "消耗凝结体-凝结体-偃武-购买-页面",
+        "target_name": "消耗凝结体-凝结体-偃武-关闭"
       }
     },
-    "next": ["MJA_CONDENSATE_SELECT_YUNZHOU_AFTER_SOLD_OUT"],
-    "on_error": ["MJA_CONDENSATE_RECORD_FAILURE"]
+    "next": ["消耗凝结体-选择-云州-之后-售罄"],
+    "on_error": ["消耗凝结体-记录-失败"]
   },
-  "MJA_CONDENSATE_SET_YANWU_MAX": {
+  "消耗凝结体-设置-偃武-最大": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "condensate.yanwu.purchase.page",
-          "condensate.yanwu.max_quantity"
+          "消耗凝结体-凝结体-偃武-购买-页面",
+          "消耗凝结体-凝结体-偃武-最大-数量"
         ],
         "box_index": 1
       }
@@ -417,22 +417,22 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "condensate.yanwu.purchase.page",
-        "target_name": "condensate.yanwu.max_quantity"
+        "page_name": "消耗凝结体-凝结体-偃武-购买-页面",
+        "target_name": "消耗凝结体-凝结体-偃武-最大-数量"
       }
     },
-    "next": ["MJA_CONDENSATE_BUY_YANWU"],
-    "on_error": ["MJA_CONDENSATE_BUDGET_UNSAFE"]
+    "next": ["消耗凝结体-购买-偃武"],
+    "on_error": ["消耗凝结体-预算-不安全"]
   },
-  "MJA_CONDENSATE_BUY_YANWU": {
+  "消耗凝结体-购买-偃武": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "condensate.yanwu.purchase.page",
-          "condensate.yanwu.buy_confirm",
-          "condensate.currency",
-          "condensate.yanwu.cost_50000"
+          "消耗凝结体-凝结体-偃武-购买-页面",
+          "消耗凝结体-凝结体-偃武-购买-确认",
+          "消耗凝结体-凝结体-货币",
+          "消耗凝结体-凝结体-偃武-消耗-50000"
         ],
         "box_index": 1
       }
@@ -446,58 +446,58 @@
       "resource_id": "凝晶",
       "resource_index": 2,
       "amount_index": 3,
-      "resource_evidence_name": "condensate.currency",
+      "resource_evidence_name": "消耗凝结体-凝结体-货币",
       "observed_amount": 50000,
       "budget_amount": 50000,
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "condensate.yanwu.purchase.page",
-        "target_name": "condensate.yanwu.buy_confirm"
+        "page_name": "消耗凝结体-凝结体-偃武-购买-页面",
+        "target_name": "消耗凝结体-凝结体-偃武-购买-确认"
       }
     },
-    "next": ["MJA_CONDENSATE_YANWU_REWARD_PROBE"],
-    "on_error": ["MJA_CONDENSATE_BUDGET_UNSAFE"]
+    "next": ["消耗凝结体-偃武-奖励-探测"],
+    "on_error": ["消耗凝结体-预算-不安全"]
   },
-  "MJA_CONDENSATE_YANWU_REWARD_PROBE": {
+  "消耗凝结体-偃武-奖励-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["condensate.yanwu.reward", "condensate.reward_close"],
+        "all_of": ["消耗凝结体-凝结体-偃武-奖励", "消耗凝结体-凝结体-奖励-关闭"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_CONDENSATE_DISMISS_YANWU_REWARD"],
-    "on_error": ["MJA_CONDENSATE_RECORD_FAILURE"]
+    "next": ["消耗凝结体-关闭-偃武-奖励"],
+    "on_error": ["消耗凝结体-记录-失败"]
   },
-  "MJA_CONDENSATE_YANWU_POST_VERIFY": {
+  "消耗凝结体-偃武-之后-校验": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["condensate.yanwu.page", "condensate.yanwu.post"],
+        "all_of": ["消耗凝结体-凝结体-偃武-页面", "消耗凝结体-凝结体-偃武-之后"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_CONDENSATE_SELECT_YUNZHOU_AFTER_BUY"],
-    "on_error": ["MJA_CONDENSATE_RECORD_FAILURE"]
+    "next": ["消耗凝结体-选择-云州-之后-购买"],
+    "on_error": ["消耗凝结体-记录-失败"]
   },
-  "MJA_CONDENSATE_YUNZHOU_PAGE_PROBE": {
+  "消耗凝结体-云州-页面-探测": {
     "recognition": "TemplateMatch",
     "template": "daily/SPEND_CONDENSATE_DAILY/yunzhou_world_page.png",
     "roi": [60, 200, 300, 130],
     "threshold": 0.36,
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_CONDENSATE_OPEN_YUNZHOU_RECOVERY"],
-    "on_error": ["[JumpBack]MJA_GAME_START"]
+    "next": ["消耗凝结体-打开-云州-恢复"],
+    "on_error": ["[JumpBack]启动-游戏启动"]
   },
-  "MJA_CONDENSATE_SELECT_YUNZHOU_AFTER_SOLD_OUT": {
+  "消耗凝结体-选择-云州-之后-售罄": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["condensate.yanwu.page", "condensate.yunzhou.tab"],
+        "all_of": ["消耗凝结体-凝结体-偃武-页面", "消耗凝结体-凝结体-云州-标签"],
         "box_index": 1
       }
     },
@@ -510,18 +510,18 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "condensate.yanwu.page",
-        "target_name": "condensate.yunzhou.tab"
+        "page_name": "消耗凝结体-凝结体-偃武-页面",
+        "target_name": "消耗凝结体-凝结体-云州-标签"
       }
     },
-    "next": ["MJA_CONDENSATE_YUNZHOU_PAGE_AFTER_SOLD_OUT"],
-    "on_error": ["MJA_CONDENSATE_RECORD_FAILURE"]
+    "next": ["消耗凝结体-云州-页面-之后-售罄"],
+    "on_error": ["消耗凝结体-记录-失败"]
   },
-  "MJA_CONDENSATE_SELECT_YUNZHOU_AFTER_BUY": {
+  "消耗凝结体-选择-云州-之后-购买": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["condensate.yanwu.page", "condensate.yunzhou.tab"],
+        "all_of": ["消耗凝结体-凝结体-偃武-页面", "消耗凝结体-凝结体-云州-标签"],
         "box_index": 1
       }
     },
@@ -534,38 +534,38 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "condensate.yanwu.page",
-        "target_name": "condensate.yunzhou.tab"
+        "page_name": "消耗凝结体-凝结体-偃武-页面",
+        "target_name": "消耗凝结体-凝结体-云州-标签"
       }
     },
-    "next": ["MJA_CONDENSATE_YUNZHOU_PAGE_AFTER_BUY"],
-    "on_error": ["MJA_CONDENSATE_RECORD_FAILURE"]
+    "next": ["消耗凝结体-云州-页面-之后-购买"],
+    "on_error": ["消耗凝结体-记录-失败"]
   },
-  "MJA_CONDENSATE_YUNZHOU_PAGE_AFTER_SOLD_OUT": {
+  "消耗凝结体-云州-页面-之后-售罄": {
     "recognition": "TemplateMatch",
     "template": "daily/SPEND_CONDENSATE_DAILY/yunzhou_world_page.png",
     "roi": [60, 200, 300, 130],
     "threshold": 0.36,
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_CONDENSATE_OPEN_YUNZHOU_AFTER_SOLD_OUT"],
-    "on_error": ["MJA_CONDENSATE_RECORD_FAILURE"]
+    "next": ["消耗凝结体-打开-云州-之后-售罄"],
+    "on_error": ["消耗凝结体-记录-失败"]
   },
-  "MJA_CONDENSATE_YUNZHOU_PAGE_AFTER_BUY": {
+  "消耗凝结体-云州-页面-之后-购买": {
     "recognition": "TemplateMatch",
     "template": "daily/SPEND_CONDENSATE_DAILY/yunzhou_world_page.png",
     "roi": [60, 200, 300, 130],
     "threshold": 0.36,
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_CONDENSATE_OPEN_YUNZHOU_AFTER_BUY"],
-    "on_error": ["MJA_CONDENSATE_RECORD_FAILURE"]
+    "next": ["消耗凝结体-打开-云州-之后-购买"],
+    "on_error": ["消耗凝结体-记录-失败"]
   },
-  "MJA_CONDENSATE_OPEN_YUNZHOU_RECOVERY": {
+  "消耗凝结体-打开-云州-恢复": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["condensate.yunzhou.page", "condensate.yunzhou.currency_entry"],
+        "all_of": ["消耗凝结体-凝结体-云州-页面", "消耗凝结体-凝结体-云州-货币-入口"],
         "box_index": 1
       }
     },
@@ -578,18 +578,18 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "condensate.yunzhou.page",
-        "target_name": "condensate.yunzhou.currency_entry"
+        "page_name": "消耗凝结体-凝结体-云州-页面",
+        "target_name": "消耗凝结体-凝结体-云州-货币-入口"
       }
     },
-    "next": ["MJA_CONDENSATE_YUNZHOU_PURCHASE_PAGE_RECOVERY"],
-    "on_error": ["MJA_CONDENSATE_RECORD_FAILURE"]
+    "next": ["消耗凝结体-云州-购买-页面-恢复"],
+    "on_error": ["消耗凝结体-记录-失败"]
   },
-  "MJA_CONDENSATE_OPEN_YUNZHOU_AFTER_SOLD_OUT": {
+  "消耗凝结体-打开-云州-之后-售罄": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["condensate.yunzhou.page", "condensate.yunzhou.currency_entry"],
+        "all_of": ["消耗凝结体-凝结体-云州-页面", "消耗凝结体-凝结体-云州-货币-入口"],
         "box_index": 1
       }
     },
@@ -602,18 +602,18 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "condensate.yunzhou.page",
-        "target_name": "condensate.yunzhou.currency_entry"
+        "page_name": "消耗凝结体-凝结体-云州-页面",
+        "target_name": "消耗凝结体-凝结体-云州-货币-入口"
       }
     },
-    "next": ["MJA_CONDENSATE_YUNZHOU_PURCHASE_PAGE_AFTER_SOLD_OUT"],
-    "on_error": ["MJA_CONDENSATE_RECORD_FAILURE"]
+    "next": ["消耗凝结体-云州-购买-页面-之后-售罄"],
+    "on_error": ["消耗凝结体-记录-失败"]
   },
-  "MJA_CONDENSATE_OPEN_YUNZHOU_AFTER_BUY": {
+  "消耗凝结体-打开-云州-之后-购买": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["condensate.yunzhou.page", "condensate.yunzhou.currency_entry"],
+        "all_of": ["消耗凝结体-凝结体-云州-页面", "消耗凝结体-凝结体-云州-货币-入口"],
         "box_index": 1
       }
     },
@@ -626,102 +626,102 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "condensate.yunzhou.page",
-        "target_name": "condensate.yunzhou.currency_entry"
+        "page_name": "消耗凝结体-凝结体-云州-页面",
+        "target_name": "消耗凝结体-凝结体-云州-货币-入口"
       }
     },
-    "next": ["MJA_CONDENSATE_YUNZHOU_PURCHASE_PAGE_AFTER_BUY"],
-    "on_error": ["MJA_CONDENSATE_RECORD_FAILURE"]
+    "next": ["消耗凝结体-云州-购买-页面-之后-购买"],
+    "on_error": ["消耗凝结体-记录-失败"]
   },
-  "MJA_CONDENSATE_YUNZHOU_PURCHASE_PAGE_RECOVERY": {
+  "消耗凝结体-云州-购买-页面-恢复": {
     "recognition": "OCR",
     "expected": ["购买", "南北通宝"],
     "roi": [0, 100, 1280, 620],
     "timeout": 8000,
     "action": "DoNothing",
     "next": [
-      "MJA_CONDENSATE_YUNZHOU_SOLD_OUT_RECOVERY",
-      "MJA_CONDENSATE_SET_YUNZHOU_MAX_RECOVERY"
+      "消耗凝结体-云州-售罄-恢复",
+      "消耗凝结体-设置-云州-最大-恢复"
     ],
-    "on_error": ["MJA_CONDENSATE_RECORD_FAILURE"]
+    "on_error": ["消耗凝结体-记录-失败"]
   },
-  "MJA_CONDENSATE_YUNZHOU_PURCHASE_PAGE_AFTER_SOLD_OUT": {
+  "消耗凝结体-云州-购买-页面-之后-售罄": {
     "recognition": "OCR",
     "expected": ["购买", "南北通宝"],
     "roi": [0, 100, 1280, 620],
     "timeout": 8000,
     "action": "DoNothing",
     "next": [
-      "MJA_CONDENSATE_YUNZHOU_SOLD_OUT_AFTER_SOLD_OUT",
-      "MJA_CONDENSATE_SET_YUNZHOU_MAX_AFTER_SOLD_OUT"
+      "消耗凝结体-云州-售罄-之后-售罄",
+      "消耗凝结体-设置-云州-最大-之后-售罄"
     ],
-    "on_error": ["MJA_CONDENSATE_RECORD_FAILURE"]
+    "on_error": ["消耗凝结体-记录-失败"]
   },
-  "MJA_CONDENSATE_YUNZHOU_PURCHASE_PAGE_AFTER_BUY": {
+  "消耗凝结体-云州-购买-页面-之后-购买": {
     "recognition": "OCR",
     "expected": ["购买", "南北通宝"],
     "roi": [0, 100, 1280, 620],
     "timeout": 8000,
     "action": "DoNothing",
     "next": [
-      "MJA_CONDENSATE_YUNZHOU_SOLD_OUT_AFTER_BUY",
-      "MJA_CONDENSATE_SET_YUNZHOU_MAX_AFTER_BUY"
+      "消耗凝结体-云州-售罄-之后-购买",
+      "消耗凝结体-设置-云州-最大-之后-购买"
     ],
-    "on_error": ["MJA_CONDENSATE_RECORD_FAILURE"]
+    "on_error": ["消耗凝结体-记录-失败"]
   },
-  "MJA_CONDENSATE_YUNZHOU_SOLD_OUT_RECOVERY": {
+  "消耗凝结体-云州-售罄-恢复": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "condensate.yunzhou.purchase.page",
-          "condensate.yunzhou.sold_out"
+          "消耗凝结体-凝结体-云州-购买-页面",
+          "消耗凝结体-凝结体-云州-售罄"
         ],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_CONDENSATE_CLOSE_YUNZHOU_RECOVERY"],
-    "on_error": ["MJA_CONDENSATE_SET_YUNZHOU_MAX_RECOVERY"]
+    "next": ["消耗凝结体-关闭-云州-恢复"],
+    "on_error": ["消耗凝结体-设置-云州-最大-恢复"]
   },
-  "MJA_CONDENSATE_YUNZHOU_SOLD_OUT_AFTER_SOLD_OUT": {
+  "消耗凝结体-云州-售罄-之后-售罄": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "condensate.yunzhou.purchase.page",
-          "condensate.yunzhou.sold_out"
+          "消耗凝结体-凝结体-云州-购买-页面",
+          "消耗凝结体-凝结体-云州-售罄"
         ],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_CONDENSATE_CLOSE_YUNZHOU_AFTER_SOLD_OUT"],
-    "on_error": ["MJA_CONDENSATE_SET_YUNZHOU_MAX_AFTER_SOLD_OUT"]
+    "next": ["消耗凝结体-关闭-云州-之后-售罄"],
+    "on_error": ["消耗凝结体-设置-云州-最大-之后-售罄"]
   },
-  "MJA_CONDENSATE_YUNZHOU_SOLD_OUT_AFTER_BUY": {
+  "消耗凝结体-云州-售罄-之后-购买": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "condensate.yunzhou.purchase.page",
-          "condensate.yunzhou.sold_out"
+          "消耗凝结体-凝结体-云州-购买-页面",
+          "消耗凝结体-凝结体-云州-售罄"
         ],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_CONDENSATE_CLOSE_YUNZHOU_AFTER_BUY"],
-    "on_error": ["MJA_CONDENSATE_SET_YUNZHOU_MAX_AFTER_BUY"]
+    "next": ["消耗凝结体-关闭-云州-之后-购买"],
+    "on_error": ["消耗凝结体-设置-云州-最大-之后-购买"]
   },
-  "MJA_CONDENSATE_CLOSE_YUNZHOU_RECOVERY": {
+  "消耗凝结体-关闭-云州-恢复": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "condensate.yunzhou.purchase.page",
-          "condensate.yunzhou.sold_out",
-          "condensate.yunzhou.close"
+          "消耗凝结体-凝结体-云州-购买-页面",
+          "消耗凝结体-凝结体-云州-售罄",
+          "消耗凝结体-凝结体-云州-关闭"
         ],
         "box_index": 2
       }
@@ -735,21 +735,21 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "condensate.yunzhou.purchase.page",
-        "target_name": "condensate.yunzhou.close"
+        "page_name": "消耗凝结体-凝结体-云州-购买-页面",
+        "target_name": "消耗凝结体-凝结体-云州-关闭"
       }
     },
-    "next": ["MJA_CONDENSATE_ALREADY_COMPLETE"],
-    "on_error": ["MJA_CONDENSATE_RECORD_FAILURE"]
+    "next": ["消耗凝结体-已完成"],
+    "on_error": ["消耗凝结体-记录-失败"]
   },
-  "MJA_CONDENSATE_CLOSE_YUNZHOU_AFTER_SOLD_OUT": {
+  "消耗凝结体-关闭-云州-之后-售罄": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "condensate.yunzhou.purchase.page",
-          "condensate.yunzhou.sold_out",
-          "condensate.yunzhou.close"
+          "消耗凝结体-凝结体-云州-购买-页面",
+          "消耗凝结体-凝结体-云州-售罄",
+          "消耗凝结体-凝结体-云州-关闭"
         ],
         "box_index": 2
       }
@@ -763,21 +763,21 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "condensate.yunzhou.purchase.page",
-        "target_name": "condensate.yunzhou.close"
+        "page_name": "消耗凝结体-凝结体-云州-购买-页面",
+        "target_name": "消耗凝结体-凝结体-云州-关闭"
       }
     },
-    "next": ["MJA_CONDENSATE_ALREADY_COMPLETE"],
-    "on_error": ["MJA_CONDENSATE_RECORD_FAILURE"]
+    "next": ["消耗凝结体-已完成"],
+    "on_error": ["消耗凝结体-记录-失败"]
   },
-  "MJA_CONDENSATE_CLOSE_YUNZHOU_AFTER_BUY": {
+  "消耗凝结体-关闭-云州-之后-购买": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "condensate.yunzhou.purchase.page",
-          "condensate.yunzhou.sold_out",
-          "condensate.yunzhou.close"
+          "消耗凝结体-凝结体-云州-购买-页面",
+          "消耗凝结体-凝结体-云州-售罄",
+          "消耗凝结体-凝结体-云州-关闭"
         ],
         "box_index": 2
       }
@@ -791,20 +791,20 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "condensate.yunzhou.purchase.page",
-        "target_name": "condensate.yunzhou.close"
+        "page_name": "消耗凝结体-凝结体-云州-购买-页面",
+        "target_name": "消耗凝结体-凝结体-云州-关闭"
       }
     },
-    "next": ["MJA_CONDENSATE_SUCCESS"],
-    "on_error": ["MJA_CONDENSATE_RECORD_FAILURE"]
+    "next": ["消耗凝结体-成功"],
+    "on_error": ["消耗凝结体-记录-失败"]
   },
-  "MJA_CONDENSATE_SET_YUNZHOU_MAX_RECOVERY": {
+  "消耗凝结体-设置-云州-最大-恢复": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "condensate.yunzhou.purchase.page",
-          "condensate.yunzhou.max_quantity"
+          "消耗凝结体-凝结体-云州-购买-页面",
+          "消耗凝结体-凝结体-云州-最大-数量"
         ],
         "box_index": 1
       }
@@ -818,20 +818,20 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "condensate.yunzhou.purchase.page",
-        "target_name": "condensate.yunzhou.max_quantity"
+        "page_name": "消耗凝结体-凝结体-云州-购买-页面",
+        "target_name": "消耗凝结体-凝结体-云州-最大-数量"
       }
     },
-    "next": ["MJA_CONDENSATE_BUY_YUNZHOU_RECOVERY"],
-    "on_error": ["MJA_CONDENSATE_BUDGET_UNSAFE"]
+    "next": ["消耗凝结体-购买-云州-恢复"],
+    "on_error": ["消耗凝结体-预算-不安全"]
   },
-  "MJA_CONDENSATE_SET_YUNZHOU_MAX_AFTER_SOLD_OUT": {
+  "消耗凝结体-设置-云州-最大-之后-售罄": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "condensate.yunzhou.purchase.page",
-          "condensate.yunzhou.max_quantity"
+          "消耗凝结体-凝结体-云州-购买-页面",
+          "消耗凝结体-凝结体-云州-最大-数量"
         ],
         "box_index": 1
       }
@@ -845,20 +845,20 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "condensate.yunzhou.purchase.page",
-        "target_name": "condensate.yunzhou.max_quantity"
+        "page_name": "消耗凝结体-凝结体-云州-购买-页面",
+        "target_name": "消耗凝结体-凝结体-云州-最大-数量"
       }
     },
-    "next": ["MJA_CONDENSATE_BUY_YUNZHOU_AFTER_SOLD_OUT"],
-    "on_error": ["MJA_CONDENSATE_BUDGET_UNSAFE"]
+    "next": ["消耗凝结体-购买-云州-之后-售罄"],
+    "on_error": ["消耗凝结体-预算-不安全"]
   },
-  "MJA_CONDENSATE_SET_YUNZHOU_MAX_AFTER_BUY": {
+  "消耗凝结体-设置-云州-最大-之后-购买": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "condensate.yunzhou.purchase.page",
-          "condensate.yunzhou.max_quantity"
+          "消耗凝结体-凝结体-云州-购买-页面",
+          "消耗凝结体-凝结体-云州-最大-数量"
         ],
         "box_index": 1
       }
@@ -872,22 +872,22 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "condensate.yunzhou.purchase.page",
-        "target_name": "condensate.yunzhou.max_quantity"
+        "page_name": "消耗凝结体-凝结体-云州-购买-页面",
+        "target_name": "消耗凝结体-凝结体-云州-最大-数量"
       }
     },
-    "next": ["MJA_CONDENSATE_BUY_YUNZHOU_AFTER_BUY"],
-    "on_error": ["MJA_CONDENSATE_BUDGET_UNSAFE"]
+    "next": ["消耗凝结体-购买-云州-之后-购买"],
+    "on_error": ["消耗凝结体-预算-不安全"]
   },
-  "MJA_CONDENSATE_BUY_YUNZHOU_RECOVERY": {
+  "消耗凝结体-购买-云州-恢复": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "condensate.yunzhou.purchase.page",
-          "condensate.yunzhou.buy_confirm",
-          "condensate.currency",
-          "condensate.yunzhou.cost_50000"
+          "消耗凝结体-凝结体-云州-购买-页面",
+          "消耗凝结体-凝结体-云州-购买-确认",
+          "消耗凝结体-凝结体-货币",
+          "消耗凝结体-凝结体-云州-消耗-50000"
         ],
         "box_index": 1
       }
@@ -901,28 +901,28 @@
       "resource_id": "凝晶",
       "resource_index": 2,
       "amount_index": 3,
-      "resource_evidence_name": "condensate.currency",
+      "resource_evidence_name": "消耗凝结体-凝结体-货币",
       "observed_amount": 50000,
       "budget_amount": 50000,
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "condensate.yunzhou.purchase.page",
-        "target_name": "condensate.yunzhou.buy_confirm"
+        "page_name": "消耗凝结体-凝结体-云州-购买-页面",
+        "target_name": "消耗凝结体-凝结体-云州-购买-确认"
       }
     },
-    "next": ["MJA_CONDENSATE_YUNZHOU_REWARD_PROBE_RECOVERY"],
-    "on_error": ["MJA_CONDENSATE_BUDGET_UNSAFE"]
+    "next": ["消耗凝结体-云州-奖励-探测-恢复"],
+    "on_error": ["消耗凝结体-预算-不安全"]
   },
-  "MJA_CONDENSATE_BUY_YUNZHOU_AFTER_SOLD_OUT": {
+  "消耗凝结体-购买-云州-之后-售罄": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "condensate.yunzhou.purchase.page",
-          "condensate.yunzhou.buy_confirm",
-          "condensate.currency",
-          "condensate.yunzhou.cost_50000"
+          "消耗凝结体-凝结体-云州-购买-页面",
+          "消耗凝结体-凝结体-云州-购买-确认",
+          "消耗凝结体-凝结体-货币",
+          "消耗凝结体-凝结体-云州-消耗-50000"
         ],
         "box_index": 1
       }
@@ -936,28 +936,28 @@
       "resource_id": "凝晶",
       "resource_index": 2,
       "amount_index": 3,
-      "resource_evidence_name": "condensate.currency",
+      "resource_evidence_name": "消耗凝结体-凝结体-货币",
       "observed_amount": 50000,
       "budget_amount": 50000,
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "condensate.yunzhou.purchase.page",
-        "target_name": "condensate.yunzhou.buy_confirm"
+        "page_name": "消耗凝结体-凝结体-云州-购买-页面",
+        "target_name": "消耗凝结体-凝结体-云州-购买-确认"
       }
     },
-    "next": ["MJA_CONDENSATE_YUNZHOU_REWARD_PROBE_AFTER_SOLD_OUT"],
-    "on_error": ["MJA_CONDENSATE_BUDGET_UNSAFE"]
+    "next": ["消耗凝结体-云州-奖励-探测-之后-售罄"],
+    "on_error": ["消耗凝结体-预算-不安全"]
   },
-  "MJA_CONDENSATE_BUY_YUNZHOU_AFTER_BUY": {
+  "消耗凝结体-购买-云州-之后-购买": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "condensate.yunzhou.purchase.page",
-          "condensate.yunzhou.buy_confirm",
-          "condensate.currency",
-          "condensate.yunzhou.cost_50000"
+          "消耗凝结体-凝结体-云州-购买-页面",
+          "消耗凝结体-凝结体-云州-购买-确认",
+          "消耗凝结体-凝结体-货币",
+          "消耗凝结体-凝结体-云州-消耗-50000"
         ],
         "box_index": 1
       }
@@ -971,68 +971,68 @@
       "resource_id": "凝晶",
       "resource_index": 2,
       "amount_index": 3,
-      "resource_evidence_name": "condensate.currency",
+      "resource_evidence_name": "消耗凝结体-凝结体-货币",
       "observed_amount": 50000,
       "budget_amount": 50000,
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "condensate.yunzhou.purchase.page",
-        "target_name": "condensate.yunzhou.buy_confirm"
+        "page_name": "消耗凝结体-凝结体-云州-购买-页面",
+        "target_name": "消耗凝结体-凝结体-云州-购买-确认"
       }
     },
-    "next": ["MJA_CONDENSATE_YUNZHOU_REWARD_PROBE_AFTER_BUY"],
-    "on_error": ["MJA_CONDENSATE_BUDGET_UNSAFE"]
+    "next": ["消耗凝结体-云州-奖励-探测-之后-购买"],
+    "on_error": ["消耗凝结体-预算-不安全"]
   },
-  "MJA_CONDENSATE_YUNZHOU_REWARD_PROBE_RECOVERY": {
+  "消耗凝结体-云州-奖励-探测-恢复": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["condensate.yunzhou.reward", "condensate.reward_close"],
+        "all_of": ["消耗凝结体-凝结体-云州-奖励", "消耗凝结体-凝结体-奖励-关闭"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_CONDENSATE_DISMISS_YUNZHOU_REWARD"],
-    "on_error": ["MJA_CONDENSATE_RECORD_FAILURE"]
+    "next": ["消耗凝结体-关闭-云州-奖励"],
+    "on_error": ["消耗凝结体-记录-失败"]
   },
-  "MJA_CONDENSATE_YUNZHOU_REWARD_PROBE_AFTER_SOLD_OUT": {
+  "消耗凝结体-云州-奖励-探测-之后-售罄": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["condensate.yunzhou.reward", "condensate.reward_close"],
+        "all_of": ["消耗凝结体-凝结体-云州-奖励", "消耗凝结体-凝结体-奖励-关闭"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_CONDENSATE_DISMISS_YUNZHOU_REWARD"],
-    "on_error": ["MJA_CONDENSATE_RECORD_FAILURE"]
+    "next": ["消耗凝结体-关闭-云州-奖励"],
+    "on_error": ["消耗凝结体-记录-失败"]
   },
-  "MJA_CONDENSATE_YUNZHOU_REWARD_PROBE_AFTER_BUY": {
+  "消耗凝结体-云州-奖励-探测-之后-购买": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["condensate.yunzhou.reward", "condensate.reward_close"],
+        "all_of": ["消耗凝结体-凝结体-云州-奖励", "消耗凝结体-凝结体-奖励-关闭"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_CONDENSATE_DISMISS_YUNZHOU_REWARD"],
-    "on_error": ["MJA_CONDENSATE_RECORD_FAILURE"]
+    "next": ["消耗凝结体-关闭-云州-奖励"],
+    "on_error": ["消耗凝结体-记录-失败"]
   },
-  "MJA_CONDENSATE_YUNZHOU_POST_VERIFY": {
+  "消耗凝结体-云州-之后-校验": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["condensate.yunzhou.page", "condensate.yunzhou.post"],
+        "all_of": ["消耗凝结体-凝结体-云州-页面", "消耗凝结体-凝结体-云州-之后"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_CONDENSATE_SUCCESS"],
-    "on_error": ["MJA_CONDENSATE_RECORD_FAILURE"]
+    "next": ["消耗凝结体-成功"],
+    "on_error": ["消耗凝结体-记录-失败"]
   },
-  "MJA_CONDENSATE_ALREADY_COMPLETE": {
+  "消耗凝结体-已完成": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -1041,9 +1041,9 @@
       "status": "already_complete",
       "postcondition": "condensate.both_regions_sold_out"
     },
-    "next": ["MJA_COMMON_STOP"]
+    "next": ["公共-通用停止"]
   },
-  "MJA_CONDENSATE_SUCCESS": {
+  "消耗凝结体-成功": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -1052,9 +1052,9 @@
       "status": "success",
       "postcondition": "condensate.both_regions_sold_out"
     },
-    "next": ["MJA_COMMON_STOP"]
+    "next": ["公共-通用停止"]
   },
-  "MJA_CONDENSATE_BUDGET_UNSAFE": {
+  "消耗凝结体-预算-不安全": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -1066,9 +1066,9 @@
       "native_fail_after_record": true
     },
     "Abort": true,
-    "next": ["MJA_COMMON_ABORT"]
+    "next": ["公共-通用中止"]
   },
-  "MJA_CONDENSATE_RECORD_FAILURE": {
+  "消耗凝结体-记录-失败": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -1080,61 +1080,61 @@
       "native_fail_after_record": true
     },
     "Abort": true,
-    "next": ["MJA_COMMON_ABORT"]
+    "next": ["公共-通用中止"]
   },
-  "condensate.home.page": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_HOME_PAGE"], "box_index": 0}},
+  "消耗凝结体-凝结体-主页-页面": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}},
     "action": "DoNothing"
   },
-  "condensate.panel_open": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_FUNCTION_PANEL_ENTRY"], "box_index": 0}},
+  "消耗凝结体-凝结体-面板-打开": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏功能面板-入口"], "box_index": 0}},
     "action": "DoNothing"
   },
-  "condensate.panel.page": {
+  "消耗凝结体-凝结体-面板-页面": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["condensate.panel.identity", "condensate.panel.mall"],
+        "all_of": ["消耗凝结体-凝结体-面板-身份", "消耗凝结体-凝结体-面板-商城"],
         "box_index": 0
       }
     },
     "action": "DoNothing"
   },
-  "condensate.panel.close": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_SIDE_PANEL_OPEN"], "box_index": 0}},
+  "消耗凝结体-凝结体-面板-关闭": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏侧边面板-打开"], "box_index": 0}},
     "action": "DoNothing"
   },
-  "condensate.panel.identity": {
+  "消耗凝结体-凝结体-面板-身份": {
     "recognition": "OCR",
     "expected": "^名帖[:：]?\\d{6,12}(?:日)?$",
     "roi": [700, 0, 190, 60],
     "action": "DoNothing"
   },
-  "condensate.panel.mall": {
+  "消耗凝结体-凝结体-面板-商城": {
     "recognition": "OCR",
     "expected": "^商城$",
     "roi": [940, 275, 100, 65],
     "action": "DoNothing"
   },
-  "condensate.painting_scroll.entry": {
+  "消耗凝结体-凝结体-画卷-滚动-入口": {
     "recognition": "OCR",
     "expected": "画卷",
     "roi": [850, 0, 430, 180],
     "action": "DoNothing"
   },
-  "condensate.daily.page": {
+  "消耗凝结体-凝结体-日常-页面": {
     "recognition": "OCR",
     "expected": ["日常任务", "活跃度"],
     "roi": [0, 0, 620, 190],
     "action": "DoNothing"
   },
-  "condensate.daily.entry": {
+  "消耗凝结体-凝结体-日常-入口": {
     "recognition": "OCR",
     "expected": "^日常$",
     "roi": [1060, 275, 100, 65],
     "action": "DoNothing"
   },
-  "condensate.daily.close": {
+  "消耗凝结体-凝结体-日常-关闭": {
     "recognition": "ColorMatch",
     "lower": [0, 0, 0],
     "upper": [125, 125, 125],
@@ -1143,157 +1143,157 @@
     "count": 180,
     "action": "DoNothing"
   },
-  "condensate.painting.page": {
+  "消耗凝结体-凝结体-画卷-页面": {
     "recognition": "OCR",
     "expected": ["画卷", "偃武世界", "云州", "蜃影武墟"],
     "roi": [0, 0, 1280, 720],
     "action": "DoNothing"
   },
-  "condensate.yanwu.tab": {
+  "消耗凝结体-凝结体-偃武-标签": {
     "recognition": "OCR",
     "expected": "偃武世界",
     "roi": [0, 90, 500, 180],
     "action": "DoNothing"
   },
-  "condensate.yanwu.page": {
+  "消耗凝结体-凝结体-偃武-页面": {
     "recognition": "OCR",
     "expected": ["偃武世界", "无名雪谷"],
     "roi": [0, 100, 1000, 620],
     "action": "DoNothing"
   },
-  "condensate.yanwu.currency_entry": {
+  "消耗凝结体-凝结体-偃武-货币-入口": {
     "recognition": "OCR",
     "expected": "^\\d+两\\d+文$",
     "roi": [990, 0, 210, 90],
     "action": "DoNothing"
   },
-  "condensate.yanwu.purchase.page": {
+  "消耗凝结体-凝结体-偃武-购买-页面": {
     "recognition": "OCR",
     "expected": ["购买", "长定壹钱"],
     "roi": [0, 100, 1280, 620],
     "action": "DoNothing"
   },
-  "condensate.yanwu.sold_out": {
+  "消耗凝结体-凝结体-偃武-售罄": {
     "recognition": "OCR",
     "expected": "^0/12500$",
     "roi": [250, 520, 400, 120],
     "action": "DoNothing"
   },
-  "condensate.yanwu.close": {
+  "消耗凝结体-凝结体-偃武-关闭": {
     "recognition": "TemplateMatch",
     "template": "home/modal_close.png",
     "roi": [1160, 0, 100, 100],
     "threshold": 0.39,
     "action": "DoNothing"
   },
-  "condensate.yanwu.max_quantity": {
+  "消耗凝结体-凝结体-偃武-最大-数量": {
     "recognition": "TemplateMatch",
     "template": "daily/BUY_TEA_DAILY/max_quantity.png",
     "roi": [900, 400, 150, 120],
     "threshold": 0.4,
     "action": "DoNothing"
   },
-  "condensate.yanwu.buy_confirm": {
+  "消耗凝结体-凝结体-偃武-购买-确认": {
     "recognition": "OCR",
     "expected": "购买",
     "roi": [700, 500, 350, 120],
     "action": "DoNothing"
   },
-  "condensate.yanwu.cost_50000": {
+  "消耗凝结体-凝结体-偃武-消耗-50000": {
     "recognition": "OCR",
     "expected": "50000",
     "roi": [650, 420, 500, 160],
     "action": "DoNothing"
   },
-  "condensate.yanwu.reward": {
+  "消耗凝结体-凝结体-偃武-奖励": {
     "recognition": "OCR",
     "expected": ["恭喜获得", "获得"],
     "roi": [0, 100, 1280, 620],
     "action": "DoNothing"
   },
-  "condensate.yanwu.post": {
+  "消耗凝结体-凝结体-偃武-之后": {
     "recognition": "OCR",
     "expected": ["偃武世界", "0/12500"],
     "roi": [0, 100, 1000, 620],
     "action": "DoNothing"
   },
-  "condensate.yunzhou.tab": {
+  "消耗凝结体-凝结体-云州-标签": {
     "recognition": "OCR",
     "expected": "云州",
     "roi": [0, 180, 500, 220],
     "action": "DoNothing"
   },
-  "condensate.yunzhou.page": {
+  "消耗凝结体-凝结体-云州-页面": {
     "recognition": "TemplateMatch",
     "template": "daily/SPEND_CONDENSATE_DAILY/yunzhou_world_page.png",
     "roi": [60, 200, 300, 130],
     "threshold": 0.36,
     "action": "DoNothing"
   },
-  "condensate.yunzhou.currency_entry": {
+  "消耗凝结体-凝结体-云州-货币-入口": {
     "recognition": "OCR",
     "expected": "^\\d+两\\d+文$",
     "roi": [990, 0, 210, 90],
     "action": "DoNothing"
   },
-  "condensate.yunzhou.purchase.page": {
+  "消耗凝结体-凝结体-云州-购买-页面": {
     "recognition": "OCR",
     "expected": ["购买", "南北通宝"],
     "roi": [0, 100, 1280, 620],
     "action": "DoNothing"
   },
-  "condensate.yunzhou.sold_out": {
+  "消耗凝结体-凝结体-云州-售罄": {
     "recognition": "OCR",
     "expected": "^0/12500$",
     "roi": [250, 520, 400, 120],
     "action": "DoNothing"
   },
-  "condensate.yunzhou.close": {
+  "消耗凝结体-凝结体-云州-关闭": {
     "recognition": "TemplateMatch",
     "template": "home/modal_close.png",
     "roi": [1160, 0, 100, 100],
     "threshold": 0.39,
     "action": "DoNothing"
   },
-  "condensate.yunzhou.max_quantity": {
+  "消耗凝结体-凝结体-云州-最大-数量": {
     "recognition": "TemplateMatch",
     "template": "daily/BUY_TEA_DAILY/max_quantity.png",
     "roi": [900, 400, 150, 120],
     "threshold": 0.4,
     "action": "DoNothing"
   },
-  "condensate.yunzhou.buy_confirm": {
+  "消耗凝结体-凝结体-云州-购买-确认": {
     "recognition": "OCR",
     "expected": "购买",
     "roi": [700, 500, 350, 120],
     "action": "DoNothing"
   },
-  "condensate.yunzhou.cost_50000": {
+  "消耗凝结体-凝结体-云州-消耗-50000": {
     "recognition": "OCR",
     "expected": "50000",
     "roi": [650, 420, 500, 160],
     "action": "DoNothing"
   },
-  "condensate.yunzhou.reward": {
+  "消耗凝结体-凝结体-云州-奖励": {
     "recognition": "OCR",
     "expected": ["恭喜获得", "获得"],
     "roi": [0, 100, 1280, 620],
     "action": "DoNothing"
   },
-  "condensate.yunzhou.post": {
+  "消耗凝结体-凝结体-云州-之后": {
     "recognition": "OCR",
     "expected": ["云州", "0/12500"],
     "roi": [0, 100, 1000, 620],
     "action": "DoNothing"
   },
-  "condensate.currency": {
+  "消耗凝结体-凝结体-货币": {
     "recognition": "TemplateMatch",
     "template": "daily/SPEND_CONDENSATE_DAILY/condensate_icon_live.png",
     "roi": [680, 450, 160, 110],
     "threshold": 0.4,
     "action": "DoNothing"
   },
-  "condensate.reward_close": {
+  "消耗凝结体-凝结体-奖励-关闭": {
     "recognition": "OCR",
     "expected": "点击空白处关闭",
     "roi": [350, 580, 600, 140],

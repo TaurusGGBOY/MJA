@@ -3,40 +3,40 @@
   "sha256": "f125b03258ecc0a330410156cb72e5c6b6e3980bd79838c327f3754ee83e4abb",
   "frame_size": [1280, 720],
   "recognitions": {
-    "break_array.prepare_formation": {
+    "破阵武学-突破-阵法-准备-阵容": {
       "hit": true,
       "box": [75, 29, 38, 21],
       "text": "阵容"
     },
-    "break_array.prepare_boss": {
+    "破阵武学-突破-阵法-准备-首领": {
       "hit": true,
       "box": [595, 27, 89, 24],
       "text": "首领战斗"
     },
-    "break_array.prepare_duration": {
+    "破阵武学-突破-阵法-准备-时长": {
       "hit": true,
       "box": [572, 52, 137, 22],
       "text": "战斗时长：02:00"
     },
-    "break_array.prepare_tactics": {
+    "破阵武学-突破-阵法-准备-战术": {
       "hit": true,
       "box": [996, 508, 90, 24],
       "text": "战术谱"
     },
-    "break_array.prepare_start": {
+    "破阵武学-突破-阵法-准备-开始": {
       "hit": true,
       "box": [1111, 560, 126, 125],
       "color_count": 5630
     },
-    "break_array.confirm_transition": {
+    "破阵武学-突破-阵法-确认-过渡": {
       "hit": false,
       "box": null
     },
-    "break_array.battle_loading": {
+    "破阵武学-突破-阵法-战斗-加载": {
       "hit": false,
       "box": null
     },
-    "break_array.battle": {
+    "破阵武学-突破-阵法-战斗": {
       "hit": false,
       "box": null,
       "texts": [

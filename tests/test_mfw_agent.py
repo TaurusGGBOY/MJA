@@ -38,7 +38,7 @@ def _action_argv(reco_detail, *, kind: str = "click", evidence: dict | None = No
 def test_guarded_input_clicks_only_after_page_target_and_budget_match():
     context = FakeContext()
     RUN_STORE.begin("MAIL_REWARD_DAILY")
-    argv = _action_argv(and_reco(hit_reco("mail.page"), hit_reco("mail.claim_all")))
+    argv = _action_argv(and_reco(hit_reco("邮件奖励-邮件-页面"), hit_reco("邮件奖励-邮件-领取-全部")))
 
     assert GuardedInput().run(context, argv) is True
     assert context.tasker.controller.actions == [("click", (120, 210))]
@@ -49,8 +49,8 @@ def test_guarded_input_clicks_verified_target_box_inside_and_result():
     RUN_STORE.begin("MAIL_REWARD_DAILY")
     argv = _action_argv(
         and_reco(
-            hit_reco("mail.page", (10, 20, 300, 200)),
-            hit_reco("mail.claim_all", (150, 240, 40, 20)),
+            hit_reco("邮件奖励-邮件-页面", (10, 20, 300, 200)),
+            hit_reco("邮件奖励-邮件-领取-全部", (150, 240, 40, 20)),
         )
     )
 
@@ -73,15 +73,15 @@ def test_guarded_input_clicks_shadow_foreground_triplet_in_fixed_order():
         "evidence": {
             "page_index": 0,
             "target_index": 1,
-            "page_name": "shadow.exploration.page",
-            "target_name": "shadow.foreground.ready",
+            "page_name": "影之遗迹-影-探索-页面",
+            "target_name": "影之遗迹-影-前台-就绪",
         },
     }
     argv = FakeArgv(
         json.dumps(payload),
         reco_detail=and_reco(
-            hit_reco("shadow.exploration.page", (850, 0, 400, 720)),
-            hit_reco("shadow.foreground.ready", (1040, 80, 90, 30)),
+            hit_reco("影之遗迹-影-探索-页面", (850, 0, 400, 720)),
+            hit_reco("影之遗迹-影-前台-就绪", (1040, 80, 90, 30)),
         ),
     )
 
@@ -108,7 +108,7 @@ def test_guarded_input_rejects_fixed_click_boxes_for_other_actions():
         context,
         FakeArgv(
             json.dumps(payload),
-            reco_detail=and_reco(hit_reco("mail.page"), hit_reco("mail.claim_all")),
+            reco_detail=and_reco(hit_reco("邮件奖励-邮件-页面"), hit_reco("邮件奖励-邮件-领取-全部")),
         ),
     ) is False
     assert context.tasker.controller.actions == []
@@ -125,15 +125,15 @@ def test_guarded_input_uses_named_blank_area_for_shadow_result_dismissal():
         "evidence": {
             "page_index": 0,
             "target_index": 1,
-            "page_name": "shadow.battle.result.page",
-            "target_name": "shadow.battle.victory",
+            "page_name": "影之遗迹-影-战斗-结果-页面",
+            "target_name": "影之遗迹-影-战斗-胜利",
         },
     }
     argv = FakeArgv(
         json.dumps(payload),
         reco_detail=and_reco(
-            hit_reco("shadow.battle.result.page", (650, 0, 630, 240)),
-            hit_reco("shadow.battle.victory", (780, 100, 300, 140)),
+            hit_reco("影之遗迹-影-战斗-结果-页面", (650, 0, 630, 240)),
+            hit_reco("影之遗迹-影-战斗-胜利", (780, 100, 300, 140)),
         ),
     )
 
@@ -152,15 +152,15 @@ def test_guarded_input_uses_named_blank_area_for_ring_result_dismissal():
         "evidence": {
             "page_index": 0,
             "target_index": 1,
-            "page_name": "ring.battle.result",
-            "target_name": "ring.result.close",
+            "page_name": "擂台挑战-擂台-战斗-结果",
+            "target_name": "擂台挑战-擂台-结果-关闭",
         },
     }
     argv = FakeArgv(
         json.dumps(payload),
         reco_detail=and_reco(
-            hit_reco("ring.battle.result", (740, 100, 390, 145)),
-            hit_reco("ring.result.close", (770, 625, 150, 35)),
+            hit_reco("擂台挑战-擂台-战斗-结果", (740, 100, 390, 145)),
+            hit_reco("擂台挑战-擂台-结果-关闭", (770, 625, 150, 35)),
         ),
     )
 
@@ -179,15 +179,15 @@ def test_guarded_input_uses_named_blank_area_for_guild_result_dismissal():
         "evidence": {
             "page_index": 0,
             "target_index": 1,
-            "page_name": "guild.result.page",
-            "target_name": "guild.result.victory",
+            "page_name": "帮派活动挑战-帮派-结果-页面",
+            "target_name": "帮派活动挑战-帮派-结果-胜利",
         },
     }
     argv = FakeArgv(
         json.dumps(payload),
         reco_detail=and_reco(
-            hit_reco("guild.result.page", (700, 70, 580, 210)),
-            hit_reco("guild.result.victory", (700, 70, 580, 210)),
+            hit_reco("帮派活动挑战-帮派-结果-页面", (700, 70, 580, 210)),
+            hit_reco("帮派活动挑战-帮派-结果-胜利", (700, 70, 580, 210)),
         ),
     )
 
@@ -206,15 +206,15 @@ def test_guarded_input_uses_named_blank_area_for_guild_defeat_dismissal():
         "evidence": {
             "page_index": 0,
             "target_index": 1,
-            "page_name": "guild.result.defeat",
-            "target_name": "guild.result.defeat.improve",
+            "page_name": "帮派活动挑战-帮派-结果-失败-2",
+            "target_name": "帮派活动挑战-帮派-结果-失败-提升",
         },
     }
     argv = FakeArgv(
         json.dumps(payload),
         reco_detail=and_reco(
-            hit_reco("guild.result.defeat", (700, 70, 580, 210)),
-            hit_reco("guild.result.defeat.improve", (840, 390, 340, 90)),
+            hit_reco("帮派活动挑战-帮派-结果-失败-2", (700, 70, 580, 210)),
+            hit_reco("帮派活动挑战-帮派-结果-失败-提升", (840, 390, 340, 90)),
         ),
     )
 
@@ -233,15 +233,15 @@ def test_guarded_input_uses_separate_safe_blank_area_for_shadow_reward_dismissal
         "evidence": {
             "page_index": 0,
             "target_index": 1,
-            "page_name": "shadow.reward",
-            "target_name": "shadow.reward.close",
+            "page_name": "影之遗迹-影-奖励",
+            "target_name": "影之遗迹-影-奖励-关闭",
         },
     }
     argv = FakeArgv(
         json.dumps(payload),
         reco_detail=and_reco(
-            hit_reco("shadow.reward", (0, 100, 1280, 620)),
-            hit_reco("shadow.reward.close", (500, 650, 300, 40)),
+            hit_reco("影之遗迹-影-奖励", (0, 100, 1280, 620)),
+            hit_reco("影之遗迹-影-奖励-关闭", (500, 650, 300, 40)),
         ),
     )
 
@@ -252,7 +252,7 @@ def test_guarded_input_uses_separate_safe_blank_area_for_shadow_reward_dismissal
 def test_guarded_input_accepts_named_same_index_shadow_reward_evidence():
     context = FakeContext()
     RUN_STORE.begin("SHADOW_RUINS_DAILY")
-    evidence_name = "shadow.victory.chest.reward"
+    evidence_name = "影之遗迹-影-胜利-宝箱-奖励"
     payload = {
         "task_id": "SHADOW_RUINS_DAILY",
         "action_id": "dismiss_shadow_reward_popup",
@@ -285,15 +285,15 @@ def test_guarded_input_uses_named_shadow_stage_entry_button():
         "evidence": {
             "page_index": 0,
             "target_index": 1,
-            "page_name": "shadow.page",
-            "target_name": "shadow.stage_entry",
+            "page_name": "影之遗迹-影-页面",
+            "target_name": "影之遗迹-影-关卡-入口",
         },
     }
     argv = FakeArgv(
         json.dumps(payload),
         reco_detail=and_reco(
-            hit_reco("shadow.page", (0, 0, 1280, 720)),
-            hit_reco("shadow.stage_entry", (870, 530, 58, 32)),
+            hit_reco("影之遗迹-影-页面", (0, 0, 1280, 720)),
+            hit_reco("影之遗迹-影-关卡-入口", (870, 530, 58, 32)),
         ),
     )
 
@@ -305,7 +305,7 @@ def test_guarded_input_swipe_uses_bounded_relative_vector():
     context = FakeContext()
     RUN_STORE.begin("MAIL_REWARD_DAILY")
     argv = _action_argv(
-        and_reco(hit_reco("mail.page"), hit_reco("mail.claim_all")),
+        and_reco(hit_reco("邮件奖励-邮件-页面"), hit_reco("邮件奖励-邮件-领取-全部")),
         kind="swipe",
         evidence={"page_index": 0, "target_index": 1, "dx": 10, "dy": -5, "duration_ms": 300},
     )
@@ -319,7 +319,7 @@ def test_guarded_input_swipe_uses_verified_target_box_for_shape_and_input():
     RUN_STORE.begin("MAIL_REWARD_DAILY")
     argv = _action_argv(
         and_reco(
-            hit_reco("mail.page", (0, 0, 40, 20)),
+            hit_reco("邮件奖励-邮件-页面", (0, 0, 40, 20)),
             hit_reco("mail.list", (100, 300, 200, 200)),
         ),
         kind="swipe",
@@ -342,7 +342,7 @@ def test_guarded_input_none_validates_evidence_without_touching_controller():
                 "evidence": {"page_index": 0, "target_index": 0},
             }
         ),
-        reco_detail=and_reco(hit_reco("ring.battle.loading")),
+        reco_detail=and_reco(hit_reco("擂台挑战-擂台-战斗-加载")),
     )
 
     assert GuardedInput().run(context, argv) is True
@@ -370,8 +370,8 @@ def test_guarded_input_accepts_dynamic_positive_resource_amount():
         "evidence": {
             "page_index": 0,
             "target_index": 1,
-            "page_name": "dungeon.sweep.panel",
-            "target_name": "dungeon.ticket.plus",
+            "page_name": "副本扫荡-副本-扫荡-面板",
+            "target_name": "副本扫荡-副本-券-加号",
         },
     }
     context = FakeContext()
@@ -379,10 +379,10 @@ def test_guarded_input_accepts_dynamic_positive_resource_amount():
     argv = FakeArgv(
         json.dumps(payload),
         reco_detail=and_reco(
-            hit_reco("dungeon.sweep.panel"),
-            hit_reco("dungeon.ticket.plus", (1180, 360, 40, 40)),
+            hit_reco("副本扫荡-副本-扫荡-面板"),
+            hit_reco("副本扫荡-副本-券-加号", (1180, 360, 40, 40)),
             ocr("副本票", "副本票", (740, 490, 100, 40)),
-            ocr("dungeon.ticket.balance", "2(-2)", (900, 490, 100, 40)),
+            ocr("副本扫荡-副本-券-余额", "2(-2)", (900, 490, 100, 40)),
         ),
     )
 
@@ -412,15 +412,15 @@ def test_guarded_input_allows_explicit_visual_resource_identity_but_not_by_defau
         "evidence": {
             "page_index": 0,
             "target_index": 1,
-            "page_name": "dungeon.sweep.panel",
-            "target_name": "dungeon.ticket.plus",
+            "page_name": "副本扫荡-副本-扫荡-面板",
+            "target_name": "副本扫荡-副本-券-加号",
         },
     }
     reco_detail = and_reco(
-        hit_reco("dungeon.sweep.panel"),
-        hit_reco("dungeon.ticket.plus", (1228, 400, 40, 40)),
-        hit_reco("dungeon.ticket.icon", (770, 510, 95, 75)),
-        ocr("dungeon.ticket.balance", "2", (840, 520, 90, 70)),
+        hit_reco("副本扫荡-副本-扫荡-面板"),
+        hit_reco("副本扫荡-副本-券-加号", (1228, 400, 40, 40)),
+        hit_reco("副本扫荡-副本-券-图标", (770, 510, 95, 75)),
+        ocr("副本扫荡-副本-券-余额", "2", (840, 520, 90, 70)),
     )
     context = FakeContext()
     RUN_STORE.begin("DUNGEON_SWEEP_DAILY")
@@ -430,7 +430,7 @@ def test_guarded_input_allows_explicit_visual_resource_identity_but_not_by_defau
     ) is False
     assert context.tasker.controller.actions == []
 
-    payload["resource_evidence_name"] = "dungeon.ticket.icon"
+    payload["resource_evidence_name"] = "副本扫荡-副本-券-图标"
     assert GuardedInput().run(
         context, FakeArgv(json.dumps(payload), reco_detail=reco_detail)
     ) is True
@@ -445,13 +445,13 @@ def test_guarded_input_visual_resource_identity_rejects_the_wrong_node_name():
         "kind": "click",
         "resource_id": "副本票",
         "resource_index": 2,
-        "resource_evidence_name": "dungeon.ticket.icon",
+        "resource_evidence_name": "副本扫荡-副本-券-图标",
         "amount_index": 3,
         "budget_amount": 1,
         "evidence": {"page_index": 0, "target_index": 1},
     }
     amount = SimpleNamespace(
-        name="dungeon.ticket.balance",
+        name="副本扫荡-副本-券-余额",
         hit=True,
         box=(840, 520, 90, 70),
         filtered_results=[SimpleNamespace(text="2")],
@@ -462,8 +462,8 @@ def test_guarded_input_visual_resource_identity_rejects_the_wrong_node_name():
     argv = FakeArgv(
         json.dumps(payload),
         reco_detail=and_reco(
-            hit_reco("dungeon.sweep.panel"),
-            hit_reco("dungeon.ticket.plus", (1228, 400, 40, 40)),
+            hit_reco("副本扫荡-副本-扫荡-面板"),
+            hit_reco("副本扫荡-副本-券-加号", (1228, 400, 40, 40)),
             hit_reco("some.other.icon", (770, 510, 95, 75)),
             amount,
         ),
@@ -495,8 +495,8 @@ def test_guarded_input_accepts_resource_token_in_full_ocr_line():
         "evidence": {
             "page_index": 0,
             "target_index": 1,
-            "page_name": "tea.quantity_panel",
-            "target_name": "tea.buy_confirm",
+            "page_name": "买茶-茶-数量-面板",
+            "target_name": "买茶-茶-购买-确认",
         },
     }
     context = FakeContext()
@@ -504,8 +504,8 @@ def test_guarded_input_accepts_resource_token_in_full_ocr_line():
     argv = FakeArgv(
         json.dumps(payload),
         reco_detail=and_reco(
-            hit_reco("tea.quantity_panel"),
-            hit_reco("tea.buy_confirm", (710, 545, 300, 65)),
+            hit_reco("买茶-茶-数量-面板"),
+            hit_reco("买茶-茶-购买-确认", (710, 545, 300, 65)),
             ocr("tea.currency.wen", "：500文"),
             ocr("tea.cost.500", "消耗：500文"),
         ),
@@ -518,7 +518,7 @@ def test_guarded_input_accepts_resource_token_in_full_ocr_line():
 def test_guarded_input_rejects_unverified_target_without_input():
     context = FakeContext()
     RUN_STORE.begin("MAIL_REWARD_DAILY")
-    argv = _action_argv(and_reco(hit_reco("mail.page"), miss_reco("mail.claim_all")))
+    argv = _action_argv(and_reco(hit_reco("邮件奖励-邮件-页面"), miss_reco("邮件奖励-邮件-领取-全部")))
 
     assert GuardedInput().run(context, argv) is False
     assert context.tasker.controller.actions == []
@@ -541,7 +541,7 @@ def test_guarded_input_rejects_removed_martial_breakthrough_action():
     argv = FakeArgv(
         json.dumps(payload),
         reco_detail=and_reco(
-            hit_reco("martial.page"),
+            hit_reco("武学突破-武学-页面"),
             hit_reco("martial.breakthrough_action"),
         ),
     )
@@ -553,7 +553,7 @@ def test_guarded_input_rejects_removed_martial_breakthrough_action():
 def test_guarded_input_does_not_downgrade_controller_failure():
     context = FakeContext(controller=FailingController(RuntimeError("device lost")))
     RUN_STORE.begin("MAIL_REWARD_DAILY")
-    argv = _action_argv(and_reco(hit_reco("mail.page"), hit_reco("mail.claim_all")))
+    argv = _action_argv(and_reco(hit_reco("邮件奖励-邮件-页面"), hit_reco("邮件奖励-邮件-领取-全部")))
 
     with pytest.raises(RuntimeError, match="device lost"):
         GuardedInput().run(context, argv)
@@ -568,7 +568,7 @@ def test_guarded_input_raises_when_controller_wait_fails():
 
     context = FakeContext(controller=WaitFailureController())
     RUN_STORE.begin("MAIL_REWARD_DAILY")
-    argv = _action_argv(and_reco(hit_reco("mail.page"), hit_reco("mail.claim_all")))
+    argv = _action_argv(and_reco(hit_reco("邮件奖励-邮件-页面"), hit_reco("邮件奖励-邮件-领取-全部")))
 
     with pytest.raises(RuntimeError, match="controller click failed"):
         GuardedInput().run(context, argv)

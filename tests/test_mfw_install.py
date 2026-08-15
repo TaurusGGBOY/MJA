@@ -41,8 +41,8 @@ def _assert_startup_payload(candidate: Path) -> None:
     )
     task_file = json.loads((candidate / "tasks/游戏启动.json").read_text(encoding="utf-8"))
 
-    assert "MJA_GAME_START" in startup
-    assert "MJA_GAME_STOP" not in startup
+    assert "启动-游戏启动" in startup
+    assert "启动-游戏停止" not in startup
     assert not any(
         key.startswith("MJA_GAME_BACK_") or "UNKNOWN_ABORT" in key for key in startup
     )
@@ -51,16 +51,16 @@ def _assert_startup_payload(candidate: Path) -> None:
         for node in startup.values()
         if isinstance(node, dict)
     )
-    assert shutdown["MJA_GAME_STOP"] == {
+    assert shutdown["启动-游戏停止"] == {
         "action": "StopApp",
         "package": "com.hanjiasongshu.dr22",
     }
     assert not (candidate / "resource_android/pipeline/startup/game_start.json").exists()
 
     tasks = {task["name"]: task for task in task_file["task"]}
-    assert tasks["GAME_START"]["entry"] == "MJA_GAME_START_ENTRY"
+    assert tasks["GAME_START"]["entry"] == "启动-游戏入口"
     assert tasks["GAME_START"]["default"] is True
-    assert tasks["GAME_STOP"]["entry"] == "MJA_GAME_STOP"
+    assert tasks["GAME_STOP"]["entry"] == "启动-游戏停止"
     assert tasks["GAME_STOP"]["default"] is False
 
 
@@ -88,8 +88,8 @@ def repo_fixture(tmp_path: Path) -> Path:
         json.dumps(
             {
                 "task": [
-                    {"name": "GAME_START", "entry": "MJA_GAME_START_ENTRY", "default": True},
-                    {"name": "GAME_STOP", "entry": "MJA_GAME_STOP", "default": False},
+                    {"name": "GAME_START", "entry": "启动-游戏入口", "default": True},
+                    {"name": "GAME_STOP", "entry": "启动-游戏停止", "default": False},
                 ]
             }
         )
@@ -99,11 +99,11 @@ def repo_fixture(tmp_path: Path) -> Path:
     (root / "assets/resource/base/pipeline/startup/game_start.json").write_text(
         json.dumps(
             {
-                "MJA_GAME_START_ENTRY": {"next": ["MJA_GAME_START"]},
-                "MJA_GAME_START": {
-                    "next": ["[JumpBack]MJA_GAME_READY", "[JumpBack]MJA_GAME_LAUNCH"]
+                "启动-游戏入口": {"next": ["启动-游戏启动"]},
+                "启动-游戏启动": {
+                    "next": ["[JumpBack]启动-游戏就绪", "[JumpBack]MJA_GAME_LAUNCH"]
                 },
-                "MJA_GAME_READY": {
+                "启动-游戏就绪": {
                     "recognition": "TemplateMatch",
                     "template": "home/home_marker.png",
                     "action": "Custom",
@@ -113,14 +113,14 @@ def repo_fixture(tmp_path: Path) -> Path:
                     "action": "StartApp",
                     "package": "com.hanjiasongshu.dr22/.MainActivity",
                 },
-                "MJA_START_IDLE": {"action": "DoNothing"},
+                "启动-空闲": {"action": "DoNothing"},
             }
         )
         + "\n",
         encoding="utf-8",
     )
     (root / "assets/resource/base/pipeline/startup/game_stop.json").write_text(
-        '{"MJA_GAME_STOP":{"action":"StopApp","package":"com.hanjiasongshu.dr22"}}\n',
+        '{"启动-游戏停止":{"action":"StopApp","package":"com.hanjiasongshu.dr22"}}\n',
         encoding="utf-8",
     )
     (root / "agent/main.py").write_text("print('agent')\n", encoding="utf-8")

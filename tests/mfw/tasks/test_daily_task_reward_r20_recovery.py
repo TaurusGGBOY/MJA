@@ -13,9 +13,9 @@ DAILY = TaskContract(
     "DAILY_TASK_REWARD_CLAIM_DAILY",
     "daily/daily_task_reward_claim_daily.json",
 )
-RECORD_FAILURE = "MJA_DAILY_RECORD_FAILURE"
-SCAN_FAILURE = "MJA_DAILY_SCAN_EXHAUSTED"
-HOME_FAILURE = "MJA_DAILY_HOME_BOUNDARY_FAILURE"
+RECORD_FAILURE = "日常任务奖励-记录-失败"
+SCAN_FAILURE = "日常任务奖励-扫描-耗尽"
+HOME_FAILURE = "日常任务奖励-主页边界-失败"
 
 
 def _contains(roi: list[int], observed_box: list[int]) -> bool:
@@ -40,19 +40,19 @@ def test_r20_home_failure_fans_out_all_resume_surfaces_as_siblings() -> None:
     # The old graph exposed only MJA_DAILY_RESUME_REWARD_PROBE here, so Maa
     # retried that missing child for 20 seconds and never entered its on_error.
     assert start["next"] == [
-        "MJA_DAILY_RESUME_REWARD_PROBE",
-        "MJA_DAILY_PAGE_PROBE",
-        "MJA_DAILY_PANEL_PROBE",
-        "MJA_DAILY_HOME_PROBE",
+        "日常任务奖励-恢复继续-奖励-探测",
+        "日常任务奖励-页面-探测",
+        "日常任务奖励-面板-探测",
+        "日常任务奖励-主页-探测",
     ]
     assert start["on_error"] == [RECORD_FAILURE]
-    assert nodes["MJA_DAILY_RESUME_REWARD_PROBE"]["on_error"] == [
+    assert nodes["日常任务奖励-恢复继续-奖励-探测"]["on_error"] == [
         RECORD_FAILURE
     ]
     assert not any(
-        "MJA_GAME_START" in target
+        "启动-游戏启动" in target
         for name, node in nodes.items()
-        if name.startswith("MJA_DAILY_")
+        if name.startswith("日常任务奖励-")
         for target in node.get("on_error", [])
     )
 
@@ -62,8 +62,8 @@ def test_r20_world_home_uses_exact_same_frame_boundary_and_narrow_panel_target()
 
     # Fresh r20 OCR boxes from the archived 1280x720 world-home screenshot.
     observed = {
-        "daily.home.dungeon": [1057, 58, 36, 14],
-        "daily.home.trial": [990, 643, 44, 22],
+        "日常任务奖励-日常-主页-副本": [1057, 58, 36, 14],
+        "日常任务奖励-日常-主页-试炼": [990, 643, 44, 22],
     }
     for name, box in observed.items():
         node = nodes[name]
@@ -71,16 +71,16 @@ def test_r20_world_home_uses_exact_same_frame_boundary_and_narrow_panel_target()
         assert _contains(node["roi"], box)
         assert node["roi"][2] * node["roi"][3] < 8_000
 
-    assert nodes["daily.home.dungeon"]["expected"] == "^副本$"
-    assert nodes["daily.home.trial"]["expected"] == [
+    assert nodes["日常任务奖励-日常-主页-副本"]["expected"] == "^副本$"
+    assert nodes["日常任务奖励-日常-主页-试炼"]["expected"] == [
         "^试剑$",
         "^击破：\\d+(?:层)?$",
     ]
-    assert nodes["daily.home.page"] == {
+    assert nodes["日常任务奖励-日常-主页-页面"] == {
         "recognition": {
             "type": "And",
             "param": {
-                "all_of": ["daily.home.dungeon", "daily.home.trial"],
+                "all_of": ["日常任务奖励-日常-主页-副本", "日常任务奖励-日常-主页-试炼"],
                 "box_index": 0,
             },
         },
@@ -89,24 +89,24 @@ def test_r20_world_home_uses_exact_same_frame_boundary_and_narrow_panel_target()
 
     # The homepage entry is a shared color-recognition boundary. The open
     # panel itself is confirmed separately by OCR in the live function panel.
-    panel = nodes["daily.home.panel_open"]
+    panel = nodes["日常任务奖励-日常-主页-面板-打开"]
     assert panel == {
         "recognition": {
             "type": "And",
             "param": {
-                "all_of": ["MJA_GAME_FUNCTION_PANEL_ENTRY"],
+                "all_of": ["公共-游戏功能面板-入口"],
                 "box_index": 0,
             },
         },
         "action": "DoNothing",
     }
 
-    same_frame = ["daily.home.page", "daily.home.panel_open"]
-    assert nodes["MJA_DAILY_HOME_PROBE"]["recognition"] == {
+    same_frame = ["日常任务奖励-日常-主页-页面", "日常任务奖励-日常-主页-面板-打开"]
+    assert nodes["日常任务奖励-主页-探测"]["recognition"] == {
         "type": "And",
         "param": {"all_of": same_frame, "box_index": 0},
     }
-    open_panel = nodes["MJA_DAILY_OPEN_PANEL"]
+    open_panel = nodes["日常任务奖励-打开-面板"]
     assert open_panel["recognition"] == {
         "type": "And",
         "param": {"all_of": same_frame, "box_index": 1},
@@ -114,8 +114,8 @@ def test_r20_world_home_uses_exact_same_frame_boundary_and_narrow_panel_target()
     assert open_panel["custom_action_param"]["evidence"] == {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "daily.home.page",
-        "target_name": "daily.home.panel_open",
+        "page_name": "日常任务奖励-日常-主页-页面",
+        "target_name": "日常任务奖励-日常-主页-面板-打开",
     }
 
 
@@ -125,32 +125,32 @@ def test_live_panel_and_daily_page_boxes_are_exact_and_same_frame_bounded() -> N
     # The live function-panel batch OCR observed 日常 at [1072,291,44,28],
     # 商城 at [954,294,42,23], and 武学研习 at [715,415,73,22].
     observed = {
-        "daily.entry": [1072, 291, 44, 28],
-        "daily.panel.shop": [954, 294, 42, 23],
-        "daily.panel.study": [715, 415, 73, 22],
+        "日常任务奖励-日常-入口": [1072, 291, 44, 28],
+        "日常任务奖励-日常-面板-商店": [954, 294, 42, 23],
+        "日常任务奖励-日常-面板-研习": [715, 415, 73, 22],
     }
     for name, box in observed.items():
         assert _contains(nodes[name]["roi"], box), name
-    assert nodes["daily.entry"]["expected"] == "^日常$"
-    assert nodes["daily.panel.page"]["recognition"]["param"]["all_of"] == [
-        "daily.panel.shop",
-        "daily.panel.study",
+    assert nodes["日常任务奖励-日常-入口"]["expected"] == "^日常$"
+    assert nodes["日常任务奖励-日常-面板-页面"]["recognition"]["param"]["all_of"] == [
+        "日常任务奖励-日常-面板-商店",
+        "日常任务奖励-日常-面板-研习",
     ]
-    assert nodes["MJA_DAILY_OPEN_DAILY"]["recognition"]["param"] == {
-        "all_of": ["daily.panel.page", "daily.entry"],
+    assert nodes["日常任务奖励-打开-日常"]["recognition"]["param"] == {
+        "all_of": ["日常任务奖励-日常-面板-页面", "日常任务奖励-日常-入口"],
         "box_index": 1,
     }
 
     # A prior live daily-page frame observed 日常任务 [93,29,81,23] and
     # vertical 活跃度 [329,98,29,64].  Require both, not OCR's OR-list form.
-    assert _contains(nodes["daily.page.title"]["roi"], [93, 29, 81, 23])
-    assert _contains(nodes["daily.page.activity"]["roi"], [329, 98, 29, 64])
-    assert nodes["daily.page.title"]["expected"] == "^日常任务$"
-    assert nodes["daily.page.activity"]["expected"] == "^活跃度$"
-    assert nodes["daily.page"]["recognition"] == {
+    assert _contains(nodes["日常任务奖励-日常-页面-标题"]["roi"], [93, 29, 81, 23])
+    assert _contains(nodes["日常任务奖励-日常-页面-活动"]["roi"], [329, 98, 29, 64])
+    assert nodes["日常任务奖励-日常-页面-标题"]["expected"] == "^日常任务$"
+    assert nodes["日常任务奖励-日常-页面-活动"]["expected"] == "^活跃度$"
+    assert nodes["日常任务奖励-日常-页面"]["recognition"] == {
         "type": "And",
         "param": {
-            "all_of": ["daily.page.title", "daily.page.activity"],
+            "all_of": ["日常任务奖励-日常-页面-标题", "日常任务奖励-日常-页面-活动"],
             "box_index": 0,
         },
     }
@@ -159,33 +159,33 @@ def test_live_panel_and_daily_page_boxes_are_exact_and_same_frame_bounded() -> N
 def test_page_decisions_are_explicit_siblings_and_scans_are_finite() -> None:
     nodes = load_task_nodes(DAILY)
 
-    assert nodes["MJA_DAILY_PAGE_PROBE"]["next"] == [
-        "MJA_DAILY_INITIAL_ROW_PROBE",
-        "MJA_DAILY_INITIAL_CHEST_PROBE",
-        "MJA_DAILY_INITIAL_NO_CLAIM_PROBE",
-        "MJA_DAILY_REWARD_SCAN",
+    assert nodes["日常任务奖励-页面-探测"]["next"] == [
+        "日常任务奖励-初始-行-探测",
+        "日常任务奖励-初始-宝箱-探测",
+        "日常任务奖励-初始-无-领取-探测",
+        "日常任务奖励-奖励-扫描",
     ]
-    assert nodes["MJA_DAILY_REWARD_PAGE_VERIFY"]["next"] == [
-        "MJA_DAILY_MUTATION_ROW_PROBE",
-        "MJA_DAILY_MUTATION_CHEST_PROBE",
-        "MJA_DAILY_MUTATION_NO_CLAIM_PROBE",
-        "MJA_DAILY_REWARD_SCAN_AFTER_MUTATION",
+    assert nodes["日常任务奖励-奖励-页面-校验"]["next"] == [
+        "日常任务奖励-变更-行-探测",
+        "日常任务奖励-变更-宝箱-探测",
+        "日常任务奖励-变更-无-领取-探测",
+        "日常任务奖励-奖励-扫描-之后-变更",
     ]
 
     scans = {
-        "MJA_DAILY_REWARD_SCAN": (
-            "MJA_DAILY_PAGE_PROBE",
+        "日常任务奖励-奖励-扫描": (
+            "日常任务奖励-页面-探测",
             [
-                "MJA_DAILY_INITIAL_SCAN_EXHAUSTED_PROBE",
-                "MJA_DAILY_INITIAL_CLAIMED_EXHAUSTED_PROBE",
+                "日常任务奖励-初始-扫描-耗尽-探测",
+                "日常任务奖励-初始-已领取-耗尽-探测",
                 SCAN_FAILURE,
             ],
         ),
-        "MJA_DAILY_REWARD_SCAN_AFTER_MUTATION": (
-            "MJA_DAILY_REWARD_PAGE_VERIFY",
+        "日常任务奖励-奖励-扫描-之后-变更": (
+            "日常任务奖励-奖励-页面-校验",
             [
-                "MJA_DAILY_MUTATION_SCAN_EXHAUSTED_PROBE",
-                "MJA_DAILY_MUTATION_CLAIMED_EXHAUSTED_PROBE",
+                "日常任务奖励-变更-扫描-耗尽-探测",
+                "日常任务奖励-变更-已领取-耗尽-探测",
                 SCAN_FAILURE,
             ],
         ),
@@ -224,15 +224,15 @@ def test_claims_are_guarded_by_policy_caps_and_never_native_retried() -> None:
         assert all(node["retry_times"] == 0 for node in guarded)
         assert_no_side_effect_retry(nodes, action_id)
 
-    for name in ("MJA_DAILY_CLAIM_ROW", "MJA_DAILY_CLAIM_CHEST"):
+    for name in ("日常任务奖励-领取-行", "日常任务奖励-领取-宝箱"):
         assert nodes[name]["next"] == [
-            "MJA_DAILY_REWARD_PROBE",
-            "MJA_DAILY_REWARD_PAGE_VERIFY",
+            "日常任务奖励-奖励-探测",
+            "日常任务奖励-奖励-页面-校验",
         ]
     assert not any(
         node.get("action") in {"Click", "Swipe", "MultiSwipe", "Key", "Input"}
         for name, node in nodes.items()
-        if name.startswith("MJA_DAILY_")
+        if name.startswith("日常任务奖励-")
     )
 
 
@@ -241,43 +241,43 @@ def test_success_outcomes_require_fresh_explicit_or_exhaustive_empty_state() -> 
 
     # A single visible 已领取 row is not enough for immediate completion.  It
     # becomes acceptable only after the bounded scan has exhausted the list.
-    assert nodes["MJA_DAILY_INITIAL_NO_CLAIM_PROBE"]["recognition"]["param"] == {
-        "all_of": ["daily.page", "daily.no_claimable_global"],
+    assert nodes["日常任务奖励-初始-无-领取-探测"]["recognition"]["param"] == {
+        "all_of": ["日常任务奖励-日常-页面", "日常任务奖励-日常-无-可领取-全局"],
         "box_index": 1,
     }
-    assert nodes["daily.no_claimable_global"]["expected"] == [
+    assert nodes["日常任务奖励-日常-无-可领取-全局"]["expected"] == [
         "^暂无可领取$",
         "^前往$",
     ]
-    assert nodes["daily.claimed_row"]["expected"] == "^已领取$"
+    assert nodes["日常任务奖励-日常-已领取-行"]["expected"] == "^已领取$"
 
     none_predecessors = {
         name
         for name, node in nodes.items()
-        if "MJA_DAILY_REWARD_NONE" in node.get("next", [])
+        if "日常任务奖励-奖励-无" in node.get("next", [])
     }
     assert none_predecessors == {
-        "MJA_DAILY_INITIAL_NO_CLAIM_PROBE",
-        "MJA_DAILY_INITIAL_SCAN_EXHAUSTED_PROBE",
-        "MJA_DAILY_INITIAL_CLAIMED_EXHAUSTED_PROBE",
+        "日常任务奖励-初始-无-领取-探测",
+        "日常任务奖励-初始-扫描-耗尽-探测",
+        "日常任务奖励-初始-已领取-耗尽-探测",
     }
     done_predecessors = {
         name
         for name, node in nodes.items()
-        if "MJA_DAILY_REWARD_DONE" in node.get("next", [])
+        if "日常任务奖励-奖励-完成" in node.get("next", [])
     }
     assert done_predecessors == {
-        "MJA_DAILY_MUTATION_NO_CLAIM_PROBE",
-        "MJA_DAILY_MUTATION_SCAN_EXHAUSTED_PROBE",
-        "MJA_DAILY_MUTATION_CLAIMED_EXHAUSTED_PROBE",
+        "日常任务奖励-变更-无-领取-探测",
+        "日常任务奖励-变更-扫描-耗尽-探测",
+        "日常任务奖励-变更-已领取-耗尽-探测",
     }
 
-    assert nodes["MJA_DAILY_REWARD_NONE"]["custom_action_param"] == {
+    assert nodes["日常任务奖励-奖励-无"]["custom_action_param"] == {
         "task_id": DAILY.task_id,
         "status": "already_complete",
         "postcondition": "daily_reward.no_claimable",
     }
-    assert nodes["MJA_DAILY_REWARD_DONE"]["custom_action_param"] == {
+    assert nodes["日常任务奖励-奖励-完成"]["custom_action_param"] == {
         "task_id": DAILY.task_id,
         "status": "success",
         "postcondition": "daily_reward.no_claimable",
@@ -307,54 +307,54 @@ def test_unknown_states_record_fresh_failed_then_native_abort() -> None:
         assert params["error_code"] == error_code
         assert params["native_fail_after_record"] is True
         assert node["Abort"] is True
-        assert node["next"] == ["MJA_COMMON_ABORT"]
+        assert node["next"] == ["公共-通用中止"]
         assert "on_error" not in node
 
 
 def test_success_cleanup_requires_a_fresh_home_boundary() -> None:
     nodes = load_task_nodes(DAILY)
-    close = nodes["MJA_DAILY_CLOSE"]
+    close = nodes["日常任务奖励-关闭"]
     assert close["next"] == [
-        "MJA_DAILY_PANEL_AFTER_CLOSE",
-        "MJA_DAILY_HOME_BOUNDARY_PROBE",
+        "日常任务奖励-面板关闭后",
+        "日常任务奖励-主页边界-探测",
     ]
     assert close["on_error"] == [HOME_FAILURE]
     assert close["retry_times"] == 0
-    panel_after_close = nodes["MJA_DAILY_PANEL_AFTER_CLOSE"]
+    panel_after_close = nodes["日常任务奖励-面板关闭后"]
     assert panel_after_close["recognition"] == {
         "type": "And",
         "param": {
-            "all_of": ["daily.panel.page", "daily.panel.close"],
+            "all_of": ["日常任务奖励-日常-面板-页面", "日常任务奖励-日常-面板-关闭"],
             "box_index": 0,
         },
     }
     assert panel_after_close["next"] == [
-        "MJA_DAILY_CLOSE_PANEL",
-        "MJA_DAILY_HOME_BOUNDARY_PROBE",
+        "日常任务奖励-关闭-面板",
+        "日常任务奖励-主页边界-探测",
     ]
-    close_panel = nodes["MJA_DAILY_CLOSE_PANEL"]
+    close_panel = nodes["日常任务奖励-关闭-面板"]
     assert close_panel["recognition"] == {
         "type": "And",
         "param": {
-            "all_of": ["daily.panel.page", "daily.panel.close"],
+            "all_of": ["日常任务奖励-日常-面板-页面", "日常任务奖励-日常-面板-关闭"],
             "box_index": 1,
         },
     }
     assert close_panel["custom_action_param"]["evidence"] == {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "daily.panel.page",
-        "target_name": "daily.panel.close",
+        "page_name": "日常任务奖励-日常-面板-页面",
+        "target_name": "日常任务奖励-日常-面板-关闭",
     }
-    assert close_panel["next"] == ["MJA_DAILY_HOME_BOUNDARY_PROBE"]
+    assert close_panel["next"] == ["日常任务奖励-主页边界-探测"]
     assert close_panel["on_error"] == [HOME_FAILURE]
     assert close_panel["retry_times"] == 0
-    assert nodes["MJA_DAILY_HOME_BOUNDARY_PROBE"]["recognition"] == {
+    assert nodes["日常任务奖励-主页边界-探测"]["recognition"] == {
         "type": "And",
-        "param": {"all_of": ["daily.home.page"]},
+        "param": {"all_of": ["日常任务奖励-日常-主页-页面"]},
     }
-    assert nodes["MJA_DAILY_HOME_BOUNDARY_PROBE"]["next"] == [
-        "MJA_COMMON_STOP",
-        "[JumpBack]MJA_GAME_START",
+    assert nodes["日常任务奖励-主页边界-探测"]["next"] == [
+        "公共-通用停止",
+        "[JumpBack]启动-游戏启动",
     ]
-    assert nodes["MJA_DAILY_HOME_BOUNDARY_PROBE"]["on_error"] == [HOME_FAILURE]
+    assert nodes["日常任务奖励-主页边界-探测"]["on_error"] == [HOME_FAILURE]

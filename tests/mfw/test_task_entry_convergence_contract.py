@@ -14,7 +14,7 @@ from tools.check_mfw_resources import (
 PIPELINE_ROOT = Path("assets/resource/base/pipeline")
 
 
-def _begin(next_target: str, error_target: str = "MJA_COMMON_ABORT") -> dict[str, Any]:
+def _begin(next_target: str, error_target: str = "公共-通用中止") -> dict[str, Any]:
     return {
         "action": "Custom",
         "custom_action": "BeginTask",
@@ -25,24 +25,24 @@ def _begin(next_target: str, error_target: str = "MJA_COMMON_ABORT") -> dict[str
 
 def _terminals() -> dict[str, dict[str, Any]]:
     return {
-        "MJA_COMMON_STOP": {"action": "StopTask"},
-        "MJA_COMMON_ABORT": {"action": "StopTask", "Abort": True},
+        "公共-通用停止": {"action": "StopTask"},
+        "公共-通用中止": {"action": "StopTask", "Abort": True},
     }
 
 
 def _shared_startup() -> dict[str, dict[str, Any]]:
     return {
-        "MJA_GAME_START": {
+        "启动-游戏启动": {
             "recognition": "TemplateMatch",
             "template": "home/home_marker.png",
             "roi": [1040, 0, 240, 110],
             "threshold": 0.425,
             "timeout": 5000,
             "action": "DoNothing",
-            "next": ["MJA_GAME_READY"],
-            "on_error": ["MJA_START_TITLE_OR_LOADING"],
+            "next": ["启动-游戏就绪"],
+            "on_error": ["启动-标题-或-加载"],
         },
-        "MJA_GAME_READY": {
+        "启动-游戏就绪": {
             "recognition": "TemplateMatch",
             "template": "home/home_marker.png",
             "roi": [1040, 0, 240, 110],
@@ -50,10 +50,10 @@ def _shared_startup() -> dict[str, dict[str, Any]]:
             "timeout": 15000,
             "action": "Custom",
             "custom_action": "RuntimeHealth",
-            "next": ["MJA_COMMON_STOP"],
+            "next": ["公共-通用停止"],
             "on_error": ["MJA_START_KNOWN_POPUP"],
         },
-        "MJA_START_TITLE_OR_LOADING": {
+        "启动-标题-或-加载": {
             "recognition": "OCR",
             "expected": ["点击开始游戏", "进入游戏", "加载中", "穿梭入世"],
             "roi": [350, 500, 580, 220],
@@ -70,7 +70,7 @@ def _shared_startup() -> dict[str, dict[str, Any]]:
             "timeout": 5000,
             "max_hit": 1,
             "action": "Click",
-            "next": ["MJA_GAME_READY"],
+            "next": ["启动-游戏就绪"],
             "on_error": ["MJA_START_KNOWN_PAGE"],
         },
         "MJA_START_KNOWN_PAGE": {
@@ -80,13 +80,13 @@ def _shared_startup() -> dict[str, dict[str, Any]]:
             "threshold": 0.4,
             "timeout": 5000,
             "action": "DoNothing",
-            "next": ["MJA_GAME_READY"],
+            "next": ["启动-游戏就绪"],
             "on_error": ["MJA_START_UNKNOWN_ABORT"],
         },
         "MJA_START_UNKNOWN_ABORT": {
             "action": "StopTask",
             "Abort": True,
-            "next": ["MJA_COMMON_ABORT"],
+            "next": ["公共-通用中止"],
         },
     }
 
@@ -129,7 +129,7 @@ def _by_rule(
 
 def test_shared_convergence_entry_is_accepted_with_structured_evidence(tmp_path: Path) -> None:
     nodes = {
-        "TASK_START": _begin("[JumpBack]MJA_GAME_START"),
+        "TASK_START": _begin("[JumpBack]启动-游戏启动"),
     }
     pipeline = _write_pipeline(tmp_path, nodes, shared=True)
 
@@ -137,7 +137,7 @@ def test_shared_convergence_entry_is_accepted_with_structured_evidence(tmp_path:
 
     assert all(diagnostic.ok for diagnostic in diagnostics)
     entry = _by_rule(diagnostics, "entry_convergence")
-    assert entry.evidence_nodes == ("MJA_GAME_START",)
+    assert entry.evidence_nodes == ("启动-游戏启动",)
     assert entry.as_dict()["task_file"] == "daily/sample_task.json"
     assert entry.as_dict()["rule"] == "entry_convergence"
 
@@ -271,7 +271,7 @@ def test_missing_one_end_boundary_is_reported(tmp_path: Path) -> None:
 
 def test_complete_copy_of_shared_game_start_recovery_is_rejected(tmp_path: Path) -> None:
     shared = _shared_startup()
-    copied_title = deepcopy(shared["MJA_START_TITLE_OR_LOADING"])
+    copied_title = deepcopy(shared["启动-标题-或-加载"])
     copied_popup = deepcopy(shared["MJA_START_KNOWN_POPUP"])
     copied_page = deepcopy(shared["MJA_START_KNOWN_PAGE"])
     copied_title["next"] = ["TASK_START_POPUP"]
@@ -364,7 +364,7 @@ def test_real_daily_inventory_reports_readable_gaps_without_forcing_all_passes()
         and diagnostic.rule == "entry_convergence"
     ]
     assert len(break_array) == 1
-    assert break_array[0].entry_nodes == ("MJA_BREAK_ARRAY_MARTIAL_DAILY_START",)
+    assert break_array[0].entry_nodes == ("破阵武学-任务入口",)
     assert break_array[0].ok or break_array[0].gap
 
 

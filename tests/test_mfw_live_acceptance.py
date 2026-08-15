@@ -16,9 +16,9 @@ from tools.mfw_live_acceptance import (
 
 ROOT = Path(__file__).parents[1]
 ENTRIES = {
-    "GAME_START": "MJA_GAME_START",
-    "MAIL_REWARD_DAILY": "MJA_MAIL_REWARD_DAILY_START",
-    "SHOP_FREE_GIFT_DAILY": "MJA_SHOP_FREE_GIFT_DAILY_START",
+    "GAME_START": "启动-游戏启动",
+    "MAIL_REWARD_DAILY": "邮件奖励-任务入口",
+    "SHOP_FREE_GIFT_DAILY": "商店免费礼包-任务入口",
 }
 
 
@@ -239,7 +239,7 @@ def test_partial_acceptance_continues_after_game_start_recovery_exhaustion(
         native_states={"GAME_START": "Failed"},
     )
     with (candidate / "debug/maafw.log").open("a", encoding="utf-8") as maafw:
-        maafw.write("MJA_COMMON_STARTUP_RECOVERY_EXHAUSTED GAME_START_RECOVERY_EXHAUSTED\n")
+        maafw.write("公共-通用-启动恢复-耗尽 GAME_START_RECOVERY_EXHAUSTED\n")
 
     summary = finish_partial_acceptance(ticket)
     payload = load_json(summary)

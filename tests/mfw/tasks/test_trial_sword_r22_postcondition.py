@@ -36,7 +36,7 @@ def test_trial_r22_archive_defines_the_strict_same_frame_completion_proof() -> N
     archived_waiting_box = [1000, 638, 188, 29]
     archived_first_zero_box = [75, 547, 18, 18]
 
-    _assert_contains(nodes["trial.page"]["roi"], archived_page_box)
+    _assert_contains(nodes["试剑-试炼-页面"]["roi"], archived_page_box)
 
     waiting = nodes["trial.free_waiting"]
     assert waiting == {
@@ -61,7 +61,7 @@ def test_trial_r22_archive_defines_the_strict_same_frame_completion_proof() -> N
             "type": "And",
             "param": {
                 "all_of": [
-                    "trial.page",
+                    "试剑-试炼-页面",
                     "trial.free_waiting",
                 ],
                 "box_index": 1,
@@ -76,24 +76,24 @@ def test_trial_r22_completion_precedes_claims_and_reaches_success() -> None:
 
     already = nodes["MJA_TRIAL_ALREADY_STATUS"]
     assert already["recognition"]["param"] == {
-        "all_of": ["trial.page", "trial.free_used"],
+        "all_of": ["试剑-试炼-页面", "trial.free_used"],
         "box_index": 1,
     }
     assert already["next"] == ["MJA_TRIAL_CLOSE_ALREADY"]
 
-    page_candidates = nodes["MJA_TRIAL_PAGE_PROBE"]["next"]
+    page_candidates = nodes["试剑-页面-探测"]["next"]
     assert page_candidates.index("MJA_TRIAL_ALREADY_STATUS") < page_candidates.index(
-        "MJA_TRIAL_CLAIM_REWARD"
+        "试剑-领取-奖励"
     )
 
     final_verify = nodes["MJA_TRIAL_FREE_VERIFY"]
     assert final_verify["recognition"]["param"] == {
-        "all_of": ["trial.page", "trial.free_used"],
+        "all_of": ["试剑-试炼-页面", "trial.free_used"],
         "box_index": 1,
     }
-    assert final_verify["next"] == ["MJA_TRIAL_CLOSE_SUCCESS"]
-    assert_reachable(nodes, "MJA_TRIAL_FREE_VERIFY", "MJA_TRIAL_SUCCESS")
-    assert nodes["MJA_TRIAL_SUCCESS"]["custom_action_param"]["status"] == "success"
+    assert final_verify["next"] == ["试剑-关闭-成功"]
+    assert_reachable(nodes, "MJA_TRIAL_FREE_VERIFY", "试剑-成功")
+    assert nodes["试剑-成功"]["custom_action_param"]["status"] == "success"
 
 
 def test_trial_r22_keeps_single_claim_caps_and_native_unknown_failure() -> None:
@@ -105,7 +105,7 @@ def test_trial_r22_keeps_single_claim_caps_and_native_unknown_failure() -> None:
     assert_no_side_effect_retry(nodes, "claim_trial_sword_reward")
     assert_no_side_effect_retry(nodes, "claim_free_trial")
 
-    failure = nodes["MJA_TRIAL_RECORD_FAILURE"]
+    failure = nodes["试剑-记录-失败"]
     assert failure["custom_action_param"] == {
         "task_id": TRIAL.task_id,
         "status": "failed",
@@ -114,7 +114,7 @@ def test_trial_r22_keeps_single_claim_caps_and_native_unknown_failure() -> None:
         "native_fail_after_record": True,
     }
     assert failure["Abort"] is True
-    assert failure["next"] == ["MJA_COMMON_ABORT"]
+    assert failure["next"] == ["公共-通用中止"]
 
 
 def test_trial_r22_android_override_matches_the_proven_completion_contract() -> None:
@@ -136,7 +136,7 @@ def test_trial_r22_android_override_matches_the_proven_completion_contract() -> 
             "type": "And",
             "param": {
                 "all_of": [
-                    "trial.page",
+                    "试剑-试炼-页面",
                     "trial.free_waiting",
                 ],
                 "box_index": 1,

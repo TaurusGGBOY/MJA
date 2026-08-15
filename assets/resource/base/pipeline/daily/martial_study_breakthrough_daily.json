@@ -1,45 +1,45 @@
 {
-  "MJA_MARTIAL_STUDY_BREAKTHROUGH_DAILY_START": {
+  "武学突破-任务入口": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "BeginTask", "max_hit": 1,
     "custom_action_param": {"task_id": "MARTIAL_STUDY_BREAKTHROUGH_DAILY"},
     "next": [
-      "[JumpBack]MJA_KNOWN_TEA_DETAIL_CLOSE",
-      "[JumpBack]MJA_KNOWN_TEA_SHOP_CLOSE",
-      "MJA_MARTIAL_PAGE_PROBE",
-      "MJA_MARTIAL_OPEN_STUDY",
-      "MJA_MARTIAL_OPEN_PANEL",
-      "MJA_MARTIAL_GAME_START_RECOVERY"
+      "[JumpBack]公共-已知-茶-详情-关闭",
+      "[JumpBack]公共-已知-茶-商店-关闭",
+      "武学突破-页面-探测",
+      "武学突破-打开-研习",
+      "武学突破-打开-面板",
+      "武学突破-游戏启动恢复"
     ],
     "timeout": 8000,
     "on_error": [
-      "MJA_MARTIAL_GAME_START_RECOVERY",
-      "MJA_MARTIAL_RECORD_FAILURE"
+      "武学突破-游戏启动恢复",
+      "武学突破-记录-失败"
     ],
     "retry_times": 0
   },
-  "MJA_MARTIAL_GAME_START_RECOVERY": {
+  "武学突破-游戏启动恢复": {
     "max_hit": 1,
     "recognition": "DirectHit",
     "action": "DoNothing",
     "retry_times": 0,
-    "next": ["MJA_MARTIAL_RECOVERY_STATE_PROBE"],
-    "on_error": ["MJA_MARTIAL_GAME_START_RECOVERY_FAILED"]
+    "next": ["武学突破-恢复-状态-探测"],
+    "on_error": ["武学突破-游戏启动恢复失败"]
   },
-  "MJA_MARTIAL_RECOVERY_STATE_PROBE": {
+  "武学突破-恢复-状态-探测": {
     "recognition": "DirectHit",
     "action": "DoNothing",
     "timeout": 30000,
     "next": [
-      "MJA_MARTIAL_PAGE_PROBE",
-      "MJA_MARTIAL_OPEN_STUDY",
-      "MJA_MARTIAL_OPEN_PANEL",
-      "[JumpBack]MJA_GAME_START"
+      "武学突破-页面-探测",
+      "武学突破-打开-研习",
+      "武学突破-打开-面板",
+      "[JumpBack]启动-游戏启动"
     ],
-    "on_error": ["MJA_MARTIAL_GAME_START_RECOVERY_FAILED"]
+    "on_error": ["武学突破-游戏启动恢复失败"]
   },
-  "MJA_MARTIAL_GAME_START_RECOVERY_FAILED": {
+  "武学突破-游戏启动恢复失败": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -51,13 +51,13 @@
       "native_fail_after_record": true
     },
     "Abort": true,
-    "next": ["MJA_COMMON_ABORT"]
+    "next": ["公共-通用中止"]
 
   },
-  "MJA_MARTIAL_OPEN_PANEL": {
+  "武学突破-打开-面板": {
     "max_hit": 1,
     "recognition": {"type": "And", "param": {
-      "all_of": ["martial.home", "martial.panel.open"],
+      "all_of": ["武学突破-武学-主页", "武学突破-武学-面板-打开"],
       "box_index": 1
     }},
     "action": "Custom",
@@ -69,30 +69,30 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "martial.home",
-        "target_name": "martial.panel.open"
+        "page_name": "武学突破-武学-主页",
+        "target_name": "武学突破-武学-面板-打开"
       }
     },
-    "next": ["MJA_MARTIAL_PANEL_PROBE"],
+    "next": ["武学突破-面板-探测"],
     "timeout": 8000,
-    "on_error": ["MJA_MARTIAL_RECORD_FAILURE"],
+    "on_error": ["武学突破-记录-失败"],
     "retry_times": 0
   },
-  "MJA_MARTIAL_PANEL_PROBE": {
+  "武学突破-面板-探测": {
     "recognition": {"type": "And", "param": {
-      "all_of": ["martial.panel.page"],
+      "all_of": ["武学突破-武学-面板-页面"],
       "box_index": 0
     }},
     "action": "DoNothing",
-    "next": ["MJA_MARTIAL_OPEN_STUDY"],
+    "next": ["武学突破-打开-研习"],
     "timeout": 8000,
-    "on_error": ["MJA_MARTIAL_RECORD_FAILURE"],
+    "on_error": ["武学突破-记录-失败"],
     "retry_times": 0
   },
-  "MJA_MARTIAL_OPEN_STUDY": {
+  "武学突破-打开-研习": {
     "max_hit": 1,
     "recognition": {"type": "And", "param": {
-      "all_of": ["martial.panel.page", "martial.entry"],
+      "all_of": ["武学突破-武学-面板-页面", "武学突破-武学-入口"],
       "box_index": 1
     }},
     "action": "Custom",
@@ -104,46 +104,46 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "martial.panel.page",
-        "target_name": "martial.entry"
+        "page_name": "武学突破-武学-面板-页面",
+        "target_name": "武学突破-武学-入口"
       }
     },
-    "next": ["MJA_MARTIAL_PAGE_PROBE"],
+    "next": ["武学突破-页面-探测"],
     "timeout": 8000,
-    "on_error": ["MJA_MARTIAL_RECORD_FAILURE"],
+    "on_error": ["武学突破-记录-失败"],
     "retry_times": 0
   },
-  "MJA_MARTIAL_PAGE_PROBE": {
+  "武学突破-页面-探测": {
     "recognition": {"type": "And", "param": {
-      "all_of": ["martial.page"],
+      "all_of": ["武学突破-武学-页面"],
       "box_index": 0
     }},
     "action": "DoNothing",
     "next": [
-      "MJA_MARTIAL_CLAIM_GATE",
-      "MJA_MARTIAL_NO_SUCCESSFUL_BREAKTHROUGH"
+      "武学突破-领取-门禁",
+      "武学突破-无-成功-突破"
     ],
     "timeout": 8000,
-    "on_error": ["MJA_MARTIAL_RECORD_FAILURE"],
+    "on_error": ["武学突破-记录-失败"],
     "retry_times": 0
   },
-  "MJA_MARTIAL_CLAIM_GATE": {"recognition": {"type": "And", "param": {"all_of": ["martial.page", "martial.success_card"]}}, "action": "DoNothing", "next": ["MJA_MARTIAL_CLAIM_LOOP"], "timeout": 8000, "on_error": ["MJA_MARTIAL_NO_SUCCESSFUL_BREAKTHROUGH"], "retry_times": 0},
-  "MJA_MARTIAL_CLAIM_LOOP": {"max_hit": 3, "recognition": {"type": "And", "param": {"all_of": ["martial.page", "martial.success_card"]}}, "action": "Custom", "custom_action": "GuardedInput", "custom_action_param": {"task_id": "MARTIAL_STUDY_BREAKTHROUGH_DAILY", "action_id": "claim_success_card", "kind": "click", "evidence": {"page_index": 0, "target_index": 1, "page_name": "martial.page", "target_name": "martial.success_card"}}, "next": ["MJA_MARTIAL_CLAIM_RESULT"], "timeout": 8000, "on_error": ["MJA_MARTIAL_CLAIM_LOOP_EXHAUSTED"]},
-  "MJA_MARTIAL_CLAIM_RESULT": {"recognition": {"type": "And", "param": {"all_of": ["martial.success_result", "martial.result.close"]}}, "action": "DoNothing", "next": ["MJA_MARTIAL_CLOSE_REWARD"], "timeout": 8000, "on_error": ["MJA_MARTIAL_RECORD_FAILURE"], "retry_times": 0},
-  "MJA_MARTIAL_CLOSE_REWARD": {"recognition": {"type": "And", "param": {"all_of": ["martial.success_result", "martial.result.close"]}}, "action": "Custom", "custom_action": "GuardedInput", "max_hit": 1, "custom_action_param": {"task_id": "MARTIAL_STUDY_BREAKTHROUGH_DAILY", "action_id": "close_reward_popup", "kind": "click", "evidence": {"page_index": 0, "target_index": 1, "page_name": "martial.success_result", "target_name": "martial.result.close"}}, "next": ["MJA_MARTIAL_PAGE_PROBE"], "timeout": 8000, "on_error": ["MJA_MARTIAL_RECORD_FAILURE"], "retry_times": 0},
-  "MJA_MARTIAL_NO_SUCCESSFUL_BREAKTHROUGH": {"recognition": {"type": "And", "param": {"all_of": ["martial.page"], "box_index": 0}}, "action": "DoNothing", "next": ["MJA_MARTIAL_CLOSE_PAGE_FOR_SUCCESS"], "timeout": 8000, "on_error": ["MJA_MARTIAL_RECORD_FAILURE"], "retry_times": 0},
-  "MJA_MARTIAL_CLOSE_PAGE_FOR_SUCCESS": {"max_hit": 1, "recognition": {"type": "And", "param": {"all_of": ["martial.page", "martial.close"], "box_index": 1}}, "action": "Custom", "custom_action": "GuardedInput", "custom_action_param": {"task_id": "MARTIAL_STUDY_BREAKTHROUGH_DAILY", "action_id": "close_martial_page", "kind": "click", "evidence": {"page_index": 0, "target_index": 1, "page_name": "martial.page", "target_name": "martial.close"}}, "next": ["MJA_MARTIAL_FINAL_PANEL_PROBE"], "timeout": 8000, "on_error": ["MJA_MARTIAL_RECORD_FAILURE"], "retry_times": 0},
-  "MJA_MARTIAL_FINAL_PANEL_PROBE": {"recognition": {"type": "Or", "param": {"any_of": ["martial.panel.page", "martial.home"]}}, "action": "DoNothing", "next": ["MJA_MARTIAL_SUCCESS_NO_CLAIM"], "timeout": 8000, "on_error": ["MJA_MARTIAL_RECORD_FAILURE"], "retry_times": 0},
-  "MJA_MARTIAL_SUCCESS_NO_CLAIM": {"recognition": "DirectHit", "action": "Custom", "custom_action": "RecordTaskOutcome", "custom_action_param": {"task_id": "MARTIAL_STUDY_BREAKTHROUGH_DAILY", "status": "success", "postcondition": "martial.claim_flow_completed"}, "timeout": 8000, "next": ["MJA_COMMON_STOP"], "on_error": ["MJA_MARTIAL_RECORD_FAILURE"]},
-  "MJA_MARTIAL_CLAIM_LOOP_EXHAUSTED": {"recognition": "DirectHit", "action": "Custom", "custom_action": "RecordTaskOutcome", "custom_action_param": {"task_id": "MARTIAL_STUDY_BREAKTHROUGH_DAILY", "status": "failed", "error_code": "MARTIAL_CLAIM_LIMIT", "postcondition": "martial.claim_state_known", "native_fail_after_record": true}, "Abort": true, "next": ["MJA_COMMON_ABORT"]},
-  "MJA_MARTIAL_RECORD_FAILURE": {"recognition": "DirectHit", "action": "Custom", "custom_action": "RecordTaskOutcome", "custom_action_param": {"task_id": "MARTIAL_STUDY_BREAKTHROUGH_DAILY", "status": "failed", "error_code": "MARTIAL_POSTCONDITION_MISSING", "postcondition": "martial.state_known", "native_fail_after_record": true}, "Abort": true, "next": ["MJA_COMMON_ABORT"]},
-  "martial.home": {"recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_HOME_PAGE"], "box_index": 0}}, "action": "DoNothing"},
-  "martial.panel.open": {"recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_FUNCTION_PANEL_ENTRY"], "box_index": 0}}, "action": "DoNothing"},
-  "martial.panel.page": {"recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_SIDE_PANEL_OPEN"], "box_index": 0}}, "action": "DoNothing"},
-  "martial.entry": {"recognition": "OCR", "expected": ["武学研习", "研习"], "roi": [650, 120, 600, 560], "action": "DoNothing"},
-  "martial.page": {"recognition": "OCR", "expected": "武学研习", "roi": [0, 0, 500, 420], "action": "DoNothing"},
-  "martial.success_card": {"recognition": "TemplateMatch", "template": "daily/MARTIAL_STUDY_BREAKTHROUGH_DAILY/success.png", "roi": [760, 350, 500, 330], "threshold": 0.36, "action": "DoNothing"},
-  "martial.success_result": {"recognition": "OCR", "expected": ["研习成功", "恭喜获得"], "roi": [0, 100, 1280, 620], "action": "DoNothing"},
-  "martial.result.close": {"recognition": "OCR", "expected": ["点击空白处关闭", "点击任意空白区域关闭"], "roi": [350, 580, 600, 140], "action": "DoNothing"},
-  "martial.close": {"recognition": "TemplateMatch", "template": "daily/HERO_DISPATCH_DAILY/dispatch_close.png", "roi": [1175, 5, 75, 75], "threshold": 0.35, "green_mask": true, "action": "DoNothing"}
+  "武学突破-领取-门禁": {"recognition": {"type": "And", "param": {"all_of": ["武学突破-武学-页面", "武学突破-武学-成功-卡片"]}}, "action": "DoNothing", "next": ["武学突破-领取-循环"], "timeout": 8000, "on_error": ["武学突破-无-成功-突破"], "retry_times": 0},
+  "武学突破-领取-循环": {"max_hit": 3, "recognition": {"type": "And", "param": {"all_of": ["武学突破-武学-页面", "武学突破-武学-成功-卡片"]}}, "action": "Custom", "custom_action": "GuardedInput", "custom_action_param": {"task_id": "MARTIAL_STUDY_BREAKTHROUGH_DAILY", "action_id": "claim_success_card", "kind": "click", "evidence": {"page_index": 0, "target_index": 1, "page_name": "武学突破-武学-页面", "target_name": "武学突破-武学-成功-卡片"}}, "next": ["武学突破-领取-结果"], "timeout": 8000, "on_error": ["武学突破-领取-循环-耗尽"]},
+  "武学突破-领取-结果": {"recognition": {"type": "And", "param": {"all_of": ["武学突破-武学-成功-结果", "武学突破-武学-结果-关闭"]}}, "action": "DoNothing", "next": ["武学突破-关闭-奖励"], "timeout": 8000, "on_error": ["武学突破-记录-失败"], "retry_times": 0},
+  "武学突破-关闭-奖励": {"recognition": {"type": "And", "param": {"all_of": ["武学突破-武学-成功-结果", "武学突破-武学-结果-关闭"]}}, "action": "Custom", "custom_action": "GuardedInput", "max_hit": 1, "custom_action_param": {"task_id": "MARTIAL_STUDY_BREAKTHROUGH_DAILY", "action_id": "close_reward_popup", "kind": "click", "evidence": {"page_index": 0, "target_index": 1, "page_name": "武学突破-武学-成功-结果", "target_name": "武学突破-武学-结果-关闭"}}, "next": ["武学突破-页面-探测"], "timeout": 8000, "on_error": ["武学突破-记录-失败"], "retry_times": 0},
+  "武学突破-无-成功-突破": {"recognition": {"type": "And", "param": {"all_of": ["武学突破-武学-页面"], "box_index": 0}}, "action": "DoNothing", "next": ["武学突破-关闭-页面-用于-成功"], "timeout": 8000, "on_error": ["武学突破-记录-失败"], "retry_times": 0},
+  "武学突破-关闭-页面-用于-成功": {"max_hit": 1, "recognition": {"type": "And", "param": {"all_of": ["武学突破-武学-页面", "武学突破-武学-关闭"], "box_index": 1}}, "action": "Custom", "custom_action": "GuardedInput", "custom_action_param": {"task_id": "MARTIAL_STUDY_BREAKTHROUGH_DAILY", "action_id": "close_martial_page", "kind": "click", "evidence": {"page_index": 0, "target_index": 1, "page_name": "武学突破-武学-页面", "target_name": "武学突破-武学-关闭"}}, "next": ["武学突破-最终-面板-探测"], "timeout": 8000, "on_error": ["武学突破-记录-失败"], "retry_times": 0},
+  "武学突破-最终-面板-探测": {"recognition": {"type": "Or", "param": {"any_of": ["武学突破-武学-面板-页面", "武学突破-武学-主页"]}}, "action": "DoNothing", "next": ["武学突破-成功-无-领取"], "timeout": 8000, "on_error": ["武学突破-记录-失败"], "retry_times": 0},
+  "武学突破-成功-无-领取": {"recognition": "DirectHit", "action": "Custom", "custom_action": "RecordTaskOutcome", "custom_action_param": {"task_id": "MARTIAL_STUDY_BREAKTHROUGH_DAILY", "status": "success", "postcondition": "martial.claim_flow_completed"}, "timeout": 8000, "next": ["公共-通用停止"], "on_error": ["武学突破-记录-失败"]},
+  "武学突破-领取-循环-耗尽": {"recognition": "DirectHit", "action": "Custom", "custom_action": "RecordTaskOutcome", "custom_action_param": {"task_id": "MARTIAL_STUDY_BREAKTHROUGH_DAILY", "status": "failed", "error_code": "MARTIAL_CLAIM_LIMIT", "postcondition": "martial.claim_state_known", "native_fail_after_record": true}, "Abort": true, "next": ["公共-通用中止"]},
+  "武学突破-记录-失败": {"recognition": "DirectHit", "action": "Custom", "custom_action": "RecordTaskOutcome", "custom_action_param": {"task_id": "MARTIAL_STUDY_BREAKTHROUGH_DAILY", "status": "failed", "error_code": "MARTIAL_POSTCONDITION_MISSING", "postcondition": "martial.state_known", "native_fail_after_record": true}, "Abort": true, "next": ["公共-通用中止"]},
+  "武学突破-武学-主页": {"recognition": {"type": "And", "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}}, "action": "DoNothing"},
+  "武学突破-武学-面板-打开": {"recognition": {"type": "And", "param": {"all_of": ["公共-游戏功能面板-入口"], "box_index": 0}}, "action": "DoNothing"},
+  "武学突破-武学-面板-页面": {"recognition": {"type": "And", "param": {"all_of": ["公共-游戏侧边面板-打开"], "box_index": 0}}, "action": "DoNothing"},
+  "武学突破-武学-入口": {"recognition": "OCR", "expected": ["武学研习", "研习"], "roi": [650, 120, 600, 560], "action": "DoNothing"},
+  "武学突破-武学-页面": {"recognition": "OCR", "expected": "武学研习", "roi": [0, 0, 500, 420], "action": "DoNothing"},
+  "武学突破-武学-成功-卡片": {"recognition": "TemplateMatch", "template": "daily/MARTIAL_STUDY_BREAKTHROUGH_DAILY/success.png", "roi": [760, 350, 500, 330], "threshold": 0.36, "action": "DoNothing"},
+  "武学突破-武学-成功-结果": {"recognition": "OCR", "expected": ["研习成功", "恭喜获得"], "roi": [0, 100, 1280, 620], "action": "DoNothing"},
+  "武学突破-武学-结果-关闭": {"recognition": "OCR", "expected": ["点击空白处关闭", "点击任意空白区域关闭"], "roi": [350, 580, 600, 140], "action": "DoNothing"},
+  "武学突破-武学-关闭": {"recognition": "TemplateMatch", "template": "daily/HERO_DISPATCH_DAILY/dispatch_close.png", "roi": [1175, 5, 75, 75], "threshold": 0.35, "green_mask": true, "action": "DoNothing"}
 }

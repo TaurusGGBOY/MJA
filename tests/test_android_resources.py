@@ -96,9 +96,9 @@ def test_android_resource_provides_the_jumpback_game_start_anchor() -> None:
             / "assets/resource_android/pipeline/startup/game_start.json"
         ).read_text(encoding="utf-8")
     )
-    assert pipeline["MJA_GAME_START_ENTRY"]["next"] == ["MJA_GAME_START"]
-    assert pipeline["MJA_GAME_START"]["next"] == ["MJA_GAME_READY"]
-    assert pipeline["MJA_GAME_READY"]["custom_action"] == "RuntimeHealth"
+    assert pipeline["启动-游戏入口"]["next"] == ["启动-游戏启动"]
+    assert pipeline["启动-游戏启动"]["next"] == ["启动-游戏就绪"]
+    assert pipeline["启动-游戏就绪"]["custom_action"] == "RuntimeHealth"
 
 
 def test_android_mail_claim_has_a_safe_reward_popup_close_path() -> None:
@@ -108,11 +108,11 @@ def test_android_mail_claim_has_a_safe_reward_popup_close_path() -> None:
             / "assets/resource_android/pipeline/daily/mail_reward_daily.json"
         ).read_text(encoding="utf-8")
     )
-    assert pipeline["mail.claim_all"]["recognition"] == "OCR"
-    assert pipeline["mail.claim_all"]["expected"] == "全部领取"
-    assert pipeline["mail.claim_all"]["roi"] == [205, 525, 150, 65]
-    assert pipeline["mail.reward_popup"]["expected"] == ["恭喜获得", "点击空白处关闭"]
-    assert pipeline["mail.reward_popup_close"]["expected"] == "点击空白处关闭"
+    assert pipeline["邮件奖励-邮件-领取-全部"]["recognition"] == "OCR"
+    assert pipeline["邮件奖励-邮件-领取-全部"]["expected"] == "全部领取"
+    assert pipeline["邮件奖励-邮件-领取-全部"]["roi"] == [205, 525, 150, 65]
+    assert pipeline["邮件奖励-邮件-奖励-弹窗"]["expected"] == ["恭喜获得", "点击空白处关闭"]
+    assert pipeline["邮件奖励-邮件-奖励-弹窗-关闭"]["expected"] == "点击空白处关闭"
 
 
 def test_android_shop_page_marker_is_scoped_to_shop_title() -> None:
@@ -122,8 +122,8 @@ def test_android_shop_page_marker_is_scoped_to_shop_title() -> None:
             / "assets/resource_android/pipeline/daily/shop_free_gift_daily.json"
         ).read_text(encoding="utf-8")
     )
-    assert pipeline["shop.page"]["expected"] == "商城"
-    assert pipeline["shop.page"]["roi"] == [0, 0, 300, 100]
+    assert pipeline["商店免费礼包-商店-页面"]["expected"] == "商城"
+    assert pipeline["商店免费礼包-商店-页面"]["roi"] == [0, 0, 300, 100]
 
 
 def test_android_weekly_paid_marker_uses_a_stable_live_title() -> None:
@@ -132,7 +132,7 @@ def test_android_weekly_paid_marker_uses_a_stable_live_title() -> None:
             encoding="utf-8"
         )
     )
-    paid = pipeline["shop.weekly_paid"]
+    paid = pipeline["周一免费礼包-商店-每周-付费"]
     assert paid["recognition"] == "OCR"
     assert paid["expected"] == "每周特价"
     assert paid["roi"] == [300, 120, 900, 480]
@@ -145,7 +145,7 @@ def test_android_daily_reward_uses_live_popup_ocr_without_missing_template() -> 
             / "assets/resource_android/pipeline/daily/daily_task_reward_claim_daily.json"
         ).read_text(encoding="utf-8")
     )
-    popup = pipeline["daily.reward_popup"]
+    popup = pipeline["日常任务奖励-日常-奖励-弹窗"]
     assert popup["recognition"] == "OCR"
     assert popup["expected"] == ["恭喜获得", "点击(?:空白处|任意位置)关闭"]
     assert "template" not in popup
@@ -174,7 +174,7 @@ def test_android_verification_ocr_does_not_match_daily_login_row() -> None:
             encoding="utf-8"
         )
     )
-    expected = pipeline["safety.verification"]["expected"]
+    expected = pipeline["破阵武学-安全-校验"]["expected"]
     assert expected == ["验证码", "安全验证", "滑动验证"]
     assert "登录" not in expected
     assert "支付" not in expected
@@ -394,38 +394,38 @@ def test_hero_dispatch_distinguishes_duration_from_live_in_progress_status() -> 
         ).read_text(encoding="utf-8")
     )
 
-    assert pipeline["hero.first_task_claimable"]["expected"] == [
+    assert pipeline["英雄派遣-英雄-首个-任务-可领取"]["expected"] == [
         "完成派遣",
         "可领取",
         "领取",
     ]
-    assert pipeline["hero.first_task_dispatchable"]["expected"] == [
+    assert pipeline["英雄派遣-英雄-首个-任务-可派遣"]["expected"] == [
         "耗时",
         "派遣(?!中)",
     ]
-    assert pipeline["hero.first_task_dispatchable"]["roi"] == [20, 130, 300, 130]
-    assert pipeline["hero.first_task_in_progress"]["expected"] == [
+    assert pipeline["英雄派遣-英雄-首个-任务-可派遣"]["roi"] == [20, 130, 300, 130]
+    assert pipeline["英雄派遣-英雄-首个-任务-中-进度"]["expected"] == [
         "正在派遣中",
         "派遣中",
         r"剩余\s*\d{1,2}:\d{2}:\d{2}",
         r"^\d{1,2}:\d{2}:\d{2}$",
     ]
-    assert pipeline["hero.first_task_in_progress"]["roi"] == [20, 130, 300, 130]
-    assert pipeline["hero.all_completed"]["expected"] == [
+    assert pipeline["英雄派遣-英雄-首个-任务-中-进度"]["roi"] == [20, 130, 300, 130]
+    assert pipeline["英雄派遣-英雄-全部-已完成"]["expected"] == [
         r"任务\s*[:：]?\s*9\s*/\s*9",
         r"已完成\s*[:：]?\s*9",
     ]
-    assert pipeline["hero.all_completed"]["roi"] == [0, 80, 360, 70]
-    assert pipeline["hero.dispatch.close"]["template"] == (
+    assert pipeline["英雄派遣-英雄-全部-已完成"]["roi"] == [0, 80, 360, 70]
+    assert pipeline["英雄派遣-英雄-派遣-关闭"]["template"] == (
         "daily/HERO_DISPATCH_DAILY/dispatch_close.png"
     )
-    assert pipeline["hero.painting.close"]["template"] == (
+    assert pipeline["英雄派遣-英雄-画卷-关闭"]["template"] == (
         "daily/HERO_DISPATCH_DAILY/painting_close.png"
     )
-    assert pipeline["hero.dispatch.close"]["green_mask"] is True
-    assert pipeline["hero.painting.close"]["green_mask"] is True
-    assert pipeline["hero.dispatch.close"]["roi"] == [1175, 5, 75, 75]
-    assert pipeline["hero.painting.close"]["roi"] == [1175, 5, 75, 75]
+    assert pipeline["英雄派遣-英雄-派遣-关闭"]["green_mask"] is True
+    assert pipeline["英雄派遣-英雄-画卷-关闭"]["green_mask"] is True
+    assert pipeline["英雄派遣-英雄-派遣-关闭"]["roi"] == [1175, 5, 75, 75]
+    assert pipeline["英雄派遣-英雄-画卷-关闭"]["roi"] == [1175, 5, 75, 75]
 
 
 def test_android_dungeon_panel_marker_is_not_the_detail_page_sweep_button() -> None:
@@ -447,11 +447,11 @@ def test_android_dungeon_panel_marker_is_not_the_detail_page_sweep_button() -> N
             "all_of": ["sweep_panel_button", "sweep_panel_yanwangling_card"]
         },
     }
-    assert base["dungeon.sweep.panel"]["recognition"] == {
+    assert base["副本扫荡-副本-扫荡-面板"]["recognition"] == {
         "type": "And",
         "param": {
             "all_of": [
-                "dungeon.sweep.button",
+                "副本扫荡-副本-扫荡-按钮",
                 "dungeon.sweep.yanwangling.card",
             ]
         },
@@ -460,8 +460,8 @@ def test_android_dungeon_panel_marker_is_not_the_detail_page_sweep_button() -> N
     expected_button_text = ["开始扫荡", "开始扫"]
     assert android["sweep_panel_button"]["expected"] == expected_button_text
     assert android["start_sweep"]["expected"] == expected_button_text
-    assert base["dungeon.sweep.button"]["expected"] == expected_button_text
-    assert base["dungeon.start"]["expected"] == expected_button_text
+    assert base["副本扫荡-副本-扫荡-按钮"]["expected"] == expected_button_text
+    assert base["副本扫荡-副本-开始"]["expected"] == expected_button_text
     assert "开始" not in expected_button_text
 
     expected_card = ["燕王秘陵", "燕王"]
@@ -587,9 +587,9 @@ def test_android_resource_has_only_a_nonlaunch_game_start_anchor() -> None:
         ).read_text(encoding="utf-8")
     )
     assert set(startup) == {
-        "MJA_GAME_START_ENTRY",
-        "MJA_GAME_START",
-        "MJA_GAME_READY",
+        "启动-游戏入口",
+        "启动-游戏启动",
+        "启动-游戏就绪",
     }
     assert all(node.get("action") != "StartApp" for node in startup.values())
 

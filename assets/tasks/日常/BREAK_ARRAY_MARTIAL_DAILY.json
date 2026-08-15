@@ -5,7 +5,7 @@
       "label": "破阵演武（每日三次）",
       "default_check": false,
       "group": ["日常"],
-      "entry": "MJA_BREAK_ARRAY_MARTIAL_DAILY_START"
+      "entry": "破阵武学-任务入口"
     }
   ]
 }

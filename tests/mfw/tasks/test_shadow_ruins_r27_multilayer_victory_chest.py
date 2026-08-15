@@ -9,13 +9,13 @@ PIPELINE = (
     / "assets/resource/base/pipeline/daily/shadow_ruins_daily.json"
 )
 
-FIRST = "MJA_SHADOW_CLAIM_VICTORY_CHEST_FIRST"
-RETRY = "MJA_SHADOW_CLAIM_VICTORY_CHEST_RETRY"
-WAIT = "MJA_SHADOW_VICTORY_CHEST_POST_RETRY_WAIT"
-FINAL = "MJA_SHADOW_FINAL_PROBE"
-REWARD = "MJA_SHADOW_REWARD_PROBE"
-CHEST_REWARD = "MJA_SHADOW_VICTORY_CHEST_REWARD_PROBE"
-FAILURE = "MJA_SHADOW_RECORD_FAILURE"
+FIRST = "影之遗迹-领取-胜利-宝箱-首个"
+RETRY = "影之遗迹-领取-胜利-宝箱-重试"
+WAIT = "影之遗迹-胜利-宝箱-之后-重试-等待"
+FINAL = "影之遗迹-最终-探测"
+REWARD = "影之遗迹-奖励-探测"
+CHEST_REWARD = "影之遗迹-胜利-宝箱-奖励-探测"
+FAILURE = "影之遗迹-记录-失败"
 
 
 def _nodes() -> dict[str, dict[str, object]]:
@@ -26,8 +26,8 @@ def test_r27_each_victory_has_two_fresh_global_claim_budgets() -> None:
     """Maa max_hit is global, so each claim phase needs the full battle budget."""
 
     nodes = _nodes()
-    battle_cap = nodes["MJA_SHADOW_BATTLE_LOOP"]["max_hit"]
-    victory = nodes["MJA_SHADOW_BATTLE_RESULT_VICTORY"]
+    battle_cap = nodes["影之遗迹-战斗-循环"]["max_hit"]
+    victory = nodes["影之遗迹-战斗-结果-胜利"]
 
     assert victory["next"] == [FIRST]
     claim_names = [
@@ -66,11 +66,11 @@ def test_r27_each_victory_has_two_fresh_global_claim_budgets() -> None:
 
 def test_r27_claim_phases_share_safe_triplet_and_prioritize_terminal_results() -> None:
     nodes = _nodes()
-    battle_cap = nodes["MJA_SHADOW_BATTLE_LOOP"]["max_hit"]
+    battle_cap = nodes["影之遗迹-战斗-循环"]["max_hit"]
     first = nodes[FIRST]
     retry = nodes[RETRY]
     wait = nodes[WAIT]
-    foreground = nodes["MJA_SHADOW_FOREGROUND_LOOP"]
+    foreground = nodes["影之遗迹-前台-循环"]
 
     assert first["next"] == [FINAL, REWARD, CHEST_REWARD, RETRY]
     assert retry["next"] == [FINAL, REWARD, CHEST_REWARD, WAIT]
@@ -90,8 +90,8 @@ def test_r27_claim_phases_share_safe_triplet_and_prioritize_terminal_results() -
         assert action["evidence"] == {
             "page_index": 0,
             "target_index": 1,
-            "page_name": "shadow.exploration.page",
-            "target_name": "shadow.foreground.ready",
+            "page_name": "影之遗迹-影-探索-页面",
+            "target_name": "影之遗迹-影-前台-就绪",
         }
         claim_contract = json.dumps(claim, ensure_ascii=False)
         assert "transfer_shadow_stage" not in claim_contract

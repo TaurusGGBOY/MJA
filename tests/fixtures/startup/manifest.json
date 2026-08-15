@@ -3,27 +3,27 @@
   "cases": {
     "ready": {
       "image": "assets/resource/base/image/home/home_marker.png",
-      "expected_first_node": "MJA_GAME_READY"
+      "expected_first_node": "启动-游戏就绪"
     },
     "title": {
       "image": "assets/resource/base/image/home/start_game_button.png",
-      "expected_first_node": "MJA_START_GAME_BUTTON_AFTER_RESTART"
+      "expected_first_node": "启动-游戏-按钮-之后-重启"
     },
     "known_popup": {
       "image": "assets/resource/base/image/home/modal_close.png",
-      "expected_first_node": "MJA_KNOWN_POPUP_CLOSE"
+      "expected_first_node": "公共-已知弹窗-关闭"
     },
     "known_page": {
       "image": "assets/resource/base/image/panel/panel_marker.png",
-      "expected_first_node": "MJA_KNOWN_PAGE_CLOSE"
+      "expected_first_node": "公共-已知-页面-关闭"
     },
     "launcher": {
       "image": "tests/fixtures/startup/launcher.png",
-      "expected_first_node": "MJA_GAME_START_AFTER_RESTART"
+      "expected_first_node": "启动-游戏重启后"
     },
     "black_screen": {
       "image": "tests/fixtures/startup/black_screen.png",
-      "expected_first_node": "MJA_START_BLACK_SCREEN_WAIT"
+      "expected_first_node": "启动-黑屏-屏幕-等待"
     }
   }
 }

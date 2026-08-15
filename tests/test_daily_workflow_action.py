@@ -48,7 +48,7 @@ def test_task_outcome_clears_android_action_context_between_tasks():
     result = TaskResult(
         "BATTLE_PASS_REWARD_DAILY",
         TaskStatus.FAILED,
-        "battle_pass.page",
+        "战令奖励-战斗-战令-页面",
         {"open_battle_pass": 1},
         "WORKFLOW_POSTCONDITION_MISSING",
     )

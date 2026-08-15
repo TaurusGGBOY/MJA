@@ -99,10 +99,10 @@ def test_shadow_ruins_has_bounded_exploration_and_truthful_battle_partition() ->
     )
     assert_terminal_after_loop(nodes, "MJA_SHADOW_TRANSFER_LOOP", 8, "SHADOW_TRANSFER_LIMIT")
     assert_terminal_after_loop(
-        nodes, "MJA_SHADOW_FOREGROUND_LOOP", 40, "SHADOW_FOREGROUND_LIMIT"
+        nodes, "影之遗迹-前台-循环", 40, "SHADOW_FOREGROUND_LIMIT"
     )
-    assert_terminal_after_loop(nodes, "MJA_SHADOW_BATTLE_LOOP", 12, "SHADOW_BATTLE_LIMIT")
-    assert nodes["MJA_SHADOW_BATTLE_LOOP"]["timeout"] == 240000
+    assert_terminal_after_loop(nodes, "影之遗迹-战斗-循环", 12, "SHADOW_BATTLE_LIMIT")
+    assert nodes["影之遗迹-战斗-循环"]["timeout"] == 240000
     assert_terminal_after_loop(
         nodes,
         "MJA_SHADOW_FAILURE_DISMISS_LOOP",
@@ -113,7 +113,7 @@ def test_shadow_ruins_has_bounded_exploration_and_truthful_battle_partition() ->
     assert_battle_result_partition(nodes, "MJA_SHADOW_BATTLE_RESULT")
     assert_outcome(
         nodes,
-        "MJA_SHADOW_RECORD_SUCCESS",
+        "影之遗迹-记录-成功",
         "success",
         "shadow.no_active_or_done_and_home",
     )
@@ -135,10 +135,10 @@ def test_shadow_ruins_has_bounded_exploration_and_truthful_battle_partition() ->
         "activity": "com.hanjiasongshu.dr22/.MainActivity",
     }
     assert restart["next"] == [
-        "MJA_SHADOW_HOME_BOUNDARY_PROBE",
-        "[JumpBack]MJA_GAME_START",
+        "影之遗迹-主页边界-探测",
+        "[JumpBack]启动-游戏启动",
     ]
-    boundary_failure = nodes["MJA_SHADOW_BOUNDARY_FAILURE"]
+    boundary_failure = nodes["影之遗迹-边界-失败"]
     assert boundary_failure["custom_action_param"]["error_code"] == "SHADOW_HOME_BOUNDARY_MISSING"
     assert boundary_failure["custom_action_param"]["native_fail_after_record"] is True
     assert boundary_failure["Abort"] is True
@@ -146,41 +146,41 @@ def test_shadow_ruins_has_bounded_exploration_and_truthful_battle_partition() ->
 
 def test_shadow_r19_adjacent_dungeon_page_fails_without_clicking_it() -> None:
     nodes = load_task_nodes(SHADOW)
-    start = nodes["MJA_SHADOW_RUINS_DAILY_START"]
+    start = nodes["影之遗迹-任务入口"]
     assert start["next"] == [
-        "[JumpBack]MJA_KNOWN_TEA_DETAIL_CLOSE",
-        "[JumpBack]MJA_KNOWN_TEA_SHOP_CLOSE",
-        "MJA_SHADOW_PAGE_PROBE",
-        "MJA_SHADOW_PAINTING_PAGE",
+        "[JumpBack]公共-已知-茶-详情-关闭",
+        "[JumpBack]公共-已知-茶-商店-关闭",
+        "影之遗迹-页面-探测",
+        "影之遗迹-画卷-页面",
         "MJA_SHADOW_DUNGEON_PAGE_PROBE",
-        "MJA_SHADOW_HOME_PROBE",
+        "影之遗迹-主页-探测",
     ]
-    assert start["on_error"] == ["MJA_SHADOW_ENTRY_UNKNOWN"]
-    open_painting = nodes["MJA_SHADOW_OPEN_PAINTING"]
+    assert start["on_error"] == ["影之遗迹-入口-未知"]
+    open_painting = nodes["影之遗迹-打开-画卷"]
     recognition = open_painting["recognition"]["param"]
 
     # r19 matched the broad home template and the combined OCR text
     # “副本（画卷”, but Maa returned the page box [1040, 0, 240, 110] to
     # GuardedInput.  The replacement must return only the exact 画卷 box.
-    assert recognition["all_of"] == ["shadow.home.page", "shadow.painting.entry"]
+    assert recognition["all_of"] == ["影之遗迹-影-主页-页面", "影之遗迹-影-画卷-入口"]
     assert recognition["box_index"] == 1
     assert open_painting["retry_times"] == 0
     assert open_painting["max_hit"] == 1
     assert open_painting["next"] == [
-        "MJA_SHADOW_PAINTING_PAGE",
+        "影之遗迹-画卷-页面",
         "MJA_SHADOW_DUNGEON_PAGE_PROBE",
-        "MJA_SHADOW_HOME_RECOVERY_PROBE",
+        "影之遗迹-主页-恢复-探测",
     ]
-    assert nodes["shadow.home.page"] == {
+    assert nodes["影之遗迹-影-主页-页面"] == {
         "recognition": "TemplateMatch",
         "template": "home/home_marker.png",
         "roi": [1040, 0, 240, 110],
         "threshold": 0.375,
         "action": "DoNothing",
     }
-    assert nodes["shadow.home.dungeon"]["expected"] == r"^副本$"
-    assert nodes["shadow.home.trial"]["expected"] == r"^试剑$"
-    assert nodes["shadow.painting.entry"]["expected"] == r"^画卷$"
+    assert nodes["影之遗迹-影-主页-副本"]["expected"] == r"^副本$"
+    assert nodes["影之遗迹-影-主页-试炼"]["expected"] == r"^试剑$"
+    assert nodes["影之遗迹-影-画卷-入口"]["expected"] == r"^画卷$"
 
     # The r19 post-click frame was the ordinary dungeon page.  Its top-left
     # title and list item are an explicit wrong-page boundary, and that branch
@@ -197,12 +197,12 @@ def test_shadow_r19_adjacent_dungeon_page_fails_without_clicking_it() -> None:
     assert failure["custom_action_param"]["error_code"] == "SHADOW_WRONG_ENTRY_PAGE"
     assert failure["custom_action_param"]["native_fail_after_record"] is True
     assert failure["Abort"] is True
-    assert failure["next"] == ["MJA_COMMON_ABORT"]
+    assert failure["next"] == ["公共-通用中止"]
     assert "on_error" not in failure
 
     # The ordinary page can still show the 画卷 navigation sibling at
     # [1116, 58, 32, 14].  It must not satisfy the true page-title ROI.
-    title = nodes["shadow.painting.page.title"]
+    title = nodes["影之遗迹-影-画卷-页面-标题"]
     assert not _box_is_inside(title["roi"], (1116, 58, 32, 14))
 
 
@@ -210,25 +210,25 @@ def test_shadow_r21_painting_page_uses_exact_tight_shadow_entry() -> None:
     nodes = load_task_nodes(SHADOW)
 
     # The same r21 frame proves a real home boundary before the input.
-    _assert_archived_ocr_hit(nodes["shadow.home.dungeon"], "副本", (1058, 57, 32, 18))
-    _assert_archived_ocr_hit(nodes["shadow.home.trial"], "试剑", (992, 644, 39, 18))
-    _assert_archived_ocr_hit(nodes["shadow.painting.entry"], "画卷", (1115, 55, 34, 20))
+    _assert_archived_ocr_hit(nodes["影之遗迹-影-主页-副本"], "副本", (1058, 57, 32, 18))
+    _assert_archived_ocr_hit(nodes["影之遗迹-影-主页-试炼"], "试剑", (992, 644, 39, 18))
+    _assert_archived_ocr_hit(nodes["影之遗迹-影-画卷-入口"], "画卷", (1115, 55, 34, 20))
 
     # These are the four stable r21 HERO OCR hits from the real painting page.
-    _assert_archived_ocr_hit(nodes["shadow.painting.page.title"], "画卷", (92, 29, 44, 25))
+    _assert_archived_ocr_hit(nodes["影之遗迹-影-画卷-页面-标题"], "画卷", (92, 29, 44, 25))
     _assert_archived_ocr_hit(
-        nodes["shadow.painting.page.world"], "·偃武世界", (118, 144, 115, 28)
+        nodes["影之遗迹-影-画卷-页面-世界"], "·偃武世界", (118, 144, 115, 28)
     )
-    _assert_archived_ocr_hit(nodes["shadow.painting.page.region"], "云州", (133, 244, 53, 31))
-    entry = nodes["shadow.entry"]
+    _assert_archived_ocr_hit(nodes["影之遗迹-影-画卷-页面-区域"], "云州", (133, 244, 53, 31))
+    entry = nodes["影之遗迹-影-入口"]
     assert entry["expected"] == r"^蜃影武墟$"
     _assert_archived_ocr_hit(entry, "蜃影武墟", (1116, 651, 84, 22))
 
     # The adjacent 侠客派遣 label must be outside the tight Shadow ROI.
     assert not _box_is_inside(entry["roi"], (1006, 648, 86, 28))
-    open_shadow = nodes["MJA_SHADOW_OPEN_SHADOW"]
+    open_shadow = nodes["影之遗迹-打开-影"]
     recognition = open_shadow["recognition"]["param"]
-    assert recognition["all_of"] == ["shadow.painting.page", "shadow.entry"]
+    assert recognition["all_of"] == ["影之遗迹-影-画卷-页面", "影之遗迹-影-入口"]
     assert recognition["box_index"] == 1
     assert open_shadow["retry_times"] == 0
     assert open_shadow["max_hit"] == 1
@@ -238,16 +238,16 @@ def test_shadow_entry_recovery_is_finite_and_unknown_is_native_failure() -> None
     nodes = load_task_nodes(SHADOW)
     policy = TASK_POLICIES[SHADOW.task_id]
 
-    assert nodes["MJA_SHADOW_RUINS_DAILY_START"]["custom_action"] == "BeginTask"
-    assert nodes["MJA_SHADOW_PAINTING_PAGE"]["on_error"] == [
-        "MJA_SHADOW_ENTRY_UNKNOWN"
+    assert nodes["影之遗迹-任务入口"]["custom_action"] == "BeginTask"
+    assert nodes["影之遗迹-画卷-页面"]["on_error"] == [
+        "影之遗迹-入口-未知"
     ]
-    recovery = nodes["MJA_SHADOW_OPEN_PAINTING_RECOVERY"]
+    recovery = nodes["影之遗迹-打开-画卷-恢复"]
     assert recovery["custom_action_param"]["action_id"] == "open_painting_scroll"
     assert recovery["max_hit"] == 1
     assert recovery["retry_times"] == 0
     assert recovery["next"] == [
-        "MJA_SHADOW_PAINTING_PAGE",
+        "影之遗迹-画卷-页面",
         "MJA_SHADOW_DUNGEON_PAGE_PROBE",
     ]
     assert policy.action_caps["open_painting_scroll"] == 2
@@ -263,7 +263,7 @@ def test_shadow_entry_recovery_is_finite_and_unknown_is_native_failure() -> None
 
     # BeginTask makes the diagnostic result fresh; RecordTaskOutcome plus
     # Abort makes the same unknown entry a native Maa Failed as well.
-    unknown = nodes["MJA_SHADOW_ENTRY_UNKNOWN"]
+    unknown = nodes["影之遗迹-入口-未知"]
     assert unknown["custom_action"] == "RecordTaskOutcome"
     assert unknown["custom_action_param"] == {
         "task_id": "SHADOW_RUINS_DAILY",
@@ -273,85 +273,85 @@ def test_shadow_entry_recovery_is_finite_and_unknown_is_native_failure() -> None
         "native_fail_after_record": True,
     }
     assert unknown["Abort"] is True
-    assert unknown["next"] == ["MJA_COMMON_ABORT"]
+    assert unknown["next"] == ["公共-通用中止"]
     assert "on_error" not in unknown
 
 
 def test_shadow_runtime_alternatives_are_parent_siblings_and_fail_natively() -> None:
     nodes = load_task_nodes(SHADOW)
 
-    assert nodes["MJA_SHADOW_PAGE_PROBE"]["next"] == [
-        "MJA_SHADOW_SELECT_ACTIVE",
+    assert nodes["影之遗迹-页面-探测"]["next"] == [
+        "影之遗迹-选择-进行中",
         "MJA_SHADOW_STATUS_PROBE",
     ]
-    assert nodes["MJA_SHADOW_ENTER_STAGE"]["next"] == [
+    assert nodes["影之遗迹-进入-关卡"]["next"] == [
         "MJA_SHADOW_AUTO_ROUTE_PROBE",
-        "MJA_SHADOW_BATTLE_GATE",
+        "影之遗迹-战斗-门禁",
         "MJA_SHADOW_RECOMMENDED_PROBE",
-        "MJA_SHADOW_STAGE_PROBE",
-        "MJA_SHADOW_EXPLORATION_PAGE",
+        "影之遗迹-关卡-探测",
+        "影之遗迹-探索-页面",
     ]
-    assert nodes["MJA_SHADOW_STAGE_PROBE"]["next"] == [
+    assert nodes["影之遗迹-关卡-探测"]["next"] == [
         "MJA_SHADOW_AUTO_ROUTE_PROBE",
         "MJA_SHADOW_RECOMMENDED_PROBE",
-        "MJA_SHADOW_BATTLE_GATE",
-        "MJA_SHADOW_FOREGROUND_LEFT",
-        "MJA_SHADOW_EXPLORATION_PAGE",
+        "影之遗迹-战斗-门禁",
+        "影之遗迹-前台-左",
+        "影之遗迹-探索-页面",
     ]
 
 
 def test_shadow_active_card_selection_uses_live_card_status_not_stale_challenge_roi() -> None:
     nodes = load_task_nodes(SHADOW)
-    select = nodes["MJA_SHADOW_SELECT_ACTIVE"]
+    select = nodes["影之遗迹-选择-进行中"]
     assert select["recognition"] == {
         "type": "And",
-        "param": {"all_of": ["shadow.page", "shadow.active"], "box_index": 1},
+        "param": {"all_of": ["影之遗迹-影-页面", "影之遗迹-影-进行中"], "box_index": 1},
     }
     assert select["custom_action_param"]["evidence"] == {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "shadow.page",
-        "target_name": "shadow.active",
+        "page_name": "影之遗迹-影-页面",
+        "target_name": "影之遗迹-影-进行中",
     }
-    assert nodes["MJA_SHADOW_EXPLORATION_PAGE"]["next"] == [
-        "MJA_SHADOW_BATTLE_RESULT_PROBE",
-        "MJA_SHADOW_BATTLE_IN_PROGRESS_WAIT",
-        "MJA_SHADOW_REWARD_PROBE",
-        "MJA_SHADOW_FOREGROUND_GATE",
-        "MJA_SHADOW_BATTLE_GATE",
-        "MJA_SHADOW_FINAL_PROBE",
-        "MJA_SHADOW_BLACK_FREEZE_RECOVERY",
+    assert nodes["影之遗迹-探索-页面"]["next"] == [
+        "影之遗迹-战斗-结果-探测",
+        "影之遗迹-战斗-中-进度-等待",
+        "影之遗迹-奖励-探测",
+        "影之遗迹-前台-门禁",
+        "影之遗迹-战斗-门禁",
+        "影之遗迹-最终-探测",
+        "影之遗迹-黑屏-冻结-恢复",
     ]
-    assert nodes["MJA_SHADOW_BATTLE_RESULT_PROBE"]["next"] == [
-        "MJA_SHADOW_BATTLE_RESULT_VICTORY",
-        "MJA_SHADOW_BATTLE_RESULT_DEFEAT",
+    assert nodes["影之遗迹-战斗-结果-探测"]["next"] == [
+        "影之遗迹-战斗-结果-胜利",
+        "影之遗迹-战斗-结果-失败",
     ]
-    assert nodes["MJA_SHADOW_BATTLE_GATE"]["recognition"]["param"]["all_of"] == [
-        "shadow.battle.page",
+    assert nodes["影之遗迹-战斗-门禁"]["recognition"]["param"]["all_of"] == [
+        "影之遗迹-影-战斗-页面",
         "shadow.battle.target",
     ]
-    assert nodes["MJA_SHADOW_BATTLE_LOOP"]["custom_action_param"]["evidence"][
+    assert nodes["影之遗迹-战斗-循环"]["custom_action_param"]["evidence"][
         "page_name"
-    ] == "shadow.battle.page"
-    assert nodes["MJA_SHADOW_BATTLE_RESULT_PROBE"]["recognition"]["param"][
+    ] == "影之遗迹-影-战斗-页面"
+    assert nodes["影之遗迹-战斗-结果-探测"]["recognition"]["param"][
         "all_of"
-    ] == ["shadow.battle.result.page"]
-    assert nodes["MJA_SHADOW_BATTLE_RESULT_VICTORY"]["recognition"]["param"][
+    ] == ["影之遗迹-影-战斗-结果-页面"]
+    assert nodes["影之遗迹-战斗-结果-胜利"]["recognition"]["param"][
         "all_of"
-    ] == ["shadow.battle.result.page", "shadow.battle.victory"]
-    assert nodes["MJA_SHADOW_BATTLE_RESULT_VICTORY"]["custom_action_param"][
+    ] == ["影之遗迹-影-战斗-结果-页面", "影之遗迹-影-战斗-胜利"]
+    assert nodes["影之遗迹-战斗-结果-胜利"]["custom_action_param"][
         "fixed_click_mode"
     ] == "shadow_result_blank"
-    assert nodes["MJA_SHADOW_BATTLE_RESULT_VICTORY"]["next"] == [
-        "MJA_SHADOW_CLAIM_VICTORY_CHEST_FIRST"
+    assert nodes["影之遗迹-战斗-结果-胜利"]["next"] == [
+        "影之遗迹-领取-胜利-宝箱-首个"
     ]
-    assert nodes["MJA_SHADOW_BATTLE_RESULT_VICTORY"]["timeout"] == 50000
-    first_claim = nodes["MJA_SHADOW_CLAIM_VICTORY_CHEST_FIRST"]
-    retry_claim = nodes["MJA_SHADOW_CLAIM_VICTORY_CHEST_RETRY"]
+    assert nodes["影之遗迹-战斗-结果-胜利"]["timeout"] == 50000
+    first_claim = nodes["影之遗迹-领取-胜利-宝箱-首个"]
+    retry_claim = nodes["影之遗迹-领取-胜利-宝箱-重试"]
     for claim in (first_claim, retry_claim):
         assert claim["recognition"]["param"]["all_of"] == [
-            "shadow.exploration.page",
-            "shadow.foreground.ready",
+            "影之遗迹-影-探索-页面",
+            "影之遗迹-影-前台-就绪",
         ]
         assert claim["custom_action"] == "GuardedInput"
         assert claim["custom_action_param"]["fixed_click_boxes"] == [
@@ -362,78 +362,78 @@ def test_shadow_active_card_selection_uses_live_card_status_not_stale_challenge_
         assert claim["custom_action_param"]["evidence"] == {
             "page_index": 0,
             "target_index": 1,
-            "page_name": "shadow.exploration.page",
-            "target_name": "shadow.foreground.ready",
+            "page_name": "影之遗迹-影-探索-页面",
+            "target_name": "影之遗迹-影-前台-就绪",
         }
-        assert claim["max_hit"] == nodes["MJA_SHADOW_BATTLE_LOOP"]["max_hit"]
+        assert claim["max_hit"] == nodes["影之遗迹-战斗-循环"]["max_hit"]
         assert claim["retry_times"] == 0
         assert claim["timeout"] == 50000
     assert first_claim["next"] == [
-        "MJA_SHADOW_FINAL_PROBE",
-        "MJA_SHADOW_REWARD_PROBE",
-        "MJA_SHADOW_VICTORY_CHEST_REWARD_PROBE",
-        "MJA_SHADOW_CLAIM_VICTORY_CHEST_RETRY",
+        "影之遗迹-最终-探测",
+        "影之遗迹-奖励-探测",
+        "影之遗迹-胜利-宝箱-奖励-探测",
+        "影之遗迹-领取-胜利-宝箱-重试",
     ]
     assert first_claim["on_error"] == [
-        "MJA_SHADOW_FINAL_PROBE",
-        "MJA_SHADOW_REWARD_PROBE",
-        "MJA_SHADOW_VICTORY_CHEST_REWARD_PROBE",
-        "MJA_SHADOW_RECORD_FAILURE",
+        "影之遗迹-最终-探测",
+        "影之遗迹-奖励-探测",
+        "影之遗迹-胜利-宝箱-奖励-探测",
+        "影之遗迹-记录-失败",
     ]
     assert retry_claim["next"] == [
-        "MJA_SHADOW_FINAL_PROBE",
-        "MJA_SHADOW_REWARD_PROBE",
-        "MJA_SHADOW_VICTORY_CHEST_REWARD_PROBE",
-        "MJA_SHADOW_VICTORY_CHEST_POST_RETRY_WAIT",
+        "影之遗迹-最终-探测",
+        "影之遗迹-奖励-探测",
+        "影之遗迹-胜利-宝箱-奖励-探测",
+        "影之遗迹-胜利-宝箱-之后-重试-等待",
     ]
     assert retry_claim["on_error"] == retry_claim["next"]
-    post_retry_wait = nodes["MJA_SHADOW_VICTORY_CHEST_POST_RETRY_WAIT"]
+    post_retry_wait = nodes["影之遗迹-胜利-宝箱-之后-重试-等待"]
     assert post_retry_wait["recognition"] == "DirectHit"
     assert post_retry_wait["action"] == "DoNothing"
     assert post_retry_wait["post_delay"] == 1000
-    assert post_retry_wait["max_hit"] == nodes["MJA_SHADOW_BATTLE_LOOP"]["max_hit"]
+    assert post_retry_wait["max_hit"] == nodes["影之遗迹-战斗-循环"]["max_hit"]
     assert post_retry_wait["next"] == [
-        "MJA_SHADOW_FINAL_PROBE",
-        "MJA_SHADOW_REWARD_PROBE",
-        "MJA_SHADOW_VICTORY_CHEST_REWARD_PROBE",
-        "MJA_SHADOW_RECORD_FAILURE",
+        "影之遗迹-最终-探测",
+        "影之遗迹-奖励-探测",
+        "影之遗迹-胜利-宝箱-奖励-探测",
+        "影之遗迹-记录-失败",
     ]
-    assert post_retry_wait["on_error"] == ["MJA_SHADOW_RECORD_FAILURE"]
-    assert nodes["MJA_SHADOW_REWARD_PROBE"]["recognition"]["param"]["all_of"] == [
-        "shadow.reward.close"
+    assert post_retry_wait["on_error"] == ["影之遗迹-记录-失败"]
+    assert nodes["影之遗迹-奖励-探测"]["recognition"]["param"]["all_of"] == [
+        "影之遗迹-影-奖励-关闭"
     ]
-    assert nodes["MJA_SHADOW_REWARD_PROBE"]["on_error"] == [
-        "MJA_SHADOW_REWARD_WAIT"
+    assert nodes["影之遗迹-奖励-探测"]["on_error"] == [
+        "影之遗迹-奖励-等待"
     ]
-    wait = nodes["MJA_SHADOW_REWARD_WAIT"]
+    wait = nodes["影之遗迹-奖励-等待"]
     assert wait["recognition"] == "DirectHit"
     assert wait["post_delay"] == 1000
     assert wait["max_hit"] == 35
-    assert wait["next"] == ["MJA_SHADOW_REWARD_PROBE"]
-    assert wait["on_error"] == ["MJA_SHADOW_RECORD_FAILURE"]
-    assert nodes["MJA_SHADOW_DISMISS_REWARD"]["recognition"]["param"]["all_of"] == [
-        "shadow.reward",
-        "shadow.reward.close",
+    assert wait["next"] == ["影之遗迹-奖励-探测"]
+    assert wait["on_error"] == ["影之遗迹-记录-失败"]
+    assert nodes["影之遗迹-关闭-奖励"]["recognition"]["param"]["all_of"] == [
+        "影之遗迹-影-奖励",
+        "影之遗迹-影-奖励-关闭",
     ]
-    assert nodes["MJA_SHADOW_DISMISS_REWARD"]["custom_action_param"][
+    assert nodes["影之遗迹-关闭-奖励"]["custom_action_param"][
         "fixed_click_mode"
     ] == "shadow_reward_blank"
-    assert nodes["MJA_SHADOW_DISMISS_REWARD"]["post_delay"] == 750
-    assert nodes["MJA_SHADOW_CONFIRM_COMPLETION"]["next"] == [
-        "MJA_SHADOW_FINAL_REWARD_PROBE"
+    assert nodes["影之遗迹-关闭-奖励"]["post_delay"] == 750
+    assert nodes["影之遗迹-确认-完成"]["next"] == [
+        "影之遗迹-最终-奖励-探测"
     ]
-    assert nodes["MJA_SHADOW_CONFIRM_COMPLETION"]["timeout"] == 50000
-    final_reward_probe = nodes["MJA_SHADOW_FINAL_REWARD_PROBE"]
+    assert nodes["影之遗迹-确认-完成"]["timeout"] == 50000
+    final_reward_probe = nodes["影之遗迹-最终-奖励-探测"]
     assert final_reward_probe["recognition"]["param"]["all_of"] == [
-        "shadow.reward.close"
+        "影之遗迹-影-奖励-关闭"
     ]
-    assert final_reward_probe["next"] == ["MJA_SHADOW_FINAL_DISMISS_REWARD"]
+    assert final_reward_probe["next"] == ["影之遗迹-最终-关闭-奖励"]
     assert final_reward_probe["on_error"] == ["MJA_SHADOW_DONE_PROBE"]
     assert final_reward_probe["timeout"] == 50000
-    final_reward_dismiss = nodes["MJA_SHADOW_FINAL_DISMISS_REWARD"]
+    final_reward_dismiss = nodes["影之遗迹-最终-关闭-奖励"]
     assert final_reward_dismiss["recognition"]["param"]["all_of"] == [
-        "shadow.reward",
-        "shadow.reward.close",
+        "影之遗迹-影-奖励",
+        "影之遗迹-影-奖励-关闭",
     ]
     assert final_reward_dismiss["custom_action_param"]["fixed_click_mode"] == (
         "shadow_reward_blank"
@@ -441,11 +441,11 @@ def test_shadow_active_card_selection_uses_live_card_status_not_stale_challenge_
     assert final_reward_dismiss["next"] == ["MJA_SHADOW_DONE_PROBE"]
     assert final_reward_dismiss["post_delay"] == 750
     assert nodes["MJA_SHADOW_DONE_PROBE"]["on_error"] == [
-        "MJA_SHADOW_HOME_BOUNDARY_PROBE"
+        "影之遗迹-主页边界-探测"
     ]
-    assert nodes["MJA_SHADOW_BATTLE_RESULT_DEFEAT"]["recognition"]["param"][
+    assert nodes["影之遗迹-战斗-结果-失败"]["recognition"]["param"][
         "all_of"
-    ] == ["shadow.battle.result.page", "shadow.battle.defeat"]
+    ] == ["影之遗迹-影-战斗-结果-页面", "影之遗迹-影-战斗-失败"]
 
     failed_nodes = [
         node
@@ -458,7 +458,7 @@ def test_shadow_active_card_selection_uses_live_card_status_not_stale_challenge_
     for node in failed_nodes:
         assert node["custom_action_param"]["native_fail_after_record"] is True
         assert node["Abort"] is True
-        assert node["next"] == ["MJA_COMMON_ABORT"]
+        assert node["next"] == ["公共-通用中止"]
         assert "on_error" not in node
 
 
@@ -468,16 +468,16 @@ def test_shadow_transfer_gate_uses_live_exploration_button_not_confirm_roi() -> 
     transfer_loop = nodes["MJA_SHADOW_TRANSFER_LOOP"]
     assert transfer_gate["recognition"] == {
         "type": "And",
-        "param": {"all_of": ["shadow.exploration.page", "shadow.transfer.entry"]},
+        "param": {"all_of": ["影之遗迹-影-探索-页面", "shadow.transfer.entry"]},
     }
     assert transfer_loop["recognition"] == {
         "type": "And",
-        "param": {"all_of": ["shadow.exploration.page", "shadow.transfer.entry"]},
+        "param": {"all_of": ["影之遗迹-影-探索-页面", "shadow.transfer.entry"]},
     }
     assert transfer_loop["custom_action_param"]["evidence"] == {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "shadow.exploration.page",
+        "page_name": "影之遗迹-影-探索-页面",
         "target_name": "shadow.transfer.entry",
     }
     assert nodes["shadow.transfer.entry"] == {
@@ -486,46 +486,46 @@ def test_shadow_transfer_gate_uses_live_exploration_button_not_confirm_roi() -> 
         "roi": [900, 570, 260, 150],
         "action": "DoNothing",
     }
-    assert nodes["MJA_SHADOW_FOREGROUND_GATE"]["recognition"]["param"]["all_of"] == [
-        "shadow.exploration.page",
-        "shadow.foreground.ready",
+    assert nodes["影之遗迹-前台-门禁"]["recognition"]["param"]["all_of"] == [
+        "影之遗迹-影-探索-页面",
+        "影之遗迹-影-前台-就绪",
     ]
-    assert nodes["MJA_SHADOW_FOREGROUND_LOOP"]["recognition"]["param"]["all_of"] == [
-        "shadow.exploration.page",
-        "shadow.foreground.ready",
+    assert nodes["影之遗迹-前台-循环"]["recognition"]["param"]["all_of"] == [
+        "影之遗迹-影-探索-页面",
+        "影之遗迹-影-前台-就绪",
     ]
-    assert nodes["MJA_SHADOW_FOREGROUND_LOOP"]["custom_action_param"][
+    assert nodes["影之遗迹-前台-循环"]["custom_action_param"][
         "fixed_click_boxes"
     ] == [[436, 536, 24, 24], [629, 536, 24, 24], [822, 536, 24, 24]]
-    assert nodes["MJA_SHADOW_FOREGROUND_LOOP"]["custom_action_param"]["evidence"] == {
+    assert nodes["影之遗迹-前台-循环"]["custom_action_param"]["evidence"] == {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "shadow.exploration.page",
-        "target_name": "shadow.foreground.ready",
+        "page_name": "影之遗迹-影-探索-页面",
+        "target_name": "影之遗迹-影-前台-就绪",
     }
-    assert nodes["shadow.foreground.ready"] == {
+    assert nodes["影之遗迹-影-前台-就绪"] == {
         "recognition": "OCR",
         "expected": "^第.+层$",
         "roi": [1000, 40, 220, 120],
         "action": "DoNothing",
     }
-    assert nodes["MJA_SHADOW_FOREGROUND_LOOP"]["on_error"] == [
+    assert nodes["影之遗迹-前台-循环"]["on_error"] == [
         "MJA_SHADOW_TRANSFER_GATE",
-        "MJA_SHADOW_FOREGROUND_LOOP_EXHAUSTED",
+        "影之遗迹-前台-循环-耗尽",
     ]
     assert nodes["shadow.transfer"]["roi"] == [300, 540, 320, 180]
 
 
 def test_shadow_stage_entry_clicks_the_entry_target_box() -> None:
     nodes = load_task_nodes(SHADOW)
-    assert nodes["MJA_SHADOW_ENTER_STAGE"]["recognition"] == {
+    assert nodes["影之遗迹-进入-关卡"]["recognition"] == {
         "type": "And",
         "param": {
-            "all_of": ["shadow.page", "shadow.stage_entry"],
+            "all_of": ["影之遗迹-影-页面", "影之遗迹-影-关卡-入口"],
             "box_index": 1,
         },
     }
-    assert nodes["MJA_SHADOW_ENTER_STAGE"]["custom_action_param"][
+    assert nodes["影之遗迹-进入-关卡"]["custom_action_param"][
         "fixed_click_mode"
     ] == "shadow_stage_entry_button"
 
@@ -543,16 +543,16 @@ def test_martial_study_only_claims_successful_breakthroughs() -> None:
             "close_martial_page",
         ],
     )
-    assert_terminal_after_loop(nodes, "MJA_MARTIAL_CLAIM_LOOP", 3, "MARTIAL_CLAIM_LIMIT")
+    assert_terminal_after_loop(nodes, "武学突破-领取-循环", 3, "MARTIAL_CLAIM_LIMIT")
     assert_outcome(
         nodes,
-        "MJA_MARTIAL_SUCCESS_NO_CLAIM",
+        "武学突破-成功-无-领取",
         "success",
         "martial.successful_breakthroughs_claimed_or_none",
     )
-    assert nodes["MJA_MARTIAL_PAGE_PROBE"]["next"] == [
-        "MJA_MARTIAL_CLAIM_GATE",
-        "MJA_MARTIAL_NO_SUCCESSFUL_BREAKTHROUGH",
+    assert nodes["武学突破-页面-探测"]["next"] == [
+        "武学突破-领取-门禁",
+        "武学突破-无-成功-突破",
     ]
     forbidden = (
         "open_martial_plus_slot",
@@ -609,7 +609,7 @@ def test_dungeon_sweep_separates_ticket_resource_and_action_limits() -> None:
     assert_no_side_effect_retry(nodes, "start_yanwangling_master_sweep")
     assert_outcome(
         nodes,
-        "MJA_DUNGEON_NO_TICKET",
+        "副本扫荡-无-券",
         "not_eligible",
         "dungeon.ticket_unavailable",
     )
@@ -618,12 +618,12 @@ def test_dungeon_sweep_separates_ticket_resource_and_action_limits() -> None:
 def test_dungeon_sweep_has_explicit_failure_and_business_success_postconditions() -> None:
     nodes = load_task_nodes(DUNGEON)
 
-    assert nodes["MJA_DUNGEON_OPEN_SWEEP"]["next"][0] == "MJA_DUNGEON_BAG_FULL_PROBE"
-    assert nodes["MJA_DUNGEON_OPEN_SWEEP"]["on_error"][0] == (
-        "MJA_DUNGEON_SWEEP_UNAVAILABLE_PROBE"
+    assert nodes["副本扫荡-打开-扫荡"]["next"][0] == "副本扫荡-背包-已满-探测"
+    assert nodes["副本扫荡-打开-扫荡"]["on_error"][0] == (
+        "副本扫荡-扫荡-不可用-探测"
     )
-    assert nodes["dungeon.sweep.target"]["expected"] == ["扫荡", "未解锁扫荡"]
-    assert nodes["dungeon.sweep.unavailable_hint"]["expected"] == [
+    assert nodes["副本扫荡-副本-扫荡-目标"]["expected"] == ["扫荡", "未解锁扫荡"]
+    assert nodes["副本扫荡-副本-扫荡-不可用-提示"]["expected"] == [
         "已完成极境模式",
         "未解锁扫荡",
         "累计通关6次可解锁该难度扫荡功能",
@@ -631,60 +631,60 @@ def test_dungeon_sweep_has_explicit_failure_and_business_success_postconditions(
     ]
     assert_outcome(
         nodes,
-        "MJA_DUNGEON_SWEEP_UNAVAILABLE",
+        "副本扫荡-扫荡-不可用",
         "not_eligible",
         "dungeon.sweep_unavailable",
     )
-    assert_outcome(nodes, "MJA_DUNGEON_BAG_FULL", "failed", "dungeon.inventory_full")
-    assert nodes["MJA_DUNGEON_BAG_FULL"]["custom_action_param"]["error_code"] == "DUNGEON_BAG_FULL"
-    assert nodes["MJA_DUNGEON_BAG_FULL"]["Abort"] is True
+    assert_outcome(nodes, "副本扫荡-背包-已满", "failed", "dungeon.inventory_full")
+    assert nodes["副本扫荡-背包-已满"]["custom_action_param"]["error_code"] == "DUNGEON_BAG_FULL"
+    assert nodes["副本扫荡-背包-已满"]["Abort"] is True
 
-    bag_full = nodes["dungeon.bag.full"]
+    bag_full = nodes["副本扫荡-副本-背包-已满"]
     assert bag_full["recognition"] == "OCR"
     assert "背包已满" in bag_full["expected"]
 
-    result = nodes["dungeon.result"]
+    result = nodes["副本扫荡-副本-结果"]
     assert result["recognition"]["param"]["all_of"] == [
-        "dungeon.result.panel.surface",
-        "dungeon.result.panel.badge",
+        "副本扫荡-副本-结果-面板-界面",
+        "副本扫荡-副本-结果-面板-徽标",
     ]
     assert "expected" not in result
-    assert nodes["MJA_DUNGEON_RESULT_PROBE"]["recognition"]["param"]["all_of"] == [
-        "dungeon.result",
-        "dungeon.result.close",
+    assert nodes["副本扫荡-结果-探测"]["recognition"]["param"]["all_of"] == [
+        "副本扫荡-副本-结果",
+        "副本扫荡-副本-结果-关闭",
     ]
 
     post = nodes["MJA_DUNGEON_POST_PROBE"]
     assert post["recognition"]["param"]["all_of"] == [
-        "dungeon.page",
+        "副本扫荡-副本-页面",
         "dungeon.ticket.depleted",
     ]
-    assert post["next"] == ["MJA_DUNGEON_SUCCESS"]
+    assert post["next"] == ["副本扫荡-成功"]
     assert_outcome(
         nodes,
-        "MJA_DUNGEON_SUCCESS",
+        "副本扫荡-成功",
         "success",
         "dungeon.reward_popup_seen_and_ticket_count_zero",
     )
-    assert nodes["MJA_DUNGEON_SUCCESS"]["next"] == ["MJA_DUNGEON_CLOSE"]
-    assert nodes["MJA_DUNGEON_SUCCESS"]["timeout"] == 8000
-    assert nodes["MJA_DUNGEON_SUCCESS"]["on_error"] == ["MJA_COMMON_STOP"]
-    assert nodes["MJA_DUNGEON_NO_TICKET"]["next"] == ["MJA_DUNGEON_CLOSE"]
-    assert nodes["MJA_DUNGEON_NO_TICKET"]["timeout"] == 8000
-    assert nodes["MJA_DUNGEON_NO_TICKET"]["on_error"] == ["MJA_COMMON_STOP"]
-    assert nodes["MJA_DUNGEON_CLOSE"]["timeout"] == 8000
-    assert nodes["MJA_DUNGEON_CLOSE"]["next"] == ["MJA_DUNGEON_EXIT_HOME_PROBE"]
-    assert nodes["MJA_DUNGEON_CLOSE"]["on_error"] == ["MJA_COMMON_STOP"]
-    assert nodes["MJA_DUNGEON_EXIT_HOME_PROBE"]["recognition"]["param"]["all_of"] == [
-        "dungeon.home"
+    assert nodes["副本扫荡-成功"]["next"] == ["副本扫荡-关闭"]
+    assert nodes["副本扫荡-成功"]["timeout"] == 8000
+    assert nodes["副本扫荡-成功"]["on_error"] == ["公共-通用停止"]
+    assert nodes["副本扫荡-无-券"]["next"] == ["副本扫荡-关闭"]
+    assert nodes["副本扫荡-无-券"]["timeout"] == 8000
+    assert nodes["副本扫荡-无-券"]["on_error"] == ["公共-通用停止"]
+    assert nodes["副本扫荡-关闭"]["timeout"] == 8000
+    assert nodes["副本扫荡-关闭"]["next"] == ["副本扫荡-退出-主页-探测"]
+    assert nodes["副本扫荡-关闭"]["on_error"] == ["公共-通用停止"]
+    assert nodes["副本扫荡-退出-主页-探测"]["recognition"]["param"]["all_of"] == [
+        "副本扫荡-副本-主页"
     ]
-    assert nodes["MJA_DUNGEON_EXIT_HOME_PROBE"]["next"] == ["MJA_COMMON_STOP"]
+    assert nodes["副本扫荡-退出-主页-探测"]["next"] == ["公共-通用停止"]
 
 
 def test_dungeon_result_page_uses_exact_visual_panel_and_close_text_same_frame() -> None:
     nodes = load_task_nodes(DUNGEON)
 
-    surface = nodes["dungeon.result.panel.surface"]
+    surface = nodes["副本扫荡-副本-结果-面板-界面"]
     assert surface == {
         "recognition": "ColorMatch",
         "lower": [205, 180, 135],
@@ -694,7 +694,7 @@ def test_dungeon_result_page_uses_exact_visual_panel_and_close_text_same_frame()
         "count": 90000,
         "action": "DoNothing",
     }
-    badge = nodes["dungeon.result.panel.badge"]
+    badge = nodes["副本扫荡-副本-结果-面板-徽标"]
     assert badge == {
         "recognition": "ColorMatch",
         "lower": [210, 75, 15],
@@ -704,7 +704,7 @@ def test_dungeon_result_page_uses_exact_visual_panel_and_close_text_same_frame()
         "count": 8000,
         "action": "DoNothing",
     }
-    close = nodes["dungeon.result.close"]
+    close = nodes["副本扫荡-副本-结果-关闭"]
     assert close == {
         "recognition": "OCR",
         "expected": "点击空白处关闭",
@@ -712,15 +712,15 @@ def test_dungeon_result_page_uses_exact_visual_panel_and_close_text_same_frame()
         "action": "DoNothing",
     }
 
-    same_frame = ["dungeon.result", "dungeon.result.close"]
-    assert nodes["MJA_DUNGEON_RESULT_PROBE"]["recognition"]["param"]["all_of"] == same_frame
-    dismiss = nodes["MJA_DUNGEON_DISMISS_RESULT"]
+    same_frame = ["副本扫荡-副本-结果", "副本扫荡-副本-结果-关闭"]
+    assert nodes["副本扫荡-结果-探测"]["recognition"]["param"]["all_of"] == same_frame
+    dismiss = nodes["副本扫荡-关闭-结果"]
     assert dismiss["recognition"]["param"]["all_of"] == same_frame
     assert dismiss["custom_action_param"]["evidence"] == {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "dungeon.result",
-        "target_name": "dungeon.result.close",
+        "page_name": "副本扫荡-副本-结果",
+        "target_name": "副本扫荡-副本-结果-关闭",
     }
     assert dismiss["retry_times"] == 0
 
@@ -738,27 +738,27 @@ def test_dungeon_sweep_panel_requires_exact_sweep_text_and_yanwangling_card() ->
     nodes = load_task_nodes(DUNGEON)
 
     expected_button_text = ["开始扫荡", "开始扫"]
-    panel = nodes["dungeon.sweep.panel"]
+    panel = nodes["副本扫荡-副本-扫荡-面板"]
     assert panel["recognition"] == {
         "type": "And",
         "param": {
             "all_of": [
-                "dungeon.sweep.button",
+                "副本扫荡-副本-扫荡-按钮",
                 "dungeon.sweep.yanwangling.card",
             ]
         },
     }
-    assert nodes["dungeon.sweep.button"]["expected"] == expected_button_text
-    assert nodes["dungeon.start"]["expected"] == expected_button_text
+    assert nodes["副本扫荡-副本-扫荡-按钮"]["expected"] == expected_button_text
+    assert nodes["副本扫荡-副本-开始"]["expected"] == expected_button_text
     assert "开始" not in expected_button_text
 
     card = nodes["dungeon.sweep.yanwangling.card"]
     assert card["expected"] == ["燕王秘陵", "燕王"]
     assert card["roi"] == [880, 240, 400, 100]
 
-    select = nodes["MJA_DUNGEON_SELECT_PANEL_YANWANG"]
+    select = nodes["副本扫荡-选择-面板-阎王"]
     assert select["recognition"]["param"]["all_of"] == [
-        "dungeon.sweep.panel",
+        "副本扫荡-副本-扫荡-面板",
         "dungeon.sweep.yanwangling.card",
     ]
     assert select["custom_action_param"]["evidence"]["target_name"] == (
@@ -769,7 +769,7 @@ def test_dungeon_sweep_panel_requires_exact_sweep_text_and_yanwangling_card() ->
 def test_dungeon_direct_plus_is_scoped_to_live_yanwangling_master_controls() -> None:
     nodes = load_task_nodes(DUNGEON)
 
-    master = nodes["dungeon.master.80"]
+    master = nodes["副本扫荡-副本-宗师-80"]
     assert master["recognition"] == "OCR"
     assert master["expected"] == r"大师\s*80级?"
     assert master["roi"] == [900, 370, 210, 100]
@@ -786,19 +786,19 @@ def test_dungeon_direct_plus_is_scoped_to_live_yanwangling_master_controls() -> 
 
     assert "MJA_DUNGEON_SELECT_MASTER" not in nodes
     assert "select_master_80" not in TASK_POLICIES[DUNGEON.task_id].action_caps
-    ready = nodes["MJA_DUNGEON_MASTER_ASSIGNMENT_READY"]
+    ready = nodes["副本扫荡-宗师-分配任务-就绪"]
     assert ready["recognition"]["param"]["all_of"] == [
-        "dungeon.sweep.panel",
+        "副本扫荡-副本-扫荡-面板",
         "dungeon.sweep.yanwangling.card",
-        "dungeon.master.80",
-        "dungeon.ticket.plus",
-        "dungeon.ticket.icon",
-        "dungeon.ticket.balance",
+        "副本扫荡-副本-宗师-80",
+        "副本扫荡-副本-券-加号",
+        "副本扫荡-副本-券-图标",
+        "副本扫荡-副本-券-余额",
     ]
     assert ready["action"] == "DoNothing"
-    assert ready["next"] == ["MJA_DUNGEON_ASSIGN_TICKET_LOOP"]
+    assert ready["next"] == ["副本扫荡-分配-券-循环"]
 
-    plus = nodes["dungeon.ticket.plus"]
+    plus = nodes["副本扫荡-副本-券-加号"]
     assert plus == {
         "recognition": "ColorMatch",
         "lower": [85, 80, 60],
@@ -817,7 +817,7 @@ def test_dungeon_direct_plus_is_scoped_to_live_yanwangling_master_controls() -> 
     )
     assert android_nodes["ticket_plus"] == plus
 
-    icon = nodes["dungeon.ticket.icon"]
+    icon = nodes["副本扫荡-副本-券-图标"]
     # r17 live scores were 0.652958-0.662200 in this exact ROI. Keep enough
     # margin for the observed frame variance without broadening the search area.
     assert icon == {
@@ -828,32 +828,32 @@ def test_dungeon_direct_plus_is_scoped_to_live_yanwangling_master_controls() -> 
         "action": "DoNothing",
     }
     assert android_nodes["ticket_icon"] == icon
-    balance = nodes["dungeon.ticket.balance"]
+    balance = nodes["副本扫荡-副本-券-余额"]
     assert balance["expected"] == r"^(?:[1-9]|1[0-9]|20)$"
     assert balance["roi"] == [840, 520, 90, 70]
     assert 840 <= 862 < 840 + 90
     assert 520 <= 550 < 520 + 70
     assert android_nodes["ticket_balance"] == balance
 
-    assign = nodes["MJA_DUNGEON_ASSIGN_TICKET_LOOP"]
+    assign = nodes["副本扫荡-分配-券-循环"]
     assert assign["recognition"]["param"]["all_of"] == [
-        "dungeon.sweep.panel",
+        "副本扫荡-副本-扫荡-面板",
         "dungeon.sweep.yanwangling.card",
-        "dungeon.master.80",
-        "dungeon.ticket.plus",
-        "dungeon.ticket.icon",
-        "dungeon.ticket.balance",
+        "副本扫荡-副本-宗师-80",
+        "副本扫荡-副本-券-加号",
+        "副本扫荡-副本-券-图标",
+        "副本扫荡-副本-券-余额",
     ]
     assert assign["recognition"]["param"]["box_index"] == 3
     assert assign["custom_action_param"]["evidence"] == {
         "page_index": 0,
         "target_index": 3,
-        "page_name": "dungeon.sweep.panel",
-        "target_name": "dungeon.ticket.plus",
+        "page_name": "副本扫荡-副本-扫荡-面板",
+        "target_name": "副本扫荡-副本-券-加号",
     }
     assert assign["custom_action_param"]["resource_index"] == 4
     assert assign["custom_action_param"]["resource_evidence_name"] == (
-        "dungeon.ticket.icon"
+        "副本扫荡-副本-券-图标"
     )
     assert assign["custom_action_param"]["amount_index"] == 5
     assert assign["max_hit"] == 100
@@ -864,62 +864,62 @@ def test_dungeon_direct_plus_is_scoped_to_live_yanwangling_master_controls() -> 
 def test_dungeon_sweep_recovers_once_from_launcher_then_requires_home() -> None:
     nodes = load_task_nodes(DUNGEON)
 
-    start = nodes["MJA_DUNGEON_SWEEP_DAILY_START"]
+    start = nodes["副本扫荡-任务入口"]
     assert start["timeout"] == 8000
     assert start["next"] == [
-        "MJA_DUNGEON_PANEL_PROBE",
-        "MJA_DUNGEON_REWARD_PREVIEW_RECOVERY_PROBE",
-        "MJA_DUNGEON_SHADOW_PAGE_PROBE",
-        "MJA_DUNGEON_HOME_PROBE",
+        "副本扫荡-面板-探测",
+        "副本扫荡-奖励-预览-恢复-探测",
+        "副本扫荡-影-页面-探测",
+        "副本扫荡-主页-探测",
     ]
     assert start["on_error"] == [
-        "MJA_DUNGEON_GAME_START_RECOVERY",
-        "MJA_DUNGEON_GAME_START_RECOVERY_FAILED",
+        "副本扫荡-游戏启动恢复",
+        "副本扫荡-游戏启动恢复失败",
     ]
-    recovery_probe = nodes["MJA_DUNGEON_REWARD_PREVIEW_RECOVERY_PROBE"]
+    recovery_probe = nodes["副本扫荡-奖励-预览-恢复-探测"]
     assert recovery_probe["recognition"] == {
         "type": "Or",
         "param": {
-            "any_of": ["dungeon.reward.preview.page", "food.food.page"]
+            "any_of": ["副本扫荡-副本-奖励-预览-页面", "吃体力食物-食物-食物-页面"]
         },
     }
 
-    recovery = nodes["MJA_DUNGEON_GAME_START_RECOVERY"]
+    recovery = nodes["副本扫荡-游戏启动恢复"]
     assert recovery["recognition"] == "DirectHit"
     assert recovery["action"] == "DoNothing"
     assert recovery["max_hit"] == 1
     assert recovery["timeout"] == 30000
     assert recovery["next"] == [
-        "MJA_DUNGEON_PANEL_PROBE",
-        "MJA_DUNGEON_REWARD_PREVIEW_RECOVERY_PROBE",
-        "MJA_DUNGEON_SHADOW_PAGE_PROBE",
-        "MJA_DUNGEON_HOME_PROBE",
+        "副本扫荡-面板-探测",
+        "副本扫荡-奖励-预览-恢复-探测",
+        "副本扫荡-影-页面-探测",
+        "副本扫荡-主页-探测",
     ]
-    assert recovery["on_error"] == ["MJA_DUNGEON_GAME_START_RECOVERY_FAILED"]
+    assert recovery["on_error"] == ["副本扫荡-游戏启动恢复失败"]
 
     assert_outcome(
         nodes,
-        "MJA_DUNGEON_GAME_START_RECOVERY_FAILED",
+        "副本扫荡-游戏启动恢复失败",
         "failed",
         "dungeon.game_foreground_and_home",
     )
-    failed = nodes["MJA_DUNGEON_GAME_START_RECOVERY_FAILED"]
+    failed = nodes["副本扫荡-游戏启动恢复失败"]
     assert failed["custom_action_param"]["error_code"] == (
         "DUNGEON_GAME_START_RECOVERY_EXHAUSTED"
     )
     assert failed["custom_action_param"]["native_fail_after_record"] is True
     assert failed["Abort"] is True
-    assert failed["next"] == ["MJA_COMMON_ABORT"]
-    assert nodes["MJA_DUNGEON_HOME_PROBE"]["on_error"] == [
-        "MJA_DUNGEON_GAME_START_RECOVERY",
-        "MJA_DUNGEON_RECORD_FAILURE",
+    assert failed["next"] == ["公共-通用中止"]
+    assert nodes["副本扫荡-主页-探测"]["on_error"] == [
+        "副本扫荡-游戏启动恢复",
+        "副本扫荡-记录-失败",
     ]
 
 
 def test_dungeon_shadow_page_is_known_fail_closed_start_state() -> None:
     nodes = load_task_nodes(DUNGEON)
 
-    marker = nodes["dungeon.shadow.page"]
+    marker = nodes["副本扫荡-副本-影-页面"]
     assert marker == {
         "recognition": "OCR",
         "expected": "蜃影武墟",
@@ -928,19 +928,19 @@ def test_dungeon_shadow_page_is_known_fail_closed_start_state() -> None:
     }
     _assert_archived_ocr_hit(marker, "蜃影武墟", (326, 389, 282, 83))
 
-    probe = nodes["MJA_DUNGEON_SHADOW_PAGE_PROBE"]
+    probe = nodes["副本扫荡-影-页面-探测"]
     assert probe["recognition"] == {
         "type": "And",
-        "param": {"all_of": ["dungeon.shadow.page"]},
+        "param": {"all_of": ["副本扫荡-副本-影-页面"]},
     }
     assert probe["action"] == "DoNothing"
-    assert probe["next"] == ["MJA_DUNGEON_UNEXPECTED_SHADOW_PAGE"]
-    assert probe["on_error"] == ["MJA_DUNGEON_RECORD_FAILURE"]
+    assert probe["next"] == ["副本扫荡-意外-影-页面"]
+    assert probe["on_error"] == ["副本扫荡-记录-失败"]
 
-    failure = nodes["MJA_DUNGEON_UNEXPECTED_SHADOW_PAGE"]
+    failure = nodes["副本扫荡-意外-影-页面"]
     assert_outcome(
         nodes,
-        "MJA_DUNGEON_UNEXPECTED_SHADOW_PAGE",
+        "副本扫荡-意外-影-页面",
         "failed",
         "dungeon.state_known",
     )
@@ -949,23 +949,23 @@ def test_dungeon_shadow_page_is_known_fail_closed_start_state() -> None:
     )
     assert failure["custom_action_param"]["native_fail_after_record"] is True
     assert failure["Abort"] is True
-    assert failure["next"] == ["MJA_COMMON_ABORT"]
+    assert failure["next"] == ["公共-通用中止"]
     assert "on_error" not in failure
 
 
 def test_dungeon_reward_preview_recovery_is_exact_bounded_and_fail_closed() -> None:
     nodes = load_task_nodes(DUNGEON)
 
-    page = nodes["dungeon.reward.preview.page"]
+    page = nodes["副本扫荡-副本-奖励-预览-页面"]
     assert page["recognition"]["param"]["all_of"] == [
-        "dungeon.reward.preview.title",
-        "dungeon.reward.preview.body",
+        "副本扫荡-副本-奖励-预览-标题",
+        "副本扫荡-副本-奖励-预览-正文",
     ]
-    assert nodes["dungeon.reward.preview.title"]["roi"] == [400, 250, 500, 75]
-    assert nodes["dungeon.reward.preview.body"]["expected"] == "概率获得以下奖励"
-    assert nodes["dungeon.reward.preview.close"]["roi"] == [840, 255, 55, 55]
+    assert nodes["副本扫荡-副本-奖励-预览-标题"]["roi"] == [400, 250, 500, 75]
+    assert nodes["副本扫荡-副本-奖励-预览-正文"]["expected"] == "概率获得以下奖励"
+    assert nodes["副本扫荡-副本-奖励-预览-关闭"]["roi"] == [840, 255, 55, 55]
 
-    close = nodes["MJA_DUNGEON_CLOSE_REWARD_PREVIEW"]
+    close = nodes["副本扫荡-关闭-奖励-预览"]
     assert close["max_hit"] == 1
     assert close["retry_times"] == 0
     assert close["custom_action_param"]["action_id"] == (
@@ -974,33 +974,33 @@ def test_dungeon_reward_preview_recovery_is_exact_bounded_and_fail_closed() -> N
     assert close["custom_action_param"]["evidence"] == {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "dungeon.reward.preview.page",
-        "target_name": "dungeon.reward.preview.close",
+        "page_name": "副本扫荡-副本-奖励-预览-页面",
+        "target_name": "副本扫荡-副本-奖励-预览-关闭",
     }
-    assert close["on_error"] == ["MJA_DUNGEON_RECORD_FAILURE"]
-    recovered = nodes["MJA_DUNGEON_REWARD_PREVIEW_RECOVERED_PANEL"]
-    assert recovered["next"] == ["MJA_DUNGEON_ASSIGN_TICKET_LOOP"]
-    assert recovered["on_error"] == ["MJA_DUNGEON_RECORD_FAILURE"]
+    assert close["on_error"] == ["副本扫荡-记录-失败"]
+    recovered = nodes["副本扫荡-奖励-预览-已恢复-面板"]
+    assert recovered["next"] == ["副本扫荡-分配-券-循环"]
+    assert recovered["on_error"] == ["副本扫荡-记录-失败"]
     assert_action_limit(DUNGEON.task_id, "close_dungeon_reward_preview", 1)
 
 
 def test_dungeon_recovery_never_replays_consumptive_actions() -> None:
     nodes = load_task_nodes(DUNGEON)
     recovery_nodes = {
-        "MJA_DUNGEON_GAME_START_RECOVERY",
-        "MJA_DUNGEON_GAME_START_RECOVERY_FAILED",
-        "MJA_DUNGEON_PANEL_PROBE",
-        "MJA_DUNGEON_PANEL_CLOSE",
-        "MJA_DUNGEON_SHADOW_PAGE_PROBE",
-        "MJA_DUNGEON_UNEXPECTED_SHADOW_PAGE",
-        "MJA_DUNGEON_REWARD_PREVIEW_RECOVERY_PROBE",
-        "MJA_DUNGEON_CLOSE_REWARD_PREVIEW",
-        "MJA_DUNGEON_REWARD_PREVIEW_RECOVERED_PANEL",
+        "副本扫荡-游戏启动恢复",
+        "副本扫荡-游戏启动恢复失败",
+        "副本扫荡-面板-探测",
+        "副本扫荡-面板-关闭",
+        "副本扫荡-影-页面-探测",
+        "副本扫荡-意外-影-页面",
+        "副本扫荡-奖励-预览-恢复-探测",
+        "副本扫荡-关闭-奖励-预览",
+        "副本扫荡-奖励-预览-已恢复-面板",
     }
     dangerous_action_nodes = {
-        "MJA_DUNGEON_ASSIGN_TICKET_LOOP",
-        "MJA_DUNGEON_START_SWEEP",
-        "MJA_DUNGEON_CONFIRM_SWEEP",
+        "副本扫荡-分配-券-循环",
+        "副本扫荡-开始-扫荡",
+        "副本扫荡-确认-扫荡",
     }
 
     for node_name in dangerous_action_nodes:
@@ -1009,48 +1009,48 @@ def test_dungeon_recovery_never_replays_consumptive_actions() -> None:
         )
         assert routes.isdisjoint(recovery_nodes)
 
-    assert nodes["MJA_DUNGEON_GAME_START_RECOVERY"]["next"] == [
-        "MJA_DUNGEON_PANEL_PROBE",
-        "MJA_DUNGEON_REWARD_PREVIEW_RECOVERY_PROBE",
-        "MJA_DUNGEON_SHADOW_PAGE_PROBE",
-        "MJA_DUNGEON_HOME_PROBE",
+    assert nodes["副本扫荡-游戏启动恢复"]["next"] == [
+        "副本扫荡-面板-探测",
+        "副本扫荡-奖励-预览-恢复-探测",
+        "副本扫荡-影-页面-探测",
+        "副本扫荡-主页-探测",
     ]
 
 
 def test_dungeon_ticket_guard_is_dynamic_but_positive_and_budgeted() -> None:
-    params = load_task_nodes(DUNGEON)["MJA_DUNGEON_ASSIGN_TICKET_LOOP"][
+    params = load_task_nodes(DUNGEON)["副本扫荡-分配-券-循环"][
         "custom_action_param"
     ]
     assert "observed_amount" not in params
     assert params["resource_id"] == "副本票"
     assert params["budget_amount"] == 1
-    assert "[1-9]" in load_task_nodes(DUNGEON)["dungeon.ticket.balance"]["expected"]
+    assert "[1-9]" in load_task_nodes(DUNGEON)["副本扫荡-副本-券-余额"]["expected"]
 
 
 def test_ring_challenge_partitions_sweep_fight_and_not_open() -> None:
     nodes = load_task_nodes(RING)
-    assert nodes["ring.daily.page"]["roi"] == [0, 0, 520, 180]
-    assert nodes["MJA_RING_DAILY_PAGE"]["next"] == [
-        "MJA_RING_DAILY_REWARD_PROBE",
-        "MJA_RING_OPEN",
+    assert nodes["擂台挑战-擂台-日常-页面"]["roi"] == [0, 0, 520, 180]
+    assert nodes["擂台挑战-日常-页面"]["next"] == [
+        "擂台挑战-日常-奖励-探测",
+        "擂台挑战-打开",
     ]
-    assert nodes["ring.entry"] == {
+    assert nodes["擂台挑战-擂台-入口"] == {
         "recognition": "OCR",
         "expected": "^前往$",
         "roi": [1000, 510, 180, 100],
         "action": "DoNothing",
     }
-    assert nodes["MJA_RING_PAGE_PROBE"]["next"] == [
+    assert nodes["擂台挑战-页面-探测"]["next"] == [
         "MJA_RING_NOT_OPEN_PROBE",
-        "MJA_RING_ATTEMPTS_PROBE",
-        "MJA_RING_OPEN_MODE",
+        "擂台挑战-次数-探测",
+        "擂台挑战-打开-模式",
     ]
-    assert nodes["MJA_RING_OPEN_MODE"]["next"] == [
-        "MJA_RING_SWEEP_ELIGIBLE",
-        "MJA_RING_SWEEP_SCORE_ELIGIBLE",
-        "MJA_RING_FIGHT_EXHAUSTED_PROBE",
-        "MJA_RING_FIGHT_GATE",
-        "MJA_RING_MATCH_GATE",
+    assert nodes["擂台挑战-打开-模式"]["next"] == [
+        "擂台挑战-扫荡-符合条件",
+        "擂台挑战-扫荡-分数-符合条件",
+        "擂台挑战-战斗-耗尽-探测",
+        "擂台挑战-战斗-门禁",
+        "擂台挑战-匹配-门禁",
     ]
     assert_guarded_actions(
         nodes,
@@ -1073,21 +1073,21 @@ def test_ring_challenge_partitions_sweep_fight_and_not_open() -> None:
             "close_ring_page",
         ],
     )
-    assert_condition(nodes, "MJA_RING_SWEEP_ELIGIBLE", "master_mode_or_score_gte_5000")
-    assert "论剑阵容模式" not in nodes["ring.master.mode"]["expected"]
-    assert "大师赛模式" in nodes["ring.master.mode"]["expected"]
-    assert nodes["MJA_RING_SWEEP_ELIGIBLE"]["on_error"] == [
-        "MJA_RING_SWEEP_SCORE_ELIGIBLE"
+    assert_condition(nodes, "擂台挑战-扫荡-符合条件", "master_mode_or_score_gte_5000")
+    assert "论剑阵容模式" not in nodes["擂台挑战-擂台-宗师-模式"]["expected"]
+    assert "大师赛模式" in nodes["擂台挑战-擂台-宗师-模式"]["expected"]
+    assert nodes["擂台挑战-扫荡-符合条件"]["on_error"] == [
+        "擂台挑战-扫荡-分数-符合条件"
     ]
-    assert nodes["MJA_RING_SWEEP_SCORE_ELIGIBLE"]["on_error"] == [
-        "MJA_RING_FIGHT_EXHAUSTED_PROBE"
+    assert nodes["擂台挑战-扫荡-分数-符合条件"]["on_error"] == [
+        "擂台挑战-战斗-耗尽-探测"
     ]
     assert nodes["擂台券"]["expected"] == [
         "擂台券",
         "^[1-9][0-9]?/12$",
     ]
     assert nodes["擂台券"]["roi"] == [1000, 0, 280, 100]
-    assert nodes["ring.ticket.amount"]["expected"] == [
+    assert nodes["擂台挑战-擂台-券-数量"]["expected"] == [
         "^[1-9][0-9]?$",
         "^[1-9][0-9]?/12$",
     ]
@@ -1116,28 +1116,28 @@ def test_ring_challenge_partitions_sweep_fight_and_not_open() -> None:
         require_observed_amount=False,
     )
     expected_battle_entry = [
-        "MJA_RING_MATCHING_LOADING_PROBE",
-        "MJA_RING_BATTLE_PREPARE",
-        "MJA_RING_FIGHT_PAGE",
-        "MJA_RING_BATTLE_LOADING_PROBE",
+        "擂台挑战-匹配中-加载-探测",
+        "擂台挑战-战斗-准备",
+        "擂台挑战-战斗-页面",
+        "擂台挑战-战斗-加载-探测",
     ]
-    assert nodes["MJA_RING_FIGHT_LOOP"]["next"] == expected_battle_entry
-    assert nodes["MJA_RING_START_MATCHING"]["next"] == expected_battle_entry
-    assert nodes["MJA_RING_FIGHT_PAGE"]["on_error"] == [
-        "MJA_RING_BATTLE_RESULT_PROBE",
-        "MJA_RING_BATTLE_RESULT_DEFEAT",
-        "MJA_RING_BATTLE_LOADING_PROBE",
+    assert nodes["擂台挑战-战斗-循环"]["next"] == expected_battle_entry
+    assert nodes["擂台挑战-开始-匹配中"]["next"] == expected_battle_entry
+    assert nodes["擂台挑战-战斗-页面"]["on_error"] == [
+        "擂台挑战-战斗-结果-探测",
+        "擂台挑战-战斗-结果-失败",
+        "擂台挑战-战斗-加载-探测",
     ]
-    assert nodes["MJA_RING_POST_RESULT"]["next"] == [
-        "MJA_RING_FIGHT_EXHAUSTED_PROBE",
-        "MJA_RING_FIGHT_GATE",
-        "MJA_RING_MATCH_GATE",
+    assert nodes["擂台挑战-结果后"]["next"] == [
+        "擂台挑战-战斗-耗尽-探测",
+        "擂台挑战-战斗-门禁",
+        "擂台挑战-匹配-门禁",
     ]
-    assert nodes["MJA_RING_BATTLE_RESULT_PROBE"]["recognition"]["param"]["all_of"] == [
-        "ring.battle.result",
-        "ring.battle.victory",
+    assert nodes["擂台挑战-战斗-结果-探测"]["recognition"]["param"]["all_of"] == [
+        "擂台挑战-擂台-战斗-结果",
+        "擂台挑战-擂台-战斗-胜利",
     ]
-    assert nodes["ring.battle.result"]["expected"] == [
+    assert nodes["擂台挑战-擂台-战斗-结果"]["expected"] == [
         "战斗胜利",
         "战斗胜",
         "战斗失败",
@@ -1145,66 +1145,66 @@ def test_ring_challenge_partitions_sweep_fight_and_not_open() -> None:
         "胜利",
         "失败",
     ]
-    assert nodes["ring.battle.victory"]["expected"] == [
+    assert nodes["擂台挑战-擂台-战斗-胜利"]["expected"] == [
         "战斗胜利",
         "战斗胜",
         "胜利",
     ]
-    assert nodes["ring.result.close"]["expected"] == [
+    assert nodes["擂台挑战-擂台-结果-关闭"]["expected"] == [
         "点击(?:空白处|任意位置)关闭",
         "擂台积分\\d+",
     ]
     assert (
-        nodes["MJA_RING_BATTLE_PREPARE"]["custom_action_param"]["action_id"]
+        nodes["擂台挑战-战斗-准备"]["custom_action_param"]["action_id"]
         == "start_ring_battle"
     )
     assert (
-        nodes["MJA_RING_BATTLE_LOADING_WAIT"]["custom_action_param"]["action_id"]
+        nodes["擂台挑战-战斗-加载-等待"]["custom_action_param"]["action_id"]
         == "wait_ring_battle"
     )
-    assert nodes["MJA_RING_BATTLE_LOADING_WAIT"]["custom_action_param"]["kind"] == "none"
-    assert nodes["MJA_RING_MATCH_GATE"]["next"] == ["MJA_RING_START_MATCHING"]
+    assert nodes["擂台挑战-战斗-加载-等待"]["custom_action_param"]["kind"] == "none"
+    assert nodes["擂台挑战-匹配-门禁"]["next"] == ["擂台挑战-开始-匹配中"]
     assert (
-        nodes["MJA_RING_START_MATCHING"]["custom_action_param"]["action_id"]
+        nodes["擂台挑战-开始-匹配中"]["custom_action_param"]["action_id"]
         == "start_ring_matching"
     )
-    assert nodes["MJA_RING_SWEEP_GATE"]["on_error"] == ["MJA_RING_RECORD_FAILURE"]
+    assert nodes["擂台挑战-扫荡-门禁"]["on_error"] == ["擂台挑战-记录-失败"]
     assert_action_limit(RING.task_id, "sweep_ring", 1)
     assert_action_limit(RING.task_id, "skip_ring_battle", 12)
-    assert nodes["MJA_RING_FIGHT_LOOP"]["max_hit"] == 12
-    assert nodes["MJA_RING_FIGHT_LOOP_EXHAUSTED"]["custom_action_param"]["status"] == "success"
-    assert nodes["MJA_RING_FIGHT_LOOP_EXHAUSTED"]["recognition"]["type"] == "And"
-    assert "ring.attempts.exhausted" in nodes["MJA_RING_FIGHT_LOOP_EXHAUSTED"][
+    assert nodes["擂台挑战-战斗-循环"]["max_hit"] == 12
+    assert nodes["擂台挑战-战斗-循环-耗尽"]["custom_action_param"]["status"] == "success"
+    assert nodes["擂台挑战-战斗-循环-耗尽"]["recognition"]["type"] == "And"
+    assert "擂台挑战-擂台-次数-耗尽" in nodes["擂台挑战-战斗-循环-耗尽"][
         "recognition"
     ]["param"]["all_of"]
-    assert nodes["MJA_RING_FIGHT_LOOP_EXHAUSTED"]["next"] == ["MJA_RING_CLOSE_OPPONENTS"]
-    assert nodes["MJA_RING_POST_RESULT"]["on_error"] == [
-        "MJA_RING_POST_RESULT_RING_PAGE_EXHAUSTED_PROBE"
+    assert nodes["擂台挑战-战斗-循环-耗尽"]["next"] == ["擂台挑战-关闭-对手"]
+    assert nodes["擂台挑战-结果后"]["on_error"] == [
+        "擂台挑战-结果后-擂台-页面-耗尽-探测"
     ]
-    assert nodes["MJA_RING_POST_RESULT_RING_PAGE_EXHAUSTED_PROBE"]["recognition"][
+    assert nodes["擂台挑战-结果后-擂台-页面-耗尽-探测"]["recognition"][
         "param"
-    ]["all_of"] == ["ring.page", "ring.attempts.exhausted"]
-    assert nodes["MJA_RING_POST_RESULT_RING_PAGE_EXHAUSTED_PROBE"]["on_error"] == [
-        "MJA_RING_POST_RESULT_RING_PAGE_CONTINUE"
+    ]["all_of"] == ["擂台挑战-擂台-页面", "擂台挑战-擂台-次数-耗尽"]
+    assert nodes["擂台挑战-结果后-擂台-页面-耗尽-探测"]["on_error"] == [
+        "擂台挑战-结果后-擂台-页面-继续"
     ]
-    assert nodes["MJA_RING_POST_RESULT_RING_PAGE_CONTINUE"]["next"] == [
-        "MJA_RING_OPEN_MODE"
+    assert nodes["擂台挑战-结果后-擂台-页面-继续"]["next"] == [
+        "擂台挑战-打开-模式"
     ]
     assert_outcome(
         nodes,
-        "MJA_RING_POST_RESULT_RING_PAGE_EXHAUSTED",
+        "擂台挑战-结果后-擂台-页面-耗尽",
         "success",
         "ring.manual_attempts_complete",
     )
     assert_outcome(
         nodes,
-        "MJA_RING_FIGHT_LOOP_EXHAUSTED",
+        "擂台挑战-战斗-循环-耗尽",
         "success",
         "ring.manual_attempts_complete",
     )
     assert_outcome(
         nodes,
-        "MJA_RING_ATTEMPTS_EXHAUSTED",
+        "擂台挑战-次数-耗尽",
         "success",
         "ring.attempts_exhausted",
     )

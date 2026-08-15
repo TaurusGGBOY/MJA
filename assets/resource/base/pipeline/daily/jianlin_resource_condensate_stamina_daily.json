@@ -1,5 +1,5 @@
 {
-  "MJA_JIANLIN_RESOURCE_CONDENSATE_STAMINA_DAILY_START": {
+  "剑林凝结体体力-任务入口": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "BeginTask", "max_hit": 1,
@@ -7,29 +7,29 @@
       "task_id": "JIANLIN_RESOURCE_CONDENSATE_STAMINA_DAILY"
     },
     "next": [
-      "MJA_JIANLIN_CLOSE_REWARD_POPUP",
-      "MJA_JIANLIN_GUILD_ACTIVITY_PAGE_PROBE",
-      "MJA_JIANLIN_GUILD_HOME_PAGE_PROBE",
-      "MJA_JIANLIN_FUNCTION_PANEL_CLOSE_PROBE",
-      "MJA_JIANLIN_RESUME_RESULT_PROBE",
-      "MJA_JIANLIN_BATTLE_PAGE_PROBE",
-      "MJA_JIANLIN_RING_PAGE_PROBE",
-      "MJA_JIANLIN_HOME_PROBE",
-      "MJA_JIANLIN_RESUME_PAGE_PROBE",
-      "MJA_JIANLIN_DAILY_PAGE_PROBE",
-      "MJA_JIANLIN_SHADOW_PAGE_PROBE",
-      "MJA_JIANLIN_DUNGEON_PAGE_PROBE",
-      "MJA_JIANLIN_GAME_START_RECOVERY"
+      "剑林凝结体体力-关闭-奖励-弹窗",
+      "剑林凝结体体力-帮派-活动-页面-探测",
+      "剑林凝结体体力-帮派-主页-页面-探测",
+      "剑林凝结体体力-功能-面板-关闭-探测",
+      "剑林凝结体体力-恢复继续-结果-探测",
+      "剑林凝结体体力-战斗-页面-探测",
+      "剑林凝结体体力-擂台-页面-探测",
+      "剑林凝结体体力-主页-探测",
+      "剑林凝结体体力-恢复继续-页面-探测",
+      "剑林凝结体体力-日常-页面-探测",
+      "剑林凝结体体力-影-页面-探测",
+      "剑林凝结体体力-副本-页面-探测",
+      "剑林凝结体体力-游戏启动恢复"
     ],
     "on_error": [
-      "MJA_JIANLIN_GAME_START_RECOVERY_FAILED"
+      "剑林凝结体体力-游戏启动恢复失败"
     ]
   },
-  "MJA_JIANLIN_CLOSE_REWARD_POPUP": {
+  "剑林凝结体体力-关闭-奖励-弹窗": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["MJA_KNOWN_CLICK_BLANK_TO_CLOSE"],
+        "all_of": ["公共-已知-点击空白关闭"],
         "box_index": 0
       }
     },
@@ -38,32 +38,32 @@
     "max_hit": 1,
     "post_delay": 750,
     "next": [
-      "MJA_JIANLIN_FUNCTION_PANEL_CLOSE_PROBE",
-      "MJA_JIANLIN_RESUME_RESULT_PROBE",
-      "MJA_JIANLIN_BATTLE_PAGE_PROBE",
-      "MJA_JIANLIN_RING_PAGE_PROBE",
-      "MJA_JIANLIN_HOME_PROBE",
-      "MJA_JIANLIN_RESUME_PAGE_PROBE",
-      "MJA_JIANLIN_DAILY_PAGE_PROBE"
+      "剑林凝结体体力-功能-面板-关闭-探测",
+      "剑林凝结体体力-恢复继续-结果-探测",
+      "剑林凝结体体力-战斗-页面-探测",
+      "剑林凝结体体力-擂台-页面-探测",
+      "剑林凝结体体力-主页-探测",
+      "剑林凝结体体力-恢复继续-页面-探测",
+      "剑林凝结体体力-日常-页面-探测"
     ],
     "on_error": [
-      "MJA_JIANLIN_FUNCTION_PANEL_CLOSE_PROBE",
-      "MJA_JIANLIN_RESUME_RESULT_PROBE",
-      "MJA_JIANLIN_BATTLE_PAGE_PROBE",
-      "MJA_JIANLIN_RING_PAGE_PROBE",
-      "MJA_JIANLIN_HOME_PROBE",
-      "MJA_JIANLIN_RESUME_PAGE_PROBE",
-      "MJA_JIANLIN_DAILY_PAGE_PROBE"
+      "剑林凝结体体力-功能-面板-关闭-探测",
+      "剑林凝结体体力-恢复继续-结果-探测",
+      "剑林凝结体体力-战斗-页面-探测",
+      "剑林凝结体体力-擂台-页面-探测",
+      "剑林凝结体体力-主页-探测",
+      "剑林凝结体体力-恢复继续-页面-探测",
+      "剑林凝结体体力-日常-页面-探测"
     ]
   },
-  "MJA_JIANLIN_GUILD_ACTIVITY_PAGE_PROBE": {
+  "剑林凝结体体力-帮派-活动-页面-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "guild.activity.page",
-          "guild.activity.context",
-          "guild.page.close"
+          "帮派活动挑战-帮派-活动-页面",
+          "帮派活动挑战-帮派-活动-上下文",
+          "帮派活动挑战-帮派-页面-关闭"
         ],
         "box_index": 2
       }
@@ -71,25 +71,25 @@
     "timeout": 8000,
     "max_hit": 1,
     "action": "DoNothing",
-    "next": ["MJA_JIANLIN_CLOSE_GUILD_ACTIVITY_PAGE"],
+    "next": ["剑林凝结体体力-关闭-帮派-活动-页面"],
     "on_error": [
-      "MJA_JIANLIN_FUNCTION_PANEL_CLOSE_PROBE",
-      "MJA_JIANLIN_RESUME_RESULT_PROBE",
-      "MJA_JIANLIN_BATTLE_PAGE_PROBE",
-      "MJA_JIANLIN_RING_PAGE_PROBE",
-      "MJA_JIANLIN_HOME_PROBE",
-      "MJA_JIANLIN_RESUME_PAGE_PROBE",
-      "MJA_JIANLIN_DAILY_PAGE_PROBE"
+      "剑林凝结体体力-功能-面板-关闭-探测",
+      "剑林凝结体体力-恢复继续-结果-探测",
+      "剑林凝结体体力-战斗-页面-探测",
+      "剑林凝结体体力-擂台-页面-探测",
+      "剑林凝结体体力-主页-探测",
+      "剑林凝结体体力-恢复继续-页面-探测",
+      "剑林凝结体体力-日常-页面-探测"
     ]
   },
-  "MJA_JIANLIN_CLOSE_GUILD_ACTIVITY_PAGE": {
+  "剑林凝结体体力-关闭-帮派-活动-页面": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "guild.activity.page",
-          "guild.activity.context",
-          "guild.page.close"
+          "帮派活动挑战-帮派-活动-页面",
+          "帮派活动挑战-帮派-活动-上下文",
+          "帮派活动挑战-帮派-页面-关闭"
         ],
         "box_index": 2
       }
@@ -105,41 +105,41 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "guild.activity.page",
-        "target_name": "guild.page.close"
+        "page_name": "帮派活动挑战-帮派-活动-页面",
+        "target_name": "帮派活动挑战-帮派-页面-关闭"
       }
     },
     "post_delay": 1000,
-    "next": ["MJA_JIANLIN_HOME_PROBE"],
-    "on_error": ["MJA_JIANLIN_RECORD_FAILURE"]
+    "next": ["剑林凝结体体力-主页-探测"],
+    "on_error": ["剑林凝结体体力-记录-失败"]
   },
-  "MJA_JIANLIN_GUILD_HOME_PAGE_PROBE": {
+  "剑林凝结体体力-帮派-主页-页面-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["guild.home.page", "guild.page.close"],
+        "all_of": ["帮派活动挑战-帮派-主页-页面", "帮派活动挑战-帮派-页面-关闭"],
         "box_index": 0
       }
     },
     "timeout": 8000,
     "max_hit": 1,
     "action": "DoNothing",
-    "next": ["MJA_JIANLIN_CLOSE_GUILD_HOME_PAGE"],
+    "next": ["剑林凝结体体力-关闭-帮派-主页-页面"],
     "on_error": [
-      "MJA_JIANLIN_FUNCTION_PANEL_CLOSE_PROBE",
-      "MJA_JIANLIN_RESUME_RESULT_PROBE",
-      "MJA_JIANLIN_BATTLE_PAGE_PROBE",
-      "MJA_JIANLIN_RING_PAGE_PROBE",
-      "MJA_JIANLIN_HOME_PROBE",
-      "MJA_JIANLIN_RESUME_PAGE_PROBE",
-      "MJA_JIANLIN_DAILY_PAGE_PROBE"
+      "剑林凝结体体力-功能-面板-关闭-探测",
+      "剑林凝结体体力-恢复继续-结果-探测",
+      "剑林凝结体体力-战斗-页面-探测",
+      "剑林凝结体体力-擂台-页面-探测",
+      "剑林凝结体体力-主页-探测",
+      "剑林凝结体体力-恢复继续-页面-探测",
+      "剑林凝结体体力-日常-页面-探测"
     ]
   },
-  "MJA_JIANLIN_CLOSE_GUILD_HOME_PAGE": {
+  "剑林凝结体体力-关闭-帮派-主页-页面": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["guild.home.page", "guild.page.close"],
+        "all_of": ["帮派活动挑战-帮派-主页-页面", "帮派活动挑战-帮派-页面-关闭"],
         "box_index": 1
       }
     },
@@ -154,40 +154,40 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "guild.home.page",
-        "target_name": "guild.page.close"
+        "page_name": "帮派活动挑战-帮派-主页-页面",
+        "target_name": "帮派活动挑战-帮派-页面-关闭"
       }
     },
     "post_delay": 1200,
-    "next": ["MJA_JIANLIN_HOME_PROBE"],
-    "on_error": ["MJA_JIANLIN_RECORD_FAILURE"]
+    "next": ["剑林凝结体体力-主页-探测"],
+    "on_error": ["剑林凝结体体力-记录-失败"]
   },
-  "MJA_JIANLIN_RESUME_RESULT_PROBE": {
+  "剑林凝结体体力-恢复继续-结果-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.battle.result",
-          "jianlin.battle.result.close"
+          "剑林凝结体体力-剑林-战斗-结果",
+          "剑林凝结体体力-剑林-战斗结果关闭"
         ],
         "box_index": 1
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_DISMISS_STALE_RESULT"
+      "剑林凝结体体力-关闭-过期-结果"
     ],
     "on_error": [
-      "MJA_JIANLIN_HOME_PROBE"
+      "剑林凝结体体力-主页-探测"
     ]
   },
-  "MJA_JIANLIN_DISMISS_STALE_RESULT": {
+  "剑林凝结体体力-关闭-过期-结果": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.battle.result",
-          "jianlin.battle.result.close"
+          "剑林凝结体体力-剑林-战斗-结果",
+          "剑林凝结体体力-剑林-战斗结果关闭"
         ],
         "box_index": 1
       }
@@ -202,46 +202,46 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "jianlin.battle.result",
-        "target_name": "jianlin.battle.result.close"
+        "page_name": "剑林凝结体体力-剑林-战斗-结果",
+        "target_name": "剑林凝结体体力-剑林-战斗结果关闭"
       }
     },
     "next": [
-      "MJA_JIANLIN_HOME_PROBE",
-      "MJA_JIANLIN_RESUME_PAGE_PROBE",
-      "MJA_JIANLIN_DAILY_PAGE_PROBE"
+      "剑林凝结体体力-主页-探测",
+      "剑林凝结体体力-恢复继续-页面-探测",
+      "剑林凝结体体力-日常-页面-探测"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_RING_PAGE_TITLE": {
+  "剑林凝结体体力-擂台-页面-标题": {
     "recognition": "OCR",
     "expected": "擂台",
     "roi": [0, 0, 1280, 180],
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "MJA_JIANLIN_RING_PAGE_PROBE": {
+  "剑林凝结体体力-擂台-页面-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["MJA_JIANLIN_RING_PAGE_TITLE", "MJA_JIANLIN_RING_PAGE_CLOSE_ICON"],
+        "all_of": ["剑林凝结体体力-擂台-页面-标题", "剑林凝结体体力-擂台-页面-关闭-图标"],
         "box_index": 1
       }
     },
     "timeout": 8000,
     "max_hit": 1,
     "action": "DoNothing",
-    "next": ["MJA_JIANLIN_RING_PAGE_CLOSE"],
-    "on_error": ["MJA_JIANLIN_HOME_PROBE"],
+    "next": ["剑林凝结体体力-擂台-页面-关闭"],
+    "on_error": ["剑林凝结体体力-主页-探测"],
     "retry_times": 0
   },
-  "MJA_JIANLIN_RING_PAGE_CLOSE": {
+  "剑林凝结体体力-擂台-页面-关闭": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["MJA_JIANLIN_RING_PAGE_TITLE", "MJA_JIANLIN_RING_PAGE_CLOSE_ICON"],
+        "all_of": ["剑林凝结体体力-擂台-页面-标题", "剑林凝结体体力-擂台-页面-关闭-图标"],
         "box_index": 1
       }
     },
@@ -256,16 +256,16 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "MJA_JIANLIN_RING_PAGE_TITLE",
-        "target_name": "MJA_JIANLIN_RING_PAGE_CLOSE_ICON"
+        "page_name": "剑林凝结体体力-擂台-页面-标题",
+        "target_name": "剑林凝结体体力-擂台-页面-关闭-图标"
       }
     },
     "post_delay": 1000,
-    "next": ["MJA_JIANLIN_HOME_PROBE"],
-    "on_error": ["MJA_JIANLIN_RECORD_FAILURE"],
+    "next": ["剑林凝结体体力-主页-探测"],
+    "on_error": ["剑林凝结体体力-记录-失败"],
     "retry_times": 0
   },
-  "MJA_JIANLIN_RING_PAGE_CLOSE_ICON": {
+  "剑林凝结体体力-擂台-页面-关闭-图标": {
     "recognition": "ColorMatch",
     "lower": [0, 0, 0],
     "upper": [125, 125, 125],
@@ -274,32 +274,32 @@
     "count": 180,
     "action": "DoNothing"
   },
-  "MJA_JIANLIN_HOME_PROBE": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_HOME_PAGE"], "box_index": 0}},
+  "剑林凝结体体力-主页-探测": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}},
     "timeout": 8000,
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_OPEN_FUNCTION_PANEL"
+      "剑林凝结体体力-打开-功能-面板"
     ],
     "on_error": [
-      "MJA_JIANLIN_GAME_START_RECOVERY",
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-游戏启动恢复",
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_FUNCTION_PANEL_CLOSE_PROBE": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_SIDE_PANEL_OPEN"], "box_index": 0}},
+  "剑林凝结体体力-功能-面板-关闭-探测": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏侧边面板-打开"], "box_index": 0}},
     "timeout": 8000,
     "max_hit": 1,
     "action": "DoNothing",
-    "next": ["MJA_JIANLIN_PANEL_CLOSE"],
-    "on_error": ["MJA_JIANLIN_RECORD_FAILURE"],
+    "next": ["剑林凝结体体力-面板-关闭"],
+    "on_error": ["剑林凝结体体力-记录-失败"],
     "retry_times": 0
   },
-  "MJA_JIANLIN_PANEL_CLOSE": {
+  "剑林凝结体体力-面板-关闭": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["MJA_KNOWN_PANEL_MARKER", "MJA_KNOWN_PANEL_CLOSE"],
+        "all_of": ["公共-已知-面板-标记", "公共-已知-面板-关闭"],
         "box_index": 1
       }
     },
@@ -315,22 +315,22 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "MJA_KNOWN_PANEL_MARKER",
-        "target_name": "MJA_KNOWN_PANEL_CLOSE"
+        "page_name": "公共-已知-面板-标记",
+        "target_name": "公共-已知-面板-关闭"
       }
     },
     "post_delay": 1000,
-    "next": ["MJA_JIANLIN_HOME_PROBE"],
-    "on_error": ["MJA_JIANLIN_RECORD_FAILURE"],
+    "next": ["剑林凝结体体力-主页-探测"],
+    "on_error": ["剑林凝结体体力-记录-失败"],
     "retry_times": 0
   },
-  "MJA_JIANLIN_SHADOW_PAGE_PROBE": {
+  "剑林凝结体体力-影-页面-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.foreign.shadow.page",
-          "jianlin.foreign.page.close"
+          "剑林凝结体体力-剑林-外部-影-页面",
+          "剑林凝结体体力-剑林-外部-页面-关闭"
         ],
         "box_index": 1
       }
@@ -341,19 +341,19 @@
     "post_delay": 1000,
     "retry_times": 0,
     "next": [
-      "MJA_JIANLIN_HOME_PROBE"
+      "剑林凝结体体力-主页-探测"
     ],
     "on_error": [
-      "MJA_JIANLIN_GAME_START_RECOVERY_FAILED"
+      "剑林凝结体体力-游戏启动恢复失败"
     ]
   },
-  "MJA_JIANLIN_DUNGEON_PAGE_PROBE": {
+  "剑林凝结体体力-副本-页面-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "dungeon.page",
-          "dungeon.close"
+          "副本扫荡-副本-页面",
+          "副本扫荡-副本-关闭"
         ],
         "box_index": 1
       }
@@ -364,13 +364,13 @@
     "post_delay": 1000,
     "retry_times": 0,
     "next": [
-      "MJA_JIANLIN_HOME_PROBE"
+      "剑林凝结体体力-主页-探测"
     ],
     "on_error": [
-      "MJA_JIANLIN_GAME_START_RECOVERY_FAILED"
+      "剑林凝结体体力-游戏启动恢复失败"
     ]
   },
-  "MJA_JIANLIN_GAME_START_RECOVERY": {
+  "剑林凝结体体力-游戏启动恢复": {
     "recognition": "DirectHit",
     "max_hit": 1,
     "timeout": 120000,
@@ -379,16 +379,16 @@
     "post_delay": 30000,
     "retry_times": 0,
     "next": [
-      "MJA_JIANLIN_RECOVERY_ANNOUNCEMENT",
-      "MJA_JIANLIN_RECOVERY_TITLE",
-      "MJA_JIANLIN_RECOVERY_TITLE_TEMPLATE",
-      "MJA_JIANLIN_RECOVERY_STATE_PROBE"
+      "剑林凝结体体力-恢复-公告",
+      "剑林凝结体体力-恢复-标题",
+      "剑林凝结体体力-恢复-标题-模板",
+      "剑林凝结体体力-恢复-状态-探测"
     ],
     "on_error": [
-      "MJA_JIANLIN_GAME_START_RECOVERY_FAILED"
+      "剑林凝结体体力-游戏启动恢复失败"
     ]
   },
-  "MJA_JIANLIN_RECOVERY_ANNOUNCEMENT": {
+  "剑林凝结体体力-恢复-公告": {
     "recognition": "OCR",
     "expected": ["公告", "公告说明", "版本更新"],
     "roi": [0, 0, 1280, 720],
@@ -396,11 +396,11 @@
     "action": "Click",
     "target": [1048, 125, 60, 50],
     "post_delay": 1000,
-    "next": ["MJA_JIANLIN_RECOVERY_STATE_PROBE"],
+    "next": ["剑林凝结体体力-恢复-状态-探测"],
     "on_error": [],
     "retry_times": 0
   },
-  "MJA_JIANLIN_RECOVERY_TITLE": {
+  "剑林凝结体体力-恢复-标题": {
     "recognition": "OCR",
     "expected": ["点击开始游戏", "点击开始游戏！", "点击开始游戏!", "进入游戏"],
     "roi": [350, 540, 580, 170],
@@ -408,10 +408,10 @@
     "action": "Click",
     "max_hit": 1,
     "post_delay": 500,
-    "next": ["MJA_JIANLIN_RECOVERY_STATE_PROBE"],
+    "next": ["剑林凝结体体力-恢复-状态-探测"],
     "on_error": []
   },
-  "MJA_JIANLIN_RECOVERY_TITLE_TEMPLATE": {
+  "剑林凝结体体力-恢复-标题-模板": {
     "recognition": "TemplateMatch",
     "template": "home/start_game_button.png",
     "roi": [560, 638, 180, 45],
@@ -420,26 +420,26 @@
     "action": "Click",
     "max_hit": 1,
     "post_delay": 500,
-    "next": ["MJA_JIANLIN_RECOVERY_STATE_PROBE"],
+    "next": ["剑林凝结体体力-恢复-状态-探测"],
     "on_error": []
   },
-  "MJA_JIANLIN_RECOVERY_STATE_PROBE": {
+  "剑林凝结体体力-恢复-状态-探测": {
     "recognition": "DirectHit",
     "action": "DoNothing",
     "timeout": 30000,
     "next": [
-      "MJA_JIANLIN_FUNCTION_PANEL_CLOSE_PROBE",
-      "MJA_JIANLIN_RECOVERY_SHADOW_PAGE_PROBE",
-      "MJA_JIANLIN_RESUME_RESULT_PROBE",
-      "MJA_JIANLIN_BATTLE_PAGE_PROBE",
-      "MJA_JIANLIN_RING_PAGE_PROBE",
-      "MJA_JIANLIN_HOME_PROBE",
-      "MJA_JIANLIN_RESUME_PAGE_PROBE",
-      "MJA_JIANLIN_DAILY_PAGE_PROBE"
+      "剑林凝结体体力-功能-面板-关闭-探测",
+      "剑林凝结体体力-恢复-影-页面-探测",
+      "剑林凝结体体力-恢复继续-结果-探测",
+      "剑林凝结体体力-战斗-页面-探测",
+      "剑林凝结体体力-擂台-页面-探测",
+      "剑林凝结体体力-主页-探测",
+      "剑林凝结体体力-恢复继续-页面-探测",
+      "剑林凝结体体力-日常-页面-探测"
     ],
-    "on_error": ["MJA_JIANLIN_GAME_START_RECOVERY_RELAUNCH"]
+    "on_error": ["剑林凝结体体力-游戏启动恢复-重新启动"]
   },
-  "MJA_JIANLIN_GAME_START_RECOVERY_RELAUNCH": {
+  "剑林凝结体体力-游戏启动恢复-重新启动": {
     "recognition": "DirectHit",
     "max_hit": 2,
     "timeout": 120000,
@@ -448,19 +448,19 @@
     "post_delay": 30000,
     "retry_times": 0,
     "next": [
-      "MJA_JIANLIN_RECOVERY_ANNOUNCEMENT",
-      "MJA_JIANLIN_RECOVERY_TITLE",
-      "MJA_JIANLIN_RECOVERY_TITLE_TEMPLATE",
-      "MJA_JIANLIN_RECOVERY_STATE_PROBE"
+      "剑林凝结体体力-恢复-公告",
+      "剑林凝结体体力-恢复-标题",
+      "剑林凝结体体力-恢复-标题-模板",
+      "剑林凝结体体力-恢复-状态-探测"
     ],
-    "on_error": ["MJA_JIANLIN_GAME_START_RECOVERY_FAILED"]
+    "on_error": ["剑林凝结体体力-游戏启动恢复失败"]
   },
-  "MJA_JIANLIN_RECOVERY_SHADOW_PAGE_PROBE": {
+  "剑林凝结体体力-恢复-影-页面-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.foreign.shadow.page"
+          "剑林凝结体体力-剑林-外部-影-页面"
         ],
         "box_index": 0
       }
@@ -468,13 +468,13 @@
     "timeout": 8000,
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_GAME_START_RECOVERY_FAILED"
+      "剑林凝结体体力-游戏启动恢复失败"
     ],
     "on_error": [
-      "MJA_JIANLIN_GAME_START_RECOVERY_FAILED"
+      "剑林凝结体体力-游戏启动恢复失败"
     ]
   },
-  "MJA_JIANLIN_GAME_START_RECOVERY_FAILED": {
+  "剑林凝结体体力-游戏启动恢复失败": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -487,15 +487,15 @@
     },
     "Abort": true,
     "next": [
-      "MJA_COMMON_ABORT"
+      "公共-通用中止"
     ]
   },
-  "MJA_JIANLIN_RESUME_PAGE_PROBE": {
+  "剑林凝结体体力-恢复继续-页面-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page"
+          "剑林凝结体体力-剑林-页面"
         ],
         "box_index": 0
       }
@@ -503,19 +503,19 @@
     "timeout": 8000,
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_PAGE_ROUTE"
+      "剑林凝结体体力-页面-路线"
     ],
     "on_error": [
-      "MJA_JIANLIN_DAILY_PAGE_PROBE"
+      "剑林凝结体体力-日常-页面-探测"
     ]
   },
-  "MJA_JIANLIN_OPEN_FUNCTION_PANEL": {
+  "剑林凝结体体力-打开-功能-面板": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.home.page",
-          "jianlin.panel.open"
+          "剑林凝结体体力-剑林-主页-页面",
+          "剑林凝结体体力-剑林-面板-打开"
         ],
         "box_index": 1
       }
@@ -529,35 +529,35 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "jianlin.home.page",
-        "target_name": "jianlin.panel.open"
+        "page_name": "剑林凝结体体力-剑林-主页-页面",
+        "target_name": "剑林凝结体体力-剑林-面板-打开"
       }
     },
     "next": [
-      "MJA_JIANLIN_PANEL_PROBE"
+      "剑林凝结体体力-面板-探测"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_PANEL_PROBE": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_SIDE_PANEL_OPEN"], "box_index": 0}},
+  "剑林凝结体体力-面板-探测": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏侧边面板-打开"], "box_index": 0}},
     "timeout": 8000,
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_OPEN_DAILY_TASKS"
+      "剑林凝结体体力-打开-日常-任务"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_OPEN_DAILY_TASKS": {
+  "剑林凝结体体力-打开-日常-任务": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.panel.page",
-          "jianlin.daily.entry"
+          "剑林凝结体体力-剑林-面板-页面",
+          "剑林凝结体体力-剑林-日常-入口"
         ],
         "box_index": 1
       }
@@ -571,18 +571,18 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "jianlin.panel.page",
-        "target_name": "jianlin.daily.entry"
+        "page_name": "剑林凝结体体力-剑林-面板-页面",
+        "target_name": "剑林凝结体体力-剑林-日常-入口"
       }
     },
     "next": [
-      "MJA_JIANLIN_DAILY_PAGE_PROBE"
+      "剑林凝结体体力-日常-页面-探测"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_DAILY_PAGE_PROBE": {
+  "剑林凝结体体力-日常-页面-探测": {
     "recognition": "OCR",
     "expected": [
       "日常",
@@ -597,39 +597,39 @@
     "timeout": 8000,
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_DAILY_ROW_PROBE",
-      "MJA_JIANLIN_SCROLL_DAILY_JIANLIN"
+      "剑林凝结体体力-日常-行-探测",
+      "剑林凝结体体力-滚动-日常-剑林"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_DAILY_ROW_PROBE": {
+  "剑林凝结体体力-日常-行-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.daily.page",
-          "jianlin.daily.row"
+          "剑林凝结体体力-剑林-日常-页面",
+          "剑林凝结体体力-剑林-日常-行"
         ],
         "box_index": 1
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_OPEN_JIANLIN"
+      "剑林凝结体体力-打开-剑林"
     ],
     "on_error": [
-      "MJA_JIANLIN_SCROLL_DAILY_JIANLIN"
+      "剑林凝结体体力-滚动-日常-剑林"
     ]
   },
-  "MJA_JIANLIN_SCROLL_DAILY_JIANLIN": {
+  "剑林凝结体体力-滚动-日常-剑林": {
     "max_hit": 3,
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.daily.page"
+          "剑林凝结体体力-剑林-日常-页面"
         ],
         "box_index": 0
       }
@@ -644,7 +644,7 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "jianlin.daily.page",
+        "page_name": "剑林凝结体体力-剑林-日常-页面",
         "target_name": "jianlin.daily.scroll",
         "dx": 0,
         "dy": -260,
@@ -652,13 +652,13 @@
       }
     },
     "next": [
-      "MJA_JIANLIN_DAILY_PAGE_AFTER_SCROLL"
+      "剑林凝结体体力-日常-页面-之后-滚动"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_DAILY_PAGE_AFTER_SCROLL": {
+  "剑林凝结体体力-日常-页面-之后-滚动": {
     "recognition": "OCR",
     "expected": [
       "日常",
@@ -673,20 +673,20 @@
     "timeout": 8000,
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_DAILY_ROW_PROBE",
-      "MJA_JIANLIN_SCROLL_DAILY_JIANLIN"
+      "剑林凝结体体力-日常-行-探测",
+      "剑林凝结体体力-滚动-日常-剑林"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_OPEN_JIANLIN": {
+  "剑林凝结体体力-打开-剑林": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.daily.page",
-          "jianlin.entry"
+          "剑林凝结体体力-剑林-日常-页面",
+          "剑林凝结体体力-剑林-入口"
         ],
         "box_index": 1
       }
@@ -700,23 +700,23 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "jianlin.daily.page",
-        "target_name": "jianlin.entry"
+        "page_name": "剑林凝结体体力-剑林-日常-页面",
+        "target_name": "剑林凝结体体力-剑林-入口"
       }
     },
     "next": [
-      "MJA_JIANLIN_PAGE_PROBE"
+      "剑林凝结体体力-页面-探测"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_PAGE_PROBE": {
+  "剑林凝结体体力-页面-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page"
+          "剑林凝结体体力-剑林-页面"
         ],
         "box_index": 0
       }
@@ -724,18 +724,18 @@
     "timeout": 8000,
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_SELECT_CONDENSATE"
+      "剑林凝结体体力-选择-凝结体"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_PAGE_ROUTE": {
+  "剑林凝结体体力-页面-路线": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page"
+          "剑林凝结体体力-剑林-页面"
         ],
         "box_index": 0
       }
@@ -743,38 +743,38 @@
     "timeout": 8000,
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_SELECT_CONDENSATE"
+      "剑林凝结体体力-选择-凝结体"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SELECTED_PROBE": {
+  "剑林凝结体体力-已选择-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.condensate.selected"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-凝结体-已选择"
         ],
         "box_index": 1
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_PURCHASE_OR_CHALLENGE_PROBE"
+      "剑林凝结体体力-购买-或-挑战-探测"
     ],
     "on_error": [
-      "MJA_JIANLIN_SELECT_CONDENSATE"
+      "剑林凝结体体力-选择-凝结体"
     ]
   },
-  "MJA_JIANLIN_SELECT_CONDENSATE": {
+  "剑林凝结体体力-选择-凝结体": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.condensate.resource"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-凝结体-资源"
         ],
         "box_index": 1
       }
@@ -788,86 +788,86 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.condensate.resource"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-凝结体-资源"
       }
     },
     "next": [
-      "MJA_JIANLIN_SELECTED_VERIFY"
+      "剑林凝结体体力-已选择-校验"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SELECTED_VERIFY": {
+  "剑林凝结体体力-已选择-校验": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.condensate.resource",
-          "jianlin.challenge.button"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-凝结体-资源",
+          "剑林凝结体体力-剑林-挑战-按钮"
         ],
         "box_index": 1
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_STAMINA_BELOW_20_PROBE"
+      "剑林凝结体体力-体力-以下-20-探测"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_STAMINA_BELOW_20_PROBE": {
+  "剑林凝结体体力-体力-以下-20-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.stamina.current",
-          "jianlin.stamina.below_20"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-体力-当前",
+          "剑林凝结体体力-剑林-体力-以下-20"
         ],
         "box_index": 1
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_STAMINA_BELOW_20_SUCCESS"
+      "剑林凝结体体力-体力-以下-20-成功"
     ],
     "on_error": [
-      "MJA_JIANLIN_PURCHASE_OR_CHALLENGE_PROBE"
+      "剑林凝结体体力-购买-或-挑战-探测"
     ]
   },
-  "MJA_JIANLIN_PURCHASE_OR_CHALLENGE_PROBE": {
+  "剑林凝结体体力-购买-或-挑战-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.condensate.resource",
-          "jianlin.stamina.current",
-          "jianlin.challenge.button"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-凝结体-资源",
+          "剑林凝结体体力-剑林-体力-当前",
+          "剑林凝结体体力-剑林-挑战-按钮"
         ],
         "box_index": 3
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_CHALLENGE_LOOP"
+      "剑林凝结体体力-挑战-循环"
     ],
     "on_error": [
-      "MJA_JIANLIN_OPEN_STAMINA_PURCHASE"
+      "剑林凝结体体力-打开-体力-购买"
     ]
   },
-  "MJA_JIANLIN_OPEN_STAMINA_PURCHASE": {
+  "剑林凝结体体力-打开-体力-购买": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.condensate.resource",
-          "jianlin.stamina.plus"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-凝结体-资源",
+          "剑林凝结体体力-剑林-体力-加号"
         ],
         "box_index": 2
       }
@@ -881,18 +881,18 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.stamina.plus"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-体力-加号"
       }
     },
     "next": [
-      "MJA_JIANLIN_STAMINA_PURCHASE_PROBE"
+      "剑林凝结体体力-体力-购买-探测"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_STAMINA_PURCHASE_PROBE": {
+  "剑林凝结体体力-体力-购买-探测": {
     "recognition": "OCR",
     "expected": [
       "补充体力",
@@ -907,22 +907,22 @@
     "timeout": 8000,
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_BUY_STAMINA_ONCE"
+      "剑林凝结体体力-购买-体力-一次"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_BUY_STAMINA_ONCE": {
+  "剑林凝结体体力-购买-体力-一次": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.stamina.purchase.prompt",
-          "jianlin.stamina.plus80",
-          "jianlin.stamina.resource",
-          "jianlin.stamina.price10",
-          "jianlin.stamina.purchase.confirm"
+          "剑林凝结体体力-剑林-体力-购买-提示",
+          "剑林凝结体体力-剑林-体力-加号80",
+          "剑林凝结体体力-剑林-体力-资源",
+          "剑林凝结体体力-剑林-体力-价格10",
+          "剑林凝结体体力-剑林-体力-购买-确认"
         ],
         "box_index": 4
       }
@@ -941,49 +941,49 @@
       "evidence": {
         "page_index": 0,
         "target_index": 4,
-        "page_name": "jianlin.stamina.purchase.prompt",
-        "target_name": "jianlin.stamina.purchase.confirm"
+        "page_name": "剑林凝结体体力-剑林-体力-购买-提示",
+        "target_name": "剑林凝结体体力-剑林-体力-购买-确认"
       }
     },
     "next": [
-      "MJA_JIANLIN_STAMINA_CONFIRMATION_PROBE"
+      "剑林凝结体体力-体力-确认弹窗-探测"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_STAMINA_CONFIRMATION_PROBE": {
+  "剑林凝结体体力-体力-确认弹窗-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.stamina.confirmation.prompt",
-          "jianlin.stamina.confirmation.resource",
-          "jianlin.stamina.confirmation.price10",
-          "jianlin.stamina.confirmation.amount80",
-          "jianlin.stamina.confirmation.confirm"
+          "剑林凝结体体力-剑林-体力-确认弹窗-提示",
+          "剑林凝结体体力-剑林-体力-确认弹窗-资源",
+          "剑林凝结体体力-剑林-体力-确认弹窗-价格10",
+          "剑林凝结体体力-剑林-体力-确认弹窗-数量80",
+          "剑林凝结体体力-剑林-体力-确认弹窗-确认"
         ],
         "box_index": 4
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_CONFIRM_STAMINA_PURCHASE"
+      "剑林凝结体体力-确认-体力-购买"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_CONFIRM_STAMINA_PURCHASE": {
+  "剑林凝结体体力-确认-体力-购买": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.stamina.confirmation.prompt",
-          "jianlin.stamina.confirmation.resource",
-          "jianlin.stamina.confirmation.price10",
-          "jianlin.stamina.confirmation.amount80",
-          "jianlin.stamina.confirmation.confirm"
+          "剑林凝结体体力-剑林-体力-确认弹窗-提示",
+          "剑林凝结体体力-剑林-体力-确认弹窗-资源",
+          "剑林凝结体体力-剑林-体力-确认弹窗-价格10",
+          "剑林凝结体体力-剑林-体力-确认弹窗-数量80",
+          "剑林凝结体体力-剑林-体力-确认弹窗-确认"
         ],
         "box_index": 4
       }
@@ -997,43 +997,43 @@
       "evidence": {
         "page_index": 0,
         "target_index": 4,
-        "page_name": "jianlin.stamina.confirmation.prompt",
-        "target_name": "jianlin.stamina.confirmation.confirm"
+        "page_name": "剑林凝结体体力-剑林-体力-确认弹窗-提示",
+        "target_name": "剑林凝结体体力-剑林-体力-确认弹窗-确认"
       }
     },
     "next": [
-      "MJA_JIANLIN_STAMINA_RESULT_PROBE"
+      "剑林凝结体体力-体力-结果-探测"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_STAMINA_RESULT_PROBE": {
+  "剑林凝结体体力-体力-结果-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.stamina.result",
-          "jianlin.stamina.result.close"
+          "剑林凝结体体力-剑林-体力-结果",
+          "剑林凝结体体力-剑林-体力-结果-关闭"
         ],
         "box_index": 1
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_DISMISS_STAMINA_RESULT"
+      "剑林凝结体体力-关闭-体力-结果"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_DISMISS_STAMINA_RESULT": {
+  "剑林凝结体体力-关闭-体力-结果": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.stamina.result",
-          "jianlin.stamina.result.close"
+          "剑林凝结体体力-剑林-体力-结果",
+          "剑林凝结体体力-剑林-体力-结果-关闭"
         ],
         "box_index": 1
       }
@@ -1047,63 +1047,63 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "jianlin.stamina.result",
-        "target_name": "jianlin.stamina.result.close"
+        "page_name": "剑林凝结体体力-剑林-体力-结果",
+        "target_name": "剑林凝结体体力-剑林-体力-结果-关闭"
       }
     },
     "next": [
-      "MJA_JIANLIN_POSTPURCHASE_PROBE"
+      "剑林凝结体体力-购买后-探测"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_POSTPURCHASE_PROBE": {
+  "剑林凝结体体力-购买后-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.stamina.purchase.prompt",
-          "jianlin.stamina.price50",
-          "jianlin.stamina.postpurchase.close"
+          "剑林凝结体体力-剑林-体力-购买-提示",
+          "剑林凝结体体力-剑林-体力-价格50",
+          "剑林凝结体体力-剑林-体力-购买后-关闭"
         ],
         "box_index": 1
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_SECOND_OFFER"
+      "剑林凝结体体力-第二次-优惠"
     ],
     "on_error": [
-      "MJA_JIANLIN_POSTPURCHASE_SAFE_CLOSE_PROBE"
+      "剑林凝结体体力-购买后-安全-关闭-探测"
     ]
   },
-  "MJA_JIANLIN_POSTPURCHASE_SAFE_CLOSE_PROBE": {
+  "剑林凝结体体力-购买后-安全-关闭-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.stamina.postpurchase.prompt",
-          "jianlin.stamina.postpurchase.close"
+          "剑林凝结体体力-剑林-体力-购买后-提示",
+          "剑林凝结体体力-剑林-体力-购买后-关闭"
         ],
         "box_index": 1
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_SECOND_OFFER"
+      "剑林凝结体体力-第二次-优惠"
     ],
     "on_error": [
-      "MJA_JIANLIN_CHALLENGE_LOOP"
+      "剑林凝结体体力-挑战-循环"
     ]
   },
-  "MJA_JIANLIN_CLOSE_POSTPURCHASE": {
+  "剑林凝结体体力-关闭-购买后": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.stamina.postpurchase.prompt",
-          "jianlin.stamina.postpurchase.close"
+          "剑林凝结体体力-剑林-体力-购买后-提示",
+          "剑林凝结体体力-剑林-体力-购买后-关闭"
         ],
         "box_index": 1
       }
@@ -1117,48 +1117,48 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "jianlin.stamina.postpurchase.prompt",
-        "target_name": "jianlin.stamina.postpurchase.close"
+        "page_name": "剑林凝结体体力-剑林-体力-购买后-提示",
+        "target_name": "剑林凝结体体力-剑林-体力-购买后-关闭"
       }
     },
     "next": [
-      "MJA_JIANLIN_POSTPURCHASE_PAGE_PROBE"
+      "剑林凝结体体力-购买后-页面-探测"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_POSTPURCHASE_PAGE_PROBE": {
+  "剑林凝结体体力-购买后-页面-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.stamina.current"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-体力-当前"
         ],
         "box_index": 1
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_CHALLENGE_LOOP"
+      "剑林凝结体体力-挑战-循环"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_CHALLENGE_LOOP": {
+  "剑林凝结体体力-挑战-循环": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.stamina.current",
-          "jianlin.stamina.cost.value",
-          "jianlin.count.max",
-          "jianlin.count.selected",
-          "jianlin.multiplier.selected",
-          "jianlin.challenge.button"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-体力-当前",
+          "剑林凝结体体力-剑林-体力-消耗-数值",
+          "剑林凝结体体力-剑林-次数-最大",
+          "剑林凝结体体力-剑林-次数-已选择",
+          "剑林凝结体体力-剑林-倍率-已选择",
+          "剑林凝结体体力-剑林-挑战-按钮"
         ],
         "box_index": 6
       }
@@ -1166,46 +1166,46 @@
     "action": "DoNothing",
     "max_hit": 12,
     "next": [
-      "MJA_JIANLIN_STAMINA_BELOW_20_PROBE",
-      "MJA_JIANLIN_INSUFFICIENT_PROBE",
-      "MJA_JIANLIN_PLAN"
+      "剑林凝结体体力-体力-以下-20-探测",
+      "剑林凝结体体力-不足-探测",
+      "剑林凝结体体力-计划"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_INSUFFICIENT_PROBE": {
+  "剑林凝结体体力-不足-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.stamina.current",
-          "jianlin.stamina.insufficient"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-体力-当前",
+          "剑林凝结体体力-剑林-体力-不足"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_STAMINA_BELOW_20_SUCCESS"
+      "剑林凝结体体力-体力-以下-20-成功"
     ],
     "on_error": [
-      "MJA_JIANLIN_PLAN"
+      "剑林凝结体体力-计划"
     ]
   },
-  "MJA_JIANLIN_PLAN": {
+  "剑林凝结体体力-计划": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.stamina.current",
-          "jianlin.stamina.cost.value",
-          "jianlin.count.max",
-          "jianlin.count.selected",
-          "jianlin.multiplier.selected",
-          "jianlin.challenge.button"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-体力-当前",
+          "剑林凝结体体力-剑林-体力-消耗-数值",
+          "剑林凝结体体力-剑林-次数-最大",
+          "剑林凝结体体力-剑林-次数-已选择",
+          "剑林凝结体体力-剑林-倍率-已选择",
+          "剑林凝结体体力-剑林-挑战-按钮"
         ],
         "box_index": 6
       }
@@ -1213,7 +1213,7 @@
     "action": "Custom",
     "custom_action": "PlanJianlinChallenge",
     "custom_action_param": {
-      "dispatch_node": "MJA_JIANLIN_PLAN_DISPATCH",
+      "dispatch_node": "剑林凝结体体力-计划-派遣",
       "stamina_index": 1,
       "cost_index": 2,
       "visible_max_index": 3,
@@ -1222,20 +1222,20 @@
       "max_total_cost": 360
     },
     "next": [
-      "MJA_JIANLIN_PLAN_DISPATCH"
+      "剑林凝结体体力-计划-派遣"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_COUNT_COUNT_1_MULTIPLIER_1": {
+  "剑林凝结体体力-设置-次数-次数-1-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.bar",
-          "jianlin.count.option.1"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-条",
+          "剑林凝结体体力-剑林-次数-选项-1"
         ],
         "box_index": 2
       }
@@ -1249,45 +1249,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.count.option.1"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-次数-选项-1"
       }
     },
     "next": [
-      "MJA_JIANLIN_COUNT_VERIFY_COUNT_1_MULTIPLIER_1"
+      "剑林凝结体体力-次数-校验-次数-1-倍率-1"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_COUNT_VERIFY_COUNT_1_MULTIPLIER_1": {
+  "剑林凝结体体力-次数-校验-次数-1-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.selected",
-          "jianlin.count.option.1"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-已选择",
+          "剑林凝结体体力-剑林-次数-选项-1"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_SET_MULTIPLIER_COUNT_1_MULTIPLIER_1"
+      "剑林凝结体体力-设置-倍率-次数-1-倍率-1"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_MULTIPLIER_COUNT_1_MULTIPLIER_1": {
+  "剑林凝结体体力-设置-倍率-次数-1-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.bar",
-          "jianlin.multiplier.1"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-条",
+          "剑林凝结体体力-剑林-倍率-1"
         ],
         "box_index": 2
       }
@@ -1301,45 +1301,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.multiplier.1"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-倍率-1"
       }
     },
     "next": [
-      "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_1_MULTIPLIER_1"
+      "剑林凝结体体力-倍率-校验-次数-1-倍率-1"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_1_MULTIPLIER_1": {
+  "剑林凝结体体力-倍率-校验-次数-1-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.selected",
-          "jianlin.multiplier.1"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-已选择",
+          "剑林凝结体体力-剑林-倍率-1"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_CHALLENGE_CONDENSATE"
+      "剑林凝结体体力-挑战-凝结体"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_COUNT_COUNT_1_MULTIPLIER_2": {
+  "剑林凝结体体力-设置-次数-次数-1-倍率-2": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.bar",
-          "jianlin.count.option.1"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-条",
+          "剑林凝结体体力-剑林-次数-选项-1"
         ],
         "box_index": 2
       }
@@ -1353,45 +1353,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.count.option.1"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-次数-选项-1"
       }
     },
     "next": [
-      "MJA_JIANLIN_COUNT_VERIFY_COUNT_1_MULTIPLIER_2"
+      "剑林凝结体体力-次数-校验-次数-1-倍率-2"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_COUNT_VERIFY_COUNT_1_MULTIPLIER_2": {
+  "剑林凝结体体力-次数-校验-次数-1-倍率-2": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.selected",
-          "jianlin.count.option.1"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-已选择",
+          "剑林凝结体体力-剑林-次数-选项-1"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_SET_MULTIPLIER_COUNT_1_MULTIPLIER_2"
+      "剑林凝结体体力-设置-倍率-次数-1-倍率-2"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_MULTIPLIER_COUNT_1_MULTIPLIER_2": {
+  "剑林凝结体体力-设置-倍率-次数-1-倍率-2": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.bar",
-          "jianlin.multiplier.2"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-条",
+          "剑林凝结体体力-剑林-倍率-2"
         ],
         "box_index": 2
       }
@@ -1405,45 +1405,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.multiplier.2"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-倍率-2"
       }
     },
     "next": [
-      "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_1_MULTIPLIER_2"
+      "剑林凝结体体力-倍率-校验-次数-1-倍率-2"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_1_MULTIPLIER_2": {
+  "剑林凝结体体力-倍率-校验-次数-1-倍率-2": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.selected",
-          "jianlin.multiplier.2"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-已选择",
+          "剑林凝结体体力-剑林-倍率-2"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_CHALLENGE_CONDENSATE"
+      "剑林凝结体体力-挑战-凝结体"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_COUNT_COUNT_1_MULTIPLIER_3": {
+  "剑林凝结体体力-设置-次数-次数-1-倍率-3": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.bar",
-          "jianlin.count.option.1"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-条",
+          "剑林凝结体体力-剑林-次数-选项-1"
         ],
         "box_index": 2
       }
@@ -1457,45 +1457,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.count.option.1"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-次数-选项-1"
       }
     },
     "next": [
-      "MJA_JIANLIN_COUNT_VERIFY_COUNT_1_MULTIPLIER_3"
+      "剑林凝结体体力-次数-校验-次数-1-倍率-3"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_COUNT_VERIFY_COUNT_1_MULTIPLIER_3": {
+  "剑林凝结体体力-次数-校验-次数-1-倍率-3": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.selected",
-          "jianlin.count.option.1"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-已选择",
+          "剑林凝结体体力-剑林-次数-选项-1"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_SET_MULTIPLIER_COUNT_1_MULTIPLIER_3"
+      "剑林凝结体体力-设置-倍率-次数-1-倍率-3"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_MULTIPLIER_COUNT_1_MULTIPLIER_3": {
+  "剑林凝结体体力-设置-倍率-次数-1-倍率-3": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.bar",
-          "jianlin.multiplier.3"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-条",
+          "剑林凝结体体力-剑林-倍率-3"
         ],
         "box_index": 2
       }
@@ -1509,45 +1509,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.multiplier.3"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-倍率-3"
       }
     },
     "next": [
-      "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_1_MULTIPLIER_3"
+      "剑林凝结体体力-倍率-校验-次数-1-倍率-3"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_1_MULTIPLIER_3": {
+  "剑林凝结体体力-倍率-校验-次数-1-倍率-3": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.selected",
-          "jianlin.multiplier.3"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-已选择",
+          "剑林凝结体体力-剑林-倍率-3"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_CHALLENGE_CONDENSATE"
+      "剑林凝结体体力-挑战-凝结体"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_COUNT_COUNT_2_MULTIPLIER_1": {
+  "剑林凝结体体力-设置-次数-次数-2-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.bar",
-          "jianlin.count.option.2"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-条",
+          "剑林凝结体体力-剑林-次数-选项-2"
         ],
         "box_index": 2
       }
@@ -1561,45 +1561,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.count.option.2"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-次数-选项-2"
       }
     },
     "next": [
-      "MJA_JIANLIN_COUNT_VERIFY_COUNT_2_MULTIPLIER_1"
+      "剑林凝结体体力-次数-校验-次数-2-倍率-1"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_COUNT_VERIFY_COUNT_2_MULTIPLIER_1": {
+  "剑林凝结体体力-次数-校验-次数-2-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.selected",
-          "jianlin.count.option.2"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-已选择",
+          "剑林凝结体体力-剑林-次数-选项-2"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_SET_MULTIPLIER_COUNT_2_MULTIPLIER_1"
+      "剑林凝结体体力-设置-倍率-次数-2-倍率-1"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_MULTIPLIER_COUNT_2_MULTIPLIER_1": {
+  "剑林凝结体体力-设置-倍率-次数-2-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.bar",
-          "jianlin.multiplier.1"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-条",
+          "剑林凝结体体力-剑林-倍率-1"
         ],
         "box_index": 2
       }
@@ -1613,45 +1613,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.multiplier.1"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-倍率-1"
       }
     },
     "next": [
-      "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_2_MULTIPLIER_1"
+      "剑林凝结体体力-倍率-校验-次数-2-倍率-1"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_2_MULTIPLIER_1": {
+  "剑林凝结体体力-倍率-校验-次数-2-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.selected",
-          "jianlin.multiplier.1"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-已选择",
+          "剑林凝结体体力-剑林-倍率-1"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_CHALLENGE_CONDENSATE"
+      "剑林凝结体体力-挑战-凝结体"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_COUNT_COUNT_2_MULTIPLIER_2": {
+  "剑林凝结体体力-设置-次数-次数-2-倍率-2": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.bar",
-          "jianlin.count.option.2"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-条",
+          "剑林凝结体体力-剑林-次数-选项-2"
         ],
         "box_index": 2
       }
@@ -1665,45 +1665,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.count.option.2"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-次数-选项-2"
       }
     },
     "next": [
-      "MJA_JIANLIN_COUNT_VERIFY_COUNT_2_MULTIPLIER_2"
+      "剑林凝结体体力-次数-校验-次数-2-倍率-2"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_COUNT_VERIFY_COUNT_2_MULTIPLIER_2": {
+  "剑林凝结体体力-次数-校验-次数-2-倍率-2": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.selected",
-          "jianlin.count.option.2"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-已选择",
+          "剑林凝结体体力-剑林-次数-选项-2"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_SET_MULTIPLIER_COUNT_2_MULTIPLIER_2"
+      "剑林凝结体体力-设置-倍率-次数-2-倍率-2"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_MULTIPLIER_COUNT_2_MULTIPLIER_2": {
+  "剑林凝结体体力-设置-倍率-次数-2-倍率-2": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.bar",
-          "jianlin.multiplier.2"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-条",
+          "剑林凝结体体力-剑林-倍率-2"
         ],
         "box_index": 2
       }
@@ -1717,45 +1717,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.multiplier.2"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-倍率-2"
       }
     },
     "next": [
-      "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_2_MULTIPLIER_2"
+      "剑林凝结体体力-倍率-校验-次数-2-倍率-2"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_2_MULTIPLIER_2": {
+  "剑林凝结体体力-倍率-校验-次数-2-倍率-2": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.selected",
-          "jianlin.multiplier.2"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-已选择",
+          "剑林凝结体体力-剑林-倍率-2"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_CHALLENGE_CONDENSATE"
+      "剑林凝结体体力-挑战-凝结体"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_COUNT_COUNT_2_MULTIPLIER_3": {
+  "剑林凝结体体力-设置-次数-次数-2-倍率-3": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.bar",
-          "jianlin.count.option.2"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-条",
+          "剑林凝结体体力-剑林-次数-选项-2"
         ],
         "box_index": 2
       }
@@ -1769,45 +1769,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.count.option.2"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-次数-选项-2"
       }
     },
     "next": [
-      "MJA_JIANLIN_COUNT_VERIFY_COUNT_2_MULTIPLIER_3"
+      "剑林凝结体体力-次数-校验-次数-2-倍率-3"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_COUNT_VERIFY_COUNT_2_MULTIPLIER_3": {
+  "剑林凝结体体力-次数-校验-次数-2-倍率-3": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.selected",
-          "jianlin.count.option.2"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-已选择",
+          "剑林凝结体体力-剑林-次数-选项-2"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_SET_MULTIPLIER_COUNT_2_MULTIPLIER_3"
+      "剑林凝结体体力-设置-倍率-次数-2-倍率-3"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_MULTIPLIER_COUNT_2_MULTIPLIER_3": {
+  "剑林凝结体体力-设置-倍率-次数-2-倍率-3": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.bar",
-          "jianlin.multiplier.3"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-条",
+          "剑林凝结体体力-剑林-倍率-3"
         ],
         "box_index": 2
       }
@@ -1821,45 +1821,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.multiplier.3"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-倍率-3"
       }
     },
     "next": [
-      "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_2_MULTIPLIER_3"
+      "剑林凝结体体力-倍率-校验-次数-2-倍率-3"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_2_MULTIPLIER_3": {
+  "剑林凝结体体力-倍率-校验-次数-2-倍率-3": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.selected",
-          "jianlin.multiplier.3"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-已选择",
+          "剑林凝结体体力-剑林-倍率-3"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_CHALLENGE_CONDENSATE"
+      "剑林凝结体体力-挑战-凝结体"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_COUNT_COUNT_3_MULTIPLIER_1": {
+  "剑林凝结体体力-设置-次数-次数-3-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.bar",
-          "jianlin.count.option.3"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-条",
+          "剑林凝结体体力-剑林-次数-选项-3"
         ],
         "box_index": 2
       }
@@ -1873,45 +1873,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.count.option.3"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-次数-选项-3"
       }
     },
     "next": [
-      "MJA_JIANLIN_COUNT_VERIFY_COUNT_3_MULTIPLIER_1"
+      "剑林凝结体体力-次数-校验-次数-3-倍率-1"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_COUNT_VERIFY_COUNT_3_MULTIPLIER_1": {
+  "剑林凝结体体力-次数-校验-次数-3-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.selected",
-          "jianlin.count.option.3"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-已选择",
+          "剑林凝结体体力-剑林-次数-选项-3"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_SET_MULTIPLIER_COUNT_3_MULTIPLIER_1"
+      "剑林凝结体体力-设置-倍率-次数-3-倍率-1"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_MULTIPLIER_COUNT_3_MULTIPLIER_1": {
+  "剑林凝结体体力-设置-倍率-次数-3-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.bar",
-          "jianlin.multiplier.1"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-条",
+          "剑林凝结体体力-剑林-倍率-1"
         ],
         "box_index": 2
       }
@@ -1925,45 +1925,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.multiplier.1"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-倍率-1"
       }
     },
     "next": [
-      "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_3_MULTIPLIER_1"
+      "剑林凝结体体力-倍率-校验-次数-3-倍率-1"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_3_MULTIPLIER_1": {
+  "剑林凝结体体力-倍率-校验-次数-3-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.selected",
-          "jianlin.multiplier.1"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-已选择",
+          "剑林凝结体体力-剑林-倍率-1"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_CHALLENGE_CONDENSATE"
+      "剑林凝结体体力-挑战-凝结体"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_COUNT_COUNT_3_MULTIPLIER_2": {
+  "剑林凝结体体力-设置-次数-次数-3-倍率-2": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.bar",
-          "jianlin.count.option.3"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-条",
+          "剑林凝结体体力-剑林-次数-选项-3"
         ],
         "box_index": 2
       }
@@ -1977,45 +1977,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.count.option.3"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-次数-选项-3"
       }
     },
     "next": [
-      "MJA_JIANLIN_COUNT_VERIFY_COUNT_3_MULTIPLIER_2"
+      "剑林凝结体体力-次数-校验-次数-3-倍率-2"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_COUNT_VERIFY_COUNT_3_MULTIPLIER_2": {
+  "剑林凝结体体力-次数-校验-次数-3-倍率-2": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.selected",
-          "jianlin.count.option.3"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-已选择",
+          "剑林凝结体体力-剑林-次数-选项-3"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_SET_MULTIPLIER_COUNT_3_MULTIPLIER_2"
+      "剑林凝结体体力-设置-倍率-次数-3-倍率-2"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_MULTIPLIER_COUNT_3_MULTIPLIER_2": {
+  "剑林凝结体体力-设置-倍率-次数-3-倍率-2": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.bar",
-          "jianlin.multiplier.2"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-条",
+          "剑林凝结体体力-剑林-倍率-2"
         ],
         "box_index": 2
       }
@@ -2029,45 +2029,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.multiplier.2"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-倍率-2"
       }
     },
     "next": [
-      "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_3_MULTIPLIER_2"
+      "剑林凝结体体力-倍率-校验-次数-3-倍率-2"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_3_MULTIPLIER_2": {
+  "剑林凝结体体力-倍率-校验-次数-3-倍率-2": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.selected",
-          "jianlin.multiplier.2"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-已选择",
+          "剑林凝结体体力-剑林-倍率-2"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_CHALLENGE_CONDENSATE"
+      "剑林凝结体体力-挑战-凝结体"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_COUNT_COUNT_3_MULTIPLIER_3": {
+  "剑林凝结体体力-设置-次数-次数-3-倍率-3": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.bar",
-          "jianlin.count.option.3"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-条",
+          "剑林凝结体体力-剑林-次数-选项-3"
         ],
         "box_index": 2
       }
@@ -2081,45 +2081,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.count.option.3"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-次数-选项-3"
       }
     },
     "next": [
-      "MJA_JIANLIN_COUNT_VERIFY_COUNT_3_MULTIPLIER_3"
+      "剑林凝结体体力-次数-校验-次数-3-倍率-3"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_COUNT_VERIFY_COUNT_3_MULTIPLIER_3": {
+  "剑林凝结体体力-次数-校验-次数-3-倍率-3": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.selected",
-          "jianlin.count.option.3"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-已选择",
+          "剑林凝结体体力-剑林-次数-选项-3"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_SET_MULTIPLIER_COUNT_3_MULTIPLIER_3"
+      "剑林凝结体体力-设置-倍率-次数-3-倍率-3"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_MULTIPLIER_COUNT_3_MULTIPLIER_3": {
+  "剑林凝结体体力-设置-倍率-次数-3-倍率-3": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.bar",
-          "jianlin.multiplier.3"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-条",
+          "剑林凝结体体力-剑林-倍率-3"
         ],
         "box_index": 2
       }
@@ -2133,45 +2133,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.multiplier.3"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-倍率-3"
       }
     },
     "next": [
-      "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_3_MULTIPLIER_3"
+      "剑林凝结体体力-倍率-校验-次数-3-倍率-3"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_3_MULTIPLIER_3": {
+  "剑林凝结体体力-倍率-校验-次数-3-倍率-3": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.selected",
-          "jianlin.multiplier.3"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-已选择",
+          "剑林凝结体体力-剑林-倍率-3"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_CHALLENGE_CONDENSATE"
+      "剑林凝结体体力-挑战-凝结体"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_COUNT_COUNT_4_MULTIPLIER_1": {
+  "剑林凝结体体力-设置-次数-次数-4-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.bar",
-          "jianlin.count.option.4"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-条",
+          "剑林凝结体体力-剑林-次数-选项-4"
         ],
         "box_index": 2
       }
@@ -2185,45 +2185,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.count.option.4"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-次数-选项-4"
       }
     },
     "next": [
-      "MJA_JIANLIN_COUNT_VERIFY_COUNT_4_MULTIPLIER_1"
+      "剑林凝结体体力-次数-校验-次数-4-倍率-1"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_COUNT_VERIFY_COUNT_4_MULTIPLIER_1": {
+  "剑林凝结体体力-次数-校验-次数-4-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.selected",
-          "jianlin.count.option.4"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-已选择",
+          "剑林凝结体体力-剑林-次数-选项-4"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_SET_MULTIPLIER_COUNT_4_MULTIPLIER_1"
+      "剑林凝结体体力-设置-倍率-次数-4-倍率-1"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_MULTIPLIER_COUNT_4_MULTIPLIER_1": {
+  "剑林凝结体体力-设置-倍率-次数-4-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.bar",
-          "jianlin.multiplier.1"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-条",
+          "剑林凝结体体力-剑林-倍率-1"
         ],
         "box_index": 2
       }
@@ -2237,45 +2237,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.multiplier.1"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-倍率-1"
       }
     },
     "next": [
-      "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_4_MULTIPLIER_1"
+      "剑林凝结体体力-倍率-校验-次数-4-倍率-1"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_4_MULTIPLIER_1": {
+  "剑林凝结体体力-倍率-校验-次数-4-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.selected",
-          "jianlin.multiplier.1"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-已选择",
+          "剑林凝结体体力-剑林-倍率-1"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_CHALLENGE_CONDENSATE"
+      "剑林凝结体体力-挑战-凝结体"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_COUNT_COUNT_4_MULTIPLIER_2": {
+  "剑林凝结体体力-设置-次数-次数-4-倍率-2": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.bar",
-          "jianlin.count.option.4"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-条",
+          "剑林凝结体体力-剑林-次数-选项-4"
         ],
         "box_index": 2
       }
@@ -2289,45 +2289,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.count.option.4"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-次数-选项-4"
       }
     },
     "next": [
-      "MJA_JIANLIN_COUNT_VERIFY_COUNT_4_MULTIPLIER_2"
+      "剑林凝结体体力-次数-校验-次数-4-倍率-2"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_COUNT_VERIFY_COUNT_4_MULTIPLIER_2": {
+  "剑林凝结体体力-次数-校验-次数-4-倍率-2": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.selected",
-          "jianlin.count.option.4"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-已选择",
+          "剑林凝结体体力-剑林-次数-选项-4"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_SET_MULTIPLIER_COUNT_4_MULTIPLIER_2"
+      "剑林凝结体体力-设置-倍率-次数-4-倍率-2"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_MULTIPLIER_COUNT_4_MULTIPLIER_2": {
+  "剑林凝结体体力-设置-倍率-次数-4-倍率-2": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.bar",
-          "jianlin.multiplier.2"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-条",
+          "剑林凝结体体力-剑林-倍率-2"
         ],
         "box_index": 2
       }
@@ -2341,45 +2341,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.multiplier.2"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-倍率-2"
       }
     },
     "next": [
-      "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_4_MULTIPLIER_2"
+      "剑林凝结体体力-倍率-校验-次数-4-倍率-2"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_4_MULTIPLIER_2": {
+  "剑林凝结体体力-倍率-校验-次数-4-倍率-2": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.selected",
-          "jianlin.multiplier.2"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-已选择",
+          "剑林凝结体体力-剑林-倍率-2"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_CHALLENGE_CONDENSATE"
+      "剑林凝结体体力-挑战-凝结体"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_COUNT_COUNT_4_MULTIPLIER_3": {
+  "剑林凝结体体力-设置-次数-次数-4-倍率-3": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.bar",
-          "jianlin.count.option.4"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-条",
+          "剑林凝结体体力-剑林-次数-选项-4"
         ],
         "box_index": 2
       }
@@ -2393,45 +2393,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.count.option.4"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-次数-选项-4"
       }
     },
     "next": [
-      "MJA_JIANLIN_COUNT_VERIFY_COUNT_4_MULTIPLIER_3"
+      "剑林凝结体体力-次数-校验-次数-4-倍率-3"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_COUNT_VERIFY_COUNT_4_MULTIPLIER_3": {
+  "剑林凝结体体力-次数-校验-次数-4-倍率-3": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.selected",
-          "jianlin.count.option.4"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-已选择",
+          "剑林凝结体体力-剑林-次数-选项-4"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_SET_MULTIPLIER_COUNT_4_MULTIPLIER_3"
+      "剑林凝结体体力-设置-倍率-次数-4-倍率-3"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_MULTIPLIER_COUNT_4_MULTIPLIER_3": {
+  "剑林凝结体体力-设置-倍率-次数-4-倍率-3": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.bar",
-          "jianlin.multiplier.3"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-条",
+          "剑林凝结体体力-剑林-倍率-3"
         ],
         "box_index": 2
       }
@@ -2445,45 +2445,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.multiplier.3"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-倍率-3"
       }
     },
     "next": [
-      "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_4_MULTIPLIER_3"
+      "剑林凝结体体力-倍率-校验-次数-4-倍率-3"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_4_MULTIPLIER_3": {
+  "剑林凝结体体力-倍率-校验-次数-4-倍率-3": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.selected",
-          "jianlin.multiplier.3"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-已选择",
+          "剑林凝结体体力-剑林-倍率-3"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_CHALLENGE_CONDENSATE"
+      "剑林凝结体体力-挑战-凝结体"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_COUNT_COUNT_5_MULTIPLIER_1": {
+  "剑林凝结体体力-设置-次数-次数-5-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.bar",
-          "jianlin.count.option.5"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-条",
+          "剑林凝结体体力-剑林-次数-选项-5"
         ],
         "box_index": 2
       }
@@ -2497,45 +2497,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.count.option.5"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-次数-选项-5"
       }
     },
     "next": [
-      "MJA_JIANLIN_COUNT_VERIFY_COUNT_5_MULTIPLIER_1"
+      "剑林凝结体体力-次数-校验-次数-5-倍率-1"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_COUNT_VERIFY_COUNT_5_MULTIPLIER_1": {
+  "剑林凝结体体力-次数-校验-次数-5-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.selected",
-          "jianlin.count.option.5"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-已选择",
+          "剑林凝结体体力-剑林-次数-选项-5"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_SET_MULTIPLIER_COUNT_5_MULTIPLIER_1"
+      "剑林凝结体体力-设置-倍率-次数-5-倍率-1"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_MULTIPLIER_COUNT_5_MULTIPLIER_1": {
+  "剑林凝结体体力-设置-倍率-次数-5-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.bar",
-          "jianlin.multiplier.1"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-条",
+          "剑林凝结体体力-剑林-倍率-1"
         ],
         "box_index": 2
       }
@@ -2549,45 +2549,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.multiplier.1"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-倍率-1"
       }
     },
     "next": [
-      "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_5_MULTIPLIER_1"
+      "剑林凝结体体力-倍率-校验-次数-5-倍率-1"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_5_MULTIPLIER_1": {
+  "剑林凝结体体力-倍率-校验-次数-5-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.selected",
-          "jianlin.multiplier.1"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-已选择",
+          "剑林凝结体体力-剑林-倍率-1"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_CHALLENGE_CONDENSATE"
+      "剑林凝结体体力-挑战-凝结体"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_COUNT_COUNT_5_MULTIPLIER_2": {
+  "剑林凝结体体力-设置-次数-次数-5-倍率-2": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.bar",
-          "jianlin.count.option.5"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-条",
+          "剑林凝结体体力-剑林-次数-选项-5"
         ],
         "box_index": 2
       }
@@ -2601,45 +2601,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.count.option.5"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-次数-选项-5"
       }
     },
     "next": [
-      "MJA_JIANLIN_COUNT_VERIFY_COUNT_5_MULTIPLIER_2"
+      "剑林凝结体体力-次数-校验-次数-5-倍率-2"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_COUNT_VERIFY_COUNT_5_MULTIPLIER_2": {
+  "剑林凝结体体力-次数-校验-次数-5-倍率-2": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.selected",
-          "jianlin.count.option.5"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-已选择",
+          "剑林凝结体体力-剑林-次数-选项-5"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_SET_MULTIPLIER_COUNT_5_MULTIPLIER_2"
+      "剑林凝结体体力-设置-倍率-次数-5-倍率-2"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_MULTIPLIER_COUNT_5_MULTIPLIER_2": {
+  "剑林凝结体体力-设置-倍率-次数-5-倍率-2": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.bar",
-          "jianlin.multiplier.2"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-条",
+          "剑林凝结体体力-剑林-倍率-2"
         ],
         "box_index": 2
       }
@@ -2653,45 +2653,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.multiplier.2"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-倍率-2"
       }
     },
     "next": [
-      "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_5_MULTIPLIER_2"
+      "剑林凝结体体力-倍率-校验-次数-5-倍率-2"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_5_MULTIPLIER_2": {
+  "剑林凝结体体力-倍率-校验-次数-5-倍率-2": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.selected",
-          "jianlin.multiplier.2"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-已选择",
+          "剑林凝结体体力-剑林-倍率-2"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_CHALLENGE_CONDENSATE"
+      "剑林凝结体体力-挑战-凝结体"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_COUNT_COUNT_5_MULTIPLIER_3": {
+  "剑林凝结体体力-设置-次数-次数-5-倍率-3": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.bar",
-          "jianlin.count.option.5"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-条",
+          "剑林凝结体体力-剑林-次数-选项-5"
         ],
         "box_index": 2
       }
@@ -2705,45 +2705,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.count.option.5"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-次数-选项-5"
       }
     },
     "next": [
-      "MJA_JIANLIN_COUNT_VERIFY_COUNT_5_MULTIPLIER_3"
+      "剑林凝结体体力-次数-校验-次数-5-倍率-3"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_COUNT_VERIFY_COUNT_5_MULTIPLIER_3": {
+  "剑林凝结体体力-次数-校验-次数-5-倍率-3": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.selected",
-          "jianlin.count.option.5"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-已选择",
+          "剑林凝结体体力-剑林-次数-选项-5"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_SET_MULTIPLIER_COUNT_5_MULTIPLIER_3"
+      "剑林凝结体体力-设置-倍率-次数-5-倍率-3"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_MULTIPLIER_COUNT_5_MULTIPLIER_3": {
+  "剑林凝结体体力-设置-倍率-次数-5-倍率-3": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.bar",
-          "jianlin.multiplier.3"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-条",
+          "剑林凝结体体力-剑林-倍率-3"
         ],
         "box_index": 2
       }
@@ -2757,45 +2757,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.multiplier.3"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-倍率-3"
       }
     },
     "next": [
-      "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_5_MULTIPLIER_3"
+      "剑林凝结体体力-倍率-校验-次数-5-倍率-3"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_5_MULTIPLIER_3": {
+  "剑林凝结体体力-倍率-校验-次数-5-倍率-3": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.selected",
-          "jianlin.multiplier.3"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-已选择",
+          "剑林凝结体体力-剑林-倍率-3"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_CHALLENGE_CONDENSATE"
+      "剑林凝结体体力-挑战-凝结体"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_COUNT_COUNT_6_MULTIPLIER_1": {
+  "剑林凝结体体力-设置-次数-次数-6-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.bar",
-          "jianlin.count.option.6"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-条",
+          "剑林凝结体体力-剑林-次数-选项-6"
         ],
         "box_index": 2
       }
@@ -2809,45 +2809,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.count.option.6"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-次数-选项-6"
       }
     },
     "next": [
-      "MJA_JIANLIN_COUNT_VERIFY_COUNT_6_MULTIPLIER_1"
+      "剑林凝结体体力-次数-校验-次数-6-倍率-1"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_COUNT_VERIFY_COUNT_6_MULTIPLIER_1": {
+  "剑林凝结体体力-次数-校验-次数-6-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.selected",
-          "jianlin.count.option.6"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-已选择",
+          "剑林凝结体体力-剑林-次数-选项-6"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_SET_MULTIPLIER_COUNT_6_MULTIPLIER_1"
+      "剑林凝结体体力-设置-倍率-次数-6-倍率-1"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_MULTIPLIER_COUNT_6_MULTIPLIER_1": {
+  "剑林凝结体体力-设置-倍率-次数-6-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.bar",
-          "jianlin.multiplier.1"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-条",
+          "剑林凝结体体力-剑林-倍率-1"
         ],
         "box_index": 2
       }
@@ -2861,45 +2861,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.multiplier.1"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-倍率-1"
       }
     },
     "next": [
-      "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_6_MULTIPLIER_1"
+      "剑林凝结体体力-倍率-校验-次数-6-倍率-1"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_6_MULTIPLIER_1": {
+  "剑林凝结体体力-倍率-校验-次数-6-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.selected",
-          "jianlin.multiplier.1"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-已选择",
+          "剑林凝结体体力-剑林-倍率-1"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_CHALLENGE_CONDENSATE"
+      "剑林凝结体体力-挑战-凝结体"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_COUNT_COUNT_6_MULTIPLIER_2": {
+  "剑林凝结体体力-设置-次数-次数-6-倍率-2": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.bar",
-          "jianlin.count.option.6"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-条",
+          "剑林凝结体体力-剑林-次数-选项-6"
         ],
         "box_index": 2
       }
@@ -2913,45 +2913,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.count.option.6"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-次数-选项-6"
       }
     },
     "next": [
-      "MJA_JIANLIN_COUNT_VERIFY_COUNT_6_MULTIPLIER_2"
+      "剑林凝结体体力-次数-校验-次数-6-倍率-2"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_COUNT_VERIFY_COUNT_6_MULTIPLIER_2": {
+  "剑林凝结体体力-次数-校验-次数-6-倍率-2": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.selected",
-          "jianlin.count.option.6"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-已选择",
+          "剑林凝结体体力-剑林-次数-选项-6"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_SET_MULTIPLIER_COUNT_6_MULTIPLIER_2"
+      "剑林凝结体体力-设置-倍率-次数-6-倍率-2"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_MULTIPLIER_COUNT_6_MULTIPLIER_2": {
+  "剑林凝结体体力-设置-倍率-次数-6-倍率-2": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.bar",
-          "jianlin.multiplier.2"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-条",
+          "剑林凝结体体力-剑林-倍率-2"
         ],
         "box_index": 2
       }
@@ -2965,45 +2965,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.multiplier.2"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-倍率-2"
       }
     },
     "next": [
-      "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_6_MULTIPLIER_2"
+      "剑林凝结体体力-倍率-校验-次数-6-倍率-2"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_6_MULTIPLIER_2": {
+  "剑林凝结体体力-倍率-校验-次数-6-倍率-2": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.selected",
-          "jianlin.multiplier.2"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-已选择",
+          "剑林凝结体体力-剑林-倍率-2"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_CHALLENGE_CONDENSATE"
+      "剑林凝结体体力-挑战-凝结体"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_COUNT_COUNT_6_MULTIPLIER_3": {
+  "剑林凝结体体力-设置-次数-次数-6-倍率-3": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.bar",
-          "jianlin.count.option.6"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-条",
+          "剑林凝结体体力-剑林-次数-选项-6"
         ],
         "box_index": 2
       }
@@ -3017,45 +3017,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.count.option.6"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-次数-选项-6"
       }
     },
     "next": [
-      "MJA_JIANLIN_COUNT_VERIFY_COUNT_6_MULTIPLIER_3"
+      "剑林凝结体体力-次数-校验-次数-6-倍率-3"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_COUNT_VERIFY_COUNT_6_MULTIPLIER_3": {
+  "剑林凝结体体力-次数-校验-次数-6-倍率-3": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.selected",
-          "jianlin.count.option.6"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-已选择",
+          "剑林凝结体体力-剑林-次数-选项-6"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_SET_MULTIPLIER_COUNT_6_MULTIPLIER_3"
+      "剑林凝结体体力-设置-倍率-次数-6-倍率-3"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_MULTIPLIER_COUNT_6_MULTIPLIER_3": {
+  "剑林凝结体体力-设置-倍率-次数-6-倍率-3": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.bar",
-          "jianlin.multiplier.3"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-条",
+          "剑林凝结体体力-剑林-倍率-3"
         ],
         "box_index": 2
       }
@@ -3069,45 +3069,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.multiplier.3"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-倍率-3"
       }
     },
     "next": [
-      "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_6_MULTIPLIER_3"
+      "剑林凝结体体力-倍率-校验-次数-6-倍率-3"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_6_MULTIPLIER_3": {
+  "剑林凝结体体力-倍率-校验-次数-6-倍率-3": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.selected",
-          "jianlin.multiplier.3"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-已选择",
+          "剑林凝结体体力-剑林-倍率-3"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_CHALLENGE_CONDENSATE"
+      "剑林凝结体体力-挑战-凝结体"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_COUNT_COUNT_7_MULTIPLIER_1": {
+  "剑林凝结体体力-设置-次数-次数-7-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.bar",
-          "jianlin.count.option.7"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-条",
+          "剑林凝结体体力-剑林-次数-选项-7"
         ],
         "box_index": 2
       }
@@ -3121,45 +3121,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.count.option.7"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-次数-选项-7"
       }
     },
     "next": [
-      "MJA_JIANLIN_COUNT_VERIFY_COUNT_7_MULTIPLIER_1"
+      "剑林凝结体体力-次数-校验-次数-7-倍率-1"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_COUNT_VERIFY_COUNT_7_MULTIPLIER_1": {
+  "剑林凝结体体力-次数-校验-次数-7-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.selected",
-          "jianlin.count.option.7"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-已选择",
+          "剑林凝结体体力-剑林-次数-选项-7"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_SET_MULTIPLIER_COUNT_7_MULTIPLIER_1"
+      "剑林凝结体体力-设置-倍率-次数-7-倍率-1"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_MULTIPLIER_COUNT_7_MULTIPLIER_1": {
+  "剑林凝结体体力-设置-倍率-次数-7-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.bar",
-          "jianlin.multiplier.1"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-条",
+          "剑林凝结体体力-剑林-倍率-1"
         ],
         "box_index": 2
       }
@@ -3173,45 +3173,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.multiplier.1"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-倍率-1"
       }
     },
     "next": [
-      "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_7_MULTIPLIER_1"
+      "剑林凝结体体力-倍率-校验-次数-7-倍率-1"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_7_MULTIPLIER_1": {
+  "剑林凝结体体力-倍率-校验-次数-7-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.selected",
-          "jianlin.multiplier.1"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-已选择",
+          "剑林凝结体体力-剑林-倍率-1"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_CHALLENGE_CONDENSATE"
+      "剑林凝结体体力-挑战-凝结体"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_COUNT_COUNT_7_MULTIPLIER_2": {
+  "剑林凝结体体力-设置-次数-次数-7-倍率-2": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.bar",
-          "jianlin.count.option.7"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-条",
+          "剑林凝结体体力-剑林-次数-选项-7"
         ],
         "box_index": 2
       }
@@ -3225,45 +3225,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.count.option.7"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-次数-选项-7"
       }
     },
     "next": [
-      "MJA_JIANLIN_COUNT_VERIFY_COUNT_7_MULTIPLIER_2"
+      "剑林凝结体体力-次数-校验-次数-7-倍率-2"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_COUNT_VERIFY_COUNT_7_MULTIPLIER_2": {
+  "剑林凝结体体力-次数-校验-次数-7-倍率-2": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.selected",
-          "jianlin.count.option.7"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-已选择",
+          "剑林凝结体体力-剑林-次数-选项-7"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_SET_MULTIPLIER_COUNT_7_MULTIPLIER_2"
+      "剑林凝结体体力-设置-倍率-次数-7-倍率-2"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_MULTIPLIER_COUNT_7_MULTIPLIER_2": {
+  "剑林凝结体体力-设置-倍率-次数-7-倍率-2": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.bar",
-          "jianlin.multiplier.2"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-条",
+          "剑林凝结体体力-剑林-倍率-2"
         ],
         "box_index": 2
       }
@@ -3277,45 +3277,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.multiplier.2"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-倍率-2"
       }
     },
     "next": [
-      "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_7_MULTIPLIER_2"
+      "剑林凝结体体力-倍率-校验-次数-7-倍率-2"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_7_MULTIPLIER_2": {
+  "剑林凝结体体力-倍率-校验-次数-7-倍率-2": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.selected",
-          "jianlin.multiplier.2"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-已选择",
+          "剑林凝结体体力-剑林-倍率-2"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_CHALLENGE_CONDENSATE"
+      "剑林凝结体体力-挑战-凝结体"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_COUNT_COUNT_7_MULTIPLIER_3": {
+  "剑林凝结体体力-设置-次数-次数-7-倍率-3": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.bar",
-          "jianlin.count.option.7"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-条",
+          "剑林凝结体体力-剑林-次数-选项-7"
         ],
         "box_index": 2
       }
@@ -3329,45 +3329,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.count.option.7"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-次数-选项-7"
       }
     },
     "next": [
-      "MJA_JIANLIN_COUNT_VERIFY_COUNT_7_MULTIPLIER_3"
+      "剑林凝结体体力-次数-校验-次数-7-倍率-3"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_COUNT_VERIFY_COUNT_7_MULTIPLIER_3": {
+  "剑林凝结体体力-次数-校验-次数-7-倍率-3": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.selected",
-          "jianlin.count.option.7"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-已选择",
+          "剑林凝结体体力-剑林-次数-选项-7"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_SET_MULTIPLIER_COUNT_7_MULTIPLIER_3"
+      "剑林凝结体体力-设置-倍率-次数-7-倍率-3"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_MULTIPLIER_COUNT_7_MULTIPLIER_3": {
+  "剑林凝结体体力-设置-倍率-次数-7-倍率-3": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.bar",
-          "jianlin.multiplier.3"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-条",
+          "剑林凝结体体力-剑林-倍率-3"
         ],
         "box_index": 2
       }
@@ -3381,45 +3381,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.multiplier.3"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-倍率-3"
       }
     },
     "next": [
-      "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_7_MULTIPLIER_3"
+      "剑林凝结体体力-倍率-校验-次数-7-倍率-3"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_7_MULTIPLIER_3": {
+  "剑林凝结体体力-倍率-校验-次数-7-倍率-3": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.selected",
-          "jianlin.multiplier.3"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-已选择",
+          "剑林凝结体体力-剑林-倍率-3"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_BUDGET_UNSAFE"
+      "剑林凝结体体力-预算-不安全"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_COUNT_COUNT_8_MULTIPLIER_1": {
+  "剑林凝结体体力-设置-次数-次数-8-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.bar",
-          "jianlin.count.option.8"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-条",
+          "剑林凝结体体力-剑林-次数-选项-8"
         ],
         "box_index": 2
       }
@@ -3433,45 +3433,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.count.option.8"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-次数-选项-8"
       }
     },
     "next": [
-      "MJA_JIANLIN_COUNT_VERIFY_COUNT_8_MULTIPLIER_1"
+      "剑林凝结体体力-次数-校验-次数-8-倍率-1"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_COUNT_VERIFY_COUNT_8_MULTIPLIER_1": {
+  "剑林凝结体体力-次数-校验-次数-8-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.selected",
-          "jianlin.count.option.8"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-已选择",
+          "剑林凝结体体力-剑林-次数-选项-8"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_SET_MULTIPLIER_COUNT_8_MULTIPLIER_1"
+      "剑林凝结体体力-设置-倍率-次数-8-倍率-1"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_MULTIPLIER_COUNT_8_MULTIPLIER_1": {
+  "剑林凝结体体力-设置-倍率-次数-8-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.bar",
-          "jianlin.multiplier.1"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-条",
+          "剑林凝结体体力-剑林-倍率-1"
         ],
         "box_index": 2
       }
@@ -3485,45 +3485,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.multiplier.1"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-倍率-1"
       }
     },
     "next": [
-      "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_8_MULTIPLIER_1"
+      "剑林凝结体体力-倍率-校验-次数-8-倍率-1"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_8_MULTIPLIER_1": {
+  "剑林凝结体体力-倍率-校验-次数-8-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.selected",
-          "jianlin.multiplier.1"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-已选择",
+          "剑林凝结体体力-剑林-倍率-1"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_CHALLENGE_CONDENSATE"
+      "剑林凝结体体力-挑战-凝结体"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_COUNT_COUNT_8_MULTIPLIER_2": {
+  "剑林凝结体体力-设置-次数-次数-8-倍率-2": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.bar",
-          "jianlin.count.option.8"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-条",
+          "剑林凝结体体力-剑林-次数-选项-8"
         ],
         "box_index": 2
       }
@@ -3537,45 +3537,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.count.option.8"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-次数-选项-8"
       }
     },
     "next": [
-      "MJA_JIANLIN_COUNT_VERIFY_COUNT_8_MULTIPLIER_2"
+      "剑林凝结体体力-次数-校验-次数-8-倍率-2"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_COUNT_VERIFY_COUNT_8_MULTIPLIER_2": {
+  "剑林凝结体体力-次数-校验-次数-8-倍率-2": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.selected",
-          "jianlin.count.option.8"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-已选择",
+          "剑林凝结体体力-剑林-次数-选项-8"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_SET_MULTIPLIER_COUNT_8_MULTIPLIER_2"
+      "剑林凝结体体力-设置-倍率-次数-8-倍率-2"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_MULTIPLIER_COUNT_8_MULTIPLIER_2": {
+  "剑林凝结体体力-设置-倍率-次数-8-倍率-2": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.bar",
-          "jianlin.multiplier.2"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-条",
+          "剑林凝结体体力-剑林-倍率-2"
         ],
         "box_index": 2
       }
@@ -3589,45 +3589,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.multiplier.2"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-倍率-2"
       }
     },
     "next": [
-      "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_8_MULTIPLIER_2"
+      "剑林凝结体体力-倍率-校验-次数-8-倍率-2"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_8_MULTIPLIER_2": {
+  "剑林凝结体体力-倍率-校验-次数-8-倍率-2": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.selected",
-          "jianlin.multiplier.2"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-已选择",
+          "剑林凝结体体力-剑林-倍率-2"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_CHALLENGE_CONDENSATE"
+      "剑林凝结体体力-挑战-凝结体"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_COUNT_COUNT_8_MULTIPLIER_3": {
+  "剑林凝结体体力-设置-次数-次数-8-倍率-3": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.bar",
-          "jianlin.count.option.8"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-条",
+          "剑林凝结体体力-剑林-次数-选项-8"
         ],
         "box_index": 2
       }
@@ -3641,45 +3641,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.count.option.8"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-次数-选项-8"
       }
     },
     "next": [
-      "MJA_JIANLIN_COUNT_VERIFY_COUNT_8_MULTIPLIER_3"
+      "剑林凝结体体力-次数-校验-次数-8-倍率-3"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_COUNT_VERIFY_COUNT_8_MULTIPLIER_3": {
+  "剑林凝结体体力-次数-校验-次数-8-倍率-3": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.selected",
-          "jianlin.count.option.8"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-已选择",
+          "剑林凝结体体力-剑林-次数-选项-8"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_SET_MULTIPLIER_COUNT_8_MULTIPLIER_3"
+      "剑林凝结体体力-设置-倍率-次数-8-倍率-3"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_MULTIPLIER_COUNT_8_MULTIPLIER_3": {
+  "剑林凝结体体力-设置-倍率-次数-8-倍率-3": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.bar",
-          "jianlin.multiplier.3"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-条",
+          "剑林凝结体体力-剑林-倍率-3"
         ],
         "box_index": 2
       }
@@ -3693,45 +3693,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.multiplier.3"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-倍率-3"
       }
     },
     "next": [
-      "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_8_MULTIPLIER_3"
+      "剑林凝结体体力-倍率-校验-次数-8-倍率-3"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_8_MULTIPLIER_3": {
+  "剑林凝结体体力-倍率-校验-次数-8-倍率-3": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.selected",
-          "jianlin.multiplier.3"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-已选择",
+          "剑林凝结体体力-剑林-倍率-3"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_BUDGET_UNSAFE"
+      "剑林凝结体体力-预算-不安全"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_COUNT_COUNT_9_MULTIPLIER_1": {
+  "剑林凝结体体力-设置-次数-次数-9-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.bar",
-          "jianlin.count.option.9"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-条",
+          "剑林凝结体体力-剑林-次数-选项-9"
         ],
         "box_index": 2
       }
@@ -3745,45 +3745,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.count.option.9"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-次数-选项-9"
       }
     },
     "next": [
-      "MJA_JIANLIN_COUNT_VERIFY_COUNT_9_MULTIPLIER_1"
+      "剑林凝结体体力-次数-校验-次数-9-倍率-1"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_COUNT_VERIFY_COUNT_9_MULTIPLIER_1": {
+  "剑林凝结体体力-次数-校验-次数-9-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.selected",
-          "jianlin.count.option.9"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-已选择",
+          "剑林凝结体体力-剑林-次数-选项-9"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_SET_MULTIPLIER_COUNT_9_MULTIPLIER_1"
+      "剑林凝结体体力-设置-倍率-次数-9-倍率-1"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_MULTIPLIER_COUNT_9_MULTIPLIER_1": {
+  "剑林凝结体体力-设置-倍率-次数-9-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.bar",
-          "jianlin.multiplier.1"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-条",
+          "剑林凝结体体力-剑林-倍率-1"
         ],
         "box_index": 2
       }
@@ -3797,45 +3797,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.multiplier.1"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-倍率-1"
       }
     },
     "next": [
-      "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_9_MULTIPLIER_1"
+      "剑林凝结体体力-倍率-校验-次数-9-倍率-1"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_9_MULTIPLIER_1": {
+  "剑林凝结体体力-倍率-校验-次数-9-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.selected",
-          "jianlin.multiplier.1"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-已选择",
+          "剑林凝结体体力-剑林-倍率-1"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_CHALLENGE_CONDENSATE"
+      "剑林凝结体体力-挑战-凝结体"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_COUNT_COUNT_9_MULTIPLIER_2": {
+  "剑林凝结体体力-设置-次数-次数-9-倍率-2": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.bar",
-          "jianlin.count.option.9"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-条",
+          "剑林凝结体体力-剑林-次数-选项-9"
         ],
         "box_index": 2
       }
@@ -3849,45 +3849,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.count.option.9"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-次数-选项-9"
       }
     },
     "next": [
-      "MJA_JIANLIN_COUNT_VERIFY_COUNT_9_MULTIPLIER_2"
+      "剑林凝结体体力-次数-校验-次数-9-倍率-2"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_COUNT_VERIFY_COUNT_9_MULTIPLIER_2": {
+  "剑林凝结体体力-次数-校验-次数-9-倍率-2": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.selected",
-          "jianlin.count.option.9"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-已选择",
+          "剑林凝结体体力-剑林-次数-选项-9"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_SET_MULTIPLIER_COUNT_9_MULTIPLIER_2"
+      "剑林凝结体体力-设置-倍率-次数-9-倍率-2"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_MULTIPLIER_COUNT_9_MULTIPLIER_2": {
+  "剑林凝结体体力-设置-倍率-次数-9-倍率-2": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.bar",
-          "jianlin.multiplier.2"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-条",
+          "剑林凝结体体力-剑林-倍率-2"
         ],
         "box_index": 2
       }
@@ -3901,45 +3901,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.multiplier.2"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-倍率-2"
       }
     },
     "next": [
-      "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_9_MULTIPLIER_2"
+      "剑林凝结体体力-倍率-校验-次数-9-倍率-2"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_9_MULTIPLIER_2": {
+  "剑林凝结体体力-倍率-校验-次数-9-倍率-2": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.selected",
-          "jianlin.multiplier.2"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-已选择",
+          "剑林凝结体体力-剑林-倍率-2"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_CHALLENGE_CONDENSATE"
+      "剑林凝结体体力-挑战-凝结体"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_COUNT_COUNT_9_MULTIPLIER_3": {
+  "剑林凝结体体力-设置-次数-次数-9-倍率-3": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.bar",
-          "jianlin.count.option.9"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-条",
+          "剑林凝结体体力-剑林-次数-选项-9"
         ],
         "box_index": 2
       }
@@ -3953,45 +3953,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.count.option.9"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-次数-选项-9"
       }
     },
     "next": [
-      "MJA_JIANLIN_COUNT_VERIFY_COUNT_9_MULTIPLIER_3"
+      "剑林凝结体体力-次数-校验-次数-9-倍率-3"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_COUNT_VERIFY_COUNT_9_MULTIPLIER_3": {
+  "剑林凝结体体力-次数-校验-次数-9-倍率-3": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.selected",
-          "jianlin.count.option.9"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-已选择",
+          "剑林凝结体体力-剑林-次数-选项-9"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_SET_MULTIPLIER_COUNT_9_MULTIPLIER_3"
+      "剑林凝结体体力-设置-倍率-次数-9-倍率-3"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_MULTIPLIER_COUNT_9_MULTIPLIER_3": {
+  "剑林凝结体体力-设置-倍率-次数-9-倍率-3": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.bar",
-          "jianlin.multiplier.3"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-条",
+          "剑林凝结体体力-剑林-倍率-3"
         ],
         "box_index": 2
       }
@@ -4005,45 +4005,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.multiplier.3"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-倍率-3"
       }
     },
     "next": [
-      "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_9_MULTIPLIER_3"
+      "剑林凝结体体力-倍率-校验-次数-9-倍率-3"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_9_MULTIPLIER_3": {
+  "剑林凝结体体力-倍率-校验-次数-9-倍率-3": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.selected",
-          "jianlin.multiplier.3"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-已选择",
+          "剑林凝结体体力-剑林-倍率-3"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_BUDGET_UNSAFE"
+      "剑林凝结体体力-预算-不安全"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_COUNT_COUNT_10_MULTIPLIER_1": {
+  "剑林凝结体体力-设置-次数-次数-10-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.bar",
-          "jianlin.count.option.10"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-条",
+          "剑林凝结体体力-剑林-次数-选项-10"
         ],
         "box_index": 2
       }
@@ -4057,45 +4057,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.count.option.10"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-次数-选项-10"
       }
     },
     "next": [
-      "MJA_JIANLIN_COUNT_VERIFY_COUNT_10_MULTIPLIER_1"
+      "剑林凝结体体力-次数-校验-次数-10-倍率-1"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_COUNT_VERIFY_COUNT_10_MULTIPLIER_1": {
+  "剑林凝结体体力-次数-校验-次数-10-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.selected",
-          "jianlin.count.option.10"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-已选择",
+          "剑林凝结体体力-剑林-次数-选项-10"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_SET_MULTIPLIER_COUNT_10_MULTIPLIER_1"
+      "剑林凝结体体力-设置-倍率-次数-10-倍率-1"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_MULTIPLIER_COUNT_10_MULTIPLIER_1": {
+  "剑林凝结体体力-设置-倍率-次数-10-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.bar",
-          "jianlin.multiplier.1"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-条",
+          "剑林凝结体体力-剑林-倍率-1"
         ],
         "box_index": 2
       }
@@ -4109,45 +4109,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.multiplier.1"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-倍率-1"
       }
     },
     "next": [
-      "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_10_MULTIPLIER_1"
+      "剑林凝结体体力-倍率-校验-次数-10-倍率-1"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_10_MULTIPLIER_1": {
+  "剑林凝结体体力-倍率-校验-次数-10-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.selected",
-          "jianlin.multiplier.1"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-已选择",
+          "剑林凝结体体力-剑林-倍率-1"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_CHALLENGE_CONDENSATE"
+      "剑林凝结体体力-挑战-凝结体"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_COUNT_COUNT_10_MULTIPLIER_2": {
+  "剑林凝结体体力-设置-次数-次数-10-倍率-2": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.bar",
-          "jianlin.count.option.10"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-条",
+          "剑林凝结体体力-剑林-次数-选项-10"
         ],
         "box_index": 2
       }
@@ -4161,45 +4161,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.count.option.10"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-次数-选项-10"
       }
     },
     "next": [
-      "MJA_JIANLIN_COUNT_VERIFY_COUNT_10_MULTIPLIER_2"
+      "剑林凝结体体力-次数-校验-次数-10-倍率-2"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_COUNT_VERIFY_COUNT_10_MULTIPLIER_2": {
+  "剑林凝结体体力-次数-校验-次数-10-倍率-2": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.selected",
-          "jianlin.count.option.10"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-已选择",
+          "剑林凝结体体力-剑林-次数-选项-10"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_SET_MULTIPLIER_COUNT_10_MULTIPLIER_2"
+      "剑林凝结体体力-设置-倍率-次数-10-倍率-2"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_MULTIPLIER_COUNT_10_MULTIPLIER_2": {
+  "剑林凝结体体力-设置-倍率-次数-10-倍率-2": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.bar",
-          "jianlin.multiplier.2"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-条",
+          "剑林凝结体体力-剑林-倍率-2"
         ],
         "box_index": 2
       }
@@ -4213,45 +4213,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.multiplier.2"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-倍率-2"
       }
     },
     "next": [
-      "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_10_MULTIPLIER_2"
+      "剑林凝结体体力-倍率-校验-次数-10-倍率-2"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_10_MULTIPLIER_2": {
+  "剑林凝结体体力-倍率-校验-次数-10-倍率-2": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.selected",
-          "jianlin.multiplier.2"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-已选择",
+          "剑林凝结体体力-剑林-倍率-2"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_BUDGET_UNSAFE"
+      "剑林凝结体体力-预算-不安全"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_COUNT_COUNT_10_MULTIPLIER_3": {
+  "剑林凝结体体力-设置-次数-次数-10-倍率-3": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.bar",
-          "jianlin.count.option.10"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-条",
+          "剑林凝结体体力-剑林-次数-选项-10"
         ],
         "box_index": 2
       }
@@ -4265,45 +4265,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.count.option.10"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-次数-选项-10"
       }
     },
     "next": [
-      "MJA_JIANLIN_COUNT_VERIFY_COUNT_10_MULTIPLIER_3"
+      "剑林凝结体体力-次数-校验-次数-10-倍率-3"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_COUNT_VERIFY_COUNT_10_MULTIPLIER_3": {
+  "剑林凝结体体力-次数-校验-次数-10-倍率-3": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.selected",
-          "jianlin.count.option.10"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-已选择",
+          "剑林凝结体体力-剑林-次数-选项-10"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_SET_MULTIPLIER_COUNT_10_MULTIPLIER_3"
+      "剑林凝结体体力-设置-倍率-次数-10-倍率-3"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_MULTIPLIER_COUNT_10_MULTIPLIER_3": {
+  "剑林凝结体体力-设置-倍率-次数-10-倍率-3": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.bar",
-          "jianlin.multiplier.3"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-条",
+          "剑林凝结体体力-剑林-倍率-3"
         ],
         "box_index": 2
       }
@@ -4317,45 +4317,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.multiplier.3"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-倍率-3"
       }
     },
     "next": [
-      "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_10_MULTIPLIER_3"
+      "剑林凝结体体力-倍率-校验-次数-10-倍率-3"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_10_MULTIPLIER_3": {
+  "剑林凝结体体力-倍率-校验-次数-10-倍率-3": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.selected",
-          "jianlin.multiplier.3"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-已选择",
+          "剑林凝结体体力-剑林-倍率-3"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_BUDGET_UNSAFE"
+      "剑林凝结体体力-预算-不安全"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_COUNT_COUNT_11_MULTIPLIER_1": {
+  "剑林凝结体体力-设置-次数-次数-11-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.bar",
-          "jianlin.count.option.11"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-条",
+          "剑林凝结体体力-剑林-次数-选项-11"
         ],
         "box_index": 2
       }
@@ -4369,45 +4369,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.count.option.11"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-次数-选项-11"
       }
     },
     "next": [
-      "MJA_JIANLIN_COUNT_VERIFY_COUNT_11_MULTIPLIER_1"
+      "剑林凝结体体力-次数-校验-次数-11-倍率-1"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_COUNT_VERIFY_COUNT_11_MULTIPLIER_1": {
+  "剑林凝结体体力-次数-校验-次数-11-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.selected",
-          "jianlin.count.option.11"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-已选择",
+          "剑林凝结体体力-剑林-次数-选项-11"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_SET_MULTIPLIER_COUNT_11_MULTIPLIER_1"
+      "剑林凝结体体力-设置-倍率-次数-11-倍率-1"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_MULTIPLIER_COUNT_11_MULTIPLIER_1": {
+  "剑林凝结体体力-设置-倍率-次数-11-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.bar",
-          "jianlin.multiplier.1"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-条",
+          "剑林凝结体体力-剑林-倍率-1"
         ],
         "box_index": 2
       }
@@ -4421,45 +4421,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.multiplier.1"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-倍率-1"
       }
     },
     "next": [
-      "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_11_MULTIPLIER_1"
+      "剑林凝结体体力-倍率-校验-次数-11-倍率-1"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_11_MULTIPLIER_1": {
+  "剑林凝结体体力-倍率-校验-次数-11-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.selected",
-          "jianlin.multiplier.1"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-已选择",
+          "剑林凝结体体力-剑林-倍率-1"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_CHALLENGE_CONDENSATE"
+      "剑林凝结体体力-挑战-凝结体"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_COUNT_COUNT_11_MULTIPLIER_2": {
+  "剑林凝结体体力-设置-次数-次数-11-倍率-2": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.bar",
-          "jianlin.count.option.11"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-条",
+          "剑林凝结体体力-剑林-次数-选项-11"
         ],
         "box_index": 2
       }
@@ -4473,45 +4473,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.count.option.11"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-次数-选项-11"
       }
     },
     "next": [
-      "MJA_JIANLIN_COUNT_VERIFY_COUNT_11_MULTIPLIER_2"
+      "剑林凝结体体力-次数-校验-次数-11-倍率-2"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_COUNT_VERIFY_COUNT_11_MULTIPLIER_2": {
+  "剑林凝结体体力-次数-校验-次数-11-倍率-2": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.selected",
-          "jianlin.count.option.11"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-已选择",
+          "剑林凝结体体力-剑林-次数-选项-11"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_SET_MULTIPLIER_COUNT_11_MULTIPLIER_2"
+      "剑林凝结体体力-设置-倍率-次数-11-倍率-2"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_MULTIPLIER_COUNT_11_MULTIPLIER_2": {
+  "剑林凝结体体力-设置-倍率-次数-11-倍率-2": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.bar",
-          "jianlin.multiplier.2"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-条",
+          "剑林凝结体体力-剑林-倍率-2"
         ],
         "box_index": 2
       }
@@ -4525,45 +4525,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.multiplier.2"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-倍率-2"
       }
     },
     "next": [
-      "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_11_MULTIPLIER_2"
+      "剑林凝结体体力-倍率-校验-次数-11-倍率-2"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_11_MULTIPLIER_2": {
+  "剑林凝结体体力-倍率-校验-次数-11-倍率-2": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.selected",
-          "jianlin.multiplier.2"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-已选择",
+          "剑林凝结体体力-剑林-倍率-2"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_BUDGET_UNSAFE"
+      "剑林凝结体体力-预算-不安全"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_COUNT_COUNT_11_MULTIPLIER_3": {
+  "剑林凝结体体力-设置-次数-次数-11-倍率-3": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.bar",
-          "jianlin.count.option.11"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-条",
+          "剑林凝结体体力-剑林-次数-选项-11"
         ],
         "box_index": 2
       }
@@ -4577,45 +4577,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.count.option.11"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-次数-选项-11"
       }
     },
     "next": [
-      "MJA_JIANLIN_COUNT_VERIFY_COUNT_11_MULTIPLIER_3"
+      "剑林凝结体体力-次数-校验-次数-11-倍率-3"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_COUNT_VERIFY_COUNT_11_MULTIPLIER_3": {
+  "剑林凝结体体力-次数-校验-次数-11-倍率-3": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.selected",
-          "jianlin.count.option.11"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-已选择",
+          "剑林凝结体体力-剑林-次数-选项-11"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_SET_MULTIPLIER_COUNT_11_MULTIPLIER_3"
+      "剑林凝结体体力-设置-倍率-次数-11-倍率-3"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_MULTIPLIER_COUNT_11_MULTIPLIER_3": {
+  "剑林凝结体体力-设置-倍率-次数-11-倍率-3": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.bar",
-          "jianlin.multiplier.3"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-条",
+          "剑林凝结体体力-剑林-倍率-3"
         ],
         "box_index": 2
       }
@@ -4629,45 +4629,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.multiplier.3"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-倍率-3"
       }
     },
     "next": [
-      "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_11_MULTIPLIER_3"
+      "剑林凝结体体力-倍率-校验-次数-11-倍率-3"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_11_MULTIPLIER_3": {
+  "剑林凝结体体力-倍率-校验-次数-11-倍率-3": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.selected",
-          "jianlin.multiplier.3"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-已选择",
+          "剑林凝结体体力-剑林-倍率-3"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_BUDGET_UNSAFE"
+      "剑林凝结体体力-预算-不安全"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_COUNT_COUNT_12_MULTIPLIER_1": {
+  "剑林凝结体体力-设置-次数-次数-12-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.bar",
-          "jianlin.count.option.12"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-条",
+          "剑林凝结体体力-剑林-次数-选项-12"
         ],
         "box_index": 2
       }
@@ -4681,45 +4681,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.count.option.12"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-次数-选项-12"
       }
     },
     "next": [
-      "MJA_JIANLIN_COUNT_VERIFY_COUNT_12_MULTIPLIER_1"
+      "剑林凝结体体力-次数-校验-次数-12-倍率-1"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_COUNT_VERIFY_COUNT_12_MULTIPLIER_1": {
+  "剑林凝结体体力-次数-校验-次数-12-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.selected",
-          "jianlin.count.option.12"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-已选择",
+          "剑林凝结体体力-剑林-次数-选项-12"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_SET_MULTIPLIER_COUNT_12_MULTIPLIER_1"
+      "剑林凝结体体力-设置-倍率-次数-12-倍率-1"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_MULTIPLIER_COUNT_12_MULTIPLIER_1": {
+  "剑林凝结体体力-设置-倍率-次数-12-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.bar",
-          "jianlin.multiplier.1"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-条",
+          "剑林凝结体体力-剑林-倍率-1"
         ],
         "box_index": 2
       }
@@ -4733,45 +4733,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.multiplier.1"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-倍率-1"
       }
     },
     "next": [
-      "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_12_MULTIPLIER_1"
+      "剑林凝结体体力-倍率-校验-次数-12-倍率-1"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_12_MULTIPLIER_1": {
+  "剑林凝结体体力-倍率-校验-次数-12-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.selected",
-          "jianlin.multiplier.1"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-已选择",
+          "剑林凝结体体力-剑林-倍率-1"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_CHALLENGE_CONDENSATE"
+      "剑林凝结体体力-挑战-凝结体"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_COUNT_COUNT_12_MULTIPLIER_2": {
+  "剑林凝结体体力-设置-次数-次数-12-倍率-2": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.bar",
-          "jianlin.count.option.12"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-条",
+          "剑林凝结体体力-剑林-次数-选项-12"
         ],
         "box_index": 2
       }
@@ -4785,45 +4785,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.count.option.12"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-次数-选项-12"
       }
     },
     "next": [
-      "MJA_JIANLIN_COUNT_VERIFY_COUNT_12_MULTIPLIER_2"
+      "剑林凝结体体力-次数-校验-次数-12-倍率-2"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_COUNT_VERIFY_COUNT_12_MULTIPLIER_2": {
+  "剑林凝结体体力-次数-校验-次数-12-倍率-2": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.selected",
-          "jianlin.count.option.12"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-已选择",
+          "剑林凝结体体力-剑林-次数-选项-12"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_SET_MULTIPLIER_COUNT_12_MULTIPLIER_2"
+      "剑林凝结体体力-设置-倍率-次数-12-倍率-2"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_MULTIPLIER_COUNT_12_MULTIPLIER_2": {
+  "剑林凝结体体力-设置-倍率-次数-12-倍率-2": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.bar",
-          "jianlin.multiplier.2"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-条",
+          "剑林凝结体体力-剑林-倍率-2"
         ],
         "box_index": 2
       }
@@ -4837,45 +4837,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.multiplier.2"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-倍率-2"
       }
     },
     "next": [
-      "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_12_MULTIPLIER_2"
+      "剑林凝结体体力-倍率-校验-次数-12-倍率-2"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_12_MULTIPLIER_2": {
+  "剑林凝结体体力-倍率-校验-次数-12-倍率-2": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.selected",
-          "jianlin.multiplier.2"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-已选择",
+          "剑林凝结体体力-剑林-倍率-2"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_BUDGET_UNSAFE"
+      "剑林凝结体体力-预算-不安全"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_COUNT_COUNT_12_MULTIPLIER_3": {
+  "剑林凝结体体力-设置-次数-次数-12-倍率-3": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.bar",
-          "jianlin.count.option.12"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-条",
+          "剑林凝结体体力-剑林-次数-选项-12"
         ],
         "box_index": 2
       }
@@ -4889,45 +4889,45 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.count.option.12"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-次数-选项-12"
       }
     },
     "next": [
-      "MJA_JIANLIN_COUNT_VERIFY_COUNT_12_MULTIPLIER_3"
+      "剑林凝结体体力-次数-校验-次数-12-倍率-3"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_COUNT_VERIFY_COUNT_12_MULTIPLIER_3": {
+  "剑林凝结体体力-次数-校验-次数-12-倍率-3": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.selected",
-          "jianlin.count.option.12"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-已选择",
+          "剑林凝结体体力-剑林-次数-选项-12"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_SET_MULTIPLIER_COUNT_12_MULTIPLIER_3"
+      "剑林凝结体体力-设置-倍率-次数-12-倍率-3"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SET_MULTIPLIER_COUNT_12_MULTIPLIER_3": {
+  "剑林凝结体体力-设置-倍率-次数-12-倍率-3": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.bar",
-          "jianlin.multiplier.3"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-条",
+          "剑林凝结体体力-剑林-倍率-3"
         ],
         "box_index": 2
       }
@@ -4941,91 +4941,91 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.multiplier.3"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-倍率-3"
       }
     },
     "next": [
-      "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_12_MULTIPLIER_3"
+      "剑林凝结体体力-倍率-校验-次数-12-倍率-3"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_MULTIPLIER_VERIFY_COUNT_12_MULTIPLIER_3": {
+  "剑林凝结体体力-倍率-校验-次数-12-倍率-3": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.multiplier.selected",
-          "jianlin.multiplier.3"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-倍率-已选择",
+          "剑林凝结体体力-剑林-倍率-3"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_BUDGET_UNSAFE"
+      "剑林凝结体体力-预算-不安全"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_PLAN_DISPATCH": {
+  "剑林凝结体体力-计划-派遣": {
     "recognition": "DirectHit",
     "action": "DoNothing",
     "next": [
-        "MJA_JIANLIN_SET_COUNT_COUNT_1_MULTIPLIER_1",
-        "MJA_JIANLIN_SET_COUNT_COUNT_1_MULTIPLIER_2",
-        "MJA_JIANLIN_SET_COUNT_COUNT_1_MULTIPLIER_3",
-        "MJA_JIANLIN_SET_COUNT_COUNT_2_MULTIPLIER_1",
-        "MJA_JIANLIN_SET_COUNT_COUNT_2_MULTIPLIER_2",
-        "MJA_JIANLIN_SET_COUNT_COUNT_2_MULTIPLIER_3",
-        "MJA_JIANLIN_SET_COUNT_COUNT_3_MULTIPLIER_1",
-        "MJA_JIANLIN_SET_COUNT_COUNT_3_MULTIPLIER_2",
-        "MJA_JIANLIN_SET_COUNT_COUNT_3_MULTIPLIER_3",
-        "MJA_JIANLIN_SET_COUNT_COUNT_4_MULTIPLIER_1",
-        "MJA_JIANLIN_SET_COUNT_COUNT_4_MULTIPLIER_2",
-        "MJA_JIANLIN_SET_COUNT_COUNT_4_MULTIPLIER_3",
-        "MJA_JIANLIN_SET_COUNT_COUNT_5_MULTIPLIER_1",
-        "MJA_JIANLIN_SET_COUNT_COUNT_5_MULTIPLIER_2",
-        "MJA_JIANLIN_SET_COUNT_COUNT_5_MULTIPLIER_3",
-        "MJA_JIANLIN_SET_COUNT_COUNT_6_MULTIPLIER_1",
-        "MJA_JIANLIN_SET_COUNT_COUNT_6_MULTIPLIER_2",
-        "MJA_JIANLIN_SET_COUNT_COUNT_6_MULTIPLIER_3",
-        "MJA_JIANLIN_SET_COUNT_COUNT_7_MULTIPLIER_1",
-        "MJA_JIANLIN_SET_COUNT_COUNT_7_MULTIPLIER_2",
-        "MJA_JIANLIN_SET_COUNT_COUNT_7_MULTIPLIER_3",
-        "MJA_JIANLIN_SET_COUNT_COUNT_8_MULTIPLIER_1",
-        "MJA_JIANLIN_SET_COUNT_COUNT_8_MULTIPLIER_2",
-        "MJA_JIANLIN_SET_COUNT_COUNT_8_MULTIPLIER_3",
-        "MJA_JIANLIN_SET_COUNT_COUNT_9_MULTIPLIER_1",
-        "MJA_JIANLIN_SET_COUNT_COUNT_9_MULTIPLIER_2",
-        "MJA_JIANLIN_SET_COUNT_COUNT_9_MULTIPLIER_3",
-        "MJA_JIANLIN_SET_COUNT_COUNT_10_MULTIPLIER_1",
-        "MJA_JIANLIN_SET_COUNT_COUNT_10_MULTIPLIER_2",
-        "MJA_JIANLIN_SET_COUNT_COUNT_10_MULTIPLIER_3",
-        "MJA_JIANLIN_SET_COUNT_COUNT_11_MULTIPLIER_1",
-        "MJA_JIANLIN_SET_COUNT_COUNT_11_MULTIPLIER_2",
-        "MJA_JIANLIN_SET_COUNT_COUNT_11_MULTIPLIER_3",
-        "MJA_JIANLIN_SET_COUNT_COUNT_12_MULTIPLIER_1",
-        "MJA_JIANLIN_SET_COUNT_COUNT_12_MULTIPLIER_2",
-        "MJA_JIANLIN_SET_COUNT_COUNT_12_MULTIPLIER_3"
+        "剑林凝结体体力-设置-次数-次数-1-倍率-1",
+        "剑林凝结体体力-设置-次数-次数-1-倍率-2",
+        "剑林凝结体体力-设置-次数-次数-1-倍率-3",
+        "剑林凝结体体力-设置-次数-次数-2-倍率-1",
+        "剑林凝结体体力-设置-次数-次数-2-倍率-2",
+        "剑林凝结体体力-设置-次数-次数-2-倍率-3",
+        "剑林凝结体体力-设置-次数-次数-3-倍率-1",
+        "剑林凝结体体力-设置-次数-次数-3-倍率-2",
+        "剑林凝结体体力-设置-次数-次数-3-倍率-3",
+        "剑林凝结体体力-设置-次数-次数-4-倍率-1",
+        "剑林凝结体体力-设置-次数-次数-4-倍率-2",
+        "剑林凝结体体力-设置-次数-次数-4-倍率-3",
+        "剑林凝结体体力-设置-次数-次数-5-倍率-1",
+        "剑林凝结体体力-设置-次数-次数-5-倍率-2",
+        "剑林凝结体体力-设置-次数-次数-5-倍率-3",
+        "剑林凝结体体力-设置-次数-次数-6-倍率-1",
+        "剑林凝结体体力-设置-次数-次数-6-倍率-2",
+        "剑林凝结体体力-设置-次数-次数-6-倍率-3",
+        "剑林凝结体体力-设置-次数-次数-7-倍率-1",
+        "剑林凝结体体力-设置-次数-次数-7-倍率-2",
+        "剑林凝结体体力-设置-次数-次数-7-倍率-3",
+        "剑林凝结体体力-设置-次数-次数-8-倍率-1",
+        "剑林凝结体体力-设置-次数-次数-8-倍率-2",
+        "剑林凝结体体力-设置-次数-次数-8-倍率-3",
+        "剑林凝结体体力-设置-次数-次数-9-倍率-1",
+        "剑林凝结体体力-设置-次数-次数-9-倍率-2",
+        "剑林凝结体体力-设置-次数-次数-9-倍率-3",
+        "剑林凝结体体力-设置-次数-次数-10-倍率-1",
+        "剑林凝结体体力-设置-次数-次数-10-倍率-2",
+        "剑林凝结体体力-设置-次数-次数-10-倍率-3",
+        "剑林凝结体体力-设置-次数-次数-11-倍率-1",
+        "剑林凝结体体力-设置-次数-次数-11-倍率-2",
+        "剑林凝结体体力-设置-次数-次数-11-倍率-3",
+        "剑林凝结体体力-设置-次数-次数-12-倍率-1",
+        "剑林凝结体体力-设置-次数-次数-12-倍率-2",
+        "剑林凝结体体力-设置-次数-次数-12-倍率-3"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_CHALLENGE_CONDENSATE": {
+  "剑林凝结体体力-挑战-凝结体": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.count.selected",
-          "jianlin.multiplier.selected",
-          "jianlin.challenge.button"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-次数-已选择",
+          "剑林凝结体体力-剑林-倍率-已选择",
+          "剑林凝结体体力-剑林-挑战-按钮"
         ],
         "box_index": 3
       }
@@ -5039,64 +5039,64 @@
       "evidence": {
         "page_index": 0,
         "target_index": 3,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.challenge.button"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-挑战-按钮"
       }
     },
     "next": [
-      "MJA_JIANLIN_BATTLE_PAGE_PROBE"
+      "剑林凝结体体力-战斗-页面-探测"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_BATTLE_PAGE_PROBE": {
+  "剑林凝结体体力-战斗-页面-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.battle.page",
-          "jianlin.battle.start"
+          "剑林凝结体体力-剑林-战斗-页面",
+          "剑林凝结体体力-剑林-战斗-开始"
         ],
         "box_index": 1
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_SKIP_PREPARE_PROBE",
-      "MJA_JIANLIN_SKIP_PREPARE_CLICK"
+      "剑林凝结体体力-跳过-准备-探测",
+      "剑林凝结体体力-跳过-准备-点击"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SKIP_PREPARE_PROBE": {
+  "剑林凝结体体力-跳过-准备-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.battle.page",
-          "jianlin.skip_prepare",
-          "jianlin.skip_prepare.checked"
+          "剑林凝结体体力-剑林-战斗-页面",
+          "剑林凝结体体力-剑林-跳过-准备",
+          "剑林凝结体体力-剑林-跳过-准备-已勾选"
         ],
         "box_index": 1
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_SKIP_PREPARE_READY"
+      "剑林凝结体体力-跳过-准备-就绪"
     ],
     "on_error": [
-      "MJA_JIANLIN_SKIP_PREPARE_CLICK"
+      "剑林凝结体体力-跳过-准备-点击"
     ]
   },
-  "MJA_JIANLIN_SKIP_PREPARE_CLICK": {
+  "剑林凝结体体力-跳过-准备-点击": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.battle.page",
-          "jianlin.skip_prepare"
+          "剑林凝结体体力-剑林-战斗-页面",
+          "剑林凝结体体力-剑林-跳过-准备"
         ],
         "box_index": 1
       }
@@ -5110,46 +5110,46 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "jianlin.battle.page",
-        "target_name": "jianlin.skip_prepare"
+        "page_name": "剑林凝结体体力-剑林-战斗-页面",
+        "target_name": "剑林凝结体体力-剑林-跳过-准备"
       }
     },
     "next": [
-      "MJA_JIANLIN_SKIP_PREPARE_READY"
+      "剑林凝结体体力-跳过-准备-就绪"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SKIP_PREPARE_READY": {
+  "剑林凝结体体力-跳过-准备-就绪": {
     "recognition": "DirectHit",
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_START_BATTLE_COUNT_1_MULTIPLIER_1",
-      "MJA_JIANLIN_START_BATTLE_COUNT_1_MULTIPLIER_2",
-      "MJA_JIANLIN_START_BATTLE_COUNT_1_MULTIPLIER_3",
-      "MJA_JIANLIN_START_BATTLE_COUNT_2_MULTIPLIER_1",
-      "MJA_JIANLIN_START_BATTLE_COUNT_2_MULTIPLIER_2",
-      "MJA_JIANLIN_START_BATTLE_COUNT_2_MULTIPLIER_3",
-      "MJA_JIANLIN_START_BATTLE_COUNT_3_MULTIPLIER_1",
-      "MJA_JIANLIN_START_BATTLE_COUNT_3_MULTIPLIER_2",
-      "MJA_JIANLIN_START_BATTLE_COUNT_4_MULTIPLIER_1",
-      "MJA_JIANLIN_START_BATTLE_COUNT_5_MULTIPLIER_1",
-      "MJA_JIANLIN_START_BATTLE_COUNT_6_MULTIPLIER_1"
+      "剑林凝结体体力-开始-战斗-次数-1-倍率-1",
+      "剑林凝结体体力-开始-战斗-次数-1-倍率-2",
+      "剑林凝结体体力-开始-战斗-次数-1-倍率-3",
+      "剑林凝结体体力-开始-战斗-次数-2-倍率-1",
+      "剑林凝结体体力-开始-战斗-次数-2-倍率-2",
+      "剑林凝结体体力-开始-战斗-次数-2-倍率-3",
+      "剑林凝结体体力-开始-战斗-次数-3-倍率-1",
+      "剑林凝结体体力-开始-战斗-次数-3-倍率-2",
+      "剑林凝结体体力-开始-战斗-次数-4-倍率-1",
+      "剑林凝结体体力-开始-战斗-次数-5-倍率-1",
+      "剑林凝结体体力-开始-战斗-次数-6-倍率-1"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_START_BATTLE_COUNT_1_MULTIPLIER_1": {
+  "剑林凝结体体力-开始-战斗-次数-1-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.battle.page",
-          "jianlin.battle.start",
-          "jianlin.stamina.resource",
-          "jianlin.stamina.total.20"
+          "剑林凝结体体力-剑林-战斗-页面",
+          "剑林凝结体体力-剑林-战斗-开始",
+          "剑林凝结体体力-剑林-体力-资源",
+          "剑林凝结体体力-剑林-体力-总量-20"
         ],
         "box_index": 1
       }
@@ -5168,26 +5168,26 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "jianlin.battle.page",
-        "target_name": "jianlin.battle.start"
+        "page_name": "剑林凝结体体力-剑林-战斗-页面",
+        "target_name": "剑林凝结体体力-剑林-战斗-开始"
       }
     },
     "next": [
-      "MJA_JIANLIN_BATTLE_RESULT_PROBE"
+      "剑林凝结体体力-战斗-结果-探测"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_START_BATTLE_COUNT_1_MULTIPLIER_2": {
+  "剑林凝结体体力-开始-战斗-次数-1-倍率-2": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.battle.page",
-          "jianlin.battle.start",
-          "jianlin.stamina.resource",
-          "jianlin.stamina.total.40"
+          "剑林凝结体体力-剑林-战斗-页面",
+          "剑林凝结体体力-剑林-战斗-开始",
+          "剑林凝结体体力-剑林-体力-资源",
+          "剑林凝结体体力-剑林-体力-总量-40"
         ],
         "box_index": 1
       }
@@ -5206,26 +5206,26 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "jianlin.battle.page",
-        "target_name": "jianlin.battle.start"
+        "page_name": "剑林凝结体体力-剑林-战斗-页面",
+        "target_name": "剑林凝结体体力-剑林-战斗-开始"
       }
     },
     "next": [
-      "MJA_JIANLIN_BATTLE_RESULT_PROBE"
+      "剑林凝结体体力-战斗-结果-探测"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_START_BATTLE_COUNT_1_MULTIPLIER_3": {
+  "剑林凝结体体力-开始-战斗-次数-1-倍率-3": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.battle.page",
-          "jianlin.battle.start",
-          "jianlin.stamina.resource",
-          "jianlin.stamina.total.60"
+          "剑林凝结体体力-剑林-战斗-页面",
+          "剑林凝结体体力-剑林-战斗-开始",
+          "剑林凝结体体力-剑林-体力-资源",
+          "剑林凝结体体力-剑林-体力-总量-60"
         ],
         "box_index": 1
       }
@@ -5244,26 +5244,26 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "jianlin.battle.page",
-        "target_name": "jianlin.battle.start"
+        "page_name": "剑林凝结体体力-剑林-战斗-页面",
+        "target_name": "剑林凝结体体力-剑林-战斗-开始"
       }
     },
     "next": [
-      "MJA_JIANLIN_BATTLE_RESULT_PROBE"
+      "剑林凝结体体力-战斗-结果-探测"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_START_BATTLE_COUNT_2_MULTIPLIER_1": {
+  "剑林凝结体体力-开始-战斗-次数-2-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.battle.page",
-          "jianlin.battle.start",
-          "jianlin.stamina.resource",
-          "jianlin.stamina.total.40"
+          "剑林凝结体体力-剑林-战斗-页面",
+          "剑林凝结体体力-剑林-战斗-开始",
+          "剑林凝结体体力-剑林-体力-资源",
+          "剑林凝结体体力-剑林-体力-总量-40"
         ],
         "box_index": 1
       }
@@ -5282,26 +5282,26 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "jianlin.battle.page",
-        "target_name": "jianlin.battle.start"
+        "page_name": "剑林凝结体体力-剑林-战斗-页面",
+        "target_name": "剑林凝结体体力-剑林-战斗-开始"
       }
     },
     "next": [
-      "MJA_JIANLIN_BATTLE_RESULT_PROBE"
+      "剑林凝结体体力-战斗-结果-探测"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_START_BATTLE_COUNT_2_MULTIPLIER_2": {
+  "剑林凝结体体力-开始-战斗-次数-2-倍率-2": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.battle.page",
-          "jianlin.battle.start",
-          "jianlin.stamina.resource",
-          "jianlin.stamina.total.80"
+          "剑林凝结体体力-剑林-战斗-页面",
+          "剑林凝结体体力-剑林-战斗-开始",
+          "剑林凝结体体力-剑林-体力-资源",
+          "剑林凝结体体力-剑林-体力-总量-80"
         ],
         "box_index": 1
       }
@@ -5320,26 +5320,26 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "jianlin.battle.page",
-        "target_name": "jianlin.battle.start"
+        "page_name": "剑林凝结体体力-剑林-战斗-页面",
+        "target_name": "剑林凝结体体力-剑林-战斗-开始"
       }
     },
     "next": [
-      "MJA_JIANLIN_BATTLE_RESULT_PROBE"
+      "剑林凝结体体力-战斗-结果-探测"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_START_BATTLE_COUNT_2_MULTIPLIER_3": {
+  "剑林凝结体体力-开始-战斗-次数-2-倍率-3": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.battle.page",
-          "jianlin.battle.start",
-          "jianlin.stamina.resource",
-          "jianlin.stamina.total.120"
+          "剑林凝结体体力-剑林-战斗-页面",
+          "剑林凝结体体力-剑林-战斗-开始",
+          "剑林凝结体体力-剑林-体力-资源",
+          "剑林凝结体体力-剑林-体力-总量-120"
         ],
         "box_index": 1
       }
@@ -5358,26 +5358,26 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "jianlin.battle.page",
-        "target_name": "jianlin.battle.start"
+        "page_name": "剑林凝结体体力-剑林-战斗-页面",
+        "target_name": "剑林凝结体体力-剑林-战斗-开始"
       }
     },
     "next": [
-      "MJA_JIANLIN_BATTLE_RESULT_PROBE"
+      "剑林凝结体体力-战斗-结果-探测"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_START_BATTLE_COUNT_3_MULTIPLIER_1": {
+  "剑林凝结体体力-开始-战斗-次数-3-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.battle.page",
-          "jianlin.battle.start",
-          "jianlin.stamina.resource",
-          "jianlin.stamina.total.60"
+          "剑林凝结体体力-剑林-战斗-页面",
+          "剑林凝结体体力-剑林-战斗-开始",
+          "剑林凝结体体力-剑林-体力-资源",
+          "剑林凝结体体力-剑林-体力-总量-60"
         ],
         "box_index": 1
       }
@@ -5396,26 +5396,26 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "jianlin.battle.page",
-        "target_name": "jianlin.battle.start"
+        "page_name": "剑林凝结体体力-剑林-战斗-页面",
+        "target_name": "剑林凝结体体力-剑林-战斗-开始"
       }
     },
     "next": [
-      "MJA_JIANLIN_BATTLE_RESULT_PROBE"
+      "剑林凝结体体力-战斗-结果-探测"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_START_BATTLE_COUNT_3_MULTIPLIER_2": {
+  "剑林凝结体体力-开始-战斗-次数-3-倍率-2": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.battle.page",
-          "jianlin.battle.start",
-          "jianlin.stamina.resource",
-          "jianlin.stamina.total.120"
+          "剑林凝结体体力-剑林-战斗-页面",
+          "剑林凝结体体力-剑林-战斗-开始",
+          "剑林凝结体体力-剑林-体力-资源",
+          "剑林凝结体体力-剑林-体力-总量-120"
         ],
         "box_index": 1
       }
@@ -5434,26 +5434,26 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "jianlin.battle.page",
-        "target_name": "jianlin.battle.start"
+        "page_name": "剑林凝结体体力-剑林-战斗-页面",
+        "target_name": "剑林凝结体体力-剑林-战斗-开始"
       }
     },
     "next": [
-      "MJA_JIANLIN_BATTLE_RESULT_PROBE"
+      "剑林凝结体体力-战斗-结果-探测"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_START_BATTLE_COUNT_4_MULTIPLIER_1": {
+  "剑林凝结体体力-开始-战斗-次数-4-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.battle.page",
-          "jianlin.battle.start",
-          "jianlin.stamina.resource",
-          "jianlin.stamina.total.80"
+          "剑林凝结体体力-剑林-战斗-页面",
+          "剑林凝结体体力-剑林-战斗-开始",
+          "剑林凝结体体力-剑林-体力-资源",
+          "剑林凝结体体力-剑林-体力-总量-80"
         ],
         "box_index": 1
       }
@@ -5472,26 +5472,26 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "jianlin.battle.page",
-        "target_name": "jianlin.battle.start"
+        "page_name": "剑林凝结体体力-剑林-战斗-页面",
+        "target_name": "剑林凝结体体力-剑林-战斗-开始"
       }
     },
     "next": [
-      "MJA_JIANLIN_BATTLE_RESULT_PROBE"
+      "剑林凝结体体力-战斗-结果-探测"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_START_BATTLE_COUNT_5_MULTIPLIER_1": {
+  "剑林凝结体体力-开始-战斗-次数-5-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.battle.page",
-          "jianlin.battle.start",
-          "jianlin.stamina.resource",
-          "jianlin.stamina.total.100"
+          "剑林凝结体体力-剑林-战斗-页面",
+          "剑林凝结体体力-剑林-战斗-开始",
+          "剑林凝结体体力-剑林-体力-资源",
+          "剑林凝结体体力-剑林-体力-总量-100"
         ],
         "box_index": 1
       }
@@ -5510,26 +5510,26 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "jianlin.battle.page",
-        "target_name": "jianlin.battle.start"
+        "page_name": "剑林凝结体体力-剑林-战斗-页面",
+        "target_name": "剑林凝结体体力-剑林-战斗-开始"
       }
     },
     "next": [
-      "MJA_JIANLIN_BATTLE_RESULT_PROBE"
+      "剑林凝结体体力-战斗-结果-探测"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_START_BATTLE_COUNT_6_MULTIPLIER_1": {
+  "剑林凝结体体力-开始-战斗-次数-6-倍率-1": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.battle.page",
-          "jianlin.battle.start",
-          "jianlin.stamina.resource",
-          "jianlin.stamina.total.120"
+          "剑林凝结体体力-剑林-战斗-页面",
+          "剑林凝结体体力-剑林-战斗-开始",
+          "剑林凝结体体力-剑林-体力-资源",
+          "剑林凝结体体力-剑林-体力-总量-120"
         ],
         "box_index": 1
       }
@@ -5548,43 +5548,43 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "jianlin.battle.page",
-        "target_name": "jianlin.battle.start"
+        "page_name": "剑林凝结体体力-剑林-战斗-页面",
+        "target_name": "剑林凝结体体力-剑林-战斗-开始"
       }
     },
     "next": [
-      "MJA_JIANLIN_BATTLE_RESULT_PROBE"
+      "剑林凝结体体力-战斗-结果-探测"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_BATTLE_RESULT_PROBE": {
+  "剑林凝结体体力-战斗-结果-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.battle.result",
-          "jianlin.battle.result.close"
+          "剑林凝结体体力-剑林-战斗-结果",
+          "剑林凝结体体力-剑林-战斗结果关闭"
         ],
         "box_index": 1
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_CLOSE_CONDENSATE_RESULT"
+      "剑林凝结体体力-关闭-凝结体-结果"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_CLOSE_CONDENSATE_RESULT": {
+  "剑林凝结体体力-关闭-凝结体-结果": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.battle.result",
-          "jianlin.battle.result.close"
+          "剑林凝结体体力-剑林-战斗-结果",
+          "剑林凝结体体力-剑林-战斗结果关闭"
         ],
         "box_index": 1
       }
@@ -5599,63 +5599,63 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "jianlin.battle.result",
-        "target_name": "jianlin.battle.result.close"
+        "page_name": "剑林凝结体体力-剑林-战斗-结果",
+        "target_name": "剑林凝结体体力-剑林-战斗结果关闭"
       }
     },
     "next": [
-      "MJA_JIANLIN_SUCCESS_AFTER_BATTLE"
+      "剑林凝结体体力-成功-之后-战斗"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_RESULT_AFTER_PROBE": {
+  "剑林凝结体体力-结果-之后-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.stamina.after_result"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-体力-之后-结果"
         ],
         "box_index": 1
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_RESULT_INSUFFICIENT_PROBE"
+      "剑林凝结体体力-结果-不足-探测"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_RESULT_INSUFFICIENT_PROBE": {
+  "剑林凝结体体力-结果-不足-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.stamina.after_result",
-          "jianlin.stamina.insufficient"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-体力-之后-结果",
+          "剑林凝结体体力-剑林-体力-不足"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_CLOSE_JIANLIN_PAGE"
+      "剑林凝结体体力-关闭-剑林-页面"
     ],
     "on_error": [
-      "MJA_JIANLIN_CHALLENGE_LOOP"
+      "剑林凝结体体力-挑战-循环"
     ]
   },
-  "MJA_JIANLIN_CLOSE_JIANLIN_PAGE": {
+  "剑林凝结体体力-关闭-剑林-页面": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.page.close"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-页面-关闭"
         ],
         "box_index": 1
       }
@@ -5669,18 +5669,18 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.page.close"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-页面-关闭"
       }
     },
     "next": [
-      "MJA_JIANLIN_SUCCESS"
+      "剑林凝结体体力-成功"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_STAMINA_BELOW_20_SUCCESS": {
+  "剑林凝结体体力-体力-以下-20-成功": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -5690,13 +5690,13 @@
       "postcondition": "jianlin.stamina_below_20_or_second_offer"
     },
     "next": [
-      "MJA_JIANLIN_TERMINAL_CLEANUP_ROUTE"
+      "剑林凝结体体力-终止-清理-路线"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SUCCESS": {
+  "剑林凝结体体力-成功": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -5706,13 +5706,13 @@
       "postcondition": "jianlin.challenge_condensate.required"
     },
     "next": [
-      "MJA_JIANLIN_TERMINAL_CLEANUP_ROUTE"
+      "剑林凝结体体力-终止-清理-路线"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SUCCESS_AFTER_BATTLE": {
+  "剑林凝结体体力-成功-之后-战斗": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -5722,33 +5722,33 @@
       "postcondition": "jianlin.challenge_condensate.required"
     },
     "next": [
-      "MJA_JIANLIN_TERMINAL_CLEANUP_ROUTE"
+      "剑林凝结体体力-终止-清理-路线"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_TERMINAL_CLEANUP_ROUTE": {
+  "剑林凝结体体力-终止-清理-路线": {
     "recognition": "DirectHit",
     "action": "DoNothing",
     "timeout": 10000,
     "next": [
-      "MJA_JIANLIN_CLEANUP_PAGE_CLOSE",
-      "MJA_JIANLIN_CLEANUP_DAILY_CLOSE",
-      "MJA_JIANLIN_CLEANUP_HOME_PROBE"
+      "剑林凝结体体力-清理-页面-关闭",
+      "剑林凝结体体力-清理-日常-关闭",
+      "剑林凝结体体力-清理-主页-探测"
     ],
     "on_error": [
-      "MJA_JIANLIN_CLEANUP_START_APP",
-      "MJA_JIANLIN_COMMON_STOP"
+      "剑林凝结体体力-清理-开始-应用",
+      "剑林凝结体体力-通用停止"
     ]
   },
-  "MJA_JIANLIN_CLEANUP_PAGE_CLOSE": {
+  "剑林凝结体体力-清理-页面-关闭": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page",
-          "jianlin.page.close"
+          "剑林凝结体体力-剑林-页面",
+          "剑林凝结体体力-剑林-页面-关闭"
         ],
         "box_index": 1
       }
@@ -5762,37 +5762,37 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "jianlin.page",
-        "target_name": "jianlin.page.close"
+        "page_name": "剑林凝结体体力-剑林-页面",
+        "target_name": "剑林凝结体体力-剑林-页面-关闭"
       }
     },
     "retry_times": 0,
     "next": [
-      "MJA_JIANLIN_CLEANUP_AFTER_PAGE_ROUTE"
+      "剑林凝结体体力-清理-之后-页面-路线"
     ],
     "on_error": [
-      "MJA_JIANLIN_COMMON_STOP"
+      "剑林凝结体体力-通用停止"
     ]
   },
-  "MJA_JIANLIN_CLEANUP_AFTER_PAGE_ROUTE": {
+  "剑林凝结体体力-清理-之后-页面-路线": {
     "recognition": "DirectHit",
     "action": "DoNothing",
     "timeout": 10000,
     "next": [
-      "MJA_JIANLIN_CLEANUP_DAILY_CLOSE",
-      "MJA_JIANLIN_CLEANUP_HOME_PROBE"
+      "剑林凝结体体力-清理-日常-关闭",
+      "剑林凝结体体力-清理-主页-探测"
     ],
     "on_error": [
-      "MJA_JIANLIN_COMMON_STOP"
+      "剑林凝结体体力-通用停止"
     ]
   },
-  "MJA_JIANLIN_CLEANUP_DAILY_CLOSE": {
+  "剑林凝结体体力-清理-日常-关闭": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.daily.page",
-          "jianlin.daily.close"
+          "剑林凝结体体力-剑林-日常-页面",
+          "剑林凝结体体力-剑林-日常-关闭"
         ],
         "box_index": 1
       }
@@ -5806,30 +5806,30 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "jianlin.daily.page",
-        "target_name": "jianlin.daily.close"
+        "page_name": "剑林凝结体体力-剑林-日常-页面",
+        "target_name": "剑林凝结体体力-剑林-日常-关闭"
       }
     },
     "retry_times": 0,
     "next": [
-      "MJA_JIANLIN_CLEANUP_HOME_PROBE"
+      "剑林凝结体体力-清理-主页-探测"
     ],
     "on_error": [
-      "MJA_JIANLIN_COMMON_STOP"
+      "剑林凝结体体力-通用停止"
     ]
   },
-  "MJA_JIANLIN_CLEANUP_HOME_PROBE": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_HOME_PAGE"], "box_index": 0}},
+  "剑林凝结体体力-清理-主页-探测": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}},
     "timeout": 10000,
     "action": "DoNothing",
     "next": [
-      "MJA_JIANLIN_COMMON_STOP"
+      "剑林凝结体体力-通用停止"
     ],
     "on_error": [
-      "MJA_JIANLIN_COMMON_STOP"
+      "剑林凝结体体力-通用停止"
     ]
   },
-  "MJA_JIANLIN_CLEANUP_START_APP": {
+  "剑林凝结体体力-清理-开始-应用": {
     "recognition": "DirectHit",
     "max_hit": 1,
     "action": "StartApp",
@@ -5837,32 +5837,32 @@
     "post_delay": 5000,
     "retry_times": 0,
     "next": [
-      "MJA_JIANLIN_CLEANUP_RECOVERY_STATE_PROBE"
+      "剑林凝结体体力-清理-恢复-状态-探测"
     ],
     "on_error": [
-      "MJA_JIANLIN_COMMON_STOP"
+      "剑林凝结体体力-通用停止"
     ]
   },
-  "MJA_JIANLIN_CLEANUP_RECOVERY_STATE_PROBE": {
+  "剑林凝结体体力-清理-恢复-状态-探测": {
     "recognition": "DirectHit",
     "action": "DoNothing",
     "timeout": 30000,
     "next": [
-      "MJA_JIANLIN_CLEANUP_PAGE_CLOSE",
-      "MJA_JIANLIN_CLEANUP_DAILY_CLOSE",
-      "MJA_JIANLIN_CLEANUP_HOME_PROBE"
+      "剑林凝结体体力-清理-页面-关闭",
+      "剑林凝结体体力-清理-日常-关闭",
+      "剑林凝结体体力-清理-主页-探测"
     ],
     "on_error": [
-      "MJA_JIANLIN_COMMON_STOP"
+      "剑林凝结体体力-通用停止"
     ]
   },
-  "MJA_JIANLIN_SECOND_OFFER": {
+  "剑林凝结体体力-第二次-优惠": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.stamina.postpurchase.prompt",
-          "jianlin.stamina.postpurchase.close"
+          "剑林凝结体体力-剑林-体力-购买后-提示",
+          "剑林凝结体体力-剑林-体力-购买后-关闭"
         ],
         "box_index": 1
       }
@@ -5876,18 +5876,18 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "jianlin.stamina.postpurchase.prompt",
-        "target_name": "jianlin.stamina.postpurchase.close"
+        "page_name": "剑林凝结体体力-剑林-体力-购买后-提示",
+        "target_name": "剑林凝结体体力-剑林-体力-购买后-关闭"
       }
     },
     "next": [
-      "MJA_JIANLIN_SECOND_OFFER_SUCCESS"
+      "剑林凝结体体力-第二次-优惠-成功"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_SECOND_OFFER_SUCCESS": {
+  "剑林凝结体体力-第二次-优惠-成功": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -5897,13 +5897,13 @@
       "postcondition": "jianlin.stamina_below_20_or_second_offer"
     },
     "next": [
-      "MJA_JIANLIN_TERMINAL_CLEANUP_ROUTE"
+      "剑林凝结体体力-终止-清理-路线"
     ],
     "on_error": [
-      "MJA_JIANLIN_RECORD_FAILURE"
+      "剑林凝结体体力-记录-失败"
     ]
   },
-  "MJA_JIANLIN_BUDGET_UNSAFE": {
+  "剑林凝结体体力-预算-不安全": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -5916,10 +5916,10 @@
     },
     "Abort": true,
     "next": [
-      "MJA_COMMON_ABORT"
+      "公共-通用中止"
     ]
   },
-  "MJA_JIANLIN_RECORD_FAILURE": {
+  "剑林凝结体体力-记录-失败": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -5932,36 +5932,36 @@
     },
     "Abort": true,
     "next": [
-      "MJA_COMMON_ABORT"
+      "公共-通用中止"
     ]
   },
-  "MJA_JIANLIN_COMMON_STOP": {
+  "剑林凝结体体力-通用停止": {
     "recognition": "DirectHit",
     "action": "StopTask",
     "next": [
-      "MJA_COMMON_STOP"
+      "公共-通用停止"
     ]
   },
-  "MJA_JIANLIN_COMMON_ABORT": {
+  "剑林凝结体体力-通用中止": {
     "recognition": "DirectHit",
     "Abort": true,
     "action": "StopTask",
     "next": [
-      "MJA_COMMON_ABORT"
+      "公共-通用中止"
     ]
   },
-  "jianlin.home.page": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_HOME_PAGE"], "box_index": 0}},
+  "剑林凝结体体力-剑林-主页-页面": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}},
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.foreign.shadow.page": {
+  "剑林凝结体体力-剑林-外部-影-页面": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.foreign.shadow.title",
-          "jianlin.foreign.shadow.level"
+          "剑林凝结体体力-剑林-外部-影-标题",
+          "剑林凝结体体力-剑林-外部-影-等级"
         ],
         "box_index": 0
       }
@@ -5969,7 +5969,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.foreign.shadow.title": {
+  "剑林凝结体体力-剑林-外部-影-标题": {
     "recognition": "OCR",
     "expected": "^蜃影武墟$",
     "roi": [
@@ -5981,7 +5981,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.foreign.shadow.level": {
+  "剑林凝结体体力-剑林-外部-影-等级": {
     "recognition": "OCR",
     "expected": "当前武墟等级",
     "roi": [
@@ -5993,7 +5993,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.foreign.page.close": {
+  "剑林凝结体体力-剑林-外部-页面-关闭": {
     "recognition": "TemplateMatch",
     "template": "home/modal_close.png",
     "roi": [1160, 0, 100, 100],
@@ -6001,17 +6001,17 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.panel.open": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_FUNCTION_PANEL_ENTRY"], "box_index": 0}},
+  "剑林凝结体体力-剑林-面板-打开": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏功能面板-入口"], "box_index": 0}},
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.panel.page": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_SIDE_PANEL_OPEN"], "box_index": 0}},
+  "剑林凝结体体力-剑林-面板-页面": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏侧边面板-打开"], "box_index": 0}},
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.daily.entry": {
+  "剑林凝结体体力-剑林-日常-入口": {
     "recognition": "OCR",
     "expected": [
       "日常",
@@ -6026,7 +6026,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.daily.page": {
+  "剑林凝结体体力-剑林-日常-页面": {
     "recognition": "OCR",
     "expected": [
       "日常",
@@ -6041,7 +6041,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.daily.close": {
+  "剑林凝结体体力-剑林-日常-关闭": {
     "recognition": "TemplateMatch",
     "template": "daily/TRIAL_SWORD_DAILY/trial_close.png",
     "roi": [
@@ -6054,7 +6054,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.daily.row": {
+  "剑林凝结体体力-剑林-日常-行": {
     "recognition": "OCR",
     "expected": "^战胜一次剑林的首领[。.]?$",
     "roi": [
@@ -6066,21 +6066,21 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.entry": {
+  "剑林凝结体体力-剑林-入口": {
     "recognition": "OCR",
     "expected": "^前往$",
     "roi": [980, 400, 240, 100],
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.page": {
+  "剑林凝结体体力-剑林-页面": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "jianlin.page.title",
-          "jianlin.multiplier.bar",
-          "jianlin.count.bar"
+          "剑林凝结体体力-剑林-页面-标题",
+          "剑林凝结体体力-剑林-倍率-条",
+          "剑林凝结体体力-剑林-次数-条"
         ],
         "box_index": 0
       }
@@ -6088,7 +6088,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.page.title": {
+  "剑林凝结体体力-剑林-页面-标题": {
     "recognition": "OCR",
     "expected": "^养成\\s*/\\s*资源$",
     "roi": [
@@ -6100,7 +6100,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.condensate.resource": {
+  "剑林凝结体体力-剑林-凝结体-资源": {
     "recognition": "OCR",
     "expected": "凝晶",
     "roi": [
@@ -6112,7 +6112,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.condensate.selected": {
+  "剑林凝结体体力-剑林-凝结体-已选择": {
     "recognition": "TemplateMatch",
     "template": "daily/JIANLIN_RESOURCE_CONDENSATE_STAMINA_DAILY/condensate_title.png",
     "roi": [
@@ -6125,7 +6125,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.stamina.plus": {
+  "剑林凝结体体力-剑林-体力-加号": {
     "recognition": "OCR",
     "expected": "\\+",
     "roi": [
@@ -6137,7 +6137,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.stamina.purchase.prompt": {
+  "剑林凝结体体力-剑林-体力-购买-提示": {
     "recognition": "OCR",
     "expected": [
       "补充体力",
@@ -6152,7 +6152,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.stamina.plus80": {
+  "剑林凝结体体力-剑林-体力-加号80": {
     "recognition": "OCR",
     "expected": "\\+80",
     "roi": [
@@ -6164,7 +6164,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.stamina.resource": {
+  "剑林凝结体体力-剑林-体力-资源": {
     "recognition": "OCR",
     "expected": "紫色魂玉",
     "roi": [
@@ -6176,7 +6176,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.stamina.price10": {
+  "剑林凝结体体力-剑林-体力-价格10": {
     "recognition": "OCR",
     "expected": "(?<!\\d)10(?!\\d)",
     "roi": [
@@ -6188,7 +6188,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.stamina.price50": {
+  "剑林凝结体体力-剑林-体力-价格50": {
     "recognition": "OCR",
     "expected": "(?<!\\d)50(?!\\d)",
     "roi": [
@@ -6200,7 +6200,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.stamina.purchase.confirm": {
+  "剑林凝结体体力-剑林-体力-购买-确认": {
     "recognition": "TemplateMatch",
     "template": "daily/JIANLIN_RESOURCE_CONDENSATE_STAMINA_DAILY/buy_confirm.png",
     "roi": [
@@ -6213,7 +6213,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.stamina.confirmation.prompt": {
+  "剑林凝结体体力-剑林-体力-确认弹窗-提示": {
     "recognition": "OCR",
     "expected": [
       "体力将于",
@@ -6228,7 +6228,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.stamina.confirmation.resource": {
+  "剑林凝结体体力-剑林-体力-确认弹窗-资源": {
     "recognition": "OCR",
     "expected": "魂玉",
     "roi": [
@@ -6240,7 +6240,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.stamina.confirmation.price10": {
+  "剑林凝结体体力-剑林-体力-确认弹窗-价格10": {
     "recognition": "OCR",
     "expected": "(?<!\\d)10(?!\\d)",
     "roi": [
@@ -6252,7 +6252,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.stamina.confirmation.amount80": {
+  "剑林凝结体体力-剑林-体力-确认弹窗-数量80": {
     "recognition": "OCR",
     "expected": "(?<!\\d)80(?!\\d)",
     "roi": [
@@ -6264,7 +6264,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.stamina.confirmation.confirm": {
+  "剑林凝结体体力-剑林-体力-确认弹窗-确认": {
     "recognition": "OCR",
     "expected": "^确认$",
     "roi": [
@@ -6276,7 +6276,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.stamina.result": {
+  "剑林凝结体体力-剑林-体力-结果": {
     "recognition": "OCR",
     "expected": [
       "购买成功",
@@ -6291,7 +6291,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.stamina.result.close": {
+  "剑林凝结体体力-剑林-体力-结果-关闭": {
     "recognition": "OCR",
     "expected": "点击空白处关闭",
     "roi": [
@@ -6303,7 +6303,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.stamina.postpurchase.prompt": {
+  "剑林凝结体体力-剑林-体力-购买后-提示": {
     "recognition": "OCR",
     "expected": [
       "补充体力",
@@ -6318,7 +6318,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.stamina.postpurchase.close": {
+  "剑林凝结体体力-剑林-体力-购买后-关闭": {
     "recognition": "OCR",
     "expected": "关闭",
     "roi": [
@@ -6330,7 +6330,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.stamina.current": {
+  "剑林凝结体体力-剑林-体力-当前": {
     "recognition": "OCR",
     "expected": [
       "当前体力\\s*[:：]?\\s*\\d{1,4}",
@@ -6346,7 +6346,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.stamina.below_20": {
+  "剑林凝结体体力-剑林-体力-以下-20": {
     "recognition": "OCR",
     "expected": [
       "当前体力\\s*[:：]?\\s*(?:[0-9]|1[0-9])(?:\\D|$)",
@@ -6362,7 +6362,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.stamina.after_result": {
+  "剑林凝结体体力-剑林-体力-之后-结果": {
     "recognition": "OCR",
     "expected": [
       "当前体力\\s*[:：]?\\s*\\d{1,4}",
@@ -6377,7 +6377,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.stamina.cost.value": {
+  "剑林凝结体体力-剑林-体力-消耗-数值": {
     "recognition": "OCR",
     "expected": "^\\d{1,3}$",
     "roi": [
@@ -6389,7 +6389,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.stamina.insufficient": {
+  "剑林凝结体体力-剑林-体力-不足": {
     "recognition": "OCR",
     "expected": [
       "体力不足",
@@ -6405,7 +6405,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.count.bar": {
+  "剑林凝结体体力-剑林-次数-条": {
     "recognition": "OCR",
     "expected": "挑战次数",
     "roi": [
@@ -6417,7 +6417,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.count.selected": {
+  "剑林凝结体体力-剑林-次数-已选择": {
     "recognition": "OCR",
     "expected": [
       "挑战次数\\s*[:：]?\\s*[x×]?\\d{1,2}",
@@ -6432,7 +6432,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.count.max": {
+  "剑林凝结体体力-剑林-次数-最大": {
     "recognition": "OCR",
     "expected": [
       "最多\\s*\\d{1,2}",
@@ -6448,7 +6448,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.count.option.1": {
+  "剑林凝结体体力-剑林-次数-选项-1": {
     "recognition": "OCR",
     "expected": [
       "[x×]\\s*1",
@@ -6463,7 +6463,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.count.option.2": {
+  "剑林凝结体体力-剑林-次数-选项-2": {
     "recognition": "OCR",
     "expected": [
       "[x×]\\s*2",
@@ -6478,7 +6478,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.count.option.3": {
+  "剑林凝结体体力-剑林-次数-选项-3": {
     "recognition": "OCR",
     "expected": [
       "[x×]\\s*3",
@@ -6493,7 +6493,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.count.option.4": {
+  "剑林凝结体体力-剑林-次数-选项-4": {
     "recognition": "OCR",
     "expected": [
       "[x×]\\s*4",
@@ -6508,7 +6508,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.count.option.5": {
+  "剑林凝结体体力-剑林-次数-选项-5": {
     "recognition": "OCR",
     "expected": [
       "[x×]\\s*5",
@@ -6523,7 +6523,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.count.option.6": {
+  "剑林凝结体体力-剑林-次数-选项-6": {
     "recognition": "OCR",
     "expected": [
       "[x×]\\s*6",
@@ -6538,7 +6538,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.count.option.7": {
+  "剑林凝结体体力-剑林-次数-选项-7": {
     "recognition": "OCR",
     "expected": [
       "[x×]\\s*7",
@@ -6553,7 +6553,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.count.option.8": {
+  "剑林凝结体体力-剑林-次数-选项-8": {
     "recognition": "OCR",
     "expected": [
       "[x×]\\s*8",
@@ -6568,7 +6568,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.count.option.9": {
+  "剑林凝结体体力-剑林-次数-选项-9": {
     "recognition": "OCR",
     "expected": [
       "[x×]\\s*9",
@@ -6583,7 +6583,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.count.option.10": {
+  "剑林凝结体体力-剑林-次数-选项-10": {
     "recognition": "OCR",
     "expected": [
       "[x×]\\s*10",
@@ -6598,7 +6598,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.count.option.11": {
+  "剑林凝结体体力-剑林-次数-选项-11": {
     "recognition": "OCR",
     "expected": [
       "[x×]\\s*11",
@@ -6613,7 +6613,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.count.option.12": {
+  "剑林凝结体体力-剑林-次数-选项-12": {
     "recognition": "OCR",
     "expected": [
       "[x×]\\s*12",
@@ -6628,7 +6628,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.multiplier.bar": {
+  "剑林凝结体体力-剑林-倍率-条": {
     "recognition": "OCR",
     "expected": "结算倍率",
     "roi": [
@@ -6640,7 +6640,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.multiplier.selected": {
+  "剑林凝结体体力-剑林-倍率-已选择": {
     "recognition": "OCR",
     "expected": [
       "结算倍率\\s*[:：]?\\s*[x×]?\\d",
@@ -6655,7 +6655,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.multiplier.1": {
+  "剑林凝结体体力-剑林-倍率-1": {
     "recognition": "OCR",
     "expected": [
       "1倍",
@@ -6670,7 +6670,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.multiplier.2": {
+  "剑林凝结体体力-剑林-倍率-2": {
     "recognition": "OCR",
     "expected": [
       "2倍",
@@ -6685,7 +6685,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.multiplier.3": {
+  "剑林凝结体体力-剑林-倍率-3": {
     "recognition": "OCR",
     "expected": [
       "3倍",
@@ -6700,7 +6700,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.challenge.button": {
+  "剑林凝结体体力-剑林-挑战-按钮": {
     "recognition": "OCR",
     "expected": "挑战",
     "roi": [
@@ -6712,7 +6712,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.battle.page": {
+  "剑林凝结体体力-剑林-战斗-页面": {
     "recognition": "OCR",
     "expected": [
       "阵容",
@@ -6730,7 +6730,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.skip_prepare": {
+  "剑林凝结体体力-剑林-跳过-准备": {
     "recognition": "OCR",
     "expected": "跳过战前准备",
     "roi": [
@@ -6742,7 +6742,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.skip_prepare.checked": {
+  "剑林凝结体体力-剑林-跳过-准备-已勾选": {
     "recognition": "OCR",
     "expected": [
       "√",
@@ -6759,7 +6759,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.battle.start": {
+  "剑林凝结体体力-剑林-战斗-开始": {
     "recognition": "OCR",
     "expected": [
       "开始挑战",
@@ -6776,7 +6776,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.battle.stamina.resource": {
+  "剑林凝结体体力-剑林-战斗-体力-资源": {
     "recognition": "OCR",
     "expected": "体力",
     "roi": [
@@ -6788,7 +6788,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.battle.stamina.total.360": {
+  "剑林凝结体体力-剑林-战斗-体力-总量-360": {
     "recognition": "OCR",
     "expected": "(?<!\\d)360(?!\\d)",
     "roi": [
@@ -6800,7 +6800,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.battle.result": {
+  "剑林凝结体体力-剑林-战斗-结果": {
     "recognition": "OCR",
     "expected": [
       "挑战成功",
@@ -6818,7 +6818,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.battle.result.close": {
+  "剑林凝结体体力-剑林-战斗结果关闭": {
     "recognition": "OCR",
     "expected": [
       "点击空白处关闭",
@@ -6835,7 +6835,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.stamina.total.20": {
+  "剑林凝结体体力-剑林-体力-总量-20": {
     "recognition": "OCR",
     "expected": "(?<!\\d)20(?!\\d)",
     "roi": [
@@ -6847,7 +6847,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.stamina.total.40": {
+  "剑林凝结体体力-剑林-体力-总量-40": {
     "recognition": "OCR",
     "expected": "(?<!\\d)40(?!\\d)",
     "roi": [
@@ -6859,7 +6859,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.stamina.total.60": {
+  "剑林凝结体体力-剑林-体力-总量-60": {
     "recognition": "OCR",
     "expected": "(?<!\\d)60(?!\\d)",
     "roi": [
@@ -6871,7 +6871,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.stamina.total.80": {
+  "剑林凝结体体力-剑林-体力-总量-80": {
     "recognition": "OCR",
     "expected": "(?<!\\d)80(?!\\d)",
     "roi": [
@@ -6883,7 +6883,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.stamina.total.120": {
+  "剑林凝结体体力-剑林-体力-总量-120": {
     "recognition": "OCR",
     "expected": "(?<!\\d)120(?!\\d)",
     "roi": [
@@ -6895,7 +6895,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.stamina.total.100": {
+  "剑林凝结体体力-剑林-体力-总量-100": {
     "recognition": "OCR",
     "expected": "(?<!\\d)100(?!\\d)",
     "roi": [
@@ -6907,7 +6907,7 @@
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "jianlin.page.close": {
+  "剑林凝结体体力-剑林-页面-关闭": {
     "recognition": "OCR",
     "expected": "关闭",
     "roi": [

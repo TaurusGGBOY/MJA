@@ -37,7 +37,7 @@ def _argv(
         *[_ocr(f"{value}倍") for value in multipliers],
     ]
     payload = {
-        "dispatch_node": "MJA_JIANLIN_PLAN_DISPATCH",
+        "dispatch_node": "剑林凝结体体力-计划-派遣",
         "stamina_index": 0,
         "cost_index": 1,
         "visible_max_index": 2,
@@ -59,7 +59,7 @@ def _selected_argv() -> FakeArgv:
         _ocr("挑战"),
     ]
     payload = {
-        "dispatch_node": "MJA_JIANLIN_PLAN_DISPATCH",
+        "dispatch_node": "剑林凝结体体力-计划-派遣",
         "stamina_index": 0,
         "cost_index": 1,
         "visible_max_index": 2,
@@ -111,15 +111,15 @@ def test_plan_safe_challenge_rejects_unsafe_inputs(
 
 def test_planner_action_selects_declared_branch_without_input_access():
     context = FakeContext(nodes={
-        "MJA_JIANLIN_PLAN_DISPATCH",
-        "MJA_JIANLIN_SET_COUNT_COUNT_2_MULTIPLIER_3",
+        "剑林凝结体体力-计划-派遣",
+        "剑林凝结体体力-设置-次数-次数-2-倍率-3",
     })
 
     assert PlanJianlinChallenge().run(context, _argv()) is True
     assert context.next_overrides == [
         (
-            "MJA_JIANLIN_PLAN_DISPATCH",
-            ["MJA_JIANLIN_SET_COUNT_COUNT_2_MULTIPLIER_3"],
+            "剑林凝结体体力-计划-派遣",
+            ["剑林凝结体体力-设置-次数-次数-2-倍率-3"],
         )
     ]
     assert context.controller.actions == []
@@ -127,15 +127,15 @@ def test_planner_action_selects_declared_branch_without_input_access():
 
 def test_planner_accepts_a_safe_current_live_slider_selection():
     context = FakeContext(nodes={
-        "MJA_JIANLIN_PLAN_DISPATCH",
-        "MJA_JIANLIN_SET_COUNT_COUNT_6_MULTIPLIER_3",
+        "剑林凝结体体力-计划-派遣",
+        "剑林凝结体体力-设置-次数-次数-6-倍率-3",
     })
 
     assert PlanJianlinChallenge().run(context, _selected_argv()) is True
     assert context.next_overrides == [
         (
-            "MJA_JIANLIN_PLAN_DISPATCH",
-            ["MJA_JIANLIN_SET_COUNT_COUNT_6_MULTIPLIER_3"],
+            "剑林凝结体体力-计划-派遣",
+            ["剑林凝结体体力-设置-次数-次数-6-倍率-3"],
         )
     ]
 
@@ -150,7 +150,7 @@ def test_planner_reduces_an_unsafe_default_selection_to_an_affordable_plan():
         _ocr("挑战"),
     ]
     payload = {
-        "dispatch_node": "MJA_JIANLIN_PLAN_DISPATCH",
+        "dispatch_node": "剑林凝结体体力-计划-派遣",
         "stamina_index": 0,
         "cost_index": 1,
         "visible_max_index": 2,
@@ -159,8 +159,8 @@ def test_planner_reduces_an_unsafe_default_selection_to_an_affordable_plan():
         "max_total_cost": 360,
     }
     context = FakeContext(nodes={
-        "MJA_JIANLIN_PLAN_DISPATCH",
-        "MJA_JIANLIN_SET_COUNT_COUNT_1_MULTIPLIER_2",
+        "剑林凝结体体力-计划-派遣",
+        "剑林凝结体体力-设置-次数-次数-1-倍率-2",
     })
 
     assert PlanJianlinChallenge().run(
@@ -172,21 +172,21 @@ def test_planner_reduces_an_unsafe_default_selection_to_an_affordable_plan():
     ) is True
     assert context.next_overrides == [
         (
-            "MJA_JIANLIN_PLAN_DISPATCH",
-            ["MJA_JIANLIN_SET_COUNT_COUNT_1_MULTIPLIER_2"],
+            "剑林凝结体体力-计划-派遣",
+            ["剑林凝结体体力-设置-次数-次数-1-倍率-2"],
         )
     ]
 
 
 def test_planner_action_rejects_malformed_ocr_and_missing_branch():
-    context = FakeContext(nodes={"MJA_JIANLIN_PLAN_DISPATCH"})
+    context = FakeContext(nodes={"剑林凝结体体力-计划-派遣"})
     argv = _argv()
     argv.reco_detail.best_result.sub_results[1] = _ocr("unknown")
 
     assert PlanJianlinChallenge().run(context, argv) is False
     assert context.next_overrides == []
 
-    context = FakeContext(nodes={"MJA_JIANLIN_PLAN_DISPATCH"})
+    context = FakeContext(nodes={"剑林凝结体体力-计划-派遣"})
     assert PlanJianlinChallenge().run(context, _argv()) is False
     assert context.next_overrides == []
 

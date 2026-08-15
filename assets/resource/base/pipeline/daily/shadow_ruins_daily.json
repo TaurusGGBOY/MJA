@@ -1,5 +1,5 @@
 {
-  "MJA_SHADOW_RUINS_DAILY_START": {
+  "影之遗迹-任务入口": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "BeginTask",
@@ -7,40 +7,40 @@
       "task_id": "SHADOW_RUINS_DAILY"
     },
     "next": [
-      "MJA_SHADOW_PAGE_PROBE",
-      "MJA_SHADOW_PAINTING_PAGE",
-      "MJA_SHADOW_HOME_PROBE",
-      "MJA_SHADOW_EXPLORATION_PAGE",
-      "MJA_SHADOW_BATTLE_RESULT_PROBE"
+      "影之遗迹-页面-探测",
+      "影之遗迹-画卷-页面",
+      "影之遗迹-主页-探测",
+      "影之遗迹-探索-页面",
+      "影之遗迹-战斗-结果-探测"
     ],
     "on_error": [
-      "MJA_SHADOW_ENTRY_UNKNOWN"
+      "影之遗迹-入口-未知"
     ]
   },
-  "MJA_SHADOW_HOME_PROBE": {
+  "影之遗迹-主页-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "shadow.home.page"
+          "影之遗迹-影-主页-页面"
         ]
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_SHADOW_OPEN_PAINTING"
+      "影之遗迹-打开-画卷"
     ],
     "on_error": [
-      "MJA_SHADOW_ENTRY_UNKNOWN"
+      "影之遗迹-入口-未知"
     ]
   },
-  "MJA_SHADOW_OPEN_PAINTING": {
+  "影之遗迹-打开-画卷": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "shadow.home.page",
-          "shadow.painting.entry"
+          "影之遗迹-影-主页-页面",
+          "影之遗迹-影-画卷-入口"
         ],
         "box_index": 1
       }
@@ -54,61 +54,61 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "shadow.home.page",
-        "target_name": "shadow.painting.entry"
+        "page_name": "影之遗迹-影-主页-页面",
+        "target_name": "影之遗迹-影-画卷-入口"
       }
     },
     "next": [
-      "MJA_SHADOW_PAINTING_PAGE",
-      "MJA_SHADOW_HOME_RECOVERY_PROBE"
+      "影之遗迹-画卷-页面",
+      "影之遗迹-主页-恢复-探测"
     ],
     "on_error": [
-      "MJA_SHADOW_ENTRY_UNKNOWN"
+      "影之遗迹-入口-未知"
     ],
     "max_hit": 1,
     "retry_times": 0
   },
-  "MJA_SHADOW_PAINTING_PAGE": {
+  "影之遗迹-画卷-页面": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "shadow.painting.page"
+          "影之遗迹-影-画卷-页面"
         ]
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_SHADOW_OPEN_SHADOW"
+      "影之遗迹-打开-影"
     ],
     "on_error": [
-      "MJA_SHADOW_ENTRY_UNKNOWN"
+      "影之遗迹-入口-未知"
     ]
   },
-  "MJA_SHADOW_HOME_RECOVERY_PROBE": {
+  "影之遗迹-主页-恢复-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "shadow.home.page"
+          "影之遗迹-影-主页-页面"
         ]
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_SHADOW_OPEN_PAINTING_RECOVERY"
+      "影之遗迹-打开-画卷-恢复"
     ],
     "on_error": [
-      "MJA_SHADOW_ENTRY_UNKNOWN"
+      "影之遗迹-入口-未知"
     ]
   },
-  "MJA_SHADOW_OPEN_PAINTING_RECOVERY": {
+  "影之遗迹-打开-画卷-恢复": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "shadow.home.page",
-          "shadow.painting.entry"
+          "影之遗迹-影-主页-页面",
+          "影之遗迹-影-画卷-入口"
         ],
         "box_index": 1
       }
@@ -122,26 +122,26 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "shadow.home.page",
-        "target_name": "shadow.painting.entry"
+        "page_name": "影之遗迹-影-主页-页面",
+        "target_name": "影之遗迹-影-画卷-入口"
       }
     },
     "next": [
-      "MJA_SHADOW_PAINTING_PAGE"
+      "影之遗迹-画卷-页面"
     ],
     "on_error": [
-      "MJA_SHADOW_ENTRY_UNKNOWN"
+      "影之遗迹-入口-未知"
     ],
     "max_hit": 1,
     "retry_times": 0
   },
-  "MJA_SHADOW_OPEN_SHADOW": {
+  "影之遗迹-打开-影": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "shadow.painting.page",
-          "shadow.entry"
+          "影之遗迹-影-画卷-页面",
+          "影之遗迹-影-入口"
         ],
         "box_index": 1
       }
@@ -155,43 +155,43 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "shadow.painting.page",
-        "target_name": "shadow.entry"
+        "page_name": "影之遗迹-影-画卷-页面",
+        "target_name": "影之遗迹-影-入口"
       }
     },
     "next": [
-      "MJA_SHADOW_PAGE_PROBE"
+      "影之遗迹-页面-探测"
     ],
     "on_error": [
-      "MJA_SHADOW_RECORD_FAILURE"
+      "影之遗迹-记录-失败"
     ],
     "max_hit": 1,
     "retry_times": 0
   },
-  "MJA_SHADOW_PAGE_PROBE": {
+  "影之遗迹-页面-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "shadow.page"
+          "影之遗迹-影-页面"
         ]
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_SHADOW_SELECT_ACTIVE"
+      "影之遗迹-选择-进行中"
     ],
     "on_error": [
-      "MJA_SHADOW_RECORD_FAILURE"
+      "影之遗迹-记录-失败"
     ]
   },
-  "MJA_SHADOW_SELECT_ACTIVE": {
+  "影之遗迹-选择-进行中": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "shadow.page",
-          "shadow.active"
+          "影之遗迹-影-页面",
+          "影之遗迹-影-进行中"
         ],
         "box_index": 1
       }
@@ -205,26 +205,26 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "shadow.page",
-        "target_name": "shadow.active"
+        "page_name": "影之遗迹-影-页面",
+        "target_name": "影之遗迹-影-进行中"
       }
     },
     "next": [
-      "MJA_SHADOW_ENTER_STAGE"
+      "影之遗迹-进入-关卡"
     ],
     "on_error": [
-      "MJA_SHADOW_CLOSE_SHADOW_PAGE"
+      "影之遗迹-关闭-影-页面"
     ],
     "retry_times": 0,
     "max_hit": 3
   },
-  "MJA_SHADOW_ENTER_STAGE": {
+  "影之遗迹-进入-关卡": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "shadow.page",
-          "shadow.stage_entry"
+          "影之遗迹-影-页面",
+          "影之遗迹-影-关卡-入口"
         ],
         "box_index": 1
       }
@@ -239,42 +239,42 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "shadow.page",
-        "target_name": "shadow.stage_entry"
+        "page_name": "影之遗迹-影-页面",
+        "target_name": "影之遗迹-影-关卡-入口"
       }
     },
     "next": [
-      "MJA_SHADOW_STAGE_PROBE"
+      "影之遗迹-关卡-探测"
     ],
     "on_error": [
-      "MJA_SHADOW_RECORD_FAILURE"
+      "影之遗迹-记录-失败"
     ],
     "retry_times": 0
   },
-  "MJA_SHADOW_STAGE_PROBE": {
+  "影之遗迹-关卡-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "shadow.stage.page"
+          "影之遗迹-影-关卡-页面"
         ]
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_SHADOW_SKIP_PREPARE_PROBE"
+      "影之遗迹-跳过-准备-探测"
     ],
     "on_error": [
-      "MJA_SHADOW_RECORD_FAILURE"
+      "影之遗迹-记录-失败"
     ]
   },
-  "MJA_SHADOW_FOREGROUND_LEFT": {
+  "影之遗迹-前台-左": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "shadow.stage.page",
-          "shadow.foreground.left"
+          "影之遗迹-影-关卡-页面",
+          "影之遗迹-影-前台-左"
         ]
       }
     },
@@ -287,25 +287,25 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "shadow.stage.page",
-        "target_name": "shadow.foreground.left"
+        "page_name": "影之遗迹-影-关卡-页面",
+        "target_name": "影之遗迹-影-前台-左"
       }
     },
     "next": [
-      "MJA_SHADOW_FOREGROUND_CENTER"
+      "影之遗迹-前台-中心"
     ],
     "on_error": [
-      "MJA_SHADOW_FOREGROUND_CENTER"
+      "影之遗迹-前台-中心"
     ],
     "retry_times": 0
   },
-  "MJA_SHADOW_FOREGROUND_CENTER": {
+  "影之遗迹-前台-中心": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "shadow.stage.page",
-          "shadow.foreground.center"
+          "影之遗迹-影-关卡-页面",
+          "影之遗迹-影-前台-中心"
         ]
       }
     },
@@ -318,25 +318,25 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "shadow.stage.page",
-        "target_name": "shadow.foreground.center"
+        "page_name": "影之遗迹-影-关卡-页面",
+        "target_name": "影之遗迹-影-前台-中心"
       }
     },
     "next": [
-      "MJA_SHADOW_FOREGROUND_RIGHT"
+      "影之遗迹-前台-右"
     ],
     "on_error": [
-      "MJA_SHADOW_FOREGROUND_RIGHT"
+      "影之遗迹-前台-右"
     ],
     "retry_times": 0
   },
-  "MJA_SHADOW_FOREGROUND_RIGHT": {
+  "影之遗迹-前台-右": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "shadow.stage.page",
-          "shadow.foreground.right"
+          "影之遗迹-影-关卡-页面",
+          "影之遗迹-影-前台-右"
         ]
       }
     },
@@ -349,42 +349,42 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "shadow.stage.page",
-        "target_name": "shadow.foreground.right"
+        "page_name": "影之遗迹-影-关卡-页面",
+        "target_name": "影之遗迹-影-前台-右"
       }
     },
     "next": [
-      "MJA_SHADOW_EXPLORATION_PAGE"
+      "影之遗迹-探索-页面"
     ],
     "on_error": [
-      "MJA_SHADOW_EXPLORATION_PAGE"
+      "影之遗迹-探索-页面"
     ],
     "retry_times": 0
   },
-  "MJA_SHADOW_EXPLORATION_PAGE": {
+  "影之遗迹-探索-页面": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "shadow.exploration.page"
+          "影之遗迹-影-探索-页面"
         ]
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_SHADOW_BATTLE_RESULT_PROBE",
-      "MJA_SHADOW_BATTLE_IN_PROGRESS_WAIT",
-      "MJA_SHADOW_REWARD_PROBE",
-      "MJA_SHADOW_FOREGROUND_GATE",
-      "MJA_SHADOW_BATTLE_GATE",
-      "MJA_SHADOW_FINAL_PROBE",
-      "MJA_SHADOW_BLACK_FREEZE_RECOVERY"
+      "影之遗迹-战斗-结果-探测",
+      "影之遗迹-战斗-中-进度-等待",
+      "影之遗迹-奖励-探测",
+      "影之遗迹-前台-门禁",
+      "影之遗迹-战斗-门禁",
+      "影之遗迹-最终-探测",
+      "影之遗迹-黑屏-冻结-恢复"
     ],
     "on_error": [
-      "MJA_SHADOW_RECORD_FAILURE"
+      "影之遗迹-记录-失败"
     ]
   },
-  "MJA_SHADOW_BLACK_FREEZE_RECOVERY": {
+  "影之遗迹-黑屏-冻结-恢复": {
     "recognition": "ColorMatch",
     "upper": [
       0,
@@ -409,71 +409,71 @@
     },
     "post_delay": 5000,
     "next": [
-      "MJA_SHADOW_BLACK_FREEZE_RESUME"
+      "影之遗迹-黑屏-冻结-恢复继续"
     ],
     "on_error": [
-      "MJA_SHADOW_RECORD_FAILURE"
+      "影之遗迹-记录-失败"
     ]
   },
-  "MJA_SHADOW_BLACK_FREEZE_RESUME": {
+  "影之遗迹-黑屏-冻结-恢复继续": {
     "recognition": "DirectHit",
     "action": "DoNothing",
     "timeout": 120000,
     "retry_times": 0,
     "next": [
-      "MJA_SHADOW_HOME_PROBE",
-      "[JumpBack]MJA_GAME_START"
+      "影之遗迹-主页-探测",
+      "[JumpBack]启动-游戏启动"
     ],
     "on_error": [
-      "MJA_SHADOW_RECORD_FAILURE"
+      "影之遗迹-记录-失败"
     ]
   },
-  "MJA_SHADOW_FOREGROUND_GATE": {
+  "影之遗迹-前台-门禁": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "shadow.exploration.page",
-          "shadow.foreground.ready"
+          "影之遗迹-影-探索-页面",
+          "影之遗迹-影-前台-就绪"
         ]
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_SHADOW_FOREGROUND_LOOP"
+      "影之遗迹-前台-循环"
     ],
     "on_error": [
-      "MJA_SHADOW_BATTLE_GATE"
+      "影之遗迹-战斗-门禁"
     ]
   },
-  "MJA_SHADOW_BATTLE_GATE": {
+  "影之遗迹-战斗-门禁": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "shadow.challenge.page",
-          "shadow.challenge.target"
+          "影之遗迹-影-挑战-页面",
+          "影之遗迹-影-挑战-目标"
         ],
         "box_index": 1
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_SHADOW_BATTLE_LOOP"
+      "影之遗迹-战斗-循环"
     ],
     "on_error": [
-      "MJA_SHADOW_FINAL_PROBE",
-      "MJA_SHADOW_RECORD_FAILURE"
+      "影之遗迹-最终-探测",
+      "影之遗迹-记录-失败"
     ]
   },
-  "MJA_SHADOW_FOREGROUND_LOOP": {
+  "影之遗迹-前台-循环": {
     "max_hit": 40,
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "shadow.exploration.page",
-          "shadow.foreground.ready"
+          "影之遗迹-影-探索-页面",
+          "影之遗迹-影-前台-就绪"
         ]
       }
     },
@@ -506,31 +506,31 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "shadow.exploration.page",
-        "target_name": "shadow.foreground.ready"
+        "page_name": "影之遗迹-影-探索-页面",
+        "target_name": "影之遗迹-影-前台-就绪"
       }
     },
     "next": [
-      "MJA_SHADOW_BATTLE_RESULT_PROBE",
-      "MJA_SHADOW_BATTLE_IN_PROGRESS_WAIT",
-      "MJA_SHADOW_BATTLE_GATE",
-      "MJA_SHADOW_BLACK_FREEZE_RECOVERY",
-      "MJA_SHADOW_EXPLORATION_PAGE"
+      "影之遗迹-战斗-结果-探测",
+      "影之遗迹-战斗-中-进度-等待",
+      "影之遗迹-战斗-门禁",
+      "影之遗迹-黑屏-冻结-恢复",
+      "影之遗迹-探索-页面"
     ],
     "on_error": [
-      "MJA_SHADOW_BATTLE_GATE",
-      "MJA_SHADOW_FOREGROUND_LOOP_EXHAUSTED"
+      "影之遗迹-战斗-门禁",
+      "影之遗迹-前台-循环-耗尽"
     ]
   },
-  "MJA_SHADOW_BATTLE_LOOP": {
+  "影之遗迹-战斗-循环": {
     "max_hit": 12,
     "timeout": 240000,
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "shadow.challenge.page",
-          "shadow.challenge.target"
+          "影之遗迹-影-挑战-页面",
+          "影之遗迹-影-挑战-目标"
         ],
         "box_index": 1
       }
@@ -544,66 +544,66 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "shadow.challenge.page",
-        "target_name": "shadow.challenge.target"
+        "page_name": "影之遗迹-影-挑战-页面",
+        "target_name": "影之遗迹-影-挑战-目标"
       }
     },
     "next": [
-      "MJA_SHADOW_BATTLE_RESULT_PROBE",
-      "MJA_SHADOW_BATTLE_IN_PROGRESS_WAIT"
+      "影之遗迹-战斗-结果-探测",
+      "影之遗迹-战斗-中-进度-等待"
     ],
     "on_error": [
-      "MJA_SHADOW_BATTLE_LOOP_EXHAUSTED"
+      "影之遗迹-战斗-循环-耗尽"
     ]
   },
-  "MJA_SHADOW_BATTLE_IN_PROGRESS_WAIT": {
+  "影之遗迹-战斗-中-进度-等待": {
     "max_hit": 240,
     "timeout": 240000,
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "shadow.battle.in_progress"
+          "影之遗迹-影-战斗-中-进度"
         ]
       }
     },
     "action": "DoNothing",
     "post_delay": 1000,
     "next": [
-      "MJA_SHADOW_BATTLE_RESULT_PROBE",
-      "MJA_SHADOW_BATTLE_IN_PROGRESS_WAIT"
+      "影之遗迹-战斗-结果-探测",
+      "影之遗迹-战斗-中-进度-等待"
     ],
     "on_error": [
-      "MJA_SHADOW_BATTLE_RESULT_PROBE",
-      "MJA_SHADOW_BATTLE_LOOP_EXHAUSTED"
+      "影之遗迹-战斗-结果-探测",
+      "影之遗迹-战斗-循环-耗尽"
     ],
     "retry_times": 0
   },
-  "MJA_SHADOW_BATTLE_RESULT_PROBE": {
+  "影之遗迹-战斗-结果-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "shadow.battle.result.page"
+          "影之遗迹-影-战斗-结果-页面"
         ]
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_SHADOW_BATTLE_RESULT_VICTORY",
-      "MJA_SHADOW_BATTLE_RESULT_DEFEAT"
+      "影之遗迹-战斗-结果-胜利",
+      "影之遗迹-战斗-结果-失败"
     ],
     "on_error": [
-      "MJA_SHADOW_BATTLE_RESULT_UNKNOWN_RESULT"
+      "影之遗迹-战斗未知结果-结果"
     ]
   },
-  "MJA_SHADOW_BATTLE_RESULT_VICTORY": {
+  "影之遗迹-战斗-结果-胜利": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "shadow.battle.result.page",
-          "shadow.battle.victory"
+          "影之遗迹-影-战斗-结果-页面",
+          "影之遗迹-影-战斗-胜利"
         ]
       }
     },
@@ -617,27 +617,27 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "shadow.battle.result.page",
-        "target_name": "shadow.battle.victory"
+        "page_name": "影之遗迹-影-战斗-结果-页面",
+        "target_name": "影之遗迹-影-战斗-胜利"
       }
     },
     "next": [
-      "MJA_SHADOW_CLAIM_VICTORY_CHEST_FIRST"
+      "影之遗迹-领取-胜利-宝箱-首个"
     ],
     "on_error": [
-      "MJA_SHADOW_RECORD_FAILURE"
+      "影之遗迹-记录-失败"
     ],
     "retry_times": 0,
     "timeout": 50000
   },
-  "MJA_SHADOW_CLAIM_VICTORY_CHEST_FIRST": {
+  "影之遗迹-领取-胜利-宝箱-首个": {
     "max_hit": 12,
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "shadow.exploration.page",
-          "shadow.foreground.ready"
+          "影之遗迹-影-探索-页面",
+          "影之遗迹-影-前台-就绪"
         ]
       }
     },
@@ -670,33 +670,33 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "shadow.exploration.page",
-        "target_name": "shadow.foreground.ready"
+        "page_name": "影之遗迹-影-探索-页面",
+        "target_name": "影之遗迹-影-前台-就绪"
       }
     },
     "next": [
-      "MJA_SHADOW_FINAL_PROBE",
-      "MJA_SHADOW_REWARD_PROBE",
-      "MJA_SHADOW_VICTORY_CHEST_REWARD_PROBE",
-      "MJA_SHADOW_CLAIM_VICTORY_CHEST_RETRY"
+      "影之遗迹-最终-探测",
+      "影之遗迹-奖励-探测",
+      "影之遗迹-胜利-宝箱-奖励-探测",
+      "影之遗迹-领取-胜利-宝箱-重试"
     ],
     "on_error": [
-      "MJA_SHADOW_FINAL_PROBE",
-      "MJA_SHADOW_REWARD_PROBE",
-      "MJA_SHADOW_VICTORY_CHEST_REWARD_PROBE",
-      "MJA_SHADOW_RECORD_FAILURE"
+      "影之遗迹-最终-探测",
+      "影之遗迹-奖励-探测",
+      "影之遗迹-胜利-宝箱-奖励-探测",
+      "影之遗迹-记录-失败"
     ],
     "retry_times": 0,
     "timeout": 50000
   },
-  "MJA_SHADOW_CLAIM_VICTORY_CHEST_RETRY": {
+  "影之遗迹-领取-胜利-宝箱-重试": {
     "max_hit": 12,
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "shadow.exploration.page",
-          "shadow.foreground.ready"
+          "影之遗迹-影-探索-页面",
+          "影之遗迹-影-前台-就绪"
         ]
       }
     },
@@ -729,68 +729,68 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "shadow.exploration.page",
-        "target_name": "shadow.foreground.ready"
+        "page_name": "影之遗迹-影-探索-页面",
+        "target_name": "影之遗迹-影-前台-就绪"
       }
     },
     "next": [
-      "MJA_SHADOW_FINAL_PROBE",
-      "MJA_SHADOW_REWARD_PROBE",
-      "MJA_SHADOW_VICTORY_CHEST_REWARD_PROBE",
-      "MJA_SHADOW_VICTORY_CHEST_POST_RETRY_WAIT"
+      "影之遗迹-最终-探测",
+      "影之遗迹-奖励-探测",
+      "影之遗迹-胜利-宝箱-奖励-探测",
+      "影之遗迹-胜利-宝箱-之后-重试-等待"
     ],
     "on_error": [
-      "MJA_SHADOW_FINAL_PROBE",
-      "MJA_SHADOW_REWARD_PROBE",
-      "MJA_SHADOW_VICTORY_CHEST_REWARD_PROBE",
-      "MJA_SHADOW_VICTORY_CHEST_POST_RETRY_WAIT"
+      "影之遗迹-最终-探测",
+      "影之遗迹-奖励-探测",
+      "影之遗迹-胜利-宝箱-奖励-探测",
+      "影之遗迹-胜利-宝箱-之后-重试-等待"
     ],
     "retry_times": 0,
     "timeout": 50000
   },
-  "MJA_SHADOW_VICTORY_CHEST_POST_RETRY_WAIT": {
+  "影之遗迹-胜利-宝箱-之后-重试-等待": {
     "max_hit": 12,
     "recognition": "DirectHit",
     "action": "DoNothing",
     "post_delay": 1000,
     "next": [
-      "MJA_SHADOW_FINAL_PROBE",
-      "MJA_SHADOW_REWARD_PROBE",
-      "MJA_SHADOW_VICTORY_CHEST_REWARD_PROBE",
-      "MJA_SHADOW_RECORD_FAILURE"
+      "影之遗迹-最终-探测",
+      "影之遗迹-奖励-探测",
+      "影之遗迹-胜利-宝箱-奖励-探测",
+      "影之遗迹-记录-失败"
     ],
     "on_error": [
-      "MJA_SHADOW_RECORD_FAILURE"
+      "影之遗迹-记录-失败"
     ],
     "retry_times": 0
   },
-  "MJA_SHADOW_VICTORY_CHEST_REWARD_PROBE": {
+  "影之遗迹-胜利-宝箱-奖励-探测": {
     "max_hit": 12,
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "shadow.victory.chest.reward"
+          "影之遗迹-影-胜利-宝箱-奖励"
         ]
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_SHADOW_DISMISS_VICTORY_CHEST_REWARD"
+      "影之遗迹-关闭-胜利-宝箱-奖励"
     ],
     "on_error": [
-      "MJA_SHADOW_RECORD_FAILURE"
+      "影之遗迹-记录-失败"
     ],
     "retry_times": 0,
     "timeout": 8000
   },
-  "MJA_SHADOW_DISMISS_VICTORY_CHEST_REWARD": {
+  "影之遗迹-关闭-胜利-宝箱-奖励": {
     "max_hit": 12,
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "shadow.victory.chest.reward"
+          "影之遗迹-影-胜利-宝箱-奖励"
         ]
       }
     },
@@ -804,27 +804,27 @@
       "evidence": {
         "page_index": 0,
         "target_index": 0,
-        "page_name": "shadow.victory.chest.reward",
-        "target_name": "shadow.victory.chest.reward"
+        "page_name": "影之遗迹-影-胜利-宝箱-奖励",
+        "target_name": "影之遗迹-影-胜利-宝箱-奖励"
       }
     },
     "next": [
-      "MJA_SHADOW_EXPLORATION_PAGE"
+      "影之遗迹-探索-页面"
     ],
     "on_error": [
-      "MJA_SHADOW_RECORD_FAILURE"
+      "影之遗迹-记录-失败"
     ],
     "retry_times": 0,
     "timeout": 8000,
     "post_delay": 750
   },
-  "MJA_SHADOW_BATTLE_RESULT_DEFEAT": {
+  "影之遗迹-战斗-结果-失败": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "shadow.battle.result.page",
-          "shadow.battle.defeat"
+          "影之遗迹-影-战斗-结果-页面",
+          "影之遗迹-影-战斗-失败"
         ],
         "box_index": 1
       }
@@ -839,19 +839,19 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "shadow.battle.result.page",
-        "target_name": "shadow.battle.defeat"
+        "page_name": "影之遗迹-影-战斗-结果-页面",
+        "target_name": "影之遗迹-影-战斗-失败"
       }
     },
     "next": [
-      "MJA_SHADOW_BATTLE_FAILURE"
+      "影之遗迹-战斗-失败"
     ],
     "on_error": [
-      "MJA_SHADOW_BATTLE_FAILURE"
+      "影之遗迹-战斗-失败"
     ],
     "retry_times": 0
   },
-  "MJA_SHADOW_BATTLE_RESULT_UNKNOWN_RESULT": {
+  "影之遗迹-战斗未知结果-结果": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -864,45 +864,45 @@
     },
     "Abort": true,
     "next": [
-      "MJA_COMMON_ABORT"
+      "公共-通用中止"
     ]
   },
-  "MJA_SHADOW_REWARD_PROBE": {
+  "影之遗迹-奖励-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "shadow.reward.close"
+          "影之遗迹-影-奖励-关闭"
         ]
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_SHADOW_DISMISS_REWARD"
+      "影之遗迹-关闭-奖励"
     ],
     "on_error": [
-      "MJA_SHADOW_REWARD_WAIT"
+      "影之遗迹-奖励-等待"
     ]
   },
-  "MJA_SHADOW_REWARD_WAIT": {
+  "影之遗迹-奖励-等待": {
     "recognition": "DirectHit",
     "action": "DoNothing",
     "post_delay": 1000,
     "max_hit": 35,
     "next": [
-      "MJA_SHADOW_REWARD_PROBE"
+      "影之遗迹-奖励-探测"
     ],
     "on_error": [
-      "MJA_SHADOW_RECORD_FAILURE"
+      "影之遗迹-记录-失败"
     ]
   },
-  "MJA_SHADOW_DISMISS_REWARD": {
+  "影之遗迹-关闭-奖励": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "shadow.reward",
-          "shadow.reward.close"
+          "影之遗迹-影-奖励",
+          "影之遗迹-影-奖励-关闭"
         ]
       }
     },
@@ -916,43 +916,43 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "shadow.reward",
-        "target_name": "shadow.reward.close"
+        "page_name": "影之遗迹-影-奖励",
+        "target_name": "影之遗迹-影-奖励-关闭"
       }
     },
     "next": [
-      "MJA_SHADOW_EXPLORATION_PAGE"
+      "影之遗迹-探索-页面"
     ],
     "on_error": [
-      "MJA_SHADOW_RECORD_FAILURE"
+      "影之遗迹-记录-失败"
     ],
     "retry_times": 0,
     "post_delay": 750
   },
-  "MJA_SHADOW_FINAL_PROBE": {
+  "影之遗迹-最终-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "shadow.final.prompt"
+          "影之遗迹-影-最终-提示"
         ]
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_SHADOW_CONFIRM_COMPLETION"
+      "影之遗迹-确认-完成"
     ],
     "on_error": [
-      "MJA_SHADOW_RECORD_FAILURE"
+      "影之遗迹-记录-失败"
     ]
   },
-  "MJA_SHADOW_CONFIRM_COMPLETION": {
+  "影之遗迹-确认-完成": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "shadow.final.prompt",
-          "shadow.final.confirm"
+          "影之遗迹-影-最终-提示",
+          "影之遗迹-影-最终-确认"
         ]
       }
     },
@@ -965,44 +965,44 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "shadow.final.prompt",
-        "target_name": "shadow.final.confirm"
+        "page_name": "影之遗迹-影-最终-提示",
+        "target_name": "影之遗迹-影-最终-确认"
       }
     },
     "next": [
-      "MJA_SHADOW_FINAL_REWARD_PROBE"
+      "影之遗迹-最终-奖励-探测"
     ],
     "on_error": [
-      "MJA_SHADOW_RECORD_FAILURE"
+      "影之遗迹-记录-失败"
     ],
     "retry_times": 0,
     "timeout": 50000
   },
-  "MJA_SHADOW_FINAL_REWARD_PROBE": {
+  "影之遗迹-最终-奖励-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "shadow.reward.close"
+          "影之遗迹-影-奖励-关闭"
         ]
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_SHADOW_FINAL_DISMISS_REWARD"
+      "影之遗迹-最终-关闭-奖励"
     ],
     "on_error": [
-      "MJA_SHADOW_RECORD_FAILURE"
+      "影之遗迹-记录-失败"
     ],
     "timeout": 50000
   },
-  "MJA_SHADOW_FINAL_DISMISS_REWARD": {
+  "影之遗迹-最终-关闭-奖励": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "shadow.reward",
-          "shadow.reward.close"
+          "影之遗迹-影-奖励",
+          "影之遗迹-影-奖励-关闭"
         ]
       }
     },
@@ -1016,38 +1016,38 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "shadow.reward",
-        "target_name": "shadow.reward.close"
+        "page_name": "影之遗迹-影-奖励",
+        "target_name": "影之遗迹-影-奖励-关闭"
       }
     },
     "next": [
-      "MJA_SHADOW_CLOSE_SHADOW_PAGE"
+      "影之遗迹-关闭-影-页面"
     ],
     "on_error": [
-      "MJA_SHADOW_RECORD_FAILURE"
+      "影之遗迹-记录-失败"
     ],
     "retry_times": 0,
     "post_delay": 750
   },
-  "MJA_SHADOW_HOME_BOUNDARY_PROBE": {
+  "影之遗迹-主页边界-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "shadow.home.page"
+          "影之遗迹-影-主页-页面"
         ]
       }
     },
     "timeout": 8000,
     "action": "DoNothing",
     "next": [
-      "MJA_SHADOW_RECORD_SUCCESS"
+      "影之遗迹-记录-成功"
     ],
     "on_error": [
-      "MJA_SHADOW_BOUNDARY_FAILURE"
+      "影之遗迹-边界-失败"
     ]
   },
-  "MJA_SHADOW_RECORD_SUCCESS": {
+  "影之遗迹-记录-成功": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -1057,10 +1057,10 @@
       "postcondition": "shadow.final_reward_claimed_and_home"
     },
     "next": [
-      "MJA_COMMON_STOP"
+      "公共-通用停止"
     ]
   },
-  "MJA_SHADOW_BOUNDARY_FAILURE": {
+  "影之遗迹-边界-失败": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -1073,10 +1073,10 @@
     },
     "Abort": true,
     "next": [
-      "MJA_COMMON_ABORT"
+      "公共-通用中止"
     ]
   },
-  "MJA_SHADOW_FOREGROUND_LOOP_EXHAUSTED": {
+  "影之遗迹-前台-循环-耗尽": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -1089,10 +1089,10 @@
     },
     "Abort": true,
     "next": [
-      "MJA_COMMON_ABORT"
+      "公共-通用中止"
     ]
   },
-  "MJA_SHADOW_BATTLE_LOOP_EXHAUSTED": {
+  "影之遗迹-战斗-循环-耗尽": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -1105,10 +1105,10 @@
     },
     "Abort": true,
     "next": [
-      "MJA_COMMON_ABORT"
+      "公共-通用中止"
     ]
   },
-  "MJA_SHADOW_ENTRY_UNKNOWN": {
+  "影之遗迹-入口-未知": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -1121,10 +1121,10 @@
     },
     "Abort": true,
     "next": [
-      "MJA_COMMON_ABORT"
+      "公共-通用中止"
     ]
   },
-  "MJA_SHADOW_RECORD_FAILURE": {
+  "影之遗迹-记录-失败": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -1137,14 +1137,14 @@
     },
     "Abort": true,
     "next": [
-      "MJA_COMMON_ABORT"
+      "公共-通用中止"
     ]
   },
-  "shadow.home.page": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_HOME_PAGE"], "box_index": 0}},
+  "影之遗迹-影-主页-页面": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}},
     "action": "DoNothing"
   },
-  "shadow.home.dungeon": {
+  "影之遗迹-影-主页-副本": {
     "recognition": "OCR",
     "expected": "^副本$",
     "roi": [
@@ -1155,7 +1155,7 @@
     ],
     "action": "DoNothing"
   },
-  "shadow.home.trial": {
+  "影之遗迹-影-主页-试炼": {
     "recognition": "OCR",
     "expected": "^试剑$",
     "roi": [
@@ -1166,7 +1166,7 @@
     ],
     "action": "DoNothing"
   },
-  "shadow.painting.entry": {
+  "影之遗迹-影-画卷-入口": {
     "recognition": "OCR",
     "expected": "^画卷$",
     "roi": [
@@ -1177,21 +1177,21 @@
     ],
     "action": "DoNothing"
   },
-  "shadow.painting.page": {
+  "影之遗迹-影-画卷-页面": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "shadow.painting.page.title",
-          "shadow.painting.page.world",
-          "shadow.painting.page.region"
+          "影之遗迹-影-画卷-页面-标题",
+          "影之遗迹-影-画卷-页面-世界",
+          "影之遗迹-影-画卷-页面-区域"
         ],
         "box_index": 0
       }
     },
     "action": "DoNothing"
   },
-  "shadow.painting.page.title": {
+  "影之遗迹-影-画卷-页面-标题": {
     "recognition": "OCR",
     "expected": "^画卷$",
     "roi": [
@@ -1202,7 +1202,7 @@
     ],
     "action": "DoNothing"
   },
-  "shadow.painting.page.world": {
+  "影之遗迹-影-画卷-页面-世界": {
     "recognition": "OCR",
     "expected": "^·?偃武世界$",
     "roi": [
@@ -1213,7 +1213,7 @@
     ],
     "action": "DoNothing"
   },
-  "shadow.painting.page.region": {
+  "影之遗迹-影-画卷-页面-区域": {
     "recognition": "OCR",
     "expected": "^云州$",
     "roi": [
@@ -1224,7 +1224,7 @@
     ],
     "action": "DoNothing"
   },
-  "shadow.entry": {
+  "影之遗迹-影-入口": {
     "recognition": "OCR",
     "expected": "^蜃影武墟$",
     "roi": [
@@ -1235,7 +1235,7 @@
     ],
     "action": "DoNothing"
   },
-  "shadow.page": {
+  "影之遗迹-影-页面": {
     "recognition": "OCR",
     "expected": "蜃影武墟",
     "roi": [
@@ -1246,7 +1246,7 @@
     ],
     "action": "DoNothing"
   },
-  "shadow.active": {
+  "影之遗迹-影-进行中": {
     "recognition": "OCR",
     "expected": [
       "探索中",
@@ -1260,7 +1260,7 @@
     ],
     "action": "DoNothing"
   },
-  "shadow.challenge": {
+  "影之遗迹-影-挑战": {
     "recognition": "OCR",
     "expected": [
       "可探索",
@@ -1275,7 +1275,7 @@
     ],
     "action": "DoNothing"
   },
-  "shadow.stage_entry": {
+  "影之遗迹-影-关卡-入口": {
     "recognition": "OCR",
     "expected": "^前往$",
     "roi": [
@@ -1286,7 +1286,7 @@
     ],
     "action": "DoNothing"
   },
-  "shadow.stage.page": {
+  "影之遗迹-影-关卡-页面": {
     "recognition": "OCR",
     "expected": [
       "蜃影武墟",
@@ -1301,7 +1301,7 @@
     ],
     "action": "DoNothing"
   },
-  "shadow.battle.page": {
+  "影之遗迹-影-战斗-页面": {
     "recognition": "OCR",
     "expected": [
       "阵容",
@@ -1315,20 +1315,20 @@
     ],
     "action": "DoNothing"
   },
-  "shadow.battle.in_progress": {
+  "影之遗迹-影-战斗-中-进度": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "shadow.battle.in_progress.stats",
-          "shadow.battle.in_progress.status",
-          "shadow.battle.in_progress.timer"
+          "影之遗迹-影-战斗-中-进度-统计",
+          "影之遗迹-影-战斗-中-进度-状态",
+          "影之遗迹-影-战斗-中-进度-计时器"
         ]
       }
     },
     "action": "DoNothing"
   },
-  "shadow.battle.in_progress.stats": {
+  "影之遗迹-影-战斗-中-进度-统计": {
     "recognition": "OCR",
     "expected": "^统计$",
     "roi": [
@@ -1339,7 +1339,7 @@
     ],
     "action": "DoNothing"
   },
-  "shadow.battle.in_progress.status": {
+  "影之遗迹-影-战斗-中-进度-状态": {
     "recognition": "OCR",
     "expected": "^状态$",
     "roi": [
@@ -1350,7 +1350,7 @@
     ],
     "action": "DoNothing"
   },
-  "shadow.battle.in_progress.timer": {
+  "影之遗迹-影-战斗-中-进度-计时器": {
     "recognition": "OCR",
     "expected": "^\\d{2}:\\d{2}$",
     "roi": [
@@ -1361,7 +1361,7 @@
     ],
     "action": "DoNothing"
   },
-  "shadow.exploration.page": {
+  "影之遗迹-影-探索-页面": {
     "recognition": "OCR",
     "expected": [
       "沙漠废墟",
@@ -1376,7 +1376,7 @@
     ],
     "action": "DoNothing"
   },
-  "shadow.foreground.ready": {
+  "影之遗迹-影-前台-就绪": {
     "recognition": "OCR",
     "expected": "^第.+层$",
     "roi": [
@@ -1387,7 +1387,7 @@
     ],
     "action": "DoNothing"
   },
-  "shadow.foreground.left": {
+  "影之遗迹-影-前台-左": {
     "recognition": "OCR",
     "expected": "左",
     "roi": [
@@ -1398,7 +1398,7 @@
     ],
     "action": "DoNothing"
   },
-  "shadow.foreground.center": {
+  "影之遗迹-影-前台-中心": {
     "recognition": "OCR",
     "expected": "中",
     "roi": [
@@ -1409,7 +1409,7 @@
     ],
     "action": "DoNothing"
   },
-  "shadow.foreground.right": {
+  "影之遗迹-影-前台-右": {
     "recognition": "OCR",
     "expected": "右",
     "roi": [
@@ -1420,7 +1420,7 @@
     ],
     "action": "DoNothing"
   },
-  "shadow.battle.result.page": {
+  "影之遗迹-影-战斗-结果-页面": {
     "recognition": "OCR",
     "expected": [
       "^战斗胜利$",
@@ -1434,7 +1434,7 @@
     ],
     "action": "DoNothing"
   },
-  "shadow.battle.victory": {
+  "影之遗迹-影-战斗-胜利": {
     "recognition": "OCR",
     "expected": [
       "战斗胜利",
@@ -1448,7 +1448,7 @@
     ],
     "action": "DoNothing"
   },
-  "shadow.battle.defeat": {
+  "影之遗迹-影-战斗-失败": {
     "recognition": "OCR",
     "expected": "战斗失败",
     "roi": [
@@ -1459,7 +1459,7 @@
     ],
     "action": "DoNothing"
   },
-  "shadow.failure.close": {
+  "影之遗迹-影-失败-关闭": {
     "recognition": "OCR",
     "expected": [
       "确定",
@@ -1473,7 +1473,7 @@
     ],
     "action": "DoNothing"
   },
-  "shadow.victory.chest.reward": {
+  "影之遗迹-影-胜利-宝箱-奖励": {
     "recognition": "OCR",
     "expected": "^恭喜获得$",
     "roi": [
@@ -1484,7 +1484,7 @@
     ],
     "action": "DoNothing"
   },
-  "shadow.reward": {
+  "影之遗迹-影-奖励": {
     "recognition": "OCR",
     "expected": [
       "恭喜获得",
@@ -1498,7 +1498,7 @@
     ],
     "action": "DoNothing"
   },
-  "shadow.reward.close": {
+  "影之遗迹-影-奖励-关闭": {
     "recognition": "OCR",
     "expected": "点击空白处关闭",
     "roi": [
@@ -1509,7 +1509,7 @@
     ],
     "action": "DoNothing"
   },
-  "shadow.final.prompt": {
+  "影之遗迹-影-最终-提示": {
     "recognition": "OCR",
     "expected": "首领已被击败",
     "roi": [
@@ -1520,7 +1520,7 @@
     ],
     "action": "DoNothing"
   },
-  "shadow.final.confirm": {
+  "影之遗迹-影-最终-确认": {
     "recognition": "OCR",
     "expected": "确定",
     "roi": [
@@ -1531,32 +1531,32 @@
     ],
     "action": "DoNothing"
   },
-  "MJA_SHADOW_SKIP_PREPARE_PROBE": {
+  "影之遗迹-跳过-准备-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "shadow.stage.page",
-          "shadow.skip_prepare.checked"
+          "影之遗迹-影-关卡-页面",
+          "影之遗迹-影-跳过-准备-已勾选"
         ],
         "box_index": 1
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_SHADOW_BATTLE_GATE"
+      "影之遗迹-战斗-门禁"
     ],
     "on_error": [
-      "MJA_SHADOW_SKIP_PREPARE_CLICK"
+      "影之遗迹-跳过-准备-点击"
     ]
   },
-  "MJA_SHADOW_SKIP_PREPARE_CLICK": {
+  "影之遗迹-跳过-准备-点击": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "shadow.stage.page",
-          "shadow.skip_prepare"
+          "影之遗迹-影-关卡-页面",
+          "影之遗迹-影-跳过-准备"
         ],
         "box_index": 1
       }
@@ -1570,19 +1570,19 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "shadow.stage.page",
-        "target_name": "shadow.skip_prepare"
+        "page_name": "影之遗迹-影-关卡-页面",
+        "target_name": "影之遗迹-影-跳过-准备"
       }
     },
     "next": [
-      "MJA_SHADOW_BATTLE_GATE"
+      "影之遗迹-战斗-门禁"
     ],
     "on_error": [
-      "MJA_SHADOW_RECORD_FAILURE"
+      "影之遗迹-记录-失败"
     ],
     "retry_times": 0
   },
-  "MJA_SHADOW_BATTLE_FAILURE": {
+  "影之遗迹-战斗-失败": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -1595,16 +1595,16 @@
     },
     "Abort": true,
     "next": [
-      "MJA_COMMON_ABORT"
+      "公共-通用中止"
     ]
   },
-  "MJA_SHADOW_CLOSE_SHADOW_PAGE": {
+  "影之遗迹-关闭-影-页面": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "shadow.page",
-          "shadow.close"
+          "影之遗迹-影-页面",
+          "影之遗迹-影-关闭"
         ],
         "box_index": 1
       }
@@ -1618,31 +1618,31 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "shadow.page",
-        "target_name": "shadow.close"
+        "page_name": "影之遗迹-影-页面",
+        "target_name": "影之遗迹-影-关闭"
       }
     },
     "next": [
-      "MJA_SHADOW_HOME_BOUNDARY_PROBE"
+      "影之遗迹-主页边界-探测"
     ],
     "on_error": [
-      "MJA_SHADOW_RECORD_FAILURE"
+      "影之遗迹-记录-失败"
     ],
     "retry_times": 0
   },
-  "shadow.challenge.page": {
+  "影之遗迹-影-挑战-页面": {
     "recognition": {
       "type": "Or",
       "param": {
         "any_of": [
-          "shadow.stage.page",
-          "shadow.battle.page"
+          "影之遗迹-影-关卡-页面",
+          "影之遗迹-影-战斗-页面"
         ]
       }
     },
     "action": "DoNothing"
   },
-  "shadow.challenge.target": {
+  "影之遗迹-影-挑战-目标": {
     "recognition": "OCR",
     "expected": [
       "挑战"
@@ -1655,7 +1655,7 @@
     ],
     "action": "DoNothing"
   },
-  "shadow.skip_prepare": {
+  "影之遗迹-影-跳过-准备": {
     "recognition": "OCR",
     "expected": "跳过战前准备",
     "roi": [
@@ -1666,7 +1666,7 @@
     ],
     "action": "DoNothing"
   },
-  "shadow.skip_prepare.checked": {
+  "影之遗迹-影-跳过-准备-已勾选": {
     "recognition": "OCR",
     "expected": [
       "√",
@@ -1681,7 +1681,7 @@
     ],
     "action": "DoNothing"
   },
-  "shadow.close": {
+  "影之遗迹-影-关闭": {
     "recognition": "OCR",
     "expected": [
       "返回",

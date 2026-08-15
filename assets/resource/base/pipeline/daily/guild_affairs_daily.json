@@ -1,77 +1,77 @@
 {
-  "MJA_GUILD_AFFAIRS_DAILY_START": {
+  "帮派事务-任务入口": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "BeginTask",
     "custom_action_param": {"task_id": "GUILD_AFFAIRS_DAILY"},
     "timeout": 8000,
     "next": [
-      "MJA_GUILD_AFFAIRS_DAILY_AFFAIRS_PAGE_PROBE",
-      "MJA_GUILD_AFFAIRS_DAILY_GUILD_PAGE_PROBE",
-      "MJA_GUILD_AFFAIRS_DAILY_HOME_PROBE",
-      "MJA_GUILD_AFFAIRS_DAILY_PANEL_PROBE",
-      "MJA_GUILD_AFFAIRS_DAILY_GAME_START_RECOVERY"
+      "帮派事务-事务-页面-探测",
+      "帮派事务-帮派-页面-探测",
+      "帮派事务-主页-探测",
+      "帮派事务-面板-探测",
+      "帮派事务-游戏启动恢复"
     ],
     "on_error": [
-      "MJA_GUILD_AFFAIRS_DAILY_GAME_START_RECOVERY",
-      "MJA_GUILD_AFFAIRS_DAILY_RECORD_FAILURE"
+      "帮派事务-游戏启动恢复",
+      "帮派事务-记录-失败"
     ]
   },
-  "MJA_GUILD_AFFAIRS_DAILY_AFFAIRS_PAGE_PROBE": {
+  "帮派事务-事务-页面-探测": {
     "recognition": "OCR",
     "expected": "帮会事务",
     "roi": [0, 0, 1280, 240],
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_GUILD_AFFAIRS_DAILY_FIRST_ROW_GATE"],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_RECORD_FAILURE"]
+    "next": ["帮派事务-首个-行-门禁"],
+    "on_error": ["帮派事务-记录-失败"]
   },
-  "MJA_GUILD_AFFAIRS_DAILY_GUILD_PAGE_PROBE": {
+  "帮派事务-帮派-页面-探测": {
     "recognition": "OCR",
     "expected": ["帮会名帖", "成员数量", "活跃度"],
     "roi": [0, 180, 380, 300],
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_GUILD_AFFAIRS_DAILY_OPEN_AFFAIRS"],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_HOME_PROBE"]
+    "next": ["帮派事务-打开-事务"],
+    "on_error": ["帮派事务-主页-探测"]
   },
-  "MJA_GUILD_AFFAIRS_DAILY_HOME_PROBE": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_HOME_PAGE"], "box_index": 0}},
+  "帮派事务-主页-探测": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}},
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_GUILD_AFFAIRS_DAILY_OPEN_PANEL"],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_PANEL_PROBE"]
+    "next": ["帮派事务-打开-面板"],
+    "on_error": ["帮派事务-面板-探测"]
   },
-  "MJA_GUILD_AFFAIRS_DAILY_PANEL_PROBE": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_SIDE_PANEL_OPEN"], "box_index": 0}},
+  "帮派事务-面板-探测": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏侧边面板-打开"], "box_index": 0}},
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_GUILD_AFFAIRS_DAILY_OPEN_GUILD"],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_RECORD_FAILURE"]
+    "next": ["帮派事务-打开-帮派"],
+    "on_error": ["帮派事务-记录-失败"]
   },
-  "MJA_GUILD_AFFAIRS_DAILY_GAME_START_RECOVERY": {
+  "帮派事务-游戏启动恢复": {
     "recognition": "DirectHit",
     "max_hit": 1,
     "action": "StartApp",
     "package": "com.hanjiasongshu.dr22/.MainActivity",
     "post_delay": 5000,
     "retry_times": 0,
-    "next": ["MJA_GUILD_AFFAIRS_DAILY_RECOVERY_STATE_PROBE"],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_GAME_START_RECOVERY_FAILED"]
+    "next": ["帮派事务-恢复-状态-探测"],
+    "on_error": ["帮派事务-游戏启动恢复失败"]
   },
-  "MJA_GUILD_AFFAIRS_DAILY_RECOVERY_STATE_PROBE": {
+  "帮派事务-恢复-状态-探测": {
     "recognition": "DirectHit",
     "action": "DoNothing",
     "timeout": 30000,
     "next": [
-      "MJA_GUILD_AFFAIRS_DAILY_AFFAIRS_PAGE_PROBE",
-      "MJA_GUILD_AFFAIRS_DAILY_GUILD_PAGE_PROBE",
-      "MJA_GUILD_AFFAIRS_DAILY_HOME_PROBE",
-      "MJA_GUILD_AFFAIRS_DAILY_PANEL_PROBE"
+      "帮派事务-事务-页面-探测",
+      "帮派事务-帮派-页面-探测",
+      "帮派事务-主页-探测",
+      "帮派事务-面板-探测"
     ],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_GAME_START_RECOVERY_FAILED"]
+    "on_error": ["帮派事务-游戏启动恢复失败"]
   },
-  "MJA_GUILD_AFFAIRS_DAILY_GAME_START_RECOVERY_FAILED": {
+  "帮派事务-游戏启动恢复失败": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -83,13 +83,13 @@
       "native_fail_after_record": true
     },
     "Abort": true,
-    "next": ["MJA_COMMON_ABORT"]
+    "next": ["公共-通用中止"]
   },
-  "MJA_GUILD_AFFAIRS_DAILY_OPEN_PANEL": {
+  "帮派事务-打开-面板": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["guild.affairs.daily.home.page", "guild.affairs.daily.panel.open"],
+        "all_of": ["帮派事务-帮派事务-主页-页面", "帮派事务-帮派事务-面板-打开"],
         "box_index": 1
       }
     },
@@ -103,19 +103,19 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "guild.affairs.daily.home.page",
-        "target_name": "guild.affairs.daily.panel.open"
+        "page_name": "帮派事务-帮派事务-主页-页面",
+        "target_name": "帮派事务-帮派事务-面板-打开"
       }
     },
-    "next": ["MJA_GUILD_AFFAIRS_DAILY_PANEL_PROBE"],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_RECORD_FAILURE"],
+    "next": ["帮派事务-面板-探测"],
+    "on_error": ["帮派事务-记录-失败"],
     "retry_times": 0
   },
-  "MJA_GUILD_AFFAIRS_DAILY_OPEN_GUILD": {
+  "帮派事务-打开-帮派": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["guild.affairs.daily.panel.page", "guild.affairs.daily.guild.entry"],
+        "all_of": ["帮派事务-帮派事务-面板-页面", "帮派事务-帮派事务-帮派-入口"],
         "box_index": 1
       }
     },
@@ -129,19 +129,19 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "guild.affairs.daily.panel.page",
-        "target_name": "guild.affairs.daily.guild.entry"
+        "page_name": "帮派事务-帮派事务-面板-页面",
+        "target_name": "帮派事务-帮派事务-帮派-入口"
       }
     },
-    "next": ["MJA_GUILD_AFFAIRS_DAILY_GUILD_PAGE_PROBE"],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_RECORD_FAILURE"],
+    "next": ["帮派事务-帮派-页面-探测"],
+    "on_error": ["帮派事务-记录-失败"],
     "retry_times": 0
   },
-  "MJA_GUILD_AFFAIRS_DAILY_OPEN_AFFAIRS": {
+  "帮派事务-打开-事务": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["guild.affairs.daily.guild.page", "guild.affairs.daily.affairs.entry"],
+        "all_of": ["帮派事务-帮派事务-帮派-页面", "帮派事务-帮派事务-事务-入口"],
         "box_index": 1
       }
     },
@@ -155,55 +155,55 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "guild.affairs.daily.guild.page",
-        "target_name": "guild.affairs.daily.affairs.entry"
+        "page_name": "帮派事务-帮派事务-帮派-页面",
+        "target_name": "帮派事务-帮派事务-事务-入口"
       }
     },
-    "next": ["MJA_GUILD_AFFAIRS_DAILY_AFFAIRS_PAGE_PROBE"],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_RECORD_FAILURE"],
+    "next": ["帮派事务-事务-页面-探测"],
+    "on_error": ["帮派事务-记录-失败"],
     "retry_times": 0
   },
-  "MJA_GUILD_AFFAIRS_DAILY_FIRST_ROW_GATE": {
+  "帮派事务-首个-行-门禁": {
     "recognition": "DirectHit",
     "action": "DoNothing",
     "next": [
-      "MJA_GUILD_AFFAIRS_DAILY_FIRST_ROW_PAID_GUARD",
-      "MJA_GUILD_AFFAIRS_DAILY_FIRST_ROW_CLAIM_PROBE",
-      "MJA_GUILD_AFFAIRS_DAILY_FIRST_ROW_START_PROBE",
-      "MJA_GUILD_AFFAIRS_DAILY_FIRST_ROW_DONE_PROBE"
+      "帮派事务-首个-行-付费-防护",
+      "帮派事务-首个-行-领取-探测",
+      "帮派事务-首个-行-开始-探测",
+      "帮派事务-首个-行-完成-探测"
     ],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_RECORD_FAILURE"]
+    "on_error": ["帮派事务-记录-失败"]
   },
-  "MJA_GUILD_AFFAIRS_DAILY_FIRST_ROW_PAID_GUARD": {
+  "帮派事务-首个-行-付费-防护": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["guild.affairs.daily.affairs.page", "guild.affairs.daily.first_row.paid"],
+        "all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-首个-行-付费"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_GUILD_AFFAIRS_DAILY_PAID_OR_AMBIGUOUS"],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_FIRST_ROW_CLAIM_PROBE"]
+    "next": ["帮派事务-付费-或-歧义"],
+    "on_error": ["帮派事务-首个-行-领取-探测"]
   },
-  "MJA_GUILD_AFFAIRS_DAILY_FIRST_ROW_CLAIM_PROBE": {
+  "帮派事务-首个-行-领取-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["guild.affairs.daily.affairs.page", "guild.affairs.daily.first_row.claimable"],
+        "all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-首个-行-可领取"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_GUILD_AFFAIRS_DAILY_CLAIM_FIRST_ROW_REWARD"],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_FIRST_ROW_START_PROBE"]
+    "next": ["帮派事务-领取-首个-行-奖励"],
+    "on_error": ["帮派事务-首个-行-开始-探测"]
   },
-  "MJA_GUILD_AFFAIRS_DAILY_CLAIM_FIRST_ROW_REWARD": {
+  "帮派事务-领取-首个-行-奖励": {
     "max_hit": 6,
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["guild.affairs.daily.affairs.page", "guild.affairs.daily.first_row.claimable"],
+        "all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-首个-行-可领取"],
         "box_index": 1
       }
     },
@@ -216,39 +216,39 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "guild.affairs.daily.affairs.page",
-        "target_name": "guild.affairs.daily.first_row.claimable",
+        "page_name": "帮派事务-帮派事务-事务-页面",
+        "target_name": "帮派事务-帮派事务-首个-行-可领取",
         "row_index": 0,
         "row_roi": [50, 150, 1180, 150],
         "target_roi": [930, 150, 300, 120]
       }
     },
-    "next": ["MJA_GUILD_AFFAIRS_DAILY_CLAIM_REWARD_PROBE"],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_RECORD_FAILURE"],
+    "next": ["帮派事务-领取-奖励-探测"],
+    "on_error": ["帮派事务-记录-失败"],
     "retry_times": 0
   },
-  "MJA_GUILD_AFFAIRS_DAILY_CLAIM_REWARD_PROBE": {
+  "帮派事务-领取-奖励-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "guild.affairs.daily.reward.popup",
-          "guild.affairs.daily.reward.popup.close"
+          "帮派事务-帮派事务-奖励-弹窗",
+          "帮派事务-帮派事务-奖励-弹窗-关闭"
         ],
         "box_index": 1
       }
     },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_GUILD_AFFAIRS_DAILY_CLOSE_REWARD"],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_RECORD_FAILURE"]
+    "next": ["帮派事务-关闭-奖励"],
+    "on_error": ["帮派事务-记录-失败"]
   },
-  "MJA_GUILD_AFFAIRS_DAILY_CLOSE_REWARD": {
+  "帮派事务-关闭-奖励": {
     "max_hit": 6,
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["guild.affairs.daily.reward.popup", "guild.affairs.daily.reward.popup.close"],
+        "all_of": ["帮派事务-帮派事务-奖励-弹窗", "帮派事务-帮派事务-奖励-弹窗-关闭"],
         "box_index": 1
       }
     },
@@ -261,94 +261,94 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "guild.affairs.daily.reward.popup",
-        "target_name": "guild.affairs.daily.reward.popup.close"
+        "page_name": "帮派事务-帮派事务-奖励-弹窗",
+        "target_name": "帮派事务-帮派事务-奖励-弹窗-关闭"
       }
     },
-    "next": ["MJA_GUILD_AFFAIRS_DAILY_FIRST_ROW_GATE"],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_RECORD_FAILURE"],
+    "next": ["帮派事务-首个-行-门禁"],
+    "on_error": ["帮派事务-记录-失败"],
     "post_delay": 500,
     "retry_times": 0
   },
-  "MJA_GUILD_AFFAIRS_DAILY_AFTER_CLAIM_PAGE_PROBE": {
+  "帮派事务-之后-领取-页面-探测": {
     "recognition": "OCR",
     "expected": "帮会事务",
     "roi": [0, 0, 1280, 240],
     "timeout": 8000,
     "action": "DoNothing",
     "next": [
-      "MJA_GUILD_AFFAIRS_DAILY_AFTER_CLAIM_PAID_GUARD",
-      "MJA_GUILD_AFFAIRS_DAILY_AFTER_CLAIM_CLAIM_PROBE",
-      "MJA_GUILD_AFFAIRS_DAILY_AFTER_CLAIM_START_PROBE",
-      "MJA_GUILD_AFFAIRS_DAILY_AFTER_CLAIM_DONE_PROBE"
+      "帮派事务-之后-领取-付费-防护",
+      "帮派事务-之后-领取-领取-探测",
+      "帮派事务-之后-领取-开始-探测",
+      "帮派事务-之后-领取-完成-探测"
     ],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_RECORD_FAILURE"]
+    "on_error": ["帮派事务-记录-失败"]
   },
-  "MJA_GUILD_AFFAIRS_DAILY_AFTER_CLAIM_PAID_GUARD": {
+  "帮派事务-之后-领取-付费-防护": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["guild.affairs.daily.affairs.page", "guild.affairs.daily.first_row.paid"],
+        "all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-首个-行-付费"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_GUILD_AFFAIRS_DAILY_PAID_OR_AMBIGUOUS"],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_AFTER_CLAIM_CLAIM_PROBE"]
+    "next": ["帮派事务-付费-或-歧义"],
+    "on_error": ["帮派事务-之后-领取-领取-探测"]
   },
-  "MJA_GUILD_AFFAIRS_DAILY_AFTER_CLAIM_CLAIM_PROBE": {
+  "帮派事务-之后-领取-领取-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["guild.affairs.daily.affairs.page", "guild.affairs.daily.first_row.claimable"],
+        "all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-首个-行-可领取"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_GUILD_AFFAIRS_DAILY_CLAIM_FIRST_ROW_REWARD"],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_AFTER_CLAIM_START_PROBE"]
+    "next": ["帮派事务-领取-首个-行-奖励"],
+    "on_error": ["帮派事务-之后-领取-开始-探测"]
   },
-  "MJA_GUILD_AFFAIRS_DAILY_AFTER_CLAIM_START_PROBE": {
+  "帮派事务-之后-领取-开始-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["guild.affairs.daily.affairs.page", "guild.affairs.daily.first_row.startable"],
+        "all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-首个-行-可开始"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_GUILD_AFFAIRS_DAILY_START_FIRST_ROW"],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_AFTER_CLAIM_DONE_PROBE"]
+    "next": ["帮派事务-开始-首个-行"],
+    "on_error": ["帮派事务-之后-领取-完成-探测"]
   },
-  "MJA_GUILD_AFFAIRS_DAILY_AFTER_CLAIM_DONE_PROBE": {
+  "帮派事务-之后-领取-完成-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["guild.affairs.daily.affairs.page", "guild.affairs.daily.first_row.no_action"],
+        "all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-首个-行-无-动作"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_GUILD_AFFAIRS_DAILY_ROW1_GATE"],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_RECORD_FAILURE"]
+    "next": ["帮派事务-行1-门禁"],
+    "on_error": ["帮派事务-记录-失败"]
   },
-  "MJA_GUILD_AFFAIRS_DAILY_FIRST_ROW_START_PROBE": {
+  "帮派事务-首个-行-开始-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["guild.affairs.daily.affairs.page", "guild.affairs.daily.first_row.startable"],
+        "all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-首个-行-可开始"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_GUILD_AFFAIRS_DAILY_START_FIRST_ROW"],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_FIRST_ROW_DONE_PROBE"]
+    "next": ["帮派事务-开始-首个-行"],
+    "on_error": ["帮派事务-首个-行-完成-探测"]
   },
-  "MJA_GUILD_AFFAIRS_DAILY_START_FIRST_ROW": {
+  "帮派事务-开始-首个-行": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["guild.affairs.daily.affairs.page", "guild.affairs.daily.first_row.startable"],
+        "all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-首个-行-可开始"],
         "box_index": 1
       }
     },
@@ -362,272 +362,272 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "guild.affairs.daily.affairs.page",
-        "target_name": "guild.affairs.daily.first_row.startable",
+        "page_name": "帮派事务-帮派事务-事务-页面",
+        "target_name": "帮派事务-帮派事务-首个-行-可开始",
         "row_index": 0,
         "row_roi": [50, 150, 1180, 150],
         "target_roi": [930, 150, 300, 120]
       }
     },
-    "next": ["MJA_GUILD_AFFAIRS_DAILY_FIRST_ROW_POST_START_PROBE"],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_RECORD_FAILURE"],
+    "next": ["帮派事务-首个-行-之后-开始-探测"],
+    "on_error": ["帮派事务-记录-失败"],
     "retry_times": 0
   },
-  "MJA_GUILD_AFFAIRS_DAILY_FIRST_ROW_POST_START_PROBE": {
+  "帮派事务-首个-行-之后-开始-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["guild.affairs.daily.affairs.page", "guild.affairs.daily.first_row.no_action"],
+        "all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-首个-行-无-动作"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_GUILD_AFFAIRS_DAILY_ROW1_GATE"],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_RECORD_FAILURE"]
+    "next": ["帮派事务-行1-门禁"],
+    "on_error": ["帮派事务-记录-失败"]
   },
-  "MJA_GUILD_AFFAIRS_DAILY_FIRST_ROW_DONE_PROBE": {
+  "帮派事务-首个-行-完成-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["guild.affairs.daily.affairs.page", "guild.affairs.daily.first_row.no_action"],
+        "all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-首个-行-无-动作"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_GUILD_AFFAIRS_DAILY_ROW1_GATE"],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_RECORD_FAILURE"]
+    "next": ["帮派事务-行1-门禁"],
+    "on_error": ["帮派事务-记录-失败"]
   },
-  "MJA_GUILD_AFFAIRS_DAILY_ROW1_GATE": {
+  "帮派事务-行1-门禁": {
     "recognition": "DirectHit",
     "action": "DoNothing",
     "next": [
-      "MJA_GUILD_AFFAIRS_DAILY_ROW1_PAID_GUARD",
-      "MJA_GUILD_AFFAIRS_DAILY_ROW1_CLAIM_PROBE",
-      "MJA_GUILD_AFFAIRS_DAILY_ROW1_START_PROBE",
-      "MJA_GUILD_AFFAIRS_DAILY_ROW1_DONE_PROBE"
+      "帮派事务-行1-付费-防护",
+      "帮派事务-行1-领取-探测",
+      "帮派事务-行1-开始-探测",
+      "帮派事务-行1-完成-探测"
     ],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_RECORD_FAILURE"]
+    "on_error": ["帮派事务-记录-失败"]
   },
-  "MJA_GUILD_AFFAIRS_DAILY_ROW1_PAID_GUARD": {
-    "recognition": {"type": "And", "param": {"all_of": ["guild.affairs.daily.affairs.page", "guild.affairs.daily.row1.paid"], "box_index": 1}},
+  "帮派事务-行1-付费-防护": {
+    "recognition": {"type": "And", "param": {"all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-行1-付费"], "box_index": 1}},
     "action": "DoNothing",
-    "next": ["MJA_GUILD_AFFAIRS_DAILY_PAID_OR_AMBIGUOUS"],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_ROW1_CLAIM_PROBE"]
+    "next": ["帮派事务-付费-或-歧义"],
+    "on_error": ["帮派事务-行1-领取-探测"]
   },
-  "MJA_GUILD_AFFAIRS_DAILY_ROW1_CLAIM_PROBE": {
-    "recognition": {"type": "And", "param": {"all_of": ["guild.affairs.daily.affairs.page", "guild.affairs.daily.row1.claimable"], "box_index": 1}},
+  "帮派事务-行1-领取-探测": {
+    "recognition": {"type": "And", "param": {"all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-行1-可领取"], "box_index": 1}},
     "action": "DoNothing",
-    "next": ["MJA_GUILD_AFFAIRS_DAILY_ROW1_CLAIM"],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_ROW1_START_PROBE"]
+    "next": ["帮派事务-行1-领取"],
+    "on_error": ["帮派事务-行1-开始-探测"]
   },
-  "MJA_GUILD_AFFAIRS_DAILY_ROW1_CLAIM": {
+  "帮派事务-行1-领取": {
     "max_hit": 6,
-    "recognition": {"type": "And", "param": {"all_of": ["guild.affairs.daily.affairs.page", "guild.affairs.daily.row1.claimable"], "box_index": 1}},
+    "recognition": {"type": "And", "param": {"all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-行1-可领取"], "box_index": 1}},
     "action": "Custom",
     "custom_action": "GuardedInput",
     "custom_action_param": {
       "task_id": "GUILD_AFFAIRS_DAILY",
       "action_id": "claim_guild_affairs_reward",
       "kind": "click",
-      "evidence": {"page_index": 0, "target_index": 1, "page_name": "guild.affairs.daily.affairs.page", "target_name": "guild.affairs.daily.row1.claimable", "row_index": 1, "row_roi": [50, 300, 1180, 150], "target_roi": [930, 300, 300, 120]}
+      "evidence": {"page_index": 0, "target_index": 1, "page_name": "帮派事务-帮派事务-事务-页面", "target_name": "帮派事务-帮派事务-行1-可领取", "row_index": 1, "row_roi": [50, 300, 1180, 150], "target_roi": [930, 300, 300, 120]}
     },
-    "next": ["MJA_GUILD_AFFAIRS_DAILY_CLAIM_REWARD_PROBE"],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_RECORD_FAILURE"],
+    "next": ["帮派事务-领取-奖励-探测"],
+    "on_error": ["帮派事务-记录-失败"],
     "retry_times": 0
   },
-  "MJA_GUILD_AFFAIRS_DAILY_ROW1_START_PROBE": {
-    "recognition": {"type": "And", "param": {"all_of": ["guild.affairs.daily.affairs.page", "guild.affairs.daily.row1.startable"], "box_index": 1}},
+  "帮派事务-行1-开始-探测": {
+    "recognition": {"type": "And", "param": {"all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-行1-可开始"], "box_index": 1}},
     "action": "DoNothing",
-    "next": ["MJA_GUILD_AFFAIRS_DAILY_ROW1_START"],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_ROW1_DONE_PROBE"]
+    "next": ["帮派事务-行1-开始"],
+    "on_error": ["帮派事务-行1-完成-探测"]
   },
-  "MJA_GUILD_AFFAIRS_DAILY_ROW1_START": {
+  "帮派事务-行1-开始": {
     "max_hit": 6,
-    "recognition": {"type": "And", "param": {"all_of": ["guild.affairs.daily.affairs.page", "guild.affairs.daily.row1.startable"], "box_index": 1}},
+    "recognition": {"type": "And", "param": {"all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-行1-可开始"], "box_index": 1}},
     "action": "Custom",
     "custom_action": "GuardedInput",
     "custom_action_param": {
       "task_id": "GUILD_AFFAIRS_DAILY",
       "action_id": "start_guild_affairs",
       "kind": "click",
-      "evidence": {"page_index": 0, "target_index": 1, "page_name": "guild.affairs.daily.affairs.page", "target_name": "guild.affairs.daily.row1.startable", "row_index": 1, "row_roi": [50, 300, 1180, 150], "target_roi": [930, 300, 300, 120]}
+      "evidence": {"page_index": 0, "target_index": 1, "page_name": "帮派事务-帮派事务-事务-页面", "target_name": "帮派事务-帮派事务-行1-可开始", "row_index": 1, "row_roi": [50, 300, 1180, 150], "target_roi": [930, 300, 300, 120]}
     },
-    "next": ["MJA_GUILD_AFFAIRS_DAILY_ROW1_POST_START_PROBE"],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_RECORD_FAILURE"],
+    "next": ["帮派事务-行1-之后-开始-探测"],
+    "on_error": ["帮派事务-记录-失败"],
     "retry_times": 0
   },
-  "MJA_GUILD_AFFAIRS_DAILY_ROW1_POST_START_PROBE": {
-    "recognition": {"type": "And", "param": {"all_of": ["guild.affairs.daily.affairs.page", "guild.affairs.daily.row1.no_action"], "box_index": 1}},
+  "帮派事务-行1-之后-开始-探测": {
+    "recognition": {"type": "And", "param": {"all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-行1-无-动作"], "box_index": 1}},
     "action": "DoNothing",
-    "next": ["MJA_GUILD_AFFAIRS_DAILY_FIRST_ROW_GATE"],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_RECORD_FAILURE"]
+    "next": ["帮派事务-首个-行-门禁"],
+    "on_error": ["帮派事务-记录-失败"]
   },
-  "MJA_GUILD_AFFAIRS_DAILY_ROW1_DONE_PROBE": {
-    "recognition": {"type": "And", "param": {"all_of": ["guild.affairs.daily.affairs.page", "guild.affairs.daily.row1.no_action"], "box_index": 1}},
+  "帮派事务-行1-完成-探测": {
+    "recognition": {"type": "And", "param": {"all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-行1-无-动作"], "box_index": 1}},
     "action": "DoNothing",
-    "next": ["MJA_GUILD_AFFAIRS_DAILY_ROW2_GATE"],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_RECORD_FAILURE"]
+    "next": ["帮派事务-行2-门禁"],
+    "on_error": ["帮派事务-记录-失败"]
   },
-  "MJA_GUILD_AFFAIRS_DAILY_ROW2_GATE": {
+  "帮派事务-行2-门禁": {
     "recognition": "DirectHit",
     "action": "DoNothing",
     "next": [
-      "MJA_GUILD_AFFAIRS_DAILY_ROW2_PAID_GUARD",
-      "MJA_GUILD_AFFAIRS_DAILY_ROW2_CLAIM_PROBE",
-      "MJA_GUILD_AFFAIRS_DAILY_ROW2_START_PROBE",
-      "MJA_GUILD_AFFAIRS_DAILY_ROW2_DONE_PROBE"
+      "帮派事务-行2-付费-防护",
+      "帮派事务-行2-领取-探测",
+      "帮派事务-行2-开始-探测",
+      "帮派事务-行2-完成-探测"
     ],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_RECORD_FAILURE"]
+    "on_error": ["帮派事务-记录-失败"]
   },
-  "MJA_GUILD_AFFAIRS_DAILY_ROW2_PAID_GUARD": {
-    "recognition": {"type": "And", "param": {"all_of": ["guild.affairs.daily.affairs.page", "guild.affairs.daily.row2.paid"], "box_index": 1}},
+  "帮派事务-行2-付费-防护": {
+    "recognition": {"type": "And", "param": {"all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-行2-付费"], "box_index": 1}},
     "action": "DoNothing",
-    "next": ["MJA_GUILD_AFFAIRS_DAILY_PAID_OR_AMBIGUOUS"],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_ROW2_CLAIM_PROBE"]
+    "next": ["帮派事务-付费-或-歧义"],
+    "on_error": ["帮派事务-行2-领取-探测"]
   },
-  "MJA_GUILD_AFFAIRS_DAILY_ROW2_CLAIM_PROBE": {
-    "recognition": {"type": "And", "param": {"all_of": ["guild.affairs.daily.affairs.page", "guild.affairs.daily.row2.claimable"], "box_index": 1}},
+  "帮派事务-行2-领取-探测": {
+    "recognition": {"type": "And", "param": {"all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-行2-可领取"], "box_index": 1}},
     "action": "DoNothing",
-    "next": ["MJA_GUILD_AFFAIRS_DAILY_ROW2_CLAIM"],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_ROW2_START_PROBE"]
+    "next": ["帮派事务-行2-领取"],
+    "on_error": ["帮派事务-行2-开始-探测"]
   },
-  "MJA_GUILD_AFFAIRS_DAILY_ROW2_CLAIM": {
+  "帮派事务-行2-领取": {
     "max_hit": 6,
-    "recognition": {"type": "And", "param": {"all_of": ["guild.affairs.daily.affairs.page", "guild.affairs.daily.row2.claimable"], "box_index": 1}},
+    "recognition": {"type": "And", "param": {"all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-行2-可领取"], "box_index": 1}},
     "action": "Custom",
     "custom_action": "GuardedInput",
     "custom_action_param": {
       "task_id": "GUILD_AFFAIRS_DAILY",
       "action_id": "claim_guild_affairs_reward",
       "kind": "click",
-      "evidence": {"page_index": 0, "target_index": 1, "page_name": "guild.affairs.daily.affairs.page", "target_name": "guild.affairs.daily.row2.claimable", "row_index": 2, "row_roi": [50, 450, 1180, 150], "target_roi": [930, 450, 300, 120]}
+      "evidence": {"page_index": 0, "target_index": 1, "page_name": "帮派事务-帮派事务-事务-页面", "target_name": "帮派事务-帮派事务-行2-可领取", "row_index": 2, "row_roi": [50, 450, 1180, 150], "target_roi": [930, 450, 300, 120]}
     },
-    "next": ["MJA_GUILD_AFFAIRS_DAILY_CLAIM_REWARD_PROBE"],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_RECORD_FAILURE"],
+    "next": ["帮派事务-领取-奖励-探测"],
+    "on_error": ["帮派事务-记录-失败"],
     "retry_times": 0
   },
-  "MJA_GUILD_AFFAIRS_DAILY_ROW2_START_PROBE": {
-    "recognition": {"type": "And", "param": {"all_of": ["guild.affairs.daily.affairs.page", "guild.affairs.daily.row2.startable"], "box_index": 1}},
+  "帮派事务-行2-开始-探测": {
+    "recognition": {"type": "And", "param": {"all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-行2-可开始"], "box_index": 1}},
     "action": "DoNothing",
-    "next": ["MJA_GUILD_AFFAIRS_DAILY_ROW2_START"],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_ROW2_DONE_PROBE"]
+    "next": ["帮派事务-行2-开始"],
+    "on_error": ["帮派事务-行2-完成-探测"]
   },
-  "MJA_GUILD_AFFAIRS_DAILY_ROW2_START": {
+  "帮派事务-行2-开始": {
     "max_hit": 6,
-    "recognition": {"type": "And", "param": {"all_of": ["guild.affairs.daily.affairs.page", "guild.affairs.daily.row2.startable"], "box_index": 1}},
+    "recognition": {"type": "And", "param": {"all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-行2-可开始"], "box_index": 1}},
     "action": "Custom",
     "custom_action": "GuardedInput",
     "custom_action_param": {
       "task_id": "GUILD_AFFAIRS_DAILY",
       "action_id": "start_guild_affairs",
       "kind": "click",
-      "evidence": {"page_index": 0, "target_index": 1, "page_name": "guild.affairs.daily.affairs.page", "target_name": "guild.affairs.daily.row2.startable", "row_index": 2, "row_roi": [50, 450, 1180, 150], "target_roi": [930, 450, 300, 120]}
+      "evidence": {"page_index": 0, "target_index": 1, "page_name": "帮派事务-帮派事务-事务-页面", "target_name": "帮派事务-帮派事务-行2-可开始", "row_index": 2, "row_roi": [50, 450, 1180, 150], "target_roi": [930, 450, 300, 120]}
     },
-    "next": ["MJA_GUILD_AFFAIRS_DAILY_ROW2_POST_START_PROBE"],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_RECORD_FAILURE"],
+    "next": ["帮派事务-行2-之后-开始-探测"],
+    "on_error": ["帮派事务-记录-失败"],
     "retry_times": 0
   },
-  "MJA_GUILD_AFFAIRS_DAILY_ROW2_POST_START_PROBE": {
-    "recognition": {"type": "And", "param": {"all_of": ["guild.affairs.daily.affairs.page", "guild.affairs.daily.row2.no_action"], "box_index": 1}},
+  "帮派事务-行2-之后-开始-探测": {
+    "recognition": {"type": "And", "param": {"all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-行2-无-动作"], "box_index": 1}},
     "action": "DoNothing",
-    "next": ["MJA_GUILD_AFFAIRS_DAILY_FIRST_ROW_GATE"],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_RECORD_FAILURE"]
+    "next": ["帮派事务-首个-行-门禁"],
+    "on_error": ["帮派事务-记录-失败"]
   },
-  "MJA_GUILD_AFFAIRS_DAILY_ROW2_DONE_PROBE": {
-    "recognition": {"type": "And", "param": {"all_of": ["guild.affairs.daily.affairs.page", "guild.affairs.daily.row2.no_action"], "box_index": 1}},
+  "帮派事务-行2-完成-探测": {
+    "recognition": {"type": "And", "param": {"all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-行2-无-动作"], "box_index": 1}},
     "action": "DoNothing",
-    "next": ["MJA_GUILD_AFFAIRS_DAILY_ROW3_GATE"],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_RECORD_FAILURE"]
+    "next": ["帮派事务-行3-门禁"],
+    "on_error": ["帮派事务-记录-失败"]
   },
-  "MJA_GUILD_AFFAIRS_DAILY_ROW3_GATE": {
+  "帮派事务-行3-门禁": {
     "recognition": "DirectHit",
     "action": "DoNothing",
     "next": [
-      "MJA_GUILD_AFFAIRS_DAILY_ROW3_PAID_GUARD",
-      "MJA_GUILD_AFFAIRS_DAILY_ROW3_CLAIM_PROBE",
-      "MJA_GUILD_AFFAIRS_DAILY_ROW3_START_PROBE",
-      "MJA_GUILD_AFFAIRS_DAILY_ROW3_DONE_PROBE"
+      "帮派事务-行3-付费-防护",
+      "帮派事务-行3-领取-探测",
+      "帮派事务-行3-开始-探测",
+      "帮派事务-行3-完成-探测"
     ],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_RECORD_FAILURE"]
+    "on_error": ["帮派事务-记录-失败"]
   },
-  "MJA_GUILD_AFFAIRS_DAILY_ROW3_PAID_GUARD": {
-    "recognition": {"type": "And", "param": {"all_of": ["guild.affairs.daily.affairs.page", "guild.affairs.daily.row3.paid"], "box_index": 1}},
+  "帮派事务-行3-付费-防护": {
+    "recognition": {"type": "And", "param": {"all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-行3-付费"], "box_index": 1}},
     "action": "DoNothing",
-    "next": ["MJA_GUILD_AFFAIRS_DAILY_PAID_OR_AMBIGUOUS"],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_ROW3_CLAIM_PROBE"]
+    "next": ["帮派事务-付费-或-歧义"],
+    "on_error": ["帮派事务-行3-领取-探测"]
   },
-  "MJA_GUILD_AFFAIRS_DAILY_ROW3_CLAIM_PROBE": {
-    "recognition": {"type": "And", "param": {"all_of": ["guild.affairs.daily.affairs.page", "guild.affairs.daily.row3.claimable"], "box_index": 1}},
+  "帮派事务-行3-领取-探测": {
+    "recognition": {"type": "And", "param": {"all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-行3-可领取"], "box_index": 1}},
     "action": "DoNothing",
-    "next": ["MJA_GUILD_AFFAIRS_DAILY_ROW3_CLAIM"],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_ROW3_START_PROBE"]
+    "next": ["帮派事务-行3-领取"],
+    "on_error": ["帮派事务-行3-开始-探测"]
   },
-  "MJA_GUILD_AFFAIRS_DAILY_ROW3_CLAIM": {
+  "帮派事务-行3-领取": {
     "max_hit": 6,
-    "recognition": {"type": "And", "param": {"all_of": ["guild.affairs.daily.affairs.page", "guild.affairs.daily.row3.claimable"], "box_index": 1}},
+    "recognition": {"type": "And", "param": {"all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-行3-可领取"], "box_index": 1}},
     "action": "Custom",
     "custom_action": "GuardedInput",
     "custom_action_param": {
       "task_id": "GUILD_AFFAIRS_DAILY",
       "action_id": "claim_guild_affairs_reward",
       "kind": "click",
-      "evidence": {"page_index": 0, "target_index": 1, "page_name": "guild.affairs.daily.affairs.page", "target_name": "guild.affairs.daily.row3.claimable", "row_index": 3, "row_roi": [50, 600, 1180, 120], "target_roi": [930, 600, 300, 120]}
+      "evidence": {"page_index": 0, "target_index": 1, "page_name": "帮派事务-帮派事务-事务-页面", "target_name": "帮派事务-帮派事务-行3-可领取", "row_index": 3, "row_roi": [50, 600, 1180, 120], "target_roi": [930, 600, 300, 120]}
     },
-    "next": ["MJA_GUILD_AFFAIRS_DAILY_CLAIM_REWARD_PROBE"],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_RECORD_FAILURE"],
+    "next": ["帮派事务-领取-奖励-探测"],
+    "on_error": ["帮派事务-记录-失败"],
     "retry_times": 0
   },
-  "MJA_GUILD_AFFAIRS_DAILY_ROW3_START_PROBE": {
-    "recognition": {"type": "And", "param": {"all_of": ["guild.affairs.daily.affairs.page", "guild.affairs.daily.row3.startable"], "box_index": 1}},
+  "帮派事务-行3-开始-探测": {
+    "recognition": {"type": "And", "param": {"all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-行3-可开始"], "box_index": 1}},
     "action": "DoNothing",
-    "next": ["MJA_GUILD_AFFAIRS_DAILY_ROW3_START"],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_ROW3_DONE_PROBE"]
+    "next": ["帮派事务-行3-开始"],
+    "on_error": ["帮派事务-行3-完成-探测"]
   },
-  "MJA_GUILD_AFFAIRS_DAILY_ROW3_START": {
+  "帮派事务-行3-开始": {
     "max_hit": 6,
-    "recognition": {"type": "And", "param": {"all_of": ["guild.affairs.daily.affairs.page", "guild.affairs.daily.row3.startable"], "box_index": 1}},
+    "recognition": {"type": "And", "param": {"all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-行3-可开始"], "box_index": 1}},
     "action": "Custom",
     "custom_action": "GuardedInput",
     "custom_action_param": {
       "task_id": "GUILD_AFFAIRS_DAILY",
       "action_id": "start_guild_affairs",
       "kind": "click",
-      "evidence": {"page_index": 0, "target_index": 1, "page_name": "guild.affairs.daily.affairs.page", "target_name": "guild.affairs.daily.row3.startable", "row_index": 3, "row_roi": [50, 600, 1180, 120], "target_roi": [930, 600, 300, 120]}
+      "evidence": {"page_index": 0, "target_index": 1, "page_name": "帮派事务-帮派事务-事务-页面", "target_name": "帮派事务-帮派事务-行3-可开始", "row_index": 3, "row_roi": [50, 600, 1180, 120], "target_roi": [930, 600, 300, 120]}
     },
-    "next": ["MJA_GUILD_AFFAIRS_DAILY_ROW3_POST_START_PROBE"],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_RECORD_FAILURE"],
+    "next": ["帮派事务-行3-之后-开始-探测"],
+    "on_error": ["帮派事务-记录-失败"],
     "retry_times": 0
   },
-  "MJA_GUILD_AFFAIRS_DAILY_ROW3_POST_START_PROBE": {
-    "recognition": {"type": "And", "param": {"all_of": ["guild.affairs.daily.affairs.page", "guild.affairs.daily.row3.no_action"], "box_index": 1}},
+  "帮派事务-行3-之后-开始-探测": {
+    "recognition": {"type": "And", "param": {"all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-行3-无-动作"], "box_index": 1}},
     "action": "DoNothing",
-    "next": ["MJA_GUILD_AFFAIRS_DAILY_FIRST_ROW_GATE"],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_RECORD_FAILURE"]
+    "next": ["帮派事务-首个-行-门禁"],
+    "on_error": ["帮派事务-记录-失败"]
   },
-  "MJA_GUILD_AFFAIRS_DAILY_ROW3_DONE_PROBE": {
-    "recognition": {"type": "And", "param": {"all_of": ["guild.affairs.daily.affairs.page", "guild.affairs.daily.row3.no_action"], "box_index": 1}},
+  "帮派事务-行3-完成-探测": {
+    "recognition": {"type": "And", "param": {"all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-行3-无-动作"], "box_index": 1}},
     "action": "DoNothing",
-    "next": ["MJA_GUILD_AFFAIRS_DAILY_SCROLL_GATE"],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_RECORD_FAILURE"]
+    "next": ["帮派事务-滚动-门禁"],
+    "on_error": ["帮派事务-记录-失败"]
   },
-  "MJA_GUILD_AFFAIRS_DAILY_SCROLL_GATE": {
+  "帮派事务-滚动-门禁": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["guild.affairs.daily.affairs.page"],
+        "all_of": ["帮派事务-帮派事务-事务-页面"],
         "box_index": 0
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_GUILD_AFFAIRS_DAILY_SCROLL"],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_SUCCESS"]
+    "next": ["帮派事务-滚动"],
+    "on_error": ["帮派事务-成功"]
   },
-  "MJA_GUILD_AFFAIRS_DAILY_SCROLL": {
+  "帮派事务-滚动": {
     "max_hit": 8,
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["guild.affairs.daily.affairs.page"],
+        "all_of": ["帮派事务-帮派事务-事务-页面"],
         "box_index": 0
       }
     },
@@ -640,18 +640,18 @@
       "evidence": {
         "page_index": 0,
         "target_index": 0,
-        "page_name": "guild.affairs.daily.affairs.page",
-        "target_name": "guild.affairs.daily.affairs.page",
+        "page_name": "帮派事务-帮派事务-事务-页面",
+        "target_name": "帮派事务-帮派事务-事务-页面",
         "dx": 0,
         "dy": -300,
         "duration_ms": 350
       }
     },
-    "next": ["MJA_GUILD_AFFAIRS_DAILY_FIRST_ROW_GATE"],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_SUCCESS"],
+    "next": ["帮派事务-首个-行-门禁"],
+    "on_error": ["帮派事务-成功"],
     "retry_times": 0
   },
-  "MJA_GUILD_AFFAIRS_DAILY_PAID_OR_AMBIGUOUS": {
+  "帮派事务-付费-或-歧义": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -663,9 +663,9 @@
       "native_fail_after_record": true
     },
     "Abort": true,
-    "next": ["MJA_COMMON_ABORT"]
+    "next": ["公共-通用中止"]
   },
-  "MJA_GUILD_AFFAIRS_DAILY_RECORD_FAILURE": {
+  "帮派事务-记录-失败": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -677,9 +677,9 @@
       "native_fail_after_record": true
     },
     "Abort": true,
-    "next": ["MJA_COMMON_ABORT"]
+    "next": ["公共-通用中止"]
   },
-  "MJA_GUILD_AFFAIRS_DAILY_ALREADY_COMPLETE": {
+  "帮派事务-已完成": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -689,9 +689,9 @@
       "postcondition": "guild.affairs.daily.all_rows_started_or_no_action",
       "defer_home_boundary": true
     },
-    "next": ["MJA_GUILD_AFFAIRS_DAILY_CLOSE"]
+    "next": ["帮派事务-关闭"]
   },
-  "MJA_GUILD_AFFAIRS_DAILY_SUCCESS": {
+  "帮派事务-成功": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -701,13 +701,13 @@
       "postcondition": "guild.affairs.daily.all_rows_started_or_no_action",
       "defer_home_boundary": true
     },
-    "next": ["MJA_GUILD_AFFAIRS_DAILY_CLOSE"]
+    "next": ["帮派事务-关闭"]
   },
-  "MJA_GUILD_AFFAIRS_DAILY_CLOSE": {
+  "帮派事务-关闭": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["guild.affairs.daily.affairs.page", "guild.affairs.daily.affairs.close"],
+        "all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-事务-关闭"],
         "box_index": 1
       }
     },
@@ -721,29 +721,29 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "guild.affairs.daily.affairs.page",
-        "target_name": "guild.affairs.daily.affairs.close"
+        "page_name": "帮派事务-帮派事务-事务-页面",
+        "target_name": "帮派事务-帮派事务-事务-关闭"
       }
     },
-    "next": ["MJA_GUILD_AFFAIRS_DAILY_EXIT_GUILD_PAGE_PROBE"],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_RECORD_FAILURE"],
+    "next": ["帮派事务-退出-帮派-页面-探测"],
+    "on_error": ["帮派事务-记录-失败"],
     "retry_times": 0
   },
-  "MJA_GUILD_AFFAIRS_DAILY_EXIT_GUILD_PAGE_PROBE": {
+  "帮派事务-退出-帮派-页面-探测": {
     "recognition": "OCR",
     "expected": ["帮会名帖", "成员数量", "活跃度"],
     "roi": [0, 180, 380, 300],
     "timeout": 5000,
     "max_hit": 1,
     "action": "DoNothing",
-    "next": ["MJA_GUILD_AFFAIRS_DAILY_CLOSE_GUILD_HOME"],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_EXIT_CLEANUP_STOP"]
+    "next": ["帮派事务-关闭-帮派-主页"],
+    "on_error": ["帮派事务-退出-清理-停止"]
   },
-  "MJA_GUILD_AFFAIRS_DAILY_CLOSE_GUILD_HOME": {
+  "帮派事务-关闭-帮派-主页": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["guild.affairs.daily.guild.page", "guild.affairs.daily.guild.close"],
+        "all_of": ["帮派事务-帮派事务-帮派-页面", "帮派事务-帮派事务-帮派-关闭"],
         "box_index": 1
       }
     },
@@ -758,26 +758,26 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "guild.affairs.daily.guild.page",
-        "target_name": "guild.affairs.daily.guild.close"
+        "page_name": "帮派事务-帮派事务-帮派-页面",
+        "target_name": "帮派事务-帮派事务-帮派-关闭"
       }
     },
-    "next": ["MJA_GUILD_AFFAIRS_DAILY_EXIT_PANEL_PROBE"],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_EXIT_CLEANUP_STOP"]
+    "next": ["帮派事务-退出-面板-探测"],
+    "on_error": ["帮派事务-退出-清理-停止"]
   },
-  "MJA_GUILD_AFFAIRS_DAILY_EXIT_PANEL_PROBE": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_SIDE_PANEL_OPEN"], "box_index": 0}},
+  "帮派事务-退出-面板-探测": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏侧边面板-打开"], "box_index": 0}},
     "timeout": 5000,
     "max_hit": 1,
     "action": "DoNothing",
-    "next": ["MJA_GUILD_AFFAIRS_DAILY_CLOSE_PANEL"],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_EXIT_CLEANUP_STOP"]
+    "next": ["帮派事务-关闭-面板"],
+    "on_error": ["帮派事务-退出-清理-停止"]
   },
-  "MJA_GUILD_AFFAIRS_DAILY_CLOSE_PANEL": {
+  "帮派事务-关闭-面板": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["guild.affairs.daily.panel.page", "guild.affairs.daily.panel.close"],
+        "all_of": ["帮派事务-帮派事务-面板-页面", "帮派事务-帮派事务-面板-关闭"],
         "box_index": 1
       }
     },
@@ -793,22 +793,22 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "guild.affairs.daily.panel.page",
-        "target_name": "guild.affairs.daily.panel.close"
+        "page_name": "帮派事务-帮派事务-面板-页面",
+        "target_name": "帮派事务-帮派事务-面板-关闭"
       }
     },
-    "next": ["MJA_GUILD_AFFAIRS_DAILY_HOME_AFTER_CLOSE_PROBE"],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_EXIT_CLEANUP_STOP"]
+    "next": ["帮派事务-主页-之后-关闭-探测"],
+    "on_error": ["帮派事务-退出-清理-停止"]
   },
-  "MJA_GUILD_AFFAIRS_DAILY_HOME_AFTER_CLOSE_PROBE": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_HOME_PAGE"], "box_index": 0}},
+  "帮派事务-主页-之后-关闭-探测": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}},
     "timeout": 5000,
     "max_hit": 1,
     "action": "DoNothing",
-    "next": ["MJA_HOME_BOUNDARY"],
-    "on_error": ["MJA_GUILD_AFFAIRS_DAILY_EXIT_CLEANUP_STOP"]
+    "next": ["公共-主页边界"],
+    "on_error": ["帮派事务-退出-清理-停止"]
   },
-  "MJA_GUILD_AFFAIRS_DAILY_EXIT_CLEANUP_STOP": {
+  "帮派事务-退出-清理-停止": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -820,33 +820,33 @@
       "native_fail_after_record": true
     },
     "Abort": true,
-    "next": ["MJA_COMMON_ABORT"]
+    "next": ["公共-通用中止"]
   },
-  "guild.affairs.daily.home.page": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_HOME_PAGE"], "box_index": 0}},
+  "帮派事务-帮派事务-主页-页面": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}},
     "action": "DoNothing"
   },
-  "guild.affairs.daily.panel.open": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_FUNCTION_PANEL_ENTRY"], "box_index": 0}},
+  "帮派事务-帮派事务-面板-打开": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏功能面板-入口"], "box_index": 0}},
     "action": "DoNothing"
   },
-  "guild.affairs.daily.panel.page": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_SIDE_PANEL_OPEN"], "box_index": 0}},
+  "帮派事务-帮派事务-面板-页面": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏侧边面板-打开"], "box_index": 0}},
     "action": "DoNothing"
   },
-  "guild.affairs.daily.guild.entry": {
+  "帮派事务-帮派事务-帮派-入口": {
     "recognition": "OCR",
     "expected": "帮会",
     "roi": [700, 100, 500, 600],
     "action": "DoNothing"
   },
-  "guild.affairs.daily.guild.page": {
+  "帮派事务-帮派事务-帮派-页面": {
     "recognition": "OCR",
     "expected": ["帮会名帖", "成员数量", "活跃度"],
     "roi": [0, 180, 380, 300],
     "action": "DoNothing"
   },
-  "guild.affairs.daily.guild.close": {
+  "帮派事务-帮派事务-帮派-关闭": {
     "recognition": "ColorMatch",
     "lower": [0, 0, 0],
     "upper": [125, 125, 125],
@@ -855,23 +855,23 @@
     "count": 180,
     "action": "DoNothing"
   },
-  "guild.affairs.daily.panel.close": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_SIDE_PANEL_OPEN"], "box_index": 0}},
+  "帮派事务-帮派事务-面板-关闭": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏侧边面板-打开"], "box_index": 0}},
     "action": "DoNothing"
   },
-  "guild.affairs.daily.affairs.entry": {
+  "帮派事务-帮派事务-事务-入口": {
     "recognition": "OCR",
     "expected": "帮会事务",
     "roi": [900, 230, 330, 170],
     "action": "DoNothing"
   },
-  "guild.affairs.daily.affairs.page": {
+  "帮派事务-帮派事务-事务-页面": {
     "recognition": "OCR",
     "expected": "帮会事务",
     "roi": [0, 0, 1280, 240],
     "action": "DoNothing"
   },
-  "guild.affairs.daily.affairs.close": {
+  "帮派事务-帮派事务-事务-关闭": {
     "recognition": "ColorMatch",
     "lower": [0, 0, 0],
     "upper": [125, 125, 125],
@@ -880,110 +880,110 @@
     "count": 180,
     "action": "DoNothing"
   },
-  "guild.affairs.daily.first_row.paid": {
+  "帮派事务-帮派事务-首个-行-付费": {
     "recognition": "OCR",
     "expected": ["购买", "付费", "充值", "价格", "¥", "￥", "元", "消耗"],
     "roi": [930, 150, 300, 120],
     "action": "DoNothing"
   },
-  "guild.affairs.daily.first_row.claimable": {
+  "帮派事务-帮派事务-首个-行-可领取": {
     "recognition": "OCR",
     "expected": "领取奖励",
     "roi": [930, 150, 300, 120],
     "action": "DoNothing"
   },
-  "guild.affairs.daily.first_row.startable": {
+  "帮派事务-帮派事务-首个-行-可开始": {
     "recognition": "OCR",
     "expected": "开始事务",
     "roi": [930, 150, 300, 120],
     "action": "DoNothing"
   },
-  "guild.affairs.daily.first_row.no_action": {
+  "帮派事务-帮派事务-首个-行-无-动作": {
     "recognition": "OCR",
     "expected": ["进行中", "事务中", "已完成", "已领取", "暂无事务", "无可领取"],
     "roi": [1040, 95, 180, 70],
     "action": "DoNothing"
   },
-  "guild.affairs.daily.row1.paid": {
+  "帮派事务-帮派事务-行1-付费": {
     "recognition": "OCR",
     "expected": ["购买", "付费", "充值", "价格", "¥", "￥", "元", "消耗"],
     "roi": [930, 300, 300, 120],
     "action": "DoNothing"
   },
-  "guild.affairs.daily.row1.claimable": {
+  "帮派事务-帮派事务-行1-可领取": {
     "recognition": "OCR",
     "expected": "领取奖励",
     "roi": [930, 300, 300, 120],
     "action": "DoNothing"
   },
-  "guild.affairs.daily.row1.startable": {
+  "帮派事务-帮派事务-行1-可开始": {
     "recognition": "OCR",
     "expected": "开始事务",
     "roi": [930, 300, 300, 120],
     "action": "DoNothing"
   },
-  "guild.affairs.daily.row1.no_action": {
+  "帮派事务-帮派事务-行1-无-动作": {
     "recognition": "OCR",
     "expected": ["进行中", "事务中", "已完成", "已领取", "暂无事务", "无可领取"],
     "roi": [1040, 245, 180, 70],
     "action": "DoNothing"
   },
-  "guild.affairs.daily.row2.paid": {
+  "帮派事务-帮派事务-行2-付费": {
     "recognition": "OCR",
     "expected": ["购买", "付费", "充值", "价格", "¥", "￥", "元", "消耗"],
     "roi": [930, 450, 300, 120],
     "action": "DoNothing"
   },
-  "guild.affairs.daily.row2.claimable": {
+  "帮派事务-帮派事务-行2-可领取": {
     "recognition": "OCR",
     "expected": "领取奖励",
     "roi": [930, 450, 300, 120],
     "action": "DoNothing"
   },
-  "guild.affairs.daily.row2.startable": {
+  "帮派事务-帮派事务-行2-可开始": {
     "recognition": "OCR",
     "expected": "开始事务",
     "roi": [930, 450, 300, 120],
     "action": "DoNothing"
   },
-  "guild.affairs.daily.row2.no_action": {
+  "帮派事务-帮派事务-行2-无-动作": {
     "recognition": "OCR",
     "expected": ["进行中", "事务中", "已完成", "已领取", "暂无事务", "无可领取"],
     "roi": [1040, 395, 180, 70],
     "action": "DoNothing"
   },
-  "guild.affairs.daily.row3.paid": {
+  "帮派事务-帮派事务-行3-付费": {
     "recognition": "OCR",
     "expected": ["购买", "付费", "充值", "价格", "¥", "￥", "元", "消耗"],
     "roi": [930, 600, 300, 120],
     "action": "DoNothing"
   },
-  "guild.affairs.daily.row3.claimable": {
+  "帮派事务-帮派事务-行3-可领取": {
     "recognition": "OCR",
     "expected": "领取奖励",
     "roi": [930, 600, 300, 120],
     "action": "DoNothing"
   },
-  "guild.affairs.daily.row3.startable": {
+  "帮派事务-帮派事务-行3-可开始": {
     "recognition": "OCR",
     "expected": "开始事务",
     "roi": [930, 600, 300, 120],
     "action": "DoNothing"
   },
-  "guild.affairs.daily.row3.no_action": {
+  "帮派事务-帮派事务-行3-无-动作": {
     "recognition": "OCR",
     "expected": ["进行中", "事务中", "已完成", "已领取", "暂无事务", "无可领取"],
     "roi": [1040, 545, 180, 70],
     "action": "DoNothing"
   },
-  "guild.affairs.daily.reward.popup": {
+  "帮派事务-帮派事务-奖励-弹窗": {
     "recognition": "TemplateMatch",
     "template": "daily/GUILD_AFFAIRS_DAILY/reward_popup_live.png",
     "roi": [120, 180, 180, 380],
     "threshold": 0.39,
     "action": "DoNothing"
   },
-  "guild.affairs.daily.reward.popup.close": {
+  "帮派事务-帮派事务-奖励-弹窗-关闭": {
     "recognition": "TemplateMatch",
     "template": "daily/GUILD_AFFAIRS_DAILY/reward_popup_close_live.png",
     "roi": [450, 600, 400, 120],

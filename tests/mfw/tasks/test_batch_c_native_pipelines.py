@@ -21,33 +21,33 @@ TASK_PIPELINES = {
 
 BOUNDED_LOOPS = {
     "MJA_SHADOW_TRANSFER_LOOP": 8,
-    "MJA_SHADOW_FOREGROUND_LOOP": 40,
-    "MJA_SHADOW_BATTLE_LOOP": 12,
+    "影之遗迹-前台-循环": 40,
+    "影之遗迹-战斗-循环": 12,
     "MJA_DUNGEON_SCROLL_LOOP": 4,
-    "MJA_DUNGEON_ASSIGN_TICKET_LOOP": 100,
-    "MJA_RING_FIGHT_LOOP": 12,
-    "MJA_RING_START_MATCHING": 12,
-    "MJA_GUILD_CHALLENGE_LOOP": 2,
-    "MJA_BREAK_ARRAY_STARTUP_LOOP": 12,
-    "MJA_BREAK_ARRAY_CHALLENGE_LOOP": 3,
-    "MJA_BREAK_ARRAY_BATTLE_LOOP": 12,
-    "MJA_BREAK_ARRAY_RESULT_LOOP": 3,
+    "副本扫荡-分配-券-循环": 100,
+    "擂台挑战-战斗-循环": 12,
+    "擂台挑战-开始-匹配中": 12,
+    "帮派活动挑战-帮派-挑战-循环": 2,
+    "破阵武学-启动-循环": 12,
+    "破阵武学-挑战-循环": 3,
+    "破阵武学-战斗-循环": 12,
+    "破阵武学-结果-循环": 3,
 }
 
 UNKNOWN_OR_FAILURE_TERMINALS = {
-    "MJA_SHADOW_BATTLE_RESULT_UNKNOWN_RESULT",
-    "MJA_DUNGEON_RECORD_FAILURE",
-    "MJA_RING_BATTLE_RESULT_UNKNOWN_RESULT",
-    "MJA_GUILD_RESULT_UNKNOWN",
-    "MJA_BREAK_ARRAY_BATTLE_UNKNOWN_RESULT",
+    "影之遗迹-战斗未知结果-结果",
+    "副本扫荡-记录-失败",
+    "擂台挑战-战斗未知结果-结果",
+    "帮派活动挑战-帮派-未知结果",
+    "破阵武学-战斗-未知-结果",
 }
 
 SUCCESS_TERMINALS = {
-    "MJA_SHADOW_RECORD_SUCCESS": "shadow.no_active_or_done_and_home",
-    "MJA_DUNGEON_SUCCESS": "dungeon.reward_popup_seen_and_ticket_count_zero",
-    "MJA_RING_SUCCESS": "ring.challenge_done",
-    "MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_SUCCESS": "guild.remaining_conquest_0_of_2",
-    "MJA_BREAK_ARRAY_SUCCESS": "break_array.three_challenges",
+    "影之遗迹-记录-成功": "shadow.no_active_or_done_and_home",
+    "副本扫荡-成功": "dungeon.reward_popup_seen_and_ticket_count_zero",
+    "擂台挑战-成功": "ring.challenge_done",
+    "帮派活动挑战-成功": "guild.remaining_conquest_0_of_2",
+    "破阵武学-成功": "break_array.three_challenges",
 }
 
 
@@ -84,10 +84,11 @@ def _reachable(nodes: dict[str, dict[str, Any]], start: str, target: str) -> boo
 def test_batch_c_declarations_and_entries_are_native_task_local() -> None:
     for task_id, filename in TASK_PIPELINES.items():
         declaration = load_task_declaration(task_id)
-        assert declaration["entry"] == f"MJA_{task_id}_START"
+        assert declaration["entry"].endswith("任务入口")
         payload = _read_task_pipeline(task_id)
         assert declaration["entry"] in payload
-        assert any(name.startswith(f"MJA_{task_id}_") for name in payload)
+        prefix = declaration["entry"].removesuffix("任务入口")
+        assert any(name.startswith(prefix) for name in payload)
         assert filename.endswith(".json")
 
 
@@ -110,13 +111,13 @@ def test_batch_c_does_not_delegate_business_flow_to_the_legacy_engine() -> None:
 
 def test_break_array_native_pipeline_has_task_local_phase_boundaries() -> None:
     nodes = load_pipeline_nodes(PIPELINE_ROOT)
-    start = nodes["MJA_BREAK_ARRAY_MARTIAL_DAILY_START"]
+    start = nodes["破阵武学-任务入口"]
     assert start["custom_action"] == "BeginTask"
     assert start["next"] == [
-        "MJA_BREAK_ARRAY_STARTUP_PROBE",
-        "MJA_BREAK_ARRAY_PAGE_PROBE",
-        "MJA_BREAK_ARRAY_ACTIVITY_PROBE",
-        "MJA_BREAK_ARRAY_HOME_PROBE",
+        "破阵武学-启动-探测",
+        "破阵武学-页面-探测",
+        "破阵武学-活动-探测",
+        "破阵武学-主页-探测",
     ]
     assert "MJA_BREAK_ARRAY_MARTIAL_DAILY_EXECUTE" not in nodes
     guarded = {
@@ -142,12 +143,12 @@ def test_break_array_native_pipeline_has_task_local_phase_boundaries() -> None:
 def test_break_array_resource_and_battle_terminals_are_explicit() -> None:
     nodes = load_pipeline_nodes(PIPELINE_ROOT)
     expected = {
-        "MJA_BREAK_ARRAY_ALREADY_COMPLETE": "already_complete",
-        "MJA_BREAK_ARRAY_NOT_ELIGIBLE": "not_eligible",
-        "MJA_BREAK_ARRAY_BATTLE_DEFEAT": "failed",
-        "MJA_BREAK_ARRAY_BATTLE_LOOP_EXHAUSTED": "failed",
-        "MJA_BREAK_ARRAY_RESULT_LOOP_EXHAUSTED": "failed",
-        "MJA_BREAK_ARRAY_RECORD_FAILURE": "failed",
+        "破阵武学-已完成": "already_complete",
+        "破阵武学-不符合条件": "not_eligible",
+        "破阵武学-战斗-失败": "failed",
+        "破阵武学-战斗-循环-耗尽": "failed",
+        "破阵武学-结果-循环-耗尽": "failed",
+        "破阵武学-记录-失败": "failed",
     }
     for name, status in expected.items():
         params = nodes[name]["custom_action_param"]
@@ -157,7 +158,7 @@ def test_break_array_resource_and_battle_terminals_are_explicit() -> None:
         if status == "failed":
             assert params["native_fail_after_record"] is True
             assert nodes[name]["Abort"] is True
-            assert nodes[name]["next"] == ["MJA_COMMON_ABORT"]
+            assert nodes[name]["next"] == ["公共-通用中止"]
             assert "on_error" not in nodes[name]
 
 
@@ -179,7 +180,7 @@ def test_batch_c_unknown_or_failure_terminals_abort_natively() -> None:
         assert params["error_code"]
         assert params["native_fail_after_record"] is True
         assert node["Abort"] is True
-        assert node["next"] == ["MJA_COMMON_ABORT"]
+        assert node["next"] == ["公共-通用中止"]
         assert "on_error" not in node
 
 
@@ -192,4 +193,4 @@ def test_batch_c_success_terminals_record_business_postconditions() -> None:
         assert params["status"] == "success"
         assert params["postcondition"] == postcondition
         assert node.get("Abort") is not True
-        assert _reachable(nodes, name, "MJA_COMMON_STOP")
+        assert _reachable(nodes, name, "公共-通用停止")

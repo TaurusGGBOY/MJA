@@ -1,5 +1,5 @@
 {
-  "MJA_WEEKLY_FREE_GIFT_MONDAY_START": {
+  "周一免费礼包-任务入口": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "BeginTask",
@@ -7,35 +7,35 @@
       "task_id": "WEEKLY_FREE_GIFT_MONDAY"
     },
     "max_hit": 1,
-    "next": ["MJA_WEEKLY_RESUME_REWARD_PROBE"],
-    "on_error": ["MJA_WEEKLY_RECORD_FAILURE"]
+    "next": ["周一免费礼包-恢复继续-奖励-探测"],
+    "on_error": ["周一免费礼包-记录-失败"]
   },
-  "MJA_WEEKLY_RESUME_REWARD_PROBE": {
+  "周一免费礼包-恢复继续-奖励-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["shop.weekly.reward", "shop.weekly.reward_close"],
+        "all_of": ["周一免费礼包-商店-每周-奖励", "周一免费礼包-商店-每周-奖励-关闭"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_WEEKLY_REWARD_SUCCESS"],
-    "on_error": ["MJA_WEEKLY_INITIAL_PAGE_PROBE"]
+    "next": ["周一免费礼包-奖励-成功"],
+    "on_error": ["周一免费礼包-初始-页面-探测"]
   },
-  "MJA_WEEKLY_INITIAL_PAGE_PROBE": {
+  "周一免费礼包-初始-页面-探测": {
     "recognition": "OCR",
     "expected": ["每周必买", "每周必购"],
     "roi": [0, 100, 1280, 620],
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_WEEKLY_FREE_CLAIM"],
-    "on_error": ["MJA_WEEKLY_GIFT_PAGE_PROBE"]
+    "next": ["周一免费礼包-免费-领取"],
+    "on_error": ["周一免费礼包-礼包-页面-探测"]
   },
-  "MJA_WEEKLY_FREE_CLAIM": {
+  "周一免费礼包-免费-领取": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["shop.weekly.page", "shop.weekly_lucky_bag_free"],
+        "all_of": ["周一免费礼包-商店-每周-页面", "周一免费礼包-商店-每周-幸运-背包-免费"],
         "box_index": 1
       }
     },
@@ -49,23 +49,23 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "shop.weekly.page",
-        "target_name": "shop.weekly_lucky_bag_free"
+        "page_name": "周一免费礼包-商店-每周-页面",
+        "target_name": "周一免费礼包-商店-每周-幸运-背包-免费"
       }
     },
-    "next": ["MJA_WEEKLY_REWARD_PROBE"],
-    "on_error": ["MJA_WEEKLY_RECORD_FAILURE"]
+    "next": ["周一免费礼包-奖励-探测"],
+    "on_error": ["周一免费礼包-记录-失败"]
   },
-  "MJA_WEEKLY_REWARD_PROBE": {
+  "周一免费礼包-奖励-探测": {
     "recognition": "OCR",
     "expected": ["恭喜获得", "获得"],
     "roi": [0, 120, 1280, 520],
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_WEEKLY_REWARD_SUCCESS"],
-    "on_error": ["MJA_WEEKLY_RECORD_FAILURE"]
+    "next": ["周一免费礼包-奖励-成功"],
+    "on_error": ["周一免费礼包-记录-失败"]
   },
-  "MJA_WEEKLY_REWARD_SUCCESS": {
+  "周一免费礼包-奖励-成功": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -75,14 +75,14 @@
       "postcondition": "weekly_gift.reward_popup_seen",
       "defer_home_boundary": true
     },
-    "next": ["MJA_WEEKLY_DISMISS_REWARD"],
-    "on_error": ["MJA_WEEKLY_RECORD_FAILURE"]
+    "next": ["周一免费礼包-关闭-奖励"],
+    "on_error": ["周一免费礼包-记录-失败"]
   },
-  "MJA_WEEKLY_DISMISS_REWARD": {
+  "周一免费礼包-关闭-奖励": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["shop.weekly.reward", "shop.weekly.reward_close"],
+        "all_of": ["周一免费礼包-商店-每周-奖励", "周一免费礼包-商店-每周-奖励-关闭"],
         "box_index": 1
       }
     },
@@ -96,14 +96,14 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "shop.weekly.reward",
-        "target_name": "shop.weekly.reward_close"
+        "page_name": "周一免费礼包-商店-每周-奖励",
+        "target_name": "周一免费礼包-商店-每周-奖励-关闭"
       }
     },
-    "next": ["MJA_WEEKLY_CLOSE"],
-    "on_error": ["MJA_WEEKLY_RECORD_FAILURE"]
+    "next": ["周一免费礼包-关闭"],
+    "on_error": ["周一免费礼包-记录-失败"]
   },
-  "MJA_WEEKLY_CLAIM_SUCCESS": {
+  "周一免费礼包-领取-成功": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -112,9 +112,9 @@
       "status": "success",
       "postcondition": "weekly_gift.reward_popup_seen"
     },
-    "next": ["MJA_WEEKLY_CLOSE"]
+    "next": ["周一免费礼包-关闭"]
   },
-  "MJA_WEEKLY_RECORD_FAILURE": {
+  "周一免费礼包-记录-失败": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -126,20 +126,20 @@
       "native_fail_after_record": true
     },
     "Abort": true,
-    "next": ["MJA_COMMON_ABORT"]
+    "next": ["公共-通用中止"]
   },
-  "MJA_WEEKLY_HOME_PROBE": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_HOME_PAGE"], "box_index": 0}},
+  "周一免费礼包-主页-探测": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}},
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_WEEKLY_OPEN_PANEL"],
-    "on_error": ["[JumpBack]MJA_GAME_START"]
+    "next": ["周一免费礼包-打开-面板"],
+    "on_error": ["[JumpBack]启动-游戏启动"]
   },
-  "MJA_WEEKLY_OPEN_PANEL": {
+  "周一免费礼包-打开-面板": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["home.page", "home.panel_open"],
+        "all_of": ["邮件奖励-主页-页面", "邮件奖励-主页-面板-打开"],
         "box_index": 1
       }
     },
@@ -153,25 +153,25 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "home.page",
-        "target_name": "home.panel_open"
+        "page_name": "邮件奖励-主页-页面",
+        "target_name": "邮件奖励-主页-面板-打开"
       }
     },
-    "next": ["MJA_WEEKLY_PANEL_PAGE_PROBE"],
-    "on_error": ["MJA_WEEKLY_RECORD_FAILURE"]
+    "next": ["周一免费礼包-面板-页面-探测"],
+    "on_error": ["周一免费礼包-记录-失败"]
   },
-  "MJA_WEEKLY_PANEL_PAGE_PROBE": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_SIDE_PANEL_OPEN"], "box_index": 0}},
+  "周一免费礼包-面板-页面-探测": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏侧边面板-打开"], "box_index": 0}},
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_WEEKLY_OPEN_SHOP"],
-    "on_error": ["MJA_WEEKLY_RECORD_FAILURE"]
+    "next": ["周一免费礼包-打开-商店"],
+    "on_error": ["周一免费礼包-记录-失败"]
   },
-  "MJA_WEEKLY_OPEN_SHOP": {
+  "周一免费礼包-打开-商店": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["panel.page", "shop.entry"],
+        "all_of": ["邮件奖励-面板-页面", "商店免费礼包-商店-入口"],
         "box_index": 1
       }
     },
@@ -185,27 +185,27 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "panel.page",
-        "target_name": "shop.entry"
+        "page_name": "邮件奖励-面板-页面",
+        "target_name": "商店免费礼包-商店-入口"
       }
     },
-    "next": ["MJA_WEEKLY_SHOP_PAGE_PROBE"],
-    "on_error": ["MJA_WEEKLY_RECORD_FAILURE"]
+    "next": ["周一免费礼包-商店-页面-探测"],
+    "on_error": ["周一免费礼包-记录-失败"]
   },
-  "MJA_WEEKLY_SHOP_PAGE_PROBE": {
+  "周一免费礼包-商店-页面-探测": {
     "recognition": "OCR",
     "expected": "商城",
     "roi": [0, 0, 1280, 720],
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_WEEKLY_OPEN_GIFT_TAB"],
-    "on_error": ["MJA_WEEKLY_PANEL_PAGE_PROBE"]
+    "next": ["周一免费礼包-打开-礼包-标签"],
+    "on_error": ["周一免费礼包-面板-页面-探测"]
   },
-  "MJA_WEEKLY_OPEN_GIFT_TAB": {
+  "周一免费礼包-打开-礼包-标签": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["shop.page", "shop.gift_tab"],
+        "all_of": ["商店免费礼包-商店-页面", "周一免费礼包-商店-礼包-标签"],
         "box_index": 1
       }
     },
@@ -219,27 +219,27 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "shop.page",
-        "target_name": "shop.gift_tab"
+        "page_name": "商店免费礼包-商店-页面",
+        "target_name": "周一免费礼包-商店-礼包-标签"
       }
     },
-    "next": ["MJA_WEEKLY_GIFT_PAGE_PROBE"],
-    "on_error": ["MJA_WEEKLY_RECORD_FAILURE"]
+    "next": ["周一免费礼包-礼包-页面-探测"],
+    "on_error": ["周一免费礼包-记录-失败"]
   },
-  "MJA_WEEKLY_GIFT_PAGE_PROBE": {
+  "周一免费礼包-礼包-页面-探测": {
     "recognition": "OCR",
     "expected": "礼包",
     "roi": [0, 100, 1280, 620],
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_WEEKLY_OPEN_WEEKLY"],
-    "on_error": ["MJA_WEEKLY_HOME_PROBE"]
+    "next": ["周一免费礼包-打开-每周"],
+    "on_error": ["周一免费礼包-主页-探测"]
   },
-  "MJA_WEEKLY_OPEN_WEEKLY": {
+  "周一免费礼包-打开-每周": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["shop.gift_tab.page", "shop.weekly_must_buy"],
+        "all_of": ["周一免费礼包-商店-礼包-标签-页面", "周一免费礼包-商店-每周-必须-购买"],
         "box_index": 1
       }
     },
@@ -253,27 +253,27 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "shop.gift_tab.page",
-        "target_name": "shop.weekly_must_buy"
+        "page_name": "周一免费礼包-商店-礼包-标签-页面",
+        "target_name": "周一免费礼包-商店-每周-必须-购买"
       }
     },
-    "next": ["MJA_WEEKLY_OPENED_PAGE_PROBE"],
-    "on_error": ["MJA_WEEKLY_RECORD_FAILURE"]
+    "next": ["周一免费礼包-已打开-页面-探测"],
+    "on_error": ["周一免费礼包-记录-失败"]
   },
-  "MJA_WEEKLY_OPENED_PAGE_PROBE": {
+  "周一免费礼包-已打开-页面-探测": {
     "recognition": "OCR",
     "expected": ["每周必买", "每周必购"],
     "roi": [0, 100, 1280, 620],
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_WEEKLY_FREE_CLAIM"],
-    "on_error": ["MJA_WEEKLY_RECORD_FAILURE"]
+    "next": ["周一免费礼包-免费-领取"],
+    "on_error": ["周一免费礼包-记录-失败"]
   },
-  "MJA_WEEKLY_CLOSE": {
+  "周一免费礼包-关闭": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["shop.weekly.page", "shop.close"],
+        "all_of": ["周一免费礼包-商店-每周-页面", "商店免费礼包-商店-关闭"],
         "box_index": 1
       }
     },
@@ -287,68 +287,68 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "shop.weekly.page",
-        "target_name": "shop.close"
+        "page_name": "周一免费礼包-商店-每周-页面",
+        "target_name": "商店免费礼包-商店-关闭"
       }
     },
-    "next": ["MJA_HOME_BOUNDARY"],
-    "on_error": ["MJA_WEEKLY_RECORD_FAILURE"]
+    "next": ["公共-主页边界"],
+    "on_error": ["周一免费礼包-记录-失败"]
   },
-  "shop.gift_tab": {
+  "周一免费礼包-商店-礼包-标签": {
     "recognition": "OCR",
     "expected": "礼包",
     "roi": [0, 100, 300, 260],
     "action": "DoNothing"
   },
-  "shop.gift_tab.page": {
+  "周一免费礼包-商店-礼包-标签-页面": {
     "recognition": "OCR",
     "expected": "礼包",
     "roi": [0, 100, 1280, 620],
     "action": "DoNothing"
   },
-  "shop.weekly_must_buy": {
+  "周一免费礼包-商店-每周-必须-购买": {
     "recognition": "OCR",
     "expected": ["每周必买", "每周必购"],
     "roi": [450, 55, 280, 120],
     "action": "DoNothing"
   },
-  "shop.weekly.page": {
+  "周一免费礼包-商店-每周-页面": {
     "recognition": "OCR",
     "expected": ["每周必买", "每周必购"],
     "roi": [0, 100, 1280, 620],
     "action": "DoNothing"
   },
-  "shop.weekly_lucky_bag_free": {
+  "周一免费礼包-商店-每周-幸运-背包-免费": {
     "recognition": "OCR",
     "expected": ["免费领取", "免费"],
     "roi": [300, 120, 900, 480],
     "action": "DoNothing"
   },
-  "shop.weekly_paid": {
+  "周一免费礼包-商店-每周-付费": {
     "recognition": "OCR",
     "expected": "每周特价",
     "roi": [300, 120, 900, 480],
     "action": "DoNothing"
   },
-  "shop.weekly_price_conflict": {
+  "周一免费礼包-商店-每周-价格-冲突": {
     "recognition": "OCR",
     "expected": ["￥", "¥", "元", "价格"],
     "roi": [300, 120, 900, 480],
     "action": "DoNothing"
   },
-  "shop.weekly_lucky_bag_claimed": {
+  "周一免费礼包-商店-每周-幸运-背包-已领取": {
     "recognition": "OCR",
     "expected": ["已领取", "已购买", "已完成"],
     "roi": [150, 100, 1050, 620],
     "action": "DoNothing"
   },
-  "shop.weekly.reward": {
+  "周一免费礼包-商店-每周-奖励": {
     "recognition": "OCR",
     "expected": ["恭喜获得", "获得"],
     "roi": [0, 120, 1280, 520],
     "action": "DoNothing"
   },
-  "shop.weekly.reward_close": {
+  "周一免费礼包-商店-每周-奖励-关闭": {
     "recognition": "OCR",
     "expected": "点击空白处关闭",
     "roi": [350, 580, 600, 140],

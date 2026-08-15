@@ -5,7 +5,7 @@
       "label": "购买茶叶",
       "default_check": true,
       "group": ["日常"],
-      "entry": "MJA_BUY_TEA_DAILY_START"
+      "entry": "买茶-任务入口"
     }
   ]
 }

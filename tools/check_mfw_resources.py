@@ -52,21 +52,32 @@ TASK_ENTRY_RULES = (
 
 _SHARED_CONVERGENCE_NAMES = frozenset(
     {
-        "MJA_GAME_START",
-        "MJA_GAME_READY",
-        "MJA_HOME_RECOVER",
+        "启动-游戏启动",
+        "启动-游戏就绪",
+        "公共-主页恢复",
         "MJA_COMMON_ENTRY",
         "MJA_STATE_CONVERGENCE",
     }
 )
 _SHARED_STARTUP_NAMES = (
-    "MJA_GAME_START",
-    "MJA_GAME_READY",
-    "MJA_START_TITLE_OR_LOADING",
+    "启动-游戏启动",
+    "启动-游戏就绪",
+    "启动-标题-或-加载",
     "MJA_START_KNOWN_POPUP",
     "MJA_START_KNOWN_PAGE",
 )
-_RESUME_MARKERS = ("RESUME", "CONTINUE", "PENDING", "IN_PROGRESS", "RETRY")
+_RESUME_MARKERS = (
+    "RESUME",
+    "CONTINUE",
+    "PENDING",
+    "IN_PROGRESS",
+    "RETRY",
+    "恢复",
+    "继续",
+    "待处理",
+    "进行中",
+    "重试",
+)
 _RECOVERY_EVIDENCE_MARKERS = (
     "PAGE",
     "PANEL",
@@ -76,10 +87,40 @@ _RECOVERY_EVIDENCE_MARKERS = (
     "TASK",
     "CARD",
     "BATTLE",
+    "页面",
+    "面板",
+    "结果",
+    "奖励",
+    "状态",
+    "任务",
+    "卡",
+    "战斗",
 )
-_STARTUP_FAILURE_MARKERS = ("UNKNOWN", "FAIL", "ABORT", "RUNTIME")
-_HOME_MARKERS = ("HOME", "MAIN", "LOBBY", "HUB")
-_STARTUP_COPY_MARKERS = ("START", "LOADING", "POPUP", "TITLE", "READY", "GAME")
+_STARTUP_FAILURE_MARKERS = (
+    "UNKNOWN",
+    "FAIL",
+    "ABORT",
+    "RUNTIME",
+    "未知",
+    "失败",
+    "中止",
+    "运行时",
+)
+_HOME_MARKERS = ("HOME", "MAIN", "LOBBY", "HUB", "主页", "首页", "大厅")
+_STARTUP_COPY_MARKERS = (
+    "START",
+    "LOADING",
+    "POPUP",
+    "TITLE",
+    "READY",
+    "GAME",
+    "启动",
+    "加载",
+    "弹窗",
+    "标题",
+    "就绪",
+    "游戏",
+)
 _TASK_SPECIFIC_FIELDS = frozenset(
     {
         "action_id",
@@ -229,7 +270,11 @@ def _entry_candidates(nodes: Mapping[str, Mapping[str, Any]]) -> tuple[str, ...]
     if begin_task:
         return tuple(begin_task)
 
-    start_nodes = sorted(name for name in nodes if name.upper().endswith("_START"))
+    start_nodes = sorted(
+        name
+        for name in nodes
+        if name.upper().endswith("_START") or name.endswith("任务入口")
+    )
     return tuple(start_nodes)
 
 
@@ -259,7 +304,10 @@ def _is_shared_convergence_node(name: str, node: Mapping[str, Any]) -> bool:
     upper = name.upper()
     if name in _SHARED_CONVERGENCE_NAMES:
         return True
-    if any(marker in upper for marker in ("STATE_CONVERGENCE", "SHARED_ENTRY")):
+    if any(
+        marker in upper
+        for marker in ("STATE_CONVERGENCE", "SHARED_ENTRY", "状态收敛", "共享入口")
+    ):
         return node.get("action") != "StopTask"
     return False
 
@@ -270,7 +318,7 @@ def _is_task_resume_node(name: str, node: Mapping[str, Any]) -> bool:
         return False
     if any(marker in upper for marker in _RESUME_MARKERS):
         return not any(marker in upper for marker in _STARTUP_FAILURE_MARKERS)
-    if "RECOVER" not in upper:
+    if "RECOVER" not in upper and "恢复" not in upper:
         return False
     if any(marker in upper for marker in _STARTUP_FAILURE_MARKERS):
         return False
@@ -281,11 +329,20 @@ def _is_home_entry_node(name: str, node: Mapping[str, Any]) -> bool:
     upper = name.upper()
     if not any(marker in upper for marker in _HOME_MARKERS):
         return False
-    if any(marker in upper for marker in ("UNKNOWN", "FAIL", "ABORT", "CLOSE", "EXIT")):
+    if any(
+        marker in upper
+        for marker in ("UNKNOWN", "FAIL", "ABORT", "CLOSE", "EXIT", "未知", "失败", "中止", "关闭", "退出")
+    ):
         return False
     if node.get("action") == "StopTask" or node.get("custom_action") == "RecordTaskOutcome":
         return False
-    return bool(node.get("recognition")) or "PROBE" in upper or "ENTRY" in upper
+    return (
+        bool(node.get("recognition"))
+        or "PROBE" in upper
+        or "ENTRY" in upper
+        or "探测" in upper
+        or "入口" in upper
+    )
 
 
 def _entry_convergence_diagnostic(
@@ -363,12 +420,12 @@ def _is_failed_outcome(name: str, node: Mapping[str, Any]) -> bool:
         return True
     if _outcome_status(node) is None:
         upper = name.upper()
-        return any(marker in upper for marker in ("FAIL", "ABORT"))
+        return any(marker in upper for marker in ("FAIL", "ABORT", "失败", "中止"))
     return False
 
 
 def _is_stop_boundary(name: str, node: Mapping[str, Any]) -> bool:
-    if name == "MJA_COMMON_STOP":
+    if name == "公共-通用停止":
         return True
     if node.get("action") == "StopTask":
         return node.get("Abort") is not True
@@ -382,7 +439,7 @@ def _is_stop_boundary(name: str, node: Mapping[str, Any]) -> bool:
 
 
 def _is_abort_boundary(name: str, node: Mapping[str, Any]) -> bool:
-    if name == "MJA_COMMON_ABORT":
+    if name == "公共-通用中止":
         return True
     return node.get("Abort") is True and (
         node.get("action") == "StopTask" or _is_recorded_outcome(node)
@@ -611,7 +668,7 @@ def check_resource_tree(root: Path, task_entry_gate: bool = False) -> list[str]:
     except (OSError, ValueError, json.JSONDecodeError) as exc:
         return [str(exc)]
     errors.extend(validate_nodes(nodes))
-    for required in ("MJA_COMMON_STOP", "MJA_COMMON_ABORT"):
+    for required in ("公共-通用停止", "公共-通用中止"):
         if required not in nodes:
             errors.append(f"missing common node: {required}")
     if task_entry_gate:

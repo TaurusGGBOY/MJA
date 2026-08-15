@@ -24,70 +24,70 @@ def test_r26_victory_chest_claim_has_one_distinct_retry_after_result_probes() ->
     """The first triplet can select the chest; the second opens its reward."""
 
     nodes = _nodes()
-    first = nodes["MJA_SHADOW_CLAIM_VICTORY_CHEST_FIRST"]
-    retry = nodes["MJA_SHADOW_CLAIM_VICTORY_CHEST_RETRY"]
-    foreground = nodes["MJA_SHADOW_FOREGROUND_LOOP"]
-    battle_cap = nodes["MJA_SHADOW_BATTLE_LOOP"]["max_hit"]
+    first = nodes["影之遗迹-领取-胜利-宝箱-首个"]
+    retry = nodes["影之遗迹-领取-胜利-宝箱-重试"]
+    foreground = nodes["影之遗迹-前台-循环"]
+    battle_cap = nodes["影之遗迹-战斗-循环"]["max_hit"]
 
     assert first["max_hit"] == retry["max_hit"] == battle_cap
     assert first["retry_times"] == retry["retry_times"] == 0
     branches = first["next"]
     assert branches == [
-        "MJA_SHADOW_FINAL_PROBE",
-        "MJA_SHADOW_REWARD_PROBE",
-        "MJA_SHADOW_VICTORY_CHEST_REWARD_PROBE",
-        "MJA_SHADOW_CLAIM_VICTORY_CHEST_RETRY",
+        "影之遗迹-最终-探测",
+        "影之遗迹-奖励-探测",
+        "影之遗迹-胜利-宝箱-奖励-探测",
+        "影之遗迹-领取-胜利-宝箱-重试",
     ]
     assert _first_matching_branch(
         branches,
         {
-            "MJA_SHADOW_FINAL_PROBE": True,
-            "MJA_SHADOW_REWARD_PROBE": True,
-            "MJA_SHADOW_VICTORY_CHEST_REWARD_PROBE": True,
-            "MJA_SHADOW_CLAIM_VICTORY_CHEST_RETRY": True,
+            "影之遗迹-最终-探测": True,
+            "影之遗迹-奖励-探测": True,
+            "影之遗迹-胜利-宝箱-奖励-探测": True,
+            "影之遗迹-领取-胜利-宝箱-重试": True,
         },
-    ) == "MJA_SHADOW_FINAL_PROBE"
+    ) == "影之遗迹-最终-探测"
     assert _first_matching_branch(
         branches,
         {
-            "MJA_SHADOW_FINAL_PROBE": False,
-            "MJA_SHADOW_REWARD_PROBE": True,
-            "MJA_SHADOW_VICTORY_CHEST_REWARD_PROBE": True,
-            "MJA_SHADOW_CLAIM_VICTORY_CHEST_RETRY": True,
+            "影之遗迹-最终-探测": False,
+            "影之遗迹-奖励-探测": True,
+            "影之遗迹-胜利-宝箱-奖励-探测": True,
+            "影之遗迹-领取-胜利-宝箱-重试": True,
         },
-    ) == "MJA_SHADOW_REWARD_PROBE"
+    ) == "影之遗迹-奖励-探测"
     assert _first_matching_branch(
         branches,
         {
-            "MJA_SHADOW_FINAL_PROBE": False,
-            "MJA_SHADOW_REWARD_PROBE": False,
-            "MJA_SHADOW_VICTORY_CHEST_REWARD_PROBE": True,
-            "MJA_SHADOW_CLAIM_VICTORY_CHEST_RETRY": True,
+            "影之遗迹-最终-探测": False,
+            "影之遗迹-奖励-探测": False,
+            "影之遗迹-胜利-宝箱-奖励-探测": True,
+            "影之遗迹-领取-胜利-宝箱-重试": True,
         },
-    ) == "MJA_SHADOW_VICTORY_CHEST_REWARD_PROBE"
+    ) == "影之遗迹-胜利-宝箱-奖励-探测"
     assert _first_matching_branch(
         branches,
         {
-            "MJA_SHADOW_FINAL_PROBE": False,
-            "MJA_SHADOW_REWARD_PROBE": False,
-            "MJA_SHADOW_VICTORY_CHEST_REWARD_PROBE": False,
-            "MJA_SHADOW_CLAIM_VICTORY_CHEST_RETRY": True,
+            "影之遗迹-最终-探测": False,
+            "影之遗迹-奖励-探测": False,
+            "影之遗迹-胜利-宝箱-奖励-探测": False,
+            "影之遗迹-领取-胜利-宝箱-重试": True,
         },
-    ) == "MJA_SHADOW_CLAIM_VICTORY_CHEST_RETRY"
+    ) == "影之遗迹-领取-胜利-宝箱-重试"
     assert first["on_error"] == [
-        "MJA_SHADOW_FINAL_PROBE",
-        "MJA_SHADOW_REWARD_PROBE",
-        "MJA_SHADOW_VICTORY_CHEST_REWARD_PROBE",
-        "MJA_SHADOW_RECORD_FAILURE",
+        "影之遗迹-最终-探测",
+        "影之遗迹-奖励-探测",
+        "影之遗迹-胜利-宝箱-奖励-探测",
+        "影之遗迹-记录-失败",
     ]
     assert retry["next"] == [
-        "MJA_SHADOW_FINAL_PROBE",
-        "MJA_SHADOW_REWARD_PROBE",
-        "MJA_SHADOW_VICTORY_CHEST_REWARD_PROBE",
-        "MJA_SHADOW_VICTORY_CHEST_POST_RETRY_WAIT",
+        "影之遗迹-最终-探测",
+        "影之遗迹-奖励-探测",
+        "影之遗迹-胜利-宝箱-奖励-探测",
+        "影之遗迹-胜利-宝箱-之后-重试-等待",
     ]
-    assert "MJA_SHADOW_CLAIM_VICTORY_CHEST_FIRST" not in retry["next"]
-    assert "MJA_SHADOW_CLAIM_VICTORY_CHEST_RETRY" not in retry["next"]
+    assert "影之遗迹-领取-胜利-宝箱-首个" not in retry["next"]
+    assert "影之遗迹-领取-胜利-宝箱-重试" not in retry["next"]
 
     foreground_action = foreground["custom_action_param"]
     for claim in (first, retry):

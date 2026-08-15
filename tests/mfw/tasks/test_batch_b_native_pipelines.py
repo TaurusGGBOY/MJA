@@ -122,19 +122,18 @@ def test_batch_b_has_private_declarations_and_native_terminal_paths() -> None:
         assert isinstance(tasks, list) and len(tasks) == 1
         task = tasks[0]
         assert task["name"] == task_id
-        assert task["entry"] == f"MJA_{task_id}_START"
+        assert task["entry"].endswith("任务入口")
         assert task["default_check"] is True
 
         nodes = _nodes(pipeline_file)
         entry = task["entry"]
         assert entry in nodes
-        assert _reachable(nodes, entry, "MJA_COMMON_STOP")
-        assert _reachable(nodes, entry, "MJA_COMMON_ABORT")
+        assert _reachable(nodes, entry, "公共-通用停止")
+        assert _reachable(nodes, entry, "公共-通用中止")
         assert any(
-            ("page" in name.lower() or "home" in name.lower())
+            any(marker in name for marker in ("页面", "主页", "面板"))
             and isinstance(node.get("recognition"), (str, dict))
             for name, node in nodes.items()
-            if name.startswith("MJA_") or "." in name
         )
 
 
@@ -169,10 +168,10 @@ def test_batch_b_failure_outcomes_persist_before_native_abort() -> None:
             if status == "failed":
                 assert params.get("native_fail_after_record") is True, (task_id, params)
                 assert node.get("Abort") is True, (task_id, params)
-                assert node.get("next") == ["MJA_COMMON_ABORT"], (task_id, params)
+                assert node.get("next") == ["公共-通用中止"], (task_id, params)
             else:
                 assert status in {"success", "already_complete", "not_eligible"}
-                assert _reachable(nodes, name, "MJA_COMMON_STOP")
+                assert _reachable(nodes, name, "公共-通用停止")
 
 
 def test_batch_b_resource_actions_have_identity_budget_and_no_replay() -> None:
@@ -207,34 +206,33 @@ def test_martial_claims_success_cards_or_succeeds_without_plus_slot_input() -> N
     assert "study_martial_slot" not in serialized
     assert "breakthrough_martial_slot" not in serialized
 
-    claim = nodes["MJA_MARTIAL_CLAIM_LOOP"]
+    claim = nodes["武学突破-领取-循环"]
     assert claim["custom_action_param"]["action_id"] == "claim_success_card"
     assert claim["max_hit"] == 3
-    terminal = nodes["MJA_MARTIAL_SUCCESS_NO_CLAIM"]["custom_action_param"]
+    terminal = nodes["武学突破-成功-无-领取"]["custom_action_param"]
     assert terminal["status"] == "success"
     assert terminal["postcondition"] == "martial.successful_breakthroughs_claimed_or_none"
     assert _reachable(
         nodes,
-        "MJA_MARTIAL_NO_SUCCESSFUL_BREAKTHROUGH",
-        "MJA_MARTIAL_SUCCESS_NO_CLAIM",
+        "武学突破-无-成功-突破",
+        "武学突破-成功-无-领取",
     )
 
 
 @pytest.mark.parametrize("observed", ["级", "级以上", "80", "等级", "部分级及以下"])
 def test_equipment_level_filter_requires_exact_label(observed: str) -> None:
     nodes = _nodes("daily/equipment_decompose_daily.json")
-    expected = nodes["equipment.level.dialog"]["expected"]
+    expected = nodes["分解装备-装备-等级-对话框"]["expected"]
     assert expected == "级及以下"
     assert observed != expected
 
 
 def test_equipment_decompose_requires_exact_level_and_business_postcondition() -> None:
     nodes = _nodes("daily/equipment_decompose_daily.json")
-    assert nodes["equipment.level.dialog"]["expected"] == "级及以下"
-    assert nodes["equipment.level.filter"]["expected"] == "级"
-    outcome = nodes["MJA_EQUIPMENT_DECOMPOSE_SUCCESS"]["custom_action_param"]
+    assert nodes["分解装备-装备-等级-对话框"]["expected"] == "级及以下"
+    assert nodes["分解装备-装备-等级-筛选"]["expected"] == "级"
+    outcome = nodes["分解装备-分解-成功"]["custom_action_param"]
     assert outcome["postcondition"] == "equipment.decomposition_confirmed"
-    assert nodes["MJA_EQUIPMENT_DECOMPOSE_SUCCESS"]["next"] == [
-        "MJA_EQUIPMENT_CLOSE_PROBE"
+    assert nodes["分解装备-分解-成功"]["next"] == [
+        "分解装备-关闭-探测"
     ]
-

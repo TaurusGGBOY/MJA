@@ -240,10 +240,10 @@ def test_mail_page_fallback_is_bound_to_open_mail_action():
     driver = MaaAndroidWorkflowDriver(context)
     driver._last_action_id = "open_mail"
 
-    evidence = driver.recognize(driver.capture(), ("mail.page", "mail.empty"))
+    evidence = driver.recognize(driver.capture(), ("邮件奖励-邮件-页面", "邮件奖励-邮件-空"))
 
-    assert evidence.page_hits["mail.page"] == 1
-    assert evidence.target_hits["mail.empty"] == 1
+    assert evidence.page_hits["邮件奖励-邮件-页面"] == 1
+    assert evidence.target_hits["邮件奖励-邮件-空"] == 1
 
 
 def test_shop_period_benefits_fallback_is_bound_to_open_tab_action():
@@ -260,13 +260,13 @@ def test_shop_period_benefits_fallback_is_bound_to_open_tab_action():
     driver._last_action_id = "open_period_benefits"
 
     evidence = driver.recognize(
-        driver.capture(), ("shop.page", "shop.period_benefits.page")
+        driver.capture(), ("商店免费礼包-商店-页面", "商店免费礼包-商店-周期-权益-页面")
     )
 
-    assert evidence.page_hits["shop.period_benefits.page"] == 1
+    assert evidence.page_hits["商店免费礼包-商店-周期-权益-页面"] == 1
     driver._last_action_id = "open_shop"
-    evidence = driver.recognize(driver.capture(), ("shop.page",))
-    assert evidence.page_hits["shop.page"] == 1
+    evidence = driver.recognize(driver.capture(), ("商店免费礼包-商店-页面",))
+    assert evidence.page_hits["商店免费礼包-商店-页面"] == 1
 
 
 def test_dungeon_full_bag_visual_fallback_is_action_bound():
@@ -355,7 +355,7 @@ def test_trial_entry_uses_the_same_frame_maa_button_box():
     context = Context()
     driver = MaaAndroidWorkflowDriver(context)
     driver._last_frame_id = "frame-1"
-    driver._boxes["trial.open"] = ("frame-1", (986, 640, 50, 28))
+    driver._boxes["试剑-试炼-打开"] = ("frame-1", (986, 640, 50, 28))
     boxes = []
     driver._controller_tap = boxes.append
 
@@ -363,7 +363,7 @@ def test_trial_entry_uses_the_same_frame_maa_button_box():
         ActionIntent(
             "open_trial_sword",
             "home",
-            "trial.open",
+            "试剑-试炼-打开",
             input_kind=InputKind.CLICK,
         )
     )
@@ -419,7 +419,7 @@ def test_maa_adapter_derives_jianlin_completion_from_same_row_green_tick():
     context.tasker.controller = GreenController()
 
     def recognize(name, image):
-        if name == "daily.page":
+        if name == "日常任务奖励-日常-页面":
             return Detail(True, (0, 0, 620, 190))
         if name == "jianlin_daily_row":
             return Detail(True, (290, 295, 300, 35))
@@ -429,7 +429,7 @@ def test_maa_adapter_derives_jianlin_completion_from_same_row_green_tick():
     driver = MaaAndroidWorkflowDriver(context)
     evidence = driver.recognize(
         driver.capture(),
-        ("daily.page", "jianlin_daily_row", "jianlin_daily_done"),
+        ("日常任务奖励-日常-页面", "jianlin_daily_row", "jianlin_daily_done"),
     )
 
     assert evidence.target_hits["jianlin_daily_done"] == 1
@@ -672,7 +672,7 @@ def test_maa_adapter_promotes_function_panel_after_its_authorized_open_action():
 
     evidence = driver.recognize(
         driver.capture(),
-        ("function_panel.page", "daily.entry", "unknown_dialog", "safety.paid"),
+        ("function_panel.page", "日常任务奖励-日常-入口", "unknown_dialog", "破阵武学-安全-付费"),
     )
 
     assert evidence.page_hits["function_panel.page"] == 1
@@ -685,7 +685,7 @@ def test_maa_adapter_uses_calibrated_daily_entry_fallback_without_ocr_box():
     def recognize(name, image):
         if name == "function_panel.page":
             return Detail(True, (0, 0, 1280, 720))
-        if name == "daily.entry":
+        if name == "日常任务奖励-日常-入口":
             # This is the live failure mode: OCR hits 日常 but Maa does not
             # return a usable result rectangle on the transition frame.
             return Detail(True, None)
@@ -695,16 +695,16 @@ def test_maa_adapter_uses_calibrated_daily_entry_fallback_without_ocr_box():
     driver = MaaAndroidWorkflowDriver(context)
     evidence = driver.recognize(
         driver.capture(),
-        ("function_panel.page", "daily.entry"),
+        ("function_panel.page", "日常任务奖励-日常-入口"),
     )
 
-    assert evidence.target_hits["daily.entry"] == 1
-    assert driver._boxes["daily.entry"][1] == (1065, 220, 110, 105)
+    assert evidence.target_hits["日常任务奖励-日常-入口"] == 1
+    assert driver._boxes["日常任务奖励-日常-入口"][1] == (1065, 220, 110, 105)
     driver.execute(
         ActionIntent(
             "open_daily_tasks",
             "function_panel.page",
-            "daily.entry",
+            "日常任务奖励-日常-入口",
             input_kind=InputKind.CLICK,
         )
     )
@@ -1006,7 +1006,7 @@ def test_maa_adapter_does_not_promote_daily_ring_announcement_to_ring_page():
     context = Context()
     context.run_recognition = lambda name, image: (
         Detail(True, (0, 0, 620, 190))
-        if name == "daily.page"
+        if name == "日常任务奖励-日常-页面"
         else Detail(True, (0, 0, 1280, 180))
         if name in {"ring_page", "ring_page_close"}
         else Detail(False, None)
@@ -1015,10 +1015,10 @@ def test_maa_adapter_does_not_promote_daily_ring_announcement_to_ring_page():
 
     evidence = driver.recognize(
         driver.capture(),
-        ("daily.page", "ring_page", "ring_page_close"),
+        ("日常任务奖励-日常-页面", "ring_page", "ring_page_close"),
     )
 
-    assert evidence.page_hits["daily.page"] == 1
+    assert evidence.page_hits["日常任务奖励-日常-页面"] == 1
     assert evidence.page_hits["ring_page"] == 0
 
 
@@ -1034,14 +1034,14 @@ def test_maa_adapter_does_not_derive_ring_completion_from_a_green_tick():
 
     context.run_recognition = lambda name, image: (
         Detail(True, (0, 0, 620, 190))
-        if name == "daily.page"
+        if name == "日常任务奖励-日常-页面"
         else Detail(False, None)
     )
     driver = MaaAndroidWorkflowDriver(context)
 
     evidence = driver.recognize(
         driver.capture(),
-        ("daily.page", "ring_daily_row", "ring_daily_done"),
+        ("日常任务奖励-日常-页面", "ring_daily_row", "ring_daily_done"),
     )
 
     assert evidence.target_hits["ring_daily_done"] == 0
@@ -1058,7 +1058,7 @@ def test_maa_adapter_derives_ring_completion_from_same_row_green_tick():
     context.tasker.controller = GreenController()
     context.run_recognition = lambda name, image: (
         Detail(True, (0, 0, 620, 190))
-        if name == "daily.page"
+        if name == "日常任务奖励-日常-页面"
         else Detail(True, (200, 550, 300, 30))
         if name == "ring_daily_task_text"
         else Detail(False, None)
@@ -1068,7 +1068,7 @@ def test_maa_adapter_derives_ring_completion_from_same_row_green_tick():
     frame = driver.capture()
     evidence = driver.recognize(
         frame,
-        ("daily.page", "ring_daily_task_text", "ring_daily_done"),
+        ("日常任务奖励-日常-页面", "ring_daily_task_text", "ring_daily_done"),
     )
 
     assert evidence.target_hits["ring_daily_done"] == 1
@@ -1082,14 +1082,14 @@ def test_maa_adapter_does_not_forge_ring_row_from_daily_page_alone():
     context = Context()
     context.run_recognition = lambda name, image: (
         Detail(True, (0, 0, 620, 190))
-        if name == "daily.page"
+        if name == "日常任务奖励-日常-页面"
         else Detail(False, None)
     )
     driver = MaaAndroidWorkflowDriver(context)
 
     evidence = driver.recognize(
         driver.capture(),
-        ("daily.page", "ring_daily_task_text", "ring_daily_row"),
+        ("日常任务奖励-日常-页面", "ring_daily_task_text", "ring_daily_row"),
     )
 
     assert evidence.target_hits["ring_daily_row"] == 0
@@ -1099,7 +1099,7 @@ def test_maa_adapter_recovers_ring_row_only_from_exact_task_text():
     context = Context()
     context.run_recognition = lambda name, image: (
         Detail(True, (0, 0, 620, 190))
-        if name == "daily.page"
+        if name == "日常任务奖励-日常-页面"
         else Detail(True, (200, 200, 800, 110))
         if name == "ring_daily_task_text"
         else Detail(False, None)
@@ -1109,7 +1109,7 @@ def test_maa_adapter_recovers_ring_row_only_from_exact_task_text():
 
     evidence = driver.recognize(
         frame,
-        ("daily.page", "ring_daily_task_text", "ring_daily_row"),
+        ("日常任务奖励-日常-页面", "ring_daily_task_text", "ring_daily_row"),
     )
 
     assert evidence.target_hits["ring_daily_row"] == 1
@@ -1123,7 +1123,7 @@ def test_trial_zero_counter_alone_does_not_prove_free_trial_was_used():
     context = Context()
 
     def recognize(name, image):
-        if name == "trial.page":
+        if name == "试剑-试炼-页面":
             return Detail(True, (0, 160, 500, 300))
         if name == "trial.current_reward_zero":
             return Detail(True, (30, 495, 120, 105))
@@ -1133,7 +1133,7 @@ def test_trial_zero_counter_alone_does_not_prove_free_trial_was_used():
     driver = MaaAndroidWorkflowDriver(context)
     evidence = driver.recognize(
         driver.capture(),
-        ("trial.page", "trial.free_used", "trial.current_reward_zero"),
+        ("试剑-试炼-页面", "trial.free_used", "trial.current_reward_zero"),
     )
 
     assert evidence.target_hits["trial.current_reward_zero"] == 1
@@ -1147,9 +1147,9 @@ def test_maa_adapter_closes_mail_from_fast_page_probe_with_fixed_region():
 
     def recognize(name, image):
         requested.append(name)
-        if name == "mail.page" and current["name"] == "mail":
+        if name == "邮件奖励-邮件-页面" and current["name"] == "mail":
             return Detail(True, (300, 90, 420, 100))
-        if name == "mail.empty" and current["name"] == "mail":
+        if name == "邮件奖励-邮件-空" and current["name"] == "mail":
             return Detail(True, (300, 520, 900, 180))
         if name == "reset.home" and current["name"] == "home":
             return Detail(True, (1040, 0, 240, 110))
@@ -1167,7 +1167,7 @@ def test_maa_adapter_closes_mail_from_fast_page_probe_with_fixed_region():
 
     assert driver.return_to_home() is True
     assert context.tasker.controller.clicks == [(1120, 160)]
-    assert {"mail.page", "mail.empty", "mail.close", "reset.mail_close"}.issubset(
+    assert {"邮件奖励-邮件-页面", "邮件奖励-邮件-空", "邮件奖励-邮件-关闭", "reset.mail_close"}.issubset(
         requested
     )
 
@@ -1176,7 +1176,7 @@ def test_mail_page_without_claim_template_is_already_complete_after_open():
     context = Context()
 
     def recognize(name, image):
-        if name == "mail.page":
+        if name == "邮件奖励-邮件-页面":
             return Detail(True, (300, 90, 420, 100))
         return Detail(False, None)
 
@@ -1186,13 +1186,13 @@ def test_mail_page_without_claim_template_is_already_complete_after_open():
 
     evidence = driver.recognize(
         driver.capture(),
-        ("mail.page", "mail.claim_all", "mail.empty"),
+        ("邮件奖励-邮件-页面", "邮件奖励-邮件-领取-全部", "邮件奖励-邮件-空"),
     )
 
-    assert evidence.page_hits["mail.page"] == 1
-    assert evidence.target_hits["mail.claim_all"] == 0
-    assert evidence.target_hits["mail.empty"] == 1
-    assert driver._boxes["mail.empty"][1] == (300, 520, 900, 180)
+    assert evidence.page_hits["邮件奖励-邮件-页面"] == 1
+    assert evidence.target_hits["邮件奖励-邮件-领取-全部"] == 0
+    assert evidence.target_hits["邮件奖励-邮件-空"] == 1
+    assert driver._boxes["邮件奖励-邮件-空"][1] == (300, 520, 900, 180)
     assert context.tasker.controller.clicks == []
 
 
@@ -1295,7 +1295,7 @@ def test_maa_adapter_limits_repeated_full_boundary_scans():
     context.tasker.controller.post_screencap = capture
     context.run_recognition = lambda name, image: (
         Detail(True, (0, 0, 420, 110))
-        if name == "collection.page"
+        if name == "采集部署-采集-页面"
         else Detail(False, None)
     )
     driver = MaaAndroidWorkflowDriver(context)
@@ -1455,8 +1455,8 @@ def test_recovery_dismisses_a_stale_daily_reward_popup_before_login_gate(monkeyp
 
     def recognize(name, image):
         if state["popup"] and name in {
-            "daily.reward_popup",
-            "daily.reward_popup_close",
+            "日常任务奖励-日常-奖励-弹窗",
+            "日常任务奖励-日常-奖励-弹窗-关闭",
         }:
             return Detail(True, (300, 560, 700, 160))
         return Detail(False, None)
@@ -1547,7 +1547,7 @@ def test_maa_adapter_closes_recognized_shop_page_before_next_task():
     current = {"name": "shop"}
 
     def recognize(name, image):
-        if name == "shop.page" and current["name"] == "shop":
+        if name == "商店免费礼包-商店-页面" and current["name"] == "shop":
             return Detail(True, (0, 0, 1280, 720))
         if name == "reset.modal_close" and current["name"] == "shop":
             return Detail(True, (1160, 0, 100, 100))
@@ -1574,7 +1574,7 @@ def test_maa_adapter_closes_recognized_shop_page_with_daily_close_target():
     current = {"name": "shop"}
 
     def recognize(name, image):
-        if name == "shop.page" and current["name"] == "shop":
+        if name == "商店免费礼包-商店-页面" and current["name"] == "shop":
             return Detail(True, (0, 0, 1280, 720))
         if name == "reset.daily_close" and current["name"] == "shop":
             return Detail(True, (1160, 0, 100, 100))
@@ -1629,9 +1629,9 @@ def test_maa_adapter_closes_dispatch_and_painting_before_next_task():
     current = {"name": "dispatch"}
 
     def recognize(name, image):
-        if name == "hero.dispatch.page" and current["name"] == "dispatch":
+        if name == "英雄派遣-英雄-派遣-页面" and current["name"] == "dispatch":
             return Detail(True, (0, 0, 520, 180))
-        if name == "hero.all_completed" and current["name"] == "dispatch":
+        if name == "英雄派遣-英雄-全部-已完成" and current["name"] == "dispatch":
             return Detail(True, (210, 80, 130, 60))
         if name == "painting_page" and current["name"] == "painting":
             return Detail(True, (0, 0, 1280, 720))
@@ -1658,7 +1658,7 @@ def test_maa_adapter_closes_collection_page_before_next_task():
     current = {"name": "collection"}
 
     def recognize(name, image):
-        if name == "collection.page" and current["name"] == "collection":
+        if name == "采集部署-采集-页面" and current["name"] == "collection":
             return Detail(True, (0, 0, 420, 110))
         if name == "painting_page" and current["name"] == "painting":
             return Detail(True, (0, 0, 1280, 720))
@@ -1786,7 +1786,7 @@ def test_maa_adapter_closes_daily_page_before_next_task():
     current = {"name": "daily"}
 
     def recognize(name, image):
-        if name == "daily.page" and current["name"] == "daily":
+        if name == "日常任务奖励-日常-页面" and current["name"] == "daily":
             return Detail(True, (0, 0, 620, 190))
         if name == "reset.daily_close" and current["name"] == "daily":
             return Detail(True, (1160, 0, 100, 100))
@@ -1813,9 +1813,9 @@ def test_maa_adapter_closes_battle_pass_rewards_before_next_task():
     current = {"name": "rewards"}
 
     def recognize(name, image):
-        if name == "battle_pass.rewards" and current["name"] == "rewards":
+        if name == "战令奖励-战斗-战令-奖励" and current["name"] == "rewards":
             return Detail(True, (100, 230, 700, 430))
-        if name == "battle_pass.close" and current["name"] == "rewards":
+        if name == "战令奖励-战斗-战令-关闭" and current["name"] == "rewards":
             return Detail(True, (1180, 10, 70, 70))
         if name == "reset.home" and current["name"] == "home":
             return Detail(True, (850, 0, 430, 180))
@@ -1853,8 +1853,8 @@ def test_maa_adapter_cleans_battle_pass_offer_before_next_task():
 
     def recognize(name, image):
         if controller.surface == "page" and name in {
-            "battle_pass.page",
-            "battle_pass.close",
+            "战令奖励-战斗-战令-页面",
+            "战令奖励-战斗-战令-关闭",
         }:
             return Detail(True, (1180, 10, 70, 70))
         if controller.surface == "home" and name == "reset.home":
@@ -1883,7 +1883,7 @@ def test_maa_adapter_closes_appraisal_page_before_next_task():
     current = {"name": "appraisal"}
 
     def recognize(name, image):
-        if name == "appraisal.page" and current["name"] == "appraisal":
+        if name == "免费鉴定-鉴定-页面" and current["name"] == "appraisal":
             return Detail(True, (0, 0, 500, 230))
         if name == "reset.modal_close" and current["name"] == "appraisal":
             return Detail(True, (1160, 0, 100, 100))
@@ -1910,7 +1910,7 @@ def test_maa_adapter_closes_appraisal_page_with_daily_close_target():
     current = {"name": "appraisal"}
 
     def recognize(name, image):
-        if name == "appraisal.page" and current["name"] == "appraisal":
+        if name == "免费鉴定-鉴定-页面" and current["name"] == "appraisal":
             return Detail(True, (0, 0, 500, 230))
         if name == "reset.daily_close" and current["name"] == "appraisal":
             return Detail(True, (1160, 0, 100, 100))
@@ -1936,9 +1936,9 @@ def test_collection_reward_close_waits_for_home_renderer(monkeypatch):
     context = Context()
     context.run_recognition = lambda name, image: (
         Detail(True, (0, 0, 1280, 720))
-        if name == "collection.reward_popup"
+        if name == "采集部署-采集-奖励-弹窗"
         else Detail(True, (1150, 620, 100, 100))
-        if name == "collection.popup_close"
+        if name == "采集部署-采集-弹窗-关闭"
         else Detail(False, None)
     )
     driver = MaaAndroidWorkflowDriver(context)
@@ -1946,14 +1946,14 @@ def test_collection_reward_close_waits_for_home_renderer(monkeypatch):
     frame = driver.capture()
     driver.recognize(
         frame,
-        ("collection.reward_popup", "collection.popup_close"),
+        ("采集部署-采集-奖励-弹窗", "采集部署-采集-弹窗-关闭"),
     )
 
     driver.execute(
         ActionIntent(
             "close_reward_popup",
-            "collection.reward_popup",
-            "collection.popup_close",
+            "采集部署-采集-奖励-弹窗",
+            "采集部署-采集-弹窗-关闭",
             input_kind=InputKind.CLICK,
         )
     )
@@ -1966,14 +1966,14 @@ def test_open_shop_waits_through_android_page_transition(monkeypatch):
     driver = MaaAndroidWorkflowDriver(context)
     monkeypatch.setattr("agent.workflows.maa_android.monotonic", lambda: 100.0)
     frame = driver.capture()
-    driver.recognize(frame, ("function_panel.page", "shop.page"))
-    driver._boxes["shop.page"] = (frame.frame_id, (0, 0, 1280, 720))
+    driver.recognize(frame, ("function_panel.page", "商店免费礼包-商店-页面"))
+    driver._boxes["商店免费礼包-商店-页面"] = (frame.frame_id, (0, 0, 1280, 720))
 
     driver.execute(
         ActionIntent(
             "open_shop",
             "function_panel.page",
-            "shop.page",
+            "商店免费礼包-商店-页面",
             input_kind=InputKind.CLICK,
         )
     )
@@ -1985,19 +1985,19 @@ def test_shop_close_uses_same_frame_shop_page_fallback():
     context = Context()
     context.run_recognition = lambda name, image: (
         Detail(True, (0, 0, 300, 100))
-        if name == "shop.page"
+        if name == "商店免费礼包-商店-页面"
         else Detail(False, None)
     )
     driver = MaaAndroidWorkflowDriver(context)
 
     evidence = driver.recognize(
         driver.capture(),
-        ("shop.page", "shop.close"),
+        ("商店免费礼包-商店-页面", "商店免费礼包-商店-关闭"),
     )
 
-    assert evidence.page_hits["shop.page"] == 1
-    assert evidence.target_hits["shop.close"] == 1
-    assert driver._boxes["shop.close"][1] == (1160, 0, 100, 100)
+    assert evidence.page_hits["商店免费礼包-商店-页面"] == 1
+    assert evidence.target_hits["商店免费礼包-商店-关闭"] == 1
+    assert driver._boxes["商店免费礼包-商店-关闭"][1] == (1160, 0, 100, 100)
 
 
 def test_shadow_foreground_move_waits_for_loading_transition(monkeypatch):
@@ -2371,7 +2371,7 @@ def test_weekly_must_buy_fallback_targets_top_tab_strip():
     context = Context()
 
     def recognize(name, image):
-        if name == "shop.gift_tab.page":
+        if name == "周一免费礼包-商店-礼包-标签-页面":
             return Detail(True, (0, 100, 1280, 620))
         return Detail(False, None)
 
@@ -2380,11 +2380,11 @@ def test_weekly_must_buy_fallback_targets_top_tab_strip():
     frame = driver.capture()
     evidence = driver.recognize(
         frame,
-        ("shop.gift_tab.page", "shop.weekly_must_buy"),
+        ("周一免费礼包-商店-礼包-标签-页面", "周一免费礼包-商店-每周-必须-购买"),
     )
 
-    assert evidence.target_hits["shop.weekly_must_buy"] == 1
-    assert driver._boxes["shop.weekly_must_buy"][1] == (500, 70, 160, 80)
+    assert evidence.target_hits["周一免费礼包-商店-每周-必须-购买"] == 1
+    assert driver._boxes["周一免费礼包-商店-每周-必须-购买"][1] == (500, 70, 160, 80)
 
 
 def test_shadow_battle_uses_short_initial_settle_before_engine_ocr_polling(monkeypatch):
@@ -2530,7 +2530,7 @@ def test_trial_free_confirmation_taps_inside_live_confirm_button():
     context = Context()
     driver = MaaAndroidWorkflowDriver(context)
     frame = driver.capture()
-    driver._boxes["trial.free_confirm"] = (
+    driver._boxes["试剑-试炼-免费-确认"] = (
         frame.frame_id,
         (780, 440, 220, 120),
     )
@@ -2538,8 +2538,8 @@ def test_trial_free_confirmation_taps_inside_live_confirm_button():
     driver.execute(
         ActionIntent(
             "confirm_free_trial",
-            "trial.free_popup",
-            "trial.free_confirm",
+            "试剑-试炼-免费-弹窗",
+            "试剑-试炼-免费-确认",
             input_kind=InputKind.CLICK,
         )
     )
@@ -2551,7 +2551,7 @@ def test_trial_reward_page_supplies_safe_blank_close_target_when_ocr_misses():
     context = Context()
     context.run_recognition = lambda name, image: (
         Detail(True, (0, 120, 1280, 520))
-        if name == "trial.reward_popup"
+        if name == "试剑-试炼-奖励-弹窗"
         else Detail(False, None)
     )
     driver = MaaAndroidWorkflowDriver(context)
@@ -2559,12 +2559,12 @@ def test_trial_reward_page_supplies_safe_blank_close_target_when_ocr_misses():
 
     evidence = driver.recognize(
         frame,
-        ("trial.reward_popup", "trial.popup_close"),
+        ("试剑-试炼-奖励-弹窗", "试剑-试炼-弹窗-关闭"),
     )
 
-    assert evidence.page_hits["trial.reward_popup"] == 1
-    assert evidence.target_hits["trial.popup_close"] == 1
-    assert driver._boxes["trial.popup_close"] == (
+    assert evidence.page_hits["试剑-试炼-奖励-弹窗"] == 1
+    assert evidence.target_hits["试剑-试炼-弹窗-关闭"] == 1
+    assert driver._boxes["试剑-试炼-弹窗-关闭"] == (
         frame.frame_id,
         (350, 580, 600, 140),
     )
@@ -2574,7 +2574,7 @@ def test_trial_free_claim_fallback_is_bound_to_closed_reward_popup():
     context = Context()
 
     def recognize(name, image):
-        if name == "trial.page":
+        if name == "试剑-试炼-页面":
             return Detail(True, (0, 160, 500, 300))
         return Detail(False, None)
 
@@ -2583,13 +2583,13 @@ def test_trial_free_claim_fallback_is_bound_to_closed_reward_popup():
     driver._last_action_id = "close_reward_popup"
     evidence = driver.recognize(
         driver.capture(),
-        ("trial.page", "trial.free_claim", "trial.current_reward_zero"),
+        ("试剑-试炼-页面", "试剑-试炼-免费-领取", "trial.current_reward_zero"),
     )
 
-    assert evidence.page_hits["trial.page"] == 1
-    assert evidence.target_hits["trial.free_claim"] == 1
+    assert evidence.page_hits["试剑-试炼-页面"] == 1
+    assert evidence.target_hits["试剑-试炼-免费-领取"] == 1
     assert "免费" in evidence.texts
-    assert driver._boxes["trial.free_claim"] == (
+    assert driver._boxes["试剑-试炼-免费-领取"] == (
         driver._last_frame_id,
         (270, 600, 100, 100),
     )
@@ -2599,7 +2599,7 @@ def test_trial_confirmed_close_without_strict_free_used_proof_stays_unknown():
     context = Context()
 
     def recognize(name, image):
-        if name == "trial.page":
+        if name == "试剑-试炼-页面":
             return Detail(True, (0, 160, 500, 300))
         return Detail(False, None)
 
@@ -2610,7 +2610,7 @@ def test_trial_confirmed_close_without_strict_free_used_proof_stays_unknown():
     evidence = driver.recognize(
         driver.capture(),
         (
-            "trial.page",
+            "试剑-试炼-页面",
             "trial.free_waiting",
             "trial.free_used",
             "trial.current_reward_zero",
@@ -2624,14 +2624,14 @@ def test_trial_strict_free_used_state_suppresses_stale_claim_controls():
     context = Context()
 
     def recognize(name, image):
-        if name == "trial.page":
+        if name == "试剑-试炼-页面":
             return Detail(True, (30, 267, 106, 27))
         if name == "trial.free_used":
             return Detail(True, (1000, 638, 188, 29))
         if name in {
-            "trial.reward_claim",
+            "试剑-试炼-奖励-领取",
             "trial.current_reward_claim",
-            "trial.free_claim",
+            "试剑-试炼-免费-领取",
         }:
             return Detail(True, (180, 632, 58, 34))
         return Detail(False, None)
@@ -2641,18 +2641,18 @@ def test_trial_strict_free_used_state_suppresses_stale_claim_controls():
     evidence = driver.recognize(
         driver.capture(),
         (
-            "trial.page",
+            "试剑-试炼-页面",
             "trial.free_used",
-            "trial.reward_claim",
+            "试剑-试炼-奖励-领取",
             "trial.current_reward_claim",
-            "trial.free_claim",
+            "试剑-试炼-免费-领取",
         ),
     )
 
     assert evidence.target_hits["trial.free_used"] == 1
-    assert evidence.target_hits["trial.reward_claim"] == 0
+    assert evidence.target_hits["试剑-试炼-奖励-领取"] == 0
     assert evidence.target_hits["trial.current_reward_claim"] == 0
-    assert evidence.target_hits["trial.free_claim"] == 0
+    assert evidence.target_hits["试剑-试炼-免费-领取"] == 0
 
 
 def test_shadow_formation_supplies_stable_battle_button_when_ocr_misses():
@@ -2801,12 +2801,12 @@ def test_claim_reward_popup_uses_visual_sheet_when_ocr_returns_nothing():
 
     evidence = driver.recognize(
         frame,
-        ("daily.reward_popup", "daily.reward_popup_close"),
+        ("日常任务奖励-日常-奖励-弹窗", "日常任务奖励-日常-奖励-弹窗-关闭"),
     )
 
-    assert evidence.page_hits["daily.reward_popup"] == 1
-    assert evidence.target_hits["daily.reward_popup_close"] == 1
-    assert driver._boxes["daily.reward_popup_close"] == (
+    assert evidence.page_hits["日常任务奖励-日常-奖励-弹窗"] == 1
+    assert evidence.target_hits["日常任务奖励-日常-奖励-弹窗-关闭"] == 1
+    assert driver._boxes["日常任务奖励-日常-奖励-弹窗-关闭"] == (
         frame.frame_id,
         (300, 560, 700, 160),
     )
@@ -2828,11 +2828,11 @@ def test_hero_claim_reward_popup_uses_visual_sheet_when_ocr_returns_nothing():
 
     evidence = driver.recognize(
         frame,
-        ("hero.reward_popup", "hero.reward_popup_close"),
+        ("英雄派遣-英雄-奖励-弹窗", "英雄派遣-英雄-奖励-弹窗-关闭"),
     )
 
-    assert evidence.page_hits["hero.reward_popup"] == 1
-    assert evidence.target_hits["hero.reward_popup_close"] == 1
+    assert evidence.page_hits["英雄派遣-英雄-奖励-弹窗"] == 1
+    assert evidence.target_hits["英雄派遣-英雄-奖励-弹窗-关闭"] == 1
 
 
 def test_battle_pass_tasks_page_does_not_become_visual_reward_popup():
@@ -2847,26 +2847,26 @@ def test_battle_pass_tasks_page_does_not_become_visual_reward_popup():
     context.tasker.controller = TasksController()
     context.run_recognition = lambda name, image: (
         Detail(True, (0, 120, 520, 180))
-        if name == "battle_pass.tasks"
+        if name == "战令奖励-战斗-战令-任务"
         else Detail(False, None)
     )
     driver = MaaAndroidWorkflowDriver(context)
     driver._last_action_id = "open_battle_pass_tasks"
     evidence = driver.recognize(
         driver.capture(),
-        ("battle_pass.tasks", "battle_pass.reward_popup", "battle_pass.reward_popup_close"),
+        ("战令奖励-战斗-战令-任务", "战令奖励-战斗-战令-奖励-弹窗", "战令奖励-战斗-战令-奖励-弹窗-关闭"),
     )
 
-    assert evidence.page_hits["battle_pass.tasks"] == 1
-    assert evidence.page_hits.get("battle_pass.reward_popup", 0) == 0
-    assert evidence.target_hits.get("battle_pass.reward_popup_close", 0) == 0
+    assert evidence.page_hits["战令奖励-战斗-战令-任务"] == 1
+    assert evidence.page_hits.get("战令奖励-战斗-战令-奖励-弹窗", 0) == 0
+    assert evidence.target_hits.get("战令奖励-战斗-战令-奖励-弹窗-关闭", 0) == 0
 
 
 def test_battle_pass_item_detail_is_a_reward_popup_with_safe_close():
     context = Context()
     context.run_recognition = lambda name, image: (
         Detail(True, (450, 190, 440, 330))
-        if name == "battle_pass.item_popup"
+        if name == "战令奖励-战斗-战令-物品-弹窗"
         else Detail(False, None)
     )
     driver = MaaAndroidWorkflowDriver(context)
@@ -2874,15 +2874,15 @@ def test_battle_pass_item_detail_is_a_reward_popup_with_safe_close():
     evidence = driver.recognize(
         frame,
         (
-            "battle_pass.item_popup",
-            "battle_pass.reward_popup",
-            "battle_pass.reward_popup_close",
+            "战令奖励-战斗-战令-物品-弹窗",
+            "战令奖励-战斗-战令-奖励-弹窗",
+            "战令奖励-战斗-战令-奖励-弹窗-关闭",
         ),
     )
 
-    assert evidence.page_hits["battle_pass.reward_popup"] == 1
-    assert evidence.target_hits["battle_pass.reward_popup_close"] == 1
-    assert driver._boxes["battle_pass.reward_popup_close"] == (
+    assert evidence.page_hits["战令奖励-战斗-战令-奖励-弹窗"] == 1
+    assert evidence.target_hits["战令奖励-战斗-战令-奖励-弹窗-关闭"] == 1
+    assert driver._boxes["战令奖励-战斗-战令-奖励-弹窗-关闭"] == (
         frame.frame_id,
         (300, 560, 700, 160),
     )
@@ -2892,21 +2892,21 @@ def test_battle_pass_rewards_without_basic_red_dot_proves_basic_track_complete()
     context = Context()
     context.run_recognition = lambda name, image: (
         Detail(True, (100, 230, 700, 430))
-        if name == "battle_pass.rewards"
+        if name == "战令奖励-战斗-战令-奖励"
         else Detail(False, None)
     )
     driver = MaaAndroidWorkflowDriver(context)
     evidence = driver.recognize(
         driver.capture(),
         (
-            "battle_pass.rewards",
-            "battle_pass.basic_red_dot_reward",
-            "battle_pass.basic_all_claimed",
+            "战令奖励-战斗-战令-奖励",
+            "战令奖励-战斗-战令-基础-红色-红点-奖励",
+            "战令奖励-战斗-战令-基础-全部已领取",
         ),
     )
 
-    assert evidence.target_hits["battle_pass.basic_all_claimed"] == 1
-    assert driver._boxes["battle_pass.basic_all_claimed"][1] == (150, 320, 700, 150)
+    assert evidence.target_hits["战令奖励-战斗-战令-基础-全部已领取"] == 1
+    assert driver._boxes["战令奖励-战斗-战令-基础-全部已领取"][1] == (150, 320, 700, 150)
 
 
 def test_shadow_stage_entry_taps_live_ocr_box_not_grid_anchor():
@@ -2993,19 +2993,19 @@ def test_hero_dispatch_close_uses_page_bounded_adb_target_when_template_misses()
     context = Context()
     context.run_recognition = lambda name, image: (
         Detail(True, (0, 0, 1280, 720))
-        if name == "hero.dispatch.page"
+        if name == "英雄派遣-英雄-派遣-页面"
         else Detail(False, None)
     )
     driver = MaaAndroidWorkflowDriver(context)
     frame = driver.capture()
-    evidence = driver.recognize(frame, ("hero.dispatch.page", "hero.dispatch.close"))
+    evidence = driver.recognize(frame, ("英雄派遣-英雄-派遣-页面", "英雄派遣-英雄-派遣-关闭"))
 
-    assert evidence.target_hits["hero.dispatch.close"] == 1
+    assert evidence.target_hits["英雄派遣-英雄-派遣-关闭"] == 1
     driver.execute(
         ActionIntent(
             "close_hero_dispatch",
-            "hero.dispatch.page",
-            "hero.dispatch.close",
+            "英雄派遣-英雄-派遣-页面",
+            "英雄派遣-英雄-派遣-关闭",
             input_kind=InputKind.CLICK,
         )
     )
@@ -3016,18 +3016,18 @@ def test_hero_dispatch_selection_recovers_claim_button_when_ocr_misses():
     context = Context()
     context.run_recognition = lambda name, image: (
         Detail(True, (0, 0, 520, 180))
-        if name == "hero.dispatch.page"
+        if name == "英雄派遣-英雄-派遣-页面"
         else Detail(False, None)
     )
     driver = MaaAndroidWorkflowDriver(context)
     driver._last_action_id = "select_first_visible_dispatch"
     frame = driver.capture()
 
-    evidence = driver.recognize(frame, ("hero.dispatch.page", "hero.claim_button"))
+    evidence = driver.recognize(frame, ("英雄派遣-英雄-派遣-页面", "英雄派遣-英雄-领取-按钮"))
 
-    assert evidence.page_hits["hero.dispatch.page"] == 1
-    assert evidence.target_hits["hero.claim_button"] == 1
-    assert driver._boxes["hero.claim_button"] == (
+    assert evidence.page_hits["英雄派遣-英雄-派遣-页面"] == 1
+    assert evidence.target_hits["英雄派遣-英雄-领取-按钮"] == 1
+    assert driver._boxes["英雄派遣-英雄-领取-按钮"] == (
         frame.frame_id,
         (950, 520, 300, 100),
     )
@@ -3037,7 +3037,7 @@ def test_hero_dispatch_promotes_page_from_authorized_close_template_when_title_o
     context = Context()
     context.run_recognition = lambda name, image: (
         Detail(True, (1190, 20, 44, 44))
-        if name == "hero.dispatch.close"
+        if name == "英雄派遣-英雄-派遣-关闭"
         else Detail(False, None)
     )
     driver = MaaAndroidWorkflowDriver(context)
@@ -3046,12 +3046,12 @@ def test_hero_dispatch_promotes_page_from_authorized_close_template_when_title_o
     frame = driver.capture()
     evidence = driver.recognize(
         frame,
-        ("hero.dispatch.page", "hero.dispatch.close"),
+        ("英雄派遣-英雄-派遣-页面", "英雄派遣-英雄-派遣-关闭"),
     )
 
-    assert evidence.page_hits["hero.dispatch.page"] == 1
-    assert evidence.target_hits["hero.dispatch.page"] == 1
-    assert driver._boxes["hero.dispatch.page"] == (
+    assert evidence.page_hits["英雄派遣-英雄-派遣-页面"] == 1
+    assert evidence.target_hits["英雄派遣-英雄-派遣-页面"] == 1
+    assert driver._boxes["英雄派遣-英雄-派遣-页面"] == (
         frame.frame_id,
         (1190, 20, 44, 44),
     )
@@ -3217,17 +3217,17 @@ def test_maa_adapter_closes_blurred_appraisal_result_through_adb_controller():
     frame = driver.capture()
     evidence = driver.recognize(
         frame,
-        ("appraisal.result_popup", "appraisal.popup_close"),
+        ("免费鉴定-鉴定-结果-弹窗", "免费鉴定-鉴定-弹窗-关闭"),
     )
 
-    assert evidence.page_hits["appraisal.result_popup"] == 1
-    assert evidence.target_hits["appraisal.popup_close"] == 1
+    assert evidence.page_hits["免费鉴定-鉴定-结果-弹窗"] == 1
+    assert evidence.target_hits["免费鉴定-鉴定-弹窗-关闭"] == 1
 
     driver.execute(
         ActionIntent(
             "close_appraisal_popup",
-            "appraisal.result_popup",
-            "appraisal.popup_close",
+            "免费鉴定-鉴定-结果-弹窗",
+            "免费鉴定-鉴定-弹窗-关闭",
             input_kind=InputKind.CLICK,
         )
     )
@@ -3420,19 +3420,19 @@ def test_maa_adapter_opens_jianlin_from_the_daily_row_button():
     context = Context()
     context.run_recognition = lambda name, image: (
         Detail(True, (92, 28, 84, 25))
-        if name == "daily.page"
+        if name == "日常任务奖励-日常-页面"
         else Detail(True, (1048, 348, 53, 29))
         if name == "jianlin_entry"
         else Detail(False, None)
     )
     driver = MaaAndroidWorkflowDriver(context)
     frame = driver.capture()
-    driver.recognize(frame, ("daily.page", "jianlin_entry"))
+    driver.recognize(frame, ("日常任务奖励-日常-页面", "jianlin_entry"))
 
     driver.execute(
         ActionIntent(
             "open_jianlin",
-            "daily.page",
+            "日常任务奖励-日常-页面",
             "jianlin_entry",
             input_kind=InputKind.CLICK,
         )
@@ -3445,18 +3445,18 @@ def test_maa_adapter_maps_jianlin_row_text_to_its_matching_forward_button():
     context = Context()
     context.run_recognition = lambda name, image: (
         Detail(True, (92, 28, 84, 25))
-        if name == "daily.page"
+        if name == "日常任务奖励-日常-页面"
         else Detail(True, (290, 348, 260, 29))
         if name == "jianlin_daily_row"
         else Detail(False, None)
     )
     driver = MaaAndroidWorkflowDriver(context)
     frame = driver.capture()
-    driver.recognize(frame, ("daily.page", "jianlin_daily_row"))
+    driver.recognize(frame, ("日常任务奖励-日常-页面", "jianlin_daily_row"))
     driver.execute(
         ActionIntent(
             "open_jianlin",
-            "daily.page",
+            "日常任务奖励-日常-页面",
             "jianlin_daily_row",
             input_kind=InputKind.CLICK,
         )
@@ -3469,7 +3469,7 @@ def test_maa_adapter_does_not_use_an_unrelated_claim_button_as_jianlin_done():
     context = Context()
     context.run_recognition = lambda name, image: (
         Detail(True, (92, 28, 84, 25))
-        if name == "daily.page"
+        if name == "日常任务奖励-日常-页面"
         else Detail(True, (1048, 428, 53, 29))
         if name == "jianlin_daily_done"
         else Detail(False, None)
@@ -3477,7 +3477,7 @@ def test_maa_adapter_does_not_use_an_unrelated_claim_button_as_jianlin_done():
     driver = MaaAndroidWorkflowDriver(context)
     frame = driver.capture()
     evidence = driver.recognize(
-        frame, ("daily.page", "jianlin_daily_row", "jianlin_daily_done")
+        frame, ("日常任务奖励-日常-页面", "jianlin_daily_row", "jianlin_daily_done")
     )
 
     assert evidence.target_hits["jianlin_daily_row"] == 0
@@ -3487,16 +3487,16 @@ def test_maa_adapter_does_not_use_an_unrelated_claim_button_as_jianlin_done():
 def test_maa_adapter_scrolls_jianlin_daily_list_through_adb_controller():
     context = Context()
     context.run_recognition = lambda name, image: (
-        Detail(True, (92, 28, 84, 25)) if name == "daily.page" else Detail(False, None)
+        Detail(True, (92, 28, 84, 25)) if name == "日常任务奖励-日常-页面" else Detail(False, None)
     )
     driver = MaaAndroidWorkflowDriver(context)
     frame = driver.capture()
-    driver.recognize(frame, ("daily.page",))
+    driver.recognize(frame, ("日常任务奖励-日常-页面",))
     driver.execute(
         ActionIntent(
             "scroll_daily_jianlin",
-            "daily.page",
-            "daily.page",
+            "日常任务奖励-日常-页面",
+            "日常任务奖励-日常-页面",
             input_kind=InputKind.SWIPE,
         )
     )
@@ -3507,16 +3507,16 @@ def test_maa_adapter_scrolls_jianlin_daily_list_through_adb_controller():
 def test_maa_adapter_scrolls_daily_rewards_without_page_pointer_box():
     context = Context()
     context.run_recognition = lambda name, image: (
-        Detail(True, None) if name == "daily.page" else Detail(False, None)
+        Detail(True, None) if name == "日常任务奖励-日常-页面" else Detail(False, None)
     )
     driver = MaaAndroidWorkflowDriver(context)
     frame = driver.capture()
-    driver.recognize(frame, ("daily.page",))
+    driver.recognize(frame, ("日常任务奖励-日常-页面",))
     driver.execute(
         ActionIntent(
             "scroll_daily_reward_rows",
-            "daily.page",
-            "daily.page",
+            "日常任务奖励-日常-页面",
+            "日常任务奖励-日常-页面",
             input_kind=InputKind.SWIPE,
         )
     )
@@ -3660,7 +3660,7 @@ def test_maa_adapter_recovers_quantity_panel_from_live_title():
     frame = driver.capture()
     evidence = driver.recognize(
         frame,
-        ("quantity_panel", "quantity_panel_title", "tea.max_quantity"),
+        ("quantity_panel", "quantity_panel_title", "买茶-茶-最大-数量"),
     )
 
     assert evidence.target_hits["quantity_panel"] == 1
@@ -3678,10 +3678,10 @@ def test_maa_adapter_keeps_collection_page_postcondition_after_open_action():
     driver = MaaAndroidWorkflowDriver(context)
     driver._last_action_id = "open_collection_deployment"
     frame = driver.capture()
-    evidence = driver.recognize(frame, ("yanwu.page", "collection.open", "collection.page"))
+    evidence = driver.recognize(frame, ("yanwu.page", "采集部署-采集-打开", "采集部署-采集-页面"))
 
-    assert evidence.page_hits["collection.page"] == 1
-    assert evidence.target_hits["collection.page"] == 1
+    assert evidence.page_hits["采集部署-采集-页面"] == 1
+    assert evidence.target_hits["采集部署-采集-页面"] == 1
 
 
 def test_maa_adapter_cleanup_does_not_click_ungated_daily_close():
@@ -3995,7 +3995,7 @@ def test_mail_claim_promotes_reward_popup_from_stable_close_footer():
     context = Context()
     context.run_recognition = lambda name, image: (
         Detail(True, (350, 560, 600, 140))
-        if name == "mail.reward_popup_close"
+        if name == "邮件奖励-邮件-奖励-弹窗-关闭"
         else Detail(False, None)
     )
     driver = MaaAndroidWorkflowDriver(context)
@@ -4003,12 +4003,12 @@ def test_mail_claim_promotes_reward_popup_from_stable_close_footer():
 
     evidence = driver.recognize(
         driver.capture(),
-        ("mail.reward_popup", "mail.reward_popup_close"),
+        ("邮件奖励-邮件-奖励-弹窗", "邮件奖励-邮件-奖励-弹窗-关闭"),
     )
 
-    assert evidence.page_hits["mail.reward_popup"] == 1
-    assert evidence.target_hits["mail.reward_popup"] == 1
-    assert driver._boxes["mail.reward_popup"][1] == (0, 100, 1280, 620)
+    assert evidence.page_hits["邮件奖励-邮件-奖励-弹窗"] == 1
+    assert evidence.target_hits["邮件奖励-邮件-奖励-弹窗"] == 1
+    assert driver._boxes["邮件奖励-邮件-奖励-弹窗"][1] == (0, 100, 1280, 620)
 
 
 def test_ring_page_is_derived_after_authorized_daily_row_navigation():
@@ -4016,7 +4016,7 @@ def test_ring_page_is_derived_after_authorized_daily_row_navigation():
     driver = MaaAndroidWorkflowDriver(context)
     driver._last_action_id = "open_ring_challenge"
 
-    evidence = driver.recognize(driver.capture(), ("ring_page", "daily.page"))
+    evidence = driver.recognize(driver.capture(), ("ring_page", "日常任务奖励-日常-页面"))
 
     assert evidence.page_hits["ring_page"] == 1
     assert evidence.target_hits["ring_page"] == 1
@@ -4026,7 +4026,7 @@ def test_daily_reward_popup_is_a_resumable_task_surface():
     context = Context()
     context.run_recognition = lambda name, image: (
         Detail(True, (130, 180, 130, 350))
-        if name == "daily.reward_popup"
+        if name == "日常任务奖励-日常-奖励-弹窗"
         else Detail(False, None)
     )
     driver = MaaAndroidWorkflowDriver(context)
@@ -4062,17 +4062,17 @@ def test_daily_reward_close_text_proves_animated_popup_parent():
     context = Context()
     context.run_recognition = lambda name, image: (
         Detail(True, (300, 560, 700, 160), results=[OcrResult("点击空白处关闭")])
-        if name == "daily.reward_popup_close"
+        if name == "日常任务奖励-日常-奖励-弹窗-关闭"
         else Detail(False, None)
     )
     driver = MaaAndroidWorkflowDriver(context)
 
     evidence = driver.recognize(
         driver.capture(),
-        ("daily.reward_popup", "daily.reward_popup_close"),
+        ("日常任务奖励-日常-奖励-弹窗", "日常任务奖励-日常-奖励-弹窗-关闭"),
     )
 
-    assert evidence.target_hits["daily.reward_popup"] == 1
+    assert evidence.target_hits["日常任务奖励-日常-奖励-弹窗"] == 1
 
 
 def test_ring_reward_close_text_proves_result_when_title_ocr_misses():
@@ -4521,12 +4521,12 @@ def test_maa_adapter_does_not_promote_unfiltered_ocr_prices_to_evidence():
     context = Context()
     context.run_recognition = lambda name, image: (
         Detail(False, None, all_results=[OcrResult("￥30.00")])
-        if name == "safety.paid"
+        if name == "破阵武学-安全-付费"
         else Detail(False, None)
     )
     driver = MaaAndroidWorkflowDriver(context)
     frame = driver.capture()
-    evidence = driver.recognize(frame, ("safety.paid",))
+    evidence = driver.recognize(frame, ("破阵武学-安全-付费",))
 
     assert evidence.texts == ()
 

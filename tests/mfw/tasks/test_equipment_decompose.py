@@ -42,13 +42,13 @@ def test_equipment_decompose_task_has_the_explicit_contract() -> None:
     assert_ordered_actions(nodes, guarded_actions)
     assert_outcome(
         nodes,
-        "MJA_EQUIPMENT_DECOMPOSE_SUCCESS",
+        "分解装备-分解-成功",
         "success",
         "equipment.decomposition_confirmed",
     )
     assert_abort_code(
         nodes,
-        "MJA_EQUIPMENT_RECORD_FAILURE",
+        "分解装备-记录-失败",
         "EQUIPMENT_DECOMPOSE_POSTCONDITION_MISSING",
     )
     for action_id in guarded_actions:
@@ -57,36 +57,36 @@ def test_equipment_decompose_task_has_the_explicit_contract() -> None:
 
 def test_equipment_decompose_uses_the_requested_quality_and_level_filters() -> None:
     nodes = load_task_nodes(EQUIPMENT)
-    assert nodes["equipment.decompose.page"]["recognition"] == {
+    assert nodes["分解装备-装备-分解-页面"]["recognition"] == {
         "type": "And",
         "param": {
-            "all_of": ["equipment.page", "equipment.quality.filter"],
+            "all_of": ["分解装备-装备-页面", "分解装备-装备-品质-筛选"],
             "box_index": 1,
         },
     }
-    assert nodes["equipment.quality.filter"]["expected"] == "品质"
-    assert nodes["equipment.quality.dialog"]["expected"] == "品质"
-    assert nodes["equipment.quality.option_b_or_below"]["expected"] == "乙"
-    assert nodes["equipment.level.filter"]["expected"] == "级"
-    assert nodes["equipment.level.dialog"]["expected"] == "级及以下"
-    assert nodes["equipment.level.option_80_or_below"]["expected"] == "80"
-    assert nodes["equipment.batch_select"]["expected"] == "批量选择"
-    assert nodes["equipment.confirm_decompose"]["expected"] == "确认分解"
-    assert nodes["equipment.confirm.final"]["expected"] == "确认"
-    assert nodes["equipment.decompose.success"]["expected"] == [
+    assert nodes["分解装备-装备-品质-筛选"]["expected"] == "品质"
+    assert nodes["分解装备-装备-品质-对话框"]["expected"] == "品质"
+    assert nodes["分解装备-装备-品质-乙级或以下"]["expected"] == "乙"
+    assert nodes["分解装备-装备-等级-筛选"]["expected"] == "级"
+    assert nodes["分解装备-装备-等级-对话框"]["expected"] == "级及以下"
+    assert nodes["分解装备-装备-等级-选项-80-或-以下"]["expected"] == "80"
+    assert nodes["分解装备-装备-批量-选择"]["expected"] == "批量选择"
+    assert nodes["分解装备-装备-确认-分解"]["expected"] == "确认分解"
+    assert nodes["分解装备-装备-确认-最终"]["expected"] == "确认"
+    assert nodes["分解装备-装备-分解-成功"]["expected"] == [
         "分解成功",
         "分解完成",
     ]
 
 
 def test_equipment_entry_roi_excludes_the_annotation_book_icon() -> None:
-    node = load_task_nodes(EQUIPMENT)["equipment.entry"]
+    node = load_task_nodes(EQUIPMENT)["分解装备-装备-入口"]
     assert node["roi"] == [25, 315, 80, 80]
     assert node["threshold"] == 0.3
 
 
 def test_equipment_decompose_button_roi_covers_the_bottom_decompose_button() -> None:
-    node = load_task_nodes(EQUIPMENT)["equipment.decompose.button"]
+    node = load_task_nodes(EQUIPMENT)["分解装备-装备-分解-按钮"]
     assert node["expected"] == "分解"
     assert node["roi"] == [620, 620, 240, 100]
 
@@ -94,10 +94,10 @@ def test_equipment_decompose_button_roi_covers_the_bottom_decompose_button() -> 
 def test_equipment_filter_dialog_rois_include_the_full_option_labels() -> None:
     nodes = load_task_nodes(EQUIPMENT)
     for node_name in (
-        "equipment.quality.dialog",
-        "equipment.quality.option_b_or_below",
-        "equipment.level.dialog",
-        "equipment.level.option_80_or_below",
+        "分解装备-装备-品质-对话框",
+        "分解装备-装备-品质-乙级或以下",
+        "分解装备-装备-等级-对话框",
+        "分解装备-装备-等级-选项-80-或-以下",
     ):
         x, y, width, height = nodes[node_name]["roi"]
         # The live failure showed the first character at approximately x=148,

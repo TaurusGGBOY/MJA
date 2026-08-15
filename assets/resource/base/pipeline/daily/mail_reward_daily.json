@@ -1,5 +1,5 @@
 {
-  "MJA_MAIL_REWARD_DAILY_START": {
+  "邮件奖励-任务入口": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "BeginTask",
@@ -8,27 +8,27 @@
     },
     "max_hit": 1,
     "next": [
-      "[JumpBack]MJA_KNOWN_CLICK_BLANK_TO_CLOSE",
-      "MJA_MAIL_PAGE_PROBE",
-      "MJA_MAIL_HOME_PROBE",
-      "MJA_MAIL_PANEL_PROBE"
+      "[JumpBack]公共-已知-点击空白关闭",
+      "邮件奖励-页面-探测",
+      "邮件奖励-主页-探测",
+      "邮件奖励-面板-探测"
     ],
-    "on_error": ["MJA_MAIL_RECORD_FAILURE"]
+    "on_error": ["邮件奖励-记录-失败"]
   },
-  "MJA_MAIL_PAGE_PROBE": {
+  "邮件奖励-页面-探测": {
     "recognition": "OCR",
     "expected": ["邮件数量", "邮件"],
     "roi": [300, 90, 420, 100],
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_MAIL_CLAIM"],
-    "on_error": ["MJA_MAIL_CLAIM"]
+    "next": ["邮件奖励-领取"],
+    "on_error": ["邮件奖励-领取"]
   },
-  "MJA_MAIL_CLAIM": {
+  "邮件奖励-领取": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["mail.page", "mail.claim_all"],
+        "all_of": ["邮件奖励-邮件-页面", "邮件奖励-邮件-领取-全部"],
         "box_index": 1
       }
     },
@@ -42,27 +42,27 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "mail.page",
-        "target_name": "mail.claim_all"
+        "page_name": "邮件奖励-邮件-页面",
+        "target_name": "邮件奖励-邮件-领取-全部"
       }
     },
-    "next": ["MJA_MAIL_REWARD_PROBE"],
-    "on_error": ["MJA_MAIL_EMPTY_PROBE"]
+    "next": ["邮件奖励-奖励-探测"],
+    "on_error": ["邮件奖励-空-探测"]
   },
-  "MJA_MAIL_EMPTY_PROBE": {
+  "邮件奖励-空-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["mail.page", "mail.empty"],
+        "all_of": ["邮件奖励-邮件-页面", "邮件奖励-邮件-空"],
         "box_index": 1
       }
     },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_MAIL_ALREADY_COMPLETE"],
-    "on_error": ["MJA_MAIL_RECORD_FAILURE"]
+    "next": ["邮件奖励-已完成"],
+    "on_error": ["邮件奖励-记录-失败"]
   },
-  "MJA_MAIL_ALREADY_COMPLETE": {
+  "邮件奖励-已完成": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -72,23 +72,23 @@
       "postcondition": "mail.empty",
       "defer_home_boundary": true
     },
-    "next": ["MJA_MAIL_CLOSE"],
-    "on_error": ["MJA_MAIL_RECORD_FAILURE"]
+    "next": ["邮件奖励-关闭"],
+    "on_error": ["邮件奖励-记录-失败"]
   },
-  "MJA_MAIL_REWARD_PROBE": {
+  "邮件奖励-奖励-探测": {
     "recognition": "OCR",
     "expected": ["恭喜获得", "点击空白处关闭"],
     "roi": [0, 120, 1280, 600],
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_MAIL_CLAIM_SUCCESS"],
-    "on_error": ["MJA_MAIL_RECORD_FAILURE"]
+    "next": ["邮件奖励-领取-成功"],
+    "on_error": ["邮件奖励-记录-失败"]
   },
-  "MJA_MAIL_CLOSE_REWARD": {
+  "邮件奖励-关闭-奖励": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["mail.reward_popup", "mail.reward_popup_close"],
+        "all_of": ["邮件奖励-邮件-奖励-弹窗", "邮件奖励-邮件-奖励-弹窗-关闭"],
         "box_index": 1
       }
     },
@@ -102,14 +102,14 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "mail.reward_popup",
-        "target_name": "mail.reward_popup_close"
+        "page_name": "邮件奖励-邮件-奖励-弹窗",
+        "target_name": "邮件奖励-邮件-奖励-弹窗-关闭"
       }
     },
-    "next": ["MJA_MAIL_CLOSE"],
-    "on_error": ["MJA_MAIL_RECORD_FAILURE"]
+    "next": ["邮件奖励-关闭"],
+    "on_error": ["邮件奖励-记录-失败"]
   },
-  "MJA_MAIL_CLAIM_SUCCESS": {
+  "邮件奖励-领取-成功": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -119,9 +119,9 @@
       "postcondition": "mail.reward_claimed",
       "defer_home_boundary": true
     },
-    "next": ["MJA_MAIL_CLOSE_REWARD"]
+    "next": ["邮件奖励-关闭-奖励"]
   },
-  "MJA_MAIL_RECORD_FAILURE": {
+  "邮件奖励-记录-失败": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -133,20 +133,20 @@
       "native_fail_after_record": true
     },
     "Abort": true,
-    "next": ["MJA_COMMON_ABORT"]
+    "next": ["公共-通用中止"]
   },
-  "MJA_MAIL_HOME_PROBE": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_HOME_PAGE"], "box_index": 0}},
+  "邮件奖励-主页-探测": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}},
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_MAIL_OPEN_PANEL"],
-    "on_error": ["[JumpBack]MJA_GAME_START"]
+    "next": ["邮件奖励-打开-面板"],
+    "on_error": ["[JumpBack]启动-游戏启动"]
   },
-  "MJA_MAIL_OPEN_PANEL": {
+  "邮件奖励-打开-面板": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["home.page", "home.panel_open"],
+        "all_of": ["邮件奖励-主页-页面", "邮件奖励-主页-面板-打开"],
         "box_index": 1
       }
     },
@@ -160,25 +160,25 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "home.page",
-        "target_name": "home.panel_open"
+        "page_name": "邮件奖励-主页-页面",
+        "target_name": "邮件奖励-主页-面板-打开"
       }
     },
-    "next": ["MJA_MAIL_PANEL_PROBE"],
-    "on_error": ["MJA_MAIL_RECORD_FAILURE"]
+    "next": ["邮件奖励-面板-探测"],
+    "on_error": ["邮件奖励-记录-失败"]
   },
-  "MJA_MAIL_PANEL_PROBE": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_SIDE_PANEL_OPEN"], "box_index": 0}},
+  "邮件奖励-面板-探测": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏侧边面板-打开"], "box_index": 0}},
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_MAIL_OPEN_MAIL"],
-    "on_error": ["MJA_MAIL_RECORD_FAILURE"]
+    "next": ["邮件奖励-打开-邮件"],
+    "on_error": ["邮件奖励-记录-失败"]
   },
-  "MJA_MAIL_OPEN_MAIL": {
+  "邮件奖励-打开-邮件": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["panel.page", "panel.mail_entry"],
+        "all_of": ["邮件奖励-面板-页面", "邮件奖励-面板-邮件-入口"],
         "box_index": 1
       }
     },
@@ -192,18 +192,18 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "panel.page",
-        "target_name": "panel.mail_entry"
+        "page_name": "邮件奖励-面板-页面",
+        "target_name": "邮件奖励-面板-邮件-入口"
       }
     },
-    "next": ["MJA_MAIL_PAGE_PROBE"],
-    "on_error": ["MJA_MAIL_RECORD_FAILURE"]
+    "next": ["邮件奖励-页面-探测"],
+    "on_error": ["邮件奖励-记录-失败"]
   },
-  "MJA_MAIL_CLOSE": {
+  "邮件奖励-关闭": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["mail.page", "mail.close"],
+        "all_of": ["邮件奖励-邮件-页面", "邮件奖励-邮件-关闭"],
         "box_index": 1
       }
     },
@@ -217,25 +217,25 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "mail.page",
-        "target_name": "mail.close"
+        "page_name": "邮件奖励-邮件-页面",
+        "target_name": "邮件奖励-邮件-关闭"
       }
     },
-    "next": ["MJA_MAIL_PANEL_AFTER_CLOSE"],
-    "on_error": ["MJA_MAIL_RECORD_FAILURE"]
+    "next": ["邮件奖励-面板关闭后"],
+    "on_error": ["邮件奖励-记录-失败"]
   },
-  "MJA_MAIL_PANEL_AFTER_CLOSE": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_SIDE_PANEL_OPEN"], "box_index": 0}},
+  "邮件奖励-面板关闭后": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏侧边面板-打开"], "box_index": 0}},
     "timeout": 5000,
     "action": "DoNothing",
-    "next": ["MJA_MAIL_CLOSE_PANEL"],
-    "on_error": ["MJA_MAIL_RECORD_FAILURE"]
+    "next": ["邮件奖励-关闭-面板"],
+    "on_error": ["邮件奖励-记录-失败"]
   },
-  "MJA_MAIL_CLOSE_PANEL": {
+  "邮件奖励-关闭-面板": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["panel.page", "panel.close"],
+        "all_of": ["邮件奖励-面板-页面", "邮件奖励-面板-关闭"],
         "box_index": 1
       }
     },
@@ -250,67 +250,67 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "panel.page",
-        "target_name": "panel.close"
+        "page_name": "邮件奖励-面板-页面",
+        "target_name": "邮件奖励-面板-关闭"
       }
     },
-    "next": ["MJA_HOME_BOUNDARY"],
-    "on_error": ["MJA_MAIL_RECORD_FAILURE"]
+    "next": ["公共-主页边界"],
+    "on_error": ["邮件奖励-记录-失败"]
   },
-  "home.page": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_HOME_PAGE"], "box_index": 0}},
+  "邮件奖励-主页-页面": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}},
     "action": "DoNothing"
   },
-  "home.panel_open": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_FUNCTION_PANEL_ENTRY"], "box_index": 0}},
+  "邮件奖励-主页-面板-打开": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏功能面板-入口"], "box_index": 0}},
     "action": "DoNothing"
   },
-  "panel.page": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_SIDE_PANEL_OPEN"], "box_index": 0}},
+  "邮件奖励-面板-页面": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏侧边面板-打开"], "box_index": 0}},
     "action": "DoNothing"
   },
-  "panel.mail_entry": {
+  "邮件奖励-面板-邮件-入口": {
     "recognition": "TemplateMatch",
     "template": "panel/mail_entry.png",
     "roi": [1120, 115, 160, 210],
     "threshold": 0.39,
     "action": "DoNothing"
   },
-  "panel.close": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_SIDE_PANEL_OPEN"], "box_index": 0}},
+  "邮件奖励-面板-关闭": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏侧边面板-打开"], "box_index": 0}},
     "action": "DoNothing"
   },
-  "mail.page": {
+  "邮件奖励-邮件-页面": {
     "recognition": "OCR",
     "expected": ["邮件数量", "邮件"],
     "roi": [300, 90, 420, 100],
     "action": "DoNothing"
   },
-  "mail.claim_all": {
+  "邮件奖励-邮件-领取-全部": {
     "recognition": "OCR",
     "expected": "全部领取",
     "roi": [205, 525, 150, 65],
     "action": "DoNothing"
   },
-  "mail.empty": {
+  "邮件奖励-邮件-空": {
     "recognition": "OCR",
     "expected": ["删除已读", "除已读", "暂无可领取"],
     "roi": [300, 520, 900, 180],
     "action": "DoNothing"
   },
-  "mail.reward_popup": {
+  "邮件奖励-邮件-奖励-弹窗": {
     "recognition": "OCR",
     "expected": ["恭喜获得", "点击空白处关闭"],
     "roi": [0, 120, 1280, 600],
     "action": "DoNothing"
   },
-  "mail.reward_popup_close": {
+  "邮件奖励-邮件-奖励-弹窗-关闭": {
     "recognition": "OCR",
     "expected": "点击空白处关闭",
     "roi": [300, 560, 700, 160],
     "action": "DoNothing"
   },
-  "mail.close": {
+  "邮件奖励-邮件-关闭": {
     "recognition": "TemplateMatch",
     "template": "daily/MAIL_REWARD_DAILY/mail_close_live.png",
     "roi": [1040, 115, 80, 80],

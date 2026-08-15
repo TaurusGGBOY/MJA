@@ -34,7 +34,7 @@ def _intersects(left: tuple[int, int, int, int], right: tuple[int, int, int, int
 
 def test_r9_network_retry_roi_contains_retry_and_excludes_cancel() -> None:
     nodes = json.loads(KNOWN_POPUPS.read_text())
-    retry = nodes["MJA_KNOWN_NETWORK_CONFIRM"]
+    retry = nodes["公共-已知-网络-确认"]
     roi = tuple(retry["roi"])
 
     assert retry["recognition"] == "OCR"

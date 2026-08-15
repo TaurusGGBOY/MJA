@@ -13,6 +13,12 @@ from tests.mfw.task_contract import (
 )
 
 DONATION = TaskContract("GUILD_DONATION_DAILY", "daily/guild_donation_daily.json")
+STATUS_LABELS = {"SUCCESS": "成功", "ALREADY_COMPLETE": "已完成"}
+
+
+def _status_node(status: str, suffix: str = "") -> str:
+    name = f"帮派捐献-{STATUS_LABELS[status]}"
+    return f"{name}-{suffix}" if suffix else name
 
 
 def test_guild_donation_is_an_independent_mfw_task_contract() -> None:
@@ -59,32 +65,32 @@ def test_guild_donation_is_an_independent_mfw_task_contract() -> None:
 def test_guild_donation_recovers_once_without_reentering_shared_startup() -> None:
     nodes = load_task_nodes(DONATION)
     probes = [
-        "MJA_GUILD_DONATION_MEMBER_CLOSE",
-        "MJA_GUILD_DONATION_START_SAFETY_PROBE",
-        "MJA_GUILD_DONATION_START_PAID_PROBE",
-        "MJA_GUILD_DONATION_START_UNKNOWN_POPUP_PROBE",
-        "MJA_GUILD_DONATION_ANDROID_PAGE_PROBE",
-        "MJA_GUILD_DONATION_ANDROID_GUILD_PAGE_PROBE",
-        "MJA_GUILD_DONATION_ANDROID_PANEL_PROBE",
-        "MJA_GUILD_DONATION_ANDROID_HOME_PROBE",
-        "MJA_GUILD_DONATION_PAGE_PROBE",
-        "MJA_GUILD_DONATION_GUILD_PAGE_PROBE",
-        "MJA_GUILD_DONATION_HOME_PROBE",
-        "MJA_GUILD_DONATION_PANEL_PROBE",
+        "帮派捐献-成员-关闭",
+        "帮派捐献-开始-安全-探测",
+        "帮派捐献-开始-付费-探测",
+        "帮派捐献-开始-未知-弹窗-探测",
+        "帮派捐献-安卓-页面-探测",
+        "帮派捐献-安卓-帮派-页面-探测",
+        "帮派捐献-安卓-面板-探测",
+        "帮派捐献-安卓-主页-探测",
+        "帮派捐献-页面-探测",
+        "帮派捐献-帮派-页面-探测",
+        "帮派捐献-主页-探测",
+        "帮派捐献-面板-探测",
     ]
     start = nodes[DONATION.entry]
     assert start["timeout"] == 8000
     assert start["next"] == probes
     assert start["on_error"] == [
-        "MJA_GUILD_DONATION_GAME_START_RECOVERY",
-        "MJA_GUILD_DONATION_RECORD_FAILURE",
+        "帮派捐献-游戏启动恢复",
+        "帮派捐献-记录-失败",
     ]
 
-    member_close = nodes["MJA_GUILD_DONATION_MEMBER_CLOSE"]
+    member_close = nodes["帮派捐献-成员-关闭"]
     assert member_close["recognition"]["param"] == {
         "all_of": [
-            "guild.donation.member.page",
-            "guild.donation.member.close",
+            "帮派捐献-帮派-捐献-成员-页面",
+            "帮派捐献-帮派-捐献-成员-关闭",
         ],
         "box_index": 1,
     }
@@ -96,24 +102,24 @@ def test_guild_donation_recovers_once_without_reentering_shared_startup() -> Non
         "evidence": {
             "page_index": 0,
             "target_index": 1,
-            "page_name": "guild.donation.member.page",
-            "target_name": "guild.donation.member.close",
+            "page_name": "帮派捐献-帮派-捐献-成员-页面",
+            "target_name": "帮派捐献-帮派-捐献-成员-关闭",
         },
     }
     assert member_close["max_hit"] == 1
     assert member_close["retry_times"] == 0
     assert member_close["next"] == [
-        "MJA_GUILD_DONATION_GUILD_HOME_OPEN_DONATION",
-        "MJA_GUILD_DONATION_MEMBER_GUILD_HOME_CLOSE"
+        "帮派捐献-帮派-主页-打开-捐献",
+        "帮派捐献-成员-帮派-主页-关闭"
     ]
-    assert member_close["on_error"] == ["MJA_GUILD_DONATION_RECORD_FAILURE"]
+    assert member_close["on_error"] == ["帮派捐献-记录-失败"]
 
-    guild_home_open = nodes["MJA_GUILD_DONATION_GUILD_HOME_OPEN_DONATION"]
+    guild_home_open = nodes["帮派捐献-帮派-主页-打开-捐献"]
     assert guild_home_open["recognition"]["param"] == {
         "all_of": [
-            "guild.donation.guild.home.page",
-            "guild.donation.guild.home.context",
-            "guild.donation.guild.home.donation.entry",
+            "帮派捐献-帮派-捐献-帮派-主页-页面",
+            "帮派捐献-帮派-捐献-帮派-主页-上下文",
+            "帮派捐献-帮派-捐献-帮派-主页-捐献-入口",
         ],
         "box_index": 2,
     }
@@ -125,21 +131,21 @@ def test_guild_donation_recovers_once_without_reentering_shared_startup() -> Non
         "evidence": {
             "page_index": 0,
             "target_index": 2,
-            "page_name": "guild.donation.guild.home.page",
-            "target_name": "guild.donation.guild.home.donation.entry",
+            "page_name": "帮派捐献-帮派-捐献-帮派-主页-页面",
+            "target_name": "帮派捐献-帮派-捐献-帮派-主页-捐献-入口",
         },
     }
     assert guild_home_open["max_hit"] == 1
     assert guild_home_open["retry_times"] == 0
-    assert guild_home_open["next"] == ["MJA_GUILD_DONATION_PAGE_PROBE"]
-    assert guild_home_open["on_error"] == ["MJA_GUILD_DONATION_RECORD_FAILURE"]
+    assert guild_home_open["next"] == ["帮派捐献-页面-探测"]
+    assert guild_home_open["on_error"] == ["帮派捐献-记录-失败"]
 
-    guild_home_close = nodes["MJA_GUILD_DONATION_MEMBER_GUILD_HOME_CLOSE"]
+    guild_home_close = nodes["帮派捐献-成员-帮派-主页-关闭"]
     assert guild_home_close["recognition"]["param"] == {
         "all_of": [
-            "guild.donation.guild.home.page",
-            "guild.donation.guild.home.context",
-            "guild.donation.guild.home.close",
+            "帮派捐献-帮派-捐献-帮派-主页-页面",
+            "帮派捐献-帮派-捐献-帮派-主页-上下文",
+            "帮派捐献-帮派-捐献-帮派-主页-关闭",
         ],
         "box_index": 2,
     }
@@ -151,16 +157,16 @@ def test_guild_donation_recovers_once_without_reentering_shared_startup() -> Non
         "evidence": {
             "page_index": 0,
             "target_index": 2,
-            "page_name": "guild.donation.guild.home.page",
-            "target_name": "guild.donation.guild.home.close",
+            "page_name": "帮派捐献-帮派-捐献-帮派-主页-页面",
+            "target_name": "帮派捐献-帮派-捐献-帮派-主页-关闭",
         },
     }
     assert guild_home_close["max_hit"] == 1
     assert guild_home_close["retry_times"] == 0
-    assert guild_home_close["next"] == ["MJA_GUILD_DONATION_PANEL_PROBE"]
-    assert guild_home_close["on_error"] == ["MJA_GUILD_DONATION_RECORD_FAILURE"]
+    assert guild_home_close["next"] == ["帮派捐献-面板-探测"]
+    assert guild_home_close["on_error"] == ["帮派捐献-记录-失败"]
 
-    recovery = nodes["MJA_GUILD_DONATION_GAME_START_RECOVERY"]
+    recovery = nodes["帮派捐献-游戏启动恢复"]
     assert recovery["recognition"] == "DirectHit"
     assert recovery["action"] == "StartApp"
     assert recovery["package"] == "com.hanjiasongshu.dr22/.MainActivity"
@@ -169,47 +175,47 @@ def test_guild_donation_recovers_once_without_reentering_shared_startup() -> Non
     assert recovery["timeout"] == 30000
     assert recovery["retry_times"] == 0
     assert recovery["next"] == probes
-    assert recovery["on_error"] == ["MJA_GUILD_DONATION_RECORD_FAILURE"]
+    assert recovery["on_error"] == ["帮派捐献-记录-失败"]
 
-    assert nodes["MJA_GUILD_DONATION_PANEL_PROBE"]["on_error"] == [
-        "MJA_GUILD_DONATION_RECORD_FAILURE"
+    assert nodes["帮派捐献-面板-探测"]["on_error"] == [
+        "帮派捐献-记录-失败"
     ]
-    assert nodes["MJA_GUILD_DONATION_GUILD_PAGE_PROBE"]["on_error"] == [
-        "MJA_GUILD_DONATION_RECORD_FAILURE"
+    assert nodes["帮派捐献-帮派-页面-探测"]["on_error"] == [
+        "帮派捐献-记录-失败"
     ]
 
 
 def test_guild_donation_requires_10_of_10_before_one_free_click() -> None:
     nodes = load_task_nodes(DONATION)
 
-    remaining_10 = nodes["guild.donation.remaining_10_of_10"]
-    remaining_9 = nodes["guild.donation.remaining_9_of_10"]
-    invalid = nodes["guild.donation.remaining_invalid"]
+    remaining_10 = nodes["帮派捐献-帮派-捐献-剩余-10-共-10"]
+    remaining_9 = nodes["帮派捐献-帮派-捐献-剩余-9-共-10"]
+    invalid = nodes["帮派捐献-帮派-捐献-剩余-无效"]
     assert "10\\s*/\\s*10" in remaining_10["expected"]
     assert "9\\s*/\\s*10" in remaining_9["expected"]
     assert "[0-8]\\s*/\\s*10" in invalid["expected"]
 
-    donation = nodes["MJA_GUILD_DONATION_DONATE_FREE"]
+    donation = nodes["帮派捐献-捐献-免费"]
     params = donation["custom_action_param"]
     assert params["action_id"] == "donate_guild_free_once"
     assert params["evidence"] == {
         "page_index": 0,
         "target_index": 3,
-        "page_name": "guild.donation.page",
-        "target_name": "guild.donation.free",
+        "page_name": "帮派捐献-帮派-捐献-页面",
+        "target_name": "帮派捐献-帮派-捐献-免费",
     }
     assert donation["retry_times"] == 0
     assert_reachable(
         nodes,
-        "MJA_GUILD_DONATION_REMAINING_10_PROBE",
-        "MJA_GUILD_DONATION_DONATE_FREE",
+        "帮派捐献-剩余-10-探测",
+        "帮派捐献-捐献-免费",
     )
     assert_reachable(
         nodes,
-        "MJA_GUILD_DONATION_DONATE_FREE",
-        "MJA_GUILD_DONATION_POSTCONDITION_PROBE",
+        "帮派捐献-捐献-免费",
+        "帮派捐献-后置条件-探测",
     )
-    android_donation = nodes["MJA_GUILD_DONATION_ANDROID_DONATE_FREE"]
+    android_donation = nodes["帮派捐献-安卓-捐献-免费"]
     assert android_donation["custom_action_param"]["action_id"] == (
         "donate_android_guild_free_once"
     )
@@ -219,82 +225,82 @@ def test_guild_donation_requires_10_of_10_before_one_free_click() -> None:
     assert android_donation["retry_times"] == 0
     assert_reachable(
         nodes,
-        "MJA_GUILD_DONATION_ANDROID_REMAINING_10_PROBE",
-        "MJA_GUILD_DONATION_ANDROID_DONATE_FREE",
+        "帮派捐献-安卓-剩余-10-探测",
+        "帮派捐献-安卓-捐献-免费",
     )
     assert_reachable(
         nodes,
-        "MJA_GUILD_DONATION_ANDROID_DONATE_FREE",
-        "MJA_GUILD_DONATION_ANDROID_CLOSE_REWARD",
+        "帮派捐献-安卓-捐献-免费",
+        "帮派捐献-安卓-关闭-奖励",
     )
     assert_reachable(
         nodes,
-        "MJA_GUILD_DONATION_ANDROID_CLOSE_REWARD",
-        "MJA_GUILD_DONATION_ANDROID_POSTCONDITION_PROBE",
+        "帮派捐献-安卓-关闭-奖励",
+        "帮派捐献-安卓-后置条件-探测",
     )
 
-    close_reward = nodes["MJA_GUILD_DONATION_ANDROID_CLOSE_REWARD"]
+    close_reward = nodes["帮派捐献-安卓-关闭-奖励"]
     assert close_reward["custom_action_param"]["action_id"] == (
         "close_android_donation_reward"
     )
     assert close_reward["custom_action_param"]["evidence"] == {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "guild.donation.android.reward",
-        "target_name": "guild.donation.android.reward.close",
+        "page_name": "帮派捐献-帮派-捐献-安卓-奖励",
+        "target_name": "帮派捐献-帮派-捐献-安卓-奖励-关闭",
     }
 
 
 def test_guild_donation_success_is_strictly_9_of_10_and_known_surface() -> None:
     nodes = load_task_nodes(DONATION)
 
-    post = nodes["MJA_GUILD_DONATION_POSTCONDITION_PROBE"]
+    post = nodes["帮派捐献-后置条件-探测"]
     assert post["recognition"]["param"]["all_of"] == [
-        "guild.donation.page",
-        "guild.donation.context",
-        "guild.donation.remaining_9_of_10",
+        "帮派捐献-帮派-捐献-页面",
+        "帮派捐献-帮派-捐献-上下文",
+        "帮派捐献-帮派-捐献-剩余-9-共-10",
     ]
     assert_outcome(
         nodes,
-        "MJA_GUILD_DONATION_SUCCESS",
+        "帮派捐献-成功",
         "success",
         "guild.donation.remaining_9_of_10",
     )
     assert_outcome(
         nodes,
-        "MJA_GUILD_DONATION_ALREADY_COMPLETE",
+        "帮派捐献-已完成",
         "already_complete",
         "guild.donation.remaining_9_of_10",
     )
-    assert nodes["MJA_GUILD_DONATION_ANDROID_POSTCONDITION_PROBE"]["next"] == [
-        "MJA_GUILD_DONATION_SUCCESS_CLEANUP"
+    assert nodes["帮派捐献-安卓-后置条件-探测"]["next"] == [
+        "帮派捐献-成功-清理"
     ]
-    assert nodes["MJA_GUILD_DONATION_POSTCONDITION_PROBE"]["next"] == [
-        "MJA_GUILD_DONATION_SUCCESS_CLEANUP"
+    assert nodes["帮派捐献-后置条件-探测"]["next"] == [
+        "帮派捐献-成功-清理"
     ]
-    assert nodes["MJA_GUILD_DONATION_ANDROID_REMAINING_9_PROBE"]["next"] == [
-        "MJA_GUILD_DONATION_ALREADY_COMPLETE_CLEANUP"
+    assert nodes["帮派捐献-安卓-剩余-9-探测"]["next"] == [
+        "帮派捐献-已完成-清理"
     ]
-    assert nodes["MJA_GUILD_DONATION_REMAINING_9_PROBE"]["next"] == [
-        "MJA_GUILD_DONATION_ALREADY_COMPLETE_CLEANUP"
+    assert nodes["帮派捐献-剩余-9-探测"]["next"] == [
+        "帮派捐献-已完成-清理"
     ]
-    assert nodes["MJA_GUILD_DONATION_SUCCESS"]["next"] == ["MJA_COMMON_STOP"]
-    assert nodes["MJA_GUILD_DONATION_ALREADY_COMPLETE"]["next"] == [
-        "MJA_COMMON_STOP"
+    assert nodes["帮派捐献-成功"]["next"] == ["公共-通用停止"]
+    assert nodes["帮派捐献-已完成"]["next"] == [
+        "公共-通用停止"
     ]
     assert_abort_code(
         nodes,
-        "MJA_GUILD_DONATION_RECORD_FAILURE",
+        "帮派捐献-记录-失败",
         "GUILD_DONATION_POSTCONDITION_MISSING",
     )
     assert_abort_code(
         nodes,
-        "MJA_GUILD_DONATION_PAID_STOP",
+        "帮派捐献-付费-停止",
         "GUILD_DONATION_PAID_SURFACE",
     )
     assert_abort_code(
         nodes,
-        "MJA_GUILD_DONATION_UNKNOWN_POPUP_STOP",
+        "帮派捐献-未知-弹窗-停止",
         "GUILD_DONATION_UNKNOWN_POPUP",
     )
 
@@ -303,11 +309,11 @@ def test_guild_donation_terminal_outcomes_cleanup_and_verify_home() -> None:
     nodes = load_task_nodes(DONATION)
 
     for status in ("SUCCESS", "ALREADY_COMPLETE"):
-        close = nodes[f"MJA_GUILD_DONATION_{status}_ANDROID_CLOSE"]
+        close = nodes[_status_node(status, "安卓-关闭")]
         assert close["recognition"]["param"] == {
             "all_of": [
-                "guild.donation.android.donation.page",
-                "guild.donation.android.donation.close",
+                "帮派捐献-帮派-捐献-安卓-捐献-页面",
+                "帮派捐献-帮派-捐献-安卓-捐献-关闭",
             ],
             "box_index": 1,
         }
@@ -319,34 +325,34 @@ def test_guild_donation_terminal_outcomes_cleanup_and_verify_home() -> None:
             "evidence": {
                 "page_index": 0,
                 "target_index": 1,
-                "page_name": "guild.donation.android.donation.page",
-                "target_name": "guild.donation.android.donation.close",
+                "page_name": "帮派捐献-帮派-捐献-安卓-捐献-页面",
+                "target_name": "帮派捐献-帮派-捐献-安卓-捐献-关闭",
             },
         }
         assert close["max_hit"] == 1
         assert close["retry_times"] == 0
         assert close["next"] == [
-            f"MJA_GUILD_DONATION_{status}_GUILD_HOME_CLOSE"
+            _status_node(status, "帮派-主页-关闭")
         ]
         assert close["on_error"] == [
-            f"MJA_GUILD_DONATION_{status}_CLOSE",
-            "MJA_GUILD_DONATION_HOME_RETURN_FAILED",
+            _status_node(status, "关闭"),
+            "帮派捐献-主页-返回-失败",
         ]
 
-        legacy_close = nodes[f"MJA_GUILD_DONATION_{status}_CLOSE"]
+        legacy_close = nodes[_status_node(status, "关闭")]
         assert legacy_close["next"] == [
-            f"MJA_GUILD_DONATION_{status}_GUILD_HOME_CLOSE"
+            _status_node(status, "帮派-主页-关闭")
         ]
         assert legacy_close["on_error"] == [
-            "MJA_GUILD_DONATION_HOME_RETURN_FAILED"
+            "帮派捐献-主页-返回-失败"
         ]
 
-        guild_close = nodes[f"MJA_GUILD_DONATION_{status}_GUILD_HOME_CLOSE"]
+        guild_close = nodes[_status_node(status, "帮派-主页-关闭")]
         assert guild_close["recognition"]["param"] == {
             "all_of": [
-                "guild.donation.guild.home.page",
-                "guild.donation.guild.home.context",
-                "guild.donation.guild.home.close",
+                "帮派捐献-帮派-捐献-帮派-主页-页面",
+                "帮派捐献-帮派-捐献-帮派-主页-上下文",
+                "帮派捐献-帮派-捐献-帮派-主页-关闭",
             ],
             "box_index": 2,
         }
@@ -358,17 +364,17 @@ def test_guild_donation_terminal_outcomes_cleanup_and_verify_home() -> None:
             "evidence": {
                 "page_index": 0,
                 "target_index": 2,
-                "page_name": "guild.donation.guild.home.page",
-                "target_name": "guild.donation.guild.home.close",
+                "page_name": "帮派捐献-帮派-捐献-帮派-主页-页面",
+                "target_name": "帮派捐献-帮派-捐献-帮派-主页-关闭",
             },
         }
         assert guild_close["max_hit"] == 1
         assert guild_close["retry_times"] == 0
-        panel_probe_name = f"MJA_GUILD_DONATION_{status}_FUNCTION_PANEL_PROBE"
-        panel_close_name = f"MJA_GUILD_DONATION_{status}_FUNCTION_PANEL_CLOSE"
+        panel_probe_name = _status_node(status, "功能-面板-探测")
+        panel_close_name = _status_node(status, "功能-面板-关闭")
         assert guild_close["next"] == [panel_probe_name]
         assert guild_close["on_error"] == [
-            "MJA_GUILD_DONATION_HOME_RETURN_FAILED"
+            "帮派捐献-主页-返回-失败"
         ]
 
         panel_probe = nodes[panel_probe_name]
@@ -376,7 +382,7 @@ def test_guild_donation_terminal_outcomes_cleanup_and_verify_home() -> None:
             "recognition": {
                 "type": "And",
                 "param": {
-                    "all_of": ["MJA_GAME_SIDE_PANEL_OPEN"],
+                    "all_of": ["公共-游戏侧边面板-打开"],
                     "box_index": 0,
                 },
             },
@@ -384,15 +390,15 @@ def test_guild_donation_terminal_outcomes_cleanup_and_verify_home() -> None:
             "max_hit": 1,
             "action": "DoNothing",
             "next": [panel_close_name],
-            "on_error": ["MJA_GUILD_DONATION_HOME_RETURN_FAILED"],
+            "on_error": ["帮派捐献-主页-返回-失败"],
             "retry_times": 0,
         }
 
         panel_close = nodes[panel_close_name]
         assert panel_close["recognition"]["param"] == {
             "all_of": [
-                "guild.donation.panel.page",
-                "guild.donation.panel.close",
+                "帮派捐献-帮派-捐献-面板-页面",
+                "帮派捐献-帮派-捐献-面板-关闭",
             ],
             "box_index": 1,
         }
@@ -405,29 +411,29 @@ def test_guild_donation_terminal_outcomes_cleanup_and_verify_home() -> None:
             "evidence": {
                 "page_index": 0,
                 "target_index": 1,
-                "page_name": "guild.donation.panel.page",
-                "target_name": "guild.donation.panel.close",
+                "page_name": "帮派捐献-帮派-捐献-面板-页面",
+                "target_name": "帮派捐献-帮派-捐献-面板-关闭",
             },
         }
         assert panel_close["max_hit"] == 1
         assert panel_close["retry_times"] == 0
         assert panel_close["next"] == [
-            f"MJA_GUILD_DONATION_{status}_HOME_PROBE"
+            _status_node(status, "主页-探测")
         ]
         assert panel_close["on_error"] == [
-            "MJA_GUILD_DONATION_HOME_RETURN_FAILED"
+            "帮派捐献-主页-返回-失败"
         ]
 
-        home = nodes[f"MJA_GUILD_DONATION_{status}_HOME_PROBE"]
+        home = nodes[_status_node(status, "主页-探测")]
         assert home["template"] == "home/home_marker.png"
         assert home["roi"] == [1040, 0, 240, 110]
         assert home["threshold"] == 0.75
         assert home["timeout"] == 5000
         assert home["max_hit"] == 1
-        assert home["next"] == [f"MJA_GUILD_DONATION_{status}"]
-        assert home["on_error"] == ["MJA_GUILD_DONATION_HOME_RETURN_FAILED"]
+        assert home["next"] == [_status_node(status)]
+        assert home["on_error"] == ["帮派捐献-主页-返回-失败"]
 
-    close_evidence = nodes["guild.donation.android.donation.close"]
+    close_evidence = nodes["帮派捐献-帮派-捐献-安卓-捐献-关闭"]
     assert close_evidence == {
         "recognition": "ColorMatch",
         "lower": [0, 0, 0],
@@ -440,21 +446,21 @@ def test_guild_donation_terminal_outcomes_cleanup_and_verify_home() -> None:
         "action": "DoNothing",
     }
 
-    guild_home_page = nodes["guild.donation.guild.home.page"]
+    guild_home_page = nodes["帮派捐献-帮派-捐献-帮派-主页-页面"]
     assert guild_home_page == {
         "recognition": "OCR",
         "expected": "浮生城",
         "roi": [0, 0, 380, 100],
         "action": "DoNothing",
     }
-    guild_home_context = nodes["guild.donation.guild.home.context"]
+    guild_home_context = nodes["帮派捐献-帮派-捐献-帮派-主页-上下文"]
     assert guild_home_context == {
         "recognition": "OCR",
         "expected": "帮会大厅",
         "roi": [780, 60, 380, 160],
         "action": "DoNothing",
     }
-    guild_home_close = nodes["guild.donation.guild.home.close"]
+    guild_home_close = nodes["帮派捐献-帮派-捐献-帮派-主页-关闭"]
     assert guild_home_close == {
         "recognition": "ColorMatch",
         "lower": [0, 0, 0],
@@ -464,48 +470,48 @@ def test_guild_donation_terminal_outcomes_cleanup_and_verify_home() -> None:
         "count": 180,
         "action": "DoNothing",
     }
-    panel_page = nodes["guild.donation.panel.page"]
+    panel_page = nodes["帮派捐献-帮派-捐献-面板-页面"]
     assert panel_page == {
         "recognition": {
             "type": "And",
             "param": {
-                "all_of": ["MJA_GAME_SIDE_PANEL_OPEN"],
+                "all_of": ["公共-游戏侧边面板-打开"],
                 "box_index": 0,
             },
         },
         "action": "DoNothing",
     }
-    panel_close = nodes["guild.donation.panel.close"]
+    panel_close = nodes["帮派捐献-帮派-捐献-面板-关闭"]
     assert panel_close == {
         "recognition": {
             "type": "And",
             "param": {
-                "all_of": ["MJA_GAME_SIDE_PANEL_OPEN"],
+                "all_of": ["公共-游戏侧边面板-打开"],
                 "box_index": 0,
             },
         },
         "action": "DoNothing",
     }
 
-    assert nodes["MJA_GAME_HOME_MARKER"]["template"] == "home/home_marker.png"
-    assert nodes["MJA_GAME_HOME_MARKER"]["threshold"] == 0.75
+    assert nodes["启动-游戏主页-标记"]["template"] == "home/home_marker.png"
+    assert nodes["启动-游戏主页-标记"]["threshold"] == 0.75
 
     assert_abort_code(
         nodes,
-        "MJA_GUILD_DONATION_HOME_RETURN_FAILED",
+        "帮派捐献-主页-返回-失败",
         "GUILD_DONATION_HOME_RETURN_FAILED",
     )
-    assert nodes["MJA_GUILD_DONATION_HOME_RETURN_FAILED"][
+    assert nodes["帮派捐献-主页-返回-失败"][
         "custom_action_param"
     ]["postcondition"] == "home.ready"
 
     for status in ("SUCCESS", "ALREADY_COMPLETE"):
-        pending = f"MJA_GUILD_DONATION_{status}_CLEANUP"
-        guild_close = f"MJA_GUILD_DONATION_{status}_GUILD_HOME_CLOSE"
-        panel_probe = f"MJA_GUILD_DONATION_{status}_FUNCTION_PANEL_PROBE"
-        panel_close = f"MJA_GUILD_DONATION_{status}_FUNCTION_PANEL_CLOSE"
-        home = f"MJA_GUILD_DONATION_{status}_HOME_PROBE"
-        outcome = f"MJA_GUILD_DONATION_{status}"
+        pending = _status_node(status, "清理")
+        guild_close = _status_node(status, "帮派-主页-关闭")
+        panel_probe = _status_node(status, "功能-面板-探测")
+        panel_close = _status_node(status, "功能-面板-关闭")
+        home = _status_node(status, "主页-探测")
+        outcome = _status_node(status)
         assert_reachable(nodes, pending, guild_close)
         assert_reachable(nodes, guild_close, panel_probe)
         assert_reachable(nodes, panel_probe, panel_close)
@@ -519,39 +525,39 @@ def test_guild_donation_cannot_fallback_to_success_when_cleanup_fails() -> None:
 
     assert "MJA_GUILD_DONATION_EXIT_CLEANUP_STOP" not in nodes
     for status in ("SUCCESS", "ALREADY_COMPLETE"):
-        pending = nodes[f"MJA_GUILD_DONATION_{status}_CLEANUP"]
-        assert pending["next"][-1] == "MJA_GUILD_DONATION_HOME_RETURN_FAILED"
+        pending = nodes[_status_node(status, "清理")]
+        assert pending["next"][-1] == "帮派捐献-主页-返回-失败"
 
-        android_close = nodes[f"MJA_GUILD_DONATION_{status}_ANDROID_CLOSE"]
-        legacy_close = nodes[f"MJA_GUILD_DONATION_{status}_CLOSE"]
-        guild_close = nodes[f"MJA_GUILD_DONATION_{status}_GUILD_HOME_CLOSE"]
-        panel_probe = nodes[f"MJA_GUILD_DONATION_{status}_FUNCTION_PANEL_PROBE"]
-        panel_close = nodes[f"MJA_GUILD_DONATION_{status}_FUNCTION_PANEL_CLOSE"]
-        home = nodes[f"MJA_GUILD_DONATION_{status}_HOME_PROBE"]
+        android_close = nodes[_status_node(status, "安卓-关闭")]
+        legacy_close = nodes[_status_node(status, "关闭")]
+        guild_close = nodes[_status_node(status, "帮派-主页-关闭")]
+        panel_probe = nodes[_status_node(status, "功能-面板-探测")]
+        panel_close = nodes[_status_node(status, "功能-面板-关闭")]
+        home = nodes[_status_node(status, "主页-探测")]
         assert android_close["on_error"][-1] == (
-            "MJA_GUILD_DONATION_HOME_RETURN_FAILED"
+            "帮派捐献-主页-返回-失败"
         )
         assert legacy_close["on_error"] == [
-            "MJA_GUILD_DONATION_HOME_RETURN_FAILED"
+            "帮派捐献-主页-返回-失败"
         ]
         assert guild_close["on_error"] == [
-            "MJA_GUILD_DONATION_HOME_RETURN_FAILED"
+            "帮派捐献-主页-返回-失败"
         ]
         assert panel_probe["on_error"] == [
-            "MJA_GUILD_DONATION_HOME_RETURN_FAILED"
+            "帮派捐献-主页-返回-失败"
         ]
         assert panel_close["on_error"] == [
-            "MJA_GUILD_DONATION_HOME_RETURN_FAILED"
+            "帮派捐献-主页-返回-失败"
         ]
-        assert home["on_error"] == ["MJA_GUILD_DONATION_HOME_RETURN_FAILED"]
-        assert home["next"] == [f"MJA_GUILD_DONATION_{status}"]
+        assert home["on_error"] == ["帮派捐献-主页-返回-失败"]
+        assert home["next"] == [_status_node(status)]
 
-    failure = nodes["MJA_GUILD_DONATION_HOME_RETURN_FAILED"]
+    failure = nodes["帮派捐献-主页-返回-失败"]
     assert failure["custom_action"] == "RecordTaskOutcome"
     assert failure["custom_action_param"]["status"] == "failed"
     assert failure["custom_action_param"]["native_fail_after_record"] is True
     assert failure["Abort"] is True
-    assert failure["next"] == ["MJA_COMMON_ABORT"]
+    assert failure["next"] == ["公共-通用中止"]
     assert "on_error" not in failure
 
 
@@ -566,18 +572,18 @@ def test_guild_donation_all_failure_outcomes_are_native_failures() -> None:
     }
 
     assert failure_names == {
-        "MJA_GUILD_DONATION_HOME_RETURN_FAILED",
-        "MJA_GUILD_DONATION_COUNTER_UNKNOWN",
-        "MJA_GUILD_DONATION_SAFETY_STOP",
-        "MJA_GUILD_DONATION_PAID_STOP",
-        "MJA_GUILD_DONATION_UNKNOWN_POPUP_STOP",
-        "MJA_GUILD_DONATION_RECORD_FAILURE",
+        "帮派捐献-主页-返回-失败",
+        "帮派捐献-计数-未知",
+        "帮派捐献-安全-停止",
+        "帮派捐献-付费-停止",
+        "帮派捐献-未知-弹窗-停止",
+        "帮派捐献-记录-失败",
     }
     for name in failure_names:
         node = nodes[name]
         assert node["custom_action_param"]["native_fail_after_record"] is True
         assert node["Abort"] is True
-        assert node["next"] == ["MJA_COMMON_ABORT"]
+        assert node["next"] == ["公共-通用中止"]
         assert "on_error" not in node
 
 
@@ -586,7 +592,7 @@ def test_guild_donation_has_no_paid_or_raw_input_branch() -> None:
     scoped = {
         name: node
         for name, node in nodes.items()
-        if name.startswith("MJA_GUILD_DONATION_DAILY_")
+        if name.startswith("帮派捐献-")
         or node.get("custom_action_param", {}).get("task_id") == DONATION.task_id
     }
     assert not any(
@@ -598,8 +604,8 @@ def test_guild_donation_has_no_paid_or_raw_input_branch() -> None:
         for node in scoped.values()
         if node.get("custom_action") == "GuardedInput"
     }
-    assert "guild.donation.free" in guarded_targets
-    assert "guild.donation.panel.close" in guarded_targets
+    assert "帮派捐献-帮派-捐献-免费" in guarded_targets
+    assert "帮派捐献-帮派-捐献-面板-关闭" in guarded_targets
     assert not any(
         isinstance(target, str)
         and any(word in target for word in ("购买", "充值", "支付", "元宝", "价格"))

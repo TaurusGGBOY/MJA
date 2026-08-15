@@ -26,12 +26,12 @@ def _contains(outer: tuple[int, int, int, int], inner: tuple[int, int, int, int]
 def test_r10_stale_victory_result_has_exact_bounded_startup_recovery() -> None:
     startup = json.loads(GAME_START.read_text(encoding="utf-8"))
     popups = json.loads(KNOWN_POPUPS.read_text(encoding="utf-8"))
-    route = startup["MJA_GAME_START"]["next"]
+    route = startup["启动-游戏启动"]["next"]
 
-    victory_name = "MJA_KNOWN_BATTLE_VICTORY_RESULT_CLOSE"
+    victory_name = "公共-已知-战斗胜利结果关闭"
     victory = popups[victory_name]
     victory_jump = f"[JumpBack]{victory_name}"
-    failure_jump = "[JumpBack]MJA_KNOWN_BATTLE_RESULT_CLOSE"
+    failure_jump = "[JumpBack]公共-已知-战斗结果关闭"
 
     assert victory["recognition"] == "OCR"
     assert victory["expected"] == f"^{re.escape(VICTORY_TEXT)}$"
@@ -46,35 +46,35 @@ def test_r10_stale_victory_result_has_exact_bounded_startup_recovery() -> None:
         "activity": "com.hanjiasongshu.dr22/.MainActivity",
     }
     assert victory["post_delay"] == 5000
-    assert victory["next"] == ["MJA_GAME_START"]
+    assert victory["next"] == ["启动-游戏启动"]
     assert "on_error" not in victory
 
     assert route.count(victory_jump) == 1
     assert route.count(failure_jump) == 1
-    assert route.index("[JumpBack]MJA_KNOWN_NETWORK_CONFIRM") < route.index(
+    assert route.index("[JumpBack]公共-已知-网络-确认") < route.index(
         victory_jump
     )
-    assert route.index("[JumpBack]MJA_KNOWN_RESOURCE_UPDATE_CONFIRM") < route.index(
+    assert route.index("[JumpBack]公共-已知-资源更新确认") < route.index(
         victory_jump
     )
     assert route.index(victory_jump) + 1 == route.index(failure_jump)
 
-    failure = popups["MJA_KNOWN_BATTLE_RESULT_CLOSE"]
+    failure = popups["公共-已知-战斗结果关闭"]
     assert failure["recognition"]["param"]["all_of"] == [
-        "MJA_KNOWN_BATTLE_FAILURE_TITLE",
-        "MJA_KNOWN_BATTLE_FAILURE_DETAIL",
+        "公共-已知-战斗-失败-标题",
+        "公共-已知-战斗-失败-详情",
     ]
     assert failure["timeout"] == 5000
     assert failure["max_hit"] == 1
     assert failure["custom_action"] == "RestartGameSurface"
     assert failure["post_delay"] == 5000
-    assert failure["next"] == ["MJA_GAME_START"]
+    assert failure["next"] == ["启动-游戏启动"]
     assert "on_error" not in failure
-    assert popups["MJA_KNOWN_BATTLE_FAILURE_TITLE"]["expected"] == "^战斗失败$"
-    assert popups["MJA_KNOWN_BATTLE_FAILURE_DETAIL"]["expected"] == (
+    assert popups["公共-已知-战斗-失败-标题"]["expected"] == "^战斗失败$"
+    assert popups["公共-已知-战斗-失败-详情"]["expected"] == (
         "^可以通过以下途径提升$"
     )
 
-    network = popups["MJA_KNOWN_NETWORK_CONFIRM"]
+    network = popups["公共-已知-网络-确认"]
     assert network["roi"] == [830, 350, 80, 130]
     assert network["max_hit"] == 1

@@ -5,7 +5,7 @@
       "label": "免费鉴宝",
       "default_check": true,
       "group": ["日常"],
-      "entry": "MJA_FREE_APPRAISAL_DAILY_START"
+      "entry": "免费鉴定-任务入口"
     }
   ]
 }

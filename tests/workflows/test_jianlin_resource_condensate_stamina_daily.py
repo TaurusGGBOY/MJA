@@ -118,7 +118,7 @@ def test_safe_planner_rejects_missing_controls_without_x1_fallback():
 
 def test_jianlin_daily_row_is_already_complete_without_inputs():
     snapshot = _snapshot(
-        "daily", ("daily.page", "jianlin_daily_row", "jianlin_daily_done")
+        "daily", ("日常任务奖励-日常-页面", "jianlin_daily_row", "jianlin_daily_done")
     )
     decision = DEFINITION.decide(snapshot, {})
     assert decision.status is TaskStatus.ALREADY_COMPLETE
@@ -126,7 +126,7 @@ def test_jianlin_daily_row_is_already_complete_without_inputs():
 
 def test_jianlin_resumes_from_an_already_open_completed_daily_list():
     snapshot = _snapshot(
-        "home", ("daily.page", "jianlin_daily_row", "jianlin_daily_done")
+        "home", ("日常任务奖励-日常-页面", "jianlin_daily_row", "jianlin_daily_done")
     )
 
     decision = DEFINITION.decide(snapshot, {})
@@ -146,7 +146,7 @@ def test_jianlin_resumes_from_open_formation_page():
 
 def test_jianlin_opens_only_from_the_recognized_boss_row():
     decision = DEFINITION.decide(
-        _snapshot("daily", ("daily.page", "jianlin_daily_row")),
+        _snapshot("daily", ("日常任务奖励-日常-页面", "jianlin_daily_row")),
         {},
     )
     assert decision.transition is not None
@@ -155,14 +155,14 @@ def test_jianlin_opens_only_from_the_recognized_boss_row():
 
 
 def test_jianlin_scrolls_daily_list_before_using_a_row_button():
-    decision = DEFINITION.decide(_snapshot("daily", ("daily.page",)), {})
+    decision = DEFINITION.decide(_snapshot("daily", ("日常任务奖励-日常-页面",)), {})
     assert decision.transition is not None
     assert decision.transition.intent.action_id == "scroll_daily_jianlin"
     assert decision.transition.intent.input_kind.value == "swipe"
     assert decision.transition.postcondition == "daily.page"
 
     exhausted = DEFINITION.decide(
-        _snapshot("daily", ("daily.page",)),
+        _snapshot("daily", ("日常任务奖励-日常-页面",)),
         {"scroll_daily_jianlin": MAX_DAILY_SCROLLS},
     )
     assert exhausted.status is TaskStatus.FAILED
@@ -500,7 +500,7 @@ def test_jianlin_incomplete_refill_prompt_is_a_normal_failure():
 def test_jianlin_requires_daily_postcondition_after_resource_loop():
     completed = DEFINITION.decide(
         _snapshot(
-            "daily_verify", ("daily.page", "jianlin_daily_row", "jianlin_daily_done")
+            "daily_verify", ("日常任务奖励-日常-页面", "jianlin_daily_row", "jianlin_daily_done")
         ),
         {"buy_stamina_once": 1, "challenge_condensate": 1},
     )

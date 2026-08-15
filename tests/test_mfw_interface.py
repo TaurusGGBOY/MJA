@@ -103,7 +103,7 @@ def test_start_task_is_declared_exactly_once_with_mja_entry() -> None:
 
     assert len(tasks) == 2
     assert tasks[0]["name"] == "GAME_START"
-    assert tasks[0]["entry"] == "MJA_GAME_START_ENTRY"
+    assert tasks[0]["entry"] == "启动-游戏入口"
     assert tasks[0]["default_check"] is True
     assert tasks[0]["group"] == ["启动"]
     assert "option" not in tasks[0]
@@ -113,13 +113,13 @@ def test_start_task_is_declared_exactly_once_with_mja_entry() -> None:
         "label": "退出/关闭游戏",
         "default_check": False,
         "group": ["启动"],
-        "entry": "MJA_GAME_STOP",
+        "entry": "启动-游戏停止",
     }
 
 
 def test_game_start_entry_is_a_native_probe_and_restart_owns_start_app() -> None:
     startup = _read_json(ROOT / "assets/resource/base/pipeline/startup/game_start.json")
-    entry = startup["MJA_GAME_START_ENTRY"]
+    entry = startup["启动-游戏入口"]
 
     assert entry["recognition"] == "DirectHit"
     assert entry["action"] == "DoNothing"

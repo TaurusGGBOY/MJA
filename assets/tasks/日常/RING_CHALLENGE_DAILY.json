@@ -5,7 +5,7 @@
       "label": "擂台挑战",
       "default_check": true,
       "group": ["日常"],
-      "entry": "MJA_RING_CHALLENGE_DAILY_START"
+      "entry": "擂台挑战-任务入口"
     }
   ]
 }

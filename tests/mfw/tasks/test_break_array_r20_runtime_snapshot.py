@@ -95,11 +95,11 @@ class _Context:
     def run_recognition(self, name, _image):
         self.requested.append(name)
         if self.battle:
-            if name == "break_array.battle":
+            if name == "破阵武学-突破-阵法-战斗":
                 return _Detail(True, (20, 20, 120, 50), "自动战斗")
             # Exercise the adapter's mutual-exclusion guard with a stale
             # orange-color target while an independently proven battle is live.
-            if name == "break_array.prepare_start":
+            if name == "破阵武学-突破-阵法-准备-开始":
                 return _Detail(True, (1111, 560, 126, 125))
             return _Detail(False, None)
         row = self.fixture["recognitions"].get(name, {})
@@ -113,8 +113,8 @@ def _snapshot(frame, state: str, evidence: VisualEvidence) -> StateSnapshot:
 def _confirm_snapshot() -> StateSnapshot:
     frame = CapturedFrame("r20-confirm", (1280, 720))
     hits = {
-        "break_array.start_confirm_dialog": 1,
-        "break_array.start_confirm_button": 1,
+        "破阵武学-突破-阵法-开始-确认-对话框": 1,
+        "破阵武学-突破-阵法-开始-确认-按钮": 1,
     }
     return StateSnapshot(
         frame,
@@ -134,22 +134,22 @@ def test_r20_live_prepare_fixture_matches_resource_boundaries_and_archive():
     pipeline = json.loads(PIPELINE_PATH.read_text(encoding="utf-8"))
 
     for marker in (
-        "break_array.prepare_formation",
-        "break_array.prepare_boss",
-        "break_array.prepare_duration",
-        "break_array.prepare_tactics",
+        "破阵武学-突破-阵法-准备-阵容",
+        "破阵武学-突破-阵法-准备-首领",
+        "破阵武学-突破-阵法-准备-时长",
+        "破阵武学-突破-阵法-准备-战术",
     ):
         assert re.fullmatch(
             pipeline[marker]["expected"],
             fixture["recognitions"][marker]["text"],
         )
 
-    start = fixture["recognitions"]["break_array.prepare_start"]
-    assert start["color_count"] >= pipeline["break_array.prepare_start"]["count"]
-    battle_texts = fixture["recognitions"]["break_array.battle"]["texts"]
+    start = fixture["recognitions"]["破阵武学-突破-阵法-准备-开始"]
+    assert start["color_count"] >= pipeline["破阵武学-突破-阵法-准备-开始"]["count"]
+    battle_texts = fixture["recognitions"]["破阵武学-突破-阵法-战斗"]["texts"]
     assert not any(
         re.fullmatch(pattern, text)
-        for pattern in pipeline["break_array.battle"]["expected"]
+        for pattern in pipeline["破阵武学-突破-阵法-战斗"]["expected"]
         for text in battle_texts
     )
 
@@ -202,10 +202,10 @@ def test_r21_archive_is_a_confirm_transition_not_prepare_or_battle():
     frame = CapturedFrame("r21-confirm-transition", (1280, 720))
     evidence = VisualEvidence(
         frame.frame_id,
-        {"break_array.confirm_transition": 1},
-        {"break_array.confirm_transition": 1},
+        {"破阵武学-突破-阵法-确认-过渡": 1},
+        {"破阵武学-突破-阵法-确认-过渡": 1},
         {},
-        {"break_array.confirm_transition": frame.frame_id},
+        {"破阵武学-突破-阵法-确认-过渡": frame.frame_id},
     )
     decision = DEFINITION.decide(
         _snapshot(frame, "post_confirm_break_array:9_of_9", evidence),
@@ -228,11 +228,11 @@ def test_r20_live_snapshot_maps_prepare_before_battle_and_preserves_sequence():
         prepare_frame,
         DEFINITION.recognizers("post_confirm_break_array:9_of_9"),
     )
-    assert "break_array.prepare_page" not in context.requested
-    assert prepare_evidence.page_hits["break_array.prepare_page"] == 1
-    assert prepare_evidence.target_hits["break_array.prepare_start"] == 1
-    assert prepare_evidence.target_hits.get("break_array.battle", 0) == 0
-    assert prepare_evidence.target_hits.get("break_array.battle_loading", 0) == 0
+    assert "破阵武学-突破-阵法-准备-页面" not in context.requested
+    assert prepare_evidence.page_hits["破阵武学-突破-阵法-准备-页面"] == 1
+    assert prepare_evidence.target_hits["破阵武学-突破-阵法-准备-开始"] == 1
+    assert prepare_evidence.target_hits.get("破阵武学-突破-阵法-战斗", 0) == 0
+    assert prepare_evidence.target_hits.get("破阵武学-突破-阵法-战斗-加载", 0) == 0
 
     confirm = DEFINITION.decide(
         _confirm_snapshot(),
@@ -256,9 +256,9 @@ def test_r20_live_snapshot_maps_prepare_before_battle_and_preserves_sequence():
         battle_frame,
         DEFINITION.recognizers("battle"),
     )
-    assert battle_evidence.target_hits["break_array.battle"] == 1
-    assert battle_evidence.target_hits.get("break_array.prepare_page", 0) == 0
-    assert battle_evidence.target_hits.get("break_array.prepare_start", 0) == 0
+    assert battle_evidence.target_hits["破阵武学-突破-阵法-战斗"] == 1
+    assert battle_evidence.target_hits.get("破阵武学-突破-阵法-准备-页面", 0) == 0
+    assert battle_evidence.target_hits.get("破阵武学-突破-阵法-准备-开始", 0) == 0
     wait = DEFINITION.decide(
         _snapshot(battle_frame, "battle", battle_evidence),
         {
@@ -284,8 +284,8 @@ def test_r22_victory_uses_tight_same_frame_anchors_and_bounded_blank_close():
     pipeline = json.loads(PIPELINE_PATH.read_text(encoding="utf-8"))
 
     for name in (
-        "break_array.result.victory_title",
-        "break_array.result.brand",
+        "破阵武学-突破-阵法-结果-胜利-标题",
+        "破阵武学-突破-阵法-结果-标识",
     ):
         node = pipeline[name]
         observed = fixture["recognitions"][name]
@@ -296,10 +296,10 @@ def test_r22_victory_uses_tight_same_frame_anchors_and_bounded_blank_close():
         assert bx + bw <= rx + rw and by + bh <= ry + rh
 
     expected_same_frame = [
-        "break_array.result.victory_title",
-        "break_array.result.brand",
+        "破阵武学-突破-阵法-结果-胜利-标题",
+        "破阵武学-突破-阵法-结果-标识",
     ]
-    for name in ("break_array.result", "break_array.success"):
+    for name in ("破阵武学-突破-阵法-结果", "破阵武学-突破-阵法-成功"):
         assert pipeline[name]["recognition"]["param"] == {
             "all_of": expected_same_frame,
             "box_index": 0,
@@ -315,17 +315,17 @@ def test_r22_victory_uses_tight_same_frame_anchors_and_bounded_blank_close():
     evidence = driver.recognize(
         frame,
         (
-            "break_array.result",
-            "break_array.success",
-            "break_array.failure",
-            "break_array.result_close",
+            "破阵武学-突破-阵法-结果",
+            "破阵武学-突破-阵法-成功",
+            "破阵武学-突破-阵法-失败",
+            "破阵武学-突破-阵法-结果-关闭",
         ),
     )
-    assert evidence.target_hits["break_array.result"] == 1
-    assert evidence.target_hits["break_array.success"] == 1
-    assert evidence.target_hits.get("break_array.failure", 0) == 0
-    assert evidence.target_hits["break_array.result_close"] == 1
-    assert driver._boxes["break_array.result_close"] == (
+    assert evidence.target_hits["破阵武学-突破-阵法-结果"] == 1
+    assert evidence.target_hits["破阵武学-突破-阵法-成功"] == 1
+    assert evidence.target_hits.get("破阵武学-突破-阵法-失败", 0) == 0
+    assert evidence.target_hits["破阵武学-突破-阵法-结果-关闭"] == 1
+    assert driver._boxes["破阵武学-突破-阵法-结果-关闭"] == (
         frame.frame_id,
         (1040, 600, 160, 70),
     )
@@ -341,4 +341,4 @@ def test_r22_victory_uses_tight_same_frame_anchors_and_bounded_blank_close():
     assert resume.transition.intent.action_id == "resume_break_array_result"
     assert dismiss.transition is not None
     assert dismiss.transition.intent.action_id == "dismiss_break_array_result"
-    assert dismiss.transition.intent.target_marker == "break_array.result_close"
+    assert dismiss.transition.intent.target_marker == "破阵武学-突破-阵法-结果-关闭"

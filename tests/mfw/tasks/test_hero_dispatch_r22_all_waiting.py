@@ -44,12 +44,12 @@ def test_r22_fixture_is_the_archived_waiting_frame_and_decides_noop() -> None:
 def test_r22_waiting_marker_requires_all_same_frame_positive_evidence() -> None:
     base = load_task_nodes(HERO)
     observed_boxes = {
-        "hero.all_dispatch_slots_assigned": [51, 97, 74, 26],
-        "hero.zero_completed_dispatches": [233, 101, 75, 20],
+        "英雄派遣-英雄-全部-派遣-槽位-已分配": [51, 97, 74, 26],
+        "英雄派遣-英雄-零-已完成-派遣任务": [233, 101, 75, 20],
     }
     expected = {
-        "hero.all_dispatch_slots_assigned": r"^任务\s*[:：]?\s*9\s*/\s*9$",
-        "hero.zero_completed_dispatches": r"^已完成\s*[:：]?\s*0$",
+        "英雄派遣-英雄-全部-派遣-槽位-已分配": r"^任务\s*[:：]?\s*9\s*/\s*9$",
+        "英雄派遣-英雄-零-已完成-派遣任务": r"^已完成\s*[:：]?\s*0$",
     }
 
     for name, box in observed_boxes.items():
@@ -57,13 +57,13 @@ def test_r22_waiting_marker_requires_all_same_frame_positive_evidence() -> None:
         assert base[name]["expected"] == expected[name]
         assert _contains(base[name]["roi"], box)
 
-    assert base["hero.all_dispatched_waiting"]["recognition"] == {
+    assert base["英雄派遣-英雄-全部-已派遣-等待中"]["recognition"] == {
         "type": "And",
         "param": {
             "all_of": [
-                "hero.dispatch.page",
-                "hero.all_dispatch_slots_assigned",
-                "hero.zero_completed_dispatches",
+                "英雄派遣-英雄-派遣-页面",
+                "英雄派遣-英雄-全部-派遣-槽位-已分配",
+                "英雄派遣-英雄-零-已完成-派遣任务",
             ],
             "box_index": 1,
         },
@@ -75,45 +75,45 @@ def test_r22_waiting_marker_requires_all_same_frame_positive_evidence() -> None:
             / "assets/resource_android/pipeline/daily/hero_dispatch_daily.json"
         ).read_text(encoding="utf-8")
     )
-    for name in (*observed_boxes, "hero.all_dispatched_waiting"):
+    for name in (*observed_boxes, "英雄派遣-英雄-全部-已派遣-等待中"):
         assert android[name] == base[name]
 
 
 def test_claimable_wins_before_waiting_and_unknown_still_fails() -> None:
     nodes = load_task_nodes(HERO)
-    page_probe = nodes["MJA_HERO_DISPATCH_PAGE_PROBE"]
+    page_probe = nodes["英雄派遣-派遣-页面-探测"]
 
     assert page_probe["next"] == [
-        "MJA_HERO_INITIAL_CLAIM_GATE",
-        "MJA_HERO_INITIAL_WAITING_GATE",
-        "MJA_HERO_INITIAL_ALL",
-        "MJA_HERO_INITIAL_PROGRESS",
-        "MJA_HERO_INITIAL_NO_TASKS",
-        "MJA_HERO_INITIAL_SELECT",
+        "英雄派遣-初始-领取-门禁",
+        "英雄派遣-初始-等待中-门禁",
+        "英雄派遣-初始-全部",
+        "英雄派遣-初始-进度",
+        "英雄派遣-初始-无-任务",
+        "英雄派遣-初始-选择",
     ]
-    assert page_probe["on_error"] == ["MJA_HERO_OPEN_DISPATCH"]
-    assert nodes["MJA_HERO_INITIAL_CLAIM_GATE"]["next"] == [
-        "MJA_HERO_INITIAL_CLAIM"
+    assert page_probe["on_error"] == ["英雄派遣-打开-派遣"]
+    assert nodes["英雄派遣-初始-领取-门禁"]["next"] == [
+        "英雄派遣-初始-领取"
     ]
 
 
 def test_waiting_sibling_is_finite_and_only_records_then_closes() -> None:
     nodes = load_task_nodes(HERO)
-    gate = nodes["MJA_HERO_INITIAL_WAITING_GATE"]
-    outcome = nodes["MJA_HERO_ALREADY_WAITING"]
+    gate = nodes["英雄派遣-初始-等待中-门禁"]
+    outcome = nodes["英雄派遣-已完成-等待中"]
 
     assert gate["recognition"] == {
         "type": "And",
         "param": {
-            "all_of": ["hero.all_dispatched_waiting"],
+            "all_of": ["英雄派遣-英雄-全部-已派遣-等待中"],
             "box_index": 0,
         },
     }
     assert gate["action"] == "DoNothing"
     assert gate["max_hit"] == 1
     assert gate["retry_times"] == 0
-    assert gate["next"] == ["MJA_HERO_ALREADY_WAITING"]
-    assert gate["on_error"] == ["MJA_HERO_RECORD_FAILURE"]
+    assert gate["next"] == ["英雄派遣-已完成-等待中"]
+    assert gate["on_error"] == ["英雄派遣-记录-失败"]
 
     assert outcome["custom_action"] == "RecordTaskOutcome"
     assert outcome["custom_action_param"] == {
@@ -123,7 +123,7 @@ def test_waiting_sibling_is_finite_and_only_records_then_closes() -> None:
     }
     assert outcome["max_hit"] == 1
     assert outcome["retry_times"] == 0
-    assert outcome["next"] == ["MJA_HERO_CLOSE_DISPATCH"]
+    assert outcome["next"] == ["英雄派遣-关闭-派遣"]
 
     forbidden = {
         "select_first_visible_dispatch",
@@ -132,10 +132,10 @@ def test_waiting_sibling_is_finite_and_only_records_then_closes() -> None:
         "dispatch_team",
     }
     waiting_route = (
-        "MJA_HERO_INITIAL_WAITING_GATE",
-        "MJA_HERO_ALREADY_WAITING",
-        "MJA_HERO_CLOSE_DISPATCH",
-        "MJA_HERO_CLOSE_PAINTING",
+        "英雄派遣-初始-等待中-门禁",
+        "英雄派遣-已完成-等待中",
+        "英雄派遣-关闭-派遣",
+        "英雄派遣-关闭-画卷",
     )
     action_ids = {
         nodes[name].get("custom_action_param", {}).get("action_id")

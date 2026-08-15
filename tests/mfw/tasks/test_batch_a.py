@@ -49,31 +49,31 @@ def test_mail_task_contract_and_existing_fixture_matrix() -> None:
 
 def test_mail_flow_guards_every_side_effect_and_has_truthful_outcomes() -> None:
     nodes = load_task_nodes(MAIL)
-    assert nodes["MJA_MAIL_REWARD_DAILY_START"]["next"] == [
-        "[JumpBack]MJA_KNOWN_CLICK_BLANK_TO_CLOSE",
-        "MJA_MAIL_PAGE_PROBE",
-        "MJA_MAIL_HOME_PROBE",
-        "MJA_MAIL_PANEL_PROBE",
+    assert nodes["邮件奖励-任务入口"]["next"] == [
+        "[JumpBack]公共-已知-点击空白关闭",
+        "邮件奖励-页面-探测",
+        "邮件奖励-主页-探测",
+        "邮件奖励-面板-探测",
     ]
-    assert nodes["MJA_MAIL_REWARD_DAILY_START"]["on_error"] == ["MJA_MAIL_RECORD_FAILURE"]
-    assert nodes["MJA_MAIL_PAGE_PROBE"]["next"] == ["MJA_MAIL_CLAIM"]
-    assert nodes["MJA_MAIL_PAGE_PROBE"]["on_error"] == ["MJA_MAIL_CLAIM"]
-    assert nodes["MJA_MAIL_CLAIM"]["on_error"] == ["MJA_MAIL_EMPTY_PROBE"]
-    assert nodes["MJA_MAIL_EMPTY_PROBE"]["next"] == ["MJA_MAIL_ALREADY_COMPLETE"]
-    assert nodes["MJA_MAIL_ALREADY_COMPLETE"]["next"] == ["MJA_MAIL_CLOSE"]
-    assert nodes["MJA_MAIL_HOME_PROBE"]["recognition"] == {
+    assert nodes["邮件奖励-任务入口"]["on_error"] == ["邮件奖励-记录-失败"]
+    assert nodes["邮件奖励-页面-探测"]["next"] == ["邮件奖励-领取"]
+    assert nodes["邮件奖励-页面-探测"]["on_error"] == ["邮件奖励-领取"]
+    assert nodes["邮件奖励-领取"]["on_error"] == ["邮件奖励-空-探测"]
+    assert nodes["邮件奖励-空-探测"]["next"] == ["邮件奖励-已完成"]
+    assert nodes["邮件奖励-已完成"]["next"] == ["邮件奖励-关闭"]
+    assert nodes["邮件奖励-主页-探测"]["recognition"] == {
         "type": "And",
-        "param": {"all_of": ["MJA_GAME_HOME_PAGE"], "box_index": 0},
+        "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0},
     }
-    assert nodes["MJA_MAIL_HOME_PROBE"]["on_error"] == ["[JumpBack]MJA_GAME_START"]
-    assert nodes["home.page"]["recognition"] == {
+    assert nodes["邮件奖励-主页-探测"]["on_error"] == ["[JumpBack]启动-游戏启动"]
+    assert nodes["邮件奖励-主页-页面"]["recognition"] == {
         "type": "And",
-        "param": {"all_of": ["MJA_GAME_HOME_PAGE"], "box_index": 0},
+        "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0},
     }
-    assert nodes["MJA_MAIL_PANEL_PROBE"]["threshold"] == 0.375
-    assert nodes["panel.page"]["threshold"] == 0.375
-    assert nodes["panel.mail_entry"]["threshold"] == 0.39
-    assert nodes["panel.close"]["threshold"] == 0.1
+    assert nodes["邮件奖励-面板-探测"]["threshold"] == 0.375
+    assert nodes["邮件奖励-面板-页面"]["threshold"] == 0.375
+    assert nodes["邮件奖励-面板-邮件-入口"]["threshold"] == 0.39
+    assert nodes["邮件奖励-面板-关闭"]["threshold"] == 0.1
     assert_guarded_actions(
         nodes,
         MAIL.task_id,
@@ -86,19 +86,19 @@ def test_mail_flow_guards_every_side_effect_and_has_truthful_outcomes() -> None:
         "close_function_panel",
     ],
     )
-    assert nodes["MJA_MAIL_REWARD_PROBE"]["next"] == ["MJA_MAIL_CLAIM_SUCCESS"]
-    assert nodes["MJA_MAIL_CLAIM_SUCCESS"]["next"] == ["MJA_MAIL_CLOSE_REWARD"]
-    assert nodes["MJA_MAIL_CLOSE_REWARD"]["next"] == ["MJA_MAIL_CLOSE"]
-    assert_outcome(nodes, "MJA_MAIL_CLAIM_SUCCESS", "success", "mail.reward_claimed")
-    assert_outcome(nodes, "MJA_MAIL_ALREADY_COMPLETE", "already_complete", "mail.empty")
-    assert nodes["MJA_MAIL_ALREADY_COMPLETE"]["custom_action_param"][
+    assert nodes["邮件奖励-奖励-探测"]["next"] == ["邮件奖励-领取-成功"]
+    assert nodes["邮件奖励-领取-成功"]["next"] == ["邮件奖励-关闭-奖励"]
+    assert nodes["邮件奖励-关闭-奖励"]["next"] == ["邮件奖励-关闭"]
+    assert_outcome(nodes, "邮件奖励-领取-成功", "success", "mail.reward_claimed")
+    assert_outcome(nodes, "邮件奖励-已完成", "already_complete", "mail.empty")
+    assert nodes["邮件奖励-已完成"]["custom_action_param"][
         "defer_home_boundary"
     ] is True
-    assert nodes["MJA_MAIL_CLAIM_SUCCESS"]["custom_action_param"][
+    assert nodes["邮件奖励-领取-成功"]["custom_action_param"][
         "defer_home_boundary"
     ] is True
-    assert nodes["MJA_MAIL_CLOSE_PANEL"]["next"] == ["MJA_HOME_BOUNDARY"]
-    assert_outcome(nodes, "MJA_MAIL_RECORD_FAILURE", "failed", "MAIL_POSTCONDITION_MISSING")
+    assert nodes["邮件奖励-关闭-面板"]["next"] == ["公共-主页边界"]
+    assert_outcome(nodes, "邮件奖励-记录-失败", "failed", "MAIL_POSTCONDITION_MISSING")
 
 
 def test_shop_task_contract_and_existing_fixture_matrix() -> None:
@@ -108,44 +108,44 @@ def test_shop_task_contract_and_existing_fixture_matrix() -> None:
         {"entry", "actionable", "completed", "danger"},
     )
     nodes = load_task_nodes(SHOP)
-    assert nodes["MJA_SHOP_FREE_GIFT_DAILY_START"]["next"] == [
-        "MJA_SHOP_DIRECT_STATUS_PROBE",
-        "MJA_SHOP_DIRECT_CLAIM_GATE",
-        "MJA_SHOP_OPEN_PERIOD",
-        "MJA_SHOP_BENEFITS_PAGE_PROBE",
-        "MJA_SHOP_PANEL_PROBE",
-        "MJA_SHOP_PAGE_PROBE",
-        "MJA_SHOP_HOME_PROBE",
+    assert nodes["商店免费礼包-任务入口"]["next"] == [
+        "商店免费礼包-直接-状态-探测",
+        "商店免费礼包-直接-领取-门禁",
+        "商店免费礼包-打开-周期",
+        "商店免费礼包-权益-页面-探测",
+        "商店免费礼包-面板-探测",
+        "商店免费礼包-页面-探测",
+        "商店免费礼包-主页-探测",
     ]
-    assert nodes["MJA_SHOP_FREE_GIFT_DAILY_START"]["on_error"] == [
-        "MJA_SHOP_RUNTIME_RECOVERY_ATTEMPT_1",
-        "MJA_SHOP_RUNTIME_RECOVERY_ATTEMPT_2",
-        "MJA_SHOP_RUNTIME_RECOVERY_EXHAUSTED",
+    assert nodes["商店免费礼包-任务入口"]["on_error"] == [
+        "商店免费礼包-运行时-恢复-尝试-1",
+        "商店免费礼包-运行时-恢复-尝试-2",
+        "商店免费礼包-运行时-恢复-耗尽",
     ]
-    assert nodes["MJA_SHOP_STATUS_PROBE"]["recognition"] == "OCR"
-    assert nodes["MJA_SHOP_STATUS_PROBE"]["expected"] == [
+    assert nodes["商店免费礼包-状态-探测"]["recognition"] == "OCR"
+    assert nodes["商店免费礼包-状态-探测"]["expected"] == [
         "已领取",
         "今日已领取",
         "领取完毕",
     ]
-    assert nodes["MJA_SHOP_STATUS_PROBE"]["on_error"] == [
-        "MJA_SHOP_CLAIM_GATE",
-        "MJA_SHOP_RUNTIME_RECOVERY_ATTEMPT_1",
-        "MJA_SHOP_RUNTIME_RECOVERY_ATTEMPT_2",
-        "MJA_SHOP_RUNTIME_RECOVERY_EXHAUSTED",
+    assert nodes["商店免费礼包-状态-探测"]["on_error"] == [
+        "商店免费礼包-领取-门禁",
+        "商店免费礼包-运行时-恢复-尝试-1",
+        "商店免费礼包-运行时-恢复-尝试-2",
+        "商店免费礼包-运行时-恢复-耗尽",
     ]
-    assert nodes["MJA_SHOP_BENEFITS_PAGE_PROBE"]["next"] == [
-        "MJA_SHOP_STATUS_PROBE",
-        "MJA_SHOP_CLAIM_GATE",
+    assert nodes["商店免费礼包-权益-页面-探测"]["next"] == [
+        "商店免费礼包-状态-探测",
+        "商店免费礼包-领取-门禁",
     ]
-    assert "threshold" not in nodes["MJA_SHOP_HOME_PROBE"]
-    assert nodes["MJA_SHOP_OPEN_PERIOD"]["next"] == ["MJA_SHOP_BENEFITS_PAGE_PROBE"]
-    assert nodes["MJA_SHOP_OPEN_PERIOD"]["on_error"] == [
-        "MJA_SHOP_RUNTIME_RECOVERY_ATTEMPT_1",
-        "MJA_SHOP_RUNTIME_RECOVERY_ATTEMPT_2",
-        "MJA_SHOP_RUNTIME_RECOVERY_EXHAUSTED",
+    assert "threshold" not in nodes["商店免费礼包-主页-探测"]
+    assert nodes["商店免费礼包-打开-周期"]["next"] == ["商店免费礼包-权益-页面-探测"]
+    assert nodes["商店免费礼包-打开-周期"]["on_error"] == [
+        "商店免费礼包-运行时-恢复-尝试-1",
+        "商店免费礼包-运行时-恢复-尝试-2",
+        "商店免费礼包-运行时-恢复-耗尽",
     ]
-    assert nodes["shop.close"] == {
+    assert nodes["商店免费礼包-商店-关闭"] == {
         "recognition": "ColorMatch",
         "lower": [0, 0, 0],
         "upper": [125, 125, 125],
@@ -173,19 +173,19 @@ def test_shop_flow_guards_every_side_effect_and_has_truthful_outcomes() -> None:
     )
     assert_outcome(
         nodes,
-        "MJA_SHOP_RECORD_ALREADY_COMPLETE",
+        "商店免费礼包-记录-已完成",
         "already_complete",
         "shop.daily_free_gift_claimed",
     )
     assert_outcome(
         nodes,
-        "MJA_SHOP_RECORD_SUCCESS",
+        "商店免费礼包-记录-成功",
         "success",
         "shop.daily_free_gift_claimed",
     )
     assert_outcome(
         nodes,
-        "MJA_SHOP_RECORD_FAILURE",
+        "商店免费礼包-记录-失败",
         "failed",
         "SHOP_POSTCONDITION_MISSING",
     )
@@ -201,33 +201,33 @@ def test_appraisal_task_contract_and_existing_fixture_matrix() -> None:
 
 def test_appraisal_flow_guards_every_side_effect_and_has_truthful_outcomes() -> None:
     nodes = load_task_nodes(APPRAISAL)
-    assert nodes[APPRAISAL.entry]["next"][0] == "[JumpBack]MJA_KNOWN_PAINTING_CLOSE"
-    assert nodes[APPRAISAL.entry]["next"][1] == "[JumpBack]MJA_APPRAISAL_EXTRA_POPUP_CLOSE"
-    assert nodes["appraisal.result_popup"] == {
+    assert nodes[APPRAISAL.entry]["next"][0] == "[JumpBack]公共-已知-画卷-关闭"
+    assert nodes[APPRAISAL.entry]["next"][1] == "[JumpBack]免费鉴定-额外-弹窗-关闭"
+    assert nodes["免费鉴定-鉴定-结果-弹窗"] == {
         "recognition": "OCR",
         "expected": ["^鉴宝一次$", "^鉴宝十次$"],
         "roi": [350, 560, 600, 100],
         "action": "DoNothing",
     }
-    assert nodes["MJA_APPRAISAL_CLOSE_REWARD"]["next"] == [
-        "[JumpBack]MJA_APPRAISAL_EXTRA_POPUP_CLOSE",
+    assert nodes["免费鉴定-关闭-奖励"]["next"] == [
+        "[JumpBack]免费鉴定-额外-弹窗-关闭",
         "MJA_APPRAISAL_VERIFY",
-        "MJA_APPRAISAL_HOME_AFTER_REWARD",
+        "免费鉴定-主页-之后-奖励",
     ]
-    assert nodes["MJA_APPRAISAL_EXTRA_POPUP_CLOSE"]["custom_action_param"][
+    assert nodes["免费鉴定-额外-弹窗-关闭"]["custom_action_param"][
         "action_id"
     ] == "close_extra_reward_popup"
-    assert nodes["appraisal.extra_popup.page"]["expected"] == "^秘宝收集$"
-    assert nodes["appraisal.extra_popup.close"]["template"] == (
+    assert nodes["免费鉴定-鉴定-额外-弹窗-页面"]["expected"] == "^秘宝收集$"
+    assert nodes["免费鉴定-鉴定-额外-弹窗-关闭"]["template"] == (
         "daily/BUY_TEA_DAILY/shop_close.png"
     )
-    assert nodes["appraisal.free_once"] == {
+    assert nodes["免费鉴定-鉴定-免费-一次"] == {
         "recognition": "OCR",
         "expected": "^免费鉴宝$",
         "roi": [470, 590, 160, 60],
         "action": "DoNothing",
     }
-    assert nodes["appraisal.page.close"] == {
+    assert nodes["免费鉴定-鉴定-页面-关闭"] == {
         "recognition": "TemplateMatch",
         "template": "daily/BUY_TEA_DAILY/shop_close.png",
         "roi": [1170, 0, 110, 110],
@@ -254,13 +254,13 @@ def test_appraisal_flow_guards_every_side_effect_and_has_truthful_outcomes() -> 
     )
     assert_outcome(
         nodes,
-        "MJA_APPRAISAL_SUCCESS",
+        "免费鉴定-成功",
         "success",
         "appraisal.used",
     )
     assert_outcome(
         nodes,
-        "MJA_APPRAISAL_RECORD_FAILURE",
+        "免费鉴定-记录-失败",
         "failed",
         "APPRAISAL_POSTCONDITION_MISSING",
     )
@@ -274,8 +274,8 @@ def test_trial_task_contract_and_existing_fixture_matrix() -> None:
     assert declaration["entry"] == TRIAL.entry
     nodes = load_task_nodes(TRIAL)
     assert TRIAL.entry in nodes
-    assert_reachable(nodes, TRIAL.entry, "MJA_COMMON_STOP")
-    assert_reachable(nodes, TRIAL.entry, "MJA_COMMON_ABORT")
+    assert_reachable(nodes, TRIAL.entry, "公共-通用停止")
+    assert_reachable(nodes, TRIAL.entry, "公共-通用中止")
     assert_fixture_matrix(
         TRIAL.task_id,
         {"entry", "actionable", "completed", "danger"},
@@ -284,7 +284,7 @@ def test_trial_task_contract_and_existing_fixture_matrix() -> None:
 
 def test_trial_flow_guards_every_side_effect_and_has_truthful_outcomes() -> None:
     nodes = load_task_nodes(TRIAL)
-    assert nodes[TRIAL.entry]["next"][0] == "[JumpBack]MJA_KNOWN_PAINTING_CLOSE"
+    assert nodes[TRIAL.entry]["next"][0] == "[JumpBack]公共-已知-画卷-关闭"
     assert_guarded_actions(
         nodes,
         TRIAL.task_id,
@@ -305,13 +305,13 @@ def test_trial_flow_guards_every_side_effect_and_has_truthful_outcomes() -> None
     )
     assert_outcome(
         nodes,
-        "MJA_TRIAL_SUCCESS",
+        "试剑-成功",
         "success",
         "trial.free_used",
     )
     assert_outcome(
         nodes,
-        "MJA_TRIAL_RECORD_FAILURE",
+        "试剑-记录-失败",
         "failed",
         "TRIAL_POSTCONDITION_MISSING",
     )
@@ -320,21 +320,21 @@ def test_trial_flow_guards_every_side_effect_and_has_truthful_outcomes() -> None
 def test_trial_r19_home_entry_uses_a_narrow_calibrated_same_frame_target() -> None:
     nodes = load_task_nodes(TRIAL)
 
-    start = nodes["MJA_TRIAL_SWORD_DAILY_START"]
+    start = nodes["试剑-任务入口"]
     assert start["next"] == [
-        "[JumpBack]MJA_KNOWN_PAINTING_CLOSE",
-        "[JumpBack]MJA_KNOWN_TEA_DETAIL_CLOSE",
-        "[JumpBack]MJA_KNOWN_TEA_SHOP_CLOSE",
-        "MJA_TRIAL_RESUME_FREE_PROBE",
-        "MJA_TRIAL_RESUME_RESULT_PROBE",
-        "MJA_TRIAL_PAGE_PROBE",
-        "MJA_TRIAL_OPEN_TRIAL",
+        "[JumpBack]公共-已知-画卷-关闭",
+        "[JumpBack]公共-已知-茶-详情-关闭",
+        "[JumpBack]公共-已知-茶-商店-关闭",
+        "试剑-恢复继续-免费-探测",
+        "试剑-恢复继续-结果-探测",
+        "试剑-页面-探测",
+        "试剑-打开-试炼",
     ]
-    assert start["on_error"] == ["MJA_TRIAL_RECORD_FAILURE"]
+    assert start["on_error"] == ["试剑-记录-失败"]
     assert start["retry_times"] == 0
     assert "MJA_TRIAL_HOME_PROBE" not in nodes
 
-    target = nodes["trial.open"]
+    target = nodes["试剑-试炼-打开"]
     assert target == {
         "recognition": "ColorMatch",
         "method": 4,
@@ -375,16 +375,16 @@ def test_trial_r19_home_entry_uses_a_narrow_calibrated_same_frame_target() -> No
     old_ocr_roi = [850, 450, 430, 270]
     assert width * height * 10 < old_ocr_roi[2] * old_ocr_roi[3]
 
-    open_trial = nodes["MJA_TRIAL_OPEN_TRIAL"]
+    open_trial = nodes["试剑-打开-试炼"]
     assert open_trial["recognition"]["param"] == {
-        "all_of": ["home.page", "trial.open"],
+        "all_of": ["邮件奖励-主页-页面", "试剑-试炼-打开"],
         "box_index": 1,
     }
     assert open_trial["custom_action_param"]["evidence"] == {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "home.page",
-        "target_name": "trial.open",
+        "page_name": "邮件奖励-主页-页面",
+        "target_name": "试剑-试炼-打开",
     }
     assert open_trial["retry_times"] == 0
     assert TASK_POLICIES[TRIAL.task_id].action_caps["open_trial_sword"] == 1
@@ -393,7 +393,7 @@ def test_trial_r19_home_entry_uses_a_narrow_calibrated_same_frame_target() -> No
 def test_trial_failure_paths_record_before_native_failure_and_never_stop_as_success() -> None:
     nodes = load_task_nodes(TRIAL)
 
-    failure = nodes["MJA_TRIAL_RECORD_FAILURE"]
+    failure = nodes["试剑-记录-失败"]
     assert failure["custom_action_param"] == {
         "task_id": TRIAL.task_id,
         "status": "failed",
@@ -402,7 +402,7 @@ def test_trial_failure_paths_record_before_native_failure_and_never_stop_as_succ
         "native_fail_after_record": True,
     }
     assert failure["Abort"] is True
-    assert failure["next"] == ["MJA_COMMON_ABORT"]
+    assert failure["next"] == ["公共-通用中止"]
 
     guarded_nodes = {
         name: node
@@ -412,7 +412,7 @@ def test_trial_failure_paths_record_before_native_failure_and_never_stop_as_succ
     }
     assert guarded_nodes
     for node in guarded_nodes.values():
-        assert node["on_error"] == ["MJA_TRIAL_RECORD_FAILURE"]
+        assert node["on_error"] == ["试剑-记录-失败"]
         assert node.get("action") == "Custom"
 
     for action_id in (
@@ -428,17 +428,17 @@ def test_trial_failure_paths_record_before_native_failure_and_never_stop_as_succ
     terminal_predecessors = {
         name
         for name, node in nodes.items()
-        if name.startswith("MJA_TRIAL_")
-        and "MJA_COMMON_STOP" in node.get("next", [])
+        if name.startswith("试剑-")
+        and "公共-通用停止" in node.get("next", [])
     }
     assert terminal_predecessors == {
         "MJA_TRIAL_ALREADY_COMPLETE",
-        "MJA_TRIAL_SUCCESS",
+        "试剑-成功",
     }
     assert_reachable(
         nodes,
-        "MJA_TRIAL_SWORD_DAILY_START",
-        "MJA_TRIAL_RECORD_FAILURE",
+        "试剑-任务入口",
+        "试剑-记录-失败",
     )
 
 
@@ -446,14 +446,14 @@ def test_trial_records_outcome_only_after_used_state_close_and_home_boundary() -
     nodes = load_task_nodes(TRIAL)
 
     assert nodes["MJA_TRIAL_FREE_VERIFY"]["recognition"]["param"] == {
-        "all_of": ["trial.page", "trial.free_used"],
+        "all_of": ["试剑-试炼-页面", "trial.free_used"],
         "box_index": 1,
     }
     assert nodes["MJA_TRIAL_FREE_VERIFY"]["next"] == [
-        "MJA_TRIAL_CLOSE_SUCCESS"
+        "试剑-关闭-成功"
     ]
     assert nodes["MJA_TRIAL_POST_REWARD_FREE_STATUS"]["next"] == [
-        "MJA_TRIAL_CLOSE_SUCCESS"
+        "试剑-关闭-成功"
     ]
     assert nodes["MJA_TRIAL_ALREADY_STATUS"]["next"] == [
         "MJA_TRIAL_CLOSE_ALREADY"
@@ -465,14 +465,14 @@ def test_trial_records_outcome_only_after_used_state_close_and_home_boundary() -
     expected_close_evidence = {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "trial.page",
-        "target_name": "trial.close",
+        "page_name": "试剑-试炼-页面",
+        "target_name": "试剑-试炼-关闭",
     }
     for close_name, home_name, outcome_name in (
         (
-            "MJA_TRIAL_CLOSE_SUCCESS",
-            "MJA_TRIAL_SUCCESS_HOME_PROBE",
-            "MJA_TRIAL_SUCCESS",
+            "试剑-关闭-成功",
+            "试剑-成功-主页-探测",
+            "试剑-成功",
         ),
         (
             "MJA_TRIAL_CLOSE_ALREADY",
@@ -484,15 +484,15 @@ def test_trial_records_outcome_only_after_used_state_close_and_home_boundary() -
         assert close["custom_action_param"]["action_id"] == "close_trial"
         assert close["custom_action_param"]["evidence"] == expected_close_evidence
         assert close["next"] == [home_name]
-        assert close["on_error"] == ["MJA_TRIAL_RECORD_FAILURE"]
+        assert close["on_error"] == ["试剑-记录-失败"]
 
         home = nodes[home_name]
-        assert home["recognition"]["param"] == {"all_of": ["home.page"]}
+        assert home["recognition"]["param"] == {"all_of": ["邮件奖励-主页-页面"]}
         assert home["action"] == "DoNothing"
         assert home["next"] == [outcome_name]
-        assert home["on_error"] == ["MJA_TRIAL_RECORD_FAILURE"]
+        assert home["on_error"] == ["试剑-记录-失败"]
 
-    assert_reachable(nodes, "MJA_TRIAL_FREE_VERIFY", "MJA_TRIAL_SUCCESS")
+    assert_reachable(nodes, "MJA_TRIAL_FREE_VERIFY", "试剑-成功")
     assert_reachable(
         nodes,
         "MJA_TRIAL_ALREADY_STATUS",
@@ -513,33 +513,33 @@ def test_hero_flow_guards_first_visible_dispatch_and_has_truthful_outcomes() -> 
     assert TASK_POLICIES[HERO.task_id].action_caps["close_reward_popup"] == 6
     assert TASK_POLICIES[HERO.task_id].action_caps["select_first_visible_dispatch"] == 12
     assert nodes[HERO.entry]["on_error"] == [
-        "MJA_HERO_GAME_START_RECOVERY",
-        "MJA_HERO_RECORD_FAILURE",
+        "英雄派遣-游戏启动恢复",
+        "英雄派遣-记录-失败",
     ]
-    assert nodes["MJA_HERO_GAME_START_RECOVERY"]["max_hit"] == 1
-    assert nodes["MJA_HERO_GAME_START_RECOVERY"]["next"][-1] == (
-        "[JumpBack]MJA_GAME_START"
+    assert nodes["英雄派遣-游戏启动恢复"]["max_hit"] == 1
+    assert nodes["英雄派遣-游戏启动恢复"]["next"][-1] == (
+        "[JumpBack]启动-游戏启动"
     )
-    assert nodes["MJA_DISPATCH_CLAIM_LOOP"]["max_hit"] == 6
-    assert nodes["MJA_DISPATCH_FILL_LOOP"]["max_hit"] == 6
+    assert nodes["英雄派遣-领取-循环"]["max_hit"] == 6
+    assert nodes["英雄派遣-填充-循环"]["max_hit"] == 6
     assert_terminal_after_loop(
         nodes,
-        "MJA_DISPATCH_CLAIM_LOOP",
+        "英雄派遣-领取-循环",
         6,
         "HERO_CLAIM_LOOP_EXHAUSTED",
     )
     assert_terminal_after_loop(
         nodes,
-        "MJA_DISPATCH_FILL_LOOP",
+        "英雄派遣-填充-循环",
         6,
         "HERO_DISPATCH_LOOP_EXHAUSTED",
     )
-    assert nodes["MJA_HERO_INITIAL_CLAIM"]["custom_action_param"]["action_id"] == (
+    assert nodes["英雄派遣-初始-领取"]["custom_action_param"]["action_id"] == (
         "select_first_visible_dispatch"
     )
-    assert nodes["MJA_HERO_INITIAL_CLAIM_BUTTON"]["next"] == ["MJA_HERO_INITIAL_CLAIM_ACTION"]
-    assert "完成派遣" in nodes["hero.first_task_claimable"]["expected"]
-    assert nodes["hero.all_completed"]["expected"] == [
+    assert nodes["英雄派遣-初始-领取-按钮"]["next"] == ["英雄派遣-初始-领取-动作"]
+    assert "完成派遣" in nodes["英雄派遣-英雄-首个-任务-可领取"]["expected"]
+    assert nodes["英雄派遣-英雄-全部-已完成"]["expected"] == [
         r"任务\s*[:：]?\s*9\s*/\s*9",
         r"已完成\s*[:：]?\s*9",
     ]
@@ -569,47 +569,47 @@ def test_hero_flow_guards_first_visible_dispatch_and_has_truthful_outcomes() -> 
     )
     assert_outcome(
         nodes,
-        "MJA_HERO_ALREADY_ALL",
+        "英雄派遣-已完成-全部",
         "already_complete",
         "hero.all_completed",
     )
     assert_outcome(
         nodes,
-        "MJA_HERO_ALREADY_PROGRESS",
+        "英雄派遣-已完成-进度",
         "already_complete",
         "hero.first_task_in_progress",
     )
     assert_outcome(
         nodes,
-        "MJA_HERO_SUCCESS_ALL",
+        "英雄派遣-成功-全部",
         "success",
         "hero.all_completed",
     )
     assert_outcome(
         nodes,
-        "MJA_HERO_SUCCESS_PROGRESS",
+        "英雄派遣-成功-进度",
         "success",
         "hero.first_task_in_progress",
     )
     assert_outcome(
         nodes,
-        "MJA_HERO_RECORD_FAILURE",
+        "英雄派遣-记录-失败",
         "failed",
         "HERO_POSTCONDITION_MISSING",
     )
     assert_outcome(
         nodes,
-        "MJA_DISPATCH_FILL_LOOP_EXHAUSTED",
+        "英雄派遣-填充-循环-耗尽",
         "failed",
         "hero.dispatch_state_known",
     )
     assert_outcome(
         nodes,
-        "MJA_DISPATCH_CLAIM_LOOP_EXHAUSTED",
+        "英雄派遣-领取-循环-耗尽",
         "failed",
         "hero.claim_state_known",
     )
-    assert nodes["MJA_HERO_CLOSE_PAINTING"]["next"] == ["MJA_HERO_HOME_BOUNDARY_PROBE"]
+    assert nodes["英雄派遣-关闭-画卷"]["next"] == ["英雄派遣-主页边界-探测"]
 
 
 def test_collection_task_contract_and_existing_fixture_matrix() -> None:
@@ -650,7 +650,7 @@ def test_collection_flow_guards_single_harvest_and_requires_fresh_empty_state() 
     )
     assert_outcome(
         nodes,
-        "MJA_COLLECTION_RECORD_FAILURE",
+        "采集部署-记录-失败",
         "failed",
         "COLLECTION_POSTCONDITION_MISSING",
     )
@@ -660,13 +660,13 @@ def test_collection_entry_closes_archived_stale_universal_shop_before_probes() -
     nodes = load_task_nodes(COLLECTION)
     start = nodes[COLLECTION.entry]
     assert start["next"] == [
-        "[JumpBack]MJA_KNOWN_COLLECTION_STALE_SHOP_CLOSE",
-        "MJA_COLLECTION_RESUME_REWARD_PROBE",
-        "MJA_COLLECTION_PAGE_PROBE",
-        "MJA_COLLECTION_HOME_PROBE",
+        "[JumpBack]采集部署-已知-采集-过期-商店-关闭",
+        "采集部署-恢复继续-奖励-探测",
+        "采集部署-页面-探测",
+        "采集部署-主页-探测",
     ]
 
-    recovery = nodes["MJA_KNOWN_COLLECTION_STALE_SHOP_CLOSE"]
+    recovery = nodes["采集部署-已知-采集-过期-商店-关闭"]
     assert recovery["action"] == "Click"
     assert recovery["max_hit"] == 1
     assert recovery["retry_times"] == 0
@@ -675,19 +675,19 @@ def test_collection_entry_closes_archived_stale_universal_shop_before_probes() -
         "type": "And",
         "param": {
             "all_of": [
-                "collection.universal_shop.boundary",
-                "collection.universal_shop.close",
+                "采集部署-采集-万用-商店-边界",
+                "采集部署-采集-万用-商店-关闭",
             ],
             "box_index": 1,
         },
     }
-    assert nodes["collection.universal_shop.boundary"] == {
+    assert nodes["采集部署-采集-万用-商店-边界"] == {
         "recognition": "OCR",
         "expected": "玉盟商会",
         "roi": [0, 0, 320, 120],
         "action": "DoNothing",
     }
-    assert nodes["collection.universal_shop.close"] == {
+    assert nodes["采集部署-采集-万用-商店-关闭"] == {
         "recognition": "TemplateMatch",
         "template": "daily/BUY_TEA_DAILY/shop_close.png",
         "roi": [1160, 0, 100, 100],
@@ -720,10 +720,10 @@ def test_weekly_flow_partitions_free_paid_and_unknown_price_states() -> None:
             "close_shop",
         ],
     )
-    free_claim = nodes["MJA_WEEKLY_FREE_CLAIM"]["recognition"]["param"]["all_of"]
-    assert "shop.weekly_lucky_bag_free" in free_claim
+    free_claim = nodes["周一免费礼包-免费-领取"]["recognition"]["param"]["all_of"]
+    assert "周一免费礼包-商店-每周-幸运-背包-免费" in free_claim
     assert_outcome(nodes, "MJA_WEEKLY_CLAIMED", "already_complete", "weekly_gift.claimed")
-    assert_outcome(nodes, "MJA_WEEKLY_CLAIM_SUCCESS", "success", "weekly_gift.claimed")
+    assert_outcome(nodes, "周一免费礼包-领取-成功", "success", "weekly_gift.claimed")
     assert_outcome(
         nodes,
         "MJA_WEEKLY_PAID_ONLY",
@@ -743,7 +743,7 @@ def test_daily_reward_task_contract_and_existing_fixture_matrix() -> None:
 
 def test_daily_reward_scan_prioritizes_claims_and_has_five_scroll_bound() -> None:
     nodes = load_task_nodes(DAILY_REWARD)
-    assert nodes["MJA_DAILY_REWARD_SCAN"]["max_hit"] == 5
+    assert nodes["日常任务奖励-奖励-扫描"]["max_hit"] == 5
     assert TASK_POLICIES[DAILY_REWARD.task_id].action_caps["claim_completed_daily_row"] == 50
     assert TASK_POLICIES[DAILY_REWARD.task_id].action_caps["claim_unlocked_activity_chest"] == 10
     assert TASK_POLICIES[DAILY_REWARD.task_id].action_caps["close_reward_popup"] == 60
@@ -761,20 +761,20 @@ def test_daily_reward_scan_prioritizes_claims_and_has_five_scroll_bound() -> Non
                 "close_function_panel",
             ],
         )
-    assert nodes["MJA_DAILY_CLAIM_ROW"]["next"] == [
-        "MJA_DAILY_REWARD_PROBE",
-        "MJA_DAILY_REWARD_PAGE_VERIFY",
+    assert nodes["日常任务奖励-领取-行"]["next"] == [
+        "日常任务奖励-奖励-探测",
+        "日常任务奖励-奖励-页面-校验",
     ]
-    assert nodes["MJA_DAILY_CLOSE_REWARD"]["next"] == ["MJA_DAILY_REWARD_PAGE_VERIFY"]
+    assert nodes["日常任务奖励-关闭-奖励"]["next"] == ["日常任务奖励-奖励-页面-校验"]
     assert_outcome(
         nodes,
-        "MJA_DAILY_REWARD_NONE",
+        "日常任务奖励-奖励-无",
         "already_complete",
         "daily_reward.no_claimable",
     )
     assert_outcome(
         nodes,
-        "MJA_DAILY_REWARD_DONE",
+        "日常任务奖励-奖励-完成",
         "success",
         "daily_reward.no_claimable",
     )
@@ -787,8 +787,8 @@ def test_battle_pass_task_and_basic_reward_phases_are_bounded_and_safe() -> None
         {"entry", "actionable", "completed", "danger"},
     )
     nodes = load_task_nodes(BATTLE_PASS)
-    assert nodes["MJA_BP_TASK_CLAIM_LOOP"]["max_hit"] == 50
-    assert nodes["MJA_BP_BASIC_CLAIM_LOOP"]["max_hit"] == 50
+    assert nodes["战令奖励-任务-领取-循环"]["max_hit"] == 50
+    assert nodes["战令奖励-基础-领取-循环"]["max_hit"] == 50
     assert TASK_POLICIES[BATTLE_PASS.task_id].action_caps["close_reward_popup"] == 50
     assert_guarded_actions(
         nodes,
@@ -803,31 +803,31 @@ def test_battle_pass_task_and_basic_reward_phases_are_bounded_and_safe() -> None
             "close_battle_pass",
         ],
     )
-    assert nodes["MJA_BP_TASK_CLAIM_LOOP"]["next"] == [
-        "MJA_BP_TASK_REWARD_PROBE",
-        "MJA_BP_TASK_ITEM_PROBE",
-        "MJA_BP_TASK_REWARD_VERIFY",
+    assert nodes["战令奖励-任务-领取-循环"]["next"] == [
+        "战令奖励-任务-奖励-探测",
+        "战令奖励-任务-物品-探测",
+        "战令奖励-任务-奖励-校验",
     ]
-    assert nodes["MJA_BP_BASIC_CLAIM_LOOP"]["next"] == [
-        "MJA_BP_BASIC_REWARD_PROBE",
-        "MJA_BP_BASIC_ITEM_PROBE",
-        "MJA_BP_BASIC_REWARD_VERIFY",
+    assert nodes["战令奖励-基础-领取-循环"]["next"] == [
+        "战令奖励-基础-奖励-探测",
+        "战令奖励-基础-物品-探测",
+        "战令奖励-基础-奖励-校验",
     ]
     assert_outcome(
         nodes,
-        "MJA_BP_ALL_CLAIMED",
+        "战令奖励-全部已领取",
         "already_complete",
         "battle_pass.no_task_or_basic_claimable",
     )
     assert_outcome(
         nodes,
-        "MJA_BP_ALL_CLAIMED_SUCCESS",
+        "战令奖励-全部已领取-成功",
         "success",
         "battle_pass.no_task_or_basic_claimable",
     )
     assert_outcome(
         nodes,
-        "MJA_BP_REWARDS_AMBIGUOUS",
+        "战令奖励-奖励-歧义",
         "failed",
         "BATTLE_PASS_REWARDS_PAGE_AMBIGUOUS",
     )

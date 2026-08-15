@@ -1,5 +1,5 @@
 {
-  "MJA_DAILY_TASK_REWARD_CLAIM_DAILY_START": {
+  "日常任务奖励-任务入口": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "BeginTask",
@@ -8,31 +8,31 @@
     },
     "max_hit": 1,
     "next": [
-      "MJA_DAILY_RESUME_REWARD_PROBE",
-      "MJA_DAILY_PAGE_PROBE",
-      "MJA_DAILY_PANEL_PROBE",
-      "MJA_DAILY_HOME_PROBE"
+      "日常任务奖励-恢复继续-奖励-探测",
+      "日常任务奖励-页面-探测",
+      "日常任务奖励-面板-探测",
+      "日常任务奖励-主页-探测"
     ],
-    "on_error": ["MJA_DAILY_RECORD_FAILURE"]
+    "on_error": ["日常任务奖励-记录-失败"]
   },
-  "MJA_DAILY_RESUME_REWARD_PROBE": {
+  "日常任务奖励-恢复继续-奖励-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["daily.reward_popup", "daily.reward_popup_close"],
+        "all_of": ["日常任务奖励-日常-奖励-弹窗", "日常任务奖励-日常-奖励-弹窗-关闭"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_DAILY_CLOSE_REWARD"],
-    "on_error": ["MJA_DAILY_RECORD_FAILURE"]
+    "next": ["日常任务奖励-关闭-奖励"],
+    "on_error": ["日常任务奖励-记录-失败"]
   },
-  "MJA_DAILY_CLOSE_REWARD": {
+  "日常任务奖励-关闭-奖励": {
     "max_hit": 60,
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["daily.reward_popup", "daily.reward_popup_close"],
+        "all_of": ["日常任务奖励-日常-奖励-弹窗", "日常任务奖励-日常-奖励-弹窗-关闭"],
         "box_index": 1
       }
     },
@@ -45,90 +45,90 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "daily.reward_popup",
-        "target_name": "daily.reward_popup_close"
+        "page_name": "日常任务奖励-日常-奖励-弹窗",
+        "target_name": "日常任务奖励-日常-奖励-弹窗-关闭"
       }
     },
-    "next": ["MJA_DAILY_REWARD_PAGE_VERIFY"],
-    "on_error": ["MJA_DAILY_RECORD_FAILURE"],
+    "next": ["日常任务奖励-奖励-页面-校验"],
+    "on_error": ["日常任务奖励-记录-失败"],
     "retry_times": 0
   },
-  "MJA_DAILY_REWARD_PAGE_VERIFY": {
+  "日常任务奖励-奖励-页面-校验": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["daily.page"]
+        "all_of": ["日常任务奖励-日常-页面"]
       }
     },
     "timeout": 8000,
     "action": "DoNothing",
     "next": [
-      "MJA_DAILY_MUTATION_ROW_PROBE",
-      "MJA_DAILY_MUTATION_CHEST_PROBE",
-      "MJA_DAILY_MUTATION_NO_CLAIM_PROBE",
-      "MJA_DAILY_REWARD_SCAN_AFTER_MUTATION"
+      "日常任务奖励-变更-行-探测",
+      "日常任务奖励-变更-宝箱-探测",
+      "日常任务奖励-变更-无-领取-探测",
+      "日常任务奖励-奖励-扫描-之后-变更"
     ],
-    "on_error": ["MJA_DAILY_RECORD_FAILURE"]
+    "on_error": ["日常任务奖励-记录-失败"]
   },
-  "MJA_DAILY_PAGE_PROBE": {
+  "日常任务奖励-页面-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["daily.page"]
+        "all_of": ["日常任务奖励-日常-页面"]
       }
     },
     "timeout": 8000,
     "action": "DoNothing",
     "next": [
-      "MJA_DAILY_INITIAL_ROW_PROBE",
-      "MJA_DAILY_INITIAL_CHEST_PROBE",
-      "MJA_DAILY_INITIAL_NO_CLAIM_PROBE",
-      "MJA_DAILY_REWARD_SCAN"
+      "日常任务奖励-初始-行-探测",
+      "日常任务奖励-初始-宝箱-探测",
+      "日常任务奖励-初始-无-领取-探测",
+      "日常任务奖励-奖励-扫描"
     ],
-    "on_error": ["MJA_DAILY_RECORD_FAILURE"]
+    "on_error": ["日常任务奖励-记录-失败"]
   },
-  "MJA_DAILY_INITIAL_ROW_PROBE": {
+  "日常任务奖励-初始-行-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["daily.page", "daily.completed_row_claim"],
+        "all_of": ["日常任务奖励-日常-页面", "日常任务奖励-日常-已完成-行-领取"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_DAILY_CLAIM_ROW"],
-    "on_error": ["MJA_DAILY_RECORD_FAILURE"]
+    "next": ["日常任务奖励-领取-行"],
+    "on_error": ["日常任务奖励-记录-失败"]
   },
-  "MJA_DAILY_INITIAL_CHEST_PROBE": {
+  "日常任务奖励-初始-宝箱-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["daily.page", "daily.unlocked_activity_chest"],
+        "all_of": ["日常任务奖励-日常-页面", "日常任务奖励-日常-已解锁-活动-宝箱"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_DAILY_CLAIM_CHEST"],
-    "on_error": ["MJA_DAILY_RECORD_FAILURE"]
+    "next": ["日常任务奖励-领取-宝箱"],
+    "on_error": ["日常任务奖励-记录-失败"]
   },
-  "MJA_DAILY_INITIAL_NO_CLAIM_PROBE": {
+  "日常任务奖励-初始-无-领取-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["daily.page", "daily.no_claimable_global"],
+        "all_of": ["日常任务奖励-日常-页面", "日常任务奖励-日常-无-可领取-全局"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_DAILY_REWARD_NONE"],
-    "on_error": ["MJA_DAILY_RECORD_FAILURE"]
+    "next": ["日常任务奖励-奖励-无"],
+    "on_error": ["日常任务奖励-记录-失败"]
   },
-  "MJA_DAILY_REWARD_SCAN": {
+  "日常任务奖励-奖励-扫描": {
     "max_hit": 5,
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["daily.page", "daily.scroll_region"],
+        "all_of": ["日常任务奖励-日常-页面", "日常任务奖励-日常-滚动-区域"],
         "box_index": 1
       }
     },
@@ -141,63 +141,63 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "daily.page",
-        "target_name": "daily.scroll_region",
+        "page_name": "日常任务奖励-日常-页面",
+        "target_name": "日常任务奖励-日常-滚动-区域",
         "dx": 0,
         "dy": -300,
         "duration_ms": 350
       }
     },
-    "next": ["MJA_DAILY_PAGE_PROBE"],
+    "next": ["日常任务奖励-页面-探测"],
     "on_error": [
-      "MJA_DAILY_INITIAL_SCAN_EXHAUSTED_PROBE",
-      "MJA_DAILY_INITIAL_CLAIMED_EXHAUSTED_PROBE",
-      "MJA_DAILY_SCAN_EXHAUSTED"
+      "日常任务奖励-初始-扫描-耗尽-探测",
+      "日常任务奖励-初始-已领取-耗尽-探测",
+      "日常任务奖励-扫描-耗尽"
     ],
     "retry_times": 0
   },
-  "MJA_DAILY_MUTATION_ROW_PROBE": {
+  "日常任务奖励-变更-行-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["daily.page", "daily.completed_row_claim"],
+        "all_of": ["日常任务奖励-日常-页面", "日常任务奖励-日常-已完成-行-领取"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_DAILY_CLAIM_ROW"],
-    "on_error": ["MJA_DAILY_RECORD_FAILURE"]
+    "next": ["日常任务奖励-领取-行"],
+    "on_error": ["日常任务奖励-记录-失败"]
   },
-  "MJA_DAILY_MUTATION_CHEST_PROBE": {
+  "日常任务奖励-变更-宝箱-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["daily.page", "daily.unlocked_activity_chest"],
+        "all_of": ["日常任务奖励-日常-页面", "日常任务奖励-日常-已解锁-活动-宝箱"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_DAILY_CLAIM_CHEST"],
-    "on_error": ["MJA_DAILY_RECORD_FAILURE"]
+    "next": ["日常任务奖励-领取-宝箱"],
+    "on_error": ["日常任务奖励-记录-失败"]
   },
-  "MJA_DAILY_MUTATION_NO_CLAIM_PROBE": {
+  "日常任务奖励-变更-无-领取-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["daily.page", "daily.no_claimable_global"],
+        "all_of": ["日常任务奖励-日常-页面", "日常任务奖励-日常-无-可领取-全局"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_DAILY_REWARD_DONE"],
-    "on_error": ["MJA_DAILY_RECORD_FAILURE"]
+    "next": ["日常任务奖励-奖励-完成"],
+    "on_error": ["日常任务奖励-记录-失败"]
   },
-  "MJA_DAILY_REWARD_SCAN_AFTER_MUTATION": {
+  "日常任务奖励-奖励-扫描-之后-变更": {
     "max_hit": 5,
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["daily.page", "daily.scroll_region"],
+        "all_of": ["日常任务奖励-日常-页面", "日常任务奖励-日常-滚动-区域"],
         "box_index": 1
       }
     },
@@ -210,75 +210,75 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "daily.page",
-        "target_name": "daily.scroll_region",
+        "page_name": "日常任务奖励-日常-页面",
+        "target_name": "日常任务奖励-日常-滚动-区域",
         "dx": 0,
         "dy": -300,
         "duration_ms": 350
       }
     },
-    "next": ["MJA_DAILY_REWARD_PAGE_VERIFY"],
+    "next": ["日常任务奖励-奖励-页面-校验"],
     "on_error": [
-      "MJA_DAILY_MUTATION_SCAN_EXHAUSTED_PROBE",
-      "MJA_DAILY_MUTATION_CLAIMED_EXHAUSTED_PROBE",
-      "MJA_DAILY_SCAN_EXHAUSTED"
+      "日常任务奖励-变更-扫描-耗尽-探测",
+      "日常任务奖励-变更-已领取-耗尽-探测",
+      "日常任务奖励-扫描-耗尽"
     ],
     "retry_times": 0
   },
-  "MJA_DAILY_INITIAL_SCAN_EXHAUSTED_PROBE": {
+  "日常任务奖励-初始-扫描-耗尽-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["daily.page", "daily.no_claimable_global"],
+        "all_of": ["日常任务奖励-日常-页面", "日常任务奖励-日常-无-可领取-全局"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_DAILY_REWARD_NONE"],
-    "on_error": ["MJA_DAILY_SCAN_EXHAUSTED"]
+    "next": ["日常任务奖励-奖励-无"],
+    "on_error": ["日常任务奖励-扫描-耗尽"]
   },
-  "MJA_DAILY_INITIAL_CLAIMED_EXHAUSTED_PROBE": {
+  "日常任务奖励-初始-已领取-耗尽-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["daily.page", "daily.claimed_row"],
+        "all_of": ["日常任务奖励-日常-页面", "日常任务奖励-日常-已领取-行"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_DAILY_REWARD_NONE"],
-    "on_error": ["MJA_DAILY_SCAN_EXHAUSTED"]
+    "next": ["日常任务奖励-奖励-无"],
+    "on_error": ["日常任务奖励-扫描-耗尽"]
   },
-  "MJA_DAILY_MUTATION_SCAN_EXHAUSTED_PROBE": {
+  "日常任务奖励-变更-扫描-耗尽-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["daily.page", "daily.no_claimable_global"],
+        "all_of": ["日常任务奖励-日常-页面", "日常任务奖励-日常-无-可领取-全局"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_DAILY_REWARD_DONE"],
-    "on_error": ["MJA_DAILY_SCAN_EXHAUSTED"]
+    "next": ["日常任务奖励-奖励-完成"],
+    "on_error": ["日常任务奖励-扫描-耗尽"]
   },
-  "MJA_DAILY_MUTATION_CLAIMED_EXHAUSTED_PROBE": {
+  "日常任务奖励-变更-已领取-耗尽-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["daily.page", "daily.claimed_row"],
+        "all_of": ["日常任务奖励-日常-页面", "日常任务奖励-日常-已领取-行"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_DAILY_REWARD_DONE"],
-    "on_error": ["MJA_DAILY_SCAN_EXHAUSTED"]
+    "next": ["日常任务奖励-奖励-完成"],
+    "on_error": ["日常任务奖励-扫描-耗尽"]
   },
-  "MJA_DAILY_CLAIM_ROW": {
+  "日常任务奖励-领取-行": {
     "max_hit": 50,
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["daily.page", "daily.completed_row_claim"],
+        "all_of": ["日常任务奖励-日常-页面", "日常任务奖励-日常-已完成-行-领取"],
         "box_index": 1
       }
     },
@@ -291,23 +291,23 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "daily.page",
-        "target_name": "daily.completed_row_claim"
+        "page_name": "日常任务奖励-日常-页面",
+        "target_name": "日常任务奖励-日常-已完成-行-领取"
       }
     },
     "next": [
-      "MJA_DAILY_REWARD_PROBE",
-      "MJA_DAILY_REWARD_PAGE_VERIFY"
+      "日常任务奖励-奖励-探测",
+      "日常任务奖励-奖励-页面-校验"
     ],
-    "on_error": ["MJA_DAILY_RECORD_FAILURE"],
+    "on_error": ["日常任务奖励-记录-失败"],
     "retry_times": 0
   },
-  "MJA_DAILY_CLAIM_CHEST": {
+  "日常任务奖励-领取-宝箱": {
     "max_hit": 10,
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["daily.page", "daily.unlocked_activity_chest"],
+        "all_of": ["日常任务奖励-日常-页面", "日常任务奖励-日常-已解锁-活动-宝箱"],
         "box_index": 1
       }
     },
@@ -320,27 +320,27 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "daily.page",
-        "target_name": "daily.unlocked_activity_chest"
+        "page_name": "日常任务奖励-日常-页面",
+        "target_name": "日常任务奖励-日常-已解锁-活动-宝箱"
       }
     },
     "next": [
-      "MJA_DAILY_REWARD_PROBE",
-      "MJA_DAILY_REWARD_PAGE_VERIFY"
+      "日常任务奖励-奖励-探测",
+      "日常任务奖励-奖励-页面-校验"
     ],
-    "on_error": ["MJA_DAILY_RECORD_FAILURE"],
+    "on_error": ["日常任务奖励-记录-失败"],
     "retry_times": 0
   },
-  "MJA_DAILY_REWARD_PROBE": {
+  "日常任务奖励-奖励-探测": {
     "recognition": "OCR",
     "expected": ["恭喜获得", "获得"],
     "roi": [0, 100, 1280, 620],
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_DAILY_CLOSE_REWARD"],
-    "on_error": ["MJA_DAILY_RECORD_FAILURE"]
+    "next": ["日常任务奖励-关闭-奖励"],
+    "on_error": ["日常任务奖励-记录-失败"]
   },
-  "MJA_DAILY_REWARD_NONE": {
+  "日常任务奖励-奖励-无": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -349,9 +349,9 @@
       "status": "already_complete",
       "postcondition": "daily_reward.no_claimable"
     },
-    "next": ["MJA_DAILY_CLOSE"]
+    "next": ["日常任务奖励-关闭"]
   },
-  "MJA_DAILY_REWARD_DONE": {
+  "日常任务奖励-奖励-完成": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -360,9 +360,9 @@
       "status": "success",
       "postcondition": "daily_reward.no_claimable"
     },
-    "next": ["MJA_DAILY_CLOSE"]
+    "next": ["日常任务奖励-关闭"]
   },
-  "MJA_DAILY_SCAN_EXHAUSTED": {
+  "日常任务奖励-扫描-耗尽": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -374,10 +374,10 @@
       "native_fail_after_record": true
     },
     "Abort": true,
-    "next": ["MJA_COMMON_ABORT"]
+    "next": ["公共-通用中止"]
 
   },
-  "MJA_DAILY_RECORD_FAILURE": {
+  "日常任务奖励-记录-失败": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -389,28 +389,28 @@
       "native_fail_after_record": true
     },
     "Abort": true,
-    "next": ["MJA_COMMON_ABORT"]
+    "next": ["公共-通用中止"]
 
   },
-  "MJA_DAILY_HOME_PROBE": {
+  "日常任务奖励-主页-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["daily.home.page", "daily.home.panel_open"],
+        "all_of": ["日常任务奖励-日常-主页-页面", "日常任务奖励-日常-主页-面板-打开"],
         "box_index": 0
       }
     },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_DAILY_OPEN_PANEL"],
-    "on_error": ["MJA_DAILY_RECORD_FAILURE"]
+    "next": ["日常任务奖励-打开-面板"],
+    "on_error": ["日常任务奖励-记录-失败"]
   },
-  "MJA_DAILY_OPEN_PANEL": {
+  "日常任务奖励-打开-面板": {
     "max_hit": 1,
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["daily.home.page", "daily.home.panel_open"],
+        "all_of": ["日常任务奖励-日常-主页-页面", "日常任务奖励-日常-主页-面板-打开"],
         "box_index": 1
       }
     },
@@ -423,32 +423,32 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "daily.home.page",
-        "target_name": "daily.home.panel_open"
+        "page_name": "日常任务奖励-日常-主页-页面",
+        "target_name": "日常任务奖励-日常-主页-面板-打开"
       }
     },
-    "next": ["MJA_DAILY_PANEL_PROBE"],
-    "on_error": ["MJA_DAILY_RECORD_FAILURE"],
+    "next": ["日常任务奖励-面板-探测"],
+    "on_error": ["日常任务奖励-记录-失败"],
     "retry_times": 0
   },
-  "MJA_DAILY_PANEL_PROBE": {
+  "日常任务奖励-面板-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["daily.panel.page"]
+        "all_of": ["日常任务奖励-日常-面板-页面"]
       }
     },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_DAILY_OPEN_DAILY"],
-    "on_error": ["MJA_DAILY_RECORD_FAILURE"]
+    "next": ["日常任务奖励-打开-日常"],
+    "on_error": ["日常任务奖励-记录-失败"]
   },
-  "MJA_DAILY_OPEN_DAILY": {
+  "日常任务奖励-打开-日常": {
     "max_hit": 1,
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["daily.panel.page", "daily.entry"],
+        "all_of": ["日常任务奖励-日常-面板-页面", "日常任务奖励-日常-入口"],
         "box_index": 1
       }
     },
@@ -461,20 +461,20 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "daily.panel.page",
-        "target_name": "daily.entry"
+        "page_name": "日常任务奖励-日常-面板-页面",
+        "target_name": "日常任务奖励-日常-入口"
       }
     },
-    "next": ["MJA_DAILY_PAGE_PROBE"],
-    "on_error": ["MJA_DAILY_RECORD_FAILURE"],
+    "next": ["日常任务奖励-页面-探测"],
+    "on_error": ["日常任务奖励-记录-失败"],
     "retry_times": 0
   },
-  "MJA_DAILY_CLOSE": {
+  "日常任务奖励-关闭": {
     "max_hit": 1,
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["daily.page", "daily.close"],
+        "all_of": ["日常任务奖励-日常-页面", "日常任务奖励-日常-关闭"],
         "box_index": 1
       }
     },
@@ -487,36 +487,36 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "daily.page",
-        "target_name": "daily.close"
+        "page_name": "日常任务奖励-日常-页面",
+        "target_name": "日常任务奖励-日常-关闭"
       }
     },
     "next": [
-      "MJA_DAILY_PANEL_AFTER_CLOSE",
-      "MJA_DAILY_HOME_BOUNDARY_PROBE"
+      "日常任务奖励-面板关闭后",
+      "日常任务奖励-主页边界-探测"
     ],
-    "on_error": ["MJA_DAILY_HOME_BOUNDARY_FAILURE"],
+    "on_error": ["日常任务奖励-主页边界-失败"],
     "retry_times": 0
   },
-  "MJA_DAILY_PANEL_AFTER_CLOSE": {
+  "日常任务奖励-面板关闭后": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["daily.panel.page", "daily.panel.close"],
+        "all_of": ["日常任务奖励-日常-面板-页面", "日常任务奖励-日常-面板-关闭"],
         "box_index": 0
       }
     },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_DAILY_CLOSE_PANEL", "MJA_DAILY_HOME_BOUNDARY_PROBE"],
-    "on_error": ["MJA_DAILY_HOME_BOUNDARY_FAILURE"]
+    "next": ["日常任务奖励-关闭-面板", "日常任务奖励-主页边界-探测"],
+    "on_error": ["日常任务奖励-主页边界-失败"]
   },
-  "MJA_DAILY_CLOSE_PANEL": {
+  "日常任务奖励-关闭-面板": {
     "max_hit": 1,
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["daily.panel.page", "daily.panel.close"],
+        "all_of": ["日常任务奖励-日常-面板-页面", "日常任务奖励-日常-面板-关闭"],
         "box_index": 1
       }
     },
@@ -530,27 +530,27 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "daily.panel.page",
-        "target_name": "daily.panel.close"
+        "page_name": "日常任务奖励-日常-面板-页面",
+        "target_name": "日常任务奖励-日常-面板-关闭"
       }
     },
-    "next": ["MJA_DAILY_HOME_BOUNDARY_PROBE"],
-    "on_error": ["MJA_DAILY_HOME_BOUNDARY_FAILURE"],
+    "next": ["日常任务奖励-主页边界-探测"],
+    "on_error": ["日常任务奖励-主页边界-失败"],
     "retry_times": 0
   },
-  "MJA_DAILY_HOME_BOUNDARY_PROBE": {
+  "日常任务奖励-主页边界-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["daily.home.page"]
+        "all_of": ["日常任务奖励-日常-主页-页面"]
       }
     },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_COMMON_STOP", "[JumpBack]MJA_GAME_START"],
-    "on_error": ["MJA_DAILY_HOME_BOUNDARY_FAILURE"]
+    "next": ["公共-通用停止", "[JumpBack]启动-游戏启动"],
+    "on_error": ["日常任务奖励-主页边界-失败"]
   },
-  "MJA_DAILY_HOME_BOUNDARY_FAILURE": {
+  "日常任务奖励-主页边界-失败": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -562,137 +562,137 @@
       "native_fail_after_record": true
     },
     "Abort": true,
-    "next": ["MJA_COMMON_ABORT"]
+    "next": ["公共-通用中止"]
 
   },
-  "daily.entry": {
+  "日常任务奖励-日常-入口": {
     "recognition": "OCR",
     "expected": "^日常$",
     "roi": [1040, 270, 120, 70],
     "action": "DoNothing"
   },
-  "daily.page": {
+  "日常任务奖励-日常-页面": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["daily.page.title", "daily.page.activity"],
+        "all_of": ["日常任务奖励-日常-页面-标题", "日常任务奖励-日常-页面-活动"],
         "box_index": 0
       }
     },
     "action": "DoNothing"
   },
-  "daily.page.title": {
+  "日常任务奖励-日常-页面-标题": {
     "recognition": "OCR",
     "expected": "^日常任务$",
     "roi": [70, 15, 130, 60],
     "action": "DoNothing"
   },
-  "daily.page.activity": {
+  "日常任务奖励-日常-页面-活动": {
     "recognition": "OCR",
     "expected": "^活跃度$",
     "roi": [300, 75, 100, 115],
     "action": "DoNothing"
   },
-  "daily.completed_row_claim": {
+  "日常任务奖励-日常-已完成-行-领取": {
     "recognition": "OCR",
     "expected": "领取",
     "roi": [980, 180, 190, 130],
     "action": "DoNothing"
   },
-  "daily.unlocked_activity_chest": {
+  "日常任务奖励-日常-已解锁-活动-宝箱": {
     "recognition": "TemplateMatch",
     "template": "daily/DAILY_TASK_REWARD_CLAIM_DAILY/unlocked_chest_live.png",
     "roi": [380, 65, 760, 100],
     "threshold": 0.36,
     "action": "DoNothing"
   },
-  "daily.reward_popup": {
+  "日常任务奖励-日常-奖励-弹窗": {
     "recognition": "OCR",
     "expected": ["恭喜获得", "获得"],
     "roi": [0, 100, 1280, 620],
     "action": "DoNothing"
   },
-  "daily.reward_popup_close": {
+  "日常任务奖励-日常-奖励-弹窗-关闭": {
     "recognition": "OCR",
     "expected": "点击空白处关闭",
     "roi": [300, 560, 700, 160],
     "action": "DoNothing"
   },
-  "daily.no_claimable_global": {
+  "日常任务奖励-日常-无-可领取-全局": {
     "recognition": "OCR",
     "expected": ["^暂无可领取$", "^前往$"],
     "roi": [300, 100, 900, 620],
     "action": "DoNothing"
   },
-  "daily.claimed_row": {
+  "日常任务奖励-日常-已领取-行": {
     "recognition": "OCR",
     "expected": "^已领取$",
     "roi": [300, 100, 900, 620],
     "action": "DoNothing"
   },
-  "daily.scroll_region": {
+  "日常任务奖励-日常-滚动-区域": {
     "recognition": "OCR",
     "expected": ["任务", "活跃度"],
     "roi": [180, 190, 1000, 400],
     "action": "DoNothing"
   },
-  "daily.close": {
+  "日常任务奖励-日常-关闭": {
     "recognition": "TemplateMatch",
     "template": "daily/TRIAL_SWORD_DAILY/trial_close.png",
     "roi": [1160, 0, 100, 100],
     "threshold": 0.36,
     "action": "DoNothing"
   },
-  "daily.home.page": {
+  "日常任务奖励-日常-主页-页面": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["daily.home.dungeon", "daily.home.trial"],
+        "all_of": ["日常任务奖励-日常-主页-副本", "日常任务奖励-日常-主页-试炼"],
         "box_index": 0
       }
     },
     "action": "DoNothing"
   },
-  "daily.home.dungeon": {
+  "日常任务奖励-日常-主页-副本": {
     "recognition": "OCR",
     "expected": "^副本$",
     "roi": [1035, 45, 80, 40],
     "action": "DoNothing"
   },
-  "daily.home.trial": {
+  "日常任务奖励-日常-主页-试炼": {
     "recognition": "OCR",
     "expected": ["^试剑$", "^击破：\\d+(?:层)?$"],
     "roi": [965, 620, 100, 70],
     "action": "DoNothing"
   },
-  "daily.home.panel_open": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_FUNCTION_PANEL_ENTRY"], "box_index": 0}},
+  "日常任务奖励-日常-主页-面板-打开": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏功能面板-入口"], "box_index": 0}},
     "action": "DoNothing"
   },
-  "daily.panel.page": {
+  "日常任务奖励-日常-面板-页面": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["daily.panel.shop", "daily.panel.study"],
+        "all_of": ["日常任务奖励-日常-面板-商店", "日常任务奖励-日常-面板-研习"],
         "box_index": 0
       }
     },
     "action": "DoNothing"
   },
-  "daily.panel.shop": {
+  "日常任务奖励-日常-面板-商店": {
     "recognition": "OCR",
     "expected": "^商城$",
     "roi": [925, 270, 105, 75],
     "action": "DoNothing"
   },
-  "daily.panel.study": {
+  "日常任务奖励-日常-面板-研习": {
     "recognition": "OCR",
     "expected": "^武学研习$",
     "roi": [680, 390, 140, 75],
     "action": "DoNothing"
   },
-  "daily.panel.close": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_SIDE_PANEL_OPEN"], "box_index": 0}},
+  "日常任务奖励-日常-面板-关闭": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏侧边面板-打开"], "box_index": 0}},
     "action": "DoNothing"
   }
 }

@@ -31,14 +31,14 @@ def test_r19_home_archive_drives_narrow_exact_roi_contract() -> None:
     # entry is the top-left 画卷 control; the old ROI [1095, 45, 85, 40]
     # pointed at the unrelated upper-right HUD and produced no match.
     observed = {
-        "hero.home.dungeon": [1060, 60, 29, 11],
-        "painting_scroll.entry": [91, 27, 46, 27],
-        "hero.home.trial": [990, 643, 44, 22],
+        "英雄派遣-英雄-主页-副本": [1060, 60, 29, 11],
+        "英雄派遣-画卷-滚动-入口": [91, 27, 46, 27],
+        "英雄派遣-英雄-主页-试炼": [990, 643, 44, 22],
     }
     expected = {
-        "hero.home.dungeon": "^副本$",
-        "painting_scroll.entry": "^画卷$",
-        "hero.home.trial": "^试剑$",
+        "英雄派遣-英雄-主页-副本": "^副本$",
+        "英雄派遣-画卷-滚动-入口": "^画卷$",
+        "英雄派遣-英雄-主页-试炼": "^试剑$",
     }
 
     for name, box in observed.items():
@@ -47,22 +47,22 @@ def test_r19_home_archive_drives_narrow_exact_roi_contract() -> None:
         assert node["recognition"] == "OCR"
         assert node["expected"] == expected[name]
         assert _contains(roi, box)
-        if name != "painting_scroll.entry":
+        if name != "英雄派遣-画卷-滚动-入口":
             assert roi[0] >= 900
         assert roi[2] * roi[3] < FRAME_WIDTH * FRAME_HEIGHT // 100
 
-    assert nodes["painting_scroll.entry"]["roi"] == [70, 10, 95, 60]
-    assert nodes["painting_scroll.entry"]["roi"] != [850, 0, 430, 180]
+    assert nodes["英雄派遣-画卷-滚动-入口"]["roi"] == [70, 10, 95, 60]
+    assert nodes["英雄派遣-画卷-滚动-入口"]["roi"] != [850, 0, 430, 180]
 
 
 def test_home_entry_requires_same_frame_world_boundary_and_exact_target() -> None:
     nodes = load_task_nodes(HERO)
 
-    home_page = nodes["hero.home.page"]
+    home_page = nodes["英雄派遣-英雄-主页-页面"]
     assert home_page == {
         "recognition": {
             "type": "And",
-            "param": {"all_of": ["MJA_GAME_HOME_PAGE"]},
+            "param": {"all_of": ["公共-游戏主页-页面"]},
         },
         "action": "DoNothing",
     }
@@ -70,29 +70,29 @@ def test_home_entry_requires_same_frame_world_boundary_and_exact_target() -> Non
     # The first route must be a cheap page probe.  OCR candidates are entered
     # one at a time through on_error, so a stale batch frame cannot decide the
     # page state before the home boundary is checked.
-    assert nodes["MJA_HERO_DISPATCH_DAILY_START"]["next"] == [
-        "MJA_HERO_HOME_PROBE"
+    assert nodes["英雄派遣-任务入口"]["next"] == [
+        "英雄派遣-主页-探测"
     ]
-    assert nodes["MJA_HERO_HOME_PROBE"]["next"] == [
-        "MJA_HERO_OPEN_PAINTING",
-        "MJA_HERO_OPEN_PAINTING_WORLD",
+    assert nodes["英雄派遣-主页-探测"]["next"] == [
+        "英雄派遣-打开-画卷",
+        "英雄派遣-打开-画卷-世界",
     ]
-    assert nodes["MJA_HERO_HOME_PROBE"]["on_error"] == [
-        "MJA_HERO_RESUME_REWARD_PROBE"
+    assert nodes["英雄派遣-主页-探测"]["on_error"] == [
+        "英雄派遣-恢复继续-奖励-探测"
     ]
 
-    for probe_name in ("MJA_HERO_HOME_PROBE", "MJA_HERO_HOME_BOUNDARY_PROBE"):
+    for probe_name in ("英雄派遣-主页-探测", "英雄派遣-主页边界-探测"):
         probe = nodes[probe_name]
         assert probe["recognition"] == {
             "type": "And",
-            "param": {"all_of": ["hero.home.page"]},
+            "param": {"all_of": ["英雄派遣-英雄-主页-页面"]},
         }
 
-    open_node = nodes["MJA_HERO_OPEN_PAINTING"]
+    open_node = nodes["英雄派遣-打开-画卷"]
     assert open_node["recognition"] == {
         "type": "And",
         "param": {
-            "all_of": ["hero.home.page", "painting_scroll.entry"],
+            "all_of": ["英雄派遣-英雄-主页-页面", "英雄派遣-画卷-滚动-入口"],
             "box_index": 1,
         },
     }
@@ -101,25 +101,25 @@ def test_home_entry_requires_same_frame_world_boundary_and_exact_target() -> Non
     assert open_node["custom_action_param"]["evidence"] == {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "hero.home.page",
-        "target_name": "painting_scroll.entry",
+        "page_name": "英雄派遣-英雄-主页-页面",
+        "target_name": "英雄派遣-画卷-滚动-入口",
     }
     assert open_node["max_hit"] == 1
     assert open_node["retry_times"] == 0
     assert TASK_POLICIES[HERO.task_id].action_caps["open_painting_scroll"] == 1
 
-    world_open = nodes["MJA_HERO_OPEN_PAINTING_WORLD"]
+    world_open = nodes["英雄派遣-打开-画卷-世界"]
     assert world_open["recognition"] == {
         "type": "And",
         "param": {
-            "all_of": ["hero.home.page", "painting_scroll.entry.world"],
+            "all_of": ["英雄派遣-英雄-主页-页面", "英雄派遣-画卷-滚动-入口-世界"],
             "box_index": 1,
         },
     }
     assert world_open["custom_action_param"]["evidence"]["target_name"] == (
-        "painting_scroll.entry.world"
+        "英雄派遣-画卷-滚动-入口-世界"
     )
-    assert nodes["painting_scroll.entry.world"] == {
+    assert nodes["英雄派遣-画卷-滚动-入口-世界"] == {
         "recognition": "OCR",
         "expected": "^画卷$",
         "roi": [1080, 0, 200, 120],
@@ -134,19 +134,19 @@ def test_start_routes_home_before_ocr_resume_states_and_fails_truthfully() -> No
     # The bounded game-start recovery is allowed once before the task fails
     # truthfully.  The home boundary is checked before any OCR candidate so
     # one stale batch frame cannot select a page route.
-    assert start["next"] == ["MJA_HERO_HOME_PROBE"]
+    assert start["next"] == ["英雄派遣-主页-探测"]
     assert start["on_error"] == [
-        "MJA_HERO_GAME_START_RECOVERY",
-        "MJA_HERO_RECORD_FAILURE",
+        "英雄派遣-游戏启动恢复",
+        "英雄派遣-记录-失败",
     ]
-    assert nodes["MJA_HERO_HOME_PROBE"]["on_error"] == [
-        "MJA_HERO_RESUME_REWARD_PROBE"
+    assert nodes["英雄派遣-主页-探测"]["on_error"] == [
+        "英雄派遣-恢复继续-奖励-探测"
     ]
-    assert nodes["MJA_HERO_RESUME_REWARD_PROBE"]["on_error"] == [
-        "MJA_HERO_DISPATCH_PAGE_PROBE"
+    assert nodes["英雄派遣-恢复继续-奖励-探测"]["on_error"] == [
+        "英雄派遣-派遣-页面-探测"
     ]
-    assert nodes["MJA_HERO_DISPATCH_PAGE_PROBE"]["on_error"] == [
-        "MJA_HERO_OPEN_DISPATCH"
+    assert nodes["英雄派遣-派遣-页面-探测"]["on_error"] == [
+        "英雄派遣-打开-派遣"
     ]
 
     failure_nodes = {
@@ -157,47 +157,47 @@ def test_start_routes_home_before_ocr_resume_states_and_fails_truthfully() -> No
         and node.get("custom_action_param", {}).get("status") == "failed"
     }
     assert set(failure_nodes) == {
-        "MJA_DISPATCH_FILL_LOOP_EXHAUSTED",
-        "MJA_DISPATCH_CLAIM_LOOP_EXHAUSTED",
-        "MJA_HERO_RECORD_FAILURE",
-        "MJA_HERO_BOUNDARY_FAILURE",
+        "英雄派遣-填充-循环-耗尽",
+        "英雄派遣-领取-循环-耗尽",
+        "英雄派遣-记录-失败",
+        "英雄派遣-边界-失败",
     }
     for node in failure_nodes.values():
         assert node["custom_action_param"]["native_fail_after_record"] is True
         assert node["Abort"] is True
-        assert node["next"] == ["MJA_COMMON_ABORT"]
+        assert node["next"] == ["公共-通用中止"]
 
 
 def test_empty_dispatch_state_requires_same_frame_zero_counters_and_blank_selection() -> None:
     nodes = load_task_nodes(HERO)
 
-    marker = nodes["hero.no_dispatch_tasks"]
+    marker = nodes["英雄派遣-英雄-无-派遣-任务"]
     assert marker["recognition"] == {
         "type": "And",
         "param": {
             "all_of": [
-                "hero.dispatch.page",
-                "hero.zero_dispatch_tasks",
-                "hero.zero_completed_dispatches",
-                "hero.no_selected_dispatch_task",
+                "英雄派遣-英雄-派遣-页面",
+                "英雄派遣-英雄-零-派遣-任务",
+                "英雄派遣-英雄-零-已完成-派遣任务",
+                "英雄派遣-英雄-无-已选择-派遣-任务",
             ],
             "box_index": 1,
         },
     }
-    assert nodes["hero.zero_dispatch_tasks"]["expected"] == r"^任务\s*[:：]?\s*0\s*/\s*9$"
-    assert nodes["hero.zero_completed_dispatches"]["expected"] == r"^已完成\s*[:：]?\s*0$"
-    assert nodes["hero.no_selected_dispatch_task"]["expected"] == "尚未选择派遣任务"
-    assert nodes["hero.no_selected_dispatch_task"]["roi"] == [930, 250, 340, 220]
+    assert nodes["英雄派遣-英雄-零-派遣-任务"]["expected"] == r"^任务\s*[:：]?\s*0\s*/\s*9$"
+    assert nodes["英雄派遣-英雄-零-已完成-派遣任务"]["expected"] == r"^已完成\s*[:：]?\s*0$"
+    assert nodes["英雄派遣-英雄-无-已选择-派遣-任务"]["expected"] == "尚未选择派遣任务"
+    assert nodes["英雄派遣-英雄-无-已选择-派遣-任务"]["roi"] == [930, 250, 340, 220]
 
-    for probe_name in ("MJA_HERO_INITIAL_NO_TASKS", "MJA_HERO_POST_NO_TASKS"):
+    for probe_name in ("英雄派遣-初始-无-任务", "英雄派遣-之后-无-任务"):
         probe = nodes[probe_name]
         assert probe["recognition"]["param"]["all_of"] == [
-            "hero.dispatch.page",
-            "hero.no_dispatch_tasks",
+            "英雄派遣-英雄-派遣-页面",
+            "英雄派遣-英雄-无-派遣-任务",
         ]
-        assert probe["next"] == ["MJA_HERO_SUCCESS_NO_TASKS"]
+        assert probe["next"] == ["英雄派遣-成功-无-任务"]
 
-    outcome = nodes["MJA_HERO_SUCCESS_NO_TASKS"]
+    outcome = nodes["英雄派遣-成功-无-任务"]
     assert outcome["custom_action_param"] == {
         "task_id": HERO.task_id,
         "status": "success",
@@ -219,36 +219,36 @@ def test_dispatch_side_effect_nodes_cannot_replay_one_observation() -> None:
         for node in matches:
             assert node.get("repeat", 1) == 1
             assert node.get("retry_times", 0) == 0
-            assert node["on_error"] == ["MJA_HERO_RECORD_FAILURE"]
+            assert node["on_error"] == ["英雄派遣-记录-失败"]
 
 
 def test_success_and_already_complete_follow_fresh_visual_postconditions() -> None:
     nodes = load_task_nodes(HERO)
     contracts = {
-        "MJA_HERO_ALREADY_ALL": (
+        "英雄派遣-已完成-全部": (
             "already_complete",
-            "hero.all_completed",
-            "MJA_HERO_INITIAL_ALL",
+            "英雄派遣-英雄-全部-已完成",
+            "英雄派遣-初始-全部",
         ),
-        "MJA_HERO_ALREADY_PROGRESS": (
+        "英雄派遣-已完成-进度": (
             "already_complete",
-            "hero.first_task_in_progress",
-            "MJA_HERO_INITIAL_PROGRESS",
+            "英雄派遣-英雄-首个-任务-中-进度",
+            "英雄派遣-初始-进度",
         ),
-        "MJA_HERO_SUCCESS_ALL": (
+        "英雄派遣-成功-全部": (
             "success",
-            "hero.all_completed",
-            "MJA_HERO_POST_ALL",
+            "英雄派遣-英雄-全部-已完成",
+            "英雄派遣-之后-全部",
         ),
-        "MJA_HERO_SUCCESS_PROGRESS": (
+        "英雄派遣-成功-进度": (
             "success",
-            "hero.first_task_in_progress",
-            "MJA_HERO_POST_PROGRESS",
+            "英雄派遣-英雄-首个-任务-中-进度",
+            "英雄派遣-之后-进度",
         ),
-        "MJA_HERO_SUCCESS_NO_TASKS": (
+        "英雄派遣-成功-无-任务": (
             "success",
-            "hero.no_dispatch_tasks",
-            "MJA_HERO_POST_NO_TASKS",
+            "英雄派遣-英雄-无-派遣-任务",
+            "英雄派遣-之后-无-任务",
         ),
     }
 
@@ -270,18 +270,18 @@ def test_reward_popup_uses_live_blank_click_marker_for_probe_and_guarded_close()
     nodes = load_task_nodes(HERO)
     popup_roi = [350, 580, 600, 140]
 
-    for name in ("MJA_HERO_CLAIM_REWARD_PROBE", "hero.reward_popup", "hero.reward_popup_close"):
+    for name in ("英雄派遣-领取-奖励-探测", "英雄派遣-英雄-奖励-弹窗", "英雄派遣-英雄-奖励-弹窗-关闭"):
         node = nodes[name]
         assert node["recognition"] == "OCR"
         assert node["expected"] == "点击空白处关闭"
         assert node["roi"] == popup_roi
 
-    for name in ("MJA_HERO_CLOSE_REWARD", "MJA_HERO_RESUME_CLOSE_REWARD"):
+    for name in ("英雄派遣-关闭-奖励", "英雄派遣-恢复继续-关闭-奖励"):
         node = nodes[name]
         assert node["recognition"] == {
             "type": "And",
             "param": {
-                "all_of": ["hero.reward_popup", "hero.reward_popup_close"],
+                "all_of": ["英雄派遣-英雄-奖励-弹窗", "英雄派遣-英雄-奖励-弹窗-关闭"],
                 "box_index": 1,
             },
         }
@@ -289,34 +289,34 @@ def test_reward_popup_uses_live_blank_click_marker_for_probe_and_guarded_close()
         assert node["custom_action_param"]["evidence"] == {
             "page_index": 0,
             "target_index": 1,
-            "page_name": "hero.reward_popup",
-            "target_name": "hero.reward_popup_close",
+            "page_name": "英雄派遣-英雄-奖励-弹窗",
+            "target_name": "英雄派遣-英雄-奖励-弹窗-关闭",
         }
 
-    assert nodes["MJA_HERO_CLOSE_REWARD"]["max_hit"] == 6
-    assert nodes["MJA_HERO_RESUME_CLOSE_REWARD"]["max_hit"] == 1
-    assert nodes["MJA_HERO_CLAIM_REWARD_PROBE"]["on_error"] == [
-        "MJA_HERO_CLAIM_VERIFY",
-        "MJA_HERO_RECORD_FAILURE",
+    assert nodes["英雄派遣-关闭-奖励"]["max_hit"] == 6
+    assert nodes["英雄派遣-恢复继续-关闭-奖励"]["max_hit"] == 1
+    assert nodes["英雄派遣-领取-奖励-探测"]["on_error"] == [
+        "英雄派遣-领取-校验",
+        "英雄派遣-记录-失败",
     ]
 
 
 def test_claim_postconditions_are_ordered_next_alternatives() -> None:
     nodes = load_task_nodes(HERO)
 
-    assert nodes["MJA_HERO_CLAIM_VERIFY"]["next"] == [
-        "MJA_DISPATCH_CLAIM_PROBE",
-        "MJA_DISPATCH_FILL_LOOP",
+    assert nodes["英雄派遣-领取-校验"]["next"] == [
+        "英雄派遣-领取-探测",
+        "英雄派遣-填充-循环",
     ]
-    assert nodes["MJA_HERO_SEND"]["next"] == [
-        "MJA_DISPATCH_CLAIM_PROBE",
-        "MJA_DISPATCH_FILL_LOOP",
+    assert nodes["英雄派遣-发送"]["next"] == [
+        "英雄派遣-领取-探测",
+        "英雄派遣-填充-循环",
     ]
-    assert nodes["MJA_DISPATCH_FILL_LOOP"]["next"] == [
-        "MJA_HERO_POST_ALL",
-        "MJA_HERO_POST_PROGRESS",
-        "MJA_HERO_POST_NO_TASKS",
-        "MJA_HERO_POST_SELECT",
+    assert nodes["英雄派遣-填充-循环"]["next"] == [
+        "英雄派遣-之后-全部",
+        "英雄派遣-之后-进度",
+        "英雄派遣-之后-无-任务",
+        "英雄派遣-之后-选择",
     ]
 
     # The claim loop is a native MAA loop: its body nodes must be allowed to
@@ -324,12 +324,12 @@ def test_claim_postconditions_are_ordered_next_alternatives() -> None:
     # parent timeout and report HERO_CLAIM_LOOP_EXHAUSTED even though the page
     # remains visibly claimable.
     for name in (
-        "MJA_HERO_POST_CLAIM_SELECT",
-        "MJA_HERO_POST_CLAIM_BUTTON",
-        "MJA_HERO_POST_CLAIM",
+        "英雄派遣-领取后-选择",
+        "英雄派遣-领取后-按钮",
+        "英雄派遣-领取后",
     ):
         assert nodes[name]["max_hit"] == 6
 
-    assert nodes["hero.first_task_in_progress"]["expected"][-1] == (
+    assert nodes["英雄派遣-英雄-首个-任务-中-进度"]["expected"][-1] == (
         r"^\d{1,2}:\d{2}:\d{2}$"
     )

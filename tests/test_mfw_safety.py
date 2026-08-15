@@ -147,23 +147,23 @@ def test_resource_counter_rejects_limit_plus_one_without_mutating_count():
 def test_dungeon_result_dismiss_is_visual_bound_and_preserves_postcondition():
     nodes = load_pipeline_nodes(ROOT / "assets/resource/base/pipeline")
 
-    assert nodes["dungeon.result"]["recognition"]["param"]["all_of"] == [
-        "dungeon.result.panel.surface",
-        "dungeon.result.panel.badge",
+    assert nodes["副本扫荡-副本-结果"]["recognition"]["param"]["all_of"] == [
+        "副本扫荡-副本-结果-面板-界面",
+        "副本扫荡-副本-结果-面板-徽标",
     ]
-    assert nodes["MJA_DUNGEON_DISMISS_RESULT"]["recognition"]["param"]["all_of"] == [
-        "dungeon.result",
-        "dungeon.result.close",
+    assert nodes["副本扫荡-关闭-结果"]["recognition"]["param"]["all_of"] == [
+        "副本扫荡-副本-结果",
+        "副本扫荡-副本-结果-关闭",
     ]
-    assert nodes["MJA_DUNGEON_DISMISS_RESULT"]["custom_action_param"]["evidence"] == {
+    assert nodes["副本扫荡-关闭-结果"]["custom_action_param"]["evidence"] == {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "dungeon.result",
-        "target_name": "dungeon.result.close",
+        "page_name": "副本扫荡-副本-结果",
+        "target_name": "副本扫荡-副本-结果-关闭",
     }
     assert TASK_POLICIES["DUNGEON_SWEEP_DAILY"].action_caps["dismiss_sweep_result"] == 1
     assert nodes["MJA_DUNGEON_POST_PROBE"]["recognition"]["param"]["all_of"] == [
-        "dungeon.page",
+        "副本扫荡-副本-页面",
         "dungeon.ticket.depleted",
     ]
 
@@ -226,7 +226,7 @@ def test_parse_action_params_rejects_invalid_payload(payload: str):
 def test_guild_activity_start_click_requires_connected_visual_target() -> None:
     nodes = load_pipeline_nodes(ROOT / "assets/resource/base/pipeline")
 
-    target = nodes["guild.challenge.start"]
+    target = nodes["帮派活动挑战-帮派-挑战-开始-2"]
     assert target["recognition"] == "ColorMatch"
     assert "expected" not in target
     assert target["method"] == 4
@@ -236,28 +236,28 @@ def test_guild_activity_start_click_requires_connected_visual_target() -> None:
     assert target["order_by"] == "Area"
     assert target["index"] == 0
 
-    start = nodes["MJA_GUILD_CHALLENGE_START"]
+    start = nodes["帮派活动挑战-帮派-挑战-开始"]
     assert start["recognition"]["param"] == {
-        "all_of": ["guild.challenge.prepare.page", "guild.challenge.start"],
+        "all_of": ["帮派活动挑战-帮派-挑战-准备-页面", "帮派活动挑战-帮派-挑战-开始-2"],
         "box_index": 1,
     }
     assert start["custom_action_param"]["evidence"] == {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "guild.challenge.prepare.page",
-        "target_name": "guild.challenge.start",
+        "page_name": "帮派活动挑战-帮派-挑战-准备-页面",
+        "target_name": "帮派活动挑战-帮派-挑战-开始-2",
     }
 
 
 def test_guild_activity_live_battle_wait_is_read_only_and_bounded() -> None:
     nodes = load_pipeline_nodes(ROOT / "assets/resource/base/pipeline")
 
-    battle = nodes["MJA_GUILD_BATTLE_ACTIVE_PROBE"]
+    battle = nodes["帮派活动挑战-帮派-战斗-进行中-探测"]
     assert battle["action"] == "DoNothing"
     assert "custom_action" not in battle
     assert battle["timeout"] == 180000
     assert battle["retry_times"] == 0
-    assert battle["on_error"] == ["MJA_GUILD_RESULT_UNKNOWN"]
+    assert battle["on_error"] == ["帮派活动挑战-帮派-未知结果"]
 
     for node_name in battle["recognition"]["param"]["all_of"]:
         control = nodes[node_name]
@@ -273,33 +273,33 @@ def test_guild_activity_result_detection_is_read_only_exact_and_fail_closed() ->
     nodes = load_pipeline_nodes(ROOT / "assets/resource/base/pipeline")
 
     for name in (
-        "guild.result.page",
-        "guild.result.known",
-        "guild.result.victory",
-        "guild.result.defeat",
-        "guild.result.defeat.improve",
-        "guild.result.defeat.page",
-        "MJA_GUILD_RESULT_VICTORY_PROBE",
-        "MJA_GUILD_RESULT_DEFEAT_PROBE",
+        "帮派活动挑战-帮派-结果-页面",
+        "帮派活动挑战-帮派-结果-已知",
+        "帮派活动挑战-帮派-结果-胜利",
+        "帮派活动挑战-帮派-结果-失败-2",
+        "帮派活动挑战-帮派-结果-失败-提升",
+        "帮派活动挑战-帮派-结果-失败-页面",
+        "帮派活动挑战-帮派-结果-胜利-探测",
+        "帮派活动挑战-帮派-结果-失败-探测",
     ):
         assert nodes[name]["action"] == "DoNothing"
 
-    assert nodes["guild.result.victory"]["expected"] == r"^战斗胜利$"
-    assert nodes["guild.result.defeat"]["expected"] == r"^战斗失败$"
-    assert nodes["guild.result.defeat.improve"]["expected"] == (
+    assert nodes["帮派活动挑战-帮派-结果-胜利"]["expected"] == r"^战斗胜利$"
+    assert nodes["帮派活动挑战-帮派-结果-失败-2"]["expected"] == r"^战斗失败$"
+    assert nodes["帮派活动挑战-帮派-结果-失败-提升"]["expected"] == (
         r"^可以通过以下途径提升$"
     )
-    assert nodes["guild.result.defeat.page"]["recognition"]["param"] == {
-        "all_of": ["guild.result.defeat", "guild.result.defeat.improve"],
+    assert nodes["帮派活动挑战-帮派-结果-失败-页面"]["recognition"]["param"] == {
+        "all_of": ["帮派活动挑战-帮派-结果-失败-2", "帮派活动挑战-帮派-结果-失败-提升"],
         "box_index": 0,
     }
-    for name in ("guild.result.defeat", "guild.result.defeat.improve"):
+    for name in ("帮派活动挑战-帮派-结果-失败-2", "帮派活动挑战-帮派-结果-失败-提升"):
         assert nodes[name]["roi"] != [0, 0, 1280, 720]
-    assert nodes["MJA_GUILD_RESULT_DEFEAT_PROBE"]["on_error"] == [
-        "MJA_GUILD_RESULT_UNKNOWN"
+    assert nodes["帮派活动挑战-帮派-结果-失败-探测"]["on_error"] == [
+        "帮派活动挑战-帮派-未知结果"
     ]
 
-    known_defeat = nodes["MJA_GUILD_RESULT_DEFEAT"]
+    known_defeat = nodes["帮派活动挑战-帮派-结果-失败"]
     assert known_defeat["action"] == "Custom"
     assert known_defeat["custom_action"] == "RecordTaskOutcome"
     assert known_defeat["custom_action_param"] == {

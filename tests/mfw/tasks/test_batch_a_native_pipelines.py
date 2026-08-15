@@ -37,25 +37,11 @@ TASKS: tuple[tuple[str, str, str], ...] = (
     ),
 )
 
-LOCAL_PREFIXES: dict[str, tuple[str, ...]] = {
-    "MAIL_REWARD_DAILY": ("MJA_MAIL_",),
-    "SHOP_FREE_GIFT_DAILY": ("MJA_SHOP_",),
-    "FREE_APPRAISAL_DAILY": ("MJA_APPRAISAL_", "MJA_FREE_APPRAISAL_"),
-    "TRIAL_SWORD_DAILY": ("MJA_TRIAL_",),
-    "HERO_DISPATCH_DAILY": ("MJA_HERO_", "MJA_DISPATCH_"),
-    "COLLECTION_DEPLOYMENT_DAILY": ("MJA_COLLECTION_",),
-    "WEEKLY_FREE_GIFT_MONDAY": ("MJA_WEEKLY_",),
-    "GUILD_AFFAIRS_DAILY": ("MJA_GUILD_AFFAIRS_DAILY_",),
-    "GUILD_DONATION_DAILY": ("MJA_GUILD_DONATION_",),
-    "DAILY_TASK_REWARD_CLAIM_DAILY": ("MJA_DAILY_",),
-    "BATTLE_PASS_REWARD_DAILY": ("MJA_BATTLE_PASS_", "MJA_BP_"),
-}
-
 ALLOWED_EXTERNAL_NODES = {
-    "MJA_COMMON_STOP",
-    "MJA_COMMON_ABORT",
-    "MJA_GAME_START",
-    "MJA_HOME_BOUNDARY",
+    "公共-通用停止",
+    "公共-通用中止",
+    "启动-游戏启动",
+    "公共-主页边界",
 }
 
 
@@ -157,23 +143,19 @@ def test_batch_a_has_one_private_declaration_and_pipeline_entry_per_task() -> No
         assert isinstance(tasks, list) and len(tasks) == 1
         task = tasks[0]
         assert task["name"] == task_id
-        assert task["entry"] == f"MJA_{task_id}_START"
+        assert task["entry"].endswith("任务入口")
         assert task["default_check"] is True
         entries.add(task["entry"])
 
         nodes = _nodes(ROOT / "assets/resource/base/pipeline" / pipeline_name)
         assert task["entry"] in nodes
         assert any(
-            ("page" in name.lower() or "home" in name.lower())
+            any(marker in name for marker in ("页面", "主页", "面板"))
             and isinstance(node.get("recognition"), (str, dict))
             for name, node in nodes.items()
         ), task_id
         assert not any(
-            name.startswith("MJA_")
-            and not name.startswith(LOCAL_PREFIXES[task_id])
-            and not name.startswith("MJA_COMMON_")
-            and not name.startswith("MJA_KNOWN_")
-            and name not in {"MJA_GAME_START"}
+            any(char.isascii() and char.isalpha() for char in name)
             for name in nodes
         ), task_id
 
@@ -182,7 +164,7 @@ def test_batch_a_has_one_private_declaration_and_pipeline_entry_per_task() -> No
 
 def test_mail_claim_target_uses_live_ocr_instead_of_template_match() -> None:
     nodes = _nodes(ROOT / "assets/resource/base/pipeline/daily/mail_reward_daily.json")
-    target = nodes["mail.claim_all"]
+    target = nodes["邮件奖励-邮件-领取-全部"]
 
     assert target["recognition"] == "OCR"
     assert target["expected"] == "全部领取"
@@ -194,34 +176,35 @@ def test_mail_claim_target_uses_live_ocr_instead_of_template_match() -> None:
 def test_mail_without_claim_button_is_an_already_complete_terminal_path() -> None:
     nodes = _nodes(ROOT / "assets/resource/base/pipeline/daily/mail_reward_daily.json")
 
-    assert nodes["MJA_MAIL_CLAIM"]["on_error"] == ["MJA_MAIL_EMPTY_PROBE"]
-    empty = nodes["mail.empty"]
+    assert nodes["邮件奖励-领取"]["on_error"] == ["邮件奖励-空-探测"]
+    empty = nodes["邮件奖励-邮件-空"]
     assert empty["recognition"] == "OCR"
     assert empty["expected"] == ["删除已读", "除已读", "暂无可领取"]
     assert empty["roi"] == [300, 520, 900, 180]
-    assert nodes["MJA_MAIL_EMPTY_PROBE"]["next"] == ["MJA_MAIL_ALREADY_COMPLETE"]
-    already = nodes["MJA_MAIL_ALREADY_COMPLETE"]
+    assert nodes["邮件奖励-空-探测"]["next"] == ["邮件奖励-已完成"]
+    already = nodes["邮件奖励-已完成"]
     assert already["action"] == "Custom"
     assert already["custom_action"] == "RecordTaskOutcome"
     assert already["custom_action_param"]["status"] == "already_complete"
     assert already["custom_action_param"]["postcondition"] == "mail.empty"
-    assert nodes["MJA_MAIL_ALREADY_COMPLETE"]["next"] == ["MJA_MAIL_CLOSE"]
-    assert nodes["MJA_MAIL_ALREADY_COMPLETE"]["custom_action_param"][
+    assert nodes["邮件奖励-已完成"]["next"] == ["邮件奖励-关闭"]
+    assert nodes["邮件奖励-已完成"]["custom_action_param"][
         "defer_home_boundary"
     ] is True
 
 
 def test_batch_a_page_and_known_drift_routes_are_finite() -> None:
-    for task_id, _, pipeline_name in TASKS:
+    for task_id, declaration_name, pipeline_name in TASKS:
         nodes = _nodes(ROOT / "assets/resource/base/pipeline" / pipeline_name)
-        entry = f"MJA_{task_id}_START"
+        declaration = _load(ROOT / "assets/tasks" / declaration_name)
+        entry = declaration["task"][0]["entry"]
         assert _reachable(
             nodes,
             entry,
             next(
                 name
                 for name, node in nodes.items()
-                if ("page" in name.lower() or "home" in name.lower())
+                if any(marker in name for marker in ("页面", "主页", "面板"))
                 and isinstance(node.get("recognition"), (str, dict))
             ),
         )
@@ -235,9 +218,7 @@ def test_batch_a_page_and_known_drift_routes_are_finite() -> None:
             for target in _targets(node):
                 if target in nodes or target in ALLOWED_EXTERNAL_NODES:
                     continue
-                if target.startswith("MJA_KNOWN_") or (
-                    target.startswith("MJA_") and target.endswith("_CLOSE")
-                ):
+                if target.startswith(("公共-", "启动-")):
                     continue
                 raise AssertionError(f"{task_id}:{name} references unknown node {target}")
 
@@ -299,12 +280,12 @@ def test_batch_a_outcomes_are_business_specific_and_failures_abort_after_record(
             if status == "failed":
                 assert params.get("native_fail_after_record") is True, f"{task_id}:{name}"
                 assert node.get("Abort") is True, f"{task_id}:{name}"
-                assert node.get("next") == ["MJA_COMMON_ABORT"], f"{task_id}:{name}"
+                assert node.get("next") == ["公共-通用中止"], f"{task_id}:{name}"
             else:
                 assert status in {"success", "already_complete", "not_eligible"}
                 assert (
-                    _reachable(nodes, name, "MJA_COMMON_STOP")
-                    or _reachable(nodes, name, "MJA_HOME_BOUNDARY")
+                    _reachable(nodes, name, "公共-通用停止")
+                    or _reachable(nodes, name, "公共-主页边界")
                 ), f"{task_id}:{name}"
 
 
@@ -320,11 +301,11 @@ def test_batch_a_side_effects_fail_closed_and_guild_affairs_rejects_incomplete_r
             ), f"{task_id}:{name} can bypass failure recording"
 
     nodes = _nodes(ROOT / "assets/resource/base/pipeline/daily/guild_affairs_daily.json")
-    success = "MJA_GUILD_AFFAIRS_DAILY_SUCCESS"
+    success = "帮派事务-成功"
     assert nodes[success]["custom_action_param"]["postcondition"] == (
         "guild.affairs.daily.all_rows_started_or_no_action"
     )
-    paid_or_ambiguous = nodes["MJA_GUILD_AFFAIRS_DAILY_PAID_OR_AMBIGUOUS"]
+    paid_or_ambiguous = nodes["帮派事务-付费-或-歧义"]
     assert paid_or_ambiguous["custom_action_param"]["status"] == "failed"
     assert paid_or_ambiguous["custom_action_param"]["error_code"] == (
         "GUILD_FIRST_ROW_PAID_OR_AMBIGUOUS"
@@ -335,7 +316,7 @@ def test_batch_a_side_effects_fail_closed_and_guild_affairs_rejects_incomplete_r
         startable = f"guild.affairs.daily.row{row_index}.startable"
         assert startable in nodes
         assert nodes[startable].get("expected") == "开始事务"
-        start_node = nodes[f"MJA_GUILD_AFFAIRS_DAILY_ROW{row_index}_START"]
+        start_node = nodes[f"帮派事务-行{row_index}-开始"]
         assert _reachable(nodes, start_node["next"][0], success) or _reaches_failed_outcome(
             nodes, start_node["next"][0]
         )

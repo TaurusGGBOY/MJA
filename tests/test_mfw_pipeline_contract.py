@@ -11,9 +11,9 @@ def test_base_resource_contains_ocr_and_common_terminals() -> None:
     assert (root / "model/ocr/rec.onnx").is_file()
     assert (root / "model/ocr/keys.txt").is_file()
     nodes = load_pipeline_nodes(root / "pipeline")
-    assert nodes["MJA_COMMON_STOP"]["action"] == "StopTask"
-    assert nodes["MJA_COMMON_ABORT"]["Abort"] is True
-    assert nodes["MJA_COMMON_ABORT"]["action"] == "StopTask"
+    assert nodes["公共-通用停止"]["action"] == "StopTask"
+    assert nodes["公共-通用中止"]["Abort"] is True
+    assert nodes["公共-通用中止"]["action"] == "StopTask"
 
 
 def test_pipeline_validator_rejects_forbidden_control_planes(tmp_path: Path) -> None:

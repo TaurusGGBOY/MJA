@@ -128,48 +128,48 @@ def test_task_declaration_and_pipeline_entry_are_task_local():
         "label": "破阵演武（每日三次）",
         "default_check": True,
         "group": ["日常"],
-        "entry": "MJA_BREAK_ARRAY_MARTIAL_DAILY_START",
+        "entry": "破阵武学-任务入口",
     }
     pipeline = json.loads(PIPELINE_PATH.read_text(encoding="utf-8"))
     mfw_pipeline = json.loads(MFW_PIPELINE_PATH.read_text(encoding="utf-8"))
-    native_start = mfw_pipeline["MJA_BREAK_ARRAY_MARTIAL_DAILY_START"]
+    native_start = mfw_pipeline["破阵武学-任务入口"]
     assert native_start["custom_action"] == "BeginTask"
     assert native_start["custom_action_param"] == {"task_id": CANONICAL_TASK_ID}
     assert native_start["next"] == [
-        "MJA_BREAK_ARRAY_STARTUP_PROBE",
-        "MJA_BREAK_ARRAY_PAGE_PROBE",
-        "MJA_BREAK_ARRAY_ACTIVITY_PROBE",
-        "MJA_BREAK_ARRAY_HOME_PROBE",
+        "破阵武学-启动-探测",
+        "破阵武学-页面-探测",
+        "破阵武学-活动-探测",
+        "破阵武学-主页-探测",
     ]
-    assert native_start["on_error"] == ["MJA_BREAK_ARRAY_RECORD_FAILURE"]
+    assert native_start["on_error"] == ["破阵武学-记录-失败"]
     assert "MJA_BREAK_ARRAY_MARTIAL_DAILY_EXECUTE" not in mfw_pipeline
     assert "BreakArrayMartialDailyAction" not in json.dumps(mfw_pipeline)
-    assert "[JumpBack]MJA_GAME_START" not in json.dumps(mfw_pipeline)
+    assert "[JumpBack]启动-游戏启动" not in json.dumps(mfw_pipeline)
     # The Android resource is retained as a read-only compatibility archive;
     # only the base MFW resource is the native execution contract.
-    assert "MJA_BREAK_ARRAY_MARTIAL_DAILY_START" in pipeline
+    assert "破阵武学-任务入口" in pipeline
     for resource_pipeline in (pipeline, mfw_pipeline):
         assert not any(
             node.get("action") in {"Click", "StartApp"}
             for node in resource_pipeline.values()
         )
-    assert mfw_pipeline["safety.paid"]["recognition"] == "OCR"
-    assert mfw_pipeline["safety.verification"]["recognition"] == "OCR"
-    assert "safety.paid" not in pipeline
-    assert "safety.verification" not in pipeline
-    assert pipeline["break_array.unknown_dialog"]["recognition"] == "OCR"
-    assert mfw_pipeline["break_array.unknown_dialog"]["recognition"] == "OCR"
-    assert mfw_pipeline["activity.entry"]["roi"] == [840, 20, 110, 90]
-    assert mfw_pipeline["activity.page"]["expected"] == ["破阵演武", "破阵"]
-    assert mfw_pipeline["activity.page"]["roi"] == [0, 120, 1280, 600]
-    assert mfw_pipeline["activity.page"] == {
+    assert mfw_pipeline["破阵武学-安全-付费"]["recognition"] == "OCR"
+    assert mfw_pipeline["破阵武学-安全-校验"]["recognition"] == "OCR"
+    assert "破阵武学-安全-付费" not in pipeline
+    assert "破阵武学-安全-校验" not in pipeline
+    assert pipeline["破阵武学-突破-阵法-未知-对话框"]["recognition"] == "OCR"
+    assert mfw_pipeline["破阵武学-突破-阵法-未知-对话框"]["recognition"] == "OCR"
+    assert mfw_pipeline["破阵武学-活动-入口"]["roi"] == [840, 20, 110, 90]
+    assert mfw_pipeline["破阵武学-活动-页面"]["expected"] == ["破阵演武", "破阵"]
+    assert mfw_pipeline["破阵武学-活动-页面"]["roi"] == [0, 120, 1280, 600]
+    assert mfw_pipeline["破阵武学-活动-页面"] == {
         "recognition": "OCR",
         "expected": ["破阵演武", "破阵"],
         "roi": [0, 120, 1280, 600],
         "action": "DoNothing",
     }
     for resource_pipeline in (pipeline, mfw_pipeline):
-        assert resource_pipeline["break_array.startup_loading"] == {
+        assert resource_pipeline["破阵武学-突破-阵法-启动-加载"] == {
             "recognition": "OCR",
             "expected": ["穿梭入世", "穿梭入世中", "加载中"],
             "roi": [350, 580, 900, 140],
@@ -178,89 +178,89 @@ def test_task_declaration_and_pipeline_entry_are_task_local():
 
 
     for resource_pipeline in (pipeline, mfw_pipeline):
-        assert resource_pipeline["break_array.page"] == {
+        assert resource_pipeline["破阵武学-突破-阵法-页面"] == {
             "recognition": {
                 "type": "And",
                 "param": {
                     "all_of": [
-                        "break_array.selected_entry",
-                        "break_array.remaining",
+                        "破阵武学-突破-阵法-已选择-入口",
+                        "破阵武学-突破-阵法-剩余",
                     ]
                 },
             },
             "action": "DoNothing",
         }
-        assert resource_pipeline["break_array.selected_entry"] == {
+        assert resource_pipeline["破阵武学-突破-阵法-已选择-入口"] == {
             "recognition": "OCR",
             "expected": "破阵演武",
             "roi": [35, 390, 135, 100],
             "action": "DoNothing",
         }
 
-        assert resource_pipeline["break_array.start"] == {
+        assert resource_pipeline["破阵武学-突破-阵法-开始"] == {
             "recognition": {
                 "type": "And",
                 "param": {
                     "all_of": [
-                        "break_array.start.top",
-                        "break_array.start.bottom",
+                        "破阵武学-突破-阵法-开始-顶部",
+                        "破阵武学-突破-阵法-开始-底部",
                     ],
                     "box_index": 0,
                 },
             },
             "action": "DoNothing",
         }
-        assert resource_pipeline["break_array.start.top"] == {
+        assert resource_pipeline["破阵武学-突破-阵法-开始-顶部"] == {
             "recognition": "OCR",
             "expected": "^开始$",
             "roi": [1050, 520, 190, 90],
             "action": "DoNothing",
         }
-        assert resource_pipeline["break_array.start.bottom"] == {
+        assert resource_pipeline["破阵武学-突破-阵法-开始-底部"] == {
             "recognition": "OCR",
             "expected": "^挑战$",
             "roi": [1050, 565, 190, 95],
             "action": "DoNothing",
         }
 
-        assert resource_pipeline["break_array.start_confirm_dialog"] == {
+        assert resource_pipeline["破阵武学-突破-阵法-开始-确认-对话框"] == {
             "recognition": {
                 "type": "And",
                 "param": {
                     "all_of": [
-                        "break_array.start_confirm_title",
-                        "break_array.start_confirm_consume",
-                        "break_array.start_confirm_prepare",
+                        "破阵武学-突破-阵法-开始-确认-标题",
+                        "破阵武学-突破-阵法-开始-确认-消耗",
+                        "破阵武学-突破-阵法-开始-确认-准备",
                     ]
                 },
             },
             "action": "DoNothing",
         }
-        assert resource_pipeline["break_array.start_confirm_title"] == {
+        assert resource_pipeline["破阵武学-突破-阵法-开始-确认-标题"] == {
             "recognition": "OCR",
             "expected": "^提\\s*示$",
             "roi": [285, 175, 80, 110],
             "action": "DoNothing",
         }
-        assert resource_pipeline["break_array.start_confirm_consume"] == {
+        assert resource_pipeline["破阵武学-突破-阵法-开始-确认-消耗"] == {
             "recognition": "OCR",
             "expected": "开始挑战.*消耗\\s*1\\s*次挑战次数",
             "roi": [400, 285, 520, 90],
             "action": "DoNothing",
         }
-        assert resource_pipeline["break_array.start_confirm_prepare"] == {
+        assert resource_pipeline["破阵武学-突破-阵法-开始-确认-准备"] == {
             "recognition": "OCR",
             "expected": ["进入准备界面", "搭配适合的出战阵容"],
             "roi": [430, 315, 470, 100],
             "action": "DoNothing",
         }
-        assert resource_pipeline["break_array.start_confirm_button"] == {
+        assert resource_pipeline["破阵武学-突破-阵法-开始-确认-按钮"] == {
             "recognition": "OCR",
             "expected": "^确认$",
             "roi": [790, 455, 180, 90],
             "action": "DoNothing",
         }
-        assert resource_pipeline["break_array.confirm_transition.dark_field"] == {
+        assert resource_pipeline["破阵武学-突破-阵法-确认-过渡-暗-字段"] == {
             "recognition": "ColorMatch",
             "method": 4,
             "lower": [0, 0, 0],
@@ -270,7 +270,7 @@ def test_task_declaration_and_pipeline_entry_are_task_local():
             "count": 400000,
             "action": "DoNothing",
         }
-        assert resource_pipeline["break_array.confirm_transition.rumor_glyphs"] == {
+        assert resource_pipeline["破阵武学-突破-阵法-确认-过渡-传闻-字形"] == {
             "recognition": "ColorMatch",
             "method": 4,
             "lower": [210, 210, 210],
@@ -280,7 +280,7 @@ def test_task_declaration_and_pipeline_entry_are_task_local():
             "count": 3000,
             "action": "DoNothing",
         }
-        assert resource_pipeline["break_array.confirm_transition.uid_glyphs"] == {
+        assert resource_pipeline["破阵武学-突破-阵法-确认-过渡-用户标识-字形"] == {
             "recognition": "ColorMatch",
             "method": 4,
             "lower": [80, 80, 65],
@@ -290,59 +290,59 @@ def test_task_declaration_and_pipeline_entry_are_task_local():
             "count": 350,
             "action": "DoNothing",
         }
-        assert resource_pipeline["break_array.confirm_transition"] == {
+        assert resource_pipeline["破阵武学-突破-阵法-确认-过渡"] == {
             "recognition": {
                 "type": "And",
                 "param": {
                     "all_of": [
-                        "break_array.confirm_transition.dark_field",
-                        "break_array.confirm_transition.rumor_glyphs",
-                        "break_array.confirm_transition.uid_glyphs",
+                        "破阵武学-突破-阵法-确认-过渡-暗-字段",
+                        "破阵武学-突破-阵法-确认-过渡-传闻-字形",
+                        "破阵武学-突破-阵法-确认-过渡-用户标识-字形",
                     ]
                 },
             },
             "action": "DoNothing",
         }
 
-        assert resource_pipeline["break_array.prepare_page"] == {
+        assert resource_pipeline["破阵武学-突破-阵法-准备-页面"] == {
             "recognition": {
                 "type": "And",
                 "param": {
                     "all_of": [
-                        "break_array.prepare_formation",
-                        "break_array.prepare_boss",
-                        "break_array.prepare_duration",
-                        "break_array.prepare_tactics",
+                        "破阵武学-突破-阵法-准备-阵容",
+                        "破阵武学-突破-阵法-准备-首领",
+                        "破阵武学-突破-阵法-准备-时长",
+                        "破阵武学-突破-阵法-准备-战术",
                     ]
                 },
             },
             "action": "DoNothing",
         }
-        assert resource_pipeline["break_array.prepare_formation"] == {
+        assert resource_pipeline["破阵武学-突破-阵法-准备-阵容"] == {
             "recognition": "OCR",
             "expected": "^阵容$",
             "roi": [40, 10, 150, 70],
             "action": "DoNothing",
         }
-        assert resource_pipeline["break_array.prepare_boss"] == {
+        assert resource_pipeline["破阵武学-突破-阵法-准备-首领"] == {
             "recognition": "OCR",
             "expected": "^首领战斗$",
             "roi": [520, 10, 240, 55],
             "action": "DoNothing",
         }
-        assert resource_pipeline["break_array.prepare_duration"] == {
+        assert resource_pipeline["破阵武学-突破-阵法-准备-时长"] == {
             "recognition": "OCR",
             "expected": r"^战(?:斗)?时长\s*[：:]\s*02\s*[：:]\s*00$",
             "roi": [520, 40, 250, 60],
             "action": "DoNothing",
         }
-        assert resource_pipeline["break_array.prepare_tactics"] == {
+        assert resource_pipeline["破阵武学-突破-阵法-准备-战术"] == {
             "recognition": "OCR",
             "expected": "^战术谱$",
             "roi": [980, 480, 140, 80],
             "action": "DoNothing",
         }
-        assert resource_pipeline["break_array.prepare_start"] == {
+        assert resource_pipeline["破阵武学-突破-阵法-准备-开始"] == {
             "recognition": "ColorMatch",
             "method": 4,
             "lower": [200, 65, 0],
@@ -353,16 +353,16 @@ def test_task_declaration_and_pipeline_entry_are_task_local():
             "action": "DoNothing",
         }
         assert "break_array.challenge_page" not in resource_pipeline
-        battle_patterns = resource_pipeline["break_array.battle"]["expected"]
+        battle_patterns = resource_pipeline["破阵武学-突破-阵法-战斗"]["expected"]
         assert battle_patterns == ["^跳过$", "^自动战斗$", "^战斗中$"]
         assert not any(re.search(pattern, "首领战斗") for pattern in battle_patterns)
 
-        for row in ("break_array.start.top", "break_array.start.bottom"):
+        for row in ("破阵武学-突破-阵法-开始-顶部", "破阵武学-突破-阵法-开始-底部"):
             x, y, width, height = resource_pipeline[row]["roi"]
             assert x >= 1030 and y >= 500
             assert x + width <= 1280 and y + height <= 660
 
-        remaining = resource_pipeline["break_array.remaining"]
+        remaining = resource_pipeline["破阵武学-突破-阵法-剩余"]
         assert remaining["roi"] == [1000, 620, 280, 100]
         assert any(
             re.search(pattern, "剩余挑战次数：9/9")
@@ -370,7 +370,7 @@ def test_task_declaration_and_pipeline_entry_are_task_local():
         )
         assert all("/\\s*3" not in pattern for pattern in remaining["expected"])
 
-        exhausted = resource_pipeline["break_array.remaining_exhausted"]
+        exhausted = resource_pipeline["破阵武学-突破-阵法-剩余-耗尽"]
         assert exhausted["roi"] == [1000, 620, 280, 100]
         assert any(
             re.search(pattern, "剩余挑战次数：0/9")
@@ -389,7 +389,7 @@ def test_task_declaration_and_pipeline_entry_are_task_local():
                     "type": "And",
                     "param": {
                         "all_of": [
-                            "break_array.selected_entry",
+                            "破阵武学-突破-阵法-已选择-入口",
                             exact_name,
                         ]
                     },
@@ -400,9 +400,9 @@ def test_task_declaration_and_pipeline_entry_are_task_local():
 
 def test_final_regression_loading_archive_is_a_task_local_read_only_boundary():
     fixture = json.loads(STARTUP_LOADING_FIXTURE_PATH.read_text(encoding="utf-8"))
-    loading = fixture["recognitions"]["break_array.startup_loading"]
+    loading = fixture["recognitions"]["破阵武学-突破-阵法-启动-加载"]
     pipeline = json.loads(PIPELINE_PATH.read_text(encoding="utf-8"))
-    node = pipeline["break_array.startup_loading"]
+    node = pipeline["破阵武学-突破-阵法-启动-加载"]
     assert loading["hit"] is True
     assert any(re.search(pattern, loading["text"]) for pattern in node["expected"])
     rx, ry, rw, rh = node["roi"]
@@ -415,7 +415,7 @@ def test_final_regression_loading_archive_is_a_task_local_read_only_boundary():
         "error_code": "WORKFLOW_POSTCONDITION_MISSING",
     }
 
-    decision = decide("home", ("break_array.startup_loading",))
+    decision = decide("home", ("破阵武学-突破-阵法-启动-加载",))
     assert decision.transition is not None
     assert decision.transition.intent.action_id == "wait_break_array_startup"
     assert decision.transition.intent.input_kind is InputKind.NONE
@@ -477,14 +477,14 @@ def test_mfw_resource_covers_every_runtime_recognizer_without_legacy_probes():
             "shadow_formation_page",
         }
     )
-    assert pipeline["break_array.home"] == {
+    assert pipeline["破阵武学-突破-阵法-主页"] == {
         "recognition": "TemplateMatch",
         "template": "home/home_marker.png",
         "roi": [1040, 0, 240, 110],
         "threshold": 0.375,
         "action": "DoNothing",
     }
-    for marker in ("break_array.close", "activity.close"):
+    for marker in ("破阵武学-突破-阵法-关闭", "破阵武学-活动-关闭"):
         assert pipeline[marker]["recognition"] == "TemplateMatch"
         assert pipeline[marker]["template"] == "home/modal_close.png"
         assert pipeline[marker]["roi"] == [1120, 0, 160, 140]
@@ -502,54 +502,54 @@ def test_legacy_custom_action_registration_fails_closed() -> None:
 
 
 def test_path_enters_activity_then_break_array():
-    activity = decide("home", ("activity.entry",))
+    activity = decide("home", ("破阵武学-活动-入口",))
     assert activity.transition is not None
     assert activity.transition.intent.action_id == "open_break_array_activity"
     assert activity.transition.next_state == "activity"
 
-    target = decide("activity", ("activity.page", "break_array.entry"))
+    target = decide("activity", ("破阵武学-活动-页面", "破阵武学-突破-阵法-入口"))
     assert target.transition is not None
     assert target.transition.intent.action_id == "open_break_array"
     assert target.transition.postcondition == "break_array.page"
 
 
 def test_unavailable_and_already_complete_are_explicit_non_failure_outcomes():
-    unavailable = decide("break_array", ("break_array.page", "break_array.unavailable"))
+    unavailable = decide("break_array", ("破阵武学-突破-阵法-页面", "破阵武学-突破-阵法-不可用"))
     assert unavailable.status is TaskStatus.NOT_ELIGIBLE
 
     complete = decide(
         "break_array",
-        ("break_array.page", "break_array.completed"),
+        ("破阵武学-突破-阵法-页面", "破阵武学-突破-阵法-已完成"),
     )
     assert complete.status is TaskStatus.ALREADY_COMPLETE
 
-    danger = decide("break_array", ("break_array.page", "break_array.unknown_dialog"))
+    danger = decide("break_array", ("破阵武学-突破-阵法-页面", "破阵武学-突破-阵法-未知-对话框"))
     assert danger.status is TaskStatus.FAILED
 
 
 def test_challenge_loop_is_exactly_three_and_requires_result_close():
     start = decide(
         "break_array",
-        ("break_array.page", "break_array.start", "break_array.remaining"),
+        ("破阵武学-突破-阵法-页面", "破阵武学-突破-阵法-开始", "破阵武学-突破-阵法-剩余"),
         texts=("剩余挑战次数：9/9",),
     )
     assert start.transition is not None
     assert start.transition.intent.action_id == "start_break_array_challenge"
-    assert start.transition.intent.page_marker == "break_array.page"
-    assert start.transition.intent.target_marker == "break_array.start"
+    assert start.transition.intent.page_marker == "破阵武学-突破-阵法-页面"
+    assert start.transition.intent.target_marker == "破阵武学-突破-阵法-开始"
     assert start.transition.postcondition == "break_array.start_confirm_dialog"
     assert start.transition.next_state == "confirm_break_array:9_of_9"
 
     start_without_page = decide(
         "break_array",
-        ("break_array.start", "break_array.remaining"),
+        ("破阵武学-突破-阵法-开始", "破阵武学-突破-阵法-剩余"),
         texts=("剩余挑战次数：9/9",),
     )
     assert start_without_page.status is TaskStatus.FAILED
 
     result = decide(
         "result",
-        ("break_array.result", "break_array.success"),
+        ("破阵武学-突破-阵法-结果", "破阵武学-突破-阵法-成功"),
         paired_counts(1),
     )
     assert result.transition is not None
@@ -557,14 +557,14 @@ def test_challenge_loop_is_exactly_three_and_requires_result_close():
 
     exhausted_result = decide(
         "result",
-        ("break_array.result", "break_array.success"),
+        ("破阵武学-突破-阵法-结果", "破阵武学-突破-阵法-成功"),
         paired_counts(1, wait_break_array_result=MAX_RESULT_POLLS),
     )
     assert exhausted_result.status is TaskStatus.FAILED
 
     close = decide(
         "result",
-        ("break_array.result", "break_array.success", "break_array.result_close"),
+        ("破阵武学-突破-阵法-结果", "破阵武学-突破-阵法-成功", "破阵武学-突破-阵法-结果-关闭"),
         paired_counts(1),
     )
     assert close.transition is not None
@@ -576,11 +576,11 @@ def test_start_confirmation_is_exactly_bounded_and_same_frame_authorized():
     confirm = decide(
         "confirm_break_array:9_of_9",
         (
-            "break_array.start_confirm_dialog",
-            "break_array.start_confirm_button",
+            "破阵武学-突破-阵法-开始-确认-对话框",
+            "破阵武学-突破-阵法-开始-确认-按钮",
             # The broad legacy detector sees 取消, but the exact known
             # title/body boundary is allowed to disambiguate this prompt.
-            "break_array.unknown_dialog",
+            "破阵武学-突破-阵法-未知-对话框",
         ),
         {"start_break_array_challenge": 1},
     )
@@ -588,23 +588,23 @@ def test_start_confirmation_is_exactly_bounded_and_same_frame_authorized():
     assert confirm.transition.intent.action_id == "confirm_break_array_challenge"
     assert (
         confirm.transition.intent.page_marker
-        == "break_array.start_confirm_dialog"
+        == "破阵武学-突破-阵法-开始-确认-对话框"
     )
-    assert confirm.transition.intent.target_marker == "break_array.start_confirm_button"
+    assert confirm.transition.intent.target_marker == "破阵武学-突破-阵法-开始-确认-按钮"
     assert confirm.transition.postcondition == "break_array.prepare_page"
     assert confirm.transition.postcondition_alternatives == ()
     assert confirm.transition.next_state == "post_confirm_break_array:9_of_9"
 
     missing_body = decide(
         "confirm_break_array:9_of_9",
-        ("break_array.start_confirm_button", "break_array.unknown_dialog"),
+        ("破阵武学-突破-阵法-开始-确认-按钮", "破阵武学-突破-阵法-未知-对话框"),
         {"start_break_array_challenge": 1},
     )
     assert missing_body.status is TaskStatus.FAILED
 
     duplicate = decide(
         "confirm_break_array:9_of_9",
-        ("break_array.start_confirm_dialog", "break_array.start_confirm_button"),
+        ("破阵武学-突破-阵法-开始-确认-对话框", "破阵武学-突破-阵法-开始-确认-按钮"),
         {
             "start_break_array_challenge": 1,
             "confirm_break_array_challenge": 1,
@@ -617,7 +617,7 @@ def test_start_confirmation_is_exactly_bounded_and_same_frame_authorized():
 def test_confirmation_transition_requires_one_bounded_formation_start_click():
     transition = decide(
         "post_confirm_break_array:9_of_9",
-        ("break_array.confirm_transition",),
+        ("破阵武学-突破-阵法-确认-过渡",),
         {
             "start_break_array_challenge": 1,
             "confirm_break_array_challenge": 1,
@@ -627,7 +627,7 @@ def test_confirmation_transition_requires_one_bounded_formation_start_click():
 
     prepare = decide(
         "post_confirm_break_array:9_of_9",
-        ("break_array.prepare_page", "break_array.prepare_start"),
+        ("破阵武学-突破-阵法-准备-页面", "破阵武学-突破-阵法-准备-开始"),
         {
             "start_break_array_challenge": 1,
             "confirm_break_array_challenge": 1,
@@ -635,8 +635,8 @@ def test_confirmation_transition_requires_one_bounded_formation_start_click():
     )
     assert prepare.transition is not None
     assert prepare.transition.intent.action_id == "start_break_array_battle"
-    assert prepare.transition.intent.page_marker == "break_array.prepare_page"
-    assert prepare.transition.intent.target_marker == "break_array.prepare_start"
+    assert prepare.transition.intent.page_marker == "破阵武学-突破-阵法-准备-页面"
+    assert prepare.transition.intent.target_marker == "破阵武学-突破-阵法-准备-开始"
     assert prepare.transition.intent.input_kind is InputKind.CLICK
     assert prepare.transition.postcondition == "break_array.battle_loading"
     assert prepare.transition.postcondition_alternatives == (
@@ -650,9 +650,9 @@ def test_confirmation_transition_requires_one_bounded_formation_start_click():
     prepare_beats_stale_transition = decide(
         "post_confirm_break_array:9_of_9",
         (
-            "break_array.prepare_page",
-            "break_array.prepare_start",
-            "break_array.confirm_transition",
+            "破阵武学-突破-阵法-准备-页面",
+            "破阵武学-突破-阵法-准备-开始",
+            "破阵武学-突破-阵法-确认-过渡",
         ),
         {
             "start_break_array_challenge": 1,
@@ -667,7 +667,7 @@ def test_confirmation_transition_requires_one_bounded_formation_start_click():
 
     prepare_after_transition = decide(
         "battle",
-        ("break_array.prepare_page", "break_array.prepare_start"),
+        ("破阵武学-突破-阵法-准备-页面", "破阵武学-突破-阵法-准备-开始"),
         {
             "start_break_array_challenge": 1,
             "confirm_break_array_challenge": 1,
@@ -682,7 +682,7 @@ def test_confirmation_transition_requires_one_bounded_formation_start_click():
 
     missing_start_target = decide(
         "post_confirm_break_array:9_of_9",
-        ("break_array.prepare_page",),
+        ("破阵武学-突破-阵法-准备-页面",),
         {
             "start_break_array_challenge": 1,
             "confirm_break_array_challenge": 1,
@@ -692,7 +692,7 @@ def test_confirmation_transition_requires_one_bounded_formation_start_click():
 
     duplicate_start = decide(
         "battle",
-        ("break_array.prepare_page", "break_array.prepare_start"),
+        ("破阵武学-突破-阵法-准备-页面", "破阵武学-突破-阵法-准备-开始"),
         paired_counts(1),
     )
     assert duplicate_start.status is TaskStatus.FAILED
@@ -700,7 +700,7 @@ def test_confirmation_transition_requires_one_bounded_formation_start_click():
 
     battle_without_start = decide(
         "post_confirm_break_array:9_of_9",
-        ("break_array.battle",),
+        ("破阵武学-突破-阵法-战斗",),
         {
             "start_break_array_challenge": 1,
             "confirm_break_array_challenge": 1,
@@ -711,10 +711,10 @@ def test_confirmation_transition_requires_one_bounded_formation_start_click():
     unexpected_decrement = decide(
         "post_confirm_break_array:9_of_9",
         (
-            "break_array.page",
-            "break_array.page.remaining_8_of_9",
-            "break_array.start",
-            "break_array.remaining",
+            "破阵武学-突破-阵法-页面",
+            "破阵武学-突破-阵法-页面-剩余-8-共-9",
+            "破阵武学-突破-阵法-开始",
+            "破阵武学-突破-阵法-剩余",
         ),
         {
             "start_break_array_challenge": 1,
@@ -727,10 +727,10 @@ def test_confirmation_transition_requires_one_bounded_formation_start_click():
     unchanged = decide(
         "post_confirm_break_array:9_of_9",
         (
-            "break_array.page",
-            "break_array.page.remaining_8_of_9",
-            "break_array.start",
-            "break_array.remaining",
+            "破阵武学-突破-阵法-页面",
+            "破阵武学-突破-阵法-页面-剩余-8-共-9",
+            "破阵武学-突破-阵法-开始",
+            "破阵武学-突破-阵法-剩余",
         ),
         {
             "start_break_array_challenge": 1,
@@ -742,7 +742,7 @@ def test_confirmation_transition_requires_one_bounded_formation_start_click():
 
     unknown = decide(
         "post_confirm_break_array:9_of_9",
-        ("break_array.page", "break_array.unknown_dialog"),
+        ("破阵武学-突破-阵法-页面", "破阵武学-突破-阵法-未知-对话框"),
         {
             "start_break_array_challenge": 1,
             "confirm_break_array_challenge": 1,
@@ -754,7 +754,7 @@ def test_confirmation_transition_requires_one_bounded_formation_start_click():
 def test_third_result_requires_stable_page_with_live_counter_before_success():
     close = decide(
         "result",
-        ("break_array.result", "break_array.success", "break_array.result_close"),
+        ("破阵武学-突破-阵法-结果", "破阵武学-突破-阵法-成功", "破阵武学-突破-阵法-结果-关闭"),
         paired_counts(MAX_CHALLENGES),
     )
     assert close.transition is not None
@@ -767,7 +767,7 @@ def test_third_result_requires_stable_page_with_live_counter_before_success():
 
     done = decide(
         "verify",
-        ("break_array.page", "break_array.remaining"),
+        ("破阵武学-突破-阵法-页面", "破阵武学-突破-阵法-剩余"),
         paired_counts(MAX_CHALLENGES),
         texts=("剩余挑战次数：6/9",),
     )
@@ -775,12 +775,12 @@ def test_third_result_requires_stable_page_with_live_counter_before_success():
 
 
 def test_failure_and_polling_caps_fail_closed():
-    failure = decide("battle", ("break_array.battle", "break_array.failure"))
+    failure = decide("battle", ("破阵武学-突破-阵法-战斗", "破阵武学-突破-阵法-失败"))
     assert failure.status is TaskStatus.FAILED
 
     exhausted = decide(
         "battle",
-        ("break_array.battle", "break_array.battle_loading"),
+        ("破阵武学-突破-阵法-战斗", "破阵武学-突破-阵法-战斗-加载"),
         paired_counts(1, wait_break_array_battle=MAX_BATTLE_POLLS),
     )
     assert exhausted.status is TaskStatus.FAILED
@@ -789,7 +789,7 @@ def test_failure_and_polling_caps_fail_closed():
     assert POLICY.action_caps["confirm_break_array_challenge"] == MAX_CHALLENGES
     assert POLICY.action_caps["start_break_array_battle"] == MAX_CHALLENGES
 
-    startup_wait = decide("home", ("break_array.startup_loading",))
+    startup_wait = decide("home", ("破阵武学-突破-阵法-启动-加载",))
     assert startup_wait.transition is not None
     assert startup_wait.transition.intent.action_id == "wait_break_array_startup"
     assert startup_wait.transition.intent.input_kind is InputKind.NONE
@@ -798,7 +798,7 @@ def test_failure_and_polling_caps_fail_closed():
 
     startup_exhausted = decide(
         "home",
-        ("break_array.startup_loading",),
+        ("破阵武学-突破-阵法-启动-加载",),
         {"wait_break_array_startup": MAX_STARTUP_POLLS},
     )
     assert startup_exhausted.status is TaskStatus.FAILED
@@ -807,7 +807,7 @@ def test_failure_and_polling_caps_fail_closed():
 def test_remaining_counter_limits_a_resumed_run_to_the_daily_remainder():
     start = decide(
         "break_array",
-        ("break_array.page", "break_array.start", "break_array.remaining"),
+        ("破阵武学-突破-阵法-页面", "破阵武学-突破-阵法-开始", "破阵武学-突破-阵法-剩余"),
         texts=("剩余挑战次数：2/9",),
     )
     assert start.transition is not None
@@ -815,7 +815,7 @@ def test_remaining_counter_limits_a_resumed_run_to_the_daily_remainder():
 
     done = decide(
         "break_array",
-        ("break_array.page", "break_array.remaining_exhausted"),
+        ("破阵武学-突破-阵法-页面", "破阵武学-突破-阵法-剩余-耗尽"),
         paired_counts(2),
         texts=("0/9",),
     )
@@ -825,7 +825,7 @@ def test_remaining_counter_limits_a_resumed_run_to_the_daily_remainder():
 def test_invalid_remaining_counter_fails_closed():
     invalid = decide(
         "break_array",
-        ("break_array.page", "break_array.start", "break_array.remaining"),
+        ("破阵武学-突破-阵法-页面", "破阵武学-突破-阵法-开始", "破阵武学-突破-阵法-剩余"),
         texts=("剩余挑战次数：10/9",),
     )
     assert invalid.status is TaskStatus.FAILED
@@ -834,21 +834,21 @@ def test_invalid_remaining_counter_fails_closed():
 def test_loading_poll_postcondition_accepts_a_still_loading_frame():
     polling = decide(
         "battle",
-        ("break_array.battle_loading",),
+        ("破阵武学-突破-阵法-战斗-加载",),
         paired_counts(1),
     )
     assert polling.transition is not None
     assert polling.transition.intent.action_id == "wait_break_array_battle"
     assert polling.transition.postcondition == "break_array.battle_loading"
-    assert "break_array.battle" in polling.transition.postcondition_alternatives
+    assert "破阵武学-突破-阵法-战斗" in polling.transition.postcondition_alternatives
 
 
 def test_startup_loading_wait_is_bounded_and_accepts_only_known_task_boundaries():
-    waiting = decide("home", ("break_array.startup_loading",))
+    waiting = decide("home", ("破阵武学-突破-阵法-启动-加载",))
     assert waiting.transition is not None
     assert waiting.transition.next_state == "home"
-    assert waiting.transition.intent.page_marker == "break_array.startup_loading"
-    assert waiting.transition.intent.target_marker == "break_array.startup_loading"
+    assert waiting.transition.intent.page_marker == "破阵武学-突破-阵法-启动-加载"
+    assert waiting.transition.intent.target_marker == "破阵武学-突破-阵法-启动-加载"
     assert waiting.transition.intent.input_kind is InputKind.NONE
     assert waiting.transition.postcondition_alternatives == (
         "break_array.home",
@@ -862,7 +862,7 @@ def test_startup_loading_wait_is_bounded_and_accepts_only_known_task_boundaries(
 
     loading_boundary = decide(
         "home",
-        ("break_array.startup_loading", "activity.entry"),
+        ("破阵武学-突破-阵法-启动-加载", "破阵武学-活动-入口"),
     )
     assert loading_boundary.transition is not None
     assert loading_boundary.transition.intent.action_id == "open_break_array_activity"
@@ -875,7 +875,7 @@ def test_confirm_transition_never_spends_battle_wait_and_unknown_still_fails():
     }
     transition = decide(
         "battle",
-        ("break_array.confirm_transition",),
+        ("破阵武学-突破-阵法-确认-过渡",),
         pending_start_counts,
     )
     assert transition.status is TaskStatus.FAILED
@@ -883,7 +883,7 @@ def test_confirm_transition_never_spends_battle_wait_and_unknown_still_fails():
 
     exhausted = decide(
         "battle",
-        ("break_array.confirm_transition",),
+        ("破阵武学-突破-阵法-确认-过渡",),
         {
             **pending_start_counts,
             "wait_break_array_battle": MAX_BATTLE_POLLS,

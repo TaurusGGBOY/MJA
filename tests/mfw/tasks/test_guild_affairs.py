@@ -28,21 +28,20 @@ def test_guild_affairs_uses_a_private_namespace_and_shared_terminals_only() -> N
     pipeline = json.loads(PIPELINE_PATH.read_text(encoding="utf-8"))
 
     assert all(
-        name.startswith("MJA_GUILD_AFFAIRS_DAILY_")
-        or name.startswith("guild.affairs.daily.")
+        name.startswith("帮派事务-")
         for name in pipeline
     )
-    assert pipeline["MJA_GUILD_AFFAIRS_DAILY_PANEL_PROBE"]["on_error"] == [
-        "MJA_GUILD_AFFAIRS_DAILY_RECORD_FAILURE"
+    assert pipeline["帮派事务-面板-探测"]["on_error"] == [
+        "帮派事务-记录-失败"
     ]
-    assert pipeline["MJA_GUILD_AFFAIRS_DAILY_PAID_OR_AMBIGUOUS"]["next"] == [
-        "MJA_COMMON_ABORT"
+    assert pipeline["帮派事务-付费-或-歧义"]["next"] == [
+        "公共-通用中止"
     ]
-    assert pipeline["MJA_GUILD_AFFAIRS_DAILY_CLOSE"]["next"] == [
-        "MJA_GUILD_AFFAIRS_DAILY_EXIT_GUILD_PAGE_PROBE"
+    assert pipeline["帮派事务-关闭"]["next"] == [
+        "帮派事务-退出-帮派-页面-探测"
     ]
-    assert pipeline["MJA_GUILD_AFFAIRS_DAILY_EXIT_CLEANUP_STOP"]["next"] == [
-        "MJA_COMMON_ABORT"
+    assert pipeline["帮派事务-退出-清理-停止"]["next"] == [
+        "公共-通用中止"
     ]
 
 
@@ -80,77 +79,77 @@ def test_guild_affairs_is_an_independent_mfw_task_contract() -> None:
 def test_guild_affairs_claims_consecutive_rewards_before_starting_a_row() -> None:
     nodes = load_task_nodes(AFFAIRS)
 
-    open_affairs = nodes["MJA_GUILD_AFFAIRS_DAILY_OPEN_AFFAIRS"]
+    open_affairs = nodes["帮派事务-打开-事务"]
     assert open_affairs["recognition"]["param"]["all_of"] == [
-        "guild.affairs.daily.guild.page",
-        "guild.affairs.daily.affairs.entry",
+        "帮派事务-帮派事务-帮派-页面",
+        "帮派事务-帮派事务-事务-入口",
     ]
-    claim_probe = nodes["MJA_GUILD_AFFAIRS_DAILY_FIRST_ROW_CLAIM_PROBE"]
-    start_probe = nodes["MJA_GUILD_AFFAIRS_DAILY_FIRST_ROW_START_PROBE"]
-    assert claim_probe["on_error"] == ["MJA_GUILD_AFFAIRS_DAILY_FIRST_ROW_START_PROBE"]
-    assert start_probe["on_error"] == ["MJA_GUILD_AFFAIRS_DAILY_FIRST_ROW_DONE_PROBE"]
-    claim_action = nodes["MJA_GUILD_AFFAIRS_DAILY_CLAIM_FIRST_ROW_REWARD"]
+    claim_probe = nodes["帮派事务-首个-行-领取-探测"]
+    start_probe = nodes["帮派事务-首个-行-开始-探测"]
+    assert claim_probe["on_error"] == ["帮派事务-首个-行-开始-探测"]
+    assert start_probe["on_error"] == ["帮派事务-首个-行-完成-探测"]
+    claim_action = nodes["帮派事务-领取-首个-行-奖励"]
     assert claim_action["recognition"]["param"] == {
         "all_of": [
-            "guild.affairs.daily.affairs.page",
-            "guild.affairs.daily.first_row.claimable",
+            "帮派事务-帮派事务-事务-页面",
+            "帮派事务-帮派事务-首个-行-可领取",
         ],
         "box_index": 1,
     }
     assert claim_action["next"] == [
-        "MJA_GUILD_AFFAIRS_DAILY_CLAIM_REWARD_PROBE"
+        "帮派事务-领取-奖励-探测"
     ]
     assert claim_action["max_hit"] == 6
-    assert nodes["MJA_GUILD_AFFAIRS_DAILY_CLOSE_REWARD"]["next"] == [
-        "MJA_GUILD_AFFAIRS_DAILY_FIRST_ROW_GATE"
+    assert nodes["帮派事务-关闭-奖励"]["next"] == [
+        "帮派事务-首个-行-门禁"
     ]
     assert_reachable(
         nodes,
-        "MJA_GUILD_AFFAIRS_DAILY_START_FIRST_ROW",
-        "MJA_GUILD_AFFAIRS_DAILY_FIRST_ROW_POST_START_PROBE",
+        "帮派事务-开始-首个-行",
+        "帮派事务-首个-行-之后-开始-探测",
     )
     assert_outcome(
         nodes,
-        "MJA_GUILD_AFFAIRS_DAILY_ALREADY_COMPLETE",
+        "帮派事务-已完成",
         "success",
         "guild.affairs.daily.all_rows_started_or_no_action",
     )
     assert_outcome(
         nodes,
-        "MJA_GUILD_AFFAIRS_DAILY_SUCCESS",
+        "帮派事务-成功",
         "success",
         "guild.affairs.daily.all_rows_started_or_no_action",
     )
 
     for row_index in range(1, 4):
-        prefix = f"MJA_GUILD_AFFAIRS_DAILY_ROW{row_index}"
-        assert_reachable(nodes, AFFAIRS.entry, f"{prefix}_GATE")
-        assert nodes[f"{prefix}_START"]["custom_action_param"]["action_id"] == (
+        prefix = f"帮派事务-行{row_index}"
+        assert_reachable(nodes, AFFAIRS.entry, f"{prefix}-门禁")
+        assert nodes[f"{prefix}-开始"]["custom_action_param"]["action_id"] == (
             "start_guild_affairs"
         )
-        assert nodes[f"{prefix}_START"]["custom_action_param"]["evidence"][
+        assert nodes[f"{prefix}-开始"]["custom_action_param"]["evidence"][
             "row_index"
         ] == row_index
-    assert nodes["MJA_GUILD_AFFAIRS_DAILY_ROW3_DONE_PROBE"]["next"] == [
-        "MJA_GUILD_AFFAIRS_DAILY_SUCCESS"
+    assert nodes["帮派事务-行3-完成-探测"]["next"] == [
+        "帮派事务-成功"
     ]
 
 
 def test_guild_affairs_normalizes_only_the_verified_claim_result_overlay() -> None:
     nodes = load_task_nodes(AFFAIRS)
-    probe = nodes["MJA_GUILD_AFFAIRS_DAILY_CLAIM_REWARD_PROBE"]
-    close = nodes["MJA_GUILD_AFFAIRS_DAILY_CLOSE_REWARD"]
+    probe = nodes["帮派事务-领取-奖励-探测"]
+    close = nodes["帮派事务-关闭-奖励"]
 
     expected_boundary = [
-        "guild.affairs.daily.reward.popup",
-        "guild.affairs.daily.reward.popup.close",
+        "帮派事务-帮派事务-奖励-弹窗",
+        "帮派事务-帮派事务-奖励-弹窗-关闭",
     ]
     assert probe["recognition"]["param"] == {
         "all_of": expected_boundary,
         "box_index": 1,
     }
     assert probe["timeout"] == 8_000
-    assert probe["on_error"] == ["MJA_GUILD_AFFAIRS_DAILY_RECORD_FAILURE"]
+    assert probe["on_error"] == ["帮派事务-记录-失败"]
 
     assert close["recognition"]["param"] == {
         "all_of": expected_boundary,
@@ -162,15 +161,15 @@ def test_guild_affairs_normalizes_only_the_verified_claim_result_overlay() -> No
     assert close["custom_action_param"]["evidence"] == {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "guild.affairs.daily.reward.popup",
-        "target_name": "guild.affairs.daily.reward.popup.close",
+        "page_name": "帮派事务-帮派事务-奖励-弹窗",
+        "target_name": "帮派事务-帮派事务-奖励-弹窗-关闭",
     }
     assert close["retry_times"] == 0
     assert close["max_hit"] == 6
     assert close["post_delay"] == 500
 
-    popup = nodes["guild.affairs.daily.reward.popup"]
-    prompt = nodes["guild.affairs.daily.reward.popup.close"]
+    popup = nodes["帮派事务-帮派事务-奖励-弹窗"]
+    prompt = nodes["帮派事务-帮派事务-奖励-弹窗-关闭"]
     assert popup["recognition"] == "TemplateMatch"
     assert popup["template"] == (
         "daily/GUILD_AFFAIRS_DAILY/reward_popup_live.png"
@@ -188,12 +187,12 @@ def test_guild_affairs_normalizes_only_the_verified_claim_result_overlay() -> No
 def test_guild_affairs_clicks_only_the_verified_first_row_and_rejects_paid_state() -> None:
     nodes = load_task_nodes(AFFAIRS)
 
-    assert nodes["guild.affairs.daily.first_row.claimable"]["expected"] == "领取奖励"
-    assert nodes["guild.affairs.daily.first_row.startable"]["expected"] == "开始事务"
-    assert nodes["guild.affairs.daily.first_row.claimable"]["roi"] == [930, 150, 300, 120]
-    assert nodes["guild.affairs.daily.first_row.startable"]["roi"] == [930, 150, 300, 120]
-    assert nodes["guild.affairs.daily.first_row.paid"]["roi"] == [930, 150, 300, 120]
-    no_action = nodes["guild.affairs.daily.first_row.no_action"]
+    assert nodes["帮派事务-帮派事务-首个-行-可领取"]["expected"] == "领取奖励"
+    assert nodes["帮派事务-帮派事务-首个-行-可开始"]["expected"] == "开始事务"
+    assert nodes["帮派事务-帮派事务-首个-行-可领取"]["roi"] == [930, 150, 300, 120]
+    assert nodes["帮派事务-帮派事务-首个-行-可开始"]["roi"] == [930, 150, 300, 120]
+    assert nodes["帮派事务-帮派事务-首个-行-付费"]["roi"] == [930, 150, 300, 120]
+    no_action = nodes["帮派事务-帮派事务-首个-行-无-动作"]
     assert no_action["roi"] == [1040, 95, 180, 70]
     assert "进行中" in no_action["expected"]
 
@@ -209,19 +208,19 @@ def test_guild_affairs_clicks_only_the_verified_first_row_and_rejects_paid_state
     assert status_y + status_height < 217
 
     for node_name in (
-        "MJA_GUILD_AFFAIRS_DAILY_CLAIM_FIRST_ROW_REWARD",
-        "MJA_GUILD_AFFAIRS_DAILY_START_FIRST_ROW",
+        "帮派事务-领取-首个-行-奖励",
+        "帮派事务-开始-首个-行",
     ):
         evidence = nodes[node_name]["custom_action_param"]["evidence"]
         assert evidence["row_index"] == 0
         assert evidence["row_roi"] == [50, 150, 1180, 150]
         assert evidence["target_roi"] == [930, 150, 300, 120]
 
-    assert nodes["MJA_GUILD_AFFAIRS_DAILY_FIRST_ROW_PAID_GUARD"]["next"] == [
-        "MJA_GUILD_AFFAIRS_DAILY_PAID_OR_AMBIGUOUS"
+    assert nodes["帮派事务-首个-行-付费-防护"]["next"] == [
+        "帮派事务-付费-或-歧义"
     ]
-    assert nodes["MJA_GUILD_AFFAIRS_DAILY_AFTER_CLAIM_PAID_GUARD"]["next"] == [
-        "MJA_GUILD_AFFAIRS_DAILY_PAID_OR_AMBIGUOUS"
+    assert nodes["帮派事务-之后-领取-付费-防护"]["next"] == [
+        "帮派事务-付费-或-歧义"
     ]
     action_ids = {
         node.get("custom_action_param", {}).get("action_id")
@@ -234,15 +233,15 @@ def test_guild_affairs_clicks_only_the_verified_first_row_and_rejects_paid_state
     }
     assert "refresh_guild_affairs" not in action_ids
     assert "refresh_guild_affairs_with_currency" not in action_ids
-    assert "guild.affairs.daily.first_row.paid" not in click_targets
+    assert "帮派事务-帮派事务-首个-行-付费" not in click_targets
     assert_abort_code(
         nodes,
-        "MJA_GUILD_AFFAIRS_DAILY_PAID_OR_AMBIGUOUS",
+        "帮派事务-付费-或-歧义",
         "GUILD_FIRST_ROW_PAID_OR_AMBIGUOUS",
     )
     assert_abort_code(
         nodes,
-        "MJA_GUILD_AFFAIRS_DAILY_RECORD_FAILURE",
+        "帮派事务-记录-失败",
         "GUILD_AFFAIRS_POSTCONDITION_MISSING",
     )
 
@@ -264,16 +263,16 @@ def test_guild_home_probe_matches_the_android_guild_home_evidence() -> None:
     expected = ["帮会名帖", "成员数量", "活跃度"]
 
     for node_name in (
-        "MJA_GUILD_AFFAIRS_DAILY_GUILD_PAGE_PROBE",
-        "guild.affairs.daily.guild.page",
-        "MJA_GUILD_AFFAIRS_DAILY_EXIT_GUILD_PAGE_PROBE",
+        "帮派事务-帮派-页面-探测",
+        "帮派事务-帮派事务-帮派-页面",
+        "帮派事务-退出-帮派-页面-探测",
     ):
         assert nodes[node_name]["expected"] == expected
         assert nodes[node_name]["roi"] == [0, 180, 380, 300]
 
-    assert nodes["guild.affairs.daily.affairs.entry"]["expected"] == "帮会事务"
-    assert nodes["guild.affairs.daily.affairs.entry"]["roi"] == [900, 230, 330, 170]
-    assert nodes["MJA_GUILD_AFFAIRS_DAILY_AFFAIRS_PAGE_PROBE"]["roi"] == [
+    assert nodes["帮派事务-帮派事务-事务-入口"]["expected"] == "帮会事务"
+    assert nodes["帮派事务-帮派事务-事务-入口"]["roi"] == [900, 230, 330, 170]
+    assert nodes["帮派事务-事务-页面-探测"]["roi"] == [
         0,
         0,
         1280,
@@ -283,15 +282,15 @@ def test_guild_home_probe_matches_the_android_guild_home_evidence() -> None:
 
 def test_guild_affairs_launcher_recovery_is_single_shot_and_truthful() -> None:
     nodes = load_task_nodes(AFFAIRS)
-    start = nodes["MJA_GUILD_AFFAIRS_DAILY_START"]
-    recovery = nodes["MJA_GUILD_AFFAIRS_DAILY_GAME_START_RECOVERY"]
-    wait = nodes["MJA_GUILD_AFFAIRS_DAILY_RECOVERY_STATE_PROBE"]
+    start = nodes["帮派事务-任务入口"]
+    recovery = nodes["帮派事务-游戏启动恢复"]
+    wait = nodes["帮派事务-恢复-状态-探测"]
 
     assert start["timeout"] == 8000
-    assert start["next"][-1] == "MJA_GUILD_AFFAIRS_DAILY_GAME_START_RECOVERY"
+    assert start["next"][-1] == "帮派事务-游戏启动恢复"
     assert start["on_error"] == [
-        "MJA_GUILD_AFFAIRS_DAILY_GAME_START_RECOVERY",
-        "MJA_GUILD_AFFAIRS_DAILY_RECORD_FAILURE",
+        "帮派事务-游戏启动恢复",
+        "帮派事务-记录-失败",
     ]
     assert recovery["action"] == "StartApp"
     assert recovery["package"] == "com.hanjiasongshu.dr22/.MainActivity"
@@ -299,21 +298,21 @@ def test_guild_affairs_launcher_recovery_is_single_shot_and_truthful() -> None:
     assert recovery["retry_times"] == 0
     assert wait["timeout"] == 30_000
     assert wait["next"] == [
-        "MJA_GUILD_AFFAIRS_DAILY_AFFAIRS_PAGE_PROBE",
-        "MJA_GUILD_AFFAIRS_DAILY_GUILD_PAGE_PROBE",
-        "MJA_GUILD_AFFAIRS_DAILY_HOME_PROBE",
-        "MJA_GUILD_AFFAIRS_DAILY_PANEL_PROBE",
+        "帮派事务-事务-页面-探测",
+        "帮派事务-帮派-页面-探测",
+        "帮派事务-主页-探测",
+        "帮派事务-面板-探测",
     ]
-    assert "MJA_GUILD_AFFAIRS_DAILY_GAME_START_RECOVERY" not in wait["next"]
-    assert wait["on_error"] == ["MJA_GUILD_AFFAIRS_DAILY_GAME_START_RECOVERY_FAILED"]
+    assert "帮派事务-游戏启动恢复" not in wait["next"]
+    assert wait["on_error"] == ["帮派事务-游戏启动恢复失败"]
     assert_abort_code(
         nodes,
-        "MJA_GUILD_AFFAIRS_DAILY_GAME_START_RECOVERY_FAILED",
+        "帮派事务-游戏启动恢复失败",
         "GUILD_AFFAIRS_GAME_START_RECOVERY_EXHAUSTED",
     )
     assert (
         sum(
-            name.startswith("MJA_GUILD_AFFAIRS_DAILY_")
+            name.startswith("帮派事务-")
             and node.get("action") == "StartApp"
             for name, node in nodes.items()
         )
@@ -323,24 +322,24 @@ def test_guild_affairs_launcher_recovery_is_single_shot_and_truthful() -> None:
 
 def test_guild_affairs_recovery_does_not_delegate_to_shared_startup() -> None:
     nodes = load_task_nodes(AFFAIRS)
-    assert nodes["MJA_GUILD_AFFAIRS_DAILY_RECOVERY_STATE_PROBE"]["next"] == [
-        "MJA_GUILD_AFFAIRS_DAILY_AFFAIRS_PAGE_PROBE",
-        "MJA_GUILD_AFFAIRS_DAILY_GUILD_PAGE_PROBE",
-        "MJA_GUILD_AFFAIRS_DAILY_HOME_PROBE",
-        "MJA_GUILD_AFFAIRS_DAILY_PANEL_PROBE",
+    assert nodes["帮派事务-恢复-状态-探测"]["next"] == [
+        "帮派事务-事务-页面-探测",
+        "帮派事务-帮派-页面-探测",
+        "帮派事务-主页-探测",
+        "帮派事务-面板-探测",
     ]
 
 
 def test_guild_affairs_terminal_cleanup_is_bounded_and_verifies_guild_home() -> None:
     nodes = load_task_nodes(AFFAIRS)
-    close = nodes["MJA_GUILD_AFFAIRS_DAILY_CLOSE"]
-    exit_probe = nodes["MJA_GUILD_AFFAIRS_DAILY_EXIT_GUILD_PAGE_PROBE"]
-    close_target = nodes["guild.affairs.daily.affairs.close"]
+    close = nodes["帮派事务-关闭"]
+    exit_probe = nodes["帮派事务-退出-帮派-页面-探测"]
+    close_target = nodes["帮派事务-帮派事务-事务-关闭"]
 
     assert close["recognition"]["param"] == {
         "all_of": [
-            "guild.affairs.daily.affairs.page",
-            "guild.affairs.daily.affairs.close",
+            "帮派事务-帮派事务-事务-页面",
+            "帮派事务-帮派事务-事务-关闭",
         ],
         "box_index": 1,
     }
@@ -354,12 +353,12 @@ def test_guild_affairs_terminal_cleanup_is_bounded_and_verifies_guild_home() -> 
         "evidence": {
             "page_index": 0,
             "target_index": 1,
-            "page_name": "guild.affairs.daily.affairs.page",
-            "target_name": "guild.affairs.daily.affairs.close",
+            "page_name": "帮派事务-帮派事务-事务-页面",
+            "target_name": "帮派事务-帮派事务-事务-关闭",
         },
     }
-    assert close["next"] == ["MJA_GUILD_AFFAIRS_DAILY_EXIT_GUILD_PAGE_PROBE"]
-    assert close["on_error"] == ["MJA_GUILD_AFFAIRS_DAILY_RECORD_FAILURE"]
+    assert close["next"] == ["帮派事务-退出-帮派-页面-探测"]
+    assert close["on_error"] == ["帮派事务-记录-失败"]
 
     # The archived r18 frame has the affairs X at [1205, 30, 31, 30]. Reuse
     # the proven guild-page ColorMatch instead of the 0.563 template match.
@@ -374,10 +373,10 @@ def test_guild_affairs_terminal_cleanup_is_bounded_and_verifies_guild_home() -> 
     }
     assert exit_probe["timeout"] == 5_000
     assert exit_probe["max_hit"] == 1
-    assert exit_probe["next"] == ["MJA_COMMON_STOP"]
-    assert exit_probe["on_error"] == ["MJA_GUILD_AFFAIRS_DAILY_EXIT_CLEANUP_STOP"]
-    assert nodes["MJA_GUILD_AFFAIRS_DAILY_EXIT_CLEANUP_STOP"]["next"] == [
-        "MJA_COMMON_ABORT"
+    assert exit_probe["next"] == ["公共-通用停止"]
+    assert exit_probe["on_error"] == ["帮派事务-退出-清理-停止"]
+    assert nodes["帮派事务-退出-清理-停止"]["next"] == [
+        "公共-通用中止"
     ]
 
     close_actions = [

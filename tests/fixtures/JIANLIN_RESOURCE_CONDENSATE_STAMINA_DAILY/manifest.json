@@ -31,22 +31,22 @@
     },
     "existing_daily_page": {
       "screenshot": "2026.08.11-16.31.15.917_MJA_JIANLIN_DAILY_PAGE_PROBE.png",
-      "expected_page": "daily.page",
-      "expected_targets": ["jianlin.daily.page"],
+      "expected_page": "日常任务奖励-日常-页面",
+      "expected_targets": ["剑林凝结体体力-剑林-日常-页面"],
       "expected_status": "failed",
       "reason": "an existing daily page without a fresh target-row action must not pass"
     },
     "existing_daily_page_after_scroll": {
       "screenshot": "2026.08.11-16.34.45.688_MJA_JIANLIN_SCROLL_DAILY_JIANLIN.png",
-      "expected_page": "daily.page",
-      "expected_targets": ["jianlin.daily.page"],
+      "expected_page": "日常任务奖励-日常-页面",
+      "expected_targets": ["剑林凝结体体力-剑林-日常-页面"],
       "expected_status": "failed",
       "reason": "scrolling or observing an old page is not a condensate challenge"
     },
     "fresh_condensate_result": {
       "screenshot": "fresh_capture_required",
-      "expected_page": "jianlin.battle.result",
-      "expected_targets": ["jianlin.battle.result.close"],
+      "expected_page": "剑林凝结体体力-剑林-战斗-结果",
+      "expected_targets": ["剑林凝结体体力-剑林-战斗结果关闭"],
       "expected_status": "success_only_after_action_chain",
       "required_actions": [
         "select_jianlin_condensate",

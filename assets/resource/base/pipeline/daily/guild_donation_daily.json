@@ -1,5 +1,5 @@
 {
-  "MJA_GUILD_DONATION_DAILY_START": {
+  "帮派捐献-任务入口": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "BeginTask",
@@ -7,32 +7,32 @@
       "task_id": "GUILD_DONATION_DAILY"
     },
     "next": [
-      "MJA_GUILD_DONATION_MEMBER_CLOSE",
-      "MJA_GUILD_DONATION_START_SAFETY_PROBE",
-      "MJA_GUILD_DONATION_START_PAID_PROBE",
-      "MJA_GUILD_DONATION_START_UNKNOWN_POPUP_PROBE",
-      "MJA_GUILD_DONATION_ANDROID_PAGE_PROBE",
-      "MJA_GUILD_DONATION_ANDROID_GUILD_PAGE_PROBE",
-      "MJA_GUILD_DONATION_ANDROID_PANEL_PROBE",
-      "MJA_GUILD_DONATION_ANDROID_HOME_PROBE",
-      "MJA_GUILD_DONATION_PAGE_PROBE",
-      "MJA_GUILD_DONATION_GUILD_PAGE_PROBE",
-      "MJA_GUILD_DONATION_HOME_PROBE",
-      "MJA_GUILD_DONATION_PANEL_PROBE"
+      "帮派捐献-成员-关闭",
+      "帮派捐献-开始-安全-探测",
+      "帮派捐献-开始-付费-探测",
+      "帮派捐献-开始-未知-弹窗-探测",
+      "帮派捐献-安卓-页面-探测",
+      "帮派捐献-安卓-帮派-页面-探测",
+      "帮派捐献-安卓-面板-探测",
+      "帮派捐献-安卓-主页-探测",
+      "帮派捐献-页面-探测",
+      "帮派捐献-帮派-页面-探测",
+      "帮派捐献-主页-探测",
+      "帮派捐献-面板-探测"
     ],
     "timeout": 8000,
     "on_error": [
-      "MJA_GUILD_DONATION_GAME_START_RECOVERY",
-      "MJA_GUILD_DONATION_RECORD_FAILURE"
+      "帮派捐献-游戏启动恢复",
+      "帮派捐献-记录-失败"
     ]
   },
-  "MJA_GUILD_DONATION_MEMBER_CLOSE": {
+  "帮派捐献-成员-关闭": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "guild.donation.member.page",
-          "guild.donation.member.close"
+          "帮派捐献-帮派-捐献-成员-页面",
+          "帮派捐献-帮派-捐献-成员-关闭"
         ],
         "box_index": 1
       }
@@ -48,26 +48,26 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "guild.donation.member.page",
-        "target_name": "guild.donation.member.close"
+        "page_name": "帮派捐献-帮派-捐献-成员-页面",
+        "target_name": "帮派捐献-帮派-捐献-成员-关闭"
       }
     },
     "post_delay": 750,
     "next": [
-      "MJA_GUILD_DONATION_GUILD_HOME_OPEN_DONATION",
-      "MJA_GUILD_DONATION_MEMBER_GUILD_HOME_CLOSE"
+      "帮派捐献-帮派-主页-打开-捐献",
+      "帮派捐献-成员-帮派-主页-关闭"
     ],
-    "on_error": ["MJA_GUILD_DONATION_RECORD_FAILURE"],
+    "on_error": ["帮派捐献-记录-失败"],
     "retry_times": 0
   },
-  "MJA_GUILD_DONATION_GUILD_HOME_OPEN_DONATION": {
+  "帮派捐献-帮派-主页-打开-捐献": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "guild.donation.guild.home.page",
-          "guild.donation.guild.home.context",
-          "guild.donation.guild.home.donation.entry"
+          "帮派捐献-帮派-捐献-帮派-主页-页面",
+          "帮派捐献-帮派-捐献-帮派-主页-上下文",
+          "帮派捐献-帮派-捐献-帮派-主页-捐献-入口"
         ],
         "box_index": 2
       }
@@ -83,23 +83,23 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "guild.donation.guild.home.page",
-        "target_name": "guild.donation.guild.home.donation.entry"
+        "page_name": "帮派捐献-帮派-捐献-帮派-主页-页面",
+        "target_name": "帮派捐献-帮派-捐献-帮派-主页-捐献-入口"
       }
     },
     "post_delay": 750,
-    "next": ["MJA_GUILD_DONATION_PAGE_PROBE"],
-    "on_error": ["MJA_GUILD_DONATION_RECORD_FAILURE"],
+    "next": ["帮派捐献-页面-探测"],
+    "on_error": ["帮派捐献-记录-失败"],
     "retry_times": 0
   },
-  "MJA_GUILD_DONATION_MEMBER_GUILD_HOME_CLOSE": {
+  "帮派捐献-成员-帮派-主页-关闭": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "guild.donation.guild.home.page",
-          "guild.donation.guild.home.context",
-          "guild.donation.guild.home.close"
+          "帮派捐献-帮派-捐献-帮派-主页-页面",
+          "帮派捐献-帮派-捐献-帮派-主页-上下文",
+          "帮派捐献-帮派-捐献-帮派-主页-关闭"
         ],
         "box_index": 2
       }
@@ -115,16 +115,16 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "guild.donation.guild.home.page",
-        "target_name": "guild.donation.guild.home.close"
+        "page_name": "帮派捐献-帮派-捐献-帮派-主页-页面",
+        "target_name": "帮派捐献-帮派-捐献-帮派-主页-关闭"
       }
     },
     "post_delay": 750,
-    "next": ["MJA_GUILD_DONATION_PANEL_PROBE"],
-    "on_error": ["MJA_GUILD_DONATION_RECORD_FAILURE"],
+    "next": ["帮派捐献-面板-探测"],
+    "on_error": ["帮派捐献-记录-失败"],
     "retry_times": 0
   },
-  "MJA_GUILD_DONATION_GAME_START_RECOVERY": {
+  "帮派捐献-游戏启动恢复": {
     "recognition": "DirectHit",
     "max_hit": 1,
     "timeout": 30000,
@@ -132,25 +132,25 @@
     "package": "com.hanjiasongshu.dr22/.MainActivity",
     "post_delay": 5000,
     "next": [
-      "MJA_GUILD_DONATION_MEMBER_CLOSE",
-      "MJA_GUILD_DONATION_START_SAFETY_PROBE",
-      "MJA_GUILD_DONATION_START_PAID_PROBE",
-      "MJA_GUILD_DONATION_START_UNKNOWN_POPUP_PROBE",
-      "MJA_GUILD_DONATION_ANDROID_PAGE_PROBE",
-      "MJA_GUILD_DONATION_ANDROID_GUILD_PAGE_PROBE",
-      "MJA_GUILD_DONATION_ANDROID_PANEL_PROBE",
-      "MJA_GUILD_DONATION_ANDROID_HOME_PROBE",
-      "MJA_GUILD_DONATION_PAGE_PROBE",
-      "MJA_GUILD_DONATION_GUILD_PAGE_PROBE",
-      "MJA_GUILD_DONATION_HOME_PROBE",
-      "MJA_GUILD_DONATION_PANEL_PROBE"
+      "帮派捐献-成员-关闭",
+      "帮派捐献-开始-安全-探测",
+      "帮派捐献-开始-付费-探测",
+      "帮派捐献-开始-未知-弹窗-探测",
+      "帮派捐献-安卓-页面-探测",
+      "帮派捐献-安卓-帮派-页面-探测",
+      "帮派捐献-安卓-面板-探测",
+      "帮派捐献-安卓-主页-探测",
+      "帮派捐献-页面-探测",
+      "帮派捐献-帮派-页面-探测",
+      "帮派捐献-主页-探测",
+      "帮派捐献-面板-探测"
     ],
     "on_error": [
-      "MJA_GUILD_DONATION_RECORD_FAILURE"
+      "帮派捐献-记录-失败"
     ],
     "retry_times": 0
   },
-  "MJA_GUILD_DONATION_START_SAFETY_PROBE": {
+  "帮派捐献-开始-安全-探测": {
     "recognition": "OCR",
     "expected": [
       "登录",
@@ -166,13 +166,13 @@
     "timeout": 2500,
     "action": "DoNothing",
     "next": [
-      "MJA_GUILD_DONATION_SAFETY_STOP"
+      "帮派捐献-安全-停止"
     ],
     "on_error": [
-      "MJA_GUILD_DONATION_START_PAID_PROBE"
+      "帮派捐献-开始-付费-探测"
     ]
   },
-  "MJA_GUILD_DONATION_START_PAID_PROBE": {
+  "帮派捐献-开始-付费-探测": {
     "recognition": "OCR",
     "expected": [
       "购买",
@@ -194,13 +194,13 @@
     "timeout": 2500,
     "action": "DoNothing",
     "next": [
-      "MJA_GUILD_DONATION_PAID_STOP"
+      "帮派捐献-付费-停止"
     ],
     "on_error": [
-      "MJA_GUILD_DONATION_START_UNKNOWN_POPUP_PROBE"
+      "帮派捐献-开始-未知-弹窗-探测"
     ]
   },
-  "MJA_GUILD_DONATION_START_UNKNOWN_POPUP_PROBE": {
+  "帮派捐献-开始-未知-弹窗-探测": {
     "recognition": "OCR",
     "expected": [
       "确认",
@@ -219,89 +219,89 @@
     "timeout": 2500,
     "action": "DoNothing",
     "next": [
-      "MJA_GUILD_DONATION_UNKNOWN_POPUP_STOP"
+      "帮派捐献-未知-弹窗-停止"
     ],
     "on_error": [
-      "MJA_GUILD_DONATION_PAGE_PROBE"
+      "帮派捐献-页面-探测"
     ]
   },
-  "MJA_GUILD_DONATION_PAGE_PROBE": {
+  "帮派捐献-页面-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "guild.donation.page",
-          "guild.donation.context"
+          "帮派捐献-帮派-捐献-页面",
+          "帮派捐献-帮派-捐献-上下文"
         ],
         "box_index": 0
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_GUILD_DONATION_REMAINING_GATE"
+      "帮派捐献-剩余-门禁"
     ],
     "on_error": [
-      "MJA_GUILD_DONATION_GUILD_PAGE_PROBE"
+      "帮派捐献-帮派-页面-探测"
     ]
   },
-  "MJA_GUILD_DONATION_GUILD_PAGE_PROBE": {
+  "帮派捐献-帮派-页面-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "guild.donation.guild.page",
-          "guild.donation.guild.context"
+          "帮派捐献-帮派-捐献-帮派-页面",
+          "帮派捐献-帮派-捐献-帮派-上下文"
         ],
         "box_index": 0
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_GUILD_DONATION_OPEN_DONATION"
+      "帮派捐献-打开-捐献"
     ],
     "on_error": [
-      "MJA_GUILD_DONATION_RECORD_FAILURE"
+      "帮派捐献-记录-失败"
     ]
   },
-  "MJA_GUILD_DONATION_HOME_PROBE": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_HOME_PAGE"], "box_index": 0}},
+  "帮派捐献-主页-探测": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}},
     "timeout": 8000,
     "action": "DoNothing",
     "next": [
-      "MJA_GUILD_DONATION_OPEN_PANEL"
+      "帮派捐献-打开-面板"
     ],
     "on_error": [
-      "MJA_GUILD_DONATION_PANEL_PROBE"
+      "帮派捐献-面板-探测"
     ]
   },
-  "MJA_GUILD_DONATION_PANEL_PROBE": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_SIDE_PANEL_OPEN"], "box_index": 0}},
+  "帮派捐献-面板-探测": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏侧边面板-打开"], "box_index": 0}},
     "timeout": 8000,
     "action": "DoNothing",
     "next": [
-      "MJA_GUILD_DONATION_OPEN_GUILD"
+      "帮派捐献-打开-帮派"
     ],
     "on_error": [
-      "MJA_GUILD_DONATION_RECORD_FAILURE"
+      "帮派捐献-记录-失败"
     ]
   },
-  "MJA_GUILD_DONATION_ANDROID_HOME_PROBE": {
+  "帮派捐献-安卓-主页-探测": {
     "recognition": "OCR",
     "expected": ["活动", "鉴宝", "祈福", "副本", "画卷"],
     "roi": [780, 0, 450, 120],
     "timeout": 5000,
     "max_hit": 1,
     "action": "DoNothing",
-    "next": ["MJA_GUILD_DONATION_OPEN_ANDROID_PANEL"],
-    "on_error": ["MJA_GUILD_DONATION_HOME_PROBE"]
+    "next": ["帮派捐献-打开-安卓-面板"],
+    "on_error": ["帮派捐献-主页-探测"]
   },
-  "MJA_GUILD_DONATION_OPEN_ANDROID_PANEL": {
+  "帮派捐献-打开-安卓-面板": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "guild.donation.android.home.page",
-          "guild.donation.panel.open"
+          "帮派捐献-帮派-捐献-安卓-主页-页面",
+          "帮派捐献-帮派-捐献-面板-打开"
         ],
         "box_index": 1
       }
@@ -316,36 +316,36 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "guild.donation.android.home.page",
-        "target_name": "guild.donation.panel.open"
+        "page_name": "帮派捐献-帮派-捐献-安卓-主页-页面",
+        "target_name": "帮派捐献-帮派-捐献-面板-打开"
       }
     },
-    "next": ["MJA_GUILD_DONATION_ANDROID_PANEL_PROBE"],
-    "on_error": ["MJA_GUILD_DONATION_RECORD_FAILURE"],
+    "next": ["帮派捐献-安卓-面板-探测"],
+    "on_error": ["帮派捐献-记录-失败"],
     "retry_times": 0
   },
-  "MJA_GUILD_DONATION_ANDROID_PANEL_PROBE": {
+  "帮派捐献-安卓-面板-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "guild.donation.android.panel.page",
-          "guild.donation.android.guild.entry"
+          "帮派捐献-帮派-捐献-安卓-面板-页面",
+          "帮派捐献-帮派-捐献-安卓-帮派-入口"
         ],
         "box_index": 0
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_GUILD_DONATION_OPEN_ANDROID_GUILD"],
-    "on_error": ["MJA_GUILD_DONATION_RECORD_FAILURE"]
+    "next": ["帮派捐献-打开-安卓-帮派"],
+    "on_error": ["帮派捐献-记录-失败"]
   },
-  "MJA_GUILD_DONATION_OPEN_ANDROID_GUILD": {
+  "帮派捐献-打开-安卓-帮派": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "guild.donation.android.panel.page",
-          "guild.donation.android.guild.entry"
+          "帮派捐献-帮派-捐献-安卓-面板-页面",
+          "帮派捐献-帮派-捐献-安卓-帮派-入口"
         ],
         "box_index": 1
       }
@@ -360,36 +360,36 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "guild.donation.android.panel.page",
-        "target_name": "guild.donation.android.guild.entry"
+        "page_name": "帮派捐献-帮派-捐献-安卓-面板-页面",
+        "target_name": "帮派捐献-帮派-捐献-安卓-帮派-入口"
       }
     },
-    "next": ["MJA_GUILD_DONATION_ANDROID_GUILD_PAGE_PROBE"],
-    "on_error": ["MJA_GUILD_DONATION_RECORD_FAILURE"],
+    "next": ["帮派捐献-安卓-帮派-页面-探测"],
+    "on_error": ["帮派捐献-记录-失败"],
     "retry_times": 0
   },
-  "MJA_GUILD_DONATION_ANDROID_GUILD_PAGE_PROBE": {
+  "帮派捐献-安卓-帮派-页面-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "guild.donation.android.guild.page",
-          "guild.donation.android.donation.entry"
+          "帮派捐献-帮派-捐献-安卓-帮派-页面",
+          "帮派捐献-帮派-捐献-安卓-捐献-入口"
         ],
         "box_index": 0
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_GUILD_DONATION_OPEN_ANDROID_DONATION"],
-    "on_error": ["MJA_GUILD_DONATION_RECORD_FAILURE"]
+    "next": ["帮派捐献-打开-安卓-捐献"],
+    "on_error": ["帮派捐献-记录-失败"]
   },
-  "MJA_GUILD_DONATION_OPEN_ANDROID_DONATION": {
+  "帮派捐献-打开-安卓-捐献": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "guild.donation.android.guild.page",
-          "guild.donation.android.donation.entry"
+          "帮派捐献-帮派-捐献-安卓-帮派-页面",
+          "帮派捐献-帮派-捐献-安卓-捐献-入口"
         ],
         "box_index": 1
       }
@@ -404,93 +404,93 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "guild.donation.android.guild.page",
-        "target_name": "guild.donation.android.donation.entry"
+        "page_name": "帮派捐献-帮派-捐献-安卓-帮派-页面",
+        "target_name": "帮派捐献-帮派-捐献-安卓-捐献-入口"
       }
     },
-    "next": ["MJA_GUILD_DONATION_ANDROID_PAGE_PROBE"],
-    "on_error": ["MJA_GUILD_DONATION_RECORD_FAILURE"],
+    "next": ["帮派捐献-安卓-页面-探测"],
+    "on_error": ["帮派捐献-记录-失败"],
     "retry_times": 0
   },
-  "MJA_GUILD_DONATION_ANDROID_PAGE_PROBE": {
+  "帮派捐献-安卓-页面-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "guild.donation.android.donation.page",
-          "guild.donation.android.donation.context"
+          "帮派捐献-帮派-捐献-安卓-捐献-页面",
+          "帮派捐献-帮派-捐献-安卓-捐献-上下文"
         ],
         "box_index": 0
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_GUILD_DONATION_ANDROID_REMAINING_GATE"],
-    "on_error": ["MJA_GUILD_DONATION_RECORD_FAILURE"]
+    "next": ["帮派捐献-安卓-剩余-门禁"],
+    "on_error": ["帮派捐献-记录-失败"]
   },
-  "MJA_GUILD_DONATION_ANDROID_REMAINING_GATE": {
+  "帮派捐献-安卓-剩余-门禁": {
     "recognition": "DirectHit",
     "action": "DoNothing",
     "next": [
-      "MJA_GUILD_DONATION_ANDROID_REMAINING_9_PROBE",
-      "MJA_GUILD_DONATION_ANDROID_REMAINING_10_PROBE",
-      "MJA_GUILD_DONATION_ANDROID_REMAINING_INVALID_PROBE"
+      "帮派捐献-安卓-剩余-9-探测",
+      "帮派捐献-安卓-剩余-10-探测",
+      "帮派捐献-安卓-剩余-无效-探测"
     ],
-    "on_error": ["MJA_GUILD_DONATION_RECORD_FAILURE"]
+    "on_error": ["帮派捐献-记录-失败"]
   },
-  "MJA_GUILD_DONATION_ANDROID_REMAINING_9_PROBE": {
+  "帮派捐献-安卓-剩余-9-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "guild.donation.android.donation.page",
-          "guild.donation.android.donation.context",
-          "guild.donation.android.remaining_9_of_10"
+          "帮派捐献-帮派-捐献-安卓-捐献-页面",
+          "帮派捐献-帮派-捐献-安卓-捐献-上下文",
+          "帮派捐献-帮派-捐献-安卓-剩余-9-共-10"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_GUILD_DONATION_ALREADY_COMPLETE_CLEANUP"]
+    "next": ["帮派捐献-已完成-清理"]
   },
-  "MJA_GUILD_DONATION_ANDROID_REMAINING_10_PROBE": {
+  "帮派捐献-安卓-剩余-10-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "guild.donation.android.donation.page",
-          "guild.donation.android.donation.context",
-          "guild.donation.android.remaining_10_of_10"
+          "帮派捐献-帮派-捐献-安卓-捐献-页面",
+          "帮派捐献-帮派-捐献-安卓-捐献-上下文",
+          "帮派捐献-帮派-捐献-安卓-剩余-10-共-10"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_GUILD_DONATION_ANDROID_DONATE_FREE"]
+    "next": ["帮派捐献-安卓-捐献-免费"]
   },
-  "MJA_GUILD_DONATION_ANDROID_REMAINING_INVALID_PROBE": {
+  "帮派捐献-安卓-剩余-无效-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "guild.donation.android.donation.page",
-          "guild.donation.android.donation.context",
-          "guild.donation.android.remaining_invalid"
+          "帮派捐献-帮派-捐献-安卓-捐献-页面",
+          "帮派捐献-帮派-捐献-安卓-捐献-上下文",
+          "帮派捐献-帮派-捐献-安卓-剩余-无效"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_GUILD_DONATION_COUNTER_UNKNOWN"]
+    "next": ["帮派捐献-计数-未知"]
   },
-  "MJA_GUILD_DONATION_ANDROID_DONATE_FREE": {
+  "帮派捐献-安卓-捐献-免费": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "guild.donation.android.donation.page",
-          "guild.donation.android.donation.context",
-          "guild.donation.android.remaining_10_of_10",
-          "guild.donation.android.free"
+          "帮派捐献-帮派-捐献-安卓-捐献-页面",
+          "帮派捐献-帮派-捐献-安卓-捐献-上下文",
+          "帮派捐献-帮派-捐献-安卓-剩余-10-共-10",
+          "帮派捐献-帮派-捐献-安卓-免费"
         ],
         "box_index": 3
       }
@@ -505,42 +505,42 @@
       "evidence": {
         "page_index": 0,
         "target_index": 3,
-        "page_name": "guild.donation.android.donation.page",
-        "target_name": "guild.donation.android.free"
+        "page_name": "帮派捐献-帮派-捐献-安卓-捐献-页面",
+        "target_name": "帮派捐献-帮派-捐献-安卓-免费"
       }
     },
     "post_delay": 1500,
     "next": [
-      "MJA_GUILD_DONATION_ANDROID_CLOSE_REWARD",
-      "MJA_GUILD_DONATION_ANDROID_POSTCONDITION_PROBE",
-      "MJA_GUILD_DONATION_ANDROID_POST_UNKNOWN_POPUP_PROBE"
+      "帮派捐献-安卓-关闭-奖励",
+      "帮派捐献-安卓-后置条件-探测",
+      "帮派捐献-安卓-之后-未知-弹窗-探测"
     ],
-    "on_error": ["MJA_GUILD_DONATION_RECORD_FAILURE"],
+    "on_error": ["帮派捐献-记录-失败"],
     "retry_times": 0
   },
-  "MJA_GUILD_DONATION_ANDROID_POSTCONDITION_PROBE": {
+  "帮派捐献-安卓-后置条件-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "guild.donation.android.donation.page",
-          "guild.donation.android.donation.context",
-          "guild.donation.android.remaining_9_of_10"
+          "帮派捐献-帮派-捐献-安卓-捐献-页面",
+          "帮派捐献-帮派-捐献-安卓-捐献-上下文",
+          "帮派捐献-帮派-捐献-安卓-剩余-9-共-10"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_GUILD_DONATION_SUCCESS_CLEANUP"],
-    "on_error": ["MJA_GUILD_DONATION_ANDROID_POST_UNKNOWN_POPUP_PROBE"]
+    "next": ["帮派捐献-成功-清理"],
+    "on_error": ["帮派捐献-安卓-之后-未知-弹窗-探测"]
   },
-  "MJA_GUILD_DONATION_ANDROID_CLOSE_REWARD": {
+  "帮派捐献-安卓-关闭-奖励": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "guild.donation.android.reward",
-          "guild.donation.android.reward.close"
+          "帮派捐献-帮派-捐献-安卓-奖励",
+          "帮派捐献-帮派-捐献-安卓-奖励-关闭"
         ],
         "box_index": 0
       }
@@ -555,15 +555,15 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "guild.donation.android.reward",
-        "target_name": "guild.donation.android.reward.close"
+        "page_name": "帮派捐献-帮派-捐献-安卓-奖励",
+        "target_name": "帮派捐献-帮派-捐献-安卓-奖励-关闭"
       }
     },
-    "next": ["MJA_GUILD_DONATION_ANDROID_POSTCONDITION_PROBE"],
-    "on_error": ["MJA_GUILD_DONATION_ANDROID_POSTCONDITION_PROBE"],
+    "next": ["帮派捐献-安卓-后置条件-探测"],
+    "on_error": ["帮派捐献-安卓-后置条件-探测"],
     "retry_times": 0
   },
-  "MJA_GUILD_DONATION_ANDROID_POST_UNKNOWN_POPUP_PROBE": {
+  "帮派捐献-安卓-之后-未知-弹窗-探测": {
     "recognition": "OCR",
     "expected": [
       "购买",
@@ -580,16 +580,16 @@
     "roi": [260, 150, 760, 440],
     "timeout": 2500,
     "action": "DoNothing",
-    "next": ["MJA_GUILD_DONATION_UNKNOWN_POPUP_STOP"],
-    "on_error": ["MJA_GUILD_DONATION_RECORD_FAILURE"]
+    "next": ["帮派捐献-未知-弹窗-停止"],
+    "on_error": ["帮派捐献-记录-失败"]
   },
-  "MJA_GUILD_DONATION_OPEN_PANEL": {
+  "帮派捐献-打开-面板": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "guild.donation.home.page",
-          "guild.donation.panel.open"
+          "帮派捐献-帮派-捐献-主页-页面",
+          "帮派捐献-帮派-捐献-面板-打开"
         ],
         "box_index": 1
       }
@@ -604,25 +604,25 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "guild.donation.home.page",
-        "target_name": "guild.donation.panel.open"
+        "page_name": "帮派捐献-帮派-捐献-主页-页面",
+        "target_name": "帮派捐献-帮派-捐献-面板-打开"
       }
     },
     "next": [
-      "MJA_GUILD_DONATION_PANEL_PROBE"
+      "帮派捐献-面板-探测"
     ],
     "on_error": [
-      "MJA_GUILD_DONATION_RECORD_FAILURE"
+      "帮派捐献-记录-失败"
     ],
     "retry_times": 0
   },
-  "MJA_GUILD_DONATION_OPEN_GUILD": {
+  "帮派捐献-打开-帮派": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "guild.donation.panel.page",
-          "guild.donation.guild.entry"
+          "帮派捐献-帮派-捐献-面板-页面",
+          "帮派捐献-帮派-捐献-帮派-入口"
         ],
         "box_index": 1
       }
@@ -637,25 +637,25 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "guild.donation.panel.page",
-        "target_name": "guild.donation.guild.entry"
+        "page_name": "帮派捐献-帮派-捐献-面板-页面",
+        "target_name": "帮派捐献-帮派-捐献-帮派-入口"
       }
     },
     "next": [
-      "MJA_GUILD_DONATION_GUILD_PAGE_PROBE"
+      "帮派捐献-帮派-页面-探测"
     ],
     "on_error": [
-      "MJA_GUILD_DONATION_RECORD_FAILURE"
+      "帮派捐献-记录-失败"
     ],
     "retry_times": 0
   },
-  "MJA_GUILD_DONATION_OPEN_DONATION": {
+  "帮派捐献-打开-捐献": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "guild.donation.guild.page",
-          "guild.donation.entry"
+          "帮派捐献-帮派-捐献-帮派-页面",
+          "帮派捐献-帮派-捐献-入口"
         ],
         "box_index": 1
       }
@@ -670,90 +670,90 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "guild.donation.guild.page",
-        "target_name": "guild.donation.entry"
+        "page_name": "帮派捐献-帮派-捐献-帮派-页面",
+        "target_name": "帮派捐献-帮派-捐献-入口"
       }
     },
     "next": [
-      "MJA_GUILD_DONATION_PAGE_PROBE"
+      "帮派捐献-页面-探测"
     ],
     "on_error": [
-      "MJA_GUILD_DONATION_RECORD_FAILURE"
+      "帮派捐献-记录-失败"
     ],
     "retry_times": 0
   },
-  "MJA_GUILD_DONATION_REMAINING_GATE": {
+  "帮派捐献-剩余-门禁": {
     "recognition": "DirectHit",
     "action": "DoNothing",
     "next": [
-      "MJA_GUILD_DONATION_REMAINING_9_PROBE",
-      "MJA_GUILD_DONATION_REMAINING_10_PROBE",
-      "MJA_GUILD_DONATION_REMAINING_INVALID_PROBE"
+      "帮派捐献-剩余-9-探测",
+      "帮派捐献-剩余-10-探测",
+      "帮派捐献-剩余-无效-探测"
     ],
     "on_error": [
-      "MJA_GUILD_DONATION_RECORD_FAILURE"
+      "帮派捐献-记录-失败"
     ]
   },
-  "MJA_GUILD_DONATION_REMAINING_9_PROBE": {
+  "帮派捐献-剩余-9-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "guild.donation.page",
-          "guild.donation.context",
-          "guild.donation.remaining_9_of_10"
+          "帮派捐献-帮派-捐献-页面",
+          "帮派捐献-帮派-捐献-上下文",
+          "帮派捐献-帮派-捐献-剩余-9-共-10"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_GUILD_DONATION_ALREADY_COMPLETE_CLEANUP"
+      "帮派捐献-已完成-清理"
     ]
   },
-  "MJA_GUILD_DONATION_REMAINING_10_PROBE": {
+  "帮派捐献-剩余-10-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "guild.donation.page",
-          "guild.donation.context",
-          "guild.donation.remaining_10_of_10"
+          "帮派捐献-帮派-捐献-页面",
+          "帮派捐献-帮派-捐献-上下文",
+          "帮派捐献-帮派-捐献-剩余-10-共-10"
         ],
         "box_index": 1
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_GUILD_DONATION_DONATE_FREE"
+      "帮派捐献-捐献-免费"
     ]
   },
-  "MJA_GUILD_DONATION_REMAINING_INVALID_PROBE": {
+  "帮派捐献-剩余-无效-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "guild.donation.page",
-          "guild.donation.context",
-          "guild.donation.remaining_invalid"
+          "帮派捐献-帮派-捐献-页面",
+          "帮派捐献-帮派-捐献-上下文",
+          "帮派捐献-帮派-捐献-剩余-无效"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_GUILD_DONATION_COUNTER_UNKNOWN"
+      "帮派捐献-计数-未知"
     ]
   },
-  "MJA_GUILD_DONATION_DONATE_FREE": {
+  "帮派捐献-捐献-免费": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "guild.donation.page",
-          "guild.donation.context",
-          "guild.donation.remaining_10_of_10",
-          "guild.donation.free"
+          "帮派捐献-帮派-捐献-页面",
+          "帮派捐献-帮派-捐献-上下文",
+          "帮派捐献-帮派-捐献-剩余-10-共-10",
+          "帮派捐献-帮派-捐献-免费"
         ],
         "box_index": 3
       }
@@ -768,40 +768,40 @@
       "evidence": {
         "page_index": 0,
         "target_index": 3,
-        "page_name": "guild.donation.page",
-        "target_name": "guild.donation.free"
+        "page_name": "帮派捐献-帮派-捐献-页面",
+        "target_name": "帮派捐献-帮派-捐献-免费"
       }
     },
     "next": [
-      "MJA_GUILD_DONATION_POSTCONDITION_PROBE",
-      "MJA_GUILD_DONATION_POST_UNKNOWN_POPUP_PROBE"
+      "帮派捐献-后置条件-探测",
+      "帮派捐献-之后-未知-弹窗-探测"
     ],
     "on_error": [
-      "MJA_GUILD_DONATION_RECORD_FAILURE"
+      "帮派捐献-记录-失败"
     ],
     "retry_times": 0
   },
-  "MJA_GUILD_DONATION_POSTCONDITION_PROBE": {
+  "帮派捐献-后置条件-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "guild.donation.page",
-          "guild.donation.context",
-          "guild.donation.remaining_9_of_10"
+          "帮派捐献-帮派-捐献-页面",
+          "帮派捐献-帮派-捐献-上下文",
+          "帮派捐献-帮派-捐献-剩余-9-共-10"
         ],
         "box_index": 2
       }
     },
     "action": "DoNothing",
     "next": [
-      "MJA_GUILD_DONATION_SUCCESS_CLEANUP"
+      "帮派捐献-成功-清理"
     ],
     "on_error": [
-      "MJA_GUILD_DONATION_POST_UNKNOWN_POPUP_PROBE"
+      "帮派捐献-之后-未知-弹窗-探测"
     ]
   },
-  "MJA_GUILD_DONATION_POST_UNKNOWN_POPUP_PROBE": {
+  "帮派捐献-之后-未知-弹窗-探测": {
     "recognition": "OCR",
     "expected": [
       "购买",
@@ -824,37 +824,37 @@
     "timeout": 2500,
     "action": "DoNothing",
     "next": [
-      "MJA_GUILD_DONATION_UNKNOWN_POPUP_STOP"
+      "帮派捐献-未知-弹窗-停止"
     ],
     "on_error": [
-      "MJA_GUILD_DONATION_RECORD_FAILURE"
+      "帮派捐献-记录-失败"
     ]
   },
-  "MJA_GUILD_DONATION_ALREADY_COMPLETE_CLEANUP": {
+  "帮派捐献-已完成-清理": {
     "recognition": "DirectHit",
     "action": "DoNothing",
     "next": [
-      "MJA_GUILD_DONATION_ALREADY_COMPLETE_ANDROID_CLOSE",
-      "MJA_GUILD_DONATION_ALREADY_COMPLETE_CLOSE",
-      "MJA_GUILD_DONATION_HOME_RETURN_FAILED"
+      "帮派捐献-已完成-安卓-关闭",
+      "帮派捐献-已完成-关闭",
+      "帮派捐献-主页-返回-失败"
     ]
   },
-  "MJA_GUILD_DONATION_SUCCESS_CLEANUP": {
+  "帮派捐献-成功-清理": {
     "recognition": "DirectHit",
     "action": "DoNothing",
     "next": [
-      "MJA_GUILD_DONATION_SUCCESS_ANDROID_CLOSE",
-      "MJA_GUILD_DONATION_SUCCESS_CLOSE",
-      "MJA_GUILD_DONATION_HOME_RETURN_FAILED"
+      "帮派捐献-成功-安卓-关闭",
+      "帮派捐献-成功-关闭",
+      "帮派捐献-主页-返回-失败"
     ]
   },
-  "MJA_GUILD_DONATION_ALREADY_COMPLETE_ANDROID_CLOSE": {
+  "帮派捐献-已完成-安卓-关闭": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "guild.donation.android.donation.page",
-          "guild.donation.android.donation.close"
+          "帮派捐献-帮派-捐献-安卓-捐献-页面",
+          "帮派捐献-帮派-捐献-安卓-捐献-关闭"
         ],
         "box_index": 1
       }
@@ -870,25 +870,25 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "guild.donation.android.donation.page",
-        "target_name": "guild.donation.android.donation.close"
+        "page_name": "帮派捐献-帮派-捐献-安卓-捐献-页面",
+        "target_name": "帮派捐献-帮派-捐献-安卓-捐献-关闭"
       }
     },
     "post_delay": 750,
-    "next": ["MJA_GUILD_DONATION_ALREADY_COMPLETE_GUILD_HOME_CLOSE"],
+    "next": ["帮派捐献-已完成-帮派-主页-关闭"],
     "on_error": [
-      "MJA_GUILD_DONATION_ALREADY_COMPLETE_CLOSE",
-      "MJA_GUILD_DONATION_HOME_RETURN_FAILED"
+      "帮派捐献-已完成-关闭",
+      "帮派捐献-主页-返回-失败"
     ],
     "retry_times": 0
   },
-  "MJA_GUILD_DONATION_ALREADY_COMPLETE_CLOSE": {
+  "帮派捐献-已完成-关闭": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "guild.donation.page",
-          "guild.donation.close"
+          "帮派捐献-帮派-捐献-页面",
+          "帮派捐献-帮派-捐献-关闭"
         ],
         "box_index": 1
       }
@@ -903,22 +903,22 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "guild.donation.page",
-        "target_name": "guild.donation.close"
+        "page_name": "帮派捐献-帮派-捐献-页面",
+        "target_name": "帮派捐献-帮派-捐献-关闭"
       }
     },
-    "next": ["MJA_GUILD_DONATION_ALREADY_COMPLETE_GUILD_HOME_CLOSE"],
-    "on_error": ["MJA_GUILD_DONATION_HOME_RETURN_FAILED"],
+    "next": ["帮派捐献-已完成-帮派-主页-关闭"],
+    "on_error": ["帮派捐献-主页-返回-失败"],
     "retry_times": 0
   },
-  "MJA_GUILD_DONATION_ALREADY_COMPLETE_GUILD_HOME_CLOSE": {
+  "帮派捐献-已完成-帮派-主页-关闭": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "guild.donation.guild.home.page",
-          "guild.donation.guild.home.context",
-          "guild.donation.guild.home.close"
+          "帮派捐献-帮派-捐献-帮派-主页-页面",
+          "帮派捐献-帮派-捐献-帮派-主页-上下文",
+          "帮派捐献-帮派-捐献-帮派-主页-关闭"
         ],
         "box_index": 2
       }
@@ -934,31 +934,31 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "guild.donation.guild.home.page",
-        "target_name": "guild.donation.guild.home.close"
+        "page_name": "帮派捐献-帮派-捐献-帮派-主页-页面",
+        "target_name": "帮派捐献-帮派-捐献-帮派-主页-关闭"
       }
     },
     "post_delay": 750,
-    "next": ["MJA_GUILD_DONATION_ALREADY_COMPLETE_FUNCTION_PANEL_PROBE"],
-    "on_error": ["MJA_GUILD_DONATION_HOME_RETURN_FAILED"],
+    "next": ["帮派捐献-已完成-功能-面板-探测"],
+    "on_error": ["帮派捐献-主页-返回-失败"],
     "retry_times": 0
   },
-  "MJA_GUILD_DONATION_ALREADY_COMPLETE_FUNCTION_PANEL_PROBE": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_SIDE_PANEL_OPEN"], "box_index": 0}},
+  "帮派捐献-已完成-功能-面板-探测": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏侧边面板-打开"], "box_index": 0}},
     "timeout": 5000,
     "max_hit": 1,
     "action": "DoNothing",
-    "next": ["MJA_GUILD_DONATION_ALREADY_COMPLETE_FUNCTION_PANEL_CLOSE"],
-    "on_error": ["MJA_GUILD_DONATION_HOME_RETURN_FAILED"],
+    "next": ["帮派捐献-已完成-功能-面板-关闭"],
+    "on_error": ["帮派捐献-主页-返回-失败"],
     "retry_times": 0
   },
-  "MJA_GUILD_DONATION_ALREADY_COMPLETE_FUNCTION_PANEL_CLOSE": {
+  "帮派捐献-已完成-功能-面板-关闭": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "guild.donation.panel.page",
-          "guild.donation.panel.close"
+          "帮派捐献-帮派-捐献-面板-页面",
+          "帮派捐献-帮派-捐献-面板-关闭"
         ],
         "box_index": 1
       }
@@ -975,24 +975,24 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "guild.donation.panel.page",
-        "target_name": "guild.donation.panel.close"
+        "page_name": "帮派捐献-帮派-捐献-面板-页面",
+        "target_name": "帮派捐献-帮派-捐献-面板-关闭"
       }
     },
     "post_delay": 750,
-    "next": ["MJA_GUILD_DONATION_ALREADY_COMPLETE_HOME_PROBE"],
-    "on_error": ["MJA_GUILD_DONATION_HOME_RETURN_FAILED"],
+    "next": ["帮派捐献-已完成-主页-探测"],
+    "on_error": ["帮派捐献-主页-返回-失败"],
     "retry_times": 0
   },
-  "MJA_GUILD_DONATION_ALREADY_COMPLETE_HOME_PROBE": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_HOME_PAGE"], "box_index": 0}},
+  "帮派捐献-已完成-主页-探测": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}},
     "timeout": 5000,
     "max_hit": 1,
     "action": "DoNothing",
-    "next": ["MJA_GUILD_DONATION_ALREADY_COMPLETE"],
-    "on_error": ["MJA_GUILD_DONATION_HOME_RETURN_FAILED"]
+    "next": ["帮派捐献-已完成"],
+    "on_error": ["帮派捐献-主页-返回-失败"]
   },
-  "MJA_GUILD_DONATION_ALREADY_COMPLETE": {
+  "帮派捐献-已完成": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -1001,15 +1001,15 @@
       "status": "already_complete",
       "postcondition": "guild.donation.remaining_9_of_10"
     },
-    "next": ["MJA_COMMON_STOP"]
+    "next": ["公共-通用停止"]
   },
-  "MJA_GUILD_DONATION_SUCCESS_ANDROID_CLOSE": {
+  "帮派捐献-成功-安卓-关闭": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "guild.donation.android.donation.page",
-          "guild.donation.android.donation.close"
+          "帮派捐献-帮派-捐献-安卓-捐献-页面",
+          "帮派捐献-帮派-捐献-安卓-捐献-关闭"
         ],
         "box_index": 1
       }
@@ -1025,25 +1025,25 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "guild.donation.android.donation.page",
-        "target_name": "guild.donation.android.donation.close"
+        "page_name": "帮派捐献-帮派-捐献-安卓-捐献-页面",
+        "target_name": "帮派捐献-帮派-捐献-安卓-捐献-关闭"
       }
     },
     "post_delay": 750,
-    "next": ["MJA_GUILD_DONATION_SUCCESS_GUILD_HOME_CLOSE"],
+    "next": ["帮派捐献-成功-帮派-主页-关闭"],
     "on_error": [
-      "MJA_GUILD_DONATION_SUCCESS_CLOSE",
-      "MJA_GUILD_DONATION_HOME_RETURN_FAILED"
+      "帮派捐献-成功-关闭",
+      "帮派捐献-主页-返回-失败"
     ],
     "retry_times": 0
   },
-  "MJA_GUILD_DONATION_SUCCESS_CLOSE": {
+  "帮派捐献-成功-关闭": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "guild.donation.page",
-          "guild.donation.close"
+          "帮派捐献-帮派-捐献-页面",
+          "帮派捐献-帮派-捐献-关闭"
         ],
         "box_index": 1
       }
@@ -1058,22 +1058,22 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "guild.donation.page",
-        "target_name": "guild.donation.close"
+        "page_name": "帮派捐献-帮派-捐献-页面",
+        "target_name": "帮派捐献-帮派-捐献-关闭"
       }
     },
-    "next": ["MJA_GUILD_DONATION_SUCCESS_GUILD_HOME_CLOSE"],
-    "on_error": ["MJA_GUILD_DONATION_HOME_RETURN_FAILED"],
+    "next": ["帮派捐献-成功-帮派-主页-关闭"],
+    "on_error": ["帮派捐献-主页-返回-失败"],
     "retry_times": 0
   },
-  "MJA_GUILD_DONATION_SUCCESS_GUILD_HOME_CLOSE": {
+  "帮派捐献-成功-帮派-主页-关闭": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "guild.donation.guild.home.page",
-          "guild.donation.guild.home.context",
-          "guild.donation.guild.home.close"
+          "帮派捐献-帮派-捐献-帮派-主页-页面",
+          "帮派捐献-帮派-捐献-帮派-主页-上下文",
+          "帮派捐献-帮派-捐献-帮派-主页-关闭"
         ],
         "box_index": 2
       }
@@ -1089,31 +1089,31 @@
       "evidence": {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "guild.donation.guild.home.page",
-        "target_name": "guild.donation.guild.home.close"
+        "page_name": "帮派捐献-帮派-捐献-帮派-主页-页面",
+        "target_name": "帮派捐献-帮派-捐献-帮派-主页-关闭"
       }
     },
     "post_delay": 750,
-    "next": ["MJA_GUILD_DONATION_SUCCESS_FUNCTION_PANEL_PROBE"],
-    "on_error": ["MJA_GUILD_DONATION_HOME_RETURN_FAILED"],
+    "next": ["帮派捐献-成功-功能-面板-探测"],
+    "on_error": ["帮派捐献-主页-返回-失败"],
     "retry_times": 0
   },
-  "MJA_GUILD_DONATION_SUCCESS_FUNCTION_PANEL_PROBE": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_SIDE_PANEL_OPEN"], "box_index": 0}},
+  "帮派捐献-成功-功能-面板-探测": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏侧边面板-打开"], "box_index": 0}},
     "timeout": 5000,
     "max_hit": 1,
     "action": "DoNothing",
-    "next": ["MJA_GUILD_DONATION_SUCCESS_FUNCTION_PANEL_CLOSE"],
-    "on_error": ["MJA_GUILD_DONATION_HOME_RETURN_FAILED"],
+    "next": ["帮派捐献-成功-功能-面板-关闭"],
+    "on_error": ["帮派捐献-主页-返回-失败"],
     "retry_times": 0
   },
-  "MJA_GUILD_DONATION_SUCCESS_FUNCTION_PANEL_CLOSE": {
+  "帮派捐献-成功-功能-面板-关闭": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "guild.donation.panel.page",
-          "guild.donation.panel.close"
+          "帮派捐献-帮派-捐献-面板-页面",
+          "帮派捐献-帮派-捐献-面板-关闭"
         ],
         "box_index": 1
       }
@@ -1130,24 +1130,24 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "guild.donation.panel.page",
-        "target_name": "guild.donation.panel.close"
+        "page_name": "帮派捐献-帮派-捐献-面板-页面",
+        "target_name": "帮派捐献-帮派-捐献-面板-关闭"
       }
     },
     "post_delay": 750,
-    "next": ["MJA_GUILD_DONATION_SUCCESS_HOME_PROBE"],
-    "on_error": ["MJA_GUILD_DONATION_HOME_RETURN_FAILED"],
+    "next": ["帮派捐献-成功-主页-探测"],
+    "on_error": ["帮派捐献-主页-返回-失败"],
     "retry_times": 0
   },
-  "MJA_GUILD_DONATION_SUCCESS_HOME_PROBE": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_HOME_PAGE"], "box_index": 0}},
+  "帮派捐献-成功-主页-探测": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}},
     "timeout": 5000,
     "max_hit": 1,
     "action": "DoNothing",
-    "next": ["MJA_GUILD_DONATION_SUCCESS"],
-    "on_error": ["MJA_GUILD_DONATION_HOME_RETURN_FAILED"]
+    "next": ["帮派捐献-成功"],
+    "on_error": ["帮派捐献-主页-返回-失败"]
   },
-  "MJA_GUILD_DONATION_SUCCESS": {
+  "帮派捐献-成功": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -1156,9 +1156,9 @@
       "status": "success",
       "postcondition": "guild.donation.remaining_9_of_10"
     },
-    "next": ["MJA_COMMON_STOP"]
+    "next": ["公共-通用停止"]
   },
-  "MJA_GUILD_DONATION_HOME_RETURN_FAILED": {
+  "帮派捐献-主页-返回-失败": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -1170,10 +1170,10 @@
       "native_fail_after_record": true
     },
     "Abort": true,
-    "next": ["MJA_COMMON_ABORT"]
+    "next": ["公共-通用中止"]
 
   },
-  "MJA_GUILD_DONATION_COUNTER_UNKNOWN": {
+  "帮派捐献-计数-未知": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -1185,10 +1185,10 @@
       "native_fail_after_record": true
     },
     "Abort": true,
-    "next": ["MJA_COMMON_ABORT"]
+    "next": ["公共-通用中止"]
 
   },
-  "MJA_GUILD_DONATION_SAFETY_STOP": {
+  "帮派捐献-安全-停止": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -1200,10 +1200,10 @@
       "native_fail_after_record": true
     },
     "Abort": true,
-    "next": ["MJA_COMMON_ABORT"]
+    "next": ["公共-通用中止"]
 
   },
-  "MJA_GUILD_DONATION_PAID_STOP": {
+  "帮派捐献-付费-停止": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -1215,10 +1215,10 @@
       "native_fail_after_record": true
     },
     "Abort": true,
-    "next": ["MJA_COMMON_ABORT"]
+    "next": ["公共-通用中止"]
 
   },
-  "MJA_GUILD_DONATION_UNKNOWN_POPUP_STOP": {
+  "帮派捐献-未知-弹窗-停止": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -1230,10 +1230,10 @@
       "native_fail_after_record": true
     },
     "Abort": true,
-    "next": ["MJA_COMMON_ABORT"]
+    "next": ["公共-通用中止"]
 
   },
-  "MJA_GUILD_DONATION_RECORD_FAILURE": {
+  "帮派捐献-记录-失败": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -1245,28 +1245,28 @@
       "native_fail_after_record": true
     },
     "Abort": true,
-    "next": ["MJA_COMMON_ABORT"]
+    "next": ["公共-通用中止"]
 
   },
-  "guild.donation.guild.home.page": {
+  "帮派捐献-帮派-捐献-帮派-主页-页面": {
     "recognition": "OCR",
     "expected": "浮生城",
     "roi": [0, 0, 380, 100],
     "action": "DoNothing"
   },
-  "guild.donation.guild.home.context": {
+  "帮派捐献-帮派-捐献-帮派-主页-上下文": {
     "recognition": "OCR",
     "expected": "帮会大厅",
     "roi": [780, 60, 380, 160],
     "action": "DoNothing"
   },
-  "guild.donation.guild.home.donation.entry": {
+  "帮派捐献-帮派-捐献-帮派-主页-捐献-入口": {
     "recognition": "OCR",
     "expected": "捐献",
     "roi": [1000, 560, 260, 160],
     "action": "DoNothing"
   },
-  "guild.donation.guild.home.close": {
+  "帮派捐献-帮派-捐献-帮派-主页-关闭": {
     "recognition": "ColorMatch",
     "lower": [0, 0, 0],
     "upper": [125, 125, 125],
@@ -1275,49 +1275,49 @@
     "count": 180,
     "action": "DoNothing"
   },
-  "guild.donation.android.home.page": {
+  "帮派捐献-帮派-捐献-安卓-主页-页面": {
     "recognition": "OCR",
     "expected": ["活动", "鉴宝", "祈福", "副本", "画卷"],
     "roi": [780, 0, 450, 120],
     "action": "DoNothing"
   },
-  "guild.donation.android.panel.page": {
+  "帮派捐献-帮派-捐献-安卓-面板-页面": {
     "recognition": "OCR",
     "expected": ["商城", "日常", "武学研习"],
     "roi": [700, 180, 500, 420],
     "action": "DoNothing"
   },
-  "guild.donation.android.guild.entry": {
+  "帮派捐献-帮派-捐献-安卓-帮派-入口": {
     "recognition": "OCR",
     "expected": "帮会",
     "roi": [700, 400, 500, 220],
     "action": "DoNothing"
   },
-  "guild.donation.android.guild.page": {
+  "帮派捐献-帮派-捐献-安卓-帮派-页面": {
     "recognition": "OCR",
     "expected": ["帮会活动", "帮会事务", "捐献"],
     "roi": [600, 200, 680, 430],
     "action": "DoNothing"
   },
-  "guild.donation.android.donation.entry": {
+  "帮派捐献-帮派-捐献-安卓-捐献-入口": {
     "recognition": "OCR",
     "expected": "捐献",
     "roi": [1080, 500, 200, 200],
     "action": "DoNothing"
   },
-  "guild.donation.android.donation.page": {
+  "帮派捐献-帮派-捐献-安卓-捐献-页面": {
     "recognition": "OCR",
     "expected": ["帮会捐献", "个人奖励"],
     "roi": [180, 100, 500, 250],
     "action": "DoNothing"
   },
-  "guild.donation.android.donation.context": {
+  "帮派捐献-帮派-捐献-安卓-捐献-上下文": {
     "recognition": "OCR",
     "expected": "今日可捐献",
     "roi": [500, 140, 550, 180],
     "action": "DoNothing"
   },
-  "guild.donation.android.donation.close": {
+  "帮派捐献-帮派-捐献-安卓-捐献-关闭": {
     "recognition": "ColorMatch",
     "lower": [0, 0, 0],
     "upper": [120, 120, 120],
@@ -1326,61 +1326,61 @@
     "count": 120,
     "action": "DoNothing"
   },
-  "guild.donation.android.free": {
+  "帮派捐献-帮派-捐献-安卓-免费": {
     "recognition": "OCR",
     "expected": "免费捐献",
     "roi": [700, 500, 350, 150],
     "action": "DoNothing"
   },
-  "guild.donation.android.remaining_10_of_10": {
+  "帮派捐献-帮派-捐献-安卓-剩余-10-共-10": {
     "recognition": "OCR",
     "expected": "(?<!\\d)10\\s*/\\s*10(?!\\d)",
     "roi": [500, 140, 550, 180],
     "action": "DoNothing"
   },
-  "guild.donation.android.remaining_9_of_10": {
+  "帮派捐献-帮派-捐献-安卓-剩余-9-共-10": {
     "recognition": "OCR",
     "expected": "(?<!\\d)9\\s*/\\s*10(?!\\d)",
     "roi": [500, 140, 550, 180],
     "action": "DoNothing"
   },
-  "guild.donation.android.remaining_invalid": {
+  "帮派捐献-帮派-捐献-安卓-剩余-无效": {
     "recognition": "OCR",
     "expected": "(?<!\\d)[0-8]\\s*/\\s*10(?!\\d)",
     "roi": [500, 140, 550, 180],
     "action": "DoNothing"
   },
-  "guild.donation.android.reward": {
+  "帮派捐献-帮派-捐献-安卓-奖励": {
     "recognition": "OCR",
     "expected": ["恭喜", "获得"],
     "roi": [100, 180, 350, 370],
     "timeout": 3000,
     "action": "DoNothing"
   },
-  "guild.donation.android.reward.close": {
+  "帮派捐献-帮派-捐献-安卓-奖励-关闭": {
     "recognition": "OCR",
     "expected": "点击空白处关闭",
     "roi": [450, 600, 400, 120],
     "timeout": 3000,
     "action": "DoNothing"
   },
-  "guild.donation.home.page": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_HOME_PAGE"], "box_index": 0}},
+  "帮派捐献-帮派-捐献-主页-页面": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}},
     "action": "DoNothing"
   },
-  "guild.donation.panel.open": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_FUNCTION_PANEL_ENTRY"], "box_index": 0}},
+  "帮派捐献-帮派-捐献-面板-打开": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏功能面板-入口"], "box_index": 0}},
     "action": "DoNothing"
   },
-  "guild.donation.panel.page": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_SIDE_PANEL_OPEN"], "box_index": 0}},
+  "帮派捐献-帮派-捐献-面板-页面": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏侧边面板-打开"], "box_index": 0}},
     "action": "DoNothing"
   },
-  "guild.donation.panel.close": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_SIDE_PANEL_OPEN"], "box_index": 0}},
+  "帮派捐献-帮派-捐献-面板-关闭": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏侧边面板-打开"], "box_index": 0}},
     "action": "DoNothing"
   },
-  "guild.donation.guild.entry": {
+  "帮派捐献-帮派-捐献-帮派-入口": {
     "recognition": "OCR",
     "expected": "帮会",
     "roi": [
@@ -1391,7 +1391,7 @@
     ],
     "action": "DoNothing"
   },
-  "guild.donation.guild.page": {
+  "帮派捐献-帮派-捐献-帮派-页面": {
     "recognition": "OCR",
     "expected": "帮会",
     "roi": [
@@ -1402,7 +1402,7 @@
     ],
     "action": "DoNothing"
   },
-  "guild.donation.member.page": {
+  "帮派捐献-帮派-捐献-成员-页面": {
     "recognition": "OCR",
     "expected": "帮会成员",
     "roi": [
@@ -1413,7 +1413,7 @@
     ],
     "action": "DoNothing"
   },
-  "guild.donation.member.close": {
+  "帮派捐献-帮派-捐献-成员-关闭": {
     "recognition": "ColorMatch",
     "lower": [0, 0, 0],
     "upper": [125, 125, 125],
@@ -1422,7 +1422,7 @@
     "count": 180,
     "action": "DoNothing"
   },
-  "guild.donation.guild.context": {
+  "帮派捐献-帮派-捐献-帮派-上下文": {
     "recognition": "OCR",
     "expected": "帮会",
     "roi": [
@@ -1433,7 +1433,7 @@
     ],
     "action": "DoNothing"
   },
-  "guild.donation.entry": {
+  "帮派捐献-帮派-捐献-入口": {
     "recognition": "OCR",
     "expected": "捐献",
     "roi": [
@@ -1444,7 +1444,7 @@
     ],
     "action": "DoNothing"
   },
-  "guild.donation.page": {
+  "帮派捐献-帮派-捐献-页面": {
     "recognition": "OCR",
     "expected": "捐献",
     "roi": [
@@ -1455,7 +1455,7 @@
     ],
     "action": "DoNothing"
   },
-  "guild.donation.context": {
+  "帮派捐献-帮派-捐献-上下文": {
     "recognition": "OCR",
     "expected": "帮会",
     "roi": [
@@ -1466,7 +1466,7 @@
     ],
     "action": "DoNothing"
   },
-  "guild.donation.free": {
+  "帮派捐献-帮派-捐献-免费": {
     "recognition": "OCR",
     "expected": "免费捐献",
     "roi": [
@@ -1477,7 +1477,7 @@
     ],
     "action": "DoNothing"
   },
-  "guild.donation.remaining_10_of_10": {
+  "帮派捐献-帮派-捐献-剩余-10-共-10": {
     "recognition": "OCR",
     "expected": "(?<!\\d)10\\s*/\\s*10(?!\\d)",
     "roi": [
@@ -1488,7 +1488,7 @@
     ],
     "action": "DoNothing"
   },
-  "guild.donation.remaining_9_of_10": {
+  "帮派捐献-帮派-捐献-剩余-9-共-10": {
     "recognition": "OCR",
     "expected": "(?<!\\d)9\\s*/\\s*10(?!\\d)",
     "roi": [
@@ -1499,7 +1499,7 @@
     ],
     "action": "DoNothing"
   },
-  "guild.donation.remaining_invalid": {
+  "帮派捐献-帮派-捐献-剩余-无效": {
     "recognition": "OCR",
     "expected": "(?<!\\d)[0-8]\\s*/\\s*10(?!\\d)",
     "roi": [
@@ -1510,7 +1510,7 @@
     ],
     "action": "DoNothing"
   },
-  "guild.donation.unavailable": {
+  "帮派捐献-帮派-捐献-不可用": {
     "recognition": "OCR",
     "expected": [
       "未加入帮会",
@@ -1525,7 +1525,7 @@
     ],
     "action": "DoNothing"
   },
-  "guild.donation.close": {
+  "帮派捐献-帮派-捐献-关闭": {
     "recognition": "TemplateMatch",
     "template": "home/modal_close.png",
     "roi": [

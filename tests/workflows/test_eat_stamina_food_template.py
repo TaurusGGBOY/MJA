@@ -68,7 +68,7 @@ def _best_template_match(
 
 def test_food_template_scans_the_whole_grid_and_finds_first_row_card() -> None:
     pipeline = _load_pipeline()
-    candidate = pipeline["food.candidate"]
+    candidate = pipeline["吃体力食物-食物-候选"]
     assert candidate["recognition"] == "TemplateMatch"
     assert candidate["template"] == "daily/EAT_STAMINA_FOOD_DAILY/longjing_shrimp.png"
     roi = candidate["roi"]
@@ -97,11 +97,11 @@ def test_food_template_scans_the_whole_grid_and_finds_first_row_card() -> None:
 
 def test_food_candidate_click_uses_match_box_and_requires_after_probe() -> None:
     pipeline = _load_pipeline()
-    loop = pipeline["MJA_FOOD_CANDIDATE_LOOP"]
+    loop = pipeline["吃体力食物-候选-循环"]
     recognition = loop["recognition"]
     assert recognition["type"] == "And"
     assert recognition["param"] == {
-        "all_of": ["food.food.page", "food.candidate"],
+        "all_of": ["吃体力食物-食物-食物-页面", "吃体力食物-食物-候选"],
         "box_index": 1,
     }
     assert loop["max_hit"] == 6
@@ -111,16 +111,16 @@ def test_food_candidate_click_uses_match_box_and_requires_after_probe() -> None:
     assert loop["custom_action_param"]["evidence"] == {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "food.food.page",
-        "target_name": "food.candidate",
+        "page_name": "吃体力食物-食物-食物-页面",
+        "target_name": "吃体力食物-食物-候选",
     }
-    assert loop["next"] == ["MJA_FOOD_DETAIL_PROBE"]
+    assert loop["next"] == ["吃体力食物-详情-探测"]
 
-    after_probe = pipeline["MJA_FOOD_DETAIL_PROBE"]
+    after_probe = pipeline["吃体力食物-详情-探测"]
     assert after_probe["recognition"] == "OCR"
     assert "龙井虾仁" in after_probe["expected"]
-    assert after_probe["on_error"] == ["MJA_FOOD_NO_SAFE_CARD"]
+    assert after_probe["on_error"] == ["吃体力食物-无安全卡"]
 
-    unknown_failure = pipeline["MJA_FOOD_RECORD_FAILURE"]
+    unknown_failure = pipeline["吃体力食物-记录-失败"]
     assert unknown_failure["custom_action_param"]["status"] == "failed"
     assert unknown_failure["Abort"] is True

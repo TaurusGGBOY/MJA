@@ -1,5 +1,5 @@
 {
-  "MJA_TRIAL_SWORD_DAILY_START": {
+  "试剑-任务入口": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "BeginTask",
@@ -8,34 +8,34 @@
     },
     "max_hit": 1,
     "next": [
-      "[JumpBack]MJA_KNOWN_PAINTING_CLOSE",
-      "[JumpBack]MJA_KNOWN_TEA_DETAIL_CLOSE",
-      "[JumpBack]MJA_KNOWN_TEA_SHOP_CLOSE",
-      "MJA_TRIAL_RESUME_FREE_PROBE",
-      "MJA_TRIAL_RESUME_RESULT_PROBE",
-      "MJA_TRIAL_PAGE_PROBE",
-      "MJA_TRIAL_OPEN_TRIAL"
+      "[JumpBack]公共-已知-画卷-关闭",
+      "[JumpBack]公共-已知-茶-详情-关闭",
+      "[JumpBack]公共-已知-茶-商店-关闭",
+      "试剑-恢复继续-免费-探测",
+      "试剑-恢复继续-结果-探测",
+      "试剑-页面-探测",
+      "试剑-打开-试炼"
     ],
-    "on_error": ["MJA_TRIAL_RECORD_FAILURE"],
+    "on_error": ["试剑-记录-失败"],
     "retry_times": 0
   },
-  "MJA_TRIAL_RESUME_FREE_PROBE": {
+  "试剑-恢复继续-免费-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["trial.free_popup", "trial.free_confirm"],
+        "all_of": ["试剑-试炼-免费-弹窗", "试剑-试炼-免费-确认"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_TRIAL_RESUME_FREE_CONFIRM"],
-    "on_error": ["MJA_TRIAL_RESUME_RESULT_PROBE"]
+    "next": ["试剑-恢复继续-免费-确认"],
+    "on_error": ["试剑-恢复继续-结果-探测"]
   },
-  "MJA_TRIAL_RESUME_FREE_CONFIRM": {
+  "试剑-恢复继续-免费-确认": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["trial.free_popup", "trial.free_confirm"],
+        "all_of": ["试剑-试炼-免费-弹窗", "试剑-试炼-免费-确认"],
         "box_index": 1
       }
     },
@@ -49,30 +49,30 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "trial.free_popup",
-        "target_name": "trial.free_confirm"
+        "page_name": "试剑-试炼-免费-弹窗",
+        "target_name": "试剑-试炼-免费-确认"
       }
     },
-    "next": ["MJA_TRIAL_FREE_REWARD_PROBE"],
-    "on_error": ["MJA_TRIAL_RECORD_FAILURE"]
+    "next": ["试剑-免费-奖励-探测"],
+    "on_error": ["试剑-记录-失败"]
   },
-  "MJA_TRIAL_RESUME_RESULT_PROBE": {
+  "试剑-恢复继续-结果-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["trial.reward_popup", "trial.popup_close"],
+        "all_of": ["试剑-试炼-奖励-弹窗", "试剑-试炼-弹窗-关闭"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_TRIAL_RESUME_RESULT_CLOSE"],
-    "on_error": ["MJA_TRIAL_PAGE_PROBE"]
+    "next": ["试剑-恢复继续-结果-关闭"],
+    "on_error": ["试剑-页面-探测"]
   },
-  "MJA_TRIAL_RESUME_RESULT_CLOSE": {
+  "试剑-恢复继续-结果-关闭": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["trial.reward_popup", "trial.popup_close"],
+        "all_of": ["试剑-试炼-奖励-弹窗", "试剑-试炼-弹窗-关闭"],
         "box_index": 1
       }
     },
@@ -85,30 +85,30 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "trial.reward_popup",
-        "target_name": "trial.popup_close"
+        "page_name": "试剑-试炼-奖励-弹窗",
+        "target_name": "试剑-试炼-弹窗-关闭"
       }
     },
-    "next": ["MJA_TRIAL_CLAIM_FREE"],
-    "on_error": ["MJA_TRIAL_RECORD_FAILURE"],
+    "next": ["试剑-领取-免费"],
+    "on_error": ["试剑-记录-失败"],
     "timeout": 8000,
     "retry_times": 0
   },
-  "MJA_TRIAL_PAGE_PROBE": {
+  "试剑-页面-探测": {
     "recognition": "OCR",
     "expected": ["挂机收益", "挂机时长"],
     "roi": [0, 160, 500, 300],
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_TRIAL_CLAIM_REWARD"],
-    "on_error": ["MJA_TRIAL_RECORD_FAILURE"],
+    "next": ["试剑-领取-奖励"],
+    "on_error": ["试剑-记录-失败"],
     "retry_times": 0
   },
-  "MJA_TRIAL_CLAIM_REWARD": {
+  "试剑-领取-奖励": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["trial.page", "trial.reward_claim"],
+        "all_of": ["试剑-试炼-页面", "试剑-试炼-奖励-领取"],
         "box_index": 1
       }
     },
@@ -121,20 +121,20 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "trial.page",
-        "target_name": "trial.reward_claim"
+        "page_name": "试剑-试炼-页面",
+        "target_name": "试剑-试炼-奖励-领取"
       }
     },
-    "next": ["MJA_TRIAL_CLOSE_REWARD"],
-    "on_error": ["MJA_TRIAL_RECORD_FAILURE"],
+    "next": ["试剑-关闭-奖励"],
+    "on_error": ["试剑-记录-失败"],
     "timeout": 8000,
     "retry_times": 0
   },
-  "MJA_TRIAL_CLOSE_REWARD": {
+  "试剑-关闭-奖励": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["trial.reward_popup", "trial.popup_close"],
+        "all_of": ["试剑-试炼-奖励-弹窗", "试剑-试炼-弹窗-关闭"],
         "box_index": 1
       }
     },
@@ -147,20 +147,20 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "trial.reward_popup",
-        "target_name": "trial.popup_close"
+        "page_name": "试剑-试炼-奖励-弹窗",
+        "target_name": "试剑-试炼-弹窗-关闭"
       }
     },
-    "next": ["MJA_TRIAL_CLAIM_FREE"],
-    "on_error": ["MJA_TRIAL_RECORD_FAILURE"],
+    "next": ["试剑-领取-免费"],
+    "on_error": ["试剑-记录-失败"],
     "timeout": 8000,
     "retry_times": 0
   },
-  "MJA_TRIAL_CLAIM_FREE": {
+  "试剑-领取-免费": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["trial.page", "trial.free_claim"],
+        "all_of": ["试剑-试炼-页面", "试剑-试炼-免费-领取"],
         "box_index": 1
       }
     },
@@ -174,27 +174,27 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "trial.page",
-        "target_name": "trial.free_claim"
+        "page_name": "试剑-试炼-页面",
+        "target_name": "试剑-试炼-免费-领取"
       }
     },
-    "next": ["MJA_TRIAL_FREE_POPUP_PROBE"],
-    "on_error": ["MJA_TRIAL_RECORD_FAILURE"]
+    "next": ["试剑-免费-弹窗-探测"],
+    "on_error": ["试剑-记录-失败"]
   },
-  "MJA_TRIAL_FREE_POPUP_PROBE": {
+  "试剑-免费-弹窗-探测": {
     "recognition": "OCR",
     "expected": ["是否免费", "6小时", "挂机收益"],
     "roi": [200, 150, 850, 450],
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_TRIAL_CONFIRM_FREE"],
-    "on_error": ["MJA_TRIAL_RECORD_FAILURE"]
+    "next": ["试剑-确认-免费"],
+    "on_error": ["试剑-记录-失败"]
   },
-  "MJA_TRIAL_CONFIRM_FREE": {
+  "试剑-确认-免费": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["trial.free_popup", "trial.free_confirm"],
+        "all_of": ["试剑-试炼-免费-弹窗", "试剑-试炼-免费-确认"],
         "box_index": 1
       }
     },
@@ -208,23 +208,23 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "trial.free_popup",
-        "target_name": "trial.free_confirm"
+        "page_name": "试剑-试炼-免费-弹窗",
+        "target_name": "试剑-试炼-免费-确认"
       }
     },
-    "next": ["MJA_TRIAL_FREE_REWARD_PROBE"],
-    "on_error": ["MJA_TRIAL_RECORD_FAILURE"]
+    "next": ["试剑-免费-奖励-探测"],
+    "on_error": ["试剑-记录-失败"]
   },
-  "MJA_TRIAL_FREE_REWARD_PROBE": {
+  "试剑-免费-奖励-探测": {
     "recognition": "OCR",
     "expected": ["恭喜获得", "奖励", "获得"],
     "roi": [0, 120, 1280, 520],
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_TRIAL_REWARD_SUCCESS"],
-    "on_error": ["MJA_TRIAL_RECORD_FAILURE"]
+    "next": ["试剑-奖励-成功"],
+    "on_error": ["试剑-记录-失败"]
   },
-  "MJA_TRIAL_REWARD_SUCCESS": {
+  "试剑-奖励-成功": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -234,14 +234,14 @@
       "postcondition": "trial.reward_popup_seen",
       "defer_home_boundary": true
     },
-    "next": ["MJA_TRIAL_CLOSE_FREE_REWARD"],
-    "on_error": ["MJA_TRIAL_RECORD_FAILURE"]
+    "next": ["试剑-关闭-免费-奖励"],
+    "on_error": ["试剑-记录-失败"]
   },
-  "MJA_TRIAL_CLOSE_FREE_REWARD": {
+  "试剑-关闭-免费-奖励": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["trial.reward_popup", "trial.popup_close"],
+        "all_of": ["试剑-试炼-奖励-弹窗", "试剑-试炼-弹窗-关闭"],
         "box_index": 1
       }
     },
@@ -255,14 +255,14 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "trial.reward_popup",
-        "target_name": "trial.popup_close"
+        "page_name": "试剑-试炼-奖励-弹窗",
+        "target_name": "试剑-试炼-弹窗-关闭"
       }
     },
-    "next": ["MJA_TRIAL_CLOSE_SUCCESS"],
-    "on_error": ["MJA_TRIAL_RECORD_FAILURE"]
+    "next": ["试剑-关闭-成功"],
+    "on_error": ["试剑-记录-失败"]
   },
-  "MJA_TRIAL_SUCCESS": {
+  "试剑-成功": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -271,9 +271,9 @@
       "status": "success",
       "postcondition": "trial.reward_popup_seen"
     },
-    "next": ["MJA_COMMON_STOP"]
+    "next": ["公共-通用停止"]
   },
-  "MJA_TRIAL_RECORD_FAILURE": {
+  "试剑-记录-失败": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -285,13 +285,13 @@
       "native_fail_after_record": true
     },
     "Abort": true,
-    "next": ["MJA_COMMON_ABORT"]
+    "next": ["公共-通用中止"]
   },
-  "MJA_TRIAL_OPEN_TRIAL": {
+  "试剑-打开-试炼": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["home.page", "trial.open"],
+        "all_of": ["邮件奖励-主页-页面", "试剑-试炼-打开"],
         "box_index": 1
       }
     },
@@ -305,19 +305,19 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "home.page",
-        "target_name": "trial.open"
+        "page_name": "邮件奖励-主页-页面",
+        "target_name": "试剑-试炼-打开"
       }
     },
-    "next": ["MJA_TRIAL_PAGE_PROBE"],
-    "on_error": ["MJA_TRIAL_RECORD_FAILURE"],
+    "next": ["试剑-页面-探测"],
+    "on_error": ["试剑-记录-失败"],
     "retry_times": 0
   },
-  "MJA_TRIAL_CLOSE_SUCCESS": {
+  "试剑-关闭-成功": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["trial.page", "trial.close"],
+        "all_of": ["试剑-试炼-页面", "试剑-试炼-关闭"],
         "box_index": 1
       }
     },
@@ -331,34 +331,34 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "trial.page",
-        "target_name": "trial.close"
+        "page_name": "试剑-试炼-页面",
+        "target_name": "试剑-试炼-关闭"
       }
     },
-    "next": ["MJA_HOME_BOUNDARY"],
-    "on_error": ["MJA_TRIAL_RECORD_FAILURE"],
+    "next": ["公共-主页边界"],
+    "on_error": ["试剑-记录-失败"],
     "retry_times": 0
   },
-  "MJA_TRIAL_SUCCESS_HOME_PROBE": {
+  "试剑-成功-主页-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["home.page"]
+        "all_of": ["邮件奖励-主页-页面"]
       }
     },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_TRIAL_SUCCESS"],
-    "on_error": ["MJA_TRIAL_RECORD_FAILURE"],
+    "next": ["试剑-成功"],
+    "on_error": ["试剑-记录-失败"],
     "retry_times": 0
   },
-  "trial.page": {
+  "试剑-试炼-页面": {
     "recognition": "OCR",
     "expected": ["挂机收益", "挂机时长"],
     "roi": [0, 160, 500, 300],
     "action": "DoNothing"
   },
-  "trial.open": {
+  "试剑-试炼-打开": {
     "recognition": "ColorMatch",
     "method": 4,
     "lower": [100, 100, 90],
@@ -370,43 +370,43 @@
     "index": 0,
     "action": "DoNothing"
   },
-  "trial.reward_claim": {
+  "试剑-试炼-奖励-领取": {
     "recognition": "OCR",
     "expected": "领取",
     "roi": [0, 560, 340, 160],
     "action": "DoNothing"
   },
-  "trial.free_claim": {
+  "试剑-试炼-免费-领取": {
     "recognition": "OCR",
     "expected": "免费",
     "roi": [180, 500, 300, 220],
     "action": "DoNothing"
   },
-  "trial.free_popup": {
+  "试剑-试炼-免费-弹窗": {
     "recognition": "OCR",
     "expected": ["是否免费", "6小时", "挂机收益"],
     "roi": [200, 150, 850, 450],
     "action": "DoNothing"
   },
-  "trial.free_confirm": {
+  "试剑-试炼-免费-确认": {
     "recognition": "OCR",
     "expected": ["确认", "确定"],
     "roi": [780, 440, 220, 120],
     "action": "DoNothing"
   },
-  "trial.reward_popup": {
+  "试剑-试炼-奖励-弹窗": {
     "recognition": "OCR",
     "expected": ["恭喜获得", "奖励", "获得"],
     "roi": [0, 120, 1280, 520],
     "action": "DoNothing"
   },
-  "trial.popup_close": {
+  "试剑-试炼-弹窗-关闭": {
     "recognition": "OCR",
     "expected": "点击空白处关闭",
     "roi": [350, 580, 600, 140],
     "action": "DoNothing"
   },
-  "trial.close": {
+  "试剑-试炼-关闭": {
     "recognition": "TemplateMatch",
     "template": "daily/TRIAL_SWORD_DAILY/trial_close.png",
     "roi": [1160, 0, 100, 100],

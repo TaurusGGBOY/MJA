@@ -5,7 +5,7 @@
       "label": "战令基础奖励",
       "default_check": true,
       "group": ["日常"],
-      "entry": "MJA_BATTLE_PASS_REWARD_DAILY_START"
+      "entry": "战令奖励-任务入口"
     }
   ]
 }

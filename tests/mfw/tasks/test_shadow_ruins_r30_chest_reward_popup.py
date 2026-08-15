@@ -10,16 +10,16 @@ PIPELINE = (
     / "assets/resource/base/pipeline/daily/shadow_ruins_daily.json"
 )
 
-FIRST = "MJA_SHADOW_CLAIM_VICTORY_CHEST_FIRST"
-RETRY = "MJA_SHADOW_CLAIM_VICTORY_CHEST_RETRY"
-WAIT = "MJA_SHADOW_VICTORY_CHEST_POST_RETRY_WAIT"
-FINAL = "MJA_SHADOW_FINAL_PROBE"
-REWARD = "MJA_SHADOW_REWARD_PROBE"
-CHEST_PROBE = "MJA_SHADOW_VICTORY_CHEST_REWARD_PROBE"
-CHEST_DISMISS = "MJA_SHADOW_DISMISS_VICTORY_CHEST_REWARD"
-EXPLORATION = "MJA_SHADOW_EXPLORATION_PAGE"
-FAILURE = "MJA_SHADOW_RECORD_FAILURE"
-LEAF = "shadow.victory.chest.reward"
+FIRST = "影之遗迹-领取-胜利-宝箱-首个"
+RETRY = "影之遗迹-领取-胜利-宝箱-重试"
+WAIT = "影之遗迹-胜利-宝箱-之后-重试-等待"
+FINAL = "影之遗迹-最终-探测"
+REWARD = "影之遗迹-奖励-探测"
+CHEST_PROBE = "影之遗迹-胜利-宝箱-奖励-探测"
+CHEST_DISMISS = "影之遗迹-关闭-胜利-宝箱-奖励"
+EXPLORATION = "影之遗迹-探索-页面"
+FAILURE = "影之遗迹-记录-失败"
+LEAF = "影之遗迹-影-胜利-宝箱-奖励"
 
 
 def _nodes() -> dict[str, dict[str, object]]:
@@ -38,7 +38,7 @@ def _incoming_edges(nodes: dict[str, dict[str, object]]) -> dict[str, set[str]]:
 
 def test_r30_chest_reward_boundary_is_exact_bounded_and_same_frame() -> None:
     nodes = _nodes()
-    battle_cap = nodes["MJA_SHADOW_BATTLE_LOOP"]["max_hit"]
+    battle_cap = nodes["影之遗迹-战斗-循环"]["max_hit"]
 
     assert nodes[LEAF] == {
         "recognition": "OCR",
@@ -97,14 +97,14 @@ def test_r30_chest_reward_recovery_is_private_to_bounded_victory_routes() -> Non
     assert nodes[WAIT]["on_error"] == [FAILURE]
 
     assert incoming[CHEST_PROBE] == {FIRST, RETRY, WAIT}
-    assert CHEST_PROBE not in nodes["MJA_SHADOW_RUINS_DAILY_START"]["next"]
-    assert CHEST_PROBE not in nodes["MJA_SHADOW_EXPLORATION_PAGE"]["next"]
+    assert CHEST_PROBE not in nodes["影之遗迹-任务入口"]["next"]
+    assert CHEST_PROBE not in nodes["影之遗迹-探索-页面"]["next"]
     assert CHEST_PROBE not in nodes[REWARD].get("next", [])
-    assert CHEST_PROBE not in nodes["MJA_SHADOW_DISMISS_REWARD"].get("next", [])
-    assert CHEST_PROBE not in nodes["MJA_SHADOW_FINAL_REWARD_PROBE"].get(
+    assert CHEST_PROBE not in nodes["影之遗迹-关闭-奖励"].get("next", [])
+    assert CHEST_PROBE not in nodes["影之遗迹-最终-奖励-探测"].get(
         "next", []
     )
-    assert CHEST_PROBE not in nodes["MJA_SHADOW_FINAL_DISMISS_REWARD"].get(
+    assert CHEST_PROBE not in nodes["影之遗迹-最终-关闭-奖励"].get(
         "next", []
     )
 
@@ -118,17 +118,17 @@ def test_r30_chest_reward_recovery_is_private_to_bounded_victory_routes() -> Non
 
     # Ordinary and final rewards still require their original close-only leaf.
     assert nodes[REWARD]["recognition"]["param"]["all_of"] == [
-        "shadow.reward.close"
+        "影之遗迹-影-奖励-关闭"
     ]
-    assert nodes["MJA_SHADOW_DISMISS_REWARD"]["recognition"]["param"][
+    assert nodes["影之遗迹-关闭-奖励"]["recognition"]["param"][
         "all_of"
-    ] == ["shadow.reward", "shadow.reward.close"]
-    assert nodes["MJA_SHADOW_FINAL_REWARD_PROBE"]["recognition"]["param"][
+    ] == ["影之遗迹-影-奖励", "影之遗迹-影-奖励-关闭"]
+    assert nodes["影之遗迹-最终-奖励-探测"]["recognition"]["param"][
         "all_of"
-    ] == ["shadow.reward.close"]
-    assert nodes["MJA_SHADOW_FINAL_DISMISS_REWARD"]["recognition"]["param"][
+    ] == ["影之遗迹-影-奖励-关闭"]
+    assert nodes["影之遗迹-最终-关闭-奖励"]["recognition"]["param"][
         "all_of"
-    ] == ["shadow.reward", "shadow.reward.close"]
+    ] == ["影之遗迹-影-奖励", "影之遗迹-影-奖励-关闭"]
 
     # An unrecognized popup cannot dismiss, return to exploration, or succeed.
     assert nodes[CHEST_PROBE]["on_error"] == [FAILURE]
@@ -137,4 +137,4 @@ def test_r30_chest_reward_recovery_is_private_to_bounded_victory_routes() -> Non
     assert failure["custom_action_param"]["status"] == "failed"
     assert failure["custom_action_param"]["native_fail_after_record"] is True
     assert failure["Abort"] is True
-    assert failure["next"] == ["MJA_COMMON_ABORT"]
+    assert failure["next"] == ["公共-通用中止"]

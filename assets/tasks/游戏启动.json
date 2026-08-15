@@ -7,7 +7,7 @@
       "group": [
         "启动"
       ],
-      "entry": "MJA_GAME_START_ENTRY"
+      "entry": "启动-游戏入口"
     },
     {
       "name": "GAME_STOP",
@@ -16,7 +16,7 @@
       "group": [
         "启动"
       ],
-      "entry": "MJA_GAME_STOP"
+      "entry": "启动-游戏停止"
     }
   ]
 }

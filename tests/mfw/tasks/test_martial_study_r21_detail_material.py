@@ -37,42 +37,42 @@ def test_martial_only_claims_existing_success_cards() -> None:
     assert {
         node["custom_action_param"]["action_id"] for node in guarded
     } == set(expected_actions)
-    assert nodes["MJA_MARTIAL_CLAIM_LOOP"]["max_hit"] == 3
+    assert nodes["武学突破-领取-循环"]["max_hit"] == 3
     assert dict(policy.action_caps) == expected_actions
     assert policy.risk_levels == frozenset({"stateful"})
 
 
 def test_martial_page_falls_back_to_success_without_entering_a_slot() -> None:
     nodes = _nodes()
-    page = nodes["MJA_MARTIAL_PAGE_PROBE"]
+    page = nodes["武学突破-页面-探测"]
     assert page["next"] == [
-        "MJA_MARTIAL_CLAIM_GATE",
-        "MJA_MARTIAL_NO_SUCCESSFUL_BREAKTHROUGH",
+        "武学突破-领取-门禁",
+        "武学突破-无-成功-突破",
     ]
 
-    no_successful = nodes["MJA_MARTIAL_NO_SUCCESSFUL_BREAKTHROUGH"]
+    no_successful = nodes["武学突破-无-成功-突破"]
     assert no_successful["recognition"] == {
         "type": "And",
-        "param": {"all_of": ["martial.page"], "box_index": 0},
+        "param": {"all_of": ["武学突破-武学-页面"], "box_index": 0},
     }
     assert no_successful["action"] == "DoNothing"
-    assert no_successful["next"] == ["MJA_MARTIAL_CLOSE_PAGE_FOR_SUCCESS"]
-    close_page = nodes["MJA_MARTIAL_CLOSE_PAGE_FOR_SUCCESS"]
+    assert no_successful["next"] == ["武学突破-关闭-页面-用于-成功"]
+    close_page = nodes["武学突破-关闭-页面-用于-成功"]
     assert close_page["custom_action_param"]["action_id"] == "close_martial_page"
-    assert close_page["next"] == ["MJA_MARTIAL_FINAL_PANEL_PROBE"]
-    assert nodes["MJA_MARTIAL_FINAL_PANEL_PROBE"]["next"] == [
-        "MJA_MARTIAL_SUCCESS_NO_CLAIM"
+    assert close_page["next"] == ["武学突破-最终-面板-探测"]
+    assert nodes["武学突破-最终-面板-探测"]["next"] == [
+        "武学突破-成功-无-领取"
     ]
-    assert nodes["MJA_MARTIAL_SUCCESS_NO_CLAIM"]["custom_action_param"] == {
+    assert nodes["武学突破-成功-无-领取"]["custom_action_param"] == {
         "task_id": MARTIAL,
         "status": "success",
             "postcondition": "martial.successful_breakthroughs_claimed_or_none",
     }
 
-    claim_gate = nodes["MJA_MARTIAL_CLAIM_GATE"]
-    assert claim_gate["next"] == ["MJA_MARTIAL_CLAIM_LOOP"]
-    assert nodes["MJA_MARTIAL_CLOSE_REWARD"]["next"] == [
-        "MJA_MARTIAL_PAGE_PROBE"
+    claim_gate = nodes["武学突破-领取-门禁"]
+    assert claim_gate["next"] == ["武学突破-领取-循环"]
+    assert nodes["武学突破-关闭-奖励"]["next"] == [
+        "武学突破-页面-探测"
     ]
 
 
@@ -91,8 +91,8 @@ def test_martial_pipeline_contains_no_plus_or_breakthrough_side_effects() -> Non
     for marker in forbidden:
         assert marker not in serialized
 
-    assert nodes["MJA_MARTIAL_CLAIM_LOOP"]["max_hit"] == 3
-    assert nodes["MJA_MARTIAL_CLAIM_LOOP_EXHAUSTED"][
+    assert nodes["武学突破-领取-循环"]["max_hit"] == 3
+    assert nodes["武学突破-领取-循环-耗尽"][
         "custom_action_param"
     ] == {
         "task_id": MARTIAL,

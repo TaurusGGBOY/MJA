@@ -1,5 +1,5 @@
 {
-  "MJA_BATTLE_PASS_REWARD_DAILY_START": {
+  "战令奖励-任务入口": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "BeginTask",
@@ -8,58 +8,58 @@
     },
     "max_hit": 1,
     "next": [
-      "MJA_BP_RESUME_REWARD_PROBE",
-      "MJA_BP_RESUME_ITEM_PROBE",
-      "MJA_BP_TASKS_PAGE_PROBE",
-      "MJA_BP_REWARDS_START_PROBE",
-      "MJA_BP_PAGE_PROBE",
-      "MJA_BP_HOME_PROBE"
+      "战令奖励-恢复继续-奖励-探测",
+      "战令奖励-恢复继续-物品-探测",
+      "战令奖励-任务-页面-探测",
+      "战令奖励-奖励-开始-探测",
+      "战令奖励-页面-探测",
+      "战令奖励-主页-探测"
     ],
-    "on_error": ["MJA_BP_RECORD_FAILURE"]
+    "on_error": ["战令奖励-记录-失败"]
   },
-  "MJA_BP_STATE_RESOLVE": {
+  "战令奖励-状态-解析": {
     "recognition": "DirectHit",
     "action": "DoNothing",
     "next": [
-      "MJA_BP_RESUME_REWARD_PROBE",
-      "MJA_BP_RESUME_ITEM_PROBE",
-      "MJA_BP_TASKS_PAGE_PROBE",
-      "MJA_BP_REWARDS_START_PROBE",
-      "MJA_BP_PAGE_PROBE",
-      "MJA_BP_HOME_PROBE"
+      "战令奖励-恢复继续-奖励-探测",
+      "战令奖励-恢复继续-物品-探测",
+      "战令奖励-任务-页面-探测",
+      "战令奖励-奖励-开始-探测",
+      "战令奖励-页面-探测",
+      "战令奖励-主页-探测"
     ],
-    "on_error": ["MJA_BP_RECORD_FAILURE"]
+    "on_error": ["战令奖励-记录-失败"]
   },
-  "MJA_BP_RESUME_REWARD_PROBE": {
+  "战令奖励-恢复继续-奖励-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["battle_pass.reward_popup", "battle_pass.reward_popup_close"],
+        "all_of": ["战令奖励-战斗-战令-奖励-弹窗", "战令奖励-战斗-战令-奖励-弹窗-关闭"],
         "box_index": 0
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_BP_RESUME_CLOSE_REWARD"],
-    "on_error": ["MJA_BP_RECORD_FAILURE"]
+    "next": ["战令奖励-恢复继续-关闭-奖励"],
+    "on_error": ["战令奖励-记录-失败"]
   },
-  "MJA_BP_RESUME_ITEM_PROBE": {
+  "战令奖励-恢复继续-物品-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["battle_pass.item_popup", "battle_pass.item_popup_close"],
+        "all_of": ["战令奖励-战斗-战令-物品-弹窗", "战令奖励-战斗-战令-物品-弹窗-关闭"],
         "box_index": 0
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_BP_RESUME_CLOSE_ITEM"],
-    "on_error": ["MJA_BP_RECORD_FAILURE"]
+    "next": ["战令奖励-恢复继续-关闭-物品"],
+    "on_error": ["战令奖励-记录-失败"]
   },
-  "MJA_BP_RESUME_CLOSE_REWARD": {
+  "战令奖励-恢复继续-关闭-奖励": {
     "max_hit": 1,
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["battle_pass.reward_popup", "battle_pass.reward_popup_close"],
+        "all_of": ["战令奖励-战斗-战令-奖励-弹窗", "战令奖励-战斗-战令-奖励-弹窗-关闭"],
         "box_index": 1
       }
     },
@@ -72,20 +72,20 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "battle_pass.reward_popup",
-        "target_name": "battle_pass.reward_popup_close"
+        "page_name": "战令奖励-战斗-战令-奖励-弹窗",
+        "target_name": "战令奖励-战斗-战令-奖励-弹窗-关闭"
       }
     },
-    "next": ["MJA_BP_STATE_RESOLVE"],
-    "on_error": ["MJA_BP_RECORD_FAILURE"],
+    "next": ["战令奖励-状态-解析"],
+    "on_error": ["战令奖励-记录-失败"],
     "retry_times": 0
   },
-  "MJA_BP_RESUME_CLOSE_ITEM": {
+  "战令奖励-恢复继续-关闭-物品": {
     "max_hit": 1,
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["battle_pass.item_popup", "battle_pass.item_popup_close"],
+        "all_of": ["战令奖励-战斗-战令-物品-弹窗", "战令奖励-战斗-战令-物品-弹窗-关闭"],
         "box_index": 1
       }
     },
@@ -98,33 +98,33 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "battle_pass.item_popup",
-        "target_name": "battle_pass.item_popup_close"
+        "page_name": "战令奖励-战斗-战令-物品-弹窗",
+        "target_name": "战令奖励-战斗-战令-物品-弹窗-关闭"
       }
     },
-    "next": ["MJA_BP_STATE_RESOLVE"],
-    "on_error": ["MJA_BP_RECORD_FAILURE"],
+    "next": ["战令奖励-状态-解析"],
+    "on_error": ["战令奖励-记录-失败"],
     "retry_times": 0
   },
-  "MJA_BP_HOME_PROBE": {
+  "战令奖励-主页-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["battle_pass.home.page", "battle_pass.open"],
+        "all_of": ["战令奖励-战斗-战令-主页-页面", "战令奖励-战斗-战令-打开"],
         "box_index": 0
       }
     },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_BP_OPEN_BATTLE_PASS"],
-    "on_error": ["MJA_BP_RECORD_FAILURE"]
+    "next": ["战令奖励-打开-战斗-战令"],
+    "on_error": ["战令奖励-记录-失败"]
   },
-  "MJA_BP_OPEN_BATTLE_PASS": {
+  "战令奖励-打开-战斗-战令": {
     "max_hit": 1,
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["battle_pass.home.page", "battle_pass.open"],
+        "all_of": ["战令奖励-战斗-战令-主页-页面", "战令奖励-战斗-战令-打开"],
         "box_index": 1
       }
     },
@@ -137,50 +137,50 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "battle_pass.home.page",
-        "target_name": "battle_pass.open"
+        "page_name": "战令奖励-战斗-战令-主页-页面",
+        "target_name": "战令奖励-战斗-战令-打开"
       }
     },
     "next": [
-      "MJA_BP_TASKS_PAGE_PROBE",
-      "MJA_BP_REWARDS_START_PROBE",
-      "MJA_BP_PAGE_PROBE"
+      "战令奖励-任务-页面-探测",
+      "战令奖励-奖励-开始-探测",
+      "战令奖励-页面-探测"
     ],
-    "on_error": ["MJA_BP_RECORD_FAILURE"],
+    "on_error": ["战令奖励-记录-失败"],
     "retry_times": 0
   },
-  "MJA_BP_PAGE_PROBE": {
+  "战令奖励-页面-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["battle_pass.page", "battle_pass.tasks_tab"],
+        "all_of": ["战令奖励-战斗-战令-页面", "战令奖励-战斗-战令-任务-标签"],
         "box_index": 0
       }
     },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_BP_OPEN_TASKS"],
-    "on_error": ["MJA_BP_RECORD_FAILURE"]
+    "next": ["战令奖励-打开-任务"],
+    "on_error": ["战令奖励-记录-失败"]
   },
-  "MJA_BP_REWARDS_START_PROBE": {
+  "战令奖励-奖励-开始-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["battle_pass.rewards", "battle_pass.tasks_tab"],
+        "all_of": ["战令奖励-战斗-战令-奖励", "战令奖励-战斗-战令-任务-标签"],
         "box_index": 0
       }
     },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_BP_OPEN_TASKS"],
-    "on_error": ["MJA_BP_RECORD_FAILURE"]
+    "next": ["战令奖励-打开-任务"],
+    "on_error": ["战令奖励-记录-失败"]
   },
-  "MJA_BP_OPEN_TASKS": {
+  "战令奖励-打开-任务": {
     "max_hit": 1,
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["battle_pass.page", "battle_pass.tasks_tab"],
+        "all_of": ["战令奖励-战斗-战令-页面", "战令奖励-战斗-战令-任务-标签"],
         "box_index": 1
       }
     },
@@ -193,36 +193,36 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "battle_pass.page",
-        "target_name": "battle_pass.tasks_tab"
+        "page_name": "战令奖励-战斗-战令-页面",
+        "target_name": "战令奖励-战斗-战令-任务-标签"
       }
     },
-    "next": ["MJA_BP_TASKS_PAGE_PROBE"],
-    "on_error": ["MJA_BP_RECORD_FAILURE"],
+    "next": ["战令奖励-任务-页面-探测"],
+    "on_error": ["战令奖励-记录-失败"],
     "retry_times": 0
   },
-  "MJA_BP_TASKS_PAGE_PROBE": {
+  "战令奖励-任务-页面-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["battle_pass.tasks"],
+        "all_of": ["战令奖励-战斗-战令-任务"],
         "box_index": 0
       }
     },
     "timeout": 8000,
     "action": "DoNothing",
     "next": [
-      "MJA_BP_TASK_CLAIM_LOOP",
-      "MJA_BP_TASK_INITIAL_NO_CLAIM_PROBE"
+      "战令奖励-任务-领取-循环",
+      "战令奖励-任务-初始-无-领取-探测"
     ],
-    "on_error": ["MJA_BP_TASKS_AMBIGUOUS"]
+    "on_error": ["战令奖励-任务-歧义"]
   },
-  "MJA_BP_TASK_CLAIM_LOOP": {
+  "战令奖励-任务-领取-循环": {
     "max_hit": 50,
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["battle_pass.tasks", "battle_pass.task_reward_claim"],
+        "all_of": ["战令奖励-战斗-战令-任务", "战令奖励-战斗-战令-任务-奖励-领取"],
         "box_index": 1
       }
     },
@@ -235,24 +235,24 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "battle_pass.tasks",
-        "target_name": "battle_pass.task_reward_claim"
+        "page_name": "战令奖励-战斗-战令-任务",
+        "target_name": "战令奖励-战斗-战令-任务-奖励-领取"
       }
     },
     "next": [
-      "MJA_BP_TASK_REWARD_PROBE",
-      "MJA_BP_TASK_ITEM_PROBE",
-      "MJA_BP_TASK_REWARD_VERIFY"
+      "战令奖励-任务-奖励-探测",
+      "战令奖励-任务-物品-探测",
+      "战令奖励-任务-奖励-校验"
     ],
-    "on_error": ["MJA_BP_RECORD_FAILURE"],
+    "on_error": ["战令奖励-记录-失败"],
     "retry_times": 0
   },
-  "MJA_BP_TASK_CLAIM_LOOP_AFTER_CLAIM": {
+  "战令奖励-任务-领取-循环-之后-领取": {
     "max_hit": 50,
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["battle_pass.tasks", "battle_pass.task_reward_claim"],
+        "all_of": ["战令奖励-战斗-战令-任务", "战令奖励-战斗-战令-任务-奖励-领取"],
         "box_index": 1
       }
     },
@@ -265,48 +265,48 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "battle_pass.tasks",
-        "target_name": "battle_pass.task_reward_claim"
+        "page_name": "战令奖励-战斗-战令-任务",
+        "target_name": "战令奖励-战斗-战令-任务-奖励-领取"
       }
     },
     "next": [
-      "MJA_BP_TASK_REWARD_PROBE",
-      "MJA_BP_TASK_ITEM_PROBE",
-      "MJA_BP_TASK_REWARD_VERIFY"
+      "战令奖励-任务-奖励-探测",
+      "战令奖励-任务-物品-探测",
+      "战令奖励-任务-奖励-校验"
     ],
-    "on_error": ["MJA_BP_RECORD_FAILURE"],
+    "on_error": ["战令奖励-记录-失败"],
     "retry_times": 0
   },
-  "MJA_BP_TASK_REWARD_PROBE": {
+  "战令奖励-任务-奖励-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["battle_pass.reward_popup", "battle_pass.reward_popup_close"],
+        "all_of": ["战令奖励-战斗-战令-奖励-弹窗", "战令奖励-战斗-战令-奖励-弹窗-关闭"],
         "box_index": 0
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_BP_TASK_CLOSE_REWARD"],
-    "on_error": ["MJA_BP_RECORD_FAILURE"]
+    "next": ["战令奖励-任务-关闭-奖励"],
+    "on_error": ["战令奖励-记录-失败"]
   },
-  "MJA_BP_TASK_ITEM_PROBE": {
+  "战令奖励-任务-物品-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["battle_pass.item_popup", "battle_pass.item_popup_close"],
+        "all_of": ["战令奖励-战斗-战令-物品-弹窗", "战令奖励-战斗-战令-物品-弹窗-关闭"],
         "box_index": 0
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_BP_TASK_CLOSE_ITEM"],
-    "on_error": ["MJA_BP_RECORD_FAILURE"]
+    "next": ["战令奖励-任务-关闭-物品"],
+    "on_error": ["战令奖励-记录-失败"]
   },
-  "MJA_BP_TASK_CLOSE_REWARD": {
+  "战令奖励-任务-关闭-奖励": {
     "max_hit": 50,
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["battle_pass.reward_popup", "battle_pass.reward_popup_close"],
+        "all_of": ["战令奖励-战斗-战令-奖励-弹窗", "战令奖励-战斗-战令-奖励-弹窗-关闭"],
         "box_index": 1
       }
     },
@@ -319,20 +319,20 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "battle_pass.reward_popup",
-        "target_name": "battle_pass.reward_popup_close"
+        "page_name": "战令奖励-战斗-战令-奖励-弹窗",
+        "target_name": "战令奖励-战斗-战令-奖励-弹窗-关闭"
       }
     },
-    "next": ["MJA_BP_TASK_REWARD_VERIFY"],
-    "on_error": ["MJA_BP_RECORD_FAILURE"],
+    "next": ["战令奖励-任务-奖励-校验"],
+    "on_error": ["战令奖励-记录-失败"],
     "retry_times": 0
   },
-  "MJA_BP_TASK_CLOSE_ITEM": {
+  "战令奖励-任务-关闭-物品": {
     "max_hit": 50,
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["battle_pass.item_popup", "battle_pass.item_popup_close"],
+        "all_of": ["战令奖励-战斗-战令-物品-弹窗", "战令奖励-战斗-战令-物品-弹窗-关闭"],
         "box_index": 1
       }
     },
@@ -345,60 +345,60 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "battle_pass.item_popup",
-        "target_name": "battle_pass.item_popup_close"
+        "page_name": "战令奖励-战斗-战令-物品-弹窗",
+        "target_name": "战令奖励-战斗-战令-物品-弹窗-关闭"
       }
     },
-    "next": ["MJA_BP_TASK_REWARD_VERIFY"],
-    "on_error": ["MJA_BP_RECORD_FAILURE"],
+    "next": ["战令奖励-任务-奖励-校验"],
+    "on_error": ["战令奖励-记录-失败"],
     "retry_times": 0
   },
-  "MJA_BP_TASK_REWARD_VERIFY": {
+  "战令奖励-任务-奖励-校验": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["battle_pass.tasks"],
+        "all_of": ["战令奖励-战斗-战令-任务"],
         "box_index": 0
       }
     },
     "timeout": 8000,
     "action": "DoNothing",
     "next": [
-      "MJA_BP_TASK_CLAIM_LOOP_AFTER_CLAIM",
-      "MJA_BP_TASK_AFTER_CLAIM_NO_CLAIM_PROBE"
+      "战令奖励-任务-领取-循环-之后-领取",
+      "战令奖励-任务-之后-领取-无-领取-探测"
     ],
-    "on_error": ["MJA_BP_RECORD_FAILURE"]
+    "on_error": ["战令奖励-记录-失败"]
   },
-  "MJA_BP_TASK_INITIAL_NO_CLAIM_PROBE": {
+  "战令奖励-任务-初始-无-领取-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["battle_pass.tasks", "battle_pass.task_no_claimable"],
+        "all_of": ["战令奖励-战斗-战令-任务", "战令奖励-战斗-战令-任务-无-可领取"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_BP_OPEN_REWARDS_INITIAL"],
-    "on_error": ["MJA_BP_TASKS_AMBIGUOUS"]
+    "next": ["战令奖励-打开-奖励-初始"],
+    "on_error": ["战令奖励-任务-歧义"]
   },
-  "MJA_BP_TASK_AFTER_CLAIM_NO_CLAIM_PROBE": {
+  "战令奖励-任务-之后-领取-无-领取-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["battle_pass.tasks", "battle_pass.task_no_claimable"],
+        "all_of": ["战令奖励-战斗-战令-任务", "战令奖励-战斗-战令-任务-无-可领取"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_BP_OPEN_REWARDS_MUTATED"],
-    "on_error": ["MJA_BP_TASKS_AMBIGUOUS"]
+    "next": ["战令奖励-打开-奖励-变更后"],
+    "on_error": ["战令奖励-任务-歧义"]
   },
-  "MJA_BP_OPEN_REWARDS_INITIAL": {
+  "战令奖励-打开-奖励-初始": {
     "max_hit": 1,
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["battle_pass.tasks", "battle_pass.rewards_tab"],
+        "all_of": ["战令奖励-战斗-战令-任务", "战令奖励-战斗-战令-奖励-标签"],
         "box_index": 1
       }
     },
@@ -411,20 +411,20 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "battle_pass.tasks",
-        "target_name": "battle_pass.rewards_tab"
+        "page_name": "战令奖励-战斗-战令-任务",
+        "target_name": "战令奖励-战斗-战令-奖励-标签"
       }
     },
-    "next": ["MJA_BP_INITIAL_REWARDS_PAGE_PROBE"],
-    "on_error": ["MJA_BP_REWARDS_AMBIGUOUS"],
+    "next": ["战令奖励-初始-奖励-页面-探测"],
+    "on_error": ["战令奖励-奖励-歧义"],
     "retry_times": 0
   },
-  "MJA_BP_OPEN_REWARDS_MUTATED": {
+  "战令奖励-打开-奖励-变更后": {
     "max_hit": 1,
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["battle_pass.tasks", "battle_pass.rewards_tab"],
+        "all_of": ["战令奖励-战斗-战令-任务", "战令奖励-战斗-战令-奖励-标签"],
         "box_index": 1
       }
     },
@@ -437,102 +437,102 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "battle_pass.tasks",
-        "target_name": "battle_pass.rewards_tab"
+        "page_name": "战令奖励-战斗-战令-任务",
+        "target_name": "战令奖励-战斗-战令-奖励-标签"
       }
     },
-    "next": ["MJA_BP_MUTATED_REWARDS_PAGE_PROBE"],
-    "on_error": ["MJA_BP_REWARDS_AMBIGUOUS"],
+    "next": ["战令奖励-变更后-奖励-页面-探测"],
+    "on_error": ["战令奖励-奖励-歧义"],
     "retry_times": 0
   },
-  "MJA_BP_INITIAL_REWARDS_PAGE_PROBE": {
+  "战令奖励-初始-奖励-页面-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["battle_pass.rewards", "battle_pass.close"],
+        "all_of": ["战令奖励-战斗-战令-奖励", "战令奖励-战斗-战令-关闭"],
         "box_index": 0
       }
     },
     "timeout": 8000,
     "action": "DoNothing",
     "next": [
-      "MJA_BP_BASIC_CLAIM_LOOP",
-      "MJA_BP_INITIAL_BASIC_STATUS_PROBE",
-      "MJA_BP_INITIAL_BASIC_CHECK_PROBE"
+      "战令奖励-基础-领取-循环",
+      "战令奖励-初始-基础-状态-探测",
+      "战令奖励-初始-基础-检查-探测"
     ],
-    "on_error": ["MJA_BP_REWARDS_AMBIGUOUS"]
+    "on_error": ["战令奖励-奖励-歧义"]
   },
-  "MJA_BP_MUTATED_REWARDS_PAGE_PROBE": {
+  "战令奖励-变更后-奖励-页面-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["battle_pass.rewards", "battle_pass.close"],
+        "all_of": ["战令奖励-战斗-战令-奖励", "战令奖励-战斗-战令-关闭"],
         "box_index": 0
       }
     },
     "timeout": 8000,
     "action": "DoNothing",
     "next": [
-      "MJA_BP_MUTATED_BASIC_CLAIM_LOOP",
-      "MJA_BP_MUTATED_BASIC_STATUS_PROBE",
-      "MJA_BP_MUTATED_BASIC_CHECK_PROBE"
+      "战令奖励-变更后-基础-领取-循环",
+      "战令奖励-变更后-基础-状态-探测",
+      "战令奖励-变更后-基础-检查-探测"
     ],
-    "on_error": ["MJA_BP_REWARDS_AMBIGUOUS"]
+    "on_error": ["战令奖励-奖励-歧义"]
   },
-  "MJA_BP_INITIAL_BASIC_STATUS_PROBE": {
+  "战令奖励-初始-基础-状态-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["battle_pass.rewards", "battle_pass.basic_all_claimed"],
+        "all_of": ["战令奖励-战斗-战令-奖励", "战令奖励-战斗-战令-基础-全部已领取"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_BP_CLOSE_ALREADY_COMPLETE"],
-    "on_error": ["MJA_BP_REWARDS_AMBIGUOUS"]
+    "next": ["战令奖励-关闭-已完成"],
+    "on_error": ["战令奖励-奖励-歧义"]
   },
-  "MJA_BP_MUTATED_BASIC_STATUS_PROBE": {
+  "战令奖励-变更后-基础-状态-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["battle_pass.rewards", "battle_pass.basic_all_claimed"],
+        "all_of": ["战令奖励-战斗-战令-奖励", "战令奖励-战斗-战令-基础-全部已领取"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_BP_CLOSE_SUCCESS"],
-    "on_error": ["MJA_BP_REWARDS_AMBIGUOUS"]
+    "next": ["战令奖励-关闭-成功"],
+    "on_error": ["战令奖励-奖励-歧义"]
   },
-  "MJA_BP_INITIAL_BASIC_CHECK_PROBE": {
+  "战令奖励-初始-基础-检查-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["battle_pass.rewards", "battle_pass.basic_claimed_check"],
+        "all_of": ["战令奖励-战斗-战令-奖励", "战令奖励-战斗-战令-基础-已领取-检查"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_BP_CLOSE_ALREADY_COMPLETE"],
-    "on_error": ["MJA_BP_REWARDS_AMBIGUOUS"]
+    "next": ["战令奖励-关闭-已完成"],
+    "on_error": ["战令奖励-奖励-歧义"]
   },
-  "MJA_BP_MUTATED_BASIC_CHECK_PROBE": {
+  "战令奖励-变更后-基础-检查-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["battle_pass.rewards", "battle_pass.basic_claimed_check"],
+        "all_of": ["战令奖励-战斗-战令-奖励", "战令奖励-战斗-战令-基础-已领取-检查"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_BP_CLOSE_SUCCESS"],
-    "on_error": ["MJA_BP_REWARDS_AMBIGUOUS"]
+    "next": ["战令奖励-关闭-成功"],
+    "on_error": ["战令奖励-奖励-歧义"]
   },
-  "MJA_BP_BASIC_CLAIM_LOOP": {
+  "战令奖励-基础-领取-循环": {
     "max_hit": 50,
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["battle_pass.rewards", "battle_pass.basic_red_dot_reward"],
+        "all_of": ["战令奖励-战斗-战令-奖励", "战令奖励-战斗-战令-基础-红色-红点-奖励"],
         "box_index": 1
       }
     },
@@ -545,24 +545,24 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "battle_pass.rewards",
-        "target_name": "battle_pass.basic_red_dot_reward"
+        "page_name": "战令奖励-战斗-战令-奖励",
+        "target_name": "战令奖励-战斗-战令-基础-红色-红点-奖励"
       }
     },
     "next": [
-      "MJA_BP_BASIC_REWARD_PROBE",
-      "MJA_BP_BASIC_ITEM_PROBE",
-      "MJA_BP_BASIC_REWARD_VERIFY"
+      "战令奖励-基础-奖励-探测",
+      "战令奖励-基础-物品-探测",
+      "战令奖励-基础-奖励-校验"
     ],
-    "on_error": ["MJA_BP_RECORD_FAILURE"],
+    "on_error": ["战令奖励-记录-失败"],
     "retry_times": 0
   },
-  "MJA_BP_MUTATED_BASIC_CLAIM_LOOP": {
+  "战令奖励-变更后-基础-领取-循环": {
     "max_hit": 50,
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["battle_pass.rewards", "battle_pass.basic_red_dot_reward"],
+        "all_of": ["战令奖励-战斗-战令-奖励", "战令奖励-战斗-战令-基础-红色-红点-奖励"],
         "box_index": 1
       }
     },
@@ -575,58 +575,58 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "battle_pass.rewards",
-        "target_name": "battle_pass.basic_red_dot_reward"
+        "page_name": "战令奖励-战斗-战令-奖励",
+        "target_name": "战令奖励-战斗-战令-基础-红色-红点-奖励"
       }
     },
     "next": [
-      "MJA_BP_BASIC_REWARD_PROBE",
-      "MJA_BP_BASIC_ITEM_PROBE",
-      "MJA_BP_BASIC_REWARD_VERIFY"
+      "战令奖励-基础-奖励-探测",
+      "战令奖励-基础-物品-探测",
+      "战令奖励-基础-奖励-校验"
     ],
-    "on_error": ["MJA_BP_RECORD_FAILURE"],
+    "on_error": ["战令奖励-记录-失败"],
     "retry_times": 0
   },
-  "MJA_BP_BASIC_REWARD_PROBE": {
+  "战令奖励-基础-奖励-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["battle_pass.reward_popup", "battle_pass.reward_popup_close"],
+        "all_of": ["战令奖励-战斗-战令-奖励-弹窗", "战令奖励-战斗-战令-奖励-弹窗-关闭"],
         "box_index": 0
       }
     },
     "timeout": 12000,
     "action": "DoNothing",
-    "next": ["MJA_BP_BASIC_CLOSE_REWARD"],
-    "on_error": ["MJA_BP_BASIC_REWARD_WAIT"]
+    "next": ["战令奖励-基础-关闭-奖励"],
+    "on_error": ["战令奖励-基础-奖励-等待"]
   },
-  "MJA_BP_BASIC_REWARD_WAIT": {
+  "战令奖励-基础-奖励-等待": {
     "recognition": "DirectHit",
     "action": "DoNothing",
     "post_delay": 1000,
     "max_hit": 12,
-    "next": ["MJA_BP_BASIC_REWARD_PROBE"],
-    "on_error": ["MJA_BP_RECORD_FAILURE"]
+    "next": ["战令奖励-基础-奖励-探测"],
+    "on_error": ["战令奖励-记录-失败"]
   },
-  "MJA_BP_BASIC_ITEM_PROBE": {
+  "战令奖励-基础-物品-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["battle_pass.item_popup", "battle_pass.item_popup_close"],
+        "all_of": ["战令奖励-战斗-战令-物品-弹窗", "战令奖励-战斗-战令-物品-弹窗-关闭"],
         "box_index": 0
       }
     },
     "timeout": 12000,
     "action": "DoNothing",
-    "next": ["MJA_BP_BASIC_CLOSE_ITEM"],
-    "on_error": ["MJA_BP_RECORD_FAILURE"]
+    "next": ["战令奖励-基础-关闭-物品"],
+    "on_error": ["战令奖励-记录-失败"]
   },
-  "MJA_BP_BASIC_CLOSE_REWARD": {
+  "战令奖励-基础-关闭-奖励": {
     "max_hit": 50,
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["battle_pass.reward_popup", "battle_pass.reward_popup_close"],
+        "all_of": ["战令奖励-战斗-战令-奖励-弹窗", "战令奖励-战斗-战令-奖励-弹窗-关闭"],
         "box_index": 1
       }
     },
@@ -639,20 +639,20 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "battle_pass.reward_popup",
-        "target_name": "battle_pass.reward_popup_close"
+        "page_name": "战令奖励-战斗-战令-奖励-弹窗",
+        "target_name": "战令奖励-战斗-战令-奖励-弹窗-关闭"
       }
     },
-    "next": ["MJA_BP_BASIC_REWARD_VERIFY"],
-    "on_error": ["MJA_BP_RECORD_FAILURE"],
+    "next": ["战令奖励-基础-奖励-校验"],
+    "on_error": ["战令奖励-记录-失败"],
     "retry_times": 0
   },
-  "MJA_BP_BASIC_CLOSE_ITEM": {
+  "战令奖励-基础-关闭-物品": {
     "max_hit": 50,
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["battle_pass.item_popup", "battle_pass.item_popup_close"],
+        "all_of": ["战令奖励-战斗-战令-物品-弹窗", "战令奖励-战斗-战令-物品-弹窗-关闭"],
         "box_index": 1
       }
     },
@@ -665,33 +665,33 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "battle_pass.item_popup",
-        "target_name": "battle_pass.item_popup_close"
+        "page_name": "战令奖励-战斗-战令-物品-弹窗",
+        "target_name": "战令奖励-战斗-战令-物品-弹窗-关闭"
       }
     },
-    "next": ["MJA_BP_BASIC_REWARD_VERIFY"],
-    "on_error": ["MJA_BP_RECORD_FAILURE"],
+    "next": ["战令奖励-基础-奖励-校验"],
+    "on_error": ["战令奖励-记录-失败"],
     "retry_times": 0
   },
-  "MJA_BP_BASIC_REWARD_VERIFY": {
+  "战令奖励-基础-奖励-校验": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["battle_pass.rewards", "battle_pass.close"],
+        "all_of": ["战令奖励-战斗-战令-奖励", "战令奖励-战斗-战令-关闭"],
         "box_index": 0
       }
     },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_BP_MUTATED_REWARDS_PAGE_PROBE"],
-    "on_error": ["MJA_BP_RECORD_FAILURE"]
+    "next": ["战令奖励-变更后-奖励-页面-探测"],
+    "on_error": ["战令奖励-记录-失败"]
   },
-  "MJA_BP_CLOSE_ALREADY_COMPLETE": {
+  "战令奖励-关闭-已完成": {
     "max_hit": 1,
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["battle_pass.rewards", "battle_pass.close"],
+        "all_of": ["战令奖励-战斗-战令-奖励", "战令奖励-战斗-战令-关闭"],
         "box_index": 1
       }
     },
@@ -704,20 +704,20 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "battle_pass.rewards",
-        "target_name": "battle_pass.close"
+        "page_name": "战令奖励-战斗-战令-奖励",
+        "target_name": "战令奖励-战斗-战令-关闭"
       }
     },
-    "next": ["MJA_BP_HOME_AFTER_ALREADY_COMPLETE"],
-    "on_error": ["MJA_BP_HOME_BOUNDARY_FAILURE"],
+    "next": ["战令奖励-主页已完成后"],
+    "on_error": ["战令奖励-主页边界-失败"],
     "retry_times": 0
   },
-  "MJA_BP_CLOSE_SUCCESS": {
+  "战令奖励-关闭-成功": {
     "max_hit": 1,
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["battle_pass.rewards", "battle_pass.close"],
+        "all_of": ["战令奖励-战斗-战令-奖励", "战令奖励-战斗-战令-关闭"],
         "box_index": 1
       }
     },
@@ -730,41 +730,41 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "battle_pass.rewards",
-        "target_name": "battle_pass.close"
+        "page_name": "战令奖励-战斗-战令-奖励",
+        "target_name": "战令奖励-战斗-战令-关闭"
       }
     },
-    "next": ["MJA_BP_HOME_AFTER_SUCCESS"],
-    "on_error": ["MJA_BP_HOME_BOUNDARY_FAILURE"],
+    "next": ["战令奖励-主页成功后"],
+    "on_error": ["战令奖励-主页边界-失败"],
     "retry_times": 0
   },
-  "MJA_BP_HOME_AFTER_ALREADY_COMPLETE": {
+  "战令奖励-主页已完成后": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["battle_pass.home.page", "battle_pass.open"],
+        "all_of": ["战令奖励-战斗-战令-主页-页面", "战令奖励-战斗-战令-打开"],
         "box_index": 0
       }
     },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_BP_ALL_CLAIMED"],
-    "on_error": ["MJA_BP_HOME_BOUNDARY_FAILURE"]
+    "next": ["战令奖励-全部已领取"],
+    "on_error": ["战令奖励-主页边界-失败"]
   },
-  "MJA_BP_HOME_AFTER_SUCCESS": {
+  "战令奖励-主页成功后": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["battle_pass.home.page", "battle_pass.open"],
+        "all_of": ["战令奖励-战斗-战令-主页-页面", "战令奖励-战斗-战令-打开"],
         "box_index": 0
       }
     },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_BP_ALL_CLAIMED_SUCCESS"],
-    "on_error": ["MJA_BP_HOME_BOUNDARY_FAILURE"]
+    "next": ["战令奖励-全部已领取-成功"],
+    "on_error": ["战令奖励-主页边界-失败"]
   },
-  "MJA_BP_ALL_CLAIMED": {
+  "战令奖励-全部已领取": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -773,9 +773,9 @@
       "status": "already_complete",
       "postcondition": "battle_pass.no_task_or_basic_claimable"
     },
-    "next": ["MJA_COMMON_STOP", "[JumpBack]MJA_GAME_START"]
+    "next": ["公共-通用停止", "[JumpBack]启动-游戏启动"]
   },
-  "MJA_BP_ALL_CLAIMED_SUCCESS": {
+  "战令奖励-全部已领取-成功": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -784,9 +784,9 @@
       "status": "success",
       "postcondition": "battle_pass.no_task_or_basic_claimable"
     },
-    "next": ["MJA_COMMON_STOP", "[JumpBack]MJA_GAME_START"]
+    "next": ["公共-通用停止", "[JumpBack]启动-游戏启动"]
   },
-  "MJA_BP_TASKS_AMBIGUOUS": {
+  "战令奖励-任务-歧义": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -798,10 +798,10 @@
       "native_fail_after_record": true
     },
     "Abort": true,
-    "next": ["MJA_COMMON_ABORT"]
+    "next": ["公共-通用中止"]
 
   },
-  "MJA_BP_REWARDS_AMBIGUOUS": {
+  "战令奖励-奖励-歧义": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -813,10 +813,10 @@
       "native_fail_after_record": true
     },
     "Abort": true,
-    "next": ["MJA_COMMON_ABORT"]
+    "next": ["公共-通用中止"]
 
   },
-  "MJA_BP_HOME_BOUNDARY_FAILURE": {
+  "战令奖励-主页边界-失败": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -828,10 +828,10 @@
       "native_fail_after_record": true
     },
     "Abort": true,
-    "next": ["MJA_COMMON_ABORT"]
+    "next": ["公共-通用中止"]
 
   },
-  "MJA_BP_RECORD_FAILURE": {
+  "战令奖励-记录-失败": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -843,147 +843,147 @@
       "native_fail_after_record": true
     },
     "Abort": true,
-    "next": ["MJA_COMMON_ABORT"]
+    "next": ["公共-通用中止"]
 
   },
-  "battle_pass.home.page": {
+  "战令奖励-战斗-战令-主页-页面": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "battle_pass.home.activity",
-          "battle_pass.home.pray",
-          "battle_pass.home.dungeon",
-          "battle_pass.home.painting"
+          "战令奖励-战斗-战令-主页-活动",
+          "战令奖励-战斗-战令-主页-祈福",
+          "战令奖励-战斗-战令-主页-副本",
+          "战令奖励-战斗-战令-主页-画卷"
         ],
         "box_index": 0
       }
     },
     "action": "DoNothing"
   },
-  "battle_pass.home.activity": {
+  "战令奖励-战斗-战令-主页-活动": {
     "recognition": "OCR",
     "expected": "^活动$",
     "roi": [870, 45, 60, 40],
     "action": "DoNothing"
   },
-  "battle_pass.home.pray": {
+  "战令奖励-战斗-战令-主页-祈福": {
     "recognition": "OCR",
     "expected": "^祈福$",
     "roi": [990, 45, 55, 40],
     "action": "DoNothing"
   },
-  "battle_pass.home.dungeon": {
+  "战令奖励-战斗-战令-主页-副本": {
     "recognition": "OCR",
     "expected": "^副本$",
     "roi": [1045, 45, 60, 40],
     "action": "DoNothing"
   },
-  "battle_pass.home.painting": {
+  "战令奖励-战斗-战令-主页-画卷": {
     "recognition": "OCR",
     "expected": "^画卷$",
     "roi": [1105, 45, 60, 40],
     "action": "DoNothing"
   },
-  "battle_pass.open": {
+  "战令奖励-战斗-战令-打开": {
     "recognition": "OCR",
     "expected": "^战令$",
     "roi": [800, 45, 80, 40],
     "action": "DoNothing"
   },
-  "battle_pass.page": {
+  "战令奖励-战斗-战令-页面": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["battle_pass.title", "battle_pass.period"],
+        "all_of": ["战令奖励-战斗-战令-标题", "战令奖励-战斗-战令-周期"],
         "box_index": 0
       }
     },
     "action": "DoNothing"
   },
-  "battle_pass.title": {
+  "战令奖励-战斗-战令-标题": {
     "recognition": "OCR",
     "expected": "^战令$",
     "roi": [40, 15, 130, 60],
     "action": "DoNothing"
   },
-  "battle_pass.period": {
+  "战令奖励-战斗-战令-周期": {
     "recognition": "OCR",
     "expected": "^本期剩余时间.*$",
     "roi": [160, 165, 320, 80],
     "action": "DoNothing"
   },
-  "battle_pass.tasks": {
+  "战令奖励-战斗-战令-任务": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "battle_pass.page",
-          "battle_pass.tasks_tab",
-          "battle_pass.tasks_content"
+          "战令奖励-战斗-战令-页面",
+          "战令奖励-战斗-战令-任务-标签",
+          "战令奖励-战斗-战令-任务-内容"
         ],
         "box_index": 0
       }
     },
     "action": "DoNothing"
   },
-  "battle_pass.tasks_content": {
+  "战令奖励-战斗-战令-任务-内容": {
     "recognition": "OCR",
     "expected": ["^每周任务$", "^当期任务$", "^追赶任务$"],
     "roi": [180, 610, 500, 100],
     "action": "DoNothing"
   },
-  "battle_pass.tasks_tab": {
+  "战令奖励-战斗-战令-任务-标签": {
     "recognition": "OCR",
     "expected": "^任务$",
     "roi": [40, 165, 100, 100],
     "action": "DoNothing"
   },
-  "battle_pass.task_reward_claim": {
+  "战令奖励-战斗-战令-任务-奖励-领取": {
     "recognition": "OCR",
     "expected": "^领取$",
     "roi": [700, 190, 220, 180],
     "action": "DoNothing"
   },
-  "battle_pass.task_no_claimable": {
+  "战令奖励-战斗-战令-任务-无-可领取": {
     "recognition": "OCR",
     "expected": ["^已领取$", "^暂无可领取$", "^未完成$", "^前往$"],
     "roi": [700, 190, 220, 390],
     "action": "DoNothing"
   },
-  "battle_pass.rewards_tab": {
+  "战令奖励-战斗-战令-奖励-标签": {
     "recognition": "OCR",
     "expected": "^奖励$",
     "roi": [40, 70, 100, 90],
     "action": "DoNothing"
   },
-  "battle_pass.rewards": {
+  "战令奖励-战斗-战令-奖励": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "battle_pass.page",
-          "battle_pass.basic_track",
-          "battle_pass.level"
+          "战令奖励-战斗-战令-页面",
+          "战令奖励-战斗-战令-基础-轨道",
+          "战令奖励-战斗-战令-等级"
         ],
         "box_index": 0
       }
     },
     "action": "DoNothing"
   },
-  "battle_pass.basic_track": {
+  "战令奖励-战斗-战令-基础-轨道": {
     "recognition": "OCR",
     "expected": "^基础版$",
     "roi": [170, 330, 130, 150],
     "action": "DoNothing"
   },
-  "battle_pass.level": {
+  "战令奖励-战斗-战令-等级": {
     "recognition": "OCR",
     "expected": "^战令等级$",
     "roi": [160, 230, 170, 110],
     "action": "DoNothing"
   },
-  "battle_pass.basic_red_dot_reward": {
+  "战令奖励-战斗-战令-基础-红色-红点-奖励": {
     "recognition": "ColorMatch",
     "method": 4,
     "lower": [180, 0, 0],
@@ -995,20 +995,20 @@
     "index": 0,
     "action": "DoNothing"
   },
-  "battle_pass.basic_all_claimed": {
+  "战令奖励-战斗-战令-基础-全部已领取": {
     "recognition": "OCR",
     "expected": "^已领取$",
     "roi": [150, 220, 900, 430],
     "action": "DoNothing"
   },
-  "battle_pass.basic_claimed_check": {
+  "战令奖励-战斗-战令-基础-已领取-检查": {
     "recognition": "TemplateMatch",
     "template": "daily/BATTLE_PASS_REWARD_DAILY/basic_claimed.png",
     "roi": [250, 320, 300, 150],
     "threshold": 0.42,
     "action": "DoNothing"
   },
-  "battle_pass.reward_popup": {
+  "战令奖励-战斗-战令-奖励-弹窗": {
     "recognition": "OCR",
     "expected": [
       "^恭喜获得$",
@@ -1022,44 +1022,44 @@
     "roi": [0, 100, 1280, 620],
     "action": "DoNothing"
   },
-  "battle_pass.reward_popup_close": {
+  "战令奖励-战斗-战令-奖励-弹窗-关闭": {
     "recognition": "OCR",
     "expected": "^点击空白处关闭$",
     "roi": [300, 540, 700, 180],
     "action": "DoNothing"
   },
-  "battle_pass.item_popup": {
+  "战令奖励-战斗-战令-物品-弹窗": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "battle_pass.item_popup_type",
-          "battle_pass.item_popup_owned"
+          "战令奖励-战斗-战令-物品-弹窗-类型",
+          "战令奖励-战斗-战令-物品-弹窗-拥有"
         ],
         "box_index": 0
       }
     },
     "action": "DoNothing"
   },
-  "battle_pass.item_popup_type": {
+  "战令奖励-战斗-战令-物品-弹窗-类型": {
     "recognition": "OCR",
     "expected": "^物品$",
     "roi": [700, 240, 140, 100],
     "action": "DoNothing"
   },
-  "battle_pass.item_popup_owned": {
+  "战令奖励-战斗-战令-物品-弹窗-拥有": {
     "recognition": "OCR",
     "expected": "^当前拥有.*$",
     "roi": [680, 300, 180, 100],
     "action": "DoNothing"
   },
-  "battle_pass.item_popup_close": {
+  "战令奖励-战斗-战令-物品-弹窗-关闭": {
     "recognition": "OCR",
     "expected": "^战令$",
     "roi": [40, 15, 130, 60],
     "action": "DoNothing"
   },
-  "battle_pass.close": {
+  "战令奖励-战斗-战令-关闭": {
     "recognition": "TemplateMatch",
     "template": "daily/BUY_TEA_DAILY/shop_close.png",
     "roi": [1170, 0, 110, 110],

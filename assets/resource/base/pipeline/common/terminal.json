@@ -1,14 +1,14 @@
 {
-  "MJA_COMMON_STOP": {
+  "公共-通用停止": {
     "recognition": "DirectHit",
     "action": "StopTask"
   },
-  "MJA_COMMON_ABORT": {
+  "公共-通用中止": {
     "recognition": "DirectHit",
     "Abort": true,
     "action": "StopTask"
   },
-  "MJA_COMMON_STARTUP_RECOVERY_RESTART": {
+  "公共-通用-启动恢复-重启": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RestartGameSurface",
@@ -19,10 +19,10 @@
     "timeout": 1000,
     "max_hit": 1,
     "post_delay": 0,
-    "next": ["MJA_GAME_START_AFTER_RESTART"],
-    "on_error": ["MJA_GAME_START_APP_RESTART_FAILED"]
+    "next": ["启动-游戏重启后"],
+    "on_error": ["公共-游戏启动应用重启失败"]
   },
-  "MJA_GAME_START_APP_RESTART_FAILED": {
+  "公共-游戏启动应用重启失败": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "FailStartupRecovery",
@@ -38,7 +38,7 @@
     "timeout": 1000,
     "max_hit": 1
   },
-  "MJA_GAME_START_START_BUTTON_NOT_FOUND": {
+  "公共-游戏启动开始按钮未找到": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "FailStartupRecovery",
@@ -54,7 +54,7 @@
     "timeout": 1000,
     "max_hit": 1
   },
-  "MJA_GAME_START_ENTER_BUTTON_NOT_FOUND": {
+  "公共-游戏启动进入按钮未找到": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "FailStartupRecovery",
@@ -70,7 +70,7 @@
     "timeout": 1000,
     "max_hit": 1
   },
-  "MJA_GAME_START_HOME_NOT_REACHED": {
+  "公共-游戏启动主页未到达": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "FailStartupRecovery",
@@ -86,7 +86,7 @@
     "timeout": 1000,
     "max_hit": 1
   },
-  "MJA_COMMON_STARTUP_RECOVERY_EXHAUSTED": {
+  "公共-通用-启动恢复-耗尽": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "FailStartupRecovery",

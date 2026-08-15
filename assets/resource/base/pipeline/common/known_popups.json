@@ -1,11 +1,11 @@
 {
-  "MJA_KNOWN_POPUP_CLOSE": {
+  "公共-已知弹窗-关闭": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "MJA_KNOWN_SAFE_ANNOUNCEMENT",
-          "MJA_KNOWN_SAFE_ANNOUNCEMENT_CLOSE_ICON"
+          "公共-已知-安全公告",
+          "公共-已知-安全公告-关闭-图标"
         ],
         "box_index": 1
       }
@@ -14,11 +14,11 @@
     "max_hit": 1,
     "action": "Click"
   },
-  "MJA_KNOWN_PAGE_CLOSE": {
+  "公共-已知-页面-关闭": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["MJA_KNOWN_PANEL_MARKER", "MJA_KNOWN_PANEL_CLOSE"],
+        "all_of": ["公共-已知-面板-标记", "公共-已知-面板-关闭"],
         "box_index": 1
       }
     },
@@ -27,31 +27,31 @@
     "action": "Click",
     "target": [1230, 45]
   },
-  "MJA_KNOWN_PANEL_MARKER": {
+  "公共-已知-面板-标记": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["MJA_GAME_SIDE_PANEL_OPEN"],
+        "all_of": ["公共-游戏侧边面板-打开"],
         "box_index": 0
       }
     },
     "action": "DoNothing"
   },
-  "MJA_KNOWN_PANEL_CLOSE": {
+  "公共-已知-面板-关闭": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["MJA_GAME_SIDE_PANEL_OPEN"],
+        "all_of": ["公共-游戏侧边面板-打开"],
         "box_index": 0
       }
     },
     "action": "DoNothing"
   },
-  "MJA_KNOWN_TEA_DETAIL_CLOSE": {
+  "公共-已知-茶-详情-关闭": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["tea.detail", "MJA_KNOWN_TEA_CLOSE"],
+        "all_of": ["买茶-茶-详情", "公共-已知-茶-关闭"],
         "box_index": 1
       }
     },
@@ -59,11 +59,11 @@
     "max_hit": 1,
     "action": "Click"
   },
-  "MJA_KNOWN_TEA_SHOP_CLOSE": {
+  "公共-已知-茶-商店-关闭": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["tea.universal_shop.page", "MJA_KNOWN_TEA_CLOSE"],
+        "all_of": ["买茶-茶-万用-商店-页面", "公共-已知-茶-关闭"],
         "box_index": 1
       }
     },
@@ -71,22 +71,22 @@
     "max_hit": 1,
     "action": "Click"
   },
-  "MJA_KNOWN_TEA_CLOSE": {
+  "公共-已知-茶-关闭": {
     "recognition": "TemplateMatch",
     "template": "daily/BUY_TEA_DAILY/shop_close.png",
     "roi": [1160, 0, 100, 100],
     "threshold": 0.39,
     "action": "DoNothing"
   },
-  "MJA_KNOWN_PAINTING_CLOSE": {
+  "公共-已知-画卷-关闭": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "MJA_KNOWN_PAINTING_TITLE",
-          "MJA_KNOWN_PAINTING_WORLD",
-          "MJA_KNOWN_PAINTING_SHOP",
-          "MJA_KNOWN_PAINTING_CLOSE_ICON"
+          "公共-已知-画卷-标题",
+          "公共-已知-画卷-世界",
+          "公共-已知-画卷-商店",
+          "公共-已知-画卷-关闭-图标"
         ],
         "box_index": 3
       }
@@ -95,38 +95,38 @@
     "max_hit": 1,
     "action": "Click"
   },
-  "MJA_KNOWN_PAINTING_TITLE": {
+  "公共-已知-画卷-标题": {
     "recognition": "OCR",
     "expected": "画卷",
     "roi": [0, 0, 350, 100],
     "action": "DoNothing"
   },
-  "MJA_KNOWN_PAINTING_WORLD": {
+  "公共-已知-画卷-世界": {
     "recognition": "OCR",
     "expected": "偃武世界",
     "roi": [0, 90, 600, 180],
     "action": "DoNothing"
   },
-  "MJA_KNOWN_PAINTING_SHOP": {
+  "公共-已知-画卷-商店": {
     "recognition": "OCR",
     "expected": "万用商店",
     "roi": [0, 550, 400, 170],
     "action": "DoNothing"
   },
-  "MJA_KNOWN_PAINTING_CLOSE_ICON": {
+  "公共-已知-画卷-关闭-图标": {
     "recognition": "TemplateMatch",
     "template": "daily/BUY_TEA_DAILY/shop_close.png",
     "roi": [1160, 0, 120, 120],
     "threshold": 0.39,
     "action": "DoNothing"
   },
-  "MJA_KNOWN_REWARD_POPUP_CLOSE": {
+  "公共-已知-奖励-弹窗-关闭": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "MJA_KNOWN_REWARD_POPUP",
-          "MJA_KNOWN_REWARD_POPUP_CLOSE_ICON"
+          "公共-已知-奖励-弹窗",
+          "公共-已知-奖励-弹窗-关闭-图标"
         ],
         "box_index": 1
       }
@@ -136,27 +136,27 @@
     "action": "Click",
     "post_delay": 500
   },
-  "MJA_KNOWN_REWARD_POPUP": {
+  "公共-已知-奖励-弹窗": {
     "recognition": "TemplateMatch",
     "template": "daily/GUILD_AFFAIRS_DAILY/reward_popup_live.png",
     "roi": [120, 180, 180, 380],
     "threshold": 0.36,
     "action": "DoNothing"
   },
-  "MJA_KNOWN_REWARD_POPUP_CLOSE_ICON": {
+  "公共-已知-奖励-弹窗-关闭-图标": {
     "recognition": "TemplateMatch",
     "template": "daily/GUILD_AFFAIRS_DAILY/reward_popup_close_live.png",
     "roi": [450, 600, 400, 120],
     "threshold": 0.36,
     "action": "DoNothing"
   },
-  "MJA_KNOWN_HERO_DISPATCH_CLOSE": {
+  "公共-已知-英雄-派遣-关闭": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "MJA_KNOWN_HERO_DISPATCH_PAGE",
-          "MJA_KNOWN_HERO_DISPATCH_CLOSE_ICON"
+          "公共-已知-英雄-派遣-页面",
+          "公共-已知-英雄-派遣-关闭-图标"
         ],
         "box_index": 1
       }
@@ -166,13 +166,13 @@
     "action": "Click",
     "post_delay": 500
   },
-  "MJA_KNOWN_MARTIAL_DETAIL_CLOSE": {
+  "公共-已知-武学-详情-关闭": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
           "martial.detail.page",
-          "martial.close"
+          "武学突破-武学-关闭"
         ],
         "box_index": 1
       }
@@ -182,13 +182,13 @@
     "action": "Click",
     "post_delay": 500
   },
-  "MJA_KNOWN_MARTIAL_PAGE_CLOSE": {
+  "公共-已知-武学-页面-关闭": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "martial.page",
-          "martial.close"
+          "武学突破-武学-页面",
+          "武学突破-武学-关闭"
         ],
         "box_index": 1
       }
@@ -198,13 +198,13 @@
     "action": "Click",
     "post_delay": 500
   },
-  "MJA_KNOWN_HERO_DISPATCH_PAGE": {
+  "公共-已知-英雄-派遣-页面": {
     "recognition": "OCR",
     "expected": ["^(?:侠客派遣|俠客派遣)$", "任务"],
     "roi": [0, 0, 520, 180],
     "action": "DoNothing"
   },
-  "MJA_KNOWN_HERO_DISPATCH_CLOSE_ICON": {
+  "公共-已知-英雄-派遣-关闭-图标": {
     "recognition": "TemplateMatch",
     "template": "daily/HERO_DISPATCH_DAILY/dispatch_close.png",
     "roi": [1175, 5, 75, 75],
@@ -212,13 +212,13 @@
     "green_mask": true,
     "action": "DoNothing"
   },
-  "MJA_KNOWN_MONTHLY_SIGNIN_CLOSE": {
+  "公共-已知-月签到-关闭": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "MJA_KNOWN_MONTHLY_SIGNIN_TITLE",
-          "MJA_KNOWN_MONTHLY_SIGNIN_ACCUMULATED"
+          "公共-已知-月签到-标题",
+          "公共-已知-月签到-累计"
         ],
         "box_index": 1
       }
@@ -229,19 +229,19 @@
     "target": [1060, 152, 16, 16],
     "post_delay": 750
   },
-  "MJA_KNOWN_MONTHLY_SIGNIN_TITLE": {
+  "公共-已知-月签到-标题": {
     "recognition": "OCR",
     "expected": "^(?:[一二三四五六七八九]|十[一二]?)月[·・•]?签到$",
     "roi": [150, 120, 160, 500],
     "action": "DoNothing"
   },
-  "MJA_KNOWN_MONTHLY_SIGNIN_ACCUMULATED": {
+  "公共-已知-月签到-累计": {
     "recognition": "OCR",
     "expected": ["^累计签到$", "^累计$"],
     "roi": [430, 110, 240, 110],
     "action": "DoNothing"
   },
-  "MJA_KNOWN_CLICK_BLANK_TO_CLOSE": {
+  "公共-已知-点击空白关闭": {
     "recognition": "OCR",
     "expected": ["点击空白处关闭", "点击任意空白区域关闭"],
     "roi": [350, 580, 600, 140],
@@ -250,7 +250,7 @@
     "action": "Click",
     "post_delay": 500
   },
-  "MJA_KNOWN_BATTLE_VICTORY_RESULT_CLOSE": {
+  "公共-已知-战斗胜利结果关闭": {
     "recognition": "OCR",
     "expected": "^战斗胜利$",
     "roi": [700, 60, 580, 220],
@@ -263,15 +263,15 @@
       "activity": "com.hanjiasongshu.dr22/.MainActivity"
     },
     "post_delay": 5000,
-    "next": ["MJA_GAME_START"]
+    "next": ["启动-游戏启动"]
   },
-  "MJA_KNOWN_BATTLE_RESULT_CLOSE": {
+  "公共-已知-战斗结果关闭": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "MJA_KNOWN_BATTLE_FAILURE_TITLE",
-          "MJA_KNOWN_BATTLE_FAILURE_DETAIL"
+          "公共-已知-战斗-失败-标题",
+          "公共-已知-战斗-失败-详情"
         ],
         "box_index": 0
       }
@@ -285,21 +285,21 @@
       "activity": "com.hanjiasongshu.dr22/.MainActivity"
     },
     "post_delay": 5000,
-    "next": ["MJA_GAME_START"]
+    "next": ["启动-游戏启动"]
   },
-  "MJA_KNOWN_BATTLE_FAILURE_TITLE": {
+  "公共-已知-战斗-失败-标题": {
     "recognition": "OCR",
     "expected": "^战斗失败$",
     "roi": [650, 0, 630, 300],
     "action": "DoNothing"
   },
-  "MJA_KNOWN_BATTLE_FAILURE_DETAIL": {
+  "公共-已知-战斗-失败-详情": {
     "recognition": "OCR",
     "expected": "^可以通过以下途径提升$",
     "roi": [700, 350, 500, 150],
     "action": "DoNothing"
   },
-  "MJA_KNOWN_NETWORK_CONFIRM": {
+  "公共-已知-网络-确认": {
     "recognition": "OCR",
     "expected": ["确认", "重试", "继续"],
     "roi": [830, 350, 80, 130],
@@ -307,7 +307,7 @@
     "max_hit": 1,
     "action": "Click"
   },
-  "MJA_KNOWN_RESOURCE_UPDATE_CONFIRM": {
+  "公共-已知-资源更新确认": {
     "recognition": "OCR",
     "expected": ["更新", "下载", "确定", "继续下载"],
     "roi": [300, 240, 680, 280],
@@ -315,13 +315,13 @@
     "max_hit": 1,
     "action": "Click"
   },
-  "MJA_KNOWN_CROSS_MAP_PROMPT_CANCEL": {
+  "公共-已知-跨地图-提示-取消": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "MJA_KNOWN_CROSS_MAP_PROMPT",
-          "MJA_KNOWN_CROSS_MAP_CANCEL_BUTTON"
+          "公共-已知-跨地图-提示",
+          "公共-已知-跨地图-取消-按钮"
         ],
         "box_index": 1
       }
@@ -330,27 +330,27 @@
     "max_hit": 1,
     "action": "Click",
     "post_delay": 500,
-    "next": ["MJA_GAME_START"]
+    "next": ["启动-游戏启动"]
   },
-  "MJA_KNOWN_CROSS_MAP_PROMPT": {
+  "公共-已知-跨地图-提示": {
     "recognition": "OCR",
     "expected": "自动寻路需要跨地图前往",
     "roi": [320, 260, 700, 180],
     "action": "DoNothing"
   },
-  "MJA_KNOWN_CROSS_MAP_CANCEL_BUTTON": {
+  "公共-已知-跨地图-取消-按钮": {
     "recognition": "OCR",
     "expected": "^取消$",
     "roi": [360, 450, 230, 100],
     "action": "DoNothing"
   },
-  "MJA_KNOWN_SAFE_ANNOUNCEMENT": {
+  "公共-已知-安全公告": {
     "recognition": "OCR",
     "expected": ["公告", "公告说明", "版本更新"],
     "roi": [0, 0, 1280, 720],
     "action": "DoNothing"
   },
-  "MJA_KNOWN_SAFE_ANNOUNCEMENT_CLOSE_ICON": {
+  "公共-已知-安全公告-关闭-图标": {
     "recognition": "TemplateMatch",
     "template": "home/modal_close.png",
     "roi": [1180, 10, 70, 70],

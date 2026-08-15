@@ -101,18 +101,18 @@ def test_common_terminals_keep_normal_stop_separate_from_abort() -> None:
     )
     terminal = json.loads(terminal_path.read_text(encoding="utf-8"))
 
-    assert terminal["MJA_COMMON_STOP"] == {
+    assert terminal["公共-通用停止"] == {
         "recognition": "DirectHit",
         "action": "StopTask",
     }
-    assert terminal["MJA_COMMON_ABORT"]["action"] == "StopTask"
-    assert terminal["MJA_COMMON_ABORT"]["Abort"] is True
-    startup_restart = terminal["MJA_COMMON_STARTUP_RECOVERY_RESTART"]
+    assert terminal["公共-通用中止"]["action"] == "StopTask"
+    assert terminal["公共-通用中止"]["Abort"] is True
+    startup_restart = terminal["公共-通用-启动恢复-重启"]
     assert startup_restart["custom_action"] == "RestartGameSurface"
     assert startup_restart["max_hit"] == 1
-    assert startup_restart["next"] == ["MJA_GAME_START_AFTER_RESTART"]
-    assert startup_restart["on_error"] == ["MJA_GAME_START_APP_RESTART_FAILED"]
-    startup_exhausted = terminal["MJA_COMMON_STARTUP_RECOVERY_EXHAUSTED"]
+    assert startup_restart["next"] == ["启动-游戏重启后"]
+    assert startup_restart["on_error"] == ["公共-游戏启动应用重启失败"]
+    startup_exhausted = terminal["公共-通用-启动恢复-耗尽"]
     assert startup_exhausted["action"] == "Custom"
     assert startup_exhausted["custom_action"] == "FailStartupRecovery"
     assert startup_exhausted["custom_action_param"] == {
@@ -120,7 +120,7 @@ def test_common_terminals_keep_normal_stop_separate_from_abort() -> None:
         "postcondition": "startup.game_ready",
     }
     assert startup_exhausted["Abort"] is True
-    assert "on_error" not in terminal["MJA_COMMON_STARTUP_RECOVERY_EXHAUSTED"]
+    assert "on_error" not in terminal["公共-通用-启动恢复-耗尽"]
 
 
 def test_startup_recovery_failure_is_control_plane_only() -> None:

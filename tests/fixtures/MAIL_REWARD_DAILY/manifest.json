@@ -4,8 +4,8 @@
   "reference_size": [1280, 720],
   "cases": {
     "entry": {"image": "entry.png", "expected_page": "home", "expected_targets": ["function_panel.open"], "expected_status": null},
-    "actionable": {"image": "actionable.png", "expected_page": "mail.page", "expected_targets": ["mail.claim_all"], "expected_status": null},
-    "completed": {"image": "completed.png", "expected_page": "mail.page", "expected_targets": ["mail.empty"], "expected_status": "already_complete"},
-    "danger": {"image": "danger.png", "expected_page": "mail.page", "expected_targets": ["unknown_dialog"], "expected_status": "failed"}
+    "actionable": {"image": "actionable.png", "expected_page": "邮件奖励-邮件-页面", "expected_targets": ["邮件奖励-邮件-领取-全部"], "expected_status": null},
+    "completed": {"image": "completed.png", "expected_page": "邮件奖励-邮件-页面", "expected_targets": ["邮件奖励-邮件-空"], "expected_status": "already_complete"},
+    "danger": {"image": "danger.png", "expected_page": "邮件奖励-邮件-页面", "expected_targets": ["unknown_dialog"], "expected_status": "failed"}
   }
 }

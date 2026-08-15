@@ -1,36 +1,36 @@
 {
-  "MJA_HOME_RECOVER": {
+  "公共-主页恢复": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["MJA_GAME_HOME_PAGE"]
+        "all_of": ["公共-游戏主页-页面"]
       }
     },
     "timeout": 10000,
     "max_hit": 1,
     "action": "DoNothing",
-    "next": ["MJA_GAME_READY"]
+    "next": ["启动-游戏就绪"]
   },
-  "MJA_HOME_RECOVER_SAFE_NOTICE": {
+  "公共-主页恢复-安全公告": {
     "recognition": "OCR",
     "expected": ["公告", "公告说明", "版本更新"],
     "roi": [0, 0, 1280, 720],
     "action": "DoNothing"
   },
-  "MJA_HOME_RECOVER_SAFE_NOTICE_CLOSE_ICON": {
+  "公共-主页恢复-安全公告-关闭-图标": {
     "recognition": "TemplateMatch",
     "template": "home/modal_close.png",
     "roi": [1180, 10, 70, 70],
     "threshold": 0.39,
     "action": "DoNothing"
   },
-  "MJA_HOME_RECOVER_POPUP": {
+  "公共-主页恢复-弹窗": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "MJA_HOME_RECOVER_SAFE_NOTICE",
-          "MJA_HOME_RECOVER_SAFE_NOTICE_CLOSE_ICON"
+          "公共-主页恢复-安全公告",
+          "公共-主页恢复-安全公告-关闭-图标"
         ],
         "box_index": 1
       }
@@ -38,9 +38,9 @@
     "timeout": 5000,
     "max_hit": 1,
     "action": "Click",
-    "next": ["MJA_HOME_RECOVER"]
+    "next": ["公共-主页恢复"]
   },
-  "MJA_HOME_RECOVER_UNKNOWN_ABORT": {
+  "公共-主页恢复-未知-中止": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordActiveTaskFailure",
@@ -53,113 +53,113 @@
     "Abort": true,
     "timeout": 1000,
     "max_hit": 1,
-    "next": ["MJA_COMMON_ABORT"]
+    "next": ["公共-通用中止"]
 
   },
-  "MJA_GAME_MAP_READY": {
+  "公共-游戏地图-就绪": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["MJA_GAME_MAP_WORLD", "MJA_GAME_MAP_REGION"],
+        "all_of": ["公共-游戏地图-世界", "公共-游戏地图-区域"],
         "box_index": 1
       }
     },
     "timeout": 8000,
     "action": "DoNothing"
   },
-  "MJA_GAME_MAP_WORLD": {
+  "公共-游戏地图-世界": {
     "recognition": "OCR",
     "expected": "偃武世界",
     "roi": [80, 100, 300, 120],
     "action": "DoNothing"
   },
-  "MJA_GAME_MAP_REGION": {
+  "公共-游戏地图-区域": {
     "recognition": "OCR",
     "expected": "绿洲",
     "roi": [400, 340, 320, 140],
     "action": "DoNothing"
   },
-  "MJA_GAME_HOME_PAGE": {
+  "公共-游戏主页-页面": {
     "recognition": "OCR",
     "expected": "^画[卷券]$",
     "roi": [1080, 0, 200, 120],
     "action": "DoNothing"
   },
-  "MJA_GAME_HOME_MAP_PAGE": {
+  "公共-游戏主页-地图-页面": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["MJA_GAME_HOME_TITLE", "MJA_GAME_HOME_LOCATION"],
+        "all_of": ["公共-游戏主页-标题", "公共-游戏主页-位置"],
         "box_index": 0
       }
     },
     "action": "DoNothing"
   },
-  "MJA_GAME_HOME_TITLE": {
+  "公共-游戏主页-标题": {
     "recognition": "OCR",
     "expected": "^画卷$",
     "roi": [0, 0, 350, 100],
     "action": "DoNothing"
   },
-  "MJA_GAME_HOME_LOCATION": {
+  "公共-游戏主页-位置": {
     "recognition": "OCR",
     "expected": "^侠隐村$",
     "roi": [1000, 180, 280, 130],
     "action": "DoNothing"
   },
-  "MJA_GAME_HOME_WORLD_TITLE": {
+  "公共-游戏主页-世界-标题": {
     "recognition": "OCR",
     "expected": "^画[卷券]$",
     "roi": [1080, 0, 200, 120],
     "action": "DoNothing"
   },
-  "MJA_GAME_SIDE_PANEL_SHOP": {
+  "公共-游戏侧边面板-商店": {
     "recognition": "OCR",
     "expected": "^商城$",
     "roi": [925, 270, 105, 75],
     "action": "DoNothing"
   },
-  "MJA_GAME_SIDE_PANEL_DAILY": {
+  "公共-游戏侧边面板-日常": {
     "recognition": "OCR",
     "expected": "^日常$",
     "roi": [1040, 270, 120, 75],
     "action": "DoNothing"
   },
-  "MJA_GAME_SIDE_PANEL_OPEN": {
+  "公共-游戏侧边面板-打开": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "MJA_GAME_SIDE_PANEL_SHOP",
-          "MJA_GAME_SIDE_PANEL_DAILY"
+          "公共-游戏侧边面板-商店",
+          "公共-游戏侧边面板-日常"
         ],
         "box_index": 0
       }
     },
     "action": "DoNothing"
   },
-  "MJA_GAME_FUNCTION_PANEL_ENTRY": {
+  "公共-游戏功能面板-入口": {
     "recognition": "OCR",
     "expected": "^画[卷券]$",
     "roi": [1080, 0, 200, 120],
     "action": "DoNothing"
   },
-  "MJA_GAME_HOME_PANEL_OPEN": {
+  "公共-游戏主页-面板-打开": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["MJA_GAME_FUNCTION_PANEL_ENTRY"],
+        "all_of": ["公共-游戏功能面板-入口"],
         "box_index": 0
       }
     },
     "action": "DoNothing"
   },
-  "MJA_GAME_HOME_WORLD_PAGE": {
+  "公共-游戏主页-世界-页面": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "MJA_GAME_HOME_PANEL_OPEN"
+          "公共-游戏主页-面板-打开"
         ],
         "box_index": 0
       }

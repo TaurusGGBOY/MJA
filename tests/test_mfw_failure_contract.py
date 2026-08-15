@@ -18,10 +18,10 @@ def test_failure_probe_has_abort_then_sentinel():
         )
     )
     failure = nodes["MJA_PROBE_BUSINESS_FAILURE"]
-    assert failure["next"] == ["MJA_COMMON_ABORT"]
+    assert failure["next"] == ["公共-通用中止"]
     assert failure["Abort"] is True
     assert failure["custom_action_param"]["native_fail_after_record"] is True
-    assert nodes["MJA_PROBE_SENTINEL"]["next"] == ["MJA_COMMON_STOP"]
+    assert nodes["MJA_PROBE_SENTINEL"]["next"] == ["公共-通用停止"]
 
 
 def test_evidence_rejects_abort_without_following_sentinel(tmp_path: Path):

@@ -128,7 +128,7 @@ def test_hero_dispatch_treats_duration_as_dispatchable_not_in_progress():
     decision, _ = evaluate_decision(
         HERO_DISPATCH_DAILY_DEFINITION,
         "inspect",
-        ("hero.dispatch.page", "hero.first_task_dispatchable"),
+        ("英雄派遣-英雄-派遣-页面", "英雄派遣-英雄-首个-任务-可派遣"),
         texts=("耗时:4小时",),
     )
 
@@ -155,19 +155,19 @@ def test_hero_dispatch_explicit_in_progress_state_is_already_complete():
     decision, _ = evaluate_decision(
         HERO_DISPATCH_DAILY_DEFINITION,
         "inspect",
-        ("hero.dispatch.page", "hero.first_task_in_progress"),
+        ("英雄派遣-英雄-派遣-页面", "英雄派遣-英雄-首个-任务-中-进度"),
         texts=("派遣中 剩余3小时",),
     )
 
     assert decision.status is TaskStatus.ALREADY_COMPLETE
-    assert "hero.dispatch.close" in HERO_DISPATCH_DAILY_DEFINITION.recognizers("inspect")
+    assert "英雄派遣-英雄-派遣-关闭" in HERO_DISPATCH_DAILY_DEFINITION.recognizers("inspect")
 
 
 def test_hero_dispatch_finishes_an_all_completed_account():
     decision, safety = evaluate_decision(
         HERO_DISPATCH_DAILY_DEFINITION,
         "inspect",
-        ("hero.dispatch.page", "hero.all_completed"),
+        ("英雄派遣-英雄-派遣-页面", "英雄派遣-英雄-全部-已完成"),
         texts=("任务:6/9 已完成:9",),
     )
 
@@ -180,22 +180,22 @@ def test_hero_dispatch_empty_task_state_is_already_complete_without_input():
         HERO_DISPATCH_DAILY_DEFINITION,
         "inspect",
         (
-            "hero.dispatch.page",
-            "hero.no_dispatch_tasks",
+            "英雄派遣-英雄-派遣-页面",
+            "英雄派遣-英雄-无-派遣-任务",
         ),
         texts=("任务:0/9 已完成:0 尚未选择派遣任务",),
     )
 
     assert decision.status is TaskStatus.ALREADY_COMPLETE
     assert safety is None
-    assert "hero.no_dispatch_tasks" in HERO_DISPATCH_DAILY_DEFINITION.recognizers("inspect")
+    assert "英雄派遣-英雄-无-派遣-任务" in HERO_DISPATCH_DAILY_DEFINITION.recognizers("inspect")
 
 
 def test_hero_dispatch_does_not_treat_six_completed_slots_as_daily_terminal():
     decision, safety = evaluate_decision(
         HERO_DISPATCH_DAILY_DEFINITION,
         "inspect",
-        ("hero.dispatch.page", "hero.first_task_claimable"),
+        ("英雄派遣-英雄-派遣-页面", "英雄派遣-英雄-首个-任务-可领取"),
         texts=("任务:6/9 已完成:6",),
     )
 
@@ -210,9 +210,9 @@ def test_hero_dispatch_claimable_row_wins_over_stale_all_completed_marker():
         HERO_DISPATCH_DAILY_DEFINITION,
         "inspect",
         (
-            "hero.dispatch.page",
-            "hero.first_task_claimable",
-            "hero.all_completed",
+            "英雄派遣-英雄-派遣-页面",
+            "英雄派遣-英雄-首个-任务-可领取",
+            "英雄派遣-英雄-全部-已完成",
         ),
         texts=("完成派遣 任务:6/9 已完成:6",),
     )
@@ -227,7 +227,7 @@ def test_hero_dispatch_claims_then_returns_to_top_first_inspection():
     claimable, _ = evaluate_decision(
         HERO_DISPATCH_DAILY_DEFINITION,
         "inspect",
-        ("hero.dispatch.page", "hero.first_task_claimable"),
+        ("英雄派遣-英雄-派遣-页面", "英雄派遣-英雄-首个-任务-可领取"),
         texts=("可领取",),
     )
     assert claimable.transition is not None
@@ -250,7 +250,7 @@ def test_hero_dispatch_smart_configures_and_dispatches_up_to_six_teams():
     capped, _ = evaluate_decision(
         HERO_DISPATCH_DAILY_DEFINITION,
         "inspect",
-        ("hero.dispatch.page", "hero.first_task_dispatchable"),
+        ("英雄派遣-英雄-派遣-页面", "英雄派遣-英雄-首个-任务-可派遣"),
         counters={"dispatch_team": 6},
     )
     assert capped.transition is not None
@@ -261,7 +261,7 @@ def test_hero_dispatch_closes_after_a_dispatch_has_been_verified():
     decision, _ = evaluate_decision(
         HERO_DISPATCH_DAILY_DEFINITION,
         "inspect",
-        ("hero.dispatch.page", "hero.first_task_in_progress"),
+        ("英雄派遣-英雄-派遣-页面", "英雄派遣-英雄-首个-任务-中-进度"),
         counters={"dispatch_team": 1},
         texts=("派遣中 剩余03:00:00",),
     )

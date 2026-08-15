@@ -22,7 +22,7 @@ class TaskContract:
 
     @property
     def entry(self) -> str:
-        return f"MJA_{self.task_id}_START"
+        return load_task_declaration(self.task_id)["entry"]
 
 
 def _task_files() -> list[Path]:
@@ -45,7 +45,7 @@ def load_task_nodes(contract: TaskContract) -> dict[str, dict[str, Any]]:
     pipeline_path = ROOT / "assets/resource/base/pipeline" / contract.pipeline_file
     assert pipeline_path.is_file(), f"missing task pipeline: {contract.pipeline_file}"
     nodes = load_pipeline_nodes(ROOT / "assets/resource/base/pipeline")
-    assert any(name.startswith(f"MJA_{contract.task_id}_") for name in nodes)
+    assert contract.entry in nodes
     return nodes
 
 
@@ -89,12 +89,10 @@ def _custom_nodes(nodes: dict[str, dict[str, Any]], action: str) -> list[dict[st
 def assert_guarded_actions(
     nodes: dict[str, dict[str, Any]], task_id: str, action_ids: list[str]
 ) -> None:
-    task_prefix = f"MJA_{task_id}_"
     scoped = {
         name: node
         for name, node in nodes.items()
-        if name.startswith(task_prefix)
-        or node.get("custom_action_param", {}).get("task_id") == task_id
+        if node.get("custom_action_param", {}).get("task_id") == task_id
     }
     guarded = _custom_nodes(scoped, "GuardedInput")
     assert guarded, f"{task_id} has no GuardedInput nodes"
@@ -277,7 +275,7 @@ def assert_terminal_after_loop(
     targets = exhausted.get("next", [])
     target = targets[0] if isinstance(targets, list) and targets else targets
     assert isinstance(target, str)
-    assert_reachable(nodes, target, "MJA_COMMON_ABORT")
+    assert_reachable(nodes, target, "公共-通用中止")
 
 
 def assert_battle_result_partition(
@@ -292,7 +290,7 @@ def assert_battle_result_partition(
     assert defeat in nodes
     assert unknown in nodes
     assert victory != defeat != unknown
-    assert_reachable(nodes, unknown, "MJA_COMMON_ABORT")
+    assert_reachable(nodes, unknown, "公共-通用中止")
 
 
 def assert_action_limit(task_id: str, action_id: str, maximum: int) -> None:
@@ -385,7 +383,7 @@ def assert_task_contract(
     )
     scoped_nodes = payload.get("pipeline", payload)
     has_game_start_recovery = any(
-        raw_target == "[JumpBack]MJA_GAME_START"
+        raw_target == "[JumpBack]启动-游戏启动"
         for node in scoped_nodes.values()
         for field in ("next", "on_error")
         for raw_target in (
@@ -395,16 +393,16 @@ def assert_task_contract(
         )
     )
     if require_game_start_recovery:
-        assert_reachable(nodes, contract.entry, "MJA_GAME_START")
+        assert_reachable(nodes, contract.entry, "启动-游戏启动")
         assert has_game_start_recovery, (
-            f"{contract.task_id} must reuse [JumpBack]MJA_GAME_START"
+            f"{contract.task_id} must reuse [JumpBack]启动-游戏启动"
         )
     else:
         assert not has_game_start_recovery, (
-            f"{contract.task_id} must fail closed instead of jumping to MJA_GAME_START"
+            f"{contract.task_id} must fail closed instead of jumping to 启动-游戏启动"
         )
-    assert_reachable(nodes, contract.entry, "MJA_COMMON_STOP")
-    assert_reachable(nodes, contract.entry, "MJA_COMMON_ABORT")
+    assert_reachable(nodes, contract.entry, "公共-通用停止")
+    assert_reachable(nodes, contract.entry, "公共-通用中止")
 
 
 def assert_fixture_matrix(task_id: str, required: set[str]) -> None:

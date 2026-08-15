@@ -29,7 +29,7 @@ def test_trial_r21_claimable_reward_uses_exact_same_frame_ocr_evidence() -> None
     archived_current_reward_box = [31, 462, 106, 25]
     archived_claim_box = [180, 632, 58, 34]
 
-    _assert_contains(nodes["trial.page"]["roi"], archived_page_box)
+    _assert_contains(nodes["试剑-试炼-页面"]["roi"], archived_page_box)
 
     current_reward = nodes["trial.current_reward"]
     assert current_reward == {
@@ -54,10 +54,10 @@ def test_trial_r21_claimable_reward_uses_exact_same_frame_ocr_evidence() -> None
     # confirmation route or any neighbouring control.
     assert claim_target["roi"][0] + claim_target["roi"][2] <= 270
 
-    claim = nodes["MJA_TRIAL_CLAIM_REWARD"]
+    claim = nodes["试剑-领取-奖励"]
     assert claim["recognition"]["param"] == {
         "all_of": [
-            "trial.page",
+            "试剑-试炼-页面",
             "trial.current_reward",
             "trial.current_reward_claim",
         ],
@@ -66,7 +66,7 @@ def test_trial_r21_claimable_reward_uses_exact_same_frame_ocr_evidence() -> None
     assert claim["custom_action_param"]["evidence"] == {
         "page_index": 0,
         "target_index": 2,
-        "page_name": "trial.page",
+        "page_name": "试剑-试炼-页面",
         "target_name": "trial.current_reward_claim",
     }
     assert claim["custom_action_param"]["action_id"] == "claim_trial_sword_reward"
@@ -78,73 +78,73 @@ def test_trial_r21_claimable_reward_uses_exact_same_frame_ocr_evidence() -> None
 def test_trial_r21_page_routes_claimable_reward_as_a_bounded_sibling() -> None:
     nodes = load_task_nodes(TRIAL)
 
-    page_probe = nodes["MJA_TRIAL_PAGE_PROBE"]
+    page_probe = nodes["试剑-页面-探测"]
     assert page_probe["next"] == [
         "MJA_TRIAL_ALREADY_STATUS",
         "MJA_TRIAL_REWARD_STATUS",
-        "MJA_TRIAL_CLAIM_REWARD",
+        "试剑-领取-奖励",
     ]
     assert page_probe["timeout"] == 8000
     assert page_probe["retry_times"] == 0
-    assert page_probe["on_error"] == ["MJA_TRIAL_RECORD_FAILURE"]
+    assert page_probe["on_error"] == ["试剑-记录-失败"]
 
-    claim = nodes["MJA_TRIAL_CLAIM_REWARD"]
+    claim = nodes["试剑-领取-奖励"]
     assert claim["next"] == [
-        "MJA_TRIAL_CLOSE_REWARD",
+        "试剑-关闭-奖励",
         "MJA_TRIAL_REWARD_VERIFY",
     ]
     assert claim["timeout"] == 8000
-    assert claim["on_error"] == ["MJA_TRIAL_RECORD_FAILURE"]
+    assert claim["on_error"] == ["试剑-记录-失败"]
 
-    reward_popup = nodes["MJA_TRIAL_CLOSE_REWARD"]
+    reward_popup = nodes["试剑-关闭-奖励"]
     assert reward_popup["recognition"]["param"] == {
-        "all_of": ["trial.reward_popup", "trial.popup_close"],
+        "all_of": ["试剑-试炼-奖励-弹窗", "试剑-试炼-弹窗-关闭"],
         "box_index": 1,
     }
     assert reward_popup["custom_action_param"]["action_id"] == "close_reward_popup"
 
     claimed_state = nodes["MJA_TRIAL_REWARD_VERIFY"]
     assert claimed_state["recognition"]["param"] == {
-        "all_of": ["trial.page", "trial.reward_claimed"],
+        "all_of": ["试剑-试炼-页面", "trial.reward_claimed"],
         "box_index": 1,
     }
 
     for node_name in (
-        "MJA_TRIAL_RESUME_RESULT_CLOSE",
-        "MJA_TRIAL_CLOSE_REWARD",
+        "试剑-恢复继续-结果-关闭",
+        "试剑-关闭-奖励",
         "MJA_TRIAL_REWARD_VERIFY",
     ):
         node = nodes[node_name]
         assert node["next"] == [
             "MJA_TRIAL_POST_REWARD_FREE_STATUS",
-            "MJA_TRIAL_CLAIM_FREE",
+            "试剑-领取-免费",
         ]
         assert node["timeout"] == 8000
         assert node["retry_times"] == 0
-        assert node["on_error"] == ["MJA_TRIAL_RECORD_FAILURE"]
+        assert node["on_error"] == ["试剑-记录-失败"]
 
 
 def test_trial_r21_keeps_free_claim_already_complete_and_native_failure_contracts() -> None:
     nodes = load_task_nodes(TRIAL)
 
-    free_claim = nodes["MJA_TRIAL_CLAIM_FREE"]
+    free_claim = nodes["试剑-领取-免费"]
     assert free_claim["recognition"]["param"] == {
-        "all_of": ["trial.page", "trial.free_claim"],
+        "all_of": ["试剑-试炼-页面", "试剑-试炼-免费-领取"],
         "box_index": 1,
     }
     assert free_claim["custom_action_param"]["action_id"] == "claim_free_trial"
     assert TASK_POLICIES[TRIAL.task_id].action_caps["claim_free_trial"] == 1
 
     assert nodes["MJA_TRIAL_POST_REWARD_FREE_STATUS"]["next"] == [
-        "MJA_TRIAL_CLOSE_SUCCESS"
+        "试剑-关闭-成功"
     ]
-    assert nodes["MJA_TRIAL_CLOSE_SUCCESS"]["next"] == [
-        "MJA_TRIAL_SUCCESS_HOME_PROBE"
+    assert nodes["试剑-关闭-成功"]["next"] == [
+        "试剑-成功-主页-探测"
     ]
-    assert nodes["MJA_TRIAL_SUCCESS_HOME_PROBE"]["next"] == [
-        "MJA_TRIAL_SUCCESS"
+    assert nodes["试剑-成功-主页-探测"]["next"] == [
+        "试剑-成功"
     ]
-    assert nodes["MJA_TRIAL_SUCCESS"]["custom_action_param"] == {
+    assert nodes["试剑-成功"]["custom_action_param"] == {
         "task_id": TRIAL.task_id,
         "status": "success",
         "postcondition": "trial.free_used",
@@ -160,12 +160,12 @@ def test_trial_r21_keeps_free_claim_already_complete_and_native_failure_contract
         "success"
     )
 
-    failure = nodes["MJA_TRIAL_RECORD_FAILURE"]
+    failure = nodes["试剑-记录-失败"]
     assert failure["custom_action_param"]["status"] == "failed"
     assert failure["custom_action_param"]["native_fail_after_record"] is True
     assert failure["Abort"] is True
-    assert failure["next"] == ["MJA_COMMON_ABORT"]
+    assert failure["next"] == ["公共-通用中止"]
 
-    assert_reachable(nodes, TRIAL.entry, "MJA_TRIAL_SUCCESS")
+    assert_reachable(nodes, TRIAL.entry, "试剑-成功")
     assert_reachable(nodes, TRIAL.entry, "MJA_TRIAL_ALREADY_COMPLETE")
-    assert_reachable(nodes, TRIAL.entry, "MJA_TRIAL_RECORD_FAILURE")
+    assert_reachable(nodes, TRIAL.entry, "试剑-记录-失败")

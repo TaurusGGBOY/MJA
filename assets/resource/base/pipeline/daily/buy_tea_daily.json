@@ -1,5 +1,5 @@
 {
-  "MJA_BUY_TEA_DAILY_START": {
+  "买茶-任务入口": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "BeginTask", "max_hit": 1,
@@ -7,31 +7,31 @@
       "task_id": "BUY_TEA_DAILY"
     },
     "next": [
-      "MJA_TEA_RESUME_RESULT_PROBE",
-      "MJA_TEA_HOME_PROBE",
-      "MJA_TEA_PANEL_PROBE",
-      "MJA_TEA_MAP_PROBE",
-      "MJA_TEA_GAME_START_RECOVERY"
+      "买茶-恢复继续-结果-探测",
+      "买茶-主页-探测",
+      "买茶-面板-探测",
+      "买茶-地图-探测",
+      "买茶-游戏启动恢复"
     ],
-    "on_error": ["MJA_TEA_GAME_START_RECOVERY_FAILED"]
+    "on_error": ["买茶-游戏启动恢复失败"]
   },
-  "MJA_TEA_RESUME_RESULT_PROBE": {
+  "买茶-恢复继续-结果-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["tea.purchase_result", "tea.purchase_result_close"],
+        "all_of": ["买茶-茶-购买-结果", "买茶-茶-购买-结果-关闭"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_TEA_RESULT_SUCCESS"],
-    "on_error": ["MJA_TEA_HOME_PROBE"]
+    "next": ["买茶-结果-成功"],
+    "on_error": ["买茶-主页-探测"]
   },
-  "MJA_TEA_DISMISS_STALE_RESULT": {
+  "买茶-关闭-过期-结果": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["tea.purchase_result", "tea.purchase_result_close"],
+        "all_of": ["买茶-茶-购买-结果", "买茶-茶-购买-结果-关闭"],
         "box_index": 1
       }
     },
@@ -44,14 +44,14 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "tea.purchase_result",
-        "target_name": "tea.purchase_result_close"
+        "page_name": "买茶-茶-购买-结果",
+        "target_name": "买茶-茶-购买-结果-关闭"
       }
     },
-    "next": ["MJA_COMMON_STOP"],
-    "on_error": ["MJA_TEA_RECORD_FAILURE"]
+    "next": ["公共-通用停止"],
+    "on_error": ["买茶-记录-失败"]
   },
-  "MJA_TEA_STALE_RESULT_SUCCESS": {
+  "买茶-过期-结果-成功": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -60,46 +60,46 @@
       "status": "success",
       "postcondition": "tea.purchase_result_seen"
     },
-    "next": ["MJA_COMMON_STOP"]
+    "next": ["公共-通用停止"]
   },
-  "MJA_TEA_GAME_START_RECOVERY": {
+  "买茶-游戏启动恢复": {
     "recognition": "DirectHit",
     "max_hit": 1,
     "action": "StartApp",
     "package": "com.hanjiasongshu.dr22/.MainActivity",
     "post_delay": 5000,
     "retry_times": 0,
-    "next": ["MJA_TEA_RECOVERY_STATE_PROBE"],
-    "on_error": ["MJA_TEA_GAME_START_RECOVERY_FAILED"]
+    "next": ["买茶-恢复-状态-探测"],
+    "on_error": ["买茶-游戏启动恢复失败"]
   },
-  "MJA_TEA_RECOVERY_STATE_PROBE": {
+  "买茶-恢复-状态-探测": {
     "recognition": "DirectHit",
     "action": "DoNothing",
     "timeout": 30000,
     "next": [
-      "MJA_TEA_RESUME_RESULT_PROBE",
-      "MJA_TEA_HOME_PROBE",
-      "MJA_TEA_PANEL_PROBE"
+      "买茶-恢复继续-结果-探测",
+      "买茶-主页-探测",
+      "买茶-面板-探测"
     ],
-    "on_error": ["MJA_TEA_GAME_START_RECOVERY_FAILED"]
+    "on_error": ["买茶-游戏启动恢复失败"]
   },
-  "MJA_TEA_MAP_PROBE": {
+  "买茶-地图-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["tea.map.world", "tea.map.region"],
+        "all_of": ["买茶-茶-地图-世界", "买茶-茶-地图-区域"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_TEA_OPEN_MAP_PAINTING"],
-    "on_error": ["MJA_TEA_GAME_START_RECOVERY"]
+    "next": ["买茶-打开-地图-画卷"],
+    "on_error": ["买茶-游戏启动恢复"]
   },
-  "MJA_TEA_OPEN_MAP_PAINTING": {
+  "买茶-打开-地图-画卷": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["tea.map.page", "tea.map.painting_scroll.entry"],
+        "all_of": ["买茶-茶-地图-页面", "买茶-茶-地图-画卷-滚动-入口"],
         "box_index": 1
       }
     },
@@ -112,15 +112,15 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "tea.map.page",
-        "target_name": "tea.map.painting_scroll.entry"
+        "page_name": "买茶-茶-地图-页面",
+        "target_name": "买茶-茶-地图-画卷-滚动-入口"
       }
     },
-    "next": ["MJA_TEA_PAINTING_PAGE_PROBE"],
-    "on_error": ["MJA_TEA_RECORD_FAILURE"],
+    "next": ["买茶-画卷-页面-探测"],
+    "on_error": ["买茶-记录-失败"],
     "retry_times": 0
   },
-  "MJA_TEA_GAME_START_RECOVERY_FAILED": {
+  "买茶-游戏启动恢复失败": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -132,27 +132,27 @@
       "native_fail_after_record": true
     },
     "Abort": true,
-    "next": ["MJA_COMMON_ABORT"]
+    "next": ["公共-通用中止"]
   },
-  "MJA_TEA_HOME_PROBE": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_HOME_PAGE"], "box_index": 0}},
+  "买茶-主页-探测": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}},
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_TEA_OPEN_PAINTING"],
-    "on_error": ["MJA_TEA_GAME_START_RECOVERY", "MJA_TEA_RECORD_FAILURE"]
+    "next": ["买茶-打开-画卷"],
+    "on_error": ["买茶-游戏启动恢复", "买茶-记录-失败"]
   },
-  "MJA_TEA_PANEL_PROBE": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_SIDE_PANEL_OPEN"], "box_index": 0}},
+  "买茶-面板-探测": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏侧边面板-打开"], "box_index": 0}},
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_TEA_PANEL_CLOSE"],
-    "on_error": ["MJA_TEA_RECORD_FAILURE"]
+    "next": ["买茶-面板-关闭"],
+    "on_error": ["买茶-记录-失败"]
   },
-  "MJA_TEA_PANEL_CLOSE": {
+  "买茶-面板-关闭": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["MJA_KNOWN_PANEL_MARKER", "MJA_KNOWN_PANEL_CLOSE"],
+        "all_of": ["公共-已知-面板-标记", "公共-已知-面板-关闭"],
         "box_index": 1
       }
     },
@@ -166,18 +166,18 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "MJA_KNOWN_PANEL_MARKER",
-        "target_name": "MJA_KNOWN_PANEL_CLOSE"
+        "page_name": "公共-已知-面板-标记",
+        "target_name": "公共-已知-面板-关闭"
       }
     },
-    "next": ["MJA_TEA_HOME_PROBE"],
-    "on_error": ["MJA_TEA_RECORD_FAILURE"]
+    "next": ["买茶-主页-探测"],
+    "on_error": ["买茶-记录-失败"]
   },
-  "MJA_TEA_OPEN_PAINTING": {
+  "买茶-打开-画卷": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["tea.home.page", "tea.painting_scroll.entry"],
+        "all_of": ["买茶-茶-主页-页面", "买茶-茶-画卷-滚动-入口"],
         "box_index": 1
       }
     },
@@ -190,27 +190,27 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "tea.home.page",
-        "target_name": "tea.painting_scroll.entry"
+        "page_name": "买茶-茶-主页-页面",
+        "target_name": "买茶-茶-画卷-滚动-入口"
       }
     },
-    "next": ["MJA_TEA_PAINTING_PAGE_PROBE"],
-    "on_error": ["MJA_TEA_RECORD_FAILURE"]
+    "next": ["买茶-画卷-页面-探测"],
+    "on_error": ["买茶-记录-失败"]
   },
-  "MJA_TEA_PAINTING_PAGE_PROBE": {
+  "买茶-画卷-页面-探测": {
     "recognition": "OCR",
     "expected": ["画卷", "偃武世界", "云州", "蜃影武墟"],
     "roi": [0, 0, 1280, 720],
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_TEA_SELECT_YANWU"],
-    "on_error": ["MJA_TEA_RECORD_FAILURE"]
+    "next": ["买茶-选择-偃武"],
+    "on_error": ["买茶-记录-失败"]
   },
-  "MJA_TEA_SELECT_YANWU": {
+  "买茶-选择-偃武": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["tea.painting.page", "tea.yanwu_world"],
+        "all_of": ["买茶-茶-画卷-页面", "买茶-茶-偃武-世界"],
         "box_index": 1
       }
     },
@@ -223,27 +223,27 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "tea.painting.page",
-        "target_name": "tea.yanwu_world"
+        "page_name": "买茶-茶-画卷-页面",
+        "target_name": "买茶-茶-偃武-世界"
       }
     },
-    "next": ["MJA_TEA_YANWU_PAGE_PROBE"],
-    "on_error": ["MJA_TEA_RECORD_FAILURE"]
+    "next": ["买茶-偃武-页面-探测"],
+    "on_error": ["买茶-记录-失败"]
   },
-  "MJA_TEA_YANWU_PAGE_PROBE": {
+  "买茶-偃武-页面-探测": {
     "recognition": "OCR",
     "expected": "偃武世界",
     "roi": [0, 100, 600, 620],
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_TEA_OPEN_UNIVERSAL_SHOP"],
-    "on_error": ["MJA_TEA_RECORD_FAILURE"]
+    "next": ["买茶-打开-万用-商店"],
+    "on_error": ["买茶-记录-失败"]
   },
-  "MJA_TEA_OPEN_UNIVERSAL_SHOP": {
+  "买茶-打开-万用-商店": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["tea.yanwu.page", "tea.universal_shop_entry"],
+        "all_of": ["买茶-茶-偃武-页面", "买茶-茶-万用-商店-入口"],
         "box_index": 1
       }
     },
@@ -256,40 +256,40 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "tea.yanwu.page",
-        "target_name": "tea.universal_shop_entry"
+        "page_name": "买茶-茶-偃武-页面",
+        "target_name": "买茶-茶-万用-商店-入口"
       }
     },
-    "next": ["MJA_TEA_SHOP_PAGE_PROBE"],
-    "on_error": ["MJA_TEA_RECORD_FAILURE"]
+    "next": ["买茶-商店-页面-探测"],
+    "on_error": ["买茶-记录-失败"]
   },
-  "MJA_TEA_SHOP_PAGE_PROBE": {
+  "买茶-商店-页面-探测": {
     "recognition": "OCR",
     "expected": ["商品", "商铺"],
     "roi": [0, 100, 1280, 620],
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_TEA_INITIAL_ITEM_PROBE"],
-    "on_error": ["MJA_TEA_SCROLL_PROBE"]
+    "next": ["买茶-初始-物品-探测"],
+    "on_error": ["买茶-滚动-探测"]
   },
-  "MJA_TEA_INITIAL_ITEM_PROBE": {
+  "买茶-初始-物品-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["tea.universal_shop.page", "tea.tea_item"],
+        "all_of": ["买茶-茶-万用-商店-页面", "买茶-茶-茶-物品"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_TEA_OPEN_TEA"],
-    "on_error": ["MJA_TEA_SCROLL_PROBE"]
+    "next": ["买茶-打开-茶"],
+    "on_error": ["买茶-滚动-探测"]
   },
-  "MJA_TEA_SCROLL_PROBE": {
+  "买茶-滚动-探测": {
     "max_hit": 1,
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["tea.universal_shop.page", "tea.scroll_region"],
+        "all_of": ["买茶-茶-万用-商店-页面", "买茶-茶-滚动-区域"],
         "box_index": 1
       }
     },
@@ -302,33 +302,33 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "tea.universal_shop.page",
-        "target_name": "tea.scroll_region",
+        "page_name": "买茶-茶-万用-商店-页面",
+        "target_name": "买茶-茶-滚动-区域",
         "dx": 0,
         "dy": -220,
         "duration_ms": 350
       }
     },
-    "next": ["MJA_TEA_SCROLLED_ITEM_PROBE"],
-    "on_error": ["MJA_TEA_ALREADY_COMPLETE"]
+    "next": ["买茶-已滚动-物品-探测"],
+    "on_error": ["买茶-已完成"]
   },
-  "MJA_TEA_SCROLLED_ITEM_PROBE": {
+  "买茶-已滚动-物品-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["tea.universal_shop.page", "tea.tea_item_scrolled"],
+        "all_of": ["买茶-茶-万用-商店-页面", "买茶-茶-茶-物品-已滚动"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_TEA_OPEN_TEA_SCROLLED"],
-    "on_error": ["MJA_TEA_RECORD_FAILURE"]
+    "next": ["买茶-打开-茶-已滚动"],
+    "on_error": ["买茶-记录-失败"]
   },
-  "MJA_TEA_OPEN_TEA": {
+  "买茶-打开-茶": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["tea.universal_shop.page", "tea.tea_item"],
+        "all_of": ["买茶-茶-万用-商店-页面", "买茶-茶-茶-物品"],
         "box_index": 1
       }
     },
@@ -341,18 +341,18 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "tea.universal_shop.page",
-        "target_name": "tea.tea_item"
+        "page_name": "买茶-茶-万用-商店-页面",
+        "target_name": "买茶-茶-茶-物品"
       }
     },
-    "next": ["MJA_TEA_DETAIL_PROBE"],
-    "on_error": ["MJA_TEA_RECORD_FAILURE"]
+    "next": ["买茶-详情-探测"],
+    "on_error": ["买茶-记录-失败"]
   },
-  "MJA_TEA_OPEN_TEA_SCROLLED": {
+  "买茶-打开-茶-已滚动": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["tea.universal_shop.page", "tea.tea_item_scrolled"],
+        "all_of": ["买茶-茶-万用-商店-页面", "买茶-茶-茶-物品-已滚动"],
         "box_index": 1
       }
     },
@@ -365,35 +365,35 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "tea.universal_shop.page",
-        "target_name": "tea.tea_item_scrolled"
+        "page_name": "买茶-茶-万用-商店-页面",
+        "target_name": "买茶-茶-茶-物品-已滚动"
       }
     },
-    "next": ["MJA_TEA_DETAIL_PROBE"],
-    "on_error": ["MJA_TEA_RECORD_FAILURE"]
+    "next": ["买茶-详情-探测"],
+    "on_error": ["买茶-记录-失败"]
   },
-  "MJA_TEA_DETAIL_PROBE": {
+  "买茶-详情-探测": {
     "recognition": "OCR",
     "expected": ["茶叶", "当前拥有"],
     "roi": [820, 100, 430, 230],
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_TEA_SOLD_OUT_PROBE", "MJA_TEA_OPEN_PURCHASE"],
-    "on_error": ["MJA_TEA_RECORD_FAILURE"]
+    "next": ["买茶-售罄-探测", "买茶-打开-购买"],
+    "on_error": ["买茶-记录-失败"]
   },
-  "MJA_TEA_SOLD_OUT_PROBE": {
+  "买茶-售罄-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["tea.detail", "tea.sold_out"],
+        "all_of": ["买茶-茶-详情", "买茶-茶-售罄"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_TEA_SOLD_OUT"],
-    "on_error": ["MJA_TEA_OPEN_PURCHASE"]
+    "next": ["买茶-售罄"],
+    "on_error": ["买茶-打开-购买"]
   },
-  "MJA_TEA_SOLD_OUT": {
+  "买茶-售罄": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -402,13 +402,13 @@
       "status": "already_complete",
       "postcondition": "tea.sold_out"
     },
-    "next": ["MJA_COMMON_STOP"]
+    "next": ["公共-通用停止"]
   },
-  "MJA_TEA_OPEN_PURCHASE": {
+  "买茶-打开-购买": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["tea.detail", "tea.purchase_control"],
+        "all_of": ["买茶-茶-详情", "买茶-茶-购买-控制"],
         "box_index": 1
       }
     },
@@ -421,30 +421,30 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "tea.detail",
-        "target_name": "tea.purchase_control"
+        "page_name": "买茶-茶-详情",
+        "target_name": "买茶-茶-购买-控制"
       }
     },
-    "next": ["MJA_TEA_QUANTITY_PAGE_PROBE"],
-    "on_error": ["MJA_TEA_RECORD_FAILURE"]
+    "next": ["买茶-数量-页面-探测"],
+    "on_error": ["买茶-记录-失败"]
   },
-  "MJA_TEA_QUANTITY_PAGE_PROBE": {
+  "买茶-数量-页面-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["tea.quantity_panel", "tea.quantity_title"],
+        "all_of": ["买茶-茶-数量-面板", "买茶-茶-数量-标题"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_TEA_SET_MAX_QUANTITY"],
-    "on_error": ["MJA_TEA_PRICE_UNSAFE"]
+    "next": ["买茶-设置-最大-数量"],
+    "on_error": ["买茶-价格-不安全"]
   },
-  "MJA_TEA_SET_MAX_QUANTITY": {
+  "买茶-设置-最大-数量": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["tea.quantity_panel", "tea.max_quantity"],
+        "all_of": ["买茶-茶-数量-面板", "买茶-茶-最大-数量"],
         "box_index": 1
       }
     },
@@ -457,20 +457,20 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "tea.quantity_panel",
-        "target_name": "tea.max_quantity"
+        "page_name": "买茶-茶-数量-面板",
+        "target_name": "买茶-茶-最大-数量"
       }
     },
-    "next": ["MJA_TEA_SAFE_QUOTE_PROBE"],
-    "on_error": ["MJA_TEA_PRICE_UNSAFE"]
+    "next": ["买茶-安全-报价-探测"],
+    "on_error": ["买茶-价格-不安全"]
   },
-  "MJA_TEA_SAFE_QUOTE_PROBE": {
+  "买茶-安全-报价-探测": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "tea.cost_500",
-          "tea.buy_confirm"
+          "买茶-茶-消耗-500",
+          "买茶-茶-购买-确认"
         ],
         "box_index": 1
       }
@@ -489,14 +489,14 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "tea.quantity_panel",
-        "target_name": "tea.buy_confirm"
+        "page_name": "买茶-茶-数量-面板",
+        "target_name": "买茶-茶-购买-确认"
       }
     },
-    "next": ["MJA_TEA_PURCHASE_RESULT_PROBE"],
-    "on_error": ["MJA_TEA_PRICE_UNSAFE"]
+    "next": ["买茶-购买-结果-探测"],
+    "on_error": ["买茶-价格-不安全"]
   },
-  "MJA_TEA_PRICE_UNSAFE": {
+  "买茶-价格-不安全": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -508,21 +508,21 @@
       "native_fail_after_record": true
     },
     "Abort": true,
-    "next": ["MJA_COMMON_ABORT"]
+    "next": ["公共-通用中止"]
   },
-  "MJA_TEA_PURCHASE_RESULT_PROBE": {
+  "买茶-购买-结果-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["tea.purchase_result", "tea.purchase_result_close"],
+        "all_of": ["买茶-茶-购买-结果", "买茶-茶-购买-结果-关闭"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_TEA_RESULT_SUCCESS"],
-    "on_error": ["MJA_TEA_RECORD_FAILURE"]
+    "next": ["买茶-结果-成功"],
+    "on_error": ["买茶-记录-失败"]
   },
-  "MJA_TEA_RESULT_SUCCESS": {
+  "买茶-结果-成功": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -531,14 +531,14 @@
       "status": "success",
       "postcondition": "tea.purchase_result_seen"
     },
-    "next": ["MJA_COMMON_STOP"],
-    "on_error": ["MJA_TEA_RECORD_FAILURE"]
+    "next": ["公共-通用停止"],
+    "on_error": ["买茶-记录-失败"]
   },
-  "MJA_TEA_DISMISS_PURCHASE_RESULT": {
+  "买茶-关闭-购买-结果": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["tea.purchase_result", "tea.purchase_result_close"],
+        "all_of": ["买茶-茶-购买-结果", "买茶-茶-购买-结果-关闭"],
         "box_index": 1
       }
     },
@@ -551,14 +551,14 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "tea.purchase_result",
-        "target_name": "tea.purchase_result_close"
+        "page_name": "买茶-茶-购买-结果",
+        "target_name": "买茶-茶-购买-结果-关闭"
       }
     },
-    "next": ["MJA_COMMON_STOP"],
-    "on_error": ["MJA_TEA_RECORD_FAILURE"]
+    "next": ["公共-通用停止"],
+    "on_error": ["买茶-记录-失败"]
   },
-  "MJA_TEA_SUCCESS": {
+  "买茶-成功": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -567,9 +567,9 @@
       "status": "success",
       "postcondition": "tea.purchase_result_seen"
     },
-    "next": ["MJA_COMMON_STOP"]
+    "next": ["公共-通用停止"]
   },
-  "MJA_TEA_RECORD_FAILURE": {
+  "买茶-记录-失败": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -581,9 +581,9 @@
       "native_fail_after_record": true
     },
     "Abort": true,
-    "next": ["MJA_COMMON_ABORT"]
+    "next": ["公共-通用中止"]
   },
-  "MJA_TEA_ALREADY_COMPLETE": {
+  "买茶-已完成": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -592,177 +592,177 @@
       "status": "already_complete",
       "postcondition": "tea.no_remaining_stock"
     },
-    "next": ["MJA_COMMON_STOP"]
+    "next": ["公共-通用停止"]
   },
-  "tea.home.page": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_HOME_PAGE"], "box_index": 0}},
+  "买茶-茶-主页-页面": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}},
     "action": "DoNothing"
   },
-  "tea.map.page": {
+  "买茶-茶-地图-页面": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["tea.map.world", "tea.map.region"],
+        "all_of": ["买茶-茶-地图-世界", "买茶-茶-地图-区域"],
         "box_index": 1
       }
     },
     "action": "DoNothing"
   },
-  "tea.map.world": {
+  "买茶-茶-地图-世界": {
     "recognition": "OCR",
     "expected": "偃武世界",
     "roi": [80, 100, 300, 120],
     "action": "DoNothing"
   },
-  "tea.map.region": {
+  "买茶-茶-地图-区域": {
     "recognition": "OCR",
     "expected": "绿洲",
     "roi": [400, 340, 320, 140],
     "action": "DoNothing"
   },
-  "tea.map.painting_scroll.entry": {
+  "买茶-茶-地图-画卷-滚动-入口": {
     "recognition": "OCR",
     "expected": "画卷",
     "roi": [0, 0, 220, 100],
     "action": "DoNothing"
   },
-  "tea.painting_scroll.entry": {
+  "买茶-茶-画卷-滚动-入口": {
     "recognition": "OCR",
     "expected": "画卷",
     "roi": [850, 0, 430, 180],
     "action": "DoNothing"
   },
-  "tea.painting.page": {
+  "买茶-茶-画卷-页面": {
     "recognition": "OCR",
     "expected": ["画卷", "偃武世界", "云州", "蜃影武墟"],
     "roi": [0, 0, 1280, 720],
     "action": "DoNothing"
   },
-  "tea.yanwu_world": {
+  "买茶-茶-偃武-世界": {
     "recognition": "OCR",
     "expected": "偃武世界",
     "roi": [0, 90, 500, 180],
     "action": "DoNothing"
   },
-  "tea.yanwu.page": {
+  "买茶-茶-偃武-页面": {
     "recognition": "OCR",
     "expected": "偃武世界",
     "roi": [0, 100, 600, 620],
     "action": "DoNothing"
   },
-  "tea.universal_shop_entry": {
+  "买茶-茶-万用-商店-入口": {
     "recognition": "OCR",
     "expected": "万用商店",
     "roi": [0, 350, 500, 370],
     "action": "DoNothing"
   },
-  "tea.universal_shop.page": {
+  "买茶-茶-万用-商店-页面": {
     "recognition": "OCR",
     "expected": ["商品", "商铺"],
     "roi": [0, 100, 1280, 620],
     "action": "DoNothing"
   },
-  "tea.tea_shop_page": {
+  "买茶-茶-茶-商店-页面": {
     "recognition": "TemplateMatch",
     "template": "daily/BUY_TEA_DAILY/tea_shop_page.png",
     "roi": [180, 130, 650, 400],
     "threshold": 0.39,
     "action": "DoNothing"
   },
-  "tea.tea_item": {
+  "买茶-茶-茶-物品": {
     "recognition": "TemplateMatch",
     "template": "daily/BUY_TEA_DAILY/tea_item.png",
     "roi": [180, 130, 650, 400],
     "threshold": 0.39,
     "action": "DoNothing"
   },
-  "tea.tea_item_scrolled": {
+  "买茶-茶-茶-物品-已滚动": {
     "recognition": "TemplateMatch",
     "template": "daily/BUY_TEA_DAILY/tea_item.png",
     "roi": [180, 130, 650, 400],
     "threshold": 0.39,
     "action": "DoNothing"
   },
-  "tea.scroll_region": {
+  "买茶-茶-滚动-区域": {
     "recognition": "TemplateMatch",
     "template": "daily/BUY_TEA_DAILY/tea_shop_page.png",
     "roi": [180, 300, 650, 230],
     "threshold": 0.35,
     "action": "DoNothing"
   },
-  "tea.detail": {
+  "买茶-茶-详情": {
     "recognition": "OCR",
     "expected": ["茶叶", "当前拥有"],
     "roi": [820, 100, 430, 230],
     "action": "DoNothing"
   },
-  "tea.inventory_decremented": {
+  "买茶-茶-库存-已减少": {
     "recognition": "OCR",
     "expected": ["当前拥有", "\\d+"],
     "roi": [820, 100, 430, 230],
     "action": "DoNothing"
   },
-  "tea.sold_out": {
+  "买茶-茶-售罄": {
     "recognition": "TemplateMatch",
     "template": "daily/BUY_TEA_DAILY/sold_out.png",
     "roi": [850, 170, 370, 120],
     "threshold": 0.39,
     "action": "DoNothing"
   },
-  "tea.purchase_control": {
+  "买茶-茶-购买-控制": {
     "recognition": "TemplateMatch",
     "template": "daily/BUY_TEA_DAILY/purchase_control.png",
     "roi": [850, 170, 370, 120],
     "threshold": 0.39,
     "action": "DoNothing"
   },
-  "tea.quantity_panel": {
+  "买茶-茶-数量-面板": {
     "recognition": "TemplateMatch",
     "template": "daily/BUY_TEA_DAILY/quantity_panel.png",
     "roi": [200, 70, 520, 180],
     "threshold": 0.39,
     "action": "DoNothing"
   },
-  "tea.quantity_title": {
+  "买茶-茶-数量-标题": {
     "recognition": "OCR",
     "expected": "购买物品",
     "roi": [240, 80, 850, 150],
     "action": "DoNothing"
   },
-  "tea.max_quantity": {
+  "买茶-茶-最大-数量": {
     "recognition": "TemplateMatch",
     "template": "daily/BUY_TEA_DAILY/max_quantity.png",
     "roi": [900, 400, 150, 120],
     "threshold": 0.4,
     "action": "DoNothing"
   },
-  "tea.buy_confirm": {
+  "买茶-茶-购买-确认": {
     "recognition": "TemplateMatch",
     "template": "daily/BUY_TEA_DAILY/buy_confirm.png",
     "roi": [650, 500, 400, 150],
     "threshold": 0.4,
     "action": "DoNothing"
   },
-  "tea.currency_wen": {
+  "买茶-茶-货币-文": {
     "recognition": "OCR",
     "expected": "文",
     "roi": [700, 430, 300, 110],
     "action": "DoNothing"
   },
-  "tea.cost_500": {
+  "买茶-茶-消耗-500": {
     "recognition": "OCR",
     "expected": "500文",
     "roi": [650, 400, 450, 120],
     "action": "DoNothing"
   },
-  "tea.purchase_result": {
+  "买茶-茶-购买-结果": {
     "recognition": "TemplateMatch",
     "template": "daily/BUY_TEA_DAILY/purchase_result.png",
     "roi": [560, 260, 260, 200],
     "threshold": 0.375,
     "action": "DoNothing"
   },
-  "tea.purchase_result_close": {
+  "买茶-茶-购买-结果-关闭": {
     "recognition": "OCR",
     "expected": "点击空白处关闭",
     "roi": [300, 560, 700, 160],

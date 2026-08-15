@@ -1,70 +1,70 @@
 {
-  "MJA_FREE_APPRAISAL_DAILY_START": {
+  "免费鉴定-任务入口": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "BeginTask",
     "custom_action_param": {"task_id": "FREE_APPRAISAL_DAILY"},
     "timeout": 8000,
     "next": [
-      "[JumpBack]MJA_KNOWN_PAINTING_CLOSE",
-      "[JumpBack]MJA_APPRAISAL_EXTRA_POPUP_CLOSE",
-      "[JumpBack]MJA_APPRAISAL_KNOWN_TEA_SHOP_CLOSE",
-      "MJA_APPRAISAL_REWARD_PROBE",
-      "MJA_APPRAISAL_PAGE_PROBE",
-      "MJA_APPRAISAL_HOME_PROBE",
-      "MJA_APPRAISAL_CLOSE_RECOVERED_PANEL"
+      "[JumpBack]公共-已知-画卷-关闭",
+      "[JumpBack]免费鉴定-额外-弹窗-关闭",
+      "[JumpBack]免费鉴定-已知-茶-商店-关闭",
+      "免费鉴定-奖励-探测",
+      "免费鉴定-页面-探测",
+      "免费鉴定-主页-探测",
+      "免费鉴定-关闭-已恢复-面板"
     ],
     "on_error": [
-      "MJA_APPRAISAL_RUNTIME_RECOVERY_ATTEMPT",
-      "MJA_APPRAISAL_RECORD_FAILURE"
+      "免费鉴定-运行时-恢复-尝试",
+      "免费鉴定-记录-失败"
     ],
     "retry_times": 0
   },
-  "MJA_APPRAISAL_RUNTIME_RECOVERY_ATTEMPT": {
+  "免费鉴定-运行时-恢复-尝试": {
     "max_hit": 1,
     "recognition": "DirectHit",
     "timeout": 30000,
     "action": "DoNothing",
     "next": [
-      "MJA_APPRAISAL_REWARD_PROBE",
-      "MJA_APPRAISAL_PAGE_PROBE",
-      "MJA_APPRAISAL_HOME_PROBE",
-      "MJA_APPRAISAL_CLOSE_RECOVERED_PANEL",
-      "[JumpBack]MJA_GAME_START"
+      "免费鉴定-奖励-探测",
+      "免费鉴定-页面-探测",
+      "免费鉴定-主页-探测",
+      "免费鉴定-关闭-已恢复-面板",
+      "[JumpBack]启动-游戏启动"
     ],
-    "on_error": ["MJA_APPRAISAL_RECORD_FAILURE"],
+    "on_error": ["免费鉴定-记录-失败"],
     "retry_times": 0
   },
-  "MJA_APPRAISAL_KNOWN_TEA_SHOP_CLOSE": {
+  "免费鉴定-已知-茶-商店-关闭": {
     "max_hit": 1,
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "appraisal.universal_shop.page",
-          "appraisal.universal_shop.close"
+          "免费鉴定-鉴定-万用-商店-页面",
+          "免费鉴定-鉴定-万用-商店-关闭"
         ],
         "box_index": 1
       }
     },
     "timeout": 5000,
     "action": "Click",
-    "on_error": ["MJA_APPRAISAL_RECORD_FAILURE"],
+    "on_error": ["免费鉴定-记录-失败"],
     "retry_times": 0
   },
-  "MJA_APPRAISAL_PAGE_PROBE": {
+  "免费鉴定-页面-探测": {
     "recognition": "OCR",
     "expected": "鉴宝",
     "roi": [0, 0, 500, 220],
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_APPRAISAL_CLAIM"],
-    "on_error": ["MJA_APPRAISAL_RECORD_FAILURE"]
+    "next": ["免费鉴定-领取"],
+    "on_error": ["免费鉴定-记录-失败"]
   },
-  "MJA_APPRAISAL_CLAIM": {
+  "免费鉴定-领取": {
     "max_hit": 1,
     "recognition": {"type": "And", "param": {
-      "all_of": ["appraisal.page", "appraisal.free_once"], "box_index": 1
+      "all_of": ["免费鉴定-鉴定-页面", "免费鉴定-鉴定-免费-一次"], "box_index": 1
     }},
     "action": "Custom",
     "custom_action": "GuardedInput",
@@ -74,25 +74,25 @@
       "kind": "click",
       "evidence": {
         "page_index": 0, "target_index": 1,
-        "page_name": "appraisal.page", "target_name": "appraisal.free_once"
+        "page_name": "免费鉴定-鉴定-页面", "target_name": "免费鉴定-鉴定-免费-一次"
       }
     },
-    "next": ["MJA_APPRAISAL_REWARD_PROBE"],
-    "on_error": ["MJA_APPRAISAL_RECORD_FAILURE"],
+    "next": ["免费鉴定-奖励-探测"],
+    "on_error": ["免费鉴定-记录-失败"],
     "timeout": 8000,
     "retry_times": 0
   },
-  "MJA_APPRAISAL_REWARD_PROBE": {
+  "免费鉴定-奖励-探测": {
     "recognition": {"type": "And", "param": {
-      "all_of": ["appraisal.result_popup", "appraisal.popup_close"],
+      "all_of": ["免费鉴定-鉴定-结果-弹窗", "免费鉴定-鉴定-弹窗-关闭"],
       "box_index": 0
     }},
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_APPRAISAL_REWARD_SUCCESS"],
-    "on_error": ["MJA_APPRAISAL_RECORD_FAILURE"]
+    "next": ["免费鉴定-奖励-成功"],
+    "on_error": ["免费鉴定-记录-失败"]
   },
-  "MJA_APPRAISAL_REWARD_SUCCESS": {
+  "免费鉴定-奖励-成功": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -102,13 +102,13 @@
       "postcondition": "appraisal.reward_popup_seen",
       "defer_home_boundary": true
     },
-    "next": ["MJA_APPRAISAL_CLOSE_REWARD"],
-    "on_error": ["MJA_APPRAISAL_RECORD_FAILURE"]
+    "next": ["免费鉴定-关闭-奖励"],
+    "on_error": ["免费鉴定-记录-失败"]
   },
-  "MJA_APPRAISAL_CLOSE_REWARD": {
+  "免费鉴定-关闭-奖励": {
     "max_hit": 1,
     "recognition": {"type": "And", "param": {
-      "all_of": ["appraisal.result_popup", "appraisal.popup_close"], "box_index": 1
+      "all_of": ["免费鉴定-鉴定-结果-弹窗", "免费鉴定-鉴定-弹窗-关闭"], "box_index": 1
     }},
     "action": "Custom",
     "custom_action": "GuardedInput",
@@ -118,22 +118,22 @@
       "kind": "click",
       "evidence": {
         "page_index": 0, "target_index": 1,
-        "page_name": "appraisal.result_popup", "target_name": "appraisal.popup_close"
+        "page_name": "免费鉴定-鉴定-结果-弹窗", "target_name": "免费鉴定-鉴定-弹窗-关闭"
       }
     },
     "next": [
-      "[JumpBack]MJA_APPRAISAL_EXTRA_POPUP_CLOSE",
-      "MJA_APPRAISAL_CLOSE_SUCCESS_PAGE",
-      "MJA_APPRAISAL_HOME_AFTER_REWARD"
+      "[JumpBack]免费鉴定-额外-弹窗-关闭",
+      "免费鉴定-关闭-成功-页面",
+      "免费鉴定-主页-之后-奖励"
     ],
-    "on_error": ["MJA_APPRAISAL_RECORD_FAILURE"],
+    "on_error": ["免费鉴定-记录-失败"],
     "timeout": 8000,
     "retry_times": 0
   },
-  "MJA_APPRAISAL_CLOSE_SUCCESS_PAGE": {
+  "免费鉴定-关闭-成功-页面": {
     "max_hit": 1,
     "recognition": {"type": "And", "param": {
-      "all_of": ["appraisal.page", "appraisal.page.close"], "box_index": 1
+      "all_of": ["免费鉴定-鉴定-页面", "免费鉴定-鉴定-页面-关闭"], "box_index": 1
     }},
     "action": "Custom",
     "custom_action": "GuardedInput",
@@ -143,33 +143,33 @@
       "kind": "click",
       "evidence": {
         "page_index": 0, "target_index": 1,
-        "page_name": "appraisal.page", "target_name": "appraisal.page.close"
+        "page_name": "免费鉴定-鉴定-页面", "target_name": "免费鉴定-鉴定-页面-关闭"
       }
     },
-    "next": ["MJA_APPRAISAL_HOME_AFTER_SUCCESS"],
-    "on_error": ["MJA_APPRAISAL_RECORD_FAILURE"],
+    "next": ["免费鉴定-主页成功后"],
+    "on_error": ["免费鉴定-记录-失败"],
     "timeout": 8000,
     "retry_times": 0
   },
-  "MJA_APPRAISAL_HOME_AFTER_SUCCESS": {
+  "免费鉴定-主页成功后": {
     "recognition": {"type": "And", "param": {
-      "all_of": ["appraisal.home.page", "appraisal.home.entry"], "box_index": 0
+      "all_of": ["免费鉴定-鉴定-主页-页面", "免费鉴定-鉴定-主页-入口"], "box_index": 0
     }},
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_HOME_BOUNDARY"],
-    "on_error": ["MJA_APPRAISAL_RECORD_FAILURE"]
+    "next": ["公共-主页边界"],
+    "on_error": ["免费鉴定-记录-失败"]
   },
-  "MJA_APPRAISAL_HOME_AFTER_REWARD": {
+  "免费鉴定-主页-之后-奖励": {
     "recognition": {"type": "And", "param": {
-      "all_of": ["appraisal.home.page", "appraisal.home.entry"], "box_index": 0
+      "all_of": ["免费鉴定-鉴定-主页-页面", "免费鉴定-鉴定-主页-入口"], "box_index": 0
     }},
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_HOME_BOUNDARY"],
-    "on_error": ["MJA_APPRAISAL_RECORD_FAILURE"]
+    "next": ["公共-主页边界"],
+    "on_error": ["免费鉴定-记录-失败"]
   },
-  "MJA_APPRAISAL_SUCCESS_FROM_HOME": {
+  "免费鉴定-主页成功": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -178,9 +178,9 @@
       "status": "success",
       "postcondition": "appraisal.reward_popup_seen"
     },
-    "next": ["MJA_COMMON_STOP"]
+    "next": ["公共-通用停止"]
   },
-  "MJA_APPRAISAL_SUCCESS": {
+  "免费鉴定-成功": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -189,9 +189,9 @@
       "status": "success",
       "postcondition": "appraisal.reward_popup_seen"
     },
-    "next": ["MJA_COMMON_STOP"]
+    "next": ["公共-通用停止"]
   },
-  "MJA_APPRAISAL_RECORD_FAILURE": {
+  "免费鉴定-记录-失败": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -203,23 +203,23 @@
       "native_fail_after_record": true
     },
     "Abort": true,
-    "next": ["MJA_COMMON_ABORT"]
+    "next": ["公共-通用中止"]
 
   },
-  "MJA_APPRAISAL_HOME_PROBE": {
+  "免费鉴定-主页-探测": {
     "recognition": {"type": "And", "param": {
-      "all_of": ["appraisal.home.page", "appraisal.home.entry"],
+      "all_of": ["免费鉴定-鉴定-主页-页面", "免费鉴定-鉴定-主页-入口"],
       "box_index": 0
     }},
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_APPRAISAL_OPEN_APPRAISAL"],
-    "on_error": ["MJA_APPRAISAL_RECORD_FAILURE"]
+    "next": ["免费鉴定-打开-鉴定"],
+    "on_error": ["免费鉴定-记录-失败"]
   },
-  "MJA_APPRAISAL_OPEN_APPRAISAL": {
+  "免费鉴定-打开-鉴定": {
     "max_hit": 1,
     "recognition": {"type": "And", "param": {
-      "all_of": ["appraisal.home.page", "appraisal.home.entry"],
+      "all_of": ["免费鉴定-鉴定-主页-页面", "免费鉴定-鉴定-主页-入口"],
       "box_index": 1
     }},
     "action": "Custom",
@@ -230,18 +230,18 @@
       "kind": "click",
       "evidence": {
         "page_index": 0, "target_index": 1,
-        "page_name": "appraisal.home.page",
-        "target_name": "appraisal.home.entry"
+        "page_name": "免费鉴定-鉴定-主页-页面",
+        "target_name": "免费鉴定-鉴定-主页-入口"
       }
     },
-    "next": ["MJA_APPRAISAL_PAGE_PROBE"],
-    "on_error": ["MJA_APPRAISAL_RECORD_FAILURE"],
+    "next": ["免费鉴定-页面-探测"],
+    "on_error": ["免费鉴定-记录-失败"],
     "retry_times": 0
   },
-  "MJA_APPRAISAL_CLOSE_RECOVERED_PANEL": {
+  "免费鉴定-关闭-已恢复-面板": {
     "max_hit": 1,
     "recognition": {"type": "And", "param": {
-      "all_of": ["appraisal.panel.page", "appraisal.panel.close"], "box_index": 1
+      "all_of": ["免费鉴定-鉴定-面板-页面", "免费鉴定-鉴定-面板-关闭"], "box_index": 1
     }},
     "timeout": 8000,
     "action": "Custom",
@@ -253,19 +253,19 @@
       "fixed_click_mode": "function_panel_close",
       "evidence": {
         "page_index": 0, "target_index": 1,
-        "page_name": "appraisal.panel.page", "target_name": "appraisal.panel.close"
+        "page_name": "免费鉴定-鉴定-面板-页面", "target_name": "免费鉴定-鉴定-面板-关闭"
       }
     },
-    "next": ["MJA_APPRAISAL_HOME_PROBE"],
-    "on_error": ["MJA_APPRAISAL_RECORD_FAILURE"],
+    "next": ["免费鉴定-主页-探测"],
+    "on_error": ["免费鉴定-记录-失败"],
     "retry_times": 0
   },
-  "MJA_APPRAISAL_EXTRA_POPUP_CLOSE": {
+  "免费鉴定-额外-弹窗-关闭": {
     "max_hit": 1,
     "recognition": {"type": "And", "param": {
       "all_of": [
-        "appraisal.extra_popup.page",
-        "appraisal.extra_popup.close"
+        "免费鉴定-鉴定-额外-弹窗-页面",
+        "免费鉴定-鉴定-额外-弹窗-关闭"
       ],
       "box_index": 1
     }},
@@ -279,93 +279,93 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "appraisal.extra_popup.page",
-        "target_name": "appraisal.extra_popup.close"
+        "page_name": "免费鉴定-鉴定-额外-弹窗-页面",
+        "target_name": "免费鉴定-鉴定-额外-弹窗-关闭"
       }
     },
     "retry_times": 0,
-    "on_error": ["MJA_APPRAISAL_RECORD_FAILURE"]
+    "on_error": ["免费鉴定-记录-失败"]
   },
-  "appraisal.home.page": {
+  "免费鉴定-鉴定-主页-页面": {
     "recognition": "OCR",
     "expected": ["^战令$", "^活动$", "^祈福$", "^副本$", "^画卷$"],
     "roi": [800, 40, 370, 50],
     "action": "DoNothing"
   },
-  "appraisal.home.entry": {
+  "免费鉴定-鉴定-主页-入口": {
     "recognition": "OCR",
     "expected": ["^鉴宝$", "^宝$"],
     "roi": [925, 45, 65, 40],
     "action": "DoNothing"
   },
-  "appraisal.page": {
+  "免费鉴定-鉴定-页面": {
     "recognition": "OCR",
     "expected": "^鉴宝$",
     "roi": [0, 0, 500, 220],
     "action": "DoNothing"
   },
-  "appraisal.page.close": {
+  "免费鉴定-鉴定-页面-关闭": {
     "recognition": "TemplateMatch",
     "template": "daily/BUY_TEA_DAILY/shop_close.png",
     "roi": [1170, 0, 110, 110],
     "threshold": 0.39,
     "action": "DoNothing"
   },
-  "appraisal.panel.page": {
+  "免费鉴定-鉴定-面板-页面": {
     "recognition": "OCR",
     "expected": ["^活动$", "^商城$", "^日常$", "^武学研习$", "^秘宝$", "^帮会$", "^签到$"],
     "roi": [700, 180, 500, 420],
     "action": "DoNothing"
   },
-  "appraisal.panel.close": {
-    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_SIDE_PANEL_OPEN"], "box_index": 0}},
+  "免费鉴定-鉴定-面板-关闭": {
+    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏侧边面板-打开"], "box_index": 0}},
     "action": "DoNothing"
   },
-  "appraisal.universal_shop.page": {
+  "免费鉴定-鉴定-万用-商店-页面": {
     "recognition": "OCR",
     "expected": "^玉盟商会$",
     "roi": [0, 0, 280, 100],
     "action": "DoNothing"
   },
-  "appraisal.universal_shop.close": {
+  "免费鉴定-鉴定-万用-商店-关闭": {
     "recognition": "TemplateMatch",
     "template": "daily/BUY_TEA_DAILY/shop_close.png",
     "roi": [1160, 0, 100, 100],
     "threshold": 0.39,
     "action": "DoNothing"
   },
-  "appraisal.free_once": {
+  "免费鉴定-鉴定-免费-一次": {
     "recognition": "OCR",
     "expected": "^免费鉴宝$",
     "roi": [470, 590, 160, 60],
     "action": "DoNothing"
   },
-  "appraisal.result_popup": {
+  "免费鉴定-鉴定-结果-弹窗": {
     "recognition": "OCR",
     "expected": ["^鉴宝一次$", "^鉴宝十次$"],
     "roi": [350, 560, 600, 100],
     "action": "DoNothing"
   },
-  "appraisal.result.banner": {
+  "免费鉴定-鉴定-结果-横幅": {
     "recognition": "OCR",
     "expected": "^传闻传[世也]高手.*已经出.*$",
     "roi": [650, 100, 590, 60],
     "action": "DoNothing"
   },
-  "appraisal.extra_popup.page": {
+  "免费鉴定-鉴定-额外-弹窗-页面": {
     "recognition": "OCR",
     "expected": "^秘宝收集$",
     "roi": [500, 150, 330, 110],
     "action": "DoNothing"
   },
-  "appraisal.extra_popup.close": {
+  "免费鉴定-鉴定-额外-弹窗-关闭": {
     "recognition": "TemplateMatch",
     "template": "daily/BUY_TEA_DAILY/shop_close.png",
     "roi": [1160, 0, 100, 100],
     "threshold": 0.39,
     "action": "DoNothing"
   },
-  "appraisal.popup_close": {
+  "免费鉴定-鉴定-弹窗-关闭": {
     "recognition": "ColorMatch",
     "lower": [150, 150, 130],
     "upper": [255, 255, 255],

@@ -17,7 +17,7 @@ def test_run_store_seals_business_result_before_home_boundary() -> None:
     store = TaskRunStore()
     store.begin(TASK_ID)
 
-    store.seal_business_result(TASK_ID, TaskOutcomeStatus.SUCCESS, "mail.empty", None)
+    store.seal_business_result(TASK_ID, TaskOutcomeStatus.SUCCESS, "邮件奖励-邮件-空", None)
     snapshot = store.snapshot(TASK_ID)
 
     assert snapshot["business_result_sealed"] is True
@@ -34,7 +34,7 @@ def test_run_store_seals_business_result_before_home_boundary() -> None:
 def test_sealed_run_allows_only_declared_boundary_cleanup_actions() -> None:
     store = TaskRunStore()
     store.begin(TASK_ID)
-    store.seal_business_result(TASK_ID, TaskOutcomeStatus.SUCCESS, "mail.empty", None)
+    store.seal_business_result(TASK_ID, TaskOutcomeStatus.SUCCESS, "邮件奖励-邮件-空", None)
 
     assert store.increment(TASK_ID, "close_reward_popup") == 1
     assert store.increment(TASK_ID, "close_mail") == 1
@@ -51,7 +51,7 @@ def test_sealed_run_allows_only_declared_boundary_cleanup_actions() -> None:
 def test_run_store_home_boundary_is_the_final_success_transition() -> None:
     store = TaskRunStore()
     store.begin(TASK_ID)
-    store.seal_business_result(TASK_ID, TaskOutcomeStatus.SUCCESS, "mail.empty", None)
+    store.seal_business_result(TASK_ID, TaskOutcomeStatus.SUCCESS, "邮件奖励-邮件-空", None)
 
     store.complete_home_boundary(TASK_ID)
     snapshot = store.snapshot(TASK_ID)
@@ -69,7 +69,7 @@ def test_run_store_home_boundary_is_the_final_success_transition() -> None:
 def test_run_store_boundary_failure_preserves_business_evidence() -> None:
     store = TaskRunStore()
     store.begin(TASK_ID)
-    store.seal_business_result(TASK_ID, TaskOutcomeStatus.SUCCESS, "mail.empty", None)
+    store.seal_business_result(TASK_ID, TaskOutcomeStatus.SUCCESS, "邮件奖励-邮件-空", None)
 
     store.fail_home_boundary(TASK_ID, "home.boundary", "HOME_BOUNDARY_TIMEOUT")
     snapshot = store.snapshot(TASK_ID)
@@ -89,7 +89,7 @@ def test_diagnostics_persists_two_phase_result_and_business_evidence(tmp_path: P
     diagnostics.seal_business_result(
         TASK_ID,
         TaskOutcomeStatus.SUCCESS,
-        "mail.empty",
+        "邮件奖励-邮件-空",
         None,
     )
 
@@ -123,7 +123,7 @@ def test_diagnostics_boundary_failure_keeps_original_business_postcondition(
     diagnostics.seal_business_result(
         TASK_ID,
         TaskOutcomeStatus.SUCCESS,
-        "mail.empty",
+        "邮件奖励-邮件-空",
         None,
     )
     diagnostics.fail_home_boundary(TASK_ID, "home.boundary", "HOME_BOUNDARY_TIMEOUT")
@@ -149,14 +149,14 @@ def test_public_home_boundary_is_strict_and_records_failure_before_abort() -> No
             Path("assets/resource/base/pipeline/common/home_boundary.json")
         ).read_text(encoding="utf-8")
     )
-    boundary = resource["MJA_HOME_BOUNDARY"]
-    failure = resource["MJA_HOME_BOUNDARY_FAILURE"]
+    boundary = resource["公共-主页边界"]
+    failure = resource["公共-主页边界-失败"]
 
     assert boundary["custom_action"] == "CompleteTaskBoundary"
     assert boundary["custom_action_param"] == {"boundary": "home"}
-    assert boundary["next"] == ["MJA_COMMON_STOP"]
-    assert boundary["on_error"] == ["MJA_HOME_BOUNDARY_FAILURE"]
+    assert boundary["next"] == ["公共-通用停止"]
+    assert boundary["on_error"] == ["公共-主页边界-失败"]
     assert failure["custom_action"] == "RecordActiveTaskFailure"
     assert failure["custom_action_param"]["native_fail_after_record"] is True
     assert failure["Abort"] is True
-    assert failure["next"] == ["MJA_COMMON_ABORT"]
+    assert failure["next"] == ["公共-通用中止"]

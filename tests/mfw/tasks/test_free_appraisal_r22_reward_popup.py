@@ -15,8 +15,8 @@ APPRAISAL = TaskContract(
     "daily/free_appraisal_daily.json",
 )
 FIXTURE = ROOT / "tests/fixtures/FREE_APPRAISAL_DAILY/r22_reward_popup.png"
-RECORD_FAILURE = "MJA_APPRAISAL_RECORD_FAILURE"
-RUNTIME_RECOVERY = "MJA_APPRAISAL_RUNTIME_RECOVERY_ATTEMPT"
+RECORD_FAILURE = "免费鉴定-记录-失败"
+RUNTIME_RECOVERY = "免费鉴定-运行时-恢复-尝试"
 
 
 def _contains(roi: list[int], box: list[int]) -> bool:
@@ -76,7 +76,7 @@ def test_r22_fixture_is_the_immutable_archived_reward_popup() -> None:
 
 def test_r22_popup_uses_stable_action_text_as_the_result_anchor() -> None:
     nodes = load_task_nodes(APPRAISAL)
-    popup = nodes["appraisal.result_popup"]
+    popup = nodes["免费鉴定-鉴定-结果-弹窗"]
     assert popup == {
         "recognition": "OCR",
         "expected": ["^鉴宝一次$", "^鉴宝十次$"],
@@ -91,12 +91,12 @@ def test_r22_popup_uses_stable_action_text_as_the_result_anchor() -> None:
     # Both the archived and the live reward surfaces expose these controls;
     # no item name, quantity, or inventory postcondition is needed to record
     # the result popup.
-    assert "appraisal.free_once" not in popup["expected"]
+    assert "免费鉴定-鉴定-免费-一次" not in popup["expected"]
 
 
 def test_r22_top_right_close_target_is_real_and_cannot_hit_paid_buttons() -> None:
     nodes = load_task_nodes(APPRAISAL)
-    target = nodes["appraisal.popup_close"]
+    target = nodes["免费鉴定-鉴定-弹窗-关闭"]
     assert target == {
         "recognition": "ColorMatch",
         "lower": [150, 150, 130],
@@ -141,26 +141,26 @@ def test_r22_reward_close_is_same_frame_guarded_and_every_input_is_capped_once()
     from agent.custom.support.policy import TASK_POLICIES
 
     nodes = load_task_nodes(APPRAISAL)
-    start = nodes["MJA_FREE_APPRAISAL_DAILY_START"]
+    start = nodes["免费鉴定-任务入口"]
     assert start["next"][:2] == [
-        "[JumpBack]MJA_KNOWN_PAINTING_CLOSE",
-        "[JumpBack]MJA_APPRAISAL_EXTRA_POPUP_CLOSE",
+        "[JumpBack]公共-已知-画卷-关闭",
+        "[JumpBack]免费鉴定-额外-弹窗-关闭",
     ]
-    assert start["next"][2] == "[JumpBack]MJA_APPRAISAL_KNOWN_TEA_SHOP_CLOSE"
+    assert start["next"][2] == "[JumpBack]免费鉴定-已知-茶-商店-关闭"
     assert start["on_error"] == [RUNTIME_RECOVERY, RECORD_FAILURE]
 
     for name, box_index in (
-        ("MJA_APPRAISAL_REWARD_PROBE", 0),
-        ("MJA_APPRAISAL_CLOSE_REWARD", 1),
+        ("免费鉴定-奖励-探测", 0),
+        ("免费鉴定-关闭-奖励", 1),
     ):
         assert nodes[name]["recognition"]["param"] == {
-            "all_of": ["appraisal.result_popup", "appraisal.popup_close"],
+            "all_of": ["免费鉴定-鉴定-结果-弹窗", "免费鉴定-鉴定-弹窗-关闭"],
             "box_index": box_index,
         }
         assert nodes[name]["on_error"] == [RECORD_FAILURE]
         assert nodes[name]["timeout"] == 8000
 
-    close = nodes["MJA_APPRAISAL_CLOSE_REWARD"]
+    close = nodes["免费鉴定-关闭-奖励"]
     assert close["max_hit"] == 1
     assert close["retry_times"] == 0
     assert close["custom_action_param"] == {
@@ -170,14 +170,14 @@ def test_r22_reward_close_is_same_frame_guarded_and_every_input_is_capped_once()
         "evidence": {
             "page_index": 0,
             "target_index": 1,
-            "page_name": "appraisal.result_popup",
-            "target_name": "appraisal.popup_close",
+            "page_name": "免费鉴定-鉴定-结果-弹窗",
+            "target_name": "免费鉴定-鉴定-弹窗-关闭",
         },
     }
     assert close["next"] == [
-        "[JumpBack]MJA_APPRAISAL_EXTRA_POPUP_CLOSE",
+        "[JumpBack]免费鉴定-额外-弹窗-关闭",
         "MJA_APPRAISAL_VERIFY",
-        "MJA_APPRAISAL_HOME_AFTER_REWARD",
+        "免费鉴定-主页-之后-奖励",
     ]
 
     policy = TASK_POLICIES[APPRAISAL.task_id]
@@ -203,40 +203,40 @@ def test_r22_post_close_accepts_only_used_once_state_or_explicit_home() -> None:
     }
     assert "免费" not in used["expected"]
     assert nodes["MJA_APPRAISAL_VERIFY"]["recognition"]["param"] == {
-        "all_of": ["appraisal.page", "appraisal.used"],
+        "all_of": ["免费鉴定-鉴定-页面", "appraisal.used"],
         "box_index": 1,
     }
     assert nodes["MJA_APPRAISAL_VERIFY"]["next"] == [
-        "MJA_APPRAISAL_CLOSE_SUCCESS_PAGE"
+        "免费鉴定-关闭-成功-页面"
     ]
-    assert nodes["MJA_APPRAISAL_CLOSE_SUCCESS_PAGE"]["next"] == [
-        "MJA_APPRAISAL_HOME_AFTER_SUCCESS"
+    assert nodes["免费鉴定-关闭-成功-页面"]["next"] == [
+        "免费鉴定-主页成功后"
     ]
-    assert nodes["MJA_APPRAISAL_HOME_AFTER_SUCCESS"]["next"] == [
-        "MJA_APPRAISAL_SUCCESS"
+    assert nodes["免费鉴定-主页成功后"]["next"] == [
+        "免费鉴定-成功"
     ]
 
-    reward_home = nodes["MJA_APPRAISAL_HOME_AFTER_REWARD"]
+    reward_home = nodes["免费鉴定-主页-之后-奖励"]
     assert reward_home["recognition"]["param"] == {
-        "all_of": ["appraisal.home.page", "appraisal.home.entry"],
+        "all_of": ["免费鉴定-鉴定-主页-页面", "免费鉴定-鉴定-主页-入口"],
         "box_index": 0,
     }
-    assert reward_home["next"] == ["MJA_APPRAISAL_SUCCESS_FROM_HOME"]
+    assert reward_home["next"] == ["免费鉴定-主页成功"]
     assert_outcome(
         nodes,
-        "MJA_APPRAISAL_SUCCESS_FROM_HOME",
+        "免费鉴定-主页成功",
         "success",
         "appraisal.reward_popup_seen_and_home",
     )
 
     for name in (
-        "MJA_APPRAISAL_CLAIM",
-        "MJA_APPRAISAL_REWARD_PROBE",
-        "MJA_APPRAISAL_CLOSE_REWARD",
+        "免费鉴定-领取",
+        "免费鉴定-奖励-探测",
+        "免费鉴定-关闭-奖励",
         "MJA_APPRAISAL_VERIFY",
-        "MJA_APPRAISAL_CLOSE_SUCCESS_PAGE",
-        "MJA_APPRAISAL_HOME_AFTER_SUCCESS",
-        "MJA_APPRAISAL_HOME_AFTER_REWARD",
+        "免费鉴定-关闭-成功-页面",
+        "免费鉴定-主页成功后",
+        "免费鉴定-主页-之后-奖励",
     ):
         assert nodes[name]["on_error"] == [RECORD_FAILURE]
 
@@ -255,15 +255,15 @@ def test_r22_never_targets_either_paid_appraisal_button() -> None:
     assert "appraisal.result.once_control" not in target_names
     assert "appraisal.result.ten_control" not in target_names
     assert "appraisal.used" not in target_names
-    assert "appraisal.free_once" in target_names
-    assert "appraisal.popup_close" in target_names
+    assert "免费鉴定-鉴定-免费-一次" in target_names
+    assert "免费鉴定-鉴定-弹窗-关闭" in target_names
 
 
 def test_r22_runtime_recovery_is_the_only_root_fallback_and_has_no_paid_target() -> None:
     nodes = load_task_nodes(APPRAISAL)
     recovery = nodes[RUNTIME_RECOVERY]
 
-    assert recovery["next"][-1] == "[JumpBack]MJA_GAME_START"
+    assert recovery["next"][-1] == "[JumpBack]启动-游戏启动"
     assert recovery["on_error"] == [RECORD_FAILURE]
     assert "appraisal.result.once_control" not in str(recovery)
     assert "appraisal.result.ten_control" not in str(recovery)

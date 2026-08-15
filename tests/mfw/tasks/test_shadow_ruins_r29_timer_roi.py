@@ -25,7 +25,7 @@ def _assert_box_inside(roi: list[int], box: tuple[int, int, int, int]) -> None:
 
 def test_r29_timer_roi_covers_digits_without_hourglass_contamination() -> None:
     nodes = _nodes()
-    timer = nodes["shadow.battle.in_progress.timer"]
+    timer = nodes["影之遗迹-影-战斗-中-进度-计时器"]
 
     assert timer["roi"] == [190, 10, 85, 50]
     _assert_box_inside(timer["roi"], (194, 18, 73, 34))
@@ -40,26 +40,26 @@ def test_r29_timer_roi_covers_digits_without_hourglass_contamination() -> None:
 def test_r29_battle_boundary_remains_strict_bounded_and_fail_closed() -> None:
     nodes = _nodes()
 
-    assert nodes["shadow.battle.in_progress.timer"]["expected"] == "^\\d{2}:\\d{2}$"
-    assert nodes["shadow.battle.in_progress"]["recognition"] == {
+    assert nodes["影之遗迹-影-战斗-中-进度-计时器"]["expected"] == "^\\d{2}:\\d{2}$"
+    assert nodes["影之遗迹-影-战斗-中-进度"]["recognition"] == {
         "type": "And",
         "param": {
             "all_of": [
-                "shadow.battle.in_progress.stats",
-                "shadow.battle.in_progress.status",
-                "shadow.battle.in_progress.timer",
+                "影之遗迹-影-战斗-中-进度-统计",
+                "影之遗迹-影-战斗-中-进度-状态",
+                "影之遗迹-影-战斗-中-进度-计时器",
             ]
         },
     }
 
-    wait = nodes["MJA_SHADOW_BATTLE_IN_PROGRESS_WAIT"]
+    wait = nodes["影之遗迹-战斗-中-进度-等待"]
     assert wait["recognition"] == {
         "type": "And",
-        "param": {"all_of": ["shadow.battle.in_progress"]},
+        "param": {"all_of": ["影之遗迹-影-战斗-中-进度"]},
     }
     assert wait["max_hit"] == 240
     assert wait["timeout"] == 240000
     assert wait["on_error"] == [
-        "MJA_SHADOW_BATTLE_RESULT_PROBE",
-        "MJA_SHADOW_BATTLE_LOOP_EXHAUSTED",
+        "影之遗迹-战斗-结果-探测",
+        "影之遗迹-战斗-循环-耗尽",
     ]

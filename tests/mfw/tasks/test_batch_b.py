@@ -48,8 +48,8 @@ def test_batch_b_contracts_use_only_existing_fixture_cases_until_live_capture() 
             assert declaration["default_check"] is True
             assert declaration["group"] == [contract.group]
             assert declaration["entry"] == contract.entry
-            assert_reachable(nodes, contract.entry, "MJA_COMMON_STOP")
-            assert_reachable(nodes, contract.entry, "MJA_COMMON_ABORT")
+            assert_reachable(nodes, contract.entry, "公共-通用停止")
+            assert_reachable(nodes, contract.entry, "公共-通用中止")
         else:
             assert_task_contract(contract)
         assert_fixture_matrix(
@@ -99,10 +99,10 @@ def test_buy_tea_is_one_guarded_purchase_of_wen_at_most_500() -> None:
         nodes,
         ["open_tea_purchase", "set_tea_quantity_max", "buy_tea"],
     )
-    assert_outcome(nodes, "MJA_TEA_SOLD_OUT", "already_complete", "tea.sold_out")
+    assert_outcome(nodes, "买茶-售罄", "already_complete", "tea.sold_out")
     assert_abort_code(
         nodes,
-        "MJA_TEA_PRICE_UNSAFE",
+        "买茶-价格-不安全",
         "TEA_PRICE_OR_CURRENCY_UNVERIFIED",
     )
 
@@ -159,13 +159,13 @@ def test_condensate_uses_one_shared_budget_for_both_regions() -> None:
     assert_no_side_effect_retry(nodes, "buy_yunzhou_currency_max")
     assert_outcome(
         nodes,
-        "MJA_CONDENSATE_ALREADY_COMPLETE",
+        "消耗凝结体-已完成",
         "already_complete",
         "condensate.both_regions_sold_out",
     )
     assert_abort_code(
         nodes,
-        "MJA_CONDENSATE_BUDGET_UNSAFE",
+        "消耗凝结体-预算-不安全",
         "CONDENSATE_PRICE_OR_CURRENCY_UNVERIFIED",
     )
 
@@ -195,25 +195,25 @@ def test_food_consumes_only_longjing_shrimp_with_bounded_loops() -> None:
         6,
         task_id=FOOD.task_id,
     )
-    assert_loop_bound(nodes, "MJA_FOOD_CANDIDATE_LOOP", maximum=6)
-    assert_loop_bound(nodes, "MJA_FOOD_REPLACE_CONFIRM_LOOP", maximum=6)
+    assert_loop_bound(nodes, "吃体力食物-候选-循环", maximum=6)
+    assert_loop_bound(nodes, "吃体力食物-替换-确认-循环", maximum=6)
     assert_loop_bound(nodes, "MJA_FOOD_CONTINUE_AFTER_VERIFIED_USE", maximum=5)
     assert_no_side_effect_retry(nodes, "eat_longjing_shrimp")
     assert_outcome(
         nodes,
-        "MJA_FOOD_STAMINA_FULL",
+        "吃体力食物-体力-已满",
         "already_complete",
         "food.overfull",
     )
     assert_outcome(
         nodes,
-        "MJA_FOOD_SUCCESS",
+        "吃体力食物-成功",
         "success",
         "food.buff_after_verified_use",
     )
     assert_outcome(
         nodes,
-        "MJA_FOOD_NO_SAFE_CARD",
+        "吃体力食物-无安全卡",
         "not_eligible",
         "food.longjing_shrimp_unavailable",
     )
@@ -224,23 +224,23 @@ def test_food_r20_start_uses_specific_same_level_siblings_and_home_resource_entr
 
     start = nodes[FOOD.entry]
     assert start["next"] == [
-        "MJA_FOOD_JIANLIN_PAGE_PROBE",
-        "MJA_FOOD_PANEL_PROBE",
-        "MJA_FOOD_DUNGEON_PAGE_PROBE",
-        "MJA_FOOD_RESUME_REPLACE_PROBE",
-        "MJA_FOOD_PAGE_PROBE",
-        "MJA_FOOD_BAG_PAGE_PROBE",
-        "MJA_FOOD_OPEN_RESOURCE",
-        "MJA_FOOD_GAME_START_RECOVERY",
+        "吃体力食物-剑林-页面-探测",
+        "吃体力食物-面板-探测",
+        "吃体力食物-副本-页面-探测",
+        "吃体力食物-恢复继续-替换-探测",
+        "吃体力食物-页面-探测",
+        "吃体力食物-背包-页面-探测",
+        "吃体力食物-打开-资源",
+        "吃体力食物-游戏启动恢复",
     ]
-    assert start["on_error"] == ["MJA_FOOD_GAME_START_RECOVERY_FAILED"]
+    assert start["on_error"] == ["吃体力食物-游戏启动恢复失败"]
     assert start["retry_times"] == 0
     assert "MJA_FOOD_HOME_PROBE" not in nodes
     assert "MJA_FOOD_OPEN_PANEL" not in nodes
     assert "MJA_FOOD_OPEN_BAG" not in nodes
 
-    food_page = nodes["MJA_FOOD_PAGE_PROBE"]
-    bag_page = nodes["food.bag.page"]
+    food_page = nodes["吃体力食物-页面-探测"]
+    bag_page = nodes["吃体力食物-食物-背包-页面"]
     assert bag_page == {
         "recognition": "TemplateMatch",
         "template": "daily/EAT_STAMINA_FOOD_DAILY/food_bag_title_live.png",
@@ -248,7 +248,7 @@ def test_food_r20_start_uses_specific_same_level_siblings_and_home_resource_entr
         "threshold": 0.4,
         "action": "DoNothing",
     }
-    category = nodes["food.category"]
+    category = nodes["吃体力食物-食物-分类"]
     assert category == {
         "recognition": "TemplateMatch",
         "template": "daily/EAT_STAMINA_FOOD_DAILY/food_category_icon_live.png",
@@ -256,7 +256,7 @@ def test_food_r20_start_uses_specific_same_level_siblings_and_home_resource_entr
         "threshold": 0.4,
         "action": "DoNothing",
     }
-    food_tab = nodes["food.food_tab"]
+    food_tab = nodes["吃体力食物-食物-食物-标签"]
     assert food_tab == {
         "recognition": "OCR",
         "expected": "食物",
@@ -264,14 +264,14 @@ def test_food_r20_start_uses_specific_same_level_siblings_and_home_resource_entr
         "action": "DoNothing",
     }
     assert food_page["recognition"]["param"] == {
-        "all_of": ["food.category.page", "food.food_tab"],
+        "all_of": ["吃体力食物-食物-分类-页面", "吃体力食物-食物-食物-标签"],
         "box_index": 1,
     }
-    assert nodes["food.food.page"]["recognition"]["param"] == food_page[
+    assert nodes["吃体力食物-食物-食物-页面"]["recognition"]["param"] == food_page[
         "recognition"
     ]["param"]
 
-    target = nodes["food.resource_entry"]
+    target = nodes["吃体力食物-食物-资源-入口"]
     assert target == {
         "recognition": "ColorMatch",
         "method": 4,
@@ -293,7 +293,7 @@ def test_food_r20_start_uses_specific_same_level_siblings_and_home_resource_entr
     archived_home_ncc = 0.8253923457503188
     archived_component_box = [19, 114, 34, 28]
     archived_component_pixels = 535
-    assert archived_home_ncc > nodes["food.home.page"]["threshold"]
+    assert archived_home_ncc > nodes["吃体力食物-食物-主页-页面"]["threshold"]
     x, y, width, height = target["roi"]
     component_x, component_y, component_width, component_height = (
         archived_component_box
@@ -311,40 +311,40 @@ def test_food_r20_start_uses_specific_same_level_siblings_and_home_resource_entr
     )
     assert width * height < frame_width * frame_height // 100
 
-    home_entry = nodes["MJA_FOOD_OPEN_RESOURCE"]
+    home_entry = nodes["吃体力食物-打开-资源"]
     assert home_entry["recognition"]["param"] == {
-        "all_of": ["food.home.page", "food.resource_entry"],
+        "all_of": ["吃体力食物-食物-主页-页面", "吃体力食物-食物-资源-入口"],
         "box_index": 1,
     }
     assert home_entry["custom_action_param"]["evidence"] == {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "food.home.page",
-        "target_name": "food.resource_entry",
+        "page_name": "吃体力食物-食物-主页-页面",
+        "target_name": "吃体力食物-食物-资源-入口",
     }
     assert home_entry["custom_action_param"]["action_id"] == "open_resource_page"
     assert home_entry["retry_times"] == 0
     assert TASK_POLICIES[FOOD.task_id].action_caps["open_resource_page"] == 1
-    assert_reachable(nodes, FOOD.entry, "MJA_FOOD_BAG_PAGE_PROBE")
+    assert_reachable(nodes, FOOD.entry, "吃体力食物-背包-页面-探测")
 
 
 def test_food_recovers_once_when_startup_leaves_a_non_food_surface() -> None:
     nodes = load_task_nodes(FOOD)
     start = nodes[FOOD.entry]
-    recovery = nodes["MJA_FOOD_GAME_START_RECOVERY"]
-    state_probe = nodes["MJA_FOOD_RECOVERY_STATE_PROBE"]
+    recovery = nodes["吃体力食物-游戏启动恢复"]
+    state_probe = nodes["吃体力食物-恢复-状态-探测"]
 
     assert start["next"] == [
-        "MJA_FOOD_JIANLIN_PAGE_PROBE",
-        "MJA_FOOD_PANEL_PROBE",
-        "MJA_FOOD_DUNGEON_PAGE_PROBE",
-        "MJA_FOOD_RESUME_REPLACE_PROBE",
-        "MJA_FOOD_PAGE_PROBE",
-        "MJA_FOOD_BAG_PAGE_PROBE",
-        "MJA_FOOD_OPEN_RESOURCE",
-        "MJA_FOOD_GAME_START_RECOVERY",
+        "吃体力食物-剑林-页面-探测",
+        "吃体力食物-面板-探测",
+        "吃体力食物-副本-页面-探测",
+        "吃体力食物-恢复继续-替换-探测",
+        "吃体力食物-页面-探测",
+        "吃体力食物-背包-页面-探测",
+        "吃体力食物-打开-资源",
+        "吃体力食物-游戏启动恢复",
     ]
-    assert start["on_error"] == ["MJA_FOOD_GAME_START_RECOVERY_FAILED"]
+    assert start["on_error"] == ["吃体力食物-游戏启动恢复失败"]
 
     assert recovery == {
         "recognition": "DirectHit",
@@ -353,26 +353,26 @@ def test_food_recovers_once_when_startup_leaves_a_non_food_surface() -> None:
         "package": "com.hanjiasongshu.dr22/.MainActivity",
         "post_delay": 5000,
         "retry_times": 0,
-        "next": ["MJA_FOOD_RECOVERY_STATE_PROBE"],
-        "on_error": ["MJA_FOOD_GAME_START_RECOVERY_FAILED"],
+        "next": ["吃体力食物-恢复-状态-探测"],
+        "on_error": ["吃体力食物-游戏启动恢复失败"],
     }
     assert state_probe == {
         "recognition": "DirectHit",
         "action": "DoNothing",
         "timeout": 30000,
         "next": [
-            "MJA_FOOD_JIANLIN_PAGE_PROBE",
-            "MJA_FOOD_PANEL_PROBE",
-            "MJA_FOOD_DUNGEON_PAGE_PROBE",
-            "MJA_FOOD_RESUME_REPLACE_PROBE",
-            "MJA_FOOD_PAGE_PROBE",
-            "MJA_FOOD_BAG_PAGE_PROBE",
-            "MJA_FOOD_OPEN_RESOURCE",
+            "吃体力食物-剑林-页面-探测",
+            "吃体力食物-面板-探测",
+            "吃体力食物-副本-页面-探测",
+            "吃体力食物-恢复继续-替换-探测",
+            "吃体力食物-页面-探测",
+            "吃体力食物-背包-页面-探测",
+            "吃体力食物-打开-资源",
         ],
-        "on_error": ["MJA_FOOD_GAME_START_RECOVERY_FAILED"],
+        "on_error": ["吃体力食物-游戏启动恢复失败"],
     }
 
-    failed = nodes["MJA_FOOD_GAME_START_RECOVERY_FAILED"]
+    failed = nodes["吃体力食物-游戏启动恢复失败"]
     assert failed["custom_action_param"] == {
         "task_id": FOOD.task_id,
         "status": "failed",
@@ -381,14 +381,14 @@ def test_food_recovers_once_when_startup_leaves_a_non_food_surface() -> None:
         "native_fail_after_record": True,
     }
     assert failed["Abort"] is True
-    assert failed["next"] == ["MJA_COMMON_ABORT"]
+    assert failed["next"] == ["公共-通用中止"]
     assert "on_error" not in failed
     assert [
         name
         for name, node in nodes.items()
-        if name.startswith("MJA_FOOD_") and node.get("action") == "StartApp"
-    ] == ["MJA_FOOD_GAME_START_RECOVERY"]
-    assert_reachable(nodes, FOOD.entry, "MJA_FOOD_GAME_START_RECOVERY_FAILED")
+        if name.startswith("吃体力食物-") and node.get("action") == "StartApp"
+    ] == ["吃体力食物-游戏启动恢复"]
+    assert_reachable(nodes, FOOD.entry, "吃体力食物-游戏启动恢复失败")
 
 
 def test_food_alternatives_follow_real_maa_next_list_semantics() -> None:
@@ -399,81 +399,81 @@ def test_food_alternatives_follow_real_maa_next_list_semantics() -> None:
     assert action_caps["eat_longjing_shrimp"] == 6
     assert action_caps["confirm_food_buff_replace"] == 6
 
-    assert nodes["MJA_FOOD_RESUME_REPLACE_PROBE"]["on_error"] == [
-        "MJA_FOOD_RECORD_FAILURE"
+    assert nodes["吃体力食物-恢复继续-替换-探测"]["on_error"] == [
+        "吃体力食物-记录-失败"
     ]
-    assert nodes["MJA_FOOD_PAGE_PROBE"]["next"] == [
-        "MJA_FOOD_RECHECK_FULL",
-        "MJA_FOOD_CANDIDATE_LOOP",
+    assert nodes["吃体力食物-页面-探测"]["next"] == [
+        "吃体力食物-重新检查-已满",
+        "吃体力食物-候选-循环",
     ]
-    assert nodes["MJA_FOOD_DETAIL_PROBE"]["next"] == [
-        f"MJA_FOOD_COUNT_{count}_PROBE" for count in range(6, 0, -1)
+    assert nodes["吃体力食物-详情-探测"]["next"] == [
+        f"吃体力食物-次数-{count}-探测" for count in range(6, 0, -1)
     ]
 
     after_eat = [
-        "MJA_FOOD_OVERFULL_AFTER_EAT_PROBE",
-        "MJA_FOOD_REPLACEMENT_PROBE",
-        "MJA_FOOD_USE_RESULT_PROBE",
+        "吃体力食物-已超上限-之后-食用-探测",
+        "吃体力食物-替换-探测",
+        "吃体力食物-使用-结果-探测",
     ]
     for count in range(6, 0, -1):
-        count_probe = nodes[f"MJA_FOOD_COUNT_{count}_PROBE"]
-        assert count_probe["on_error"] == ["MJA_FOOD_RECORD_FAILURE"]
-        eat = nodes[f"MJA_FOOD_EAT_COUNT_{count}"]
+        count_probe = nodes[f"吃体力食物-次数-{count}-探测"]
+        assert count_probe["on_error"] == ["吃体力食物-记录-失败"]
+        eat = nodes[f"吃体力食物-食用-次数-{count}"]
         assert eat["next"] == after_eat
-        assert eat["on_error"] == ["MJA_FOOD_RECORD_FAILURE"]
+        assert eat["on_error"] == ["吃体力食物-记录-失败"]
         assert eat["retry_times"] == 0
 
     strict_pair = [
-        "food.replace.prompt",
-        "food.replace.confirm",
-        "food.longjing_name",
+        "吃体力食物-食物-替换-提示",
+        "吃体力食物-食物-替换-确认",
+        "吃体力食物-食物-龙井虾仁-名称",
     ]
     for name in (
-        "MJA_FOOD_RESUME_REPLACE_PROBE",
-        "MJA_FOOD_REPLACEMENT_PROBE",
-        "MJA_FOOD_REPLACE_CONFIRM_LOOP",
+        "吃体力食物-恢复继续-替换-探测",
+        "吃体力食物-替换-探测",
+        "吃体力食物-替换-确认-循环",
     ):
         assert nodes[name]["recognition"]["param"]["all_of"] == strict_pair
-    confirm = nodes["MJA_FOOD_REPLACE_CONFIRM_LOOP"]
+    confirm = nodes["吃体力食物-替换-确认-循环"]
     assert confirm["custom_action_param"]["evidence"] == {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "food.replace.prompt",
-        "target_name": "food.replace.confirm",
+        "page_name": "吃体力食物-食物-替换-提示",
+        "target_name": "吃体力食物-食物-替换-确认",
     }
     assert confirm["next"] == [
-        "MJA_FOOD_OVERFULL_AFTER_EAT_PROBE",
-        "MJA_FOOD_USE_RESULT_PROBE",
+        "吃体力食物-已超上限-之后-食用-探测",
+        "吃体力食物-使用-结果-探测",
     ]
     assert confirm.get("retry_times", 0) == 0
 
-    buff = nodes["MJA_FOOD_USE_RESULT_PROBE"]
+    buff = nodes["吃体力食物-使用-结果-探测"]
     assert buff["recognition"] == {
         "type": "Or",
-        "param": {"any_of": ["food.use_result", "food.post_use_state"]},
+        "param": {"any_of": ["吃体力食物-食物-使用-结果", "吃体力食物-食物-之后-使用-状态"]},
     }
-    assert buff["next"] == ["MJA_FOOD_POST_USE_PROGRESS_PROBE"]
-    progress = nodes["MJA_FOOD_POST_USE_PROGRESS_PROBE"]
+    assert buff["next"] == ["吃体力食物-之后-使用-进度-探测"]
+    progress = nodes["吃体力食物-之后-使用-进度-探测"]
     assert progress["custom_action"] == "VerifyFoodQuantityDecrease"
     assert progress["custom_action_param"] == {
         "task_id": FOOD.task_id,
         "resource_id": "龙井虾仁",
         "amount_index": 2,
-        "amount_result_name": "food.available_positive",
+        "amount_result_name": "吃体力食物-食物-可用-正向",
     }
     assert progress["next"] == [
-        "MJA_FOOD_SUCCESS",
+        "吃体力食物-成功",
         "MJA_FOOD_CONTINUE_AFTER_VERIFIED_USE",
     ]
     assert nodes["MJA_FOOD_CONTINUE_AFTER_VERIFIED_USE"]["next"] == [
-        "MJA_FOOD_PAGE_PROBE"
+        "吃体力食物-页面-探测"
     ]
 
 
 def test_food_failures_record_failed_before_native_abort_and_cannot_remain_running() -> None:
     nodes = load_task_nodes(FOOD)
 
-    failure = nodes["MJA_FOOD_RECORD_FAILURE"]
+    failure = nodes["吃体力食物-记录-失败"]
     assert failure["custom_action_param"] == {
         "task_id": FOOD.task_id,
         "status": "failed",
@@ -482,7 +482,7 @@ def test_food_failures_record_failed_before_native_abort_and_cannot_remain_runni
         "native_fail_after_record": True,
     }
     assert failure["Abort"] is True
-    assert failure["next"] == ["MJA_COMMON_ABORT"]
+    assert failure["next"] == ["公共-通用中止"]
     assert "on_error" not in failure
 
     guarded = {
@@ -495,25 +495,25 @@ def test_food_failures_record_failed_before_native_abort_and_cannot_remain_runni
     # close_bag runs only after an outcome has already been persisted; every
     # input that can still leave the task running must close through failure.
     for name, node in guarded.items():
-        if name != "MJA_FOOD_CLOSE_BAG":
-            assert node["on_error"] == ["MJA_FOOD_RECORD_FAILURE"]
+        if name != "吃体力食物-关闭-背包":
+            assert node["on_error"] == ["吃体力食物-记录-失败"]
 
     direct_native_abort = {
         name
         for name, node in nodes.items()
-        if name.startswith("MJA_FOOD_")
+        if name.startswith("吃体力食物-")
         and name
         not in {
-            "MJA_FOOD_RECORD_FAILURE",
-            "MJA_FOOD_GAME_START_RECOVERY_FAILED",
+            "吃体力食物-记录-失败",
+            "吃体力食物-游戏启动恢复失败",
         }
         and (
-            "MJA_COMMON_ABORT" in node.get("next", [])
-            or "MJA_COMMON_ABORT" in node.get("on_error", [])
+            "公共-通用中止" in node.get("next", [])
+            or "公共-通用中止" in node.get("on_error", [])
         )
     }
     assert direct_native_abort == set()
-    assert_reachable(nodes, FOOD.entry, "MJA_FOOD_RECORD_FAILURE")
+    assert_reachable(nodes, FOOD.entry, "吃体力食物-记录-失败")
 
 
 def test_jianlin_has_one_verified_refill_and_bounded_challenges() -> None:
@@ -567,11 +567,11 @@ def test_jianlin_has_one_verified_refill_and_bounded_challenges() -> None:
         and node.get("custom_action_param", {}).get("action_id") == "buy_stamina_once"
     )
     assert TASK_POLICIES[JIANLIN.task_id].action_caps["buy_stamina_once"] == 1
-    assert_loop_bound(nodes, "MJA_JIANLIN_CHALLENGE_LOOP", maximum=12)
+    assert_loop_bound(nodes, "剑林凝结体体力-挑战-循环", maximum=12)
     assert_no_side_effect_retry(nodes, "buy_stamina_once")
     assert_no_side_effect_retry(nodes, "start_jianlin_battle")
     assert_abort_code(
         nodes,
-        "MJA_JIANLIN_SECOND_OFFER",
+        "剑林凝结体体力-第二次-优惠",
         "JIANLIN_ESCALATED_STAMINA_OFFER",
     )

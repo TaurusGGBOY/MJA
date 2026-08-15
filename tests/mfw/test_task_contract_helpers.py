@@ -62,8 +62,8 @@ def test_order_and_abort_helpers_cover_phase_boundaries() -> None:
         "OPEN": _guarded("open_tea"),
         "BUY": _guarded("buy_tea"),
         "VERIFY": {"recognition": "OCR", "action": "DoNothing"},
-        "ABORT": {"action": "DoNothing", "next": ["MJA_COMMON_ABORT"]},
-        "MJA_COMMON_ABORT": {"action": "StopTask"},
+        "ABORT": {"action": "DoNothing", "next": ["公共-通用中止"]},
+        "公共-通用中止": {"action": "StopTask"},
         "FAIL": {
             "action": "Custom",
             "custom_action": "RecordTaskOutcome",
@@ -109,8 +109,8 @@ def test_terminal_after_loop_requires_bounded_abort_path() -> None:
             },
             "next": ["ABORT"],
         },
-        "ABORT": {"action": "DoNothing", "next": ["MJA_COMMON_ABORT"]},
-        "MJA_COMMON_ABORT": {"action": "StopTask"},
+        "ABORT": {"action": "DoNothing", "next": ["公共-通用中止"]},
+        "公共-通用中止": {"action": "StopTask"},
         "OTHER": {"action": "StopTask"},
     }
     assert_terminal_after_loop(nodes, "LOOP", 3, "LOOP_EXHAUSTED")
@@ -124,11 +124,11 @@ def test_battle_result_partition_rejects_missing_unknown_abort_branch() -> None:
         "MJA_RESULT_VICTORY": {"action": "StopTask"},
         "MJA_RESULT_DEFEAT": {"action": "StopTask"},
         "MJA_RESULT_UNKNOWN_RESULT": {"action": "StopTask"},
-        "MJA_COMMON_ABORT": {"action": "StopTask"},
+        "公共-通用中止": {"action": "StopTask"},
     }
     with pytest.raises(AssertionError):
         assert_battle_result_partition(nodes, "MJA_RESULT")
-    nodes["MJA_RESULT_UNKNOWN_RESULT"]["next"] = ["MJA_COMMON_ABORT"]
+    nodes["MJA_RESULT_UNKNOWN_RESULT"]["next"] = ["公共-通用中止"]
     assert_battle_result_partition(nodes, "MJA_RESULT")
 
 

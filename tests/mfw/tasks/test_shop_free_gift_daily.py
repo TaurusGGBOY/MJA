@@ -15,16 +15,16 @@ from tests.mfw.task_contract import (
 
 SHOP = TaskContract("SHOP_FREE_GIFT_DAILY", "daily/shop_free_gift_daily.json")
 RECOVERY_ATTEMPTS = [
-    "MJA_SHOP_RUNTIME_RECOVERY_ATTEMPT_1",
-    "MJA_SHOP_RUNTIME_RECOVERY_ATTEMPT_2",
+    "商店免费礼包-运行时-恢复-尝试-1",
+    "商店免费礼包-运行时-恢复-尝试-2",
 ]
-RECOVERY_EXHAUSTED = "MJA_SHOP_RUNTIME_RECOVERY_EXHAUSTED"
+RECOVERY_EXHAUSTED = "商店免费礼包-运行时-恢复-耗尽"
 RECOVERY_ROUTE = [*RECOVERY_ATTEMPTS, RECOVERY_EXHAUSTED]
 POST_CLAIM_RECOVERY_ATTEMPTS = [
-    "MJA_SHOP_POST_CLAIM_RECOVERY_ATTEMPT_1",
-    "MJA_SHOP_POST_CLAIM_RECOVERY_ATTEMPT_2",
+    "商店免费礼包-领取后-恢复-尝试-1",
+    "商店免费礼包-领取后-恢复-尝试-2",
 ]
-POST_CLAIM_RECOVERY_EXHAUSTED = "MJA_SHOP_POST_CLAIM_RECOVERY_EXHAUSTED"
+POST_CLAIM_RECOVERY_EXHAUSTED = "商店免费礼包-领取后-恢复-耗尽"
 POST_CLAIM_RECOVERY_ROUTE = [
     *POST_CLAIM_RECOVERY_ATTEMPTS,
     POST_CLAIM_RECOVERY_EXHAUSTED,
@@ -36,19 +36,19 @@ ALLOWED_TERMINAL_STATUSES = {
     "failed",
 }
 POST_TERMINAL_CLEANUP = {
-    "MJA_SHOP_CLOSE",
-    "MJA_SHOP_PANEL_AFTER_CLOSE",
-    "MJA_SHOP_CLOSE_PANEL",
-    "MJA_SHOP_HOME_RETURN_PROBE",
-    "MJA_SHOP_CLOSE_ALREADY_COMPLETE",
-    "MJA_SHOP_PANEL_AFTER_CLOSE_ALREADY_COMPLETE",
-    "MJA_SHOP_CLOSE_PANEL_ALREADY_COMPLETE",
-    "MJA_SHOP_HOME_RETURN_PROBE_ALREADY_COMPLETE",
+    "商店免费礼包-关闭",
+    "商店免费礼包-面板关闭后",
+    "商店免费礼包-关闭-面板",
+    "商店免费礼包-主页-返回-探测",
+    "商店免费礼包-关闭-已完成",
+    "商店免费礼包-面板关闭后-已完成",
+    "商店免费礼包-关闭-面板-已完成",
+    "商店免费礼包-主页-返回-探测-已完成",
 }
 
 
 def _task_nodes(nodes: Mapping[str, Mapping[str, Any]]) -> dict[str, Mapping[str, Any]]:
-    return {name: node for name, node in nodes.items() if name.startswith("MJA_SHOP_")}
+    return {name: node for name, node in nodes.items() if name.startswith("商店免费礼包-")}
 
 
 def _targets(node: Mapping[str, Any]) -> list[str]:
@@ -83,26 +83,26 @@ def test_shop_process_exit_recovery_is_bounded_and_truthful() -> None:
     assert_task_contract(SHOP)
     nodes = load_task_nodes(SHOP)
 
-    assert nodes["MJA_SHOP_FREE_GIFT_DAILY_START"]["next"] == [
-        "MJA_SHOP_DIRECT_STATUS_PROBE",
-        "MJA_SHOP_DIRECT_CLAIM_GATE",
-        "MJA_SHOP_OPEN_PERIOD",
-        "MJA_SHOP_BENEFITS_PAGE_PROBE",
-        "MJA_SHOP_PANEL_PROBE",
-        "MJA_SHOP_PAGE_PROBE",
-        "MJA_SHOP_HOME_PROBE",
+    assert nodes["商店免费礼包-任务入口"]["next"] == [
+        "商店免费礼包-直接-状态-探测",
+        "商店免费礼包-直接-领取-门禁",
+        "商店免费礼包-打开-周期",
+        "商店免费礼包-权益-页面-探测",
+        "商店免费礼包-面板-探测",
+        "商店免费礼包-页面-探测",
+        "商店免费礼包-主页-探测",
     ]
-    assert nodes["MJA_SHOP_FREE_GIFT_DAILY_START"]["on_error"] == RECOVERY_ROUTE
+    assert nodes["商店免费礼包-任务入口"]["on_error"] == RECOVERY_ROUTE
     for attempt in RECOVERY_ATTEMPTS:
         assert nodes[attempt]["next"] == [
-            "MJA_SHOP_DIRECT_STATUS_PROBE",
-            "MJA_SHOP_DIRECT_CLAIM_GATE",
-            "MJA_SHOP_OPEN_PERIOD",
-            "MJA_SHOP_BENEFITS_PAGE_PROBE",
-            "MJA_SHOP_PANEL_PROBE",
-            "MJA_SHOP_PAGE_PROBE",
-            "MJA_SHOP_HOME_PROBE",
-            "[JumpBack]MJA_GAME_START",
+            "商店免费礼包-直接-状态-探测",
+            "商店免费礼包-直接-领取-门禁",
+            "商店免费礼包-打开-周期",
+            "商店免费礼包-权益-页面-探测",
+            "商店免费礼包-面板-探测",
+            "商店免费礼包-页面-探测",
+            "商店免费礼包-主页-探测",
+            "[JumpBack]启动-游戏启动",
         ]
         assert nodes[attempt]["timeout"] == 30000
         assert nodes[attempt]["max_hit"] == 2
@@ -116,57 +116,57 @@ def test_shop_process_exit_recovery_is_bounded_and_truthful() -> None:
         "SHOP_RUNTIME_RECOVERY_EXHAUSTED"
     )
     assert nodes[RECOVERY_EXHAUSTED]["Abort"] is True
-    assert_reachable(nodes, RECOVERY_EXHAUSTED, "MJA_COMMON_ABORT")
+    assert_reachable(nodes, RECOVERY_EXHAUSTED, "公共-通用中止")
 
 
 def test_shop_pre_claim_navigation_failures_converge_on_bounded_recovery() -> None:
     nodes = load_task_nodes(SHOP)
 
     for node_name in (
-        "MJA_SHOP_PAGE_PROBE",
-        "MJA_SHOP_BENEFITS_PAGE_PROBE",
-        "MJA_SHOP_CLAIM_GATE",
-        "MJA_SHOP_HOME_PROBE",
-        "MJA_SHOP_OPEN_PANEL",
-        "MJA_SHOP_PANEL_PROBE",
-        "MJA_SHOP_OPEN_SHOP",
-        "MJA_SHOP_OPEN_PERIOD",
+        "商店免费礼包-页面-探测",
+        "商店免费礼包-权益-页面-探测",
+        "商店免费礼包-领取-门禁",
+        "商店免费礼包-主页-探测",
+        "商店免费礼包-打开-面板",
+        "商店免费礼包-面板-探测",
+        "商店免费礼包-打开-商店",
+        "商店免费礼包-打开-周期",
     ):
         assert nodes[node_name]["on_error"] == RECOVERY_ROUTE
 
-    assert nodes["MJA_SHOP_STATUS_PROBE"]["on_error"] == [
-        "MJA_SHOP_CLAIM_GATE",
+    assert nodes["商店免费礼包-状态-探测"]["on_error"] == [
+        "商店免费礼包-领取-门禁",
         *RECOVERY_ROUTE,
     ]
-    assert nodes["MJA_SHOP_PAGE_PROBE"]["next"] == [
-        "MJA_SHOP_DIRECT_STATUS_PROBE",
-        "MJA_SHOP_DIRECT_CLAIM_GATE",
-        "MJA_SHOP_OPEN_PERIOD",
-        "MJA_SHOP_BENEFITS_PAGE_PROBE",
+    assert nodes["商店免费礼包-页面-探测"]["next"] == [
+        "商店免费礼包-直接-状态-探测",
+        "商店免费礼包-直接-领取-门禁",
+        "商店免费礼包-打开-周期",
+        "商店免费礼包-权益-页面-探测",
     ]
-    assert nodes["MJA_SHOP_OPEN_PERIOD"]["next"] == ["MJA_SHOP_BENEFITS_PAGE_PROBE"]
+    assert nodes["商店免费礼包-打开-周期"]["next"] == ["商店免费礼包-权益-页面-探测"]
 
 
 def test_shop_post_claim_recovery_verifies_without_replaying_claim() -> None:
     nodes = load_task_nodes(SHOP)
 
-    assert nodes["MJA_SHOP_CLAIM"]["retry_times"] == 0
-    assert nodes["MJA_SHOP_CLAIM"]["on_error"] == ["MJA_SHOP_RECORD_FAILURE"]
-    assert nodes["MJA_SHOP_DIRECT_CLAIM"]["retry_times"] == 0
-    assert nodes["MJA_SHOP_DIRECT_CLAIM"]["on_error"] == ["MJA_SHOP_RECORD_FAILURE"]
+    assert nodes["商店免费礼包-领取"]["retry_times"] == 0
+    assert nodes["商店免费礼包-领取"]["on_error"] == ["商店免费礼包-记录-失败"]
+    assert nodes["商店免费礼包-直接-领取"]["retry_times"] == 0
+    assert nodes["商店免费礼包-直接-领取"]["on_error"] == ["商店免费礼包-记录-失败"]
     assert_no_side_effect_retry(nodes, "claim_free_gift")
-    assert nodes["MJA_SHOP_REWARD_PROBE"]["on_error"] == POST_CLAIM_RECOVERY_ROUTE
-    assert nodes["MJA_SHOP_CLOSE_REWARD"]["on_error"] == POST_CLAIM_RECOVERY_ROUTE
-    assert nodes["MJA_SHOP_CLOSE_REWARD"]["next"] == [
-        "MJA_SHOP_CLAIM_VERIFY",
-        "MJA_SHOP_DIRECT_CLAIM_VERIFY",
+    assert nodes["商店免费礼包-奖励-探测"]["on_error"] == POST_CLAIM_RECOVERY_ROUTE
+    assert nodes["商店免费礼包-关闭-奖励"]["on_error"] == POST_CLAIM_RECOVERY_ROUTE
+    assert nodes["商店免费礼包-关闭-奖励"]["next"] == [
+        "商店免费礼包-领取-校验",
+        "商店免费礼包-直接-领取-校验",
     ]
-    assert nodes["MJA_SHOP_CLAIM_VERIFY"]["on_error"] == POST_CLAIM_RECOVERY_ROUTE
-    assert nodes["MJA_SHOP_DIRECT_CLAIM_VERIFY"]["on_error"] == (POST_CLAIM_RECOVERY_ROUTE)
+    assert nodes["商店免费礼包-领取-校验"]["on_error"] == POST_CLAIM_RECOVERY_ROUTE
+    assert nodes["商店免费礼包-直接-领取-校验"]["on_error"] == (POST_CLAIM_RECOVERY_ROUTE)
     for attempt in POST_CLAIM_RECOVERY_ATTEMPTS:
         assert nodes[attempt]["timeout"] == 30000
         assert nodes[attempt]["max_hit"] == 2
-        assert "MJA_SHOP_CLAIM" not in _reachable_names(nodes, attempt)
+        assert "商店免费礼包-领取" not in _reachable_names(nodes, attempt)
     assert nodes[POST_CLAIM_RECOVERY_ATTEMPTS[0]]["on_error"] == [
         POST_CLAIM_RECOVERY_ATTEMPTS[1],
         POST_CLAIM_RECOVERY_EXHAUSTED,
@@ -177,29 +177,29 @@ def test_shop_post_claim_recovery_verifies_without_replaying_claim() -> None:
         == "SHOP_POST_CLAIM_STATE_UNKNOWN"
     )
     assert nodes[POST_CLAIM_RECOVERY_EXHAUSTED]["Abort"] is True
-    assert_reachable(nodes, POST_CLAIM_RECOVERY_EXHAUSTED, "MJA_COMMON_ABORT")
+    assert_reachable(nodes, POST_CLAIM_RECOVERY_EXHAUSTED, "公共-通用中止")
 
 
 def test_shop_live_daily_deals_page_can_claim_without_period_benefits() -> None:
     nodes = load_task_nodes(SHOP)
 
-    direct_status = nodes["MJA_SHOP_DIRECT_STATUS_PROBE"]
+    direct_status = nodes["商店免费礼包-直接-状态-探测"]
     assert direct_status["recognition"]["param"] == {
-        "all_of": ["shop.page", "shop.daily_free_gift_claimed"],
+        "all_of": ["商店免费礼包-商店-页面", "商店免费礼包-商店-日常-免费-礼包-已领取"],
         "box_index": 1,
     }
-    assert direct_status["next"] == ["MJA_SHOP_ALREADY_COMPLETE"]
+    assert direct_status["next"] == ["商店免费礼包-已完成"]
 
-    direct_gate = nodes["MJA_SHOP_DIRECT_CLAIM_GATE"]
+    direct_gate = nodes["商店免费礼包-直接-领取-门禁"]
     assert direct_gate["recognition"]["param"] == {
-        "all_of": ["shop.page", "shop.daily_free_gift"],
+        "all_of": ["商店免费礼包-商店-页面", "商店免费礼包-商店-日常-免费-礼包"],
         "box_index": 1,
     }
-    assert direct_gate["next"] == ["MJA_SHOP_DIRECT_CLAIM"]
+    assert direct_gate["next"] == ["商店免费礼包-直接-领取"]
 
-    direct_claim = nodes["MJA_SHOP_DIRECT_CLAIM"]
+    direct_claim = nodes["商店免费礼包-直接-领取"]
     assert direct_claim["recognition"]["param"] == {
-        "all_of": ["shop.page", "shop.daily_free_gift"],
+        "all_of": ["商店免费礼包-商店-页面", "商店免费礼包-商店-日常-免费-礼包"],
         "box_index": 1,
     }
     assert direct_claim["custom_action"] == "GuardedInput"
@@ -207,19 +207,19 @@ def test_shop_live_daily_deals_page_can_claim_without_period_benefits() -> None:
     assert direct_claim["custom_action_param"]["evidence"] == {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "shop.page",
-        "target_name": "shop.daily_free_gift",
+        "page_name": "商店免费礼包-商店-页面",
+        "target_name": "商店免费礼包-商店-日常-免费-礼包",
     }
 
-    direct_verify = nodes["MJA_SHOP_DIRECT_CLAIM_VERIFY"]
+    direct_verify = nodes["商店免费礼包-直接-领取-校验"]
     assert direct_verify["recognition"]["param"] == {
-        "all_of": ["shop.page", "shop.daily_free_gift_claimed"],
+        "all_of": ["商店免费礼包-商店-页面", "商店免费礼包-商店-日常-免费-礼包-已领取"],
         "box_index": 1,
     }
-    assert direct_verify["next"] == ["MJA_SHOP_SUCCESS"]
-    assert nodes["MJA_SHOP_POST_CLAIM_PAGE_PROBE"]["next"] == [
-        "MJA_SHOP_DIRECT_CLAIM_VERIFY",
-        "MJA_SHOP_POST_CLAIM_OPEN_PERIOD",
+    assert direct_verify["next"] == ["商店免费礼包-成功"]
+    assert nodes["商店免费礼包-领取后-页面-探测"]["next"] == [
+        "商店免费礼包-直接-领取-校验",
+        "商店免费礼包-领取后-打开-周期",
     ]
 
 
@@ -257,51 +257,51 @@ def test_shop_all_task_branches_write_an_allowed_terminal_outcome() -> None:
         params = scoped[outcome]["custom_action_param"]
         if params["status"] == "failed":
             assert scoped[outcome]["Abort"] is True
-            assert_reachable(nodes, outcome, "MJA_COMMON_ABORT")
+            assert_reachable(nodes, outcome, "公共-通用中止")
 
     assert_outcome(
         nodes,
-        "MJA_SHOP_RECORD_ALREADY_COMPLETE",
+        "商店免费礼包-记录-已完成",
         "already_complete",
         "shop.daily_free_gift_claimed",
     )
     assert_outcome(
         nodes,
-        "MJA_SHOP_RECORD_SUCCESS",
+        "商店免费礼包-记录-成功",
         "success",
         "shop.daily_free_gift_claimed",
     )
-    assert nodes["MJA_SHOP_ALREADY_COMPLETE"]["action"] == "DoNothing"
-    assert nodes["MJA_SHOP_ALREADY_COMPLETE"]["next"] == [
-        "MJA_SHOP_CLOSE_ALREADY_COMPLETE"
+    assert nodes["商店免费礼包-已完成"]["action"] == "DoNothing"
+    assert nodes["商店免费礼包-已完成"]["next"] == [
+        "商店免费礼包-关闭-已完成"
     ]
-    assert nodes["MJA_SHOP_SUCCESS"]["action"] == "DoNothing"
-    assert nodes["MJA_SHOP_SUCCESS"]["next"] == ["MJA_SHOP_CLOSE"]
-    assert nodes["MJA_SHOP_CLOSE"]["next"] == ["MJA_SHOP_PANEL_AFTER_CLOSE"]
-    assert nodes["MJA_SHOP_PANEL_AFTER_CLOSE"]["next"] == ["MJA_SHOP_CLOSE_PANEL"]
-    assert nodes["MJA_SHOP_CLOSE_PANEL"]["next"] == ["MJA_SHOP_HOME_RETURN_PROBE"]
-    assert nodes["MJA_SHOP_HOME_RETURN_PROBE"]["next"] == [
-        "MJA_SHOP_RECORD_SUCCESS"
+    assert nodes["商店免费礼包-成功"]["action"] == "DoNothing"
+    assert nodes["商店免费礼包-成功"]["next"] == ["商店免费礼包-关闭"]
+    assert nodes["商店免费礼包-关闭"]["next"] == ["商店免费礼包-面板关闭后"]
+    assert nodes["商店免费礼包-面板关闭后"]["next"] == ["商店免费礼包-关闭-面板"]
+    assert nodes["商店免费礼包-关闭-面板"]["next"] == ["商店免费礼包-主页-返回-探测"]
+    assert nodes["商店免费礼包-主页-返回-探测"]["next"] == [
+        "商店免费礼包-记录-成功"
     ]
-    assert nodes["MJA_SHOP_CLOSE_ALREADY_COMPLETE"]["next"] == [
-        "MJA_SHOP_PANEL_AFTER_CLOSE_ALREADY_COMPLETE"
+    assert nodes["商店免费礼包-关闭-已完成"]["next"] == [
+        "商店免费礼包-面板关闭后-已完成"
     ]
-    assert nodes["MJA_SHOP_PANEL_AFTER_CLOSE_ALREADY_COMPLETE"]["next"] == [
-        "MJA_SHOP_CLOSE_PANEL_ALREADY_COMPLETE"
+    assert nodes["商店免费礼包-面板关闭后-已完成"]["next"] == [
+        "商店免费礼包-关闭-面板-已完成"
     ]
-    assert nodes["MJA_SHOP_CLOSE_PANEL_ALREADY_COMPLETE"]["next"] == [
-        "MJA_SHOP_HOME_RETURN_PROBE_ALREADY_COMPLETE"
+    assert nodes["商店免费礼包-关闭-面板-已完成"]["next"] == [
+        "商店免费礼包-主页-返回-探测-已完成"
     ]
-    assert nodes["MJA_SHOP_HOME_RETURN_PROBE_ALREADY_COMPLETE"]["next"] == [
-        "MJA_SHOP_RECORD_ALREADY_COMPLETE"
+    assert nodes["商店免费礼包-主页-返回-探测-已完成"]["next"] == [
+        "商店免费礼包-记录-已完成"
     ]
-    assert nodes["MJA_SHOP_CLOSE"]["on_error"] == ["MJA_SHOP_RECORD_FAILURE"]
-    assert nodes["MJA_SHOP_PANEL_AFTER_CLOSE"]["on_error"] == [
-        "MJA_SHOP_RECORD_FAILURE"
+    assert nodes["商店免费礼包-关闭"]["on_error"] == ["商店免费礼包-记录-失败"]
+    assert nodes["商店免费礼包-面板关闭后"]["on_error"] == [
+        "商店免费礼包-记录-失败"
     ]
-    assert nodes["MJA_SHOP_CLOSE_PANEL"]["on_error"] == ["MJA_SHOP_RECORD_FAILURE"]
-    assert nodes["MJA_SHOP_HOME_RETURN_PROBE"]["on_error"] == [
-        "MJA_SHOP_RECORD_FAILURE"
+    assert nodes["商店免费礼包-关闭-面板"]["on_error"] == ["商店免费礼包-记录-失败"]
+    assert nodes["商店免费礼包-主页-返回-探测"]["on_error"] == [
+        "商店免费礼包-记录-失败"
     ]
 
 
@@ -310,24 +310,24 @@ def test_shop_terminal_outcome_is_written_only_after_panel_and_home_cleanup() ->
 
     for branch, cleanup, outcome in (
         (
-            "MJA_SHOP_SUCCESS",
+            "商店免费礼包-成功",
             [
-                "MJA_SHOP_CLOSE",
-                "MJA_SHOP_PANEL_AFTER_CLOSE",
-                "MJA_SHOP_CLOSE_PANEL",
-                "MJA_SHOP_HOME_RETURN_PROBE",
+                "商店免费礼包-关闭",
+                "商店免费礼包-面板关闭后",
+                "商店免费礼包-关闭-面板",
+                "商店免费礼包-主页-返回-探测",
             ],
-            "MJA_SHOP_RECORD_SUCCESS",
+            "商店免费礼包-记录-成功",
         ),
         (
-            "MJA_SHOP_ALREADY_COMPLETE",
+            "商店免费礼包-已完成",
             [
-                "MJA_SHOP_CLOSE_ALREADY_COMPLETE",
-                "MJA_SHOP_PANEL_AFTER_CLOSE_ALREADY_COMPLETE",
-                "MJA_SHOP_CLOSE_PANEL_ALREADY_COMPLETE",
-                "MJA_SHOP_HOME_RETURN_PROBE_ALREADY_COMPLETE",
+                "商店免费礼包-关闭-已完成",
+                "商店免费礼包-面板关闭后-已完成",
+                "商店免费礼包-关闭-面板-已完成",
+                "商店免费礼包-主页-返回-探测-已完成",
             ],
-            "MJA_SHOP_RECORD_ALREADY_COMPLETE",
+            "商店免费礼包-记录-已完成",
         ),
     ):
         assert nodes[branch].get("custom_action") is None

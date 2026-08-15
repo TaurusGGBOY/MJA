@@ -1,5 +1,5 @@
 {
-  "MJA_HERO_DISPATCH_DAILY_START": {
+  "英雄派遣-任务入口": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "BeginTask",
@@ -7,131 +7,131 @@
       "task_id": "HERO_DISPATCH_DAILY"
     },
     "timeout": 8000,
-    "next": ["MJA_HERO_HOME_PROBE"],
+    "next": ["英雄派遣-主页-探测"],
     "on_error": [
-      "MJA_HERO_GAME_START_RECOVERY",
-      "MJA_HERO_RECORD_FAILURE"
+      "英雄派遣-游戏启动恢复",
+      "英雄派遣-记录-失败"
     ]
   },
-  "MJA_HERO_GAME_START_RECOVERY": {
+  "英雄派遣-游戏启动恢复": {
     "max_hit": 1,
     "recognition": "DirectHit",
     "timeout": 30000,
     "action": "DoNothing",
-    "next": ["MJA_HERO_HOME_PROBE", "[JumpBack]MJA_GAME_START"],
-    "on_error": ["MJA_HERO_RECORD_FAILURE"]
+    "next": ["英雄派遣-主页-探测", "[JumpBack]启动-游戏启动"],
+    "on_error": ["英雄派遣-记录-失败"]
   },
-  "MJA_HERO_RESUME_REWARD_PROBE": {
+  "英雄派遣-恢复继续-奖励-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["hero.reward_popup", "hero.reward_popup_close"],
+        "all_of": ["英雄派遣-英雄-奖励-弹窗", "英雄派遣-英雄-奖励-弹窗-关闭"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_HERO_RESUME_CLOSE_REWARD"],
-    "on_error": ["MJA_HERO_DISPATCH_PAGE_PROBE"]
+    "next": ["英雄派遣-恢复继续-关闭-奖励"],
+    "on_error": ["英雄派遣-派遣-页面-探测"]
   },
-  "MJA_HERO_DISPATCH_PAGE_PROBE": {
+  "英雄派遣-派遣-页面-探测": {
     "recognition": "OCR",
     "expected": ["^(?:侠客派遣|俠客派遣)$", "任务"],
     "roi": [0, 0, 520, 180],
     "timeout": 8000,
     "action": "DoNothing",
     "next": [
-      "MJA_HERO_INITIAL_CLAIM_GATE",
-      "MJA_HERO_INITIAL_WAITING_GATE",
-      "MJA_HERO_INITIAL_ALL",
-      "MJA_HERO_INITIAL_PROGRESS",
-      "MJA_HERO_INITIAL_NO_TASKS",
-      "MJA_HERO_INITIAL_SELECT"
+      "英雄派遣-初始-领取-门禁",
+      "英雄派遣-初始-等待中-门禁",
+      "英雄派遣-初始-全部",
+      "英雄派遣-初始-进度",
+      "英雄派遣-初始-无-任务",
+      "英雄派遣-初始-选择"
     ],
-    "on_error": ["MJA_HERO_OPEN_DISPATCH"]
+    "on_error": ["英雄派遣-打开-派遣"]
   },
-  "MJA_HERO_DISPATCH_PAGE_AFTER_OPEN": {
+  "英雄派遣-派遣-页面-之后-打开": {
     "recognition": "OCR",
     "expected": ["^(?:侠客派遣|俠客派遣)$", "任务"],
     "roi": [0, 0, 520, 180],
     "timeout": 8000,
     "action": "DoNothing",
     "next": [
-      "MJA_HERO_INITIAL_CLAIM_GATE",
-      "MJA_HERO_INITIAL_WAITING_GATE",
-      "MJA_HERO_INITIAL_ALL",
-      "MJA_HERO_INITIAL_PROGRESS",
-      "MJA_HERO_INITIAL_NO_TASKS",
-      "MJA_HERO_INITIAL_SELECT"
+      "英雄派遣-初始-领取-门禁",
+      "英雄派遣-初始-等待中-门禁",
+      "英雄派遣-初始-全部",
+      "英雄派遣-初始-进度",
+      "英雄派遣-初始-无-任务",
+      "英雄派遣-初始-选择"
     ],
-    "on_error": ["MJA_HERO_RECORD_FAILURE"]
+    "on_error": ["英雄派遣-记录-失败"]
   },
-  "MJA_HERO_INITIAL_CLAIM_GATE": {
+  "英雄派遣-初始-领取-门禁": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["hero.dispatch.page", "hero.first_task_claimable"],
+        "all_of": ["英雄派遣-英雄-派遣-页面", "英雄派遣-英雄-首个-任务-可领取"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_HERO_INITIAL_CLAIM"],
-    "on_error": ["MJA_HERO_INITIAL_ALL"]
+    "next": ["英雄派遣-初始-领取"],
+    "on_error": ["英雄派遣-初始-全部"]
   },
-  "MJA_HERO_INITIAL_WAITING_GATE": {
+  "英雄派遣-初始-等待中-门禁": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["hero.all_dispatched_waiting"],
+        "all_of": ["英雄派遣-英雄-全部-已派遣-等待中"],
         "box_index": 0
       }
     },
     "action": "DoNothing",
     "max_hit": 1,
     "retry_times": 0,
-    "next": ["MJA_HERO_ALREADY_WAITING"],
-    "on_error": ["MJA_HERO_RECORD_FAILURE"]
+    "next": ["英雄派遣-已完成-等待中"],
+    "on_error": ["英雄派遣-记录-失败"]
   },
-  "MJA_HERO_INITIAL_ALL": {
+  "英雄派遣-初始-全部": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["hero.dispatch.page", "hero.all_completed"],
+        "all_of": ["英雄派遣-英雄-派遣-页面", "英雄派遣-英雄-全部-已完成"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_HERO_ALREADY_ALL"],
-    "on_error": ["MJA_HERO_INITIAL_PROGRESS"]
+    "next": ["英雄派遣-已完成-全部"],
+    "on_error": ["英雄派遣-初始-进度"]
   },
-  "MJA_HERO_INITIAL_PROGRESS": {
+  "英雄派遣-初始-进度": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["hero.dispatch.page", "hero.first_task_in_progress"],
+        "all_of": ["英雄派遣-英雄-派遣-页面", "英雄派遣-英雄-首个-任务-中-进度"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_HERO_ALREADY_PROGRESS"],
-    "on_error": ["MJA_HERO_INITIAL_NO_TASKS"]
+    "next": ["英雄派遣-已完成-进度"],
+    "on_error": ["英雄派遣-初始-无-任务"]
   },
-  "MJA_HERO_INITIAL_NO_TASKS": {
+  "英雄派遣-初始-无-任务": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["hero.dispatch.page", "hero.no_dispatch_tasks"],
+        "all_of": ["英雄派遣-英雄-派遣-页面", "英雄派遣-英雄-无-派遣-任务"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_HERO_SUCCESS_NO_TASKS"],
-    "on_error": ["MJA_HERO_INITIAL_CLAIM"]
+    "next": ["英雄派遣-成功-无-任务"],
+    "on_error": ["英雄派遣-初始-领取"]
   },
-  "MJA_HERO_INITIAL_CLAIM": {
+  "英雄派遣-初始-领取": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["hero.dispatch.page", "hero.first_task_claimable"],
+        "all_of": ["英雄派遣-英雄-派遣-页面", "英雄派遣-英雄-首个-任务-可领取"],
         "box_index": 1
       }
     },
@@ -145,30 +145,30 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "hero.dispatch.page",
-        "target_name": "hero.first_task_claimable"
+        "page_name": "英雄派遣-英雄-派遣-页面",
+        "target_name": "英雄派遣-英雄-首个-任务-可领取"
       }
     },
-    "next": ["MJA_HERO_INITIAL_CLAIM_BUTTON"],
-    "on_error": ["MJA_HERO_RECORD_FAILURE"]
+    "next": ["英雄派遣-初始-领取-按钮"],
+    "on_error": ["英雄派遣-记录-失败"]
   },
-  "MJA_HERO_INITIAL_CLAIM_BUTTON": {
+  "英雄派遣-初始-领取-按钮": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["hero.dispatch.page", "hero.claim_button"],
+        "all_of": ["英雄派遣-英雄-派遣-页面", "英雄派遣-英雄-领取-按钮"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_HERO_INITIAL_CLAIM_ACTION"],
-    "on_error": ["MJA_HERO_RECORD_FAILURE"]
+    "next": ["英雄派遣-初始-领取-动作"],
+    "on_error": ["英雄派遣-记录-失败"]
   },
-  "MJA_HERO_INITIAL_CLAIM_ACTION": {
+  "英雄派遣-初始-领取-动作": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["hero.dispatch.page", "hero.claim_button"],
+        "all_of": ["英雄派遣-英雄-派遣-页面", "英雄派遣-英雄-领取-按钮"],
         "box_index": 1
       }
     },
@@ -182,18 +182,18 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "hero.dispatch.page",
-        "target_name": "hero.claim_button"
+        "page_name": "英雄派遣-英雄-派遣-页面",
+        "target_name": "英雄派遣-英雄-领取-按钮"
       }
     },
-    "next": ["MJA_HERO_CLAIM_REWARD_PROBE"],
-    "on_error": ["MJA_HERO_RECORD_FAILURE"]
+    "next": ["英雄派遣-领取-奖励-探测"],
+    "on_error": ["英雄派遣-记录-失败"]
   },
-  "MJA_HERO_INITIAL_SELECT": {
+  "英雄派遣-初始-选择": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["hero.dispatch.page", "hero.first_task_dispatchable"],
+        "all_of": ["英雄派遣-英雄-派遣-页面", "英雄派遣-英雄-首个-任务-可派遣"],
         "box_index": 1
       }
     },
@@ -207,27 +207,27 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "hero.dispatch.page",
-        "target_name": "hero.first_task_dispatchable"
+        "page_name": "英雄派遣-英雄-派遣-页面",
+        "target_name": "英雄派遣-英雄-首个-任务-可派遣"
       }
     },
-    "next": ["MJA_HERO_CONFIGURE"],
-    "on_error": ["MJA_HERO_RECORD_FAILURE"]
+    "next": ["英雄派遣-配置"],
+    "on_error": ["英雄派遣-记录-失败"]
   },
-  "MJA_HERO_CLAIM_REWARD_PROBE": {
+  "英雄派遣-领取-奖励-探测": {
     "recognition": "OCR",
     "expected": "点击空白处关闭",
     "roi": [350, 580, 600, 140],
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_HERO_CLOSE_REWARD"],
-    "on_error": ["MJA_HERO_CLAIM_VERIFY", "MJA_HERO_RECORD_FAILURE"]
+    "next": ["英雄派遣-关闭-奖励"],
+    "on_error": ["英雄派遣-领取-校验", "英雄派遣-记录-失败"]
   },
-  "MJA_HERO_CLOSE_REWARD": {
+  "英雄派遣-关闭-奖励": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["hero.reward_popup", "hero.reward_popup_close"],
+        "all_of": ["英雄派遣-英雄-奖励-弹窗", "英雄派遣-英雄-奖励-弹窗-关闭"],
         "box_index": 1
       }
     },
@@ -241,18 +241,18 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "hero.reward_popup",
-        "target_name": "hero.reward_popup_close"
+        "page_name": "英雄派遣-英雄-奖励-弹窗",
+        "target_name": "英雄派遣-英雄-奖励-弹窗-关闭"
       }
     },
-    "next": ["MJA_HERO_CLAIM_VERIFY"],
-    "on_error": ["MJA_HERO_RECORD_FAILURE"]
+    "next": ["英雄派遣-领取-校验"],
+    "on_error": ["英雄派遣-记录-失败"]
   },
-  "MJA_HERO_RESUME_CLOSE_REWARD": {
+  "英雄派遣-恢复继续-关闭-奖励": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["hero.reward_popup", "hero.reward_popup_close"],
+        "all_of": ["英雄派遣-英雄-奖励-弹窗", "英雄派遣-英雄-奖励-弹窗-关闭"],
         "box_index": 1
       }
     },
@@ -266,88 +266,88 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "hero.reward_popup",
-        "target_name": "hero.reward_popup_close"
+        "page_name": "英雄派遣-英雄-奖励-弹窗",
+        "target_name": "英雄派遣-英雄-奖励-弹窗-关闭"
       }
     },
-    "next": ["MJA_HERO_DISPATCH_PAGE_PROBE"],
-    "on_error": ["MJA_HERO_RECORD_FAILURE"]
+    "next": ["英雄派遣-派遣-页面-探测"],
+    "on_error": ["英雄派遣-记录-失败"]
   },
-  "MJA_HERO_CLAIM_VERIFY": {
+  "英雄派遣-领取-校验": {
     "recognition": "OCR",
     "expected": ["^(?:侠客派遣|俠客派遣)$", "任务"],
     "roi": [0, 0, 520, 180],
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_DISPATCH_CLAIM_PROBE", "MJA_DISPATCH_FILL_LOOP"],
-    "on_error": ["MJA_HERO_RECORD_FAILURE"]
+    "next": ["英雄派遣-领取-探测", "英雄派遣-填充-循环"],
+    "on_error": ["英雄派遣-记录-失败"]
   },
-  "MJA_DISPATCH_CLAIM_PROBE": {
+  "英雄派遣-领取-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["hero.dispatch.page", "hero.first_task_claimable"],
+        "all_of": ["英雄派遣-英雄-派遣-页面", "英雄派遣-英雄-首个-任务-可领取"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_DISPATCH_CLAIM_LOOP"],
-    "on_error": ["MJA_DISPATCH_FILL_LOOP"]
+    "next": ["英雄派遣-领取-循环"],
+    "on_error": ["英雄派遣-填充-循环"]
   },
-  "MJA_DISPATCH_CLAIM_LOOP": {
+  "英雄派遣-领取-循环": {
     "max_hit": 6,
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["hero.dispatch.page", "hero.first_task_claimable"],
+        "all_of": ["英雄派遣-英雄-派遣-页面", "英雄派遣-英雄-首个-任务-可领取"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_HERO_POST_CLAIM_SELECT"],
-    "on_error": ["MJA_DISPATCH_CLAIM_LOOP_EXHAUSTED"]
+    "next": ["英雄派遣-领取后-选择"],
+    "on_error": ["英雄派遣-领取-循环-耗尽"]
   },
-  "MJA_HERO_POST_ALL": {
+  "英雄派遣-之后-全部": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["hero.dispatch.page", "hero.all_completed"],
+        "all_of": ["英雄派遣-英雄-派遣-页面", "英雄派遣-英雄-全部-已完成"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_HERO_SUCCESS_ALL"],
-    "on_error": ["MJA_HERO_POST_PROGRESS"]
+    "next": ["英雄派遣-成功-全部"],
+    "on_error": ["英雄派遣-之后-进度"]
   },
-  "MJA_HERO_POST_PROGRESS": {
+  "英雄派遣-之后-进度": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["hero.dispatch.page", "hero.first_task_in_progress"],
+        "all_of": ["英雄派遣-英雄-派遣-页面", "英雄派遣-英雄-首个-任务-中-进度"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_HERO_SUCCESS_PROGRESS"],
-    "on_error": ["MJA_HERO_POST_NO_TASKS"]
+    "next": ["英雄派遣-成功-进度"],
+    "on_error": ["英雄派遣-之后-无-任务"]
   },
-  "MJA_HERO_POST_NO_TASKS": {
+  "英雄派遣-之后-无-任务": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["hero.dispatch.page", "hero.no_dispatch_tasks"],
+        "all_of": ["英雄派遣-英雄-派遣-页面", "英雄派遣-英雄-无-派遣-任务"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["MJA_HERO_SUCCESS_NO_TASKS"],
-    "on_error": ["MJA_HERO_POST_SELECT"]
+    "next": ["英雄派遣-成功-无-任务"],
+    "on_error": ["英雄派遣-之后-选择"]
   },
-  "MJA_HERO_POST_CLAIM_SELECT": {
+  "英雄派遣-领取后-选择": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["hero.dispatch.page", "hero.first_task_claimable"],
+        "all_of": ["英雄派遣-英雄-派遣-页面", "英雄派遣-英雄-首个-任务-可领取"],
         "box_index": 1
       }
     },
@@ -361,31 +361,31 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "hero.dispatch.page",
-        "target_name": "hero.first_task_claimable"
+        "page_name": "英雄派遣-英雄-派遣-页面",
+        "target_name": "英雄派遣-英雄-首个-任务-可领取"
       }
     },
-    "next": ["MJA_HERO_POST_CLAIM_BUTTON"],
-    "on_error": ["MJA_HERO_RECORD_FAILURE"]
+    "next": ["英雄派遣-领取后-按钮"],
+    "on_error": ["英雄派遣-记录-失败"]
   },
-  "MJA_HERO_POST_CLAIM_BUTTON": {
+  "英雄派遣-领取后-按钮": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["hero.dispatch.page", "hero.claim_button"],
+        "all_of": ["英雄派遣-英雄-派遣-页面", "英雄派遣-英雄-领取-按钮"],
         "box_index": 1
       }
     },
     "action": "DoNothing",
     "max_hit": 6,
-    "next": ["MJA_HERO_POST_CLAIM"],
-    "on_error": ["MJA_HERO_RECORD_FAILURE"]
+    "next": ["英雄派遣-领取后"],
+    "on_error": ["英雄派遣-记录-失败"]
   },
-  "MJA_HERO_POST_CLAIM": {
+  "英雄派遣-领取后": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["hero.dispatch.page", "hero.claim_button"],
+        "all_of": ["英雄派遣-英雄-派遣-页面", "英雄派遣-英雄-领取-按钮"],
         "box_index": 1
       }
     },
@@ -399,14 +399,14 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "hero.dispatch.page",
-        "target_name": "hero.claim_button"
+        "page_name": "英雄派遣-英雄-派遣-页面",
+        "target_name": "英雄派遣-英雄-领取-按钮"
       }
     },
-    "next": ["MJA_HERO_CLAIM_REWARD_PROBE"],
-    "on_error": ["MJA_HERO_RECORD_FAILURE"]
+    "next": ["英雄派遣-领取-奖励-探测"],
+    "on_error": ["英雄派遣-记录-失败"]
   },
-  "MJA_DISPATCH_FILL_LOOP": {
+  "英雄派遣-填充-循环": {
     "max_hit": 6,
     "recognition": "OCR",
     "expected": ["^(?:侠客派遣|俠客派遣)$", "任务"],
@@ -414,14 +414,14 @@
     "timeout": 8000,
     "action": "DoNothing",
     "next": [
-      "MJA_HERO_POST_ALL",
-      "MJA_HERO_POST_PROGRESS",
-      "MJA_HERO_POST_NO_TASKS",
-      "MJA_HERO_POST_SELECT"
+      "英雄派遣-之后-全部",
+      "英雄派遣-之后-进度",
+      "英雄派遣-之后-无-任务",
+      "英雄派遣-之后-选择"
     ],
-    "on_error": ["MJA_DISPATCH_FILL_LOOP_EXHAUSTED"]
+    "on_error": ["英雄派遣-填充-循环-耗尽"]
   },
-  "MJA_DISPATCH_FILL_LOOP_EXHAUSTED": {
+  "英雄派遣-填充-循环-耗尽": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -433,9 +433,9 @@
       "native_fail_after_record": true
     },
     "Abort": true,
-    "next": ["MJA_COMMON_ABORT"]
+    "next": ["公共-通用中止"]
   },
-  "MJA_DISPATCH_CLAIM_LOOP_EXHAUSTED": {
+  "英雄派遣-领取-循环-耗尽": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -447,13 +447,13 @@
       "native_fail_after_record": true
     },
     "Abort": true,
-    "next": ["MJA_COMMON_ABORT"]
+    "next": ["公共-通用中止"]
   },
-  "MJA_HERO_POST_SELECT": {
+  "英雄派遣-之后-选择": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["hero.dispatch.page", "hero.first_task_dispatchable"],
+        "all_of": ["英雄派遣-英雄-派遣-页面", "英雄派遣-英雄-首个-任务-可派遣"],
         "box_index": 1
       }
     },
@@ -467,18 +467,18 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "hero.dispatch.page",
-        "target_name": "hero.first_task_dispatchable"
+        "page_name": "英雄派遣-英雄-派遣-页面",
+        "target_name": "英雄派遣-英雄-首个-任务-可派遣"
       }
     },
-    "next": ["MJA_HERO_CONFIGURE"],
-    "on_error": ["MJA_HERO_RECORD_FAILURE"]
+    "next": ["英雄派遣-配置"],
+    "on_error": ["英雄派遣-记录-失败"]
   },
-  "MJA_HERO_CONFIGURE": {
+  "英雄派遣-配置": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["hero.dispatch.page", "hero.smart_configure"],
+        "all_of": ["英雄派遣-英雄-派遣-页面", "英雄派遣-英雄-智能-配置"],
         "box_index": 1
       }
     },
@@ -492,18 +492,18 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "hero.dispatch.page",
-        "target_name": "hero.smart_configure"
+        "page_name": "英雄派遣-英雄-派遣-页面",
+        "target_name": "英雄派遣-英雄-智能-配置"
       }
     },
-    "next": ["MJA_HERO_SEND"],
-    "on_error": ["MJA_HERO_RECORD_FAILURE"]
+    "next": ["英雄派遣-发送"],
+    "on_error": ["英雄派遣-记录-失败"]
   },
-  "MJA_HERO_SEND": {
+  "英雄派遣-发送": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["hero.dispatch.page", "hero.dispatch_button"],
+        "all_of": ["英雄派遣-英雄-派遣-页面", "英雄派遣-英雄-派遣-按钮"],
         "box_index": 1
       }
     },
@@ -517,14 +517,14 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "hero.dispatch.page",
-        "target_name": "hero.dispatch_button"
+        "page_name": "英雄派遣-英雄-派遣-页面",
+        "target_name": "英雄派遣-英雄-派遣-按钮"
       }
     },
-    "next": ["MJA_DISPATCH_CLAIM_PROBE", "MJA_DISPATCH_FILL_LOOP"],
-    "on_error": ["MJA_HERO_RECORD_FAILURE"]
+    "next": ["英雄派遣-领取-探测", "英雄派遣-填充-循环"],
+    "on_error": ["英雄派遣-记录-失败"]
   },
-  "MJA_HERO_SUCCESS_ALL": {
+  "英雄派遣-成功-全部": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -533,9 +533,9 @@
       "status": "success",
       "postcondition": "hero.all_completed"
     },
-    "next": ["MJA_HERO_CLOSE_DISPATCH"]
+    "next": ["英雄派遣-关闭-派遣"]
   },
-  "MJA_HERO_SUCCESS_PROGRESS": {
+  "英雄派遣-成功-进度": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -544,9 +544,9 @@
       "status": "success",
       "postcondition": "hero.first_task_in_progress"
     },
-    "next": ["MJA_HERO_CLOSE_DISPATCH"]
+    "next": ["英雄派遣-关闭-派遣"]
   },
-  "MJA_HERO_SUCCESS_NO_TASKS": {
+  "英雄派遣-成功-无-任务": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -555,9 +555,9 @@
       "status": "success",
       "postcondition": "hero.no_dispatch_tasks"
     },
-    "next": ["MJA_HERO_CLOSE_DISPATCH"]
+    "next": ["英雄派遣-关闭-派遣"]
   },
-  "MJA_HERO_ALREADY_ALL": {
+  "英雄派遣-已完成-全部": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -566,9 +566,9 @@
       "status": "already_complete",
       "postcondition": "hero.all_completed"
     },
-    "next": ["MJA_HERO_CLOSE_DISPATCH"]
+    "next": ["英雄派遣-关闭-派遣"]
   },
-  "MJA_HERO_ALREADY_PROGRESS": {
+  "英雄派遣-已完成-进度": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -577,9 +577,9 @@
       "status": "already_complete",
       "postcondition": "hero.first_task_in_progress"
     },
-    "next": ["MJA_HERO_CLOSE_DISPATCH"]
+    "next": ["英雄派遣-关闭-派遣"]
   },
-  "MJA_HERO_ALREADY_WAITING": {
+  "英雄派遣-已完成-等待中": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -590,9 +590,9 @@
     },
     "max_hit": 1,
     "retry_times": 0,
-    "next": ["MJA_HERO_CLOSE_DISPATCH"]
+    "next": ["英雄派遣-关闭-派遣"]
   },
-  "MJA_HERO_RECORD_FAILURE": {
+  "英雄派遣-记录-失败": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -604,25 +604,25 @@
       "native_fail_after_record": true
     },
     "Abort": true,
-    "next": ["MJA_COMMON_ABORT"]
+    "next": ["公共-通用中止"]
   },
-  "MJA_HERO_HOME_PROBE": {
+  "英雄派遣-主页-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["hero.home.page"]
+        "all_of": ["英雄派遣-英雄-主页-页面"]
       }
     },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_HERO_OPEN_PAINTING", "MJA_HERO_OPEN_PAINTING_WORLD"],
-    "on_error": ["MJA_HERO_RESUME_REWARD_PROBE"]
+    "next": ["英雄派遣-打开-画卷", "英雄派遣-打开-画卷-世界"],
+    "on_error": ["英雄派遣-恢复继续-奖励-探测"]
   },
-  "MJA_HERO_OPEN_PAINTING": {
+  "英雄派遣-打开-画卷": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["hero.home.page", "painting_scroll.entry"],
+        "all_of": ["英雄派遣-英雄-主页-页面", "英雄派遣-画卷-滚动-入口"],
         "box_index": 1
       }
     },
@@ -635,20 +635,20 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "hero.home.page",
-        "target_name": "painting_scroll.entry"
+        "page_name": "英雄派遣-英雄-主页-页面",
+        "target_name": "英雄派遣-画卷-滚动-入口"
       }
     },
     "max_hit": 1,
     "retry_times": 0,
-    "next": ["MJA_HERO_OPEN_DISPATCH"],
-    "on_error": ["MJA_HERO_OPEN_PAINTING_WORLD", "MJA_HERO_RECORD_FAILURE"]
+    "next": ["英雄派遣-打开-派遣"],
+    "on_error": ["英雄派遣-打开-画卷-世界", "英雄派遣-记录-失败"]
   },
-  "MJA_HERO_OPEN_PAINTING_WORLD": {
+  "英雄派遣-打开-画卷-世界": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["hero.home.page", "painting_scroll.entry.world"],
+        "all_of": ["英雄派遣-英雄-主页-页面", "英雄派遣-画卷-滚动-入口-世界"],
         "box_index": 1
       }
     },
@@ -661,20 +661,20 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "hero.home.page",
-        "target_name": "painting_scroll.entry.world"
+        "page_name": "英雄派遣-英雄-主页-页面",
+        "target_name": "英雄派遣-画卷-滚动-入口-世界"
       }
     },
     "max_hit": 1,
     "retry_times": 0,
-    "next": ["MJA_HERO_OPEN_DISPATCH"],
-    "on_error": ["MJA_HERO_RECORD_FAILURE"]
+    "next": ["英雄派遣-打开-派遣"],
+    "on_error": ["英雄派遣-记录-失败"]
   },
-  "MJA_HERO_OPEN_DISPATCH": {
+  "英雄派遣-打开-派遣": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["painting.page", "hero.dispatch.entry"],
+        "all_of": ["英雄派遣-画卷-页面", "英雄派遣-英雄-派遣-入口"],
         "box_index": 1
       }
     },
@@ -687,21 +687,21 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "painting.page",
-        "target_name": "hero.dispatch.entry"
+        "page_name": "英雄派遣-画卷-页面",
+        "target_name": "英雄派遣-英雄-派遣-入口"
       }
     },
     "timeout": 8000,
     "max_hit": 1,
     "retry_times": 0,
-    "next": ["MJA_HERO_DISPATCH_PAGE_AFTER_OPEN"],
-    "on_error": ["MJA_HERO_RECORD_FAILURE"]
+    "next": ["英雄派遣-派遣-页面-之后-打开"],
+    "on_error": ["英雄派遣-记录-失败"]
   },
-  "MJA_HERO_CLOSE_DISPATCH": {
+  "英雄派遣-关闭-派遣": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["hero.dispatch.page", "hero.dispatch.close"],
+        "all_of": ["英雄派遣-英雄-派遣-页面", "英雄派遣-英雄-派遣-关闭"],
         "box_index": 1
       }
     },
@@ -714,32 +714,32 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "hero.dispatch.page",
-        "target_name": "hero.dispatch.close"
+        "page_name": "英雄派遣-英雄-派遣-页面",
+        "target_name": "英雄派遣-英雄-派遣-关闭"
       }
     },
     "max_hit": 1,
     "retry_times": 0,
-    "next": ["MJA_HERO_CLOSE_PAINTING"],
-    "on_error": ["MJA_HERO_CLOSE_DISPATCH_PAINTING_PROBE", "MJA_HERO_HOME_BOUNDARY_PROBE"]
+    "next": ["英雄派遣-关闭-画卷"],
+    "on_error": ["英雄派遣-关闭-派遣-画卷-探测", "英雄派遣-主页边界-探测"]
   },
-  "MJA_HERO_CLOSE_DISPATCH_PAINTING_PROBE": {
+  "英雄派遣-关闭-派遣-画卷-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["painting.page"]
+        "all_of": ["英雄派遣-画卷-页面"]
       }
     },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_HERO_CLOSE_PAINTING"],
-    "on_error": ["MJA_HERO_HOME_BOUNDARY_PROBE"]
+    "next": ["英雄派遣-关闭-画卷"],
+    "on_error": ["英雄派遣-主页边界-探测"]
   },
-  "MJA_HERO_CLOSE_PAINTING": {
+  "英雄派遣-关闭-画卷": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["painting.page", "hero.painting.close"],
+        "all_of": ["英雄派遣-画卷-页面", "英雄派遣-英雄-画卷-关闭"],
         "box_index": 1
       }
     },
@@ -752,28 +752,28 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "painting.page",
-        "target_name": "hero.painting.close"
+        "page_name": "英雄派遣-画卷-页面",
+        "target_name": "英雄派遣-英雄-画卷-关闭"
       }
     },
     "max_hit": 1,
     "retry_times": 0,
-    "next": ["MJA_HERO_HOME_BOUNDARY_PROBE"],
-    "on_error": ["MJA_HERO_HOME_BOUNDARY_PROBE"]
+    "next": ["英雄派遣-主页边界-探测"],
+    "on_error": ["英雄派遣-主页边界-探测"]
   },
-  "MJA_HERO_HOME_BOUNDARY_PROBE": {
+  "英雄派遣-主页边界-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["hero.home.page"]
+        "all_of": ["英雄派遣-英雄-主页-页面"]
       }
     },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_COMMON_STOP"],
-    "on_error": ["MJA_HERO_BOUNDARY_FAILURE"]
+    "next": ["公共-通用停止"],
+    "on_error": ["英雄派遣-边界-失败"]
   },
-  "MJA_HERO_BOUNDARY_FAILURE": {
+  "英雄派遣-边界-失败": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -785,88 +785,88 @@
       "native_fail_after_record": true
     },
     "Abort": true,
-    "next": ["MJA_COMMON_ABORT"]
+    "next": ["公共-通用中止"]
   },
-  "hero.home.page": {
+  "英雄派遣-英雄-主页-页面": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["MJA_GAME_HOME_PAGE"]
+        "all_of": ["公共-游戏主页-页面"]
       }
     },
     "action": "DoNothing"
   },
-  "hero.home.dungeon": {
+  "英雄派遣-英雄-主页-副本": {
     "recognition": "OCR",
     "expected": "^副本$",
     "roi": [1035, 45, 80, 40],
     "action": "DoNothing"
   },
-  "hero.home.trial": {
+  "英雄派遣-英雄-主页-试炼": {
     "recognition": "OCR",
     "expected": "^试剑$",
     "roi": [965, 620, 100, 70],
     "action": "DoNothing"
   },
-  "painting_scroll.entry": {
+  "英雄派遣-画卷-滚动-入口": {
     "recognition": "OCR",
     "expected": "^画卷$",
     "roi": [70, 10, 95, 60],
     "action": "DoNothing"
   },
-  "painting_scroll.entry.world": {
+  "英雄派遣-画卷-滚动-入口-世界": {
     "recognition": "OCR",
     "expected": "^画卷$",
     "roi": [1080, 0, 200, 120],
     "action": "DoNothing"
   },
-  "painting.page": {
+  "英雄派遣-画卷-页面": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["painting.page.title", "painting.page.yanwu_world"],
+        "all_of": ["英雄派遣-画卷-页面-标题", "英雄派遣-画卷-页面-偃武-世界"],
         "box_index": 0
       }
     },
     "action": "DoNothing"
   },
-  "painting.page.title": {
+  "英雄派遣-画卷-页面-标题": {
     "recognition": "OCR",
     "expected": "^画卷$",
     "roi": [70, 10, 95, 60],
     "action": "DoNothing"
   },
-  "painting.page.yanwu_world": {
+  "英雄派遣-画卷-页面-偃武-世界": {
     "recognition": "OCR",
     "expected": "^偃武世界$",
     "roi": [110, 120, 150, 70],
     "action": "DoNothing"
   },
-  "hero.dispatch.entry": {
+  "英雄派遣-英雄-派遣-入口": {
     "recognition": "OCR",
     "expected": "^(?:侠客派遣|俠客派遣)$",
     "roi": [985, 625, 125, 70],
     "action": "DoNothing"
   },
-  "hero.dispatch.page": {
+  "英雄派遣-英雄-派遣-页面": {
     "recognition": "OCR",
     "expected": ["^(?:侠客派遣|俠客派遣)$", "任务"],
     "roi": [0, 0, 520, 180],
     "action": "DoNothing"
   },
-  "hero.first_task_claimable": {
+  "英雄派遣-英雄-首个-任务-可领取": {
     "recognition": "OCR",
     "expected": ["完成派遣", "可领取", "领取"],
     "roi": [20, 130, 300, 130],
     "action": "DoNothing"
   },
-  "hero.first_task_dispatchable": {
+  "英雄派遣-英雄-首个-任务-可派遣": {
     "recognition": "OCR",
     "expected": ["耗时", "派遣(?!中)"],
     "roi": [20, 130, 300, 130],
     "action": "DoNothing"
   },
-  "hero.first_task_in_progress": {
+  "英雄派遣-英雄-首个-任务-中-进度": {
     "recognition": "OCR",
     "expected": [
       "正在派遣中",
@@ -877,39 +877,39 @@
     "roi": [20, 130, 300, 130],
     "action": "DoNothing"
   },
-  "hero.all_dispatch_slots_assigned": {
+  "英雄派遣-英雄-全部-派遣-槽位-已分配": {
     "recognition": "OCR",
     "expected": "^任务\\s*[:：]?\\s*9\\s*/\\s*9$",
     "roi": [20, 80, 190, 70],
     "action": "DoNothing"
   },
-  "hero.zero_dispatch_tasks": {
+  "英雄派遣-英雄-零-派遣-任务": {
     "recognition": "OCR",
     "expected": "^任务\\s*[:：]?\\s*0\\s*/\\s*9$",
     "roi": [20, 80, 190, 70],
     "action": "DoNothing"
   },
-  "hero.zero_completed_dispatches": {
+  "英雄派遣-英雄-零-已完成-派遣任务": {
     "recognition": "OCR",
     "expected": "^已完成\\s*[:：]?\\s*0$",
     "roi": [190, 80, 180, 70],
     "action": "DoNothing"
   },
-  "hero.all_dispatched_waiting": {
+  "英雄派遣-英雄-全部-已派遣-等待中": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "hero.dispatch.page",
-          "hero.all_dispatch_slots_assigned",
-          "hero.zero_completed_dispatches"
+          "英雄派遣-英雄-派遣-页面",
+          "英雄派遣-英雄-全部-派遣-槽位-已分配",
+          "英雄派遣-英雄-零-已完成-派遣任务"
         ],
         "box_index": 1
       }
     },
     "action": "DoNothing"
   },
-  "hero.all_completed": {
+  "英雄派遣-英雄-全部-已完成": {
     "recognition": "OCR",
     "expected": [
       "任务\\s*[:：]?\\s*9\\s*/\\s*9",
@@ -918,58 +918,58 @@
     "roi": [0, 80, 360, 70],
     "action": "DoNothing"
   },
-  "hero.no_selected_dispatch_task": {
+  "英雄派遣-英雄-无-已选择-派遣-任务": {
     "recognition": "OCR",
     "expected": "尚未选择派遣任务",
     "roi": [930, 250, 340, 220],
     "action": "DoNothing"
   },
-  "hero.no_dispatch_tasks": {
+  "英雄派遣-英雄-无-派遣-任务": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "hero.dispatch.page",
-          "hero.zero_dispatch_tasks",
-          "hero.zero_completed_dispatches",
-          "hero.no_selected_dispatch_task"
+          "英雄派遣-英雄-派遣-页面",
+          "英雄派遣-英雄-零-派遣-任务",
+          "英雄派遣-英雄-零-已完成-派遣任务",
+          "英雄派遣-英雄-无-已选择-派遣-任务"
         ],
         "box_index": 1
       }
     },
     "action": "DoNothing"
   },
-  "hero.claim_button": {
+  "英雄派遣-英雄-领取-按钮": {
     "recognition": "OCR",
     "expected": "领取",
     "roi": [950, 520, 300, 100],
     "action": "DoNothing"
   },
-  "hero.smart_configure": {
+  "英雄派遣-英雄-智能-配置": {
     "recognition": "OCR",
     "expected": "智能配置",
     "roi": [760, 520, 220, 100],
     "action": "DoNothing"
   },
-  "hero.dispatch_button": {
+  "英雄派遣-英雄-派遣-按钮": {
     "recognition": "OCR",
     "expected": "派遣",
     "roi": [950, 520, 300, 100],
     "action": "DoNothing"
   },
-  "hero.reward_popup": {
+  "英雄派遣-英雄-奖励-弹窗": {
     "recognition": "OCR",
     "expected": "点击空白处关闭",
     "roi": [350, 580, 600, 140],
     "action": "DoNothing"
   },
-  "hero.reward_popup_close": {
+  "英雄派遣-英雄-奖励-弹窗-关闭": {
     "recognition": "OCR",
     "expected": "点击空白处关闭",
     "roi": [350, 580, 600, 140],
     "action": "DoNothing"
   },
-  "hero.dispatch.close": {
+  "英雄派遣-英雄-派遣-关闭": {
     "recognition": "TemplateMatch",
     "template": "daily/HERO_DISPATCH_DAILY/dispatch_close.png",
     "roi": [1175, 5, 75, 75],
@@ -977,7 +977,7 @@
     "green_mask": true,
     "action": "DoNothing"
   },
-  "hero.painting.close": {
+  "英雄派遣-英雄-画卷-关闭": {
     "recognition": "TemplateMatch",
     "template": "daily/HERO_DISPATCH_DAILY/painting_close.png",
     "roi": [1175, 5, 75, 75],

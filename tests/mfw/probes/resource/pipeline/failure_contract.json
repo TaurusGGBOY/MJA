@@ -18,7 +18,7 @@
       "status": "success",
       "postcondition": "probe success"
     },
-    "next": ["MJA_COMMON_STOP"]
+    "next": ["公共-通用停止"]
   },
   "MJA_PROBE_ALREADY_COMPLETE": {
     "recognition": "DirectHit",
@@ -39,7 +39,7 @@
       "status": "already_complete",
       "postcondition": "probe already complete"
     },
-    "next": ["MJA_COMMON_STOP"]
+    "next": ["公共-通用停止"]
   },
   "MJA_PROBE_NOT_ELIGIBLE": {
     "recognition": "DirectHit",
@@ -60,7 +60,7 @@
       "status": "not_eligible",
       "postcondition": "probe not eligible"
     },
-    "next": ["MJA_COMMON_STOP"]
+    "next": ["公共-通用停止"]
   },
   "MJA_PROBE_BUSINESS_FAILURE_BEGIN": {
     "recognition": "DirectHit",
@@ -84,11 +84,11 @@
       "error_code": "PROBE_BUSINESS_FAILURE",
       "native_fail_after_record": true
     },
-    "next": ["MJA_COMMON_ABORT"]
+    "next": ["公共-通用中止"]
   },
   "MJA_PROBE_SENTINEL": {
     "recognition": "DirectHit",
     "action": "DoNothing",
-    "next": ["MJA_COMMON_STOP"]
+    "next": ["公共-通用停止"]
   }
 }

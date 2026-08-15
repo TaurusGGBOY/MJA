@@ -25,16 +25,16 @@ def test_appraisal_closes_archived_tea_shop_before_probing_appraisal() -> None:
 
     start = nodes[APPRAISAL.entry]
     assert start["next"][:3] == [
-        "[JumpBack]MJA_KNOWN_PAINTING_CLOSE",
-        "[JumpBack]MJA_APPRAISAL_EXTRA_POPUP_CLOSE",
-        "[JumpBack]MJA_APPRAISAL_KNOWN_TEA_SHOP_CLOSE",
+        "[JumpBack]公共-已知-画卷-关闭",
+        "[JumpBack]免费鉴定-额外-弹窗-关闭",
+        "[JumpBack]免费鉴定-已知-茶-商店-关闭",
     ]
 
-    recovery = nodes["MJA_APPRAISAL_KNOWN_TEA_SHOP_CLOSE"]
+    recovery = nodes["免费鉴定-已知-茶-商店-关闭"]
     assert recovery["recognition"]["param"] == {
         "all_of": [
-            "appraisal.universal_shop.page",
-            "appraisal.universal_shop.close",
+            "免费鉴定-鉴定-万用-商店-页面",
+            "免费鉴定-鉴定-万用-商店-关闭",
         ],
         "box_index": 1,
     }
@@ -42,21 +42,21 @@ def test_appraisal_closes_archived_tea_shop_before_probing_appraisal() -> None:
     assert recovery["max_hit"] == 1
     assert recovery["timeout"] == 5000
     assert recovery["retry_times"] == 0
-    assert recovery["on_error"] == ["MJA_APPRAISAL_RECORD_FAILURE"]
+    assert recovery["on_error"] == ["免费鉴定-记录-失败"]
 
-    page = nodes["appraisal.universal_shop.page"]
+    page = nodes["免费鉴定-鉴定-万用-商店-页面"]
     assert page["expected"] == "^玉盟商会$"
     assert _contains(page["roi"], [91, 30, 84, 23])
 
-    close = nodes["appraisal.universal_shop.close"]
+    close = nodes["免费鉴定-鉴定-万用-商店-关闭"]
     assert close["template"] == "daily/BUY_TEA_DAILY/shop_close.png"
     assert close["roi"] == [1160, 0, 100, 100]
     assert close["threshold"] == 0.39
 
     assert_outcome(
         nodes,
-        "MJA_APPRAISAL_RECORD_FAILURE",
+        "免费鉴定-记录-失败",
         "failed",
         "APPRAISAL_POSTCONDITION_MISSING",
     )
-    assert nodes["MJA_APPRAISAL_RECORD_FAILURE"]["Abort"] is True
+    assert nodes["免费鉴定-记录-失败"]["Abort"] is True

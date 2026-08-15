@@ -49,7 +49,7 @@ def test_ring_resumes_from_an_already_open_daily_list():
     decision = DEFINITION.decide(
         _snapshot(
             "home",
-            ("daily.page", "ring_daily_task_text", "ring_daily_row"),
+            ("日常任务奖励-日常-页面", "ring_daily_task_text", "ring_daily_row"),
         ),
         {},
     )
@@ -60,7 +60,7 @@ def test_ring_resumes_from_an_already_open_daily_list():
 
 def test_ring_completed_daily_list_still_opens_arena_to_verify_all_attempts():
     decision = DEFINITION.decide(
-        _snapshot("home", ("daily.page", "ring_daily_done")),
+        _snapshot("home", ("日常任务奖励-日常-页面", "ring_daily_done")),
         {},
     )
 
@@ -72,7 +72,7 @@ def test_ring_open_accepts_the_daily_reward_popup_as_a_transition_surface():
     decision = DEFINITION.decide(
         _snapshot(
             "daily",
-            ("daily.page", "ring_daily_task_text", "ring_daily_row"),
+            ("日常任务奖励-日常-页面", "ring_daily_task_text", "ring_daily_row"),
         ),
         {},
     )
@@ -84,7 +84,7 @@ def test_ring_open_accepts_the_daily_reward_popup_as_a_transition_surface():
 
 def test_ring_daily_reward_popup_must_close_before_completed_row_is_reopened():
     decision = DEFINITION.decide(
-        _snapshot("ring", ("daily.reward_popup", "daily.reward_popup_close")),
+        _snapshot("ring", ("日常任务奖励-日常-奖励-弹窗", "日常任务奖励-日常-奖励-弹窗-关闭")),
         {},
     )
 
@@ -93,7 +93,7 @@ def test_ring_daily_reward_popup_must_close_before_completed_row_is_reopened():
     assert decision.transition.next_state == "daily"
 
     reopened = DEFINITION.decide(
-        _snapshot("daily", ("daily.page", "ring_daily_done")),
+        _snapshot("daily", ("日常任务奖励-日常-页面", "ring_daily_done")),
         {},
     )
     assert reopened.transition is not None
@@ -536,7 +536,7 @@ def test_ring_result_without_completion_evidence_still_fails():
 
 def test_ring_terminal_state_does_not_reenter_dynamic_home_navigation():
     completed = DEFINITION.decide(
-        _snapshot("done", ("home", "daily.page")),
+        _snapshot("done", ("home", "日常任务奖励-日常-页面")),
         {},
     )
 
