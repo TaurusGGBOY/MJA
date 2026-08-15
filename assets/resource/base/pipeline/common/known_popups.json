@@ -18,8 +18,8 @@
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["公共-已知-面板-标记", "公共-已知-面板-关闭"],
-        "box_index": 1
+        "all_of": ["公共-已知-面板-标记"],
+        "box_index": 0
       }
     },
     "timeout": 5000,
@@ -157,22 +157,6 @@
         "all_of": [
           "公共-已知-英雄-派遣-页面",
           "公共-已知-英雄-派遣-关闭-图标"
-        ],
-        "box_index": 1
-      }
-    },
-    "timeout": 5000,
-    "max_hit": 1,
-    "action": "Click",
-    "post_delay": 500
-  },
-  "公共-已知-武学-详情-关闭": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": [
-          "martial.detail.page",
-          "武学突破-武学-关闭"
         ],
         "box_index": 1
       }
