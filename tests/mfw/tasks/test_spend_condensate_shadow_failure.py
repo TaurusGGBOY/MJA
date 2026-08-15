@@ -56,3 +56,22 @@ def test_painting_probe_no_longer_jumps_to_unverified_world_or_game_start() -> N
     assert "消耗凝结体-偃武-页面-探测" not in on_error
     assert "[JumpBack]启动-游戏启动" not in on_error
     assert "消耗凝结体-记录-失败" in on_error
+
+
+def test_normal_outcomes_cleanup_to_home_boundary() -> None:
+    nodes = load_task_nodes(CONDENSATE)
+
+    for outcome_name in ("消耗凝结体-已完成", "消耗凝结体-成功"):
+        outcome = nodes[outcome_name]
+        assert outcome["custom_action_param"]["defer_home_boundary"] is True
+        assert outcome["next"] == ["消耗凝结体-完成-收尾"]
+        assert_reachable(nodes, outcome_name, "公共-主页边界")
+        assert_reachable(nodes, outcome_name, "公共-通用停止")
+
+    cleanup = nodes["消耗凝结体-完成-收尾"]
+    assert cleanup["max_hit"] == 4
+    assert cleanup["next"] == [
+        "[JumpBack]公共-已知-画卷-关闭",
+        "消耗凝结体-完成-主页-探测",
+    ]
+    assert nodes["消耗凝结体-完成-主页-探测"]["next"] == ["公共-主页边界"]

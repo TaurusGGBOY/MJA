@@ -615,9 +615,10 @@
     "custom_action_param": {
       "task_id": "SPEND_CONDENSATE_DAILY",
       "status": "already_complete",
-      "postcondition": "condensate.both_regions_sold_out"
+      "postcondition": "condensate.both_regions_sold_out",
+      "defer_home_boundary": true
     },
-    "next": ["公共-通用停止"]
+    "next": ["消耗凝结体-完成-收尾"]
   },
   "消耗凝结体-成功": {
     "recognition": "DirectHit",
@@ -626,9 +627,31 @@
     "custom_action_param": {
       "task_id": "SPEND_CONDENSATE_DAILY",
       "status": "success",
-      "postcondition": "condensate.both_regions_sold_out"
+      "postcondition": "condensate.both_regions_sold_out",
+      "defer_home_boundary": true
     },
-    "next": ["公共-通用停止"]
+    "next": ["消耗凝结体-完成-收尾"]
+  },
+  "消耗凝结体-完成-收尾": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "max_hit": 4,
+    "timeout": 8000,
+    "next": [
+      "[JumpBack]公共-已知-画卷-关闭",
+      "消耗凝结体-完成-主页-探测"
+    ],
+    "on_error": ["消耗凝结体-记录-失败"]
+  },
+  "消耗凝结体-完成-主页-探测": {
+    "recognition": {
+      "type": "And",
+      "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}
+    },
+    "timeout": 8000,
+    "action": "DoNothing",
+    "next": ["公共-主页边界"],
+    "on_error": ["消耗凝结体-记录-失败"]
   },
   "消耗凝结体-预算-不安全": {
     "recognition": "DirectHit",
