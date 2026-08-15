@@ -520,7 +520,7 @@
       "postcondition": "shadow.final_reward_claimed_and_home"
     },
     "next": [
-      "公共-通用停止"
+      "公共-主页边界"
     ]
   },
   "影之遗迹-边界-失败": {
