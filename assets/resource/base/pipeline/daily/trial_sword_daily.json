@@ -11,96 +11,9 @@
       "[JumpBack]公共-已知-画卷-关闭",
       "[JumpBack]公共-已知-茶-详情-关闭",
       "[JumpBack]公共-已知-茶-商店-关闭",
-      "试剑-恢复继续-免费-探测",
-      "试剑-恢复继续-结果-探测",
-      "试剑-页面-探测",
+      "试剑-领取-奖励",
       "试剑-打开-试炼"
     ],
-    "on_error": ["试剑-记录-失败"],
-    "retry_times": 0
-  },
-  "试剑-恢复继续-免费-探测": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": ["试剑-试炼-免费-弹窗", "试剑-试炼-免费-确认"],
-        "box_index": 1
-      }
-    },
-    "action": "DoNothing",
-    "next": ["试剑-恢复继续-免费-确认"],
-    "on_error": ["试剑-恢复继续-结果-探测"]
-  },
-  "试剑-恢复继续-免费-确认": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": ["试剑-试炼-免费-弹窗", "试剑-试炼-免费-确认"],
-        "box_index": 1
-      }
-    },
-    "action": "Custom",
-    "max_hit": 1,
-    "custom_action": "GuardedInput",
-    "custom_action_param": {
-      "task_id": "TRIAL_SWORD_DAILY",
-      "action_id": "confirm_free_trial",
-      "kind": "click",
-      "evidence": {
-        "page_index": 0,
-        "target_index": 1,
-        "page_name": "试剑-试炼-免费-弹窗",
-        "target_name": "试剑-试炼-免费-确认"
-      }
-    },
-    "next": ["试剑-免费-奖励-探测"],
-    "on_error": ["试剑-记录-失败"]
-  },
-  "试剑-恢复继续-结果-探测": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": ["试剑-试炼-奖励-弹窗", "试剑-试炼-弹窗-关闭"],
-        "box_index": 1
-      }
-    },
-    "action": "DoNothing",
-    "next": ["试剑-恢复继续-结果-关闭"],
-    "on_error": ["试剑-页面-探测"]
-  },
-  "试剑-恢复继续-结果-关闭": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": ["试剑-试炼-奖励-弹窗", "试剑-试炼-弹窗-关闭"],
-        "box_index": 1
-      }
-    },
-    "action": "Custom",
-    "custom_action": "GuardedInput",
-    "custom_action_param": {
-      "task_id": "TRIAL_SWORD_DAILY",
-      "action_id": "close_reward_popup",
-      "kind": "click",
-      "evidence": {
-        "page_index": 0,
-        "target_index": 1,
-        "page_name": "试剑-试炼-奖励-弹窗",
-        "target_name": "试剑-试炼-弹窗-关闭"
-      }
-    },
-    "next": ["试剑-领取-免费"],
-    "on_error": ["试剑-记录-失败"],
-    "timeout": 8000,
-    "retry_times": 0
-  },
-  "试剑-页面-探测": {
-    "recognition": "OCR",
-    "expected": ["挂机收益", "挂机时长"],
-    "roi": [0, 160, 500, 300],
-    "timeout": 8000,
-    "action": "DoNothing",
-    "next": ["试剑-领取-奖励"],
     "on_error": ["试剑-记录-失败"],
     "retry_times": 0
   },
@@ -178,15 +91,6 @@
         "target_name": "试剑-试炼-免费-领取"
       }
     },
-    "next": ["试剑-免费-弹窗-探测"],
-    "on_error": ["试剑-记录-失败"]
-  },
-  "试剑-免费-弹窗-探测": {
-    "recognition": "OCR",
-    "expected": ["是否免费", "6小时", "挂机收益"],
-    "roi": [200, 150, 850, 450],
-    "timeout": 8000,
-    "action": "DoNothing",
     "next": ["试剑-确认-免费"],
     "on_error": ["试剑-记录-失败"]
   },
@@ -262,17 +166,6 @@
     "next": ["试剑-关闭-成功"],
     "on_error": ["试剑-记录-失败"]
   },
-  "试剑-成功": {
-    "recognition": "DirectHit",
-    "action": "Custom",
-    "custom_action": "RecordTaskOutcome",
-    "custom_action_param": {
-      "task_id": "TRIAL_SWORD_DAILY",
-      "status": "success",
-      "postcondition": "trial.reward_popup_seen"
-    },
-    "next": ["公共-通用停止"]
-  },
   "试剑-记录-失败": {
     "recognition": "DirectHit",
     "action": "Custom",
@@ -309,7 +202,7 @@
         "target_name": "试剑-试炼-打开"
       }
     },
-    "next": ["试剑-页面-探测"],
+    "next": ["试剑-领取-奖励"],
     "on_error": ["试剑-记录-失败"],
     "retry_times": 0
   },
@@ -336,19 +229,6 @@
       }
     },
     "next": ["公共-主页边界"],
-    "on_error": ["试剑-记录-失败"],
-    "retry_times": 0
-  },
-  "试剑-成功-主页-探测": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": ["邮件奖励-主页-页面"]
-      }
-    },
-    "timeout": 8000,
-    "action": "DoNothing",
-    "next": ["试剑-成功"],
     "on_error": ["试剑-记录-失败"],
     "retry_times": 0
   },
