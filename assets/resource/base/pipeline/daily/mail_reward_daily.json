@@ -9,20 +9,11 @@
     "max_hit": 1,
     "next": [
       "[JumpBack]公共-已知-点击空白关闭",
-      "邮件奖励-页面-探测",
-      "邮件奖励-主页-探测",
-      "邮件奖励-面板-探测"
+      "邮件奖励-邮件-页面",
+      "邮件奖励-打开-邮件",
+      "邮件奖励-主页-探测"
     ],
     "on_error": ["邮件奖励-记录-失败"]
-  },
-  "邮件奖励-页面-探测": {
-    "recognition": "OCR",
-    "expected": ["邮件数量", "邮件"],
-    "roi": [300, 90, 420, 100],
-    "timeout": 8000,
-    "action": "DoNothing",
-    "next": ["邮件奖励-领取"],
-    "on_error": ["邮件奖励-领取"]
   },
   "邮件奖励-领取": {
     "recognition": {
@@ -146,7 +137,7 @@
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["邮件奖励-主页-页面", "邮件奖励-主页-面板-打开"],
+        "all_of": ["公共-游戏主页-页面", "公共-游戏功能面板-入口"],
         "box_index": 1
       }
     },
@@ -160,17 +151,10 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "邮件奖励-主页-页面",
-        "target_name": "邮件奖励-主页-面板-打开"
+        "page_name": "公共-游戏主页-页面",
+        "target_name": "公共-游戏功能面板-入口"
       }
     },
-    "next": ["邮件奖励-面板-探测"],
-    "on_error": ["邮件奖励-记录-失败"]
-  },
-  "邮件奖励-面板-探测": {
-    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏侧边面板-打开"], "box_index": 0}},
-    "timeout": 8000,
-    "action": "DoNothing",
     "next": ["邮件奖励-打开-邮件"],
     "on_error": ["邮件奖励-记录-失败"]
   },
@@ -178,7 +162,7 @@
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["邮件奖励-面板-页面", "邮件奖励-面板-邮件-入口"],
+        "all_of": ["公共-游戏侧边面板-打开", "邮件奖励-面板-邮件-入口"],
         "box_index": 1
       }
     },
@@ -192,11 +176,11 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "邮件奖励-面板-页面",
+        "page_name": "公共-游戏侧边面板-打开",
         "target_name": "邮件奖励-面板-邮件-入口"
       }
     },
-    "next": ["邮件奖励-页面-探测"],
+    "next": ["邮件奖励-邮件-页面"],
     "on_error": ["邮件奖励-记录-失败"]
   },
   "邮件奖励-关闭": {
@@ -221,13 +205,6 @@
         "target_name": "邮件奖励-邮件-关闭"
       }
     },
-    "next": ["邮件奖励-面板关闭后"],
-    "on_error": ["邮件奖励-记录-失败"]
-  },
-  "邮件奖励-面板关闭后": {
-    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏侧边面板-打开"], "box_index": 0}},
-    "timeout": 5000,
-    "action": "DoNothing",
     "next": ["邮件奖励-关闭-面板"],
     "on_error": ["邮件奖励-记录-失败"]
   },
@@ -235,7 +212,7 @@
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["邮件奖励-面板-页面", "邮件奖励-面板-关闭"],
+        "all_of": ["公共-已知-面板-标记", "公共-已知-面板-关闭"],
         "box_index": 1
       }
     },
@@ -250,8 +227,8 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "邮件奖励-面板-页面",
-        "target_name": "邮件奖励-面板-关闭"
+        "page_name": "公共-已知-面板-标记",
+        "target_name": "公共-已知-面板-关闭"
       }
     },
     "next": ["公共-主页边界"],
@@ -284,6 +261,9 @@
     "recognition": "OCR",
     "expected": ["邮件数量", "邮件"],
     "roi": [300, 90, 420, 100],
+    "timeout": 8000,
+    "next": ["邮件奖励-领取"],
+    "on_error": ["邮件奖励-空-探测"],
     "action": "DoNothing"
   },
   "邮件奖励-邮件-领取-全部": {
