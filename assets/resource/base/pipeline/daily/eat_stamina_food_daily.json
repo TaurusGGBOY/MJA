@@ -249,7 +249,7 @@
       }
     },
     "action": "DoNothing",
-    "next": ["吃体力食物-体力-已满"],
+    "next": ["吃体力食物-体力-已满-关闭-背包"],
     "on_error": ["吃体力食物-记录-失败"]
   },
   "吃体力食物-候选-循环": {
@@ -291,7 +291,7 @@
       "吃体力食物-次数-2-探测",
       "吃体力食物-次数-1-探测"
     ],
-    "on_error": ["吃体力食物-无安全卡"]
+    "on_error": ["吃体力食物-无安全卡-关闭-背包"]
   },
   "吃体力食物-次数-6-探测": {
     "recognition": {
@@ -695,7 +695,7 @@
       "吃体力食物-重新检查-已满",
       "吃体力食物-候选-循环"
     ],
-    "on_error": ["吃体力食物-成功"]
+    "on_error": ["吃体力食物-关闭-背包"]
   },
   "吃体力食物-体力-已满": {
     "recognition": "DirectHit",
@@ -704,9 +704,11 @@
     "custom_action_param": {
       "task_id": "EAT_STAMINA_FOOD_DAILY",
       "status": "success",
-      "postcondition": "food.stamina_full"
+      "postcondition": "food.stamina_full",
+      "defer_home_boundary": true
     },
-    "next": ["吃体力食物-关闭-背包"]
+    "next": ["吃体力食物-收尾-主页-探测"],
+    "on_error": ["吃体力食物-记录-失败"]
   },
   "吃体力食物-成功": {
     "recognition": "DirectHit",
@@ -715,9 +717,11 @@
     "custom_action_param": {
       "task_id": "EAT_STAMINA_FOOD_DAILY",
       "status": "success",
-      "postcondition": "food.used_five_times"
+      "postcondition": "food.used_five_times",
+      "defer_home_boundary": true
     },
-    "next": ["吃体力食物-关闭-背包"]
+    "next": ["吃体力食物-收尾-主页-探测"],
+    "on_error": ["吃体力食物-记录-失败"]
   },
   "吃体力食物-无安全卡": {
     "recognition": "DirectHit",
@@ -726,9 +730,11 @@
     "custom_action_param": {
       "task_id": "EAT_STAMINA_FOOD_DAILY",
       "status": "not_eligible",
-      "postcondition": "food.longjing_shrimp_unavailable"
+      "postcondition": "food.longjing_shrimp_unavailable",
+      "defer_home_boundary": true
     },
-    "next": ["吃体力食物-关闭-背包"]
+    "next": ["吃体力食物-收尾-主页-探测"],
+    "on_error": ["吃体力食物-记录-失败"]
   },
   "吃体力食物-记录-失败": {
     "recognition": "DirectHit",
@@ -766,8 +772,72 @@
         "target_name": "吃体力食物-食物-关闭"
       }
     },
-    "next": ["公共-通用停止"],
-    "on_error": ["公共-通用停止"]
+    "next": ["吃体力食物-成功"],
+    "on_error": ["吃体力食物-记录-失败"]
+  },
+  "吃体力食物-体力-已满-关闭-背包": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["吃体力食物-食物-食物-页面", "吃体力食物-食物-关闭"],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "max_hit": 1,
+    "custom_action_param": {
+      "task_id": "EAT_STAMINA_FOOD_DAILY",
+      "action_id": "close_bag",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "吃体力食物-食物-食物-页面",
+        "target_name": "吃体力食物-食物-关闭"
+      }
+    },
+    "next": ["吃体力食物-体力-已满"],
+    "on_error": ["吃体力食物-记录-失败"]
+  },
+  "吃体力食物-无安全卡-关闭-背包": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["吃体力食物-食物-食物-页面", "吃体力食物-食物-关闭"],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "max_hit": 1,
+    "custom_action_param": {
+      "task_id": "EAT_STAMINA_FOOD_DAILY",
+      "action_id": "close_bag",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "吃体力食物-食物-食物-页面",
+        "target_name": "吃体力食物-食物-关闭"
+      }
+    },
+    "next": ["吃体力食物-无安全卡"],
+    "on_error": ["吃体力食物-记录-失败"]
+  },
+  "吃体力食物-收尾-主页-探测": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["吃体力食物-食物-主页-页面"],
+        "box_index": 0
+      }
+    },
+    "timeout": 8000,
+    "max_hit": 1,
+    "action": "DoNothing",
+    "next": ["公共-主页边界"],
+    "on_error": ["吃体力食物-记录-失败"]
   },
   "吃体力食物-食物-主页-页面": {
     "recognition": {"type": "And", "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}},

@@ -119,7 +119,7 @@ def test_food_candidate_click_uses_match_box_and_requires_after_probe() -> None:
     after_probe = pipeline["吃体力食物-详情-探测"]
     assert after_probe["recognition"] == "OCR"
     assert "龙井虾仁" in after_probe["expected"]
-    assert after_probe["on_error"] == ["吃体力食物-无安全卡"]
+    assert after_probe["on_error"] == ["吃体力食物-无安全卡-关闭-背包"]
 
     unknown_failure = pipeline["吃体力食物-记录-失败"]
     assert unknown_failure["custom_action_param"]["status"] == "failed"
