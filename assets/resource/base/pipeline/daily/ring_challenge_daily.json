@@ -120,10 +120,8 @@
   },
   "擂台挑战-次数-耗尽": {
     "recognition": "DirectHit",
-    "action": "Custom",
-    "custom_action": "RecordTaskOutcome",
-    "custom_action_param": {"task_id": "RING_CHALLENGE_DAILY", "status": "already_complete", "postcondition": "ring.attempts_exhausted"},
-    "next": ["公共-通用停止"]
+    "action": "DoNothing",
+    "next": ["擂台挑战-已完成-关闭-页面"]
   },
   "擂台挑战-打开-模式": {
     "max_hit": 1,
@@ -362,11 +360,44 @@
   "擂台挑战-战斗-循环-耗尽": {
     "recognition": {"type": "And", "param": {"all_of": ["擂台挑战-擂台-对手-页面", "擂台挑战-擂台-次数-耗尽"]}},
     "timeout": 8000,
-    "action": "Custom",
-    "custom_action": "RecordTaskOutcome",
-    "custom_action_param": {"task_id": "RING_CHALLENGE_DAILY", "status": "success", "postcondition": "ring.manual_attempts_complete"},
+    "action": "DoNothing",
     "next": ["擂台挑战-关闭-对手"],
     "on_error": ["擂台挑战-记录-失败"]
+  },
+  "擂台挑战-已完成-关闭-页面": {
+    "max_hit": 1,
+    "recognition": {"type": "And", "param": {"all_of": ["擂台挑战-擂台-页面", "擂台挑战-擂台-页面-关闭"], "box_index": 1}},
+    "timeout": 8000,
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "RING_CHALLENGE_DAILY",
+      "action_id": "close_ring_page",
+      "kind": "click",
+      "evidence": {"page_index": 0, "target_index": 1, "page_name": "擂台挑战-擂台-页面", "target_name": "擂台挑战-擂台-页面-关闭"}
+    },
+    "next": ["擂台挑战-已完成-主页-探测"],
+    "on_error": ["擂台挑战-记录-失败"],
+    "retry_times": 0
+  },
+  "擂台挑战-已完成-主页-探测": {
+    "recognition": {"type": "And", "param": {"all_of": ["擂台挑战-擂台-主页"]}},
+    "timeout": 8000,
+    "action": "DoNothing",
+    "next": ["擂台挑战-已完成"],
+    "on_error": ["擂台挑战-记录-失败"]
+  },
+  "擂台挑战-已完成": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "RecordTaskOutcome",
+    "custom_action_param": {
+      "task_id": "RING_CHALLENGE_DAILY",
+      "status": "already_complete",
+      "postcondition": "ring.attempts_exhausted",
+      "defer_home_boundary": true
+    },
+    "next": ["公共-主页边界"]
   },
   "擂台挑战-关闭-对手": {
     "max_hit": 1,
@@ -411,8 +442,8 @@
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
-    "custom_action_param": {"task_id": "RING_CHALLENGE_DAILY", "status": "success", "postcondition": "ring.challenge_done"},
-    "next": ["公共-通用停止"]
+    "custom_action_param": {"task_id": "RING_CHALLENGE_DAILY", "status": "success", "postcondition": "ring.challenge_done", "defer_home_boundary": true},
+    "next": ["公共-主页边界"]
   },
   "擂台挑战-记录-失败": {
     "recognition": "DirectHit",

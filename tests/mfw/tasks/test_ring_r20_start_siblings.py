@@ -6,7 +6,6 @@ from tests.mfw.task_contract import TaskContract, assert_outcome, load_task_node
 
 RING = TaskContract("RING_CHALLENGE_DAILY", "daily/ring_challenge_daily.json")
 FAILURE = "擂台挑战-记录-失败"
-STARTUP_FAILURE = "擂台挑战-游戏启动恢复失败"
 
 
 def _contains(roi: list[int], box: list[int]) -> bool:
@@ -20,7 +19,7 @@ def _contains(roi: list[int], box: list[int]) -> bool:
     )
 
 
-def test_r20_start_recovers_once_through_shared_startup() -> None:
+def test_r20_start_delegates_recovery_to_shared_startup() -> None:
     nodes = load_task_nodes(RING)
     start = nodes["擂台挑战-任务入口"]
 
@@ -31,46 +30,9 @@ def test_r20_start_recovers_once_through_shared_startup() -> None:
         "擂台挑战-面板-探测",
         "擂台挑战-主页-探测",
     ]
-    assert start["on_error"] == ["擂台挑战-游戏启动恢复", STARTUP_FAILURE]
-    assert "JumpBack" not in str(start)
-
-    recovery = nodes["擂台挑战-游戏启动恢复"]
-    assert recovery["recognition"] == "DirectHit"
-    assert recovery["action"] == "DoNothing"
-    assert recovery["max_hit"] == 1
-    assert recovery["retry_times"] == 0
-    assert recovery["next"] == ["擂台挑战-恢复-状态-探测"]
-    assert recovery["on_error"] == [STARTUP_FAILURE]
-
-    state = nodes["擂台挑战-恢复-状态-探测"]
-    assert state["recognition"] == "DirectHit"
-    assert state["action"] == "DoNothing"
-    assert state["timeout"] == 30000
-    assert state["next"] == [
-        "擂台挑战-页面-探测",
-        "擂台挑战-日常-页面",
-        "擂台挑战-面板-探测",
-        "擂台挑战-主页-探测",
-        "[JumpBack]启动-游戏启动",
-    ]
-    assert state["on_error"] == [STARTUP_FAILURE]
-    assert "[JumpBack]启动-游戏启动" in state["next"]
-    assert "[JumpBack]启动-游戏启动" not in recovery["next"]
-
-    assert_outcome(
-        nodes,
-        STARTUP_FAILURE,
-        "failed",
-        "ring.game_foreground_or_recoverable_state",
-    )
-    failed = nodes[STARTUP_FAILURE]
-    assert failed["custom_action_param"]["error_code"] == (
-        "RING_GAME_START_RECOVERY_EXHAUSTED"
-    )
-    assert failed["custom_action_param"]["native_fail_after_record"] is True
-    assert failed["Abort"] is True
-    assert failed["next"] == ["公共-通用中止"]
-    assert "on_error" not in failed
+    assert start["on_error"] == ["[JumpBack]启动-游戏启动", FAILURE]
+    assert "擂台挑战-游戏启动恢复" not in nodes
+    assert "擂台挑战-恢复-状态-探测" not in nodes
 
     assert not any(
         name.startswith("擂台挑战-") and node.get("action") == "StartApp"
@@ -194,17 +156,36 @@ def test_r20_unknown_state_records_fresh_failed_then_native_failed() -> None:
 def test_r20_allowed_terminals_keep_explicit_business_postconditions() -> None:
     nodes = load_task_nodes(RING)
 
-    assert_outcome(nodes, "MJA_RING_NOT_OPEN", "not_eligible", "ring.not_open")
     assert_outcome(
         nodes,
-        "擂台挑战-次数-耗尽",
-        "success",
+        "擂台挑战-已完成",
+        "already_complete",
         "ring.attempts_exhausted",
     )
-    assert nodes["MJA_RING_NOT_OPEN_PROBE"]["recognition"]["param"]["all_of"] == [
-        "擂台挑战-擂台-页面",
-        "ring.not.open",
-    ]
+    assert nodes["擂台挑战-次数-耗尽"]["action"] == "DoNothing"
+    assert nodes["擂台挑战-次数-耗尽"]["next"] == ["擂台挑战-已完成-关闭-页面"]
     assert nodes["擂台挑战-次数-探测"]["recognition"]["param"][
         "all_of"
     ] == ["擂台挑战-擂台-页面", "擂台挑战-擂台-次数-耗尽"]
+
+
+def test_r20_normal_outcomes_close_to_home_before_shared_boundary() -> None:
+    nodes = load_task_nodes(RING)
+
+    already_complete = nodes["擂台挑战-已完成"]
+    assert already_complete["custom_action_param"]["defer_home_boundary"] is True
+    assert already_complete["next"] == ["公共-主页边界"]
+    assert nodes["擂台挑战-已完成-关闭-页面"]["next"] == [
+        "擂台挑战-已完成-主页-探测"
+    ]
+    assert nodes["擂台挑战-已完成-主页-探测"]["next"] == ["擂台挑战-已完成"]
+
+    success = nodes["擂台挑战-成功"]
+    assert success["custom_action_param"]["defer_home_boundary"] is True
+    assert success["next"] == ["公共-主页边界"]
+    assert nodes["擂台挑战-主页-返回-探测"]["next"] == ["擂台挑战-成功"]
+
+    # The exhaustion probe only establishes the business state.  Cleanup and
+    # the final result happen after the shared home probe.
+    assert nodes["擂台挑战-战斗-循环-耗尽"]["action"] == "DoNothing"
+    assert nodes["擂台挑战-战斗-循环-耗尽"]["next"] == ["擂台挑战-关闭-对手"]
