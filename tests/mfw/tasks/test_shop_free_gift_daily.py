@@ -48,7 +48,12 @@ POST_TERMINAL_CLEANUP = {
 
 
 def _task_nodes(nodes: Mapping[str, Mapping[str, Any]]) -> dict[str, Mapping[str, Any]]:
-    return {name: node for name, node in nodes.items() if name.startswith("商店免费礼包-")}
+    return {
+        name: node
+        for name, node in nodes.items()
+        if name.startswith("商店免费礼包-")
+        and (node.get("next") or node.get("on_error") or node.get("custom_action"))
+    }
 
 
 def _targets(node: Mapping[str, Any]) -> list[str]:
