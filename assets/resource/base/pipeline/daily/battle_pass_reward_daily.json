@@ -599,11 +599,11 @@
     "custom_action_param": {
       "task_id": "BATTLE_PASS_REWARD_DAILY",
       "status": "already_complete",
-      "postcondition": "battle_pass.no_task_or_basic_claimable"
+      "postcondition": "battle_pass.no_task_or_basic_claimable",
+      "defer_home_boundary": true
     },
     "next": [
-      "公共-通用停止",
-      "[JumpBack]启动-游戏启动"
+      "公共-主页边界"
     ],
     "on_error": [
       "战令奖励-主页边界-失败"
@@ -625,11 +625,11 @@
     "custom_action_param": {
       "task_id": "BATTLE_PASS_REWARD_DAILY",
       "status": "success",
-      "postcondition": "battle_pass.no_task_or_basic_claimable"
+      "postcondition": "battle_pass.no_task_or_basic_claimable",
+      "defer_home_boundary": true
     },
     "next": [
-      "公共-通用停止",
-      "[JumpBack]启动-游戏启动"
+      "公共-主页边界"
     ],
     "on_error": [
       "战令奖励-主页边界-失败"
