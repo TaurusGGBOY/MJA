@@ -79,7 +79,7 @@
       "postcondition": "weekly_gift.claimed",
       "defer_home_boundary": true
     },
-    "next": ["周一免费礼包-关闭-奖励"],
+    "next": ["周一免费礼包-完成-收尾"],
     "on_error": ["周一免费礼包-记录-失败"]
   },
   "周一免费礼包-关闭-奖励": {
@@ -126,9 +126,11 @@
     "custom_action_param": {
       "task_id": "WEEKLY_FREE_GIFT_MONDAY",
       "status": "already_complete",
-      "postcondition": "weekly_gift.claimed"
+      "postcondition": "weekly_gift.claimed",
+      "defer_home_boundary": true
     },
-    "next": ["周一免费礼包-关闭"]
+    "next": ["周一免费礼包-完成-收尾"],
+    "on_error": ["周一免费礼包-记录-失败"]
   },
   "周一免费礼包-付费-探测": {
     "recognition": {
@@ -149,9 +151,11 @@
     "custom_action_param": {
       "task_id": "WEEKLY_FREE_GIFT_MONDAY",
       "status": "not_eligible",
-      "postcondition": "weekly_gift.no_free_offer"
+      "postcondition": "weekly_gift.no_free_offer",
+      "defer_home_boundary": true
     },
-    "next": ["周一免费礼包-关闭"]
+    "next": ["周一免费礼包-完成-收尾"],
+    "on_error": ["周一免费礼包-记录-失败"]
   },
   "周一免费礼包-记录-失败": {
     "recognition": "DirectHit",
@@ -166,6 +170,14 @@
     },
     "Abort": true,
     "next": ["公共-通用中止"]
+  },
+  "周一免费礼包-完成-收尾": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "timeout": 8000,
+    "max_hit": 1,
+    "next": ["周一免费礼包-关闭-奖励", "周一免费礼包-关闭"],
+    "on_error": ["周一免费礼包-记录-失败"]
   },
   "周一免费礼包-主页-探测": {
     "recognition": {"type": "And", "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}},
@@ -303,6 +315,43 @@
         "target_name": "商店免费礼包-商店-关闭"
       }
     },
+    "next": ["周一免费礼包-完成-关闭-面板"],
+    "on_error": ["周一免费礼包-记录-失败"]
+  },
+  "周一免费礼包-完成-关闭-面板": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["公共-已知-面板-标记", "公共-已知-面板-关闭"],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "max_hit": 1,
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "WEEKLY_FREE_GIFT_MONDAY",
+      "action_id": "close_function_panel",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "公共-已知-面板-标记",
+        "target_name": "公共-已知-面板-关闭"
+      }
+    },
+    "next": ["周一免费礼包-完成-主页-探测"],
+    "on_error": ["周一免费礼包-记录-失败"],
+    "retry_times": 0
+  },
+  "周一免费礼包-完成-主页-探测": {
+    "recognition": {
+      "type": "And",
+      "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}
+    },
+    "timeout": 8000,
+    "max_hit": 1,
+    "action": "DoNothing",
     "next": ["公共-主页边界"],
     "on_error": ["周一免费礼包-记录-失败"]
   },
