@@ -84,8 +84,11 @@ _POLICIES = {
             "claim_weekly_lucky_bag": 1,
             "dismiss_weekly_reward": 1,
             "close_shop": 1,
+            "close_function_panel": 1,
         },
-        cleanup_actions=frozenset({"dismiss_weekly_reward", "close_shop"}),
+        cleanup_actions=frozenset(
+            {"dismiss_weekly_reward", "close_shop", "close_function_panel"}
+        ),
         monday_only=True,
     ),
     "TRIAL_SWORD_DAILY": _policy(
@@ -354,6 +357,7 @@ _POLICIES = {
             "close_daily_tasks": 1,
         },
         resources={"紫色魂玉": 1, "体力": 360},
+        cleanup_actions=frozenset({"close_jianlin_page", "close_daily_tasks"}),
     ),
     "RING_CHALLENGE_DAILY": _policy(
         "RING_CHALLENGE_DAILY",
@@ -396,7 +400,12 @@ _POLICIES = {
             "wait_break_array_result": 3,
             "resume_break_array_result": 1,
             "dismiss_break_array_result": 3,
+            "close_break_array_page": 1,
+            "close_break_array_activity": 1,
         },
+        cleanup_actions=frozenset(
+            {"close_break_array_page", "close_break_array_activity"}
+        ),
     ),
     # MFW-only task.  The legacy workflow catalog intentionally remains
     # unchanged until the main agent integrates this task's control-plane
@@ -496,6 +505,7 @@ _POLICIES = {
             "close_daily_tasks": 1,
             "close_function_panel": 1,
         },
+        cleanup_actions=frozenset({"close_daily_tasks", "close_function_panel"}),
     ),
     "BATTLE_PASS_REWARD_DAILY": _policy(
         "BATTLE_PASS_REWARD_DAILY",

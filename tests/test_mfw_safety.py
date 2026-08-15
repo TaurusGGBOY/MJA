@@ -88,6 +88,8 @@ def test_legacy_policies_match_business_data_and_mfw_only_extensions_are_explici
         "wait_break_array_result": 3,
         "resume_break_array_result": 1,
         "dismiss_break_array_result": 3,
+        "close_break_array_page": 1,
+        "close_break_array_activity": 1,
     }
 
 
