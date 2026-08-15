@@ -5162,7 +5162,8 @@
     "custom_action_param": {
       "task_id": "JIANLIN_RESOURCE_CONDENSATE_STAMINA_DAILY",
       "status": "success",
-      "postcondition": "jianlin.stamina_below_20_or_second_offer"
+      "postcondition": "jianlin.stamina_below_20_or_second_offer",
+      "defer_home_boundary": true
     },
     "next": [
       "剑林凝结体体力-终止-清理-路线"
@@ -5178,7 +5179,8 @@
     "custom_action_param": {
       "task_id": "JIANLIN_RESOURCE_CONDENSATE_STAMINA_DAILY",
       "status": "success",
-      "postcondition": "jianlin.challenge_condensate.required"
+      "postcondition": "jianlin.challenge_condensate.required",
+      "defer_home_boundary": true
     },
     "next": [
       "剑林凝结体体力-终止-清理-路线"
@@ -5280,7 +5282,7 @@
     "timeout": 10000,
     "action": "DoNothing",
     "next": [
-      "剑林凝结体体力-通用停止"
+      "公共-主页边界"
     ],
     "on_error": [
       "剑林凝结体体力-通用停止"
