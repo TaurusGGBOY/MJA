@@ -31,8 +31,8 @@ def test_guild_affairs_uses_a_private_namespace_and_shared_terminals_only() -> N
         name.startswith("帮派事务-")
         for name in pipeline
     )
-    assert pipeline["帮派事务-面板-探测"]["on_error"] == [
-        "帮派事务-记录-失败"
+    assert pipeline["帮派事务-主页-探测"]["on_error"] == [
+        "帮派事务-打开-帮派"
     ]
     assert pipeline["帮派事务-付费-或-歧义"]["next"] == [
         "公共-通用中止"
@@ -46,7 +46,7 @@ def test_guild_affairs_uses_a_private_namespace_and_shared_terminals_only() -> N
 
 
 def test_guild_affairs_is_an_independent_mfw_task_contract() -> None:
-    assert_task_contract(AFFAIRS, require_game_start_recovery=False)
+    assert_task_contract(AFFAIRS, require_game_start_recovery=True)
     nodes = load_task_nodes(AFFAIRS)
 
     assert_guarded_actions(
@@ -60,6 +60,8 @@ def test_guild_affairs_is_an_independent_mfw_task_contract() -> None:
             "dismiss_guild_affairs_reward",
             "start_guild_affairs",
             "close_guild_affairs",
+            "close_guild_home",
+            "close_function_panel",
         ],
     )
     assert TASK_POLICIES[AFFAIRS.task_id].action_caps == {
@@ -68,8 +70,11 @@ def test_guild_affairs_is_an_independent_mfw_task_contract() -> None:
         "open_guild_affairs": 1,
         "claim_guild_affairs_reward": 6,
         "dismiss_guild_affairs_reward": 6,
-        "start_guild_affairs": 4,
+        "scroll_guild_affairs": 8,
+        "start_guild_affairs": 6,
         "close_guild_affairs": 1,
+        "close_guild_home": 1,
+        "close_function_panel": 1,
     }
     assert_no_side_effect_retry(nodes, "claim_guild_affairs_reward")
     assert_no_side_effect_retry(nodes, "dismiss_guild_affairs_reward")
@@ -101,12 +106,15 @@ def test_guild_affairs_claims_consecutive_rewards_before_starting_a_row() -> Non
     ]
     assert claim_action["max_hit"] == 6
     assert nodes["帮派事务-关闭-奖励"]["next"] == [
-        "帮派事务-首个-行-门禁"
+        "帮派事务-首个-行-付费-防护",
+        "帮派事务-首个-行-领取-探测",
+        "帮派事务-首个-行-开始-探测",
+        "帮派事务-首个-行-完成-探测",
     ]
     assert_reachable(
         nodes,
         "帮派事务-开始-首个-行",
-        "帮派事务-首个-行-之后-开始-探测",
+        "帮派事务-首个-行-完成-探测",
     )
     assert_outcome(
         nodes,
@@ -123,7 +131,7 @@ def test_guild_affairs_claims_consecutive_rewards_before_starting_a_row() -> Non
 
     for row_index in range(1, 4):
         prefix = f"帮派事务-行{row_index}"
-        assert_reachable(nodes, AFFAIRS.entry, f"{prefix}-门禁")
+        assert_reachable(nodes, AFFAIRS.entry, f"{prefix}-付费-防护")
         assert nodes[f"{prefix}-开始"]["custom_action_param"]["action_id"] == (
             "start_guild_affairs"
         )
@@ -131,7 +139,7 @@ def test_guild_affairs_claims_consecutive_rewards_before_starting_a_row() -> Non
             "row_index"
         ] == row_index
     assert nodes["帮派事务-行3-完成-探测"]["next"] == [
-        "帮派事务-成功"
+        "帮派事务-已完成"
     ]
 
 
@@ -175,13 +183,13 @@ def test_guild_affairs_normalizes_only_the_verified_claim_result_overlay() -> No
         "daily/GUILD_AFFAIRS_DAILY/reward_popup_live.png"
     )
     assert popup["roi"] == [120, 180, 180, 380]
-    assert popup["threshold"] == 0.39
+    assert popup["threshold"] == 0.78
     assert prompt["recognition"] == "TemplateMatch"
     assert prompt["template"] == (
         "daily/GUILD_AFFAIRS_DAILY/reward_popup_close_live.png"
     )
     assert prompt["roi"] == [450, 600, 400, 120]
-    assert prompt["threshold"] == 0.36
+    assert prompt["threshold"] == 0.72
 
 
 def test_guild_affairs_clicks_only_the_verified_first_row_and_rejects_paid_state() -> None:
@@ -217,9 +225,6 @@ def test_guild_affairs_clicks_only_the_verified_first_row_and_rejects_paid_state
         assert evidence["target_roi"] == [930, 150, 300, 120]
 
     assert nodes["帮派事务-首个-行-付费-防护"]["next"] == [
-        "帮派事务-付费-或-歧义"
-    ]
-    assert nodes["帮派事务-之后-领取-付费-防护"]["next"] == [
         "帮派事务-付费-或-歧义"
     ]
     action_ids = {
@@ -283,51 +288,27 @@ def test_guild_home_probe_matches_the_android_guild_home_evidence() -> None:
 def test_guild_affairs_launcher_recovery_is_single_shot_and_truthful() -> None:
     nodes = load_task_nodes(AFFAIRS)
     start = nodes["帮派事务-任务入口"]
-    recovery = nodes["帮派事务-游戏启动恢复"]
-    wait = nodes["帮派事务-恢复-状态-探测"]
 
     assert start["timeout"] == 8000
-    assert start["next"][-1] == "帮派事务-游戏启动恢复"
+    assert start["next"] == [
+        "帮派事务-事务-页面-探测",
+        "帮派事务-帮派-页面-探测",
+        "帮派事务-主页-探测",
+        "帮派事务-打开-帮派",
+    ]
     assert start["on_error"] == [
-        "帮派事务-游戏启动恢复",
+        "[JumpBack]启动-游戏启动",
         "帮派事务-记录-失败",
     ]
-    assert recovery["action"] == "StartApp"
-    assert recovery["package"] == "com.hanjiasongshu.dr22/.MainActivity"
-    assert recovery["max_hit"] == 1
-    assert recovery["retry_times"] == 0
-    assert wait["timeout"] == 30_000
-    assert wait["next"] == [
-        "帮派事务-事务-页面-探测",
-        "帮派事务-帮派-页面-探测",
-        "帮派事务-主页-探测",
-        "帮派事务-面板-探测",
-    ]
-    assert "帮派事务-游戏启动恢复" not in wait["next"]
-    assert wait["on_error"] == ["帮派事务-游戏启动恢复失败"]
-    assert_abort_code(
-        nodes,
-        "帮派事务-游戏启动恢复失败",
-        "GUILD_AFFAIRS_GAME_START_RECOVERY_EXHAUSTED",
-    )
-    assert (
-        sum(
-            name.startswith("帮派事务-")
-            and node.get("action") == "StartApp"
-            for name, node in nodes.items()
-        )
-        == 1
-    )
+    assert "帮派事务-游戏启动恢复" not in nodes
+    assert "帮派事务-恢复-状态-探测" not in nodes
 
 
-def test_guild_affairs_recovery_does_not_delegate_to_shared_startup() -> None:
+def test_guild_affairs_recovery_delegates_to_shared_startup() -> None:
     nodes = load_task_nodes(AFFAIRS)
-    assert nodes["帮派事务-恢复-状态-探测"]["next"] == [
-        "帮派事务-事务-页面-探测",
-        "帮派事务-帮派-页面-探测",
-        "帮派事务-主页-探测",
-        "帮派事务-面板-探测",
-    ]
+    assert nodes["帮派事务-任务入口"]["on_error"][0] == (
+        "[JumpBack]启动-游戏启动"
+    )
 
 
 def test_guild_affairs_terminal_cleanup_is_bounded_and_verifies_guild_home() -> None:
@@ -373,8 +354,20 @@ def test_guild_affairs_terminal_cleanup_is_bounded_and_verifies_guild_home() -> 
     }
     assert exit_probe["timeout"] == 5_000
     assert exit_probe["max_hit"] == 1
-    assert exit_probe["next"] == ["公共-通用停止"]
+    assert exit_probe["next"] == ["帮派事务-关闭-帮派-主页"]
     assert exit_probe["on_error"] == ["帮派事务-退出-清理-停止"]
+    assert nodes["帮派事务-关闭-帮派-主页"]["next"] == [
+        "帮派事务-退出-面板-探测"
+    ]
+    assert nodes["帮派事务-退出-面板-探测"]["next"] == [
+        "帮派事务-关闭-面板"
+    ]
+    assert nodes["帮派事务-关闭-面板"]["next"] == [
+        "帮派事务-主页-之后-关闭-探测"
+    ]
+    assert nodes["帮派事务-主页-之后-关闭-探测"]["next"] == [
+        "公共-主页边界"
+    ]
     assert nodes["帮派事务-退出-清理-停止"]["next"] == [
         "公共-通用中止"
     ]
@@ -387,6 +380,40 @@ def test_guild_affairs_terminal_cleanup_is_bounded_and_verifies_guild_home() -> 
     ]
     assert close_actions == [close]
     assert TASK_POLICIES[AFFAIRS.task_id].action_caps["close_guild_affairs"] == 1
+
+
+def test_guild_affairs_normal_outcomes_share_bounded_home_cleanup() -> None:
+    nodes = load_task_nodes(AFFAIRS)
+
+    for outcome_name in ("帮派事务-已完成", "帮派事务-成功"):
+        outcome = nodes[outcome_name]
+        assert outcome["custom_action_param"]["defer_home_boundary"] is True
+        assert outcome["next"] == ["帮派事务-完成-收尾"]
+        assert_reachable(nodes, outcome_name, "公共-主页边界")
+        assert_reachable(nodes, outcome_name, "公共-通用停止")
+
+    cleanup = nodes["帮派事务-完成-收尾"]
+    assert cleanup == {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "timeout": 8000,
+        "max_hit": 1,
+        "next": [
+            "帮派事务-关闭",
+            "帮派事务-退出-帮派-页面-探测",
+            "帮派事务-退出-面板-探测",
+            "帮派事务-主页-之后-关闭-探测",
+        ],
+        "on_error": ["帮派事务-记录-失败"],
+    }
+    assert nodes["帮派事务-主页-之后-关闭-探测"]["next"] == [
+        "公共-主页边界"
+    ]
+    assert nodes["公共-主页边界"]["next"] == ["公共-通用停止"]
+    assert nodes["公共-通用停止"] == {
+        "recognition": "DirectHit",
+        "action": "StopTask",
+    }
 
 
 def test_guild_affairs_android_has_no_duplicate_pipeline_override() -> None:
