@@ -188,8 +188,8 @@
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["邮件奖励-主页-页面", "试剑-试炼-打开"],
-        "box_index": 1
+        "all_of": ["公共-游戏主页-页面"],
+        "box_index": 0
       }
     },
     "action": "Custom",
@@ -199,11 +199,12 @@
       "task_id": "TRIAL_SWORD_DAILY",
       "action_id": "open_trial_sword",
       "kind": "click",
+      "fixed_click_mode": "trial_entry_button",
       "evidence": {
         "page_index": 0,
-        "target_index": 1,
-        "page_name": "邮件奖励-主页-页面",
-        "target_name": "试剑-试炼-打开"
+        "target_index": 0,
+        "page_name": "公共-游戏主页-页面",
+        "target_name": "公共-游戏主页-页面"
       }
     },
     "next": ["试剑-领取-奖励"],
@@ -252,18 +253,6 @@
     "recognition": "OCR",
     "expected": ["挂机收益", "挂机时长"],
     "roi": [0, 160, 500, 300],
-    "action": "DoNothing"
-  },
-  "试剑-试炼-打开": {
-    "recognition": "ColorMatch",
-    "method": 4,
-    "lower": [100, 100, 90],
-    "upper": [255, 255, 255],
-    "roi": [987, 599, 52, 66],
-    "connected": true,
-    "count": 1200,
-    "order_by": "Area",
-    "index": 0,
     "action": "DoNothing"
   },
   "试剑-试炼-奖励-领取": {

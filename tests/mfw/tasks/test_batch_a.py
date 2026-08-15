@@ -318,7 +318,7 @@ def test_trial_flow_guards_every_side_effect_and_has_truthful_outcomes() -> None
     )
 
 
-def test_trial_r19_home_entry_uses_a_narrow_calibrated_same_frame_target() -> None:
+def test_trial_home_entry_uses_home_evidence_and_named_fixed_target() -> None:
     nodes = load_task_nodes(TRIAL)
 
     start = nodes["试剑-任务入口"]
@@ -326,67 +326,28 @@ def test_trial_r19_home_entry_uses_a_narrow_calibrated_same_frame_target() -> No
         "[JumpBack]公共-已知-画卷-关闭",
         "[JumpBack]公共-已知-茶-详情-关闭",
         "[JumpBack]公共-已知-茶-商店-关闭",
-        "试剑-恢复继续-免费-探测",
-        "试剑-恢复继续-结果-探测",
-        "试剑-页面-探测",
+        "试剑-领取-奖励",
         "试剑-打开-试炼",
     ]
-    assert start["on_error"] == ["试剑-记录-失败"]
-    assert start["retry_times"] == 0
+    assert start["on_error"] == ["[JumpBack]启动-游戏启动", "试剑-记录-失败"]
+    assert start.get("retry_times", 0) == 0
     assert "MJA_TRIAL_HOME_PROBE" not in nodes
-
-    target = nodes["试剑-试炼-打开"]
-    assert target == {
-        "recognition": "ColorMatch",
-        "method": 4,
-        "lower": [100, 100, 90],
-        "upper": [255, 255, 255],
-        "roi": [987, 599, 52, 66],
-        "connected": True,
-        "count": 1200,
-        "order_by": "Area",
-        "index": 0,
-        "action": "DoNothing",
-    }
-
-    # Offline calibration from the fresh r19 on-error frame at 17:47:11.552.
-    # The styled glyph never produced the expected OCR text.  In the exact
-    # 1280x720 screenshot its stable white button body is this connected box.
-    frame_width, frame_height = 1280, 720
-    archived_component_box = [987, 599, 52, 66]
-    archived_component_pixels = 1775
-    x, y, width, height = target["roi"]
-    component_x, component_y, component_width, component_height = archived_component_box
-    assert x <= component_x
-    assert y <= component_y
-    assert x + width >= component_x + component_width
-    assert y + height >= component_y + component_height
-    assert x + width <= frame_width
-    assert y + height <= frame_height
-    assert target["count"] < archived_component_pixels
-
-    # The ColorMatch result box, not the ROI or a bare coordinate, supplies
-    # the GuardedInput target.  Its center remains inside the visible button.
-    click_x = component_x + component_width // 2
-    click_y = component_y + component_height // 2
-    assert (click_x, click_y) == (1013, 632)
-    assert x <= click_x < x + width
-    assert y <= click_y < y + height
-
-    old_ocr_roi = [850, 450, 430, 270]
-    assert width * height * 10 < old_ocr_roi[2] * old_ocr_roi[3]
 
     open_trial = nodes["试剑-打开-试炼"]
     assert open_trial["recognition"]["param"] == {
-        "all_of": ["邮件奖励-主页-页面", "试剑-试炼-打开"],
-        "box_index": 1,
+        "all_of": ["公共-游戏主页-页面"],
+        "box_index": 0,
     }
+    assert "试剑-试炼-打开" not in nodes
     assert open_trial["custom_action_param"]["evidence"] == {
         "page_index": 0,
-        "target_index": 1,
-        "page_name": "邮件奖励-主页-页面",
-        "target_name": "试剑-试炼-打开",
+        "target_index": 0,
+        "page_name": "公共-游戏主页-页面",
+        "target_name": "公共-游戏主页-页面",
     }
+    assert open_trial["custom_action_param"]["fixed_click_mode"] == (
+        "trial_entry_button"
+    )
     assert open_trial["retry_times"] == 0
     assert TASK_POLICIES[TRIAL.task_id].action_caps["open_trial_sword"] == 1
 

@@ -327,6 +327,14 @@ def _fixed_click_boxes(params: Mapping[str, Any]) -> tuple[tuple[int, int, int, 
 
 
 _FIXED_CLICK_MODES: Mapping[tuple[str, str], tuple[int, int, int, int]] = {
+    # The trial shortcut is a stable home-only anchor, but its decorative
+    # glyph is not a reliable OCR/ColorMatch target.  The named mode keeps
+    # the fixed box action-specific; the home page still has to be present in
+    # the same-frame GuardedInput evidence before this click is allowed.
+    (
+        "open_trial_sword",
+        "trial_entry_button",
+    ): (987, 599, 52, 66),
     (
         "enter_shadow_stage",
         "shadow_stage_entry_button",
