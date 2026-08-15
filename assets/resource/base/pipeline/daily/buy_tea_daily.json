@@ -7,60 +7,11 @@
       "task_id": "BUY_TEA_DAILY"
     },
     "next": [
-      "买茶-恢复继续-结果-探测",
       "买茶-主页-探测",
       "买茶-面板-探测",
-      "买茶-地图-探测",
       "买茶-游戏启动恢复"
     ],
     "on_error": ["买茶-游戏启动恢复失败"]
-  },
-  "买茶-恢复继续-结果-探测": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": ["买茶-茶-购买-结果", "买茶-茶-购买-结果-关闭"],
-        "box_index": 1
-      }
-    },
-    "action": "DoNothing",
-    "next": ["买茶-结果-成功"],
-    "on_error": ["买茶-主页-探测"]
-  },
-  "买茶-关闭-过期-结果": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": ["买茶-茶-购买-结果", "买茶-茶-购买-结果-关闭"],
-        "box_index": 1
-      }
-    },
-    "action": "Custom",
-    "custom_action": "GuardedInput", "max_hit": 1,
-    "custom_action_param": {
-      "task_id": "BUY_TEA_DAILY",
-      "action_id": "dismiss_tea_purchase_result",
-      "kind": "click",
-      "evidence": {
-        "page_index": 0,
-        "target_index": 1,
-        "page_name": "买茶-茶-购买-结果",
-        "target_name": "买茶-茶-购买-结果-关闭"
-      }
-    },
-    "next": ["公共-通用停止"],
-    "on_error": ["买茶-记录-失败"]
-  },
-  "买茶-过期-结果-成功": {
-    "recognition": "DirectHit",
-    "action": "Custom",
-    "custom_action": "RecordTaskOutcome",
-    "custom_action_param": {
-      "task_id": "BUY_TEA_DAILY",
-      "status": "success",
-      "postcondition": "tea.purchase_result_seen"
-    },
-    "next": ["公共-通用停止"]
   },
   "买茶-游戏启动恢复": {
     "recognition": "DirectHit",
@@ -77,48 +28,10 @@
     "action": "DoNothing",
     "timeout": 30000,
     "next": [
-      "买茶-恢复继续-结果-探测",
       "买茶-主页-探测",
       "买茶-面板-探测"
     ],
     "on_error": ["买茶-游戏启动恢复失败"]
-  },
-  "买茶-地图-探测": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": ["买茶-茶-地图-世界", "买茶-茶-地图-区域"],
-        "box_index": 1
-      }
-    },
-    "action": "DoNothing",
-    "next": ["买茶-打开-地图-画卷"],
-    "on_error": ["买茶-游戏启动恢复"]
-  },
-  "买茶-打开-地图-画卷": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": ["买茶-茶-地图-页面", "买茶-茶-地图-画卷-滚动-入口"],
-        "box_index": 1
-      }
-    },
-    "action": "Custom",
-    "custom_action": "GuardedInput", "max_hit": 1,
-    "custom_action_param": {
-      "task_id": "BUY_TEA_DAILY",
-      "action_id": "open_painting_scroll",
-      "kind": "click",
-      "evidence": {
-        "page_index": 0,
-        "target_index": 1,
-        "page_name": "买茶-茶-地图-页面",
-        "target_name": "买茶-茶-地图-画卷-滚动-入口"
-      }
-    },
-    "next": ["买茶-画卷-页面-探测"],
-    "on_error": ["买茶-记录-失败"],
-    "retry_times": 0
   },
   "买茶-游戏启动恢复失败": {
     "recognition": "DirectHit",
@@ -194,15 +107,6 @@
         "target_name": "买茶-茶-画卷-滚动-入口"
       }
     },
-    "next": ["买茶-画卷-页面-探测"],
-    "on_error": ["买茶-记录-失败"]
-  },
-  "买茶-画卷-页面-探测": {
-    "recognition": "OCR",
-    "expected": ["画卷", "偃武世界", "云州", "蜃影武墟"],
-    "roi": [0, 0, 1280, 720],
-    "timeout": 8000,
-    "action": "DoNothing",
     "next": ["买茶-选择-偃武"],
     "on_error": ["买茶-记录-失败"]
   },
@@ -227,15 +131,6 @@
         "target_name": "买茶-茶-偃武-世界"
       }
     },
-    "next": ["买茶-偃武-页面-探测"],
-    "on_error": ["买茶-记录-失败"]
-  },
-  "买茶-偃武-页面-探测": {
-    "recognition": "OCR",
-    "expected": "偃武世界",
-    "roi": [0, 100, 600, 620],
-    "timeout": 8000,
-    "action": "DoNothing",
     "next": ["买茶-打开-万用-商店"],
     "on_error": ["买茶-记录-失败"]
   },
@@ -260,17 +155,8 @@
         "target_name": "买茶-茶-万用-商店-入口"
       }
     },
-    "next": ["买茶-商店-页面-探测"],
-    "on_error": ["买茶-记录-失败"]
-  },
-  "买茶-商店-页面-探测": {
-    "recognition": "OCR",
-    "expected": ["商品", "商铺"],
-    "roi": [0, 100, 1280, 620],
-    "timeout": 8000,
-    "action": "DoNothing",
     "next": ["买茶-初始-物品-探测"],
-    "on_error": ["买茶-滚动-探测"]
+    "on_error": ["买茶-记录-失败"]
   },
   "买茶-初始-物品-探测": {
     "recognition": {
@@ -309,20 +195,8 @@
         "duration_ms": 350
       }
     },
-    "next": ["买茶-已滚动-物品-探测"],
+    "next": ["买茶-打开-茶"],
     "on_error": ["买茶-已完成"]
-  },
-  "买茶-已滚动-物品-探测": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": ["买茶-茶-万用-商店-页面", "买茶-茶-茶-物品-已滚动"],
-        "box_index": 1
-      }
-    },
-    "action": "DoNothing",
-    "next": ["买茶-打开-茶-已滚动"],
-    "on_error": ["买茶-记录-失败"]
   },
   "买茶-打开-茶": {
     "recognition": {
@@ -343,30 +217,6 @@
         "target_index": 1,
         "page_name": "买茶-茶-万用-商店-页面",
         "target_name": "买茶-茶-茶-物品"
-      }
-    },
-    "next": ["买茶-详情-探测"],
-    "on_error": ["买茶-记录-失败"]
-  },
-  "买茶-打开-茶-已滚动": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": ["买茶-茶-万用-商店-页面", "买茶-茶-茶-物品-已滚动"],
-        "box_index": 1
-      }
-    },
-    "action": "Custom",
-    "custom_action": "GuardedInput", "max_hit": 1,
-    "custom_action_param": {
-      "task_id": "BUY_TEA_DAILY",
-      "action_id": "open_tea_tab",
-      "kind": "click",
-      "evidence": {
-        "page_index": 0,
-        "target_index": 1,
-        "page_name": "买茶-茶-万用-商店-页面",
-        "target_name": "买茶-茶-茶-物品-已滚动"
       }
     },
     "next": ["买茶-详情-探测"],
@@ -519,7 +369,7 @@
       }
     },
     "action": "DoNothing",
-    "next": ["买茶-结果-成功"],
+    "next": ["买茶-关闭-购买-结果"],
     "on_error": ["买茶-记录-失败"]
   },
   "买茶-结果-成功": {
@@ -555,19 +405,8 @@
         "target_name": "买茶-茶-购买-结果-关闭"
       }
     },
-    "next": ["公共-通用停止"],
+    "next": ["买茶-结果-成功"],
     "on_error": ["买茶-记录-失败"]
-  },
-  "买茶-成功": {
-    "recognition": "DirectHit",
-    "action": "Custom",
-    "custom_action": "RecordTaskOutcome",
-    "custom_action_param": {
-      "task_id": "BUY_TEA_DAILY",
-      "status": "success",
-      "postcondition": "tea.purchase_result_seen"
-    },
-    "next": ["公共-通用停止"]
   },
   "买茶-记录-失败": {
     "recognition": "DirectHit",
@@ -596,34 +435,6 @@
   },
   "买茶-茶-主页-页面": {
     "recognition": {"type": "And", "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}},
-    "action": "DoNothing"
-  },
-  "买茶-茶-地图-页面": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": ["买茶-茶-地图-世界", "买茶-茶-地图-区域"],
-        "box_index": 1
-      }
-    },
-    "action": "DoNothing"
-  },
-  "买茶-茶-地图-世界": {
-    "recognition": "OCR",
-    "expected": "偃武世界",
-    "roi": [80, 100, 300, 120],
-    "action": "DoNothing"
-  },
-  "买茶-茶-地图-区域": {
-    "recognition": "OCR",
-    "expected": "绿洲",
-    "roi": [400, 340, 320, 140],
-    "action": "DoNothing"
-  },
-  "买茶-茶-地图-画卷-滚动-入口": {
-    "recognition": "OCR",
-    "expected": "画卷",
-    "roi": [0, 0, 220, 100],
     "action": "DoNothing"
   },
   "买茶-茶-画卷-滚动-入口": {
@@ -662,21 +473,7 @@
     "roi": [0, 100, 1280, 620],
     "action": "DoNothing"
   },
-  "买茶-茶-茶-商店-页面": {
-    "recognition": "TemplateMatch",
-    "template": "daily/BUY_TEA_DAILY/tea_shop_page.png",
-    "roi": [180, 130, 650, 400],
-    "threshold": 0.39,
-    "action": "DoNothing"
-  },
   "买茶-茶-茶-物品": {
-    "recognition": "TemplateMatch",
-    "template": "daily/BUY_TEA_DAILY/tea_item.png",
-    "roi": [180, 130, 650, 400],
-    "threshold": 0.39,
-    "action": "DoNothing"
-  },
-  "买茶-茶-茶-物品-已滚动": {
     "recognition": "TemplateMatch",
     "template": "daily/BUY_TEA_DAILY/tea_item.png",
     "roi": [180, 130, 650, 400],
@@ -693,12 +490,6 @@
   "买茶-茶-详情": {
     "recognition": "OCR",
     "expected": ["茶叶", "当前拥有"],
-    "roi": [820, 100, 430, 230],
-    "action": "DoNothing"
-  },
-  "买茶-茶-库存-已减少": {
-    "recognition": "OCR",
-    "expected": ["当前拥有", "\\d+"],
     "roi": [820, 100, 430, 230],
     "action": "DoNothing"
   },
@@ -741,12 +532,6 @@
     "template": "daily/BUY_TEA_DAILY/buy_confirm.png",
     "roi": [650, 500, 400, 150],
     "threshold": 0.4,
-    "action": "DoNothing"
-  },
-  "买茶-茶-货币-文": {
-    "recognition": "OCR",
-    "expected": "文",
-    "roi": [700, 430, 300, 110],
     "action": "DoNothing"
   },
   "买茶-茶-消耗-500": {
