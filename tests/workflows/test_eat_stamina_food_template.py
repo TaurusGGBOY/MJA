@@ -1,0 +1,126 @@
+"""Offline contract tests for the food-grid template recognizer."""
+
+from __future__ import annotations
+
+import json
+from pathlib import Path
+from typing import Any
+
+import numpy as np
+from PIL import Image
+
+
+ROOT = Path(__file__).parents[2]
+PIPELINE_PATH = ROOT / "assets/resource/base/pipeline/daily/eat_stamina_food_daily.json"
+TEMPLATE_PATH = ROOT / "assets/resource/base/image/daily/EAT_STAMINA_FOOD_DAILY/longjing_shrimp.png"
+GRID_FIXTURE = ROOT / "tests/fixtures/EAT_STAMINA_FOOD_DAILY/grid_food_tab_shrimp_first_row.png"
+
+
+def _load_pipeline() -> dict[str, dict[str, Any]]:
+    payload = json.loads(PIPELINE_PATH.read_text(encoding="utf-8"))
+    assert isinstance(payload, dict)
+    return payload
+
+
+def _gray(path: Path) -> np.ndarray:
+    return np.asarray(Image.open(path).convert("L"), dtype=np.float32)
+
+
+def _ncc(left: np.ndarray, right: np.ndarray) -> float:
+    left = left - left.mean()
+    right = right - right.mean()
+    denominator = float(np.linalg.norm(left) * np.linalg.norm(right))
+    if denominator == 0:
+        return -1.0
+    return float(np.sum(left * right) / denominator)
+
+
+def _best_template_match(
+    frame: np.ndarray, template: np.ndarray, roi: list[int]
+) -> tuple[float, tuple[int, int]]:
+    """Scan the configured ROI without a fixed row/column prior."""
+
+    x0, y0, width, height = roi
+    template_height, template_width = template.shape
+    stride = 4
+    sampled_template = template[::stride, ::stride]
+    best_score = -1.0
+    best_box = (x0, y0)
+    for y in range(y0, y0 + height - template_height + 1, stride):
+        for x in range(x0, x0 + width - template_width + 1, stride):
+            patch = frame[y : y + template_height : stride, x : x + template_width : stride]
+            score = _ncc(patch, sampled_template)
+            if score > best_score:
+                best_score = score
+                best_box = (x, y)
+
+    refined_score = best_score
+    refined_box = best_box
+    for y in range(max(y0, best_box[1] - stride), best_box[1] + stride + 1):
+        for x in range(max(x0, best_box[0] - stride), best_box[0] + stride + 1):
+            patch = frame[y : y + template_height, x : x + template_width]
+            score = _ncc(patch, template)
+            if score > refined_score:
+                refined_score = score
+                refined_box = (x, y)
+    return refined_score, refined_box
+
+
+def test_food_template_scans_the_whole_grid_and_finds_first_row_card() -> None:
+    pipeline = _load_pipeline()
+    candidate = pipeline["food.candidate"]
+    assert candidate["recognition"] == "TemplateMatch"
+    assert candidate["template"] == "daily/EAT_STAMINA_FOOD_DAILY/longjing_shrimp.png"
+    roi = candidate["roi"]
+    assert roi == [120, 80, 680, 540]
+    assert roi[0] <= 540 and roi[1] <= 114
+    assert roi[0] + roi[2] >= 620 and roi[1] + roi[3] >= 194
+
+    frame = _gray(GRID_FIXTURE)
+    template = _gray(TEMPLATE_PATH)
+    score, (match_x, match_y) = _best_template_match(frame, template, roi)
+    assert score >= candidate["threshold"]
+
+    template_width = template.shape[1]
+    template_height = template.shape[0]
+    assert roi[0] <= match_x < roi[0] + roi[2]
+    assert roi[1] <= match_y < roi[1] + roi[3]
+    assert match_x + template_width <= roi[0] + roi[2]
+    assert match_y + template_height <= roi[1] + roi[3]
+
+    legacy_roi = [500, 370, 160, 170]
+    assert not (
+        legacy_roi[0] <= match_x < legacy_roi[0] + legacy_roi[2]
+        and legacy_roi[1] <= match_y < legacy_roi[1] + legacy_roi[3]
+    )
+
+
+def test_food_candidate_click_uses_match_box_and_requires_after_probe() -> None:
+    pipeline = _load_pipeline()
+    loop = pipeline["MJA_FOOD_CANDIDATE_LOOP"]
+    recognition = loop["recognition"]
+    assert recognition["type"] == "And"
+    assert recognition["param"] == {
+        "all_of": ["food.food.page", "food.candidate"],
+        "box_index": 1,
+    }
+    assert loop["max_hit"] == 6
+    assert loop["action"] == "Custom"
+    assert loop["custom_action"] == "GuardedInput"
+    assert loop["custom_action_param"]["action_id"] == "inspect_food_candidate"
+    assert loop["custom_action_param"]["evidence"] == {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "food.food.page",
+        "target_name": "food.candidate",
+    }
+    assert loop["next"] == ["MJA_FOOD_DETAIL_PROBE"]
+
+    after_probe = pipeline["MJA_FOOD_DETAIL_PROBE"]
+    assert after_probe["recognition"] == "OCR"
+    assert "龙井虾仁" in after_probe["expected"]
+    assert after_probe["on_error"] == ["MJA_FOOD_NO_SAFE_CARD"]
+
+    unknown_failure = pipeline["MJA_FOOD_RECORD_FAILURE"]
+    assert unknown_failure["custom_action_param"]["status"] == "failed"
+    assert unknown_failure["Abort"] is True

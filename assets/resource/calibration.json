@@ -20,9 +20,9 @@
     }
   },
   "template_contract": {
-    "profile": "observed_ios_window",
-    "capture_size": [923, 720],
-    "status": "scaled_legacy_assets_pending_live_capture",
-    "reason": "Pipeline ROIs and legacy PNGs are projected to the observed frame as a safe bootstrap; replace them with live foreground UI captures when the game UI is visible."
+    "profile": "true_1280_legacy_assets",
+    "capture_size": [1280, 720],
+    "status": "live_recalibration_pending",
+    "reason": "The runtime requires the Maa_bbb-style 1280x720 16:9 contract; replace legacy PNGs with live foreground UI captures only after the game window honors that geometry."
   }
 }

@@ -1,0 +1,11 @@
+{
+  "task": [
+    {
+      "name": "DAILY_TASK_REWARD_CLAIM_DAILY",
+      "label": "日常任务奖励",
+      "default_check": true,
+      "group": ["日常"],
+      "entry": "MJA_DAILY_TASK_REWARD_CLAIM_DAILY_START"
+    }
+  ]
+}

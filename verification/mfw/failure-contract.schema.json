@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "MJA MFW failure propagation evidence",
+  "type": "object",
+  "required": [
+    "abort_failed",
+    "sentinel_ran",
+    "base_metadata_sha256",
+    "base_payload_sha256",
+    "overlay_sha256",
+    "probe_metadata_sha256",
+    "probe_metadata_path",
+    "base_metadata_path"
+  ],
+  "properties": {
+    "abort_failed": {"const": true},
+    "sentinel_ran": {"const": true},
+    "base_metadata_sha256": {"type": "string", "pattern": "^[0-9a-fA-F]{64}$"},
+    "base_payload_sha256": {"type": "string", "pattern": "^[0-9a-fA-F]{64}$"},
+    "overlay_sha256": {"type": "string", "pattern": "^[0-9a-fA-F]{64}$"},
+    "probe_metadata_sha256": {"type": "string", "pattern": "^[0-9a-fA-F]{64}$"},
+    "probe_metadata_path": {"type": "string", "minLength": 1},
+    "base_metadata_path": {"type": "string", "minLength": 1},
+    "mfw_tag": {"type": "string"},
+    "maa_tag": {"type": "string"},
+    "config_path": {"type": "string"},
+    "log_paths": {"type": "array", "items": {"type": "string"}}
+  },
+  "additionalProperties": true
+}

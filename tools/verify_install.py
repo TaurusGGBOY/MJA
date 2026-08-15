@@ -8,12 +8,25 @@ import subprocess
 from pathlib import Path
 from typing import Any, Callable, Iterable
 
+from PIL import Image
+
 from tools.native_bundle import load_patched_bundle
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CLICLICK = Path("/opt/homebrew/bin/cliclick")
 REQUIRED_VERSIONS = {"maafw": "5.12.2", "mfa": "2.13.0-beta.5"}
 FORBIDDEN_ACTIONS = {"Click", "Swipe", "Key", "Input", "StartApp"}
+ANDROID_MAA_ACTIONS = {
+    "Click",
+    "Swipe",
+    "LongPress",
+    "MultiSwipe",
+    "TouchDown",
+    "TouchMove",
+    "TouchUp",
+    "StartApp",
+    "StopApp",
+}
 CONTROL_UNIT_NAME = "libMaaMacOSControlUnit.dylib"
 DEFAULT_CONTROL_UNIT_BUNDLE = ROOT / "vendor" / "maafw" / "v5.12.2" / "macos-arm64"
 FILE_TOOL = "/usr/bin/file"
@@ -43,15 +56,116 @@ def _referenced_paths(payload: Any) -> Iterable[str]:
 
 def _pipeline_errors(resource_root: Path) -> list[str]:
     errors: list[str] = []
+    forbidden_actions = FORBIDDEN_ACTIONS
+    if resource_root.name == "resource_android":
+        # Android resources are executed by MaaFramework's Android controller.
+        # This is the same native pipeline path used by Maa_bbb; keep keyboard,
+        # text-input and shell-like actions forbidden while allowing bounded
+        # controller actions and app lifecycle nodes.
+        forbidden_actions = FORBIDDEN_ACTIONS - ANDROID_MAA_ACTIONS
     for path in resource_root.rglob("*.json"):
+        # ``resource/base`` is the canonical MaaFramework macOS resource
+        # tree.  Its controller-owned Click/Swipe/Key actions are valid for
+        # that controller; the Android resource is checked separately below.
+        # Keep the strict policy for a standalone legacy ``resource`` tree so
+        # accidental computer-use pipelines are still rejected.
+        relative = path.relative_to(resource_root)
+        if relative.parts[:1] == ("base",):
+            path_forbidden_actions: set[str] = set()
+        else:
+            path_forbidden_actions = forbidden_actions
         try:
             payload = json.loads(path.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError) as exc:
             errors.append(f"invalid {path.relative_to(resource_root.parent)}: {exc}")
             continue
         for key, value in _walk_mapping_items(payload):
-            if key in {"action", "action_type", "input"} and value in FORBIDDEN_ACTIONS:
+            if key in {"action", "action_type", "input"} and value in path_forbidden_actions:
                 errors.append(f"forbidden input action {value} in {path.name}")
+    return errors
+
+
+def _template_contract_errors(resource_root: Path) -> list[str]:
+    """Reject template/ROI pairs that cannot run in the canonical frame."""
+
+    errors: list[str] = []
+    calibration_path = resource_root / "calibration.json"
+    if calibration_path.is_file():
+        try:
+            calibration = json.loads(calibration_path.read_text(encoding="utf-8"))
+            contract = calibration["template_contract"]
+            expected_profile = (
+                "android_live_capture"
+                if resource_root.name == "resource_android"
+                else "true_1280_legacy_assets"
+            )
+            if contract["profile"] != expected_profile:
+                errors.append(f"template contract must use {expected_profile}")
+            if tuple(contract["capture_size"]) != (1280, 720):
+                errors.append("template contract capture size must be 1280x720")
+            pending_live_capture = contract.get("status") == "live_capture_pending"
+        except (KeyError, TypeError, OSError, json.JSONDecodeError) as exc:
+            errors.append(f"invalid calibration.json template contract: {exc}")
+            pending_live_capture = False
+    else:
+        pending_live_capture = False
+
+    for path in resource_root.rglob("*.json"):
+        if path.name == "calibration.json":
+            continue
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        if not isinstance(payload, dict):
+            continue
+        for node_name, node in payload.items():
+            if not isinstance(node, dict):
+                continue
+            recognition = node.get("recognition")
+            if isinstance(recognition, dict):
+                recognition = recognition.get("type")
+            if recognition != "TemplateMatch":
+                continue
+            roi = node.get("roi")
+            template = node.get("template")
+            if not isinstance(roi, list) or len(roi) != 4:
+                continue
+            if isinstance(template, list):
+                template = template[0] if template else None
+            if not isinstance(template, str):
+                continue
+            try:
+                x, y, width, height = (int(value) for value in roi)
+            except (TypeError, ValueError):
+                errors.append(f"{path.name}:{node_name} has an invalid ROI")
+                continue
+            if x < 0 or y < 0 or width <= 0 or height <= 0 or x + width > 1280 or y + height > 720:
+                errors.append(f"{path.name}:{node_name} ROI is outside 1280x720")
+                continue
+            if pending_live_capture:
+                continue
+            # Pipeline files may live in ``resource/base/pipeline`` while the
+            # corresponding assets live in the sibling ``base/image``.  Use
+            # the image directory beside the pipeline tree instead of
+            # assuming every JSON file belongs to the resource root itself.
+            pipeline_root = next(
+                (parent for parent in path.parents if parent.name == "pipeline"),
+                None,
+            )
+            image_root = pipeline_root.parent / "image" if pipeline_root else resource_root / "image"
+            image_path = image_root / template
+            try:
+                with Image.open(image_path) as image:
+                    image_width, image_height = image.size
+            except (OSError, ValueError) as exc:
+                errors.append(f"{path.name}:{node_name} template {template} is unreadable: {exc}")
+                continue
+            if image_width > width or image_height > height:
+                errors.append(
+                    f"{path.name}:{node_name} template {template} is {image_width}x{image_height}, "
+                    f"larger than ROI {width}x{height}"
+                )
     return errors
 
 
@@ -236,9 +350,10 @@ def verify_install(
         except (OSError, json.JSONDecodeError) as exc:
             errors.append(f"invalid interface.json: {exc}")
 
-    resource = install_root / "resource"
-    if resource.is_dir():
-        errors.extend(_pipeline_errors(resource))
+    for resource in (install_root / "resource", install_root / "resource_android"):
+        if resource.is_dir():
+            errors.extend(_pipeline_errors(resource))
+            errors.extend(_template_contract_errors(resource))
 
     if run_runtime_checks and not errors:
         python = install_root / ".venv/bin/python3"

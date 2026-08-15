@@ -1,0 +1,11 @@
+{
+  "task": [
+    {
+      "name": "GUILD_ACTIVITY_CHALLENGE_DAILY",
+      "label": "帮会活动征讨",
+      "default_check": true,
+      "group": ["日常"],
+      "entry": "MJA_GUILD_ACTIVITY_CHALLENGE_DAILY_START"
+    }
+  ]
+}

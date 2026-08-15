@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "task_id": "MAIL_REWARD_DAILY",
+  "reference_size": [1280, 720],
+  "cases": {
+    "entry": {"image": "entry.png", "expected_page": "home", "expected_targets": ["function_panel.open"], "expected_status": null},
+    "actionable": {"image": "actionable.png", "expected_page": "mail.page", "expected_targets": ["mail.claim_all"], "expected_status": null},
+    "completed": {"image": "completed.png", "expected_page": "mail.page", "expected_targets": ["mail.empty"], "expected_status": "already_complete"},
+    "danger": {"image": "danger.png", "expected_page": "mail.page", "expected_targets": ["unknown_dialog"], "expected_status": "failed"}
+  }
+}

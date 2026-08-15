@@ -109,6 +109,88 @@ def test_pipeline_forbids_unapproved_input_actions(tmp_path: Path) -> None:
     assert any("forbidden input action" in item for item in errors)
 
 
+def test_android_pipeline_allows_native_maa_controller_actions(tmp_path: Path) -> None:
+    _make_complete_install(tmp_path)
+    android_resource = tmp_path / "resource_android"
+    android_resource.mkdir()
+    pipeline = android_resource / "pipeline.json"
+    pipeline.write_text(
+        json.dumps(
+            {
+                "start": {"action": "StartApp", "package": "com.example.game"},
+                "tap": {"action": "Click"},
+            }
+        )
+    )
+
+    errors = verify_install(
+        tmp_path,
+        run_runtime_checks=False,
+        cliclick_path=tmp_path / "cliclick",
+    )
+    assert not any("forbidden input action" in item for item in errors)
+
+
+def test_template_larger_than_roi_is_reported(tmp_path: Path) -> None:
+    _make_complete_install(tmp_path)
+    image = tmp_path / "resource/image/marker.png"
+    image.parent.mkdir(parents=True, exist_ok=True)
+    from PIL import Image
+
+    Image.new("RGB", (20, 20), "navy").save(image)
+    (tmp_path / "resource/pipeline.json").write_text(
+        json.dumps(
+            {
+                "Marker": {
+                    "recognition": "TemplateMatch",
+                    "template": "marker.png",
+                    "roi": [0, 0, 10, 10],
+                }
+            }
+        )
+    )
+
+    errors = verify_install(
+        tmp_path,
+        run_runtime_checks=False,
+        cliclick_path=tmp_path / "cliclick",
+    )
+    assert any("template marker.png is" in error and "larger than ROI" in error for error in errors)
+
+
+def test_nested_base_resource_uses_its_own_image_root_and_controller_actions(
+    tmp_path: Path,
+) -> None:
+    _make_complete_install(tmp_path)
+    from PIL import Image
+
+    image = tmp_path / "resource/base/image/daily/marker.png"
+    image.parent.mkdir(parents=True, exist_ok=True)
+    Image.new("RGB", (10, 10), "navy").save(image)
+    pipeline = tmp_path / "resource/base/pipeline/daily/example.json"
+    pipeline.parent.mkdir(parents=True, exist_ok=True)
+    pipeline.write_text(
+        json.dumps(
+            {
+                "marker": {
+                    "recognition": "TemplateMatch",
+                    "template": "daily/marker.png",
+                    "roi": [0, 0, 20, 20],
+                },
+                "tap": {"action": "Click"},
+            }
+        )
+    )
+
+    errors = verify_install(
+        tmp_path,
+        run_runtime_checks=False,
+        cliclick_path=tmp_path / "cliclick",
+    )
+
+    assert errors == []
+
+
 def test_runtime_checks_use_injected_runner(tmp_path: Path) -> None:
     bundle_root = _make_complete_install(tmp_path)
     calls: list[list[str]] = []

@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "task_id": "SHOP_FREE_GIFT_DAILY",
+  "state": "live_pending",
+  "implementation_commit": "1ef968d3be174f2b327e3ee485b49077ac413367",
+  "verified_at": "2026-07-28T00:00:00+08:00",
+  "controller_backend": "ScreenCaptureKit",
+  "logical_window_size": [1280, 720],
+  "maa_capture_size": [1280, 720],
+  "normal_run_status": "already_complete",
+  "noop_run_status": "already_complete",
+  "evidence": [],
+  "postcondition_evidence": [],
+  "pending_branches": ["real Android emulator capture and task execution pending"]
+}

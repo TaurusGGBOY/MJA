@@ -1,0 +1,4 @@
+interface:
+  display_name: "MFW任务顺序与改动记录"
+  short_description: "只读配置讲解任务、每项一次澄清并统一记录改动并验证"
+  default_prompt: "Use $mfw-task-sequence-change-control to explain the selected MFW tasks from configuration only, ask one clarification question per change, and apply the recorded changes only at the agreed stopping point."

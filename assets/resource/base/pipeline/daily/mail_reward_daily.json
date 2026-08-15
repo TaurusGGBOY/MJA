@@ -1,0 +1,320 @@
+{
+  "MJA_MAIL_REWARD_DAILY_START": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "BeginTask",
+    "custom_action_param": {
+      "task_id": "MAIL_REWARD_DAILY"
+    },
+    "max_hit": 1,
+    "next": [
+      "[JumpBack]MJA_KNOWN_CLICK_BLANK_TO_CLOSE",
+      "MJA_MAIL_PAGE_PROBE",
+      "MJA_MAIL_HOME_PROBE",
+      "MJA_MAIL_PANEL_PROBE"
+    ],
+    "on_error": ["MJA_MAIL_RECORD_FAILURE"]
+  },
+  "MJA_MAIL_PAGE_PROBE": {
+    "recognition": "OCR",
+    "expected": ["邮件数量", "邮件"],
+    "roi": [300, 90, 420, 100],
+    "timeout": 8000,
+    "action": "DoNothing",
+    "next": ["MJA_MAIL_CLAIM"],
+    "on_error": ["MJA_MAIL_CLAIM"]
+  },
+  "MJA_MAIL_CLAIM": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["mail.page", "mail.claim_all"],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "max_hit": 1,
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "MAIL_REWARD_DAILY",
+      "action_id": "claim_all_mail",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "mail.page",
+        "target_name": "mail.claim_all"
+      }
+    },
+    "next": ["MJA_MAIL_REWARD_PROBE"],
+    "on_error": ["MJA_MAIL_EMPTY_PROBE"]
+  },
+  "MJA_MAIL_EMPTY_PROBE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["mail.page", "mail.empty"],
+        "box_index": 1
+      }
+    },
+    "timeout": 8000,
+    "action": "DoNothing",
+    "next": ["MJA_MAIL_ALREADY_COMPLETE"],
+    "on_error": ["MJA_MAIL_RECORD_FAILURE"]
+  },
+  "MJA_MAIL_ALREADY_COMPLETE": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "RecordTaskOutcome",
+    "custom_action_param": {
+      "task_id": "MAIL_REWARD_DAILY",
+      "status": "already_complete",
+      "postcondition": "mail.empty",
+      "defer_home_boundary": true
+    },
+    "next": ["MJA_MAIL_CLOSE"],
+    "on_error": ["MJA_MAIL_RECORD_FAILURE"]
+  },
+  "MJA_MAIL_REWARD_PROBE": {
+    "recognition": "OCR",
+    "expected": ["恭喜获得", "点击空白处关闭"],
+    "roi": [0, 120, 1280, 600],
+    "timeout": 8000,
+    "action": "DoNothing",
+    "next": ["MJA_MAIL_CLAIM_SUCCESS"],
+    "on_error": ["MJA_MAIL_RECORD_FAILURE"]
+  },
+  "MJA_MAIL_CLOSE_REWARD": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["mail.reward_popup", "mail.reward_popup_close"],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "max_hit": 1,
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "MAIL_REWARD_DAILY",
+      "action_id": "close_reward_popup",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "mail.reward_popup",
+        "target_name": "mail.reward_popup_close"
+      }
+    },
+    "next": ["MJA_MAIL_CLOSE"],
+    "on_error": ["MJA_MAIL_RECORD_FAILURE"]
+  },
+  "MJA_MAIL_CLAIM_SUCCESS": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "RecordTaskOutcome",
+    "custom_action_param": {
+      "task_id": "MAIL_REWARD_DAILY",
+      "status": "success",
+      "postcondition": "mail.reward_claimed",
+      "defer_home_boundary": true
+    },
+    "next": ["MJA_MAIL_CLOSE_REWARD"]
+  },
+  "MJA_MAIL_RECORD_FAILURE": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "RecordTaskOutcome",
+    "custom_action_param": {
+      "task_id": "MAIL_REWARD_DAILY",
+      "status": "failed",
+      "postcondition": "MAIL_POSTCONDITION_MISSING",
+      "error_code": "MAIL_POSTCONDITION_MISSING",
+      "native_fail_after_record": true
+    },
+    "Abort": true,
+    "next": ["MJA_COMMON_ABORT"]
+  },
+  "MJA_MAIL_HOME_PROBE": {
+    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_HOME_PAGE"], "box_index": 0}},
+    "timeout": 8000,
+    "action": "DoNothing",
+    "next": ["MJA_MAIL_OPEN_PANEL"],
+    "on_error": ["[JumpBack]MJA_GAME_START"]
+  },
+  "MJA_MAIL_OPEN_PANEL": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["home.page", "home.panel_open"],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "max_hit": 1,
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "MAIL_REWARD_DAILY",
+      "action_id": "open_function_panel",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "home.page",
+        "target_name": "home.panel_open"
+      }
+    },
+    "next": ["MJA_MAIL_PANEL_PROBE"],
+    "on_error": ["MJA_MAIL_RECORD_FAILURE"]
+  },
+  "MJA_MAIL_PANEL_PROBE": {
+    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_SIDE_PANEL_OPEN"], "box_index": 0}},
+    "timeout": 8000,
+    "action": "DoNothing",
+    "next": ["MJA_MAIL_OPEN_MAIL"],
+    "on_error": ["MJA_MAIL_RECORD_FAILURE"]
+  },
+  "MJA_MAIL_OPEN_MAIL": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["panel.page", "panel.mail_entry"],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "max_hit": 1,
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "MAIL_REWARD_DAILY",
+      "action_id": "open_mail",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "panel.page",
+        "target_name": "panel.mail_entry"
+      }
+    },
+    "next": ["MJA_MAIL_PAGE_PROBE"],
+    "on_error": ["MJA_MAIL_RECORD_FAILURE"]
+  },
+  "MJA_MAIL_CLOSE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["mail.page", "mail.close"],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "max_hit": 1,
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "MAIL_REWARD_DAILY",
+      "action_id": "close_mail",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "mail.page",
+        "target_name": "mail.close"
+      }
+    },
+    "next": ["MJA_MAIL_PANEL_AFTER_CLOSE"],
+    "on_error": ["MJA_MAIL_RECORD_FAILURE"]
+  },
+  "MJA_MAIL_PANEL_AFTER_CLOSE": {
+    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_SIDE_PANEL_OPEN"], "box_index": 0}},
+    "timeout": 5000,
+    "action": "DoNothing",
+    "next": ["MJA_MAIL_CLOSE_PANEL"],
+    "on_error": ["MJA_MAIL_RECORD_FAILURE"]
+  },
+  "MJA_MAIL_CLOSE_PANEL": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["panel.page", "panel.close"],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "max_hit": 1,
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "MAIL_REWARD_DAILY",
+      "action_id": "close_function_panel",
+      "kind": "click",
+      "fixed_click_mode": "function_panel_close",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "panel.page",
+        "target_name": "panel.close"
+      }
+    },
+    "next": ["MJA_HOME_BOUNDARY"],
+    "on_error": ["MJA_MAIL_RECORD_FAILURE"]
+  },
+  "home.page": {
+    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_HOME_PAGE"], "box_index": 0}},
+    "action": "DoNothing"
+  },
+  "home.panel_open": {
+    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_FUNCTION_PANEL_ENTRY"], "box_index": 0}},
+    "action": "DoNothing"
+  },
+  "panel.page": {
+    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_SIDE_PANEL_OPEN"], "box_index": 0}},
+    "action": "DoNothing"
+  },
+  "panel.mail_entry": {
+    "recognition": "TemplateMatch",
+    "template": "panel/mail_entry.png",
+    "roi": [1120, 115, 160, 210],
+    "threshold": 0.39,
+    "action": "DoNothing"
+  },
+  "panel.close": {
+    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_SIDE_PANEL_OPEN"], "box_index": 0}},
+    "action": "DoNothing"
+  },
+  "mail.page": {
+    "recognition": "OCR",
+    "expected": ["邮件数量", "邮件"],
+    "roi": [300, 90, 420, 100],
+    "action": "DoNothing"
+  },
+  "mail.claim_all": {
+    "recognition": "OCR",
+    "expected": "全部领取",
+    "roi": [205, 525, 150, 65],
+    "action": "DoNothing"
+  },
+  "mail.empty": {
+    "recognition": "OCR",
+    "expected": ["删除已读", "除已读", "暂无可领取"],
+    "roi": [300, 520, 900, 180],
+    "action": "DoNothing"
+  },
+  "mail.reward_popup": {
+    "recognition": "OCR",
+    "expected": ["恭喜获得", "点击空白处关闭"],
+    "roi": [0, 120, 1280, 600],
+    "action": "DoNothing"
+  },
+  "mail.reward_popup_close": {
+    "recognition": "OCR",
+    "expected": "点击空白处关闭",
+    "roi": [300, 560, 700, 160],
+    "action": "DoNothing"
+  },
+  "mail.close": {
+    "recognition": "TemplateMatch",
+    "template": "daily/MAIL_REWARD_DAILY/mail_close_live.png",
+    "roi": [1040, 115, 80, 80],
+    "threshold": 0.36,
+    "action": "DoNothing"
+  }
+}

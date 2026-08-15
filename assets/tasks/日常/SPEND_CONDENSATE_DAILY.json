@@ -1,0 +1,11 @@
+{
+  "task": [
+    {
+      "name": "SPEND_CONDENSATE_DAILY",
+      "label": "消耗凝晶",
+      "default_check": true,
+      "group": ["日常"],
+      "entry": "MJA_SPEND_CONDENSATE_DAILY_START"
+    }
+  ]
+}

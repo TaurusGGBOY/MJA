@@ -1,0 +1,29 @@
+{
+  "schema_version": 2,
+  "cases": {
+    "ready": {
+      "image": "assets/resource/base/image/home/home_marker.png",
+      "expected_first_node": "MJA_GAME_READY"
+    },
+    "title": {
+      "image": "assets/resource/base/image/home/start_game_button.png",
+      "expected_first_node": "MJA_START_GAME_BUTTON_AFTER_RESTART"
+    },
+    "known_popup": {
+      "image": "assets/resource/base/image/home/modal_close.png",
+      "expected_first_node": "MJA_KNOWN_POPUP_CLOSE"
+    },
+    "known_page": {
+      "image": "assets/resource/base/image/panel/panel_marker.png",
+      "expected_first_node": "MJA_KNOWN_PAGE_CLOSE"
+    },
+    "launcher": {
+      "image": "tests/fixtures/startup/launcher.png",
+      "expected_first_node": "MJA_GAME_START_AFTER_RESTART"
+    },
+    "black_screen": {
+      "image": "tests/fixtures/startup/black_screen.png",
+      "expected_first_node": "MJA_START_BLACK_SCREEN_WAIT"
+    }
+  }
+}

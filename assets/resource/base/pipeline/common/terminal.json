@@ -1,0 +1,101 @@
+{
+  "MJA_COMMON_STOP": {
+    "recognition": "DirectHit",
+    "action": "StopTask"
+  },
+  "MJA_COMMON_ABORT": {
+    "recognition": "DirectHit",
+    "Abort": true,
+    "action": "StopTask"
+  },
+  "MJA_COMMON_STARTUP_RECOVERY_RESTART": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "RestartGameSurface",
+    "custom_action_param": {
+      "package": "com.hanjiasongshu.dr22",
+      "activity": "com.hanjiasongshu.dr22/.MainActivity"
+    },
+    "timeout": 1000,
+    "max_hit": 1,
+    "post_delay": 0,
+    "next": ["MJA_GAME_START_AFTER_RESTART"],
+    "on_error": ["MJA_GAME_START_APP_RESTART_FAILED"]
+  },
+  "MJA_GAME_START_APP_RESTART_FAILED": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "FailStartupRecovery",
+    "custom_action_param": {
+      "error_code": "GAME_START_APP_RESTART_FAILED",
+      "postcondition": "startup.app_restarted",
+      "stage": "restart_app",
+      "expected": "APP 被停止后重新启动",
+      "observed": "RestartGameSurface 返回失败",
+      "root_cause": "APP 重启动作未完成"
+    },
+    "Abort": true,
+    "timeout": 1000,
+    "max_hit": 1
+  },
+  "MJA_GAME_START_START_BUTTON_NOT_FOUND": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "FailStartupRecovery",
+    "custom_action_param": {
+      "error_code": "GAME_START_START_BUTTON_NOT_FOUND",
+      "postcondition": "startup.start_game_button_visible",
+      "stage": "after_five_start_attempts",
+      "expected": "OCR 识别到 开始游戏",
+      "observed": "连续 5 次启动并分别等待 20 秒后仍未找到开始游戏按钮",
+      "root_cause": "游戏进程可能在启动阶段退出，或前台停留在非开始页；5 次重启均未使开始游戏按钮进入 OCR ROI"
+    },
+    "Abort": true,
+    "timeout": 1000,
+    "max_hit": 1
+  },
+  "MJA_GAME_START_ENTER_BUTTON_NOT_FOUND": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "FailStartupRecovery",
+    "custom_action_param": {
+      "error_code": "GAME_START_ENTER_BUTTON_NOT_FOUND",
+      "postcondition": "startup.enter_game_button_visible",
+      "stage": "after_click_start_game_5s",
+      "expected": "OCR 识别到 进入游戏",
+      "observed": "点击开始游戏并等待 5 秒后未找到进入游戏按钮",
+      "root_cause": "开始游戏点击未生效，或二次进入页文字与 OCR 契约不一致"
+    },
+    "Abort": true,
+    "timeout": 1000,
+    "max_hit": 1
+  },
+  "MJA_GAME_START_HOME_NOT_REACHED": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "FailStartupRecovery",
+    "custom_action_param": {
+      "error_code": "GAME_START_HOME_NOT_REACHED",
+      "postcondition": "startup.game_ready",
+      "stage": "after_click_enter_game_30s",
+      "expected": "右上角 OCR 识别到 画卷/画券",
+      "observed": "点击进入游戏并等待 30 秒后仍未识别到主页",
+      "root_cause": "游戏未完成进入主页，或主页 OCR 结果/ROI 与实际画面不一致"
+    },
+    "Abort": true,
+    "timeout": 1000,
+    "max_hit": 1
+  },
+  "MJA_COMMON_STARTUP_RECOVERY_EXHAUSTED": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "FailStartupRecovery",
+    "custom_action_param": {
+      "error_code": "GAME_START_RECOVERY_EXHAUSTED",
+      "postcondition": "startup.game_ready"
+    },
+    "Abort": true,
+    "timeout": 1000,
+    "max_hit": 1
+  }
+}

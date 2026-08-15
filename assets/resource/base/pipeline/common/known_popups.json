@@ -1,0 +1,360 @@
+{
+  "MJA_KNOWN_POPUP_CLOSE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "MJA_KNOWN_SAFE_ANNOUNCEMENT",
+          "MJA_KNOWN_SAFE_ANNOUNCEMENT_CLOSE_ICON"
+        ],
+        "box_index": 1
+      }
+    },
+    "timeout": 5000,
+    "max_hit": 1,
+    "action": "Click"
+  },
+  "MJA_KNOWN_PAGE_CLOSE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["MJA_KNOWN_PANEL_MARKER", "MJA_KNOWN_PANEL_CLOSE"],
+        "box_index": 1
+      }
+    },
+    "timeout": 5000,
+    "max_hit": 1,
+    "action": "Click",
+    "target": [1230, 45]
+  },
+  "MJA_KNOWN_PANEL_MARKER": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["MJA_GAME_SIDE_PANEL_OPEN"],
+        "box_index": 0
+      }
+    },
+    "action": "DoNothing"
+  },
+  "MJA_KNOWN_PANEL_CLOSE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["MJA_GAME_SIDE_PANEL_OPEN"],
+        "box_index": 0
+      }
+    },
+    "action": "DoNothing"
+  },
+  "MJA_KNOWN_TEA_DETAIL_CLOSE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["tea.detail", "MJA_KNOWN_TEA_CLOSE"],
+        "box_index": 1
+      }
+    },
+    "timeout": 5000,
+    "max_hit": 1,
+    "action": "Click"
+  },
+  "MJA_KNOWN_TEA_SHOP_CLOSE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["tea.universal_shop.page", "MJA_KNOWN_TEA_CLOSE"],
+        "box_index": 1
+      }
+    },
+    "timeout": 5000,
+    "max_hit": 1,
+    "action": "Click"
+  },
+  "MJA_KNOWN_TEA_CLOSE": {
+    "recognition": "TemplateMatch",
+    "template": "daily/BUY_TEA_DAILY/shop_close.png",
+    "roi": [1160, 0, 100, 100],
+    "threshold": 0.39,
+    "action": "DoNothing"
+  },
+  "MJA_KNOWN_PAINTING_CLOSE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "MJA_KNOWN_PAINTING_TITLE",
+          "MJA_KNOWN_PAINTING_WORLD",
+          "MJA_KNOWN_PAINTING_SHOP",
+          "MJA_KNOWN_PAINTING_CLOSE_ICON"
+        ],
+        "box_index": 3
+      }
+    },
+    "timeout": 5000,
+    "max_hit": 1,
+    "action": "Click"
+  },
+  "MJA_KNOWN_PAINTING_TITLE": {
+    "recognition": "OCR",
+    "expected": "画卷",
+    "roi": [0, 0, 350, 100],
+    "action": "DoNothing"
+  },
+  "MJA_KNOWN_PAINTING_WORLD": {
+    "recognition": "OCR",
+    "expected": "偃武世界",
+    "roi": [0, 90, 600, 180],
+    "action": "DoNothing"
+  },
+  "MJA_KNOWN_PAINTING_SHOP": {
+    "recognition": "OCR",
+    "expected": "万用商店",
+    "roi": [0, 550, 400, 170],
+    "action": "DoNothing"
+  },
+  "MJA_KNOWN_PAINTING_CLOSE_ICON": {
+    "recognition": "TemplateMatch",
+    "template": "daily/BUY_TEA_DAILY/shop_close.png",
+    "roi": [1160, 0, 120, 120],
+    "threshold": 0.39,
+    "action": "DoNothing"
+  },
+  "MJA_KNOWN_REWARD_POPUP_CLOSE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "MJA_KNOWN_REWARD_POPUP",
+          "MJA_KNOWN_REWARD_POPUP_CLOSE_ICON"
+        ],
+        "box_index": 1
+      }
+    },
+    "timeout": 5000,
+    "max_hit": 1,
+    "action": "Click",
+    "post_delay": 500
+  },
+  "MJA_KNOWN_REWARD_POPUP": {
+    "recognition": "TemplateMatch",
+    "template": "daily/GUILD_AFFAIRS_DAILY/reward_popup_live.png",
+    "roi": [120, 180, 180, 380],
+    "threshold": 0.36,
+    "action": "DoNothing"
+  },
+  "MJA_KNOWN_REWARD_POPUP_CLOSE_ICON": {
+    "recognition": "TemplateMatch",
+    "template": "daily/GUILD_AFFAIRS_DAILY/reward_popup_close_live.png",
+    "roi": [450, 600, 400, 120],
+    "threshold": 0.36,
+    "action": "DoNothing"
+  },
+  "MJA_KNOWN_HERO_DISPATCH_CLOSE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "MJA_KNOWN_HERO_DISPATCH_PAGE",
+          "MJA_KNOWN_HERO_DISPATCH_CLOSE_ICON"
+        ],
+        "box_index": 1
+      }
+    },
+    "timeout": 5000,
+    "max_hit": 1,
+    "action": "Click",
+    "post_delay": 500
+  },
+  "MJA_KNOWN_MARTIAL_DETAIL_CLOSE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "martial.detail.page",
+          "martial.close"
+        ],
+        "box_index": 1
+      }
+    },
+    "timeout": 5000,
+    "max_hit": 1,
+    "action": "Click",
+    "post_delay": 500
+  },
+  "MJA_KNOWN_MARTIAL_PAGE_CLOSE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "martial.page",
+          "martial.close"
+        ],
+        "box_index": 1
+      }
+    },
+    "timeout": 5000,
+    "max_hit": 1,
+    "action": "Click",
+    "post_delay": 500
+  },
+  "MJA_KNOWN_HERO_DISPATCH_PAGE": {
+    "recognition": "OCR",
+    "expected": ["^(?:侠客派遣|俠客派遣)$", "任务"],
+    "roi": [0, 0, 520, 180],
+    "action": "DoNothing"
+  },
+  "MJA_KNOWN_HERO_DISPATCH_CLOSE_ICON": {
+    "recognition": "TemplateMatch",
+    "template": "daily/HERO_DISPATCH_DAILY/dispatch_close.png",
+    "roi": [1175, 5, 75, 75],
+    "threshold": 0.35,
+    "green_mask": true,
+    "action": "DoNothing"
+  },
+  "MJA_KNOWN_MONTHLY_SIGNIN_CLOSE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "MJA_KNOWN_MONTHLY_SIGNIN_TITLE",
+          "MJA_KNOWN_MONTHLY_SIGNIN_ACCUMULATED"
+        ],
+        "box_index": 1
+      }
+    },
+    "timeout": 5000,
+    "max_hit": 1,
+    "action": "Click",
+    "target": [1060, 152, 16, 16],
+    "post_delay": 750
+  },
+  "MJA_KNOWN_MONTHLY_SIGNIN_TITLE": {
+    "recognition": "OCR",
+    "expected": "^(?:[一二三四五六七八九]|十[一二]?)月[·・•]?签到$",
+    "roi": [150, 120, 160, 500],
+    "action": "DoNothing"
+  },
+  "MJA_KNOWN_MONTHLY_SIGNIN_ACCUMULATED": {
+    "recognition": "OCR",
+    "expected": ["^累计签到$", "^累计$"],
+    "roi": [430, 110, 240, 110],
+    "action": "DoNothing"
+  },
+  "MJA_KNOWN_CLICK_BLANK_TO_CLOSE": {
+    "recognition": "OCR",
+    "expected": ["点击空白处关闭", "点击任意空白区域关闭"],
+    "roi": [350, 580, 600, 140],
+    "timeout": 5000,
+    "max_hit": 1,
+    "action": "Click",
+    "post_delay": 500
+  },
+  "MJA_KNOWN_BATTLE_VICTORY_RESULT_CLOSE": {
+    "recognition": "OCR",
+    "expected": "^战斗胜利$",
+    "roi": [700, 60, 580, 220],
+    "timeout": 5000,
+    "max_hit": 1,
+    "action": "Custom",
+    "custom_action": "RestartGameSurface",
+    "custom_action_param": {
+      "package": "com.hanjiasongshu.dr22",
+      "activity": "com.hanjiasongshu.dr22/.MainActivity"
+    },
+    "post_delay": 5000,
+    "next": ["MJA_GAME_START"]
+  },
+  "MJA_KNOWN_BATTLE_RESULT_CLOSE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "MJA_KNOWN_BATTLE_FAILURE_TITLE",
+          "MJA_KNOWN_BATTLE_FAILURE_DETAIL"
+        ],
+        "box_index": 0
+      }
+    },
+    "timeout": 5000,
+    "max_hit": 1,
+    "action": "Custom",
+    "custom_action": "RestartGameSurface",
+    "custom_action_param": {
+      "package": "com.hanjiasongshu.dr22",
+      "activity": "com.hanjiasongshu.dr22/.MainActivity"
+    },
+    "post_delay": 5000,
+    "next": ["MJA_GAME_START"]
+  },
+  "MJA_KNOWN_BATTLE_FAILURE_TITLE": {
+    "recognition": "OCR",
+    "expected": "^战斗失败$",
+    "roi": [650, 0, 630, 300],
+    "action": "DoNothing"
+  },
+  "MJA_KNOWN_BATTLE_FAILURE_DETAIL": {
+    "recognition": "OCR",
+    "expected": "^可以通过以下途径提升$",
+    "roi": [700, 350, 500, 150],
+    "action": "DoNothing"
+  },
+  "MJA_KNOWN_NETWORK_CONFIRM": {
+    "recognition": "OCR",
+    "expected": ["确认", "重试", "继续"],
+    "roi": [830, 350, 80, 130],
+    "timeout": 5000,
+    "max_hit": 1,
+    "action": "Click"
+  },
+  "MJA_KNOWN_RESOURCE_UPDATE_CONFIRM": {
+    "recognition": "OCR",
+    "expected": ["更新", "下载", "确定", "继续下载"],
+    "roi": [300, 240, 680, 280],
+    "timeout": 5000,
+    "max_hit": 1,
+    "action": "Click"
+  },
+  "MJA_KNOWN_CROSS_MAP_PROMPT_CANCEL": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "MJA_KNOWN_CROSS_MAP_PROMPT",
+          "MJA_KNOWN_CROSS_MAP_CANCEL_BUTTON"
+        ],
+        "box_index": 1
+      }
+    },
+    "timeout": 5000,
+    "max_hit": 1,
+    "action": "Click",
+    "post_delay": 500,
+    "next": ["MJA_GAME_START"]
+  },
+  "MJA_KNOWN_CROSS_MAP_PROMPT": {
+    "recognition": "OCR",
+    "expected": "自动寻路需要跨地图前往",
+    "roi": [320, 260, 700, 180],
+    "action": "DoNothing"
+  },
+  "MJA_KNOWN_CROSS_MAP_CANCEL_BUTTON": {
+    "recognition": "OCR",
+    "expected": "^取消$",
+    "roi": [360, 450, 230, 100],
+    "action": "DoNothing"
+  },
+  "MJA_KNOWN_SAFE_ANNOUNCEMENT": {
+    "recognition": "OCR",
+    "expected": ["公告", "公告说明", "版本更新"],
+    "roi": [0, 0, 1280, 720],
+    "action": "DoNothing"
+  },
+  "MJA_KNOWN_SAFE_ANNOUNCEMENT_CLOSE_ICON": {
+    "recognition": "TemplateMatch",
+    "template": "home/modal_close.png",
+    "roi": [1180, 10, 70, 70],
+    "threshold": 0.39,
+    "action": "DoNothing"
+  }
+}

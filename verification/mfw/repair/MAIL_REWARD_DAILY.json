@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "owner": "worker:MAIL_REWARD_DAILY:r5b",
+  "candidate": "/Users/gaoguobin/project/MJA/install/mfw-repair-mail-202608081512-r5",
+  "started_at": "2026-08-08T07:12:42.629483+00:00",
+  "finished_at": "2026-08-08T07:13:45.654109+00:00",
+  "expected_tasks": [
+    "GAME_START",
+    "MAIL_REWARD_DAILY"
+  ],
+  "result": "passed",
+  "tasks": {
+    "MAIL_REWARD_DAILY": {
+      "status": "already_complete",
+      "postcondition": "mail.empty",
+      "result_path": "/Users/gaoguobin/project/MJA/install/mfw-repair-mail-202608081512-r5/debug/acceptance/MAIL_REWARD_DAILY/20260808T071242629483Z/MAIL_REWARD_DAILY-result.json",
+      "sha256": "c5c7b84f346d1ccdd231d04d5f15fea265e28aabe4769f288a6a7d976a744f42"
+    }
+  },
+  "gui_log_sha256": "89e906858e9451a9f6b1ca2b673530e39f3e0f6711c4f83b59216b4919c829d6",
+  "maafw_log_sha256": "081a5ac92aa365577d5c5d1d6c39a29737c292f1240ee1dd7e03f3cf6ab7c6e4"
+}

@@ -1,0 +1,11 @@
+{
+  "task": [
+    {
+      "name": "DUNGEON_SWEEP_DAILY",
+      "label": "副本扫荡",
+      "default_check": true,
+      "group": ["日常"],
+      "entry": "MJA_DUNGEON_SWEEP_DAILY_START"
+    }
+  ]
+}

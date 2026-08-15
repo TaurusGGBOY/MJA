@@ -1,0 +1,26 @@
+{
+  "candidate": "install/mfw-android-all-20260809-r20",
+  "archive": "install/mfw-android-all-20260809-r20-debug-guild-activity-r2",
+  "ticket": "acceptance/GUILD_ACTIVITY_CHALLENGE_DAILY/20260809T101635757314Z/ticket.json",
+  "screenshot": "2026.08.09-18.18.14.256_MJA_GUILD_ALREADY_COMPLETE_EXIT_GUILD_HOME.png",
+  "screenshot_sha256": "82cbe596d9adaa01940932bb04699af34ba07c1459318dc43b6ed2cb79a8b000",
+  "visible_state": "outer_function_panel",
+  "visible_labels": ["活动", "商店", "日常", "武学研习", "帮会"],
+  "template_scores": {
+    "panel_marker": 0.8166005182726191,
+    "panel_close": 0.24600025159119993,
+    "home_marker": 0.02273152991231478
+  },
+  "action_trace": [
+    "open_function_panel",
+    "open_guild",
+    "open_guild_activity",
+    "exit_guild_activity",
+    "exit_guild_home"
+  ],
+  "fresh_result": {
+    "status": "failed",
+    "postcondition": "guild.home_restored",
+    "reason": "GUILD_HOME_RETURN_FAILED"
+  }
+}

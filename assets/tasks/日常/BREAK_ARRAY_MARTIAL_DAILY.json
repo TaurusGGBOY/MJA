@@ -1,0 +1,11 @@
+{
+  "task": [
+    {
+      "name": "BREAK_ARRAY_MARTIAL_DAILY",
+      "label": "破阵演武（每日三次）",
+      "default_check": false,
+      "group": ["日常"],
+      "entry": "MJA_BREAK_ARRAY_MARTIAL_DAILY_START"
+    }
+  ]
+}

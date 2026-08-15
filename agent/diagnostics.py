@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import logging
+import shutil
 from datetime import datetime
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
@@ -56,6 +57,43 @@ def _safe_details(value: Any) -> Any:
     if isinstance(value, tuple):
         return [_safe_details(item) for item in value]
     return value
+
+
+def write_android_result(
+    path: Path,
+    *,
+    avd: str,
+    serial: str,
+    package: str,
+    display_size: tuple[int, int],
+    task_name: str,
+    started_at: str,
+    finished_at: str,
+    status: str,
+) -> None:
+    """Write the Android runner's deliberately minimal, redacted result record."""
+    width, height = display_size
+    payload = {
+        "avd": avd,
+        "serial": serial,
+        "package": package,
+        "display_size": {"width": width, "height": height},
+        "task_name": task_name,
+        "started_at": started_at,
+        "finished_at": finished_at,
+        "status": status,
+    }
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_name(f".{path.name}.tmp")
+    try:
+        temporary.write_text(
+            json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+        temporary.replace(path)
+    finally:
+        temporary.unlink(missing_ok=True)
 
 
 class RunDiagnostics:
@@ -155,6 +193,51 @@ class RunDiagnostics:
             self._logger.info("event %s", name)
             self._write()
 
+    def start_task(self, task_id: str) -> None:
+        self.event("task_started", {"task_id": task_id})
+
+    def record_frame(self, frame: Any, role: str) -> None:
+        """Record frame identity and persist byte, path, or array evidence locally."""
+
+        frame_id = getattr(frame, "frame_id", "unknown")
+        payload = getattr(frame, "payload", None)
+        filename = None
+        target = self.directory / f"{role}.png"
+        if isinstance(payload, bytes):
+            target.write_bytes(payload)
+            filename = str(target)
+        elif isinstance(payload, (str, Path)) and Path(payload).is_file():
+            shutil.copyfile(payload, target)
+            filename = str(target)
+        elif getattr(payload, "shape", None) is not None:
+            from PIL import Image
+
+            Image.fromarray(payload).save(target, format="PNG")
+            filename = str(target)
+        self.event("frame", {"frame_id": frame_id, "role": role, "path": filename})
+
+    def record_action(self, intent: Any, decision: Any, frame_id: str) -> None:
+        trace = {
+            "frame_id": frame_id,
+            "action_id": getattr(intent, "action_id", None),
+            "allowed": getattr(decision, "allowed", False),
+            "reason": getattr(getattr(decision, "reason", None), "value", None),
+        }
+        with self._lock:
+            with (self.directory / "action-trace.jsonl").open("a", encoding="utf-8") as stream:
+                stream.write(json.dumps(_safe_details(trace), ensure_ascii=False) + "\n")
+
+    def record_error(self, error: BaseException) -> None:
+        self.event("task_error", {"type": type(error).__name__, "message": str(error)})
+
+    def write_task_result(self, result: Any) -> None:
+        payload = result.as_dict() if hasattr(result, "as_dict") else _safe_details(result)
+        target = self.directory / "result.json"
+        target.write_text(
+            json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+
     def succeed(self) -> None:
         with self._lock:
             self._payload["status"] = "succeeded"
@@ -202,4 +285,4 @@ class RunDiagnostics:
         temporary.replace(target)
 
 
-__all__ = ["RunDiagnostics"]
+__all__ = ["RunDiagnostics", "write_android_result"]

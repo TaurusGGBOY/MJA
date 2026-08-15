@@ -1,0 +1,357 @@
+{
+  "MJA_WEEKLY_FREE_GIFT_MONDAY_START": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "BeginTask",
+    "custom_action_param": {
+      "task_id": "WEEKLY_FREE_GIFT_MONDAY"
+    },
+    "max_hit": 1,
+    "next": ["MJA_WEEKLY_RESUME_REWARD_PROBE"],
+    "on_error": ["MJA_WEEKLY_RECORD_FAILURE"]
+  },
+  "MJA_WEEKLY_RESUME_REWARD_PROBE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["shop.weekly.reward", "shop.weekly.reward_close"],
+        "box_index": 1
+      }
+    },
+    "action": "DoNothing",
+    "next": ["MJA_WEEKLY_REWARD_SUCCESS"],
+    "on_error": ["MJA_WEEKLY_INITIAL_PAGE_PROBE"]
+  },
+  "MJA_WEEKLY_INITIAL_PAGE_PROBE": {
+    "recognition": "OCR",
+    "expected": ["每周必买", "每周必购"],
+    "roi": [0, 100, 1280, 620],
+    "timeout": 8000,
+    "action": "DoNothing",
+    "next": ["MJA_WEEKLY_FREE_CLAIM"],
+    "on_error": ["MJA_WEEKLY_GIFT_PAGE_PROBE"]
+  },
+  "MJA_WEEKLY_FREE_CLAIM": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["shop.weekly.page", "shop.weekly_lucky_bag_free"],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "max_hit": 1,
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "WEEKLY_FREE_GIFT_MONDAY",
+      "action_id": "claim_weekly_lucky_bag",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "shop.weekly.page",
+        "target_name": "shop.weekly_lucky_bag_free"
+      }
+    },
+    "next": ["MJA_WEEKLY_REWARD_PROBE"],
+    "on_error": ["MJA_WEEKLY_RECORD_FAILURE"]
+  },
+  "MJA_WEEKLY_REWARD_PROBE": {
+    "recognition": "OCR",
+    "expected": ["恭喜获得", "获得"],
+    "roi": [0, 120, 1280, 520],
+    "timeout": 8000,
+    "action": "DoNothing",
+    "next": ["MJA_WEEKLY_REWARD_SUCCESS"],
+    "on_error": ["MJA_WEEKLY_RECORD_FAILURE"]
+  },
+  "MJA_WEEKLY_REWARD_SUCCESS": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "RecordTaskOutcome",
+    "custom_action_param": {
+      "task_id": "WEEKLY_FREE_GIFT_MONDAY",
+      "status": "success",
+      "postcondition": "weekly_gift.reward_popup_seen",
+      "defer_home_boundary": true
+    },
+    "next": ["MJA_WEEKLY_DISMISS_REWARD"],
+    "on_error": ["MJA_WEEKLY_RECORD_FAILURE"]
+  },
+  "MJA_WEEKLY_DISMISS_REWARD": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["shop.weekly.reward", "shop.weekly.reward_close"],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "max_hit": 1,
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "WEEKLY_FREE_GIFT_MONDAY",
+      "action_id": "dismiss_weekly_reward",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "shop.weekly.reward",
+        "target_name": "shop.weekly.reward_close"
+      }
+    },
+    "next": ["MJA_WEEKLY_CLOSE"],
+    "on_error": ["MJA_WEEKLY_RECORD_FAILURE"]
+  },
+  "MJA_WEEKLY_CLAIM_SUCCESS": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "RecordTaskOutcome",
+    "custom_action_param": {
+      "task_id": "WEEKLY_FREE_GIFT_MONDAY",
+      "status": "success",
+      "postcondition": "weekly_gift.reward_popup_seen"
+    },
+    "next": ["MJA_WEEKLY_CLOSE"]
+  },
+  "MJA_WEEKLY_RECORD_FAILURE": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "RecordTaskOutcome",
+    "custom_action_param": {
+      "task_id": "WEEKLY_FREE_GIFT_MONDAY",
+      "status": "failed",
+      "postcondition": "WEEKLY_POSTCONDITION_MISSING",
+      "error_code": "WEEKLY_POSTCONDITION_MISSING",
+      "native_fail_after_record": true
+    },
+    "Abort": true,
+    "next": ["MJA_COMMON_ABORT"]
+  },
+  "MJA_WEEKLY_HOME_PROBE": {
+    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_HOME_PAGE"], "box_index": 0}},
+    "timeout": 8000,
+    "action": "DoNothing",
+    "next": ["MJA_WEEKLY_OPEN_PANEL"],
+    "on_error": ["[JumpBack]MJA_GAME_START"]
+  },
+  "MJA_WEEKLY_OPEN_PANEL": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["home.page", "home.panel_open"],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "max_hit": 1,
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "WEEKLY_FREE_GIFT_MONDAY",
+      "action_id": "open_function_panel",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "home.page",
+        "target_name": "home.panel_open"
+      }
+    },
+    "next": ["MJA_WEEKLY_PANEL_PAGE_PROBE"],
+    "on_error": ["MJA_WEEKLY_RECORD_FAILURE"]
+  },
+  "MJA_WEEKLY_PANEL_PAGE_PROBE": {
+    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_SIDE_PANEL_OPEN"], "box_index": 0}},
+    "timeout": 8000,
+    "action": "DoNothing",
+    "next": ["MJA_WEEKLY_OPEN_SHOP"],
+    "on_error": ["MJA_WEEKLY_RECORD_FAILURE"]
+  },
+  "MJA_WEEKLY_OPEN_SHOP": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["panel.page", "shop.entry"],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "max_hit": 1,
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "WEEKLY_FREE_GIFT_MONDAY",
+      "action_id": "open_shop",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "panel.page",
+        "target_name": "shop.entry"
+      }
+    },
+    "next": ["MJA_WEEKLY_SHOP_PAGE_PROBE"],
+    "on_error": ["MJA_WEEKLY_RECORD_FAILURE"]
+  },
+  "MJA_WEEKLY_SHOP_PAGE_PROBE": {
+    "recognition": "OCR",
+    "expected": "商城",
+    "roi": [0, 0, 1280, 720],
+    "timeout": 8000,
+    "action": "DoNothing",
+    "next": ["MJA_WEEKLY_OPEN_GIFT_TAB"],
+    "on_error": ["MJA_WEEKLY_PANEL_PAGE_PROBE"]
+  },
+  "MJA_WEEKLY_OPEN_GIFT_TAB": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["shop.page", "shop.gift_tab"],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "max_hit": 1,
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "WEEKLY_FREE_GIFT_MONDAY",
+      "action_id": "open_gift_tab",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "shop.page",
+        "target_name": "shop.gift_tab"
+      }
+    },
+    "next": ["MJA_WEEKLY_GIFT_PAGE_PROBE"],
+    "on_error": ["MJA_WEEKLY_RECORD_FAILURE"]
+  },
+  "MJA_WEEKLY_GIFT_PAGE_PROBE": {
+    "recognition": "OCR",
+    "expected": "礼包",
+    "roi": [0, 100, 1280, 620],
+    "timeout": 8000,
+    "action": "DoNothing",
+    "next": ["MJA_WEEKLY_OPEN_WEEKLY"],
+    "on_error": ["MJA_WEEKLY_HOME_PROBE"]
+  },
+  "MJA_WEEKLY_OPEN_WEEKLY": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["shop.gift_tab.page", "shop.weekly_must_buy"],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "max_hit": 1,
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "WEEKLY_FREE_GIFT_MONDAY",
+      "action_id": "open_weekly_must_buy",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "shop.gift_tab.page",
+        "target_name": "shop.weekly_must_buy"
+      }
+    },
+    "next": ["MJA_WEEKLY_OPENED_PAGE_PROBE"],
+    "on_error": ["MJA_WEEKLY_RECORD_FAILURE"]
+  },
+  "MJA_WEEKLY_OPENED_PAGE_PROBE": {
+    "recognition": "OCR",
+    "expected": ["每周必买", "每周必购"],
+    "roi": [0, 100, 1280, 620],
+    "timeout": 8000,
+    "action": "DoNothing",
+    "next": ["MJA_WEEKLY_FREE_CLAIM"],
+    "on_error": ["MJA_WEEKLY_RECORD_FAILURE"]
+  },
+  "MJA_WEEKLY_CLOSE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["shop.weekly.page", "shop.close"],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "max_hit": 1,
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "WEEKLY_FREE_GIFT_MONDAY",
+      "action_id": "close_shop",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "shop.weekly.page",
+        "target_name": "shop.close"
+      }
+    },
+    "next": ["MJA_HOME_BOUNDARY"],
+    "on_error": ["MJA_WEEKLY_RECORD_FAILURE"]
+  },
+  "shop.gift_tab": {
+    "recognition": "OCR",
+    "expected": "礼包",
+    "roi": [0, 100, 300, 260],
+    "action": "DoNothing"
+  },
+  "shop.gift_tab.page": {
+    "recognition": "OCR",
+    "expected": "礼包",
+    "roi": [0, 100, 1280, 620],
+    "action": "DoNothing"
+  },
+  "shop.weekly_must_buy": {
+    "recognition": "OCR",
+    "expected": ["每周必买", "每周必购"],
+    "roi": [450, 55, 280, 120],
+    "action": "DoNothing"
+  },
+  "shop.weekly.page": {
+    "recognition": "OCR",
+    "expected": ["每周必买", "每周必购"],
+    "roi": [0, 100, 1280, 620],
+    "action": "DoNothing"
+  },
+  "shop.weekly_lucky_bag_free": {
+    "recognition": "OCR",
+    "expected": ["免费领取", "免费"],
+    "roi": [300, 120, 900, 480],
+    "action": "DoNothing"
+  },
+  "shop.weekly_paid": {
+    "recognition": "OCR",
+    "expected": "每周特价",
+    "roi": [300, 120, 900, 480],
+    "action": "DoNothing"
+  },
+  "shop.weekly_price_conflict": {
+    "recognition": "OCR",
+    "expected": ["￥", "¥", "元", "价格"],
+    "roi": [300, 120, 900, 480],
+    "action": "DoNothing"
+  },
+  "shop.weekly_lucky_bag_claimed": {
+    "recognition": "OCR",
+    "expected": ["已领取", "已购买", "已完成"],
+    "roi": [150, 100, 1050, 620],
+    "action": "DoNothing"
+  },
+  "shop.weekly.reward": {
+    "recognition": "OCR",
+    "expected": ["恭喜获得", "获得"],
+    "roi": [0, 120, 1280, 520],
+    "action": "DoNothing"
+  },
+  "shop.weekly.reward_close": {
+    "recognition": "OCR",
+    "expected": "点击空白处关闭",
+    "roi": [350, 580, 600, 140],
+    "action": "DoNothing"
+  }
+}

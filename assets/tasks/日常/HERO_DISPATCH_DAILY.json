@@ -1,0 +1,11 @@
+{
+  "task": [
+    {
+      "name": "HERO_DISPATCH_DAILY",
+      "label": "侠客派遣",
+      "default_check": true,
+      "group": ["日常"],
+      "entry": "MJA_HERO_DISPATCH_DAILY_START"
+    }
+  ]
+}

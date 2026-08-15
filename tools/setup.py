@@ -24,6 +24,10 @@ DEFAULT_CLICLICK = Path("/opt/homebrew/bin/cliclick")
 CHUNK_SIZE = 1024 * 1024
 MAAFW_VERSION = "5.12.2"
 MACOS_CONTROL_UNIT_LIBRARY = "libMaaMacOSControlUnit.dylib"
+ANDROID_CONTROL_UNIT_LIBRARY = "libMaaAdbControlUnit.dylib"
+ANDROID_MAAPI_BUILD_SCRIPT = (
+    ROOT / "native" / "maafw-android-cli" / "build.sh"
+)
 OFFICIAL_BASE_LIBRARY_SHA256 = (
     "f9f341ca13db62ef6f8bd642862510d191efbfc55de896fdec523b5b507ffc9a"
 )
@@ -277,6 +281,149 @@ def _fsync_copy(source: Path, destination: Path) -> None:
         os.fsync(handle.fileno())
 
 
+def _replace_project_tree(source: Path, destination: Path) -> None:
+    """Replace a generated project-owned tree without retaining stale files.
+
+    The install directory is deliberately preserved across setup runs, but
+    project-owned resources must mirror their source tree exactly.  Merging
+    them with ``dirs_exist_ok`` can leave an old pipeline at a previous path;
+    Maa then discovers both copies and rejects the resource bundle for a
+    duplicate node name.
+    """
+
+    if destination.is_symlink():
+        raise ValueError(f"install directory must not be a symlink: {destination}")
+    if destination.exists():
+        if not destination.is_dir():
+            raise ValueError(f"install project tree is not a directory: {destination}")
+        shutil.rmtree(destination)
+    shutil.copytree(source, destination)
+
+
+def build_android_maapi_cli(
+    install_root: Path,
+    *,
+    source: Path | None = None,
+    official_bin: Path | None = None,
+    runner: Callable[..., Any] = subprocess.run,
+) -> None:
+    """Build or validate the MaaPiCli binary used by the Android runner."""
+    install_root = Path(install_root)
+    cli = install_root / "MaaPiCli"
+    source = source or (
+        Path(os.environ["MJA_MAAFRAME_ANDROID_SOURCE"])
+        if os.environ.get("MJA_MAAFRAME_ANDROID_SOURCE")
+        else None
+    )
+    if source is not None:
+        official_bin = official_bin or install_root
+        runner(
+            [
+                os.fspath(ANDROID_MAAPI_BUILD_SCRIPT),
+                "--source",
+                os.fspath(source),
+                "--official-bin",
+                os.fspath(official_bin),
+                "--output",
+                os.fspath(install_root),
+            ],
+            check=True,
+        )
+    if not cli.is_file() or cli.is_symlink():
+        raise RuntimeError(f"Android MaaPiCli binary is missing: {cli}")
+
+    manifest_path = install_root / "MaaPiCli.android.manifest.json"
+    if not manifest_path.is_file():
+        return
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise RuntimeError("Android MaaPiCli build manifest is invalid") from exc
+    if (
+        manifest.get("schema_version") != 1
+        or manifest.get("upstream_tag") != "v5.12.2"
+        or manifest.get("upstream_commit") != "f625a60edeccd4549f9a71c0f74628d827ade8fb"
+        or manifest.get("maapi_cli_size") != cli.stat().st_size
+        or manifest.get("maapi_cli_sha256") != sha256_file(cli)
+    ):
+        raise RuntimeError("Android MaaPiCli build manifest does not match the binary")
+    adb_sha256 = manifest.get("adb_control_unit_sha256")
+    adb_size = manifest.get("adb_control_unit_size")
+    if adb_sha256 is not None or adb_size is not None:
+        if not isinstance(adb_sha256, str) or len(adb_sha256) != 64:
+            raise RuntimeError("Android MaaPiCli build manifest has an invalid ADB library digest")
+        if isinstance(adb_size, bool) or not isinstance(adb_size, int) or adb_size <= 0:
+            raise RuntimeError("Android MaaPiCli build manifest has an invalid ADB library size")
+        for library in (
+            install_root / ANDROID_CONTROL_UNIT_LIBRARY,
+            install_root / "runtime/maafw/bin" / ANDROID_CONTROL_UNIT_LIBRARY,
+        ):
+            if library.is_file() and (
+                library.stat().st_size != adb_size or sha256_file(library) != adb_sha256
+            ):
+                raise RuntimeError(f"Android ADB control-unit library does not match the build manifest: {library}")
+
+
+def _preserved_android_control_unit(install_root: Path) -> tuple[bytes, int] | None:
+    """Capture a previously attested Android control unit before reassembly.
+
+    The official MaaFramework archive contains an unpatched ADB control unit.
+    A no-source setup must therefore carry the patched dylib forward along
+    with the attested MaaPiCli instead of silently restoring the upstream one.
+    """
+
+    manifest_path = install_root / "MaaPiCli.android.manifest.json"
+    expected_digest: str | None = None
+    if manifest_path.is_file():
+        try:
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            manifest = {}
+        value = manifest.get("adb_control_unit_sha256")
+        if isinstance(value, str) and len(value) == 64:
+            expected_digest = value
+
+    candidates = (
+        install_root / "runtime/maafw.previous/bin" / ANDROID_CONTROL_UNIT_LIBRARY,
+        install_root / ANDROID_CONTROL_UNIT_LIBRARY,
+    )
+    for candidate in candidates:
+        if not candidate.is_file():
+            continue
+        if expected_digest is not None and sha256_file(candidate) != expected_digest:
+            continue
+        return candidate.read_bytes(), stat.S_IMODE(candidate.stat().st_mode)
+    return None
+
+
+def _has_attested_android_maapi_cli(install_root: Path) -> bool:
+    """Return whether an existing patched CLI can survive runtime reassembly.
+
+    The official MaaFramework archive also contains an unpatched ``MaaPiCli``.
+    Replacing an already attested project binary with that file while keeping
+    the old manifest creates a false mismatch during a later setup. Preserve
+    the attested binary in that no-source/reuse case; a source-backed build
+    still replaces and re-attests it through ``build_android_maapi_cli``.
+    """
+
+    cli = Path(install_root) / "MaaPiCli"
+    manifest_path = Path(install_root) / "MaaPiCli.android.manifest.json"
+    if not cli.is_file() or not manifest_path.is_file():
+        return False
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        return (
+            manifest.get("schema_version") == 1
+            and manifest.get("upstream_tag") == "v5.12.2"
+            and manifest.get("upstream_commit")
+            == "f625a60edeccd4549f9a71c0f74628d827ade8fb"
+            and manifest.get("maapi_cli_size") == cli.stat().st_size
+            and manifest.get("maapi_cli_sha256") == sha256_file(cli)
+        )
+    except (OSError, ValueError, json.JSONDecodeError):
+        return False
+
+
 def _require_install_scope(install_root: Path) -> Path:
     root = Path(os.path.abspath(install_root))
     for ancestor in root.parents:
@@ -503,6 +650,10 @@ def _assemble_install_in_place(
     ):
         if directory.exists() and directory.is_symlink():
             raise ValueError(f"install directory must not be a symlink: {directory}")
+    preserve_attested_cli = _has_attested_android_maapi_cli(install_root)
+    preserved_android_control_unit = (
+        _preserved_android_control_unit(install_root) if preserve_attested_cli else None
+    )
     for artifact_id, source in extracted.items():
         if artifact_id == "maafw":
             _validate_bundle_base(
@@ -520,6 +671,8 @@ def _assemble_install_in_place(
             # install so dyld can resolve those dependencies.
             for runtime_file in bin_root.iterdir():
                 if runtime_file.is_file():
+                    if runtime_file.name == "MaaPiCli" and preserve_attested_cli:
+                        continue
                     shutil.copy2(runtime_file, install_root / runtime_file.name)
             legacy_plugin_dir = install_root / "plugins" / "osx-arm64"
             if legacy_plugin_dir.is_dir():
@@ -529,6 +682,15 @@ def _assemble_install_in_place(
             target = runtime_root / "maafw"
             _atomic_copytree(source, target)
             (target / "VERSION").write_text(f"{MAAFW_VERSION}\n", encoding="utf-8")
+            if preserved_android_control_unit is not None:
+                payload, mode = preserved_android_control_unit
+                for library in (
+                    install_root / ANDROID_CONTROL_UNIT_LIBRARY,
+                    target / "bin" / ANDROID_CONTROL_UNIT_LIBRARY,
+                ):
+                    if library.parent.is_dir():
+                        library.write_bytes(payload)
+                        library.chmod(mode)
         elif artifact_id == "mfa":
             app = _find_named(source, "MFAAvalonia.app", directory=True)
             if app is not None:
@@ -554,6 +716,7 @@ def _assemble_install_in_place(
             (target / "VERSION").write_text("2.13.0-beta.5\n", encoding="utf-8")
 
     if "maafw" in extracted:
+        build_android_maapi_cli(install_root)
         # The Python Maa binding loads the control unit from the .NET native
         # runtime directory, not only from the MaaFramework bin directory.
         # Apply the attested overlay after MFA extraction has created that
@@ -568,10 +731,42 @@ def _assemble_install_in_place(
         shutil.copy2(interface, install_root / "interface.json")
     resource = project_root / "assets/resource"
     if resource.is_dir():
-        shutil.copytree(resource, install_root / "resource", dirs_exist_ok=True)
+        _replace_project_tree(resource, install_root / "resource")
+    android_resource = project_root / "assets/resource_android"
+    if android_resource.is_dir():
+        _replace_project_tree(android_resource, install_root / "resource_android")
     agent = project_root / "agent"
     if agent.is_dir():
-        shutil.copytree(agent, install_root / "agent", dirs_exist_ok=True)
+        _replace_project_tree(agent, install_root / "agent")
+
+    task_entries: list[dict[str, Any]] = []
+    if interface.exists():
+        interface_payload = json.loads(interface.read_text(encoding="utf-8"))
+        task_entries = [
+            {
+                "name": task.get("name"),
+                "entry": task.get("entry"),
+                "resource": task.get("resource"),
+                "controller": task.get("controller"),
+            }
+            for task in interface_payload.get("task", [])
+            if isinstance(task, dict)
+            and (
+                str(task.get("entry", "")).startswith("MJA_Daily_")
+                or task.get("name") == "mail_smoke_test"
+            )
+        ]
+    workflow_manifest = {
+        "schema_version": 1,
+        "interface_sha256": sha256_file(interface) if interface.is_file() else None,
+        "task_registry": task_entries,
+        "resource": "mja_android",
+        "controller": "android",
+    }
+    (install_root / "mja-workflow-manifest.json").write_text(
+        json.dumps(workflow_manifest, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
 
 
 def assemble_install(
@@ -646,16 +841,31 @@ def setup(root: Path) -> Path:
     return install_root
 
 
+def sync_project_payload(project_root: Path, install_root: Path) -> None:
+    """Refresh project-owned files without downloading or rebuilding runtimes."""
+
+    project_root = Path(project_root).resolve()
+    install_root = Path(install_root).resolve()
+    if not install_root.is_dir():
+        raise RuntimeError(f"existing install is required: {install_root}")
+    _assemble_install_in_place(install_root, {}, project_root=project_root)
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Download and assemble the MJA runtime")
     parser.add_argument("--root", type=Path, default=ROOT)
+    parser.add_argument("--sync-only", action="store_true")
     args = parser.parse_args(argv)
     try:
-        setup(args.root.resolve())
+        root = args.root.resolve()
+        if args.sync_only:
+            sync_project_payload(root, root / "install")
+        else:
+            setup(root)
     except (OSError, RuntimeError, ValueError) as exc:
         print(f"ERROR: {exc}")
         return 1
-    print("MJA setup complete")
+    print("MJA project payload synchronized" if args.sync_only else "MJA setup complete")
     return 0
 
 

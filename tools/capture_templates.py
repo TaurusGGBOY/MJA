@@ -1,14 +1,13 @@
 from __future__ import annotations
 
-import argparse
 import json
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Callable, Mapping
+from typing import Any, Mapping
 
 from PIL import Image
 
-IMAGE_ROOT = Path("assets/resource/image")
+ANDROID_IMAGE_ROOT = Path("assets/resource_android/image")
 _UNSAFE_CROP_TERMS = ("claim", "reward", "领取", "奖励")
 
 
@@ -105,7 +104,6 @@ def load_calibration(path: str | Path, profile: str | None = None) -> CaptureCal
 
 
 TRUE_1280_CALIBRATION = CaptureCalibration((1280, 720), (1280, 720), 720)
-OBSERVED_IOS_CALIBRATION = CaptureCalibration((1051, 820), (923, 720), 720)
 
 
 HOME_CROPS: dict[str, Crop] = {
@@ -156,32 +154,6 @@ def validate_crop_profile(
         _validate_crop(crop, calibration.maa_capture_size)
 
 
-def _crops_for_calibration(
-    crops: Mapping[str, Crop], calibration: CaptureCalibration
-) -> dict[str, Crop]:
-    """Project the legacy 1280x720 crop contract into a calibrated frame."""
-
-    if calibration == TRUE_1280_CALIBRATION:
-        return dict(crops)
-    source_width, source_height = TRUE_1280_CALIBRATION.maa_capture_size
-    target_width, target_height = calibration.maa_capture_size
-    scale_x = target_width / source_width
-    scale_y = target_height / source_height
-
-    def scale(value: int, factor: float) -> int:
-        return int(round(value * factor))
-
-    return {
-        name: Crop(
-            x=scale(crop.x, scale_x),
-            y=scale(crop.y, scale_y),
-            width=max(1, scale(crop.width, scale_x)),
-            height=max(1, scale(crop.height, scale_y)),
-        )
-        for name, crop in crops.items()
-    }
-
-
 def crop_templates(
     source: str | Path,
     output_dir: str | Path,
@@ -205,126 +177,38 @@ def crop_templates(
         target_dir.mkdir(parents=True, exist_ok=True)
         for name, crop in crops.items():
             output = target_dir / f"{name}.png"
-            image.crop(crop.box()).save(output, format="PNG")
+            temporary = output.with_name(output.name + ".tmp")
+            try:
+                image.crop(crop.box()).save(temporary, format="PNG")
+                temporary.replace(output)
+            finally:
+                temporary.unlink(missing_ok=True)
             outputs[name] = output
     return outputs
 
 
-def _default_controller_factory(window_id: int) -> Any:
-    from maa.controller import MacOSController
-    from maa.define import MaaMacOSInputMethodEnum, MaaMacOSScreencapMethodEnum
-
-    return MacOSController(
-        window_id,
-        screencap_method=MaaMacOSScreencapMethodEnum.ScreenCaptureKit,
-        input_method=MaaMacOSInputMethodEnum.GlobalEvent,
-    )
-
-
-def capture_screen(
-    window_id: int,
-    controller_factory: Callable[[int], Any] | None = None,
-    *,
-    expected_short_side: int = 720,
-    calibration: CaptureCalibration | None = None,
-) -> Image.Image:
-    """Capture one read-only frame and validate Maa's scaled output dimensions."""
-
-    if isinstance(window_id, bool) or not isinstance(window_id, int) or window_id <= 0:
-        raise ValueError("window_id must be a positive integer")
-    if (
-        isinstance(expected_short_side, bool)
-        or not isinstance(expected_short_side, int)
-        or expected_short_side <= 0
-    ):
-        raise ValueError("expected_short_side must be a positive integer")
-    if calibration is not None and calibration.display_short_side != expected_short_side:
-        raise ValueError("expected_short_side does not match calibration")
-    controller = (controller_factory or _default_controller_factory)(window_id)
-    connection = controller.post_connection().wait()
-    if hasattr(connection, "succeeded") and not connection.succeeded:
-        raise RuntimeError(f"failed to connect macOS controller for window {window_id}")
-    if not controller.set_screenshot_target_short_side(expected_short_side):
-        raise RuntimeError(
-            f"failed to set screenshot short side to {expected_short_side}"
-        )
-    frame = controller.post_screencap().wait().get()
-    image = frame if isinstance(frame, Image.Image) else Image.fromarray(frame)
-    if min(image.size) != expected_short_side:
-        raise ValueError(
-            f"captured frame short side must be {expected_short_side}, got {image.size}"
-        )
-    if calibration is not None and image.size != calibration.maa_capture_size:
-        raise ValueError(
-            "captured frame does not match calibrated MAA capture size: "
-            f"expected {calibration.maa_capture_size}, got {image.size}"
-        )
-    return image.convert("RGB")
-
-
-def capture_profile(
+def capture_android_profile(
     profile: str,
-    window_id: int,
-    output_root: str | Path = IMAGE_ROOT,
-    controller_factory: Callable[[int], Any] | None = None,
-    *,
-    calibration: CaptureCalibration = TRUE_1280_CALIBRATION,
+    device: Any,
+    output_root: str | Path = ANDROID_IMAGE_ROOT,
 ) -> dict[str, Path]:
+    """Capture one safe profile from a ready 1280x720 ADB device."""
+
     try:
         directory, crops = _PROFILES[profile]
     except KeyError as exc:
         raise ValueError(f"profile must be one of: {', '.join(_PROFILES)}") from exc
-    image = capture_screen(
-        window_id,
-        expected_short_side=calibration.display_short_side,
-        calibration=calibration,
-        controller_factory=controller_factory,
-    )
-    crops = _crops_for_calibration(crops, calibration)
+    device.wait_ready()
     target_dir = Path(output_root) / directory
-    temporary = target_dir / ".capture-source.png"
     target_dir.mkdir(parents=True, exist_ok=True)
+    temporary = target_dir / ".capture-source.png"
     try:
-        image.save(temporary, format="PNG")
-        outputs = crop_templates(temporary, target_dir, crops, calibration=calibration)
+        device.screencap(temporary)
+        return crop_templates(
+            temporary,
+            target_dir,
+            crops,
+            calibration=TRUE_1280_CALIBRATION,
+        )
     finally:
         temporary.unlink(missing_ok=True)
-    return outputs
-
-
-def _build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(
-        description="Capture safe MJA template crops from a macOS window"
-    )
-    subparsers = parser.add_subparsers(dest="command", required=True)
-    capture = subparsers.add_parser("capture", help="capture one named screen profile")
-    capture.add_argument("profile", choices=tuple(_PROFILES))
-    capture.add_argument("--window-id", required=True, type=int)
-    capture.add_argument("--output-root", type=Path, default=IMAGE_ROOT)
-    capture.add_argument(
-        "--calibration",
-        type=Path,
-        default=Path(__file__).resolve().parents[1] / "assets/resource/calibration.json",
-    )
-    capture.add_argument("--calibration-profile", default="true_1280_legacy_assets")
-    return parser
-
-
-def main(argv: list[str] | None = None) -> int:
-    args = _build_parser().parse_args(argv)
-    if args.command == "capture":
-        calibration = load_calibration(args.calibration, args.calibration_profile)
-        outputs = capture_profile(
-            args.profile,
-            args.window_id,
-            args.output_root,
-            calibration=calibration,
-        )
-        for output in outputs.values():
-            print(output)
-        return 0
-    raise AssertionError(f"unsupported command: {args.command}")
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())

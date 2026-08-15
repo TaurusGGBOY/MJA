@@ -1,0 +1,11 @@
+{
+  "task": [
+    {
+      "name": "COLLECTION_DEPLOYMENT_DAILY",
+      "label": "采集收取",
+      "default_check": true,
+      "group": ["日常"],
+      "entry": "MJA_COLLECTION_DEPLOYMENT_DAILY_START"
+    }
+  ]
+}

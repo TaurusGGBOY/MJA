@@ -1,0 +1,27 @@
+{
+  "source": "install/mfw-android-all-20260809-r21-debug-break-r1/on_error/2026.08.09-18.31.25.861_MJA_BREAK_ARRAY_MARTIAL_DAILY_EXECUTE.png",
+  "ticket_source": "install/mfw-android-all-20260809-r21-debug-break-r1/acceptance/BREAK_ARRAY_MARTIAL_DAILY/20260809T102905420030Z/ticket.json",
+  "result_source": "install/mfw-android-all-20260809-r21-debug-break-r1/mfw-105553128293832/BREAK_ARRAY_MARTIAL_DAILY/result.json",
+  "action_trace_source": "install/mfw-android-all-20260809-r21-debug-break-r1/mfw-105553128293832/BREAK_ARRAY_MARTIAL_DAILY/action-trace.jsonl",
+  "sha256": "833fc0107c64c8265cee13e2f106476cde24bbd607654521c8483c5e5c8bcfc4",
+  "frame_size": [1280, 720],
+  "result": {
+    "status": "failed",
+    "error_code": "WORKFLOW_POSTCONDITION_MISSING"
+  },
+  "action_trace": [
+    "open_break_array_activity",
+    "open_break_array",
+    "start_break_array_challenge",
+    "confirm_break_array_challenge"
+  ],
+  "observations": {
+    "dark_field_count": 420000,
+    "dark_field_threshold": 400000,
+    "rumor_glyph_counts": [1628, 1779, 1932],
+    "rumor_glyph_threshold": 3000,
+    "prepare_page": false,
+    "battle": false,
+    "prepare_start": false
+  }
+}

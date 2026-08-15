@@ -1,0 +1,1700 @@
+{
+  "MJA_SHADOW_RUINS_DAILY_START": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "BeginTask",
+    "custom_action_param": {
+      "task_id": "SHADOW_RUINS_DAILY"
+    },
+    "next": [
+      "MJA_SHADOW_PAGE_PROBE",
+      "MJA_SHADOW_PAINTING_PAGE",
+      "MJA_SHADOW_HOME_PROBE",
+      "MJA_SHADOW_EXPLORATION_PAGE",
+      "MJA_SHADOW_BATTLE_RESULT_PROBE"
+    ],
+    "on_error": [
+      "MJA_SHADOW_ENTRY_UNKNOWN"
+    ]
+  },
+  "MJA_SHADOW_HOME_PROBE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "shadow.home.page"
+        ]
+      }
+    },
+    "action": "DoNothing",
+    "next": [
+      "MJA_SHADOW_OPEN_PAINTING"
+    ],
+    "on_error": [
+      "MJA_SHADOW_ENTRY_UNKNOWN"
+    ]
+  },
+  "MJA_SHADOW_OPEN_PAINTING": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "shadow.home.page",
+          "shadow.painting.entry"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "SHADOW_RUINS_DAILY",
+      "action_id": "open_painting_scroll",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "shadow.home.page",
+        "target_name": "shadow.painting.entry"
+      }
+    },
+    "next": [
+      "MJA_SHADOW_PAINTING_PAGE",
+      "MJA_SHADOW_HOME_RECOVERY_PROBE"
+    ],
+    "on_error": [
+      "MJA_SHADOW_ENTRY_UNKNOWN"
+    ],
+    "max_hit": 1,
+    "retry_times": 0
+  },
+  "MJA_SHADOW_PAINTING_PAGE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "shadow.painting.page"
+        ]
+      }
+    },
+    "action": "DoNothing",
+    "next": [
+      "MJA_SHADOW_OPEN_SHADOW"
+    ],
+    "on_error": [
+      "MJA_SHADOW_ENTRY_UNKNOWN"
+    ]
+  },
+  "MJA_SHADOW_HOME_RECOVERY_PROBE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "shadow.home.page"
+        ]
+      }
+    },
+    "action": "DoNothing",
+    "next": [
+      "MJA_SHADOW_OPEN_PAINTING_RECOVERY"
+    ],
+    "on_error": [
+      "MJA_SHADOW_ENTRY_UNKNOWN"
+    ]
+  },
+  "MJA_SHADOW_OPEN_PAINTING_RECOVERY": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "shadow.home.page",
+          "shadow.painting.entry"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "SHADOW_RUINS_DAILY",
+      "action_id": "open_painting_scroll",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "shadow.home.page",
+        "target_name": "shadow.painting.entry"
+      }
+    },
+    "next": [
+      "MJA_SHADOW_PAINTING_PAGE"
+    ],
+    "on_error": [
+      "MJA_SHADOW_ENTRY_UNKNOWN"
+    ],
+    "max_hit": 1,
+    "retry_times": 0
+  },
+  "MJA_SHADOW_OPEN_SHADOW": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "shadow.painting.page",
+          "shadow.entry"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "SHADOW_RUINS_DAILY",
+      "action_id": "open_shadow",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "shadow.painting.page",
+        "target_name": "shadow.entry"
+      }
+    },
+    "next": [
+      "MJA_SHADOW_PAGE_PROBE"
+    ],
+    "on_error": [
+      "MJA_SHADOW_RECORD_FAILURE"
+    ],
+    "max_hit": 1,
+    "retry_times": 0
+  },
+  "MJA_SHADOW_PAGE_PROBE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "shadow.page"
+        ]
+      }
+    },
+    "action": "DoNothing",
+    "next": [
+      "MJA_SHADOW_SELECT_ACTIVE"
+    ],
+    "on_error": [
+      "MJA_SHADOW_RECORD_FAILURE"
+    ]
+  },
+  "MJA_SHADOW_SELECT_ACTIVE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "shadow.page",
+          "shadow.active"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "SHADOW_RUINS_DAILY",
+      "action_id": "select_active_shadow_card",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "shadow.page",
+        "target_name": "shadow.active"
+      }
+    },
+    "next": [
+      "MJA_SHADOW_ENTER_STAGE"
+    ],
+    "on_error": [
+      "MJA_SHADOW_CLOSE_SHADOW_PAGE"
+    ],
+    "retry_times": 0,
+    "max_hit": 3
+  },
+  "MJA_SHADOW_ENTER_STAGE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "shadow.page",
+          "shadow.stage_entry"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "SHADOW_RUINS_DAILY",
+      "action_id": "enter_shadow_stage",
+      "kind": "click",
+      "fixed_click_mode": "shadow_stage_entry_button",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "shadow.page",
+        "target_name": "shadow.stage_entry"
+      }
+    },
+    "next": [
+      "MJA_SHADOW_STAGE_PROBE"
+    ],
+    "on_error": [
+      "MJA_SHADOW_RECORD_FAILURE"
+    ],
+    "retry_times": 0
+  },
+  "MJA_SHADOW_STAGE_PROBE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "shadow.stage.page"
+        ]
+      }
+    },
+    "action": "DoNothing",
+    "next": [
+      "MJA_SHADOW_SKIP_PREPARE_PROBE"
+    ],
+    "on_error": [
+      "MJA_SHADOW_RECORD_FAILURE"
+    ]
+  },
+  "MJA_SHADOW_FOREGROUND_LEFT": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "shadow.stage.page",
+          "shadow.foreground.left"
+        ]
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "SHADOW_RUINS_DAILY",
+      "action_id": "move_shadow_foreground_left",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "shadow.stage.page",
+        "target_name": "shadow.foreground.left"
+      }
+    },
+    "next": [
+      "MJA_SHADOW_FOREGROUND_CENTER"
+    ],
+    "on_error": [
+      "MJA_SHADOW_FOREGROUND_CENTER"
+    ],
+    "retry_times": 0
+  },
+  "MJA_SHADOW_FOREGROUND_CENTER": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "shadow.stage.page",
+          "shadow.foreground.center"
+        ]
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "SHADOW_RUINS_DAILY",
+      "action_id": "move_shadow_foreground_center",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "shadow.stage.page",
+        "target_name": "shadow.foreground.center"
+      }
+    },
+    "next": [
+      "MJA_SHADOW_FOREGROUND_RIGHT"
+    ],
+    "on_error": [
+      "MJA_SHADOW_FOREGROUND_RIGHT"
+    ],
+    "retry_times": 0
+  },
+  "MJA_SHADOW_FOREGROUND_RIGHT": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "shadow.stage.page",
+          "shadow.foreground.right"
+        ]
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "SHADOW_RUINS_DAILY",
+      "action_id": "move_shadow_foreground_right",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "shadow.stage.page",
+        "target_name": "shadow.foreground.right"
+      }
+    },
+    "next": [
+      "MJA_SHADOW_EXPLORATION_PAGE"
+    ],
+    "on_error": [
+      "MJA_SHADOW_EXPLORATION_PAGE"
+    ],
+    "retry_times": 0
+  },
+  "MJA_SHADOW_EXPLORATION_PAGE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "shadow.exploration.page"
+        ]
+      }
+    },
+    "action": "DoNothing",
+    "next": [
+      "MJA_SHADOW_BATTLE_RESULT_PROBE",
+      "MJA_SHADOW_BATTLE_IN_PROGRESS_WAIT",
+      "MJA_SHADOW_REWARD_PROBE",
+      "MJA_SHADOW_FOREGROUND_GATE",
+      "MJA_SHADOW_BATTLE_GATE",
+      "MJA_SHADOW_FINAL_PROBE",
+      "MJA_SHADOW_BLACK_FREEZE_RECOVERY"
+    ],
+    "on_error": [
+      "MJA_SHADOW_RECORD_FAILURE"
+    ]
+  },
+  "MJA_SHADOW_BLACK_FREEZE_RECOVERY": {
+    "recognition": "ColorMatch",
+    "upper": [
+      0,
+      0,
+      0
+    ],
+    "lower": [
+      0,
+      0,
+      0
+    ],
+    "connected": true,
+    "count": 80000,
+    "timeout": 5000,
+    "max_hit": 1,
+    "retry_times": 0,
+    "action": "Custom",
+    "custom_action": "RestartGameSurface",
+    "custom_action_param": {
+      "package": "com.hanjiasongshu.dr22",
+      "activity": "com.hanjiasongshu.dr22/.MainActivity"
+    },
+    "post_delay": 5000,
+    "next": [
+      "MJA_SHADOW_BLACK_FREEZE_RESUME"
+    ],
+    "on_error": [
+      "MJA_SHADOW_RECORD_FAILURE"
+    ]
+  },
+  "MJA_SHADOW_BLACK_FREEZE_RESUME": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "timeout": 120000,
+    "retry_times": 0,
+    "next": [
+      "MJA_SHADOW_HOME_PROBE",
+      "[JumpBack]MJA_GAME_START"
+    ],
+    "on_error": [
+      "MJA_SHADOW_RECORD_FAILURE"
+    ]
+  },
+  "MJA_SHADOW_FOREGROUND_GATE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "shadow.exploration.page",
+          "shadow.foreground.ready"
+        ]
+      }
+    },
+    "action": "DoNothing",
+    "next": [
+      "MJA_SHADOW_FOREGROUND_LOOP"
+    ],
+    "on_error": [
+      "MJA_SHADOW_BATTLE_GATE"
+    ]
+  },
+  "MJA_SHADOW_BATTLE_GATE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "shadow.challenge.page",
+          "shadow.challenge.target"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "DoNothing",
+    "next": [
+      "MJA_SHADOW_BATTLE_LOOP"
+    ],
+    "on_error": [
+      "MJA_SHADOW_FINAL_PROBE",
+      "MJA_SHADOW_RECORD_FAILURE"
+    ]
+  },
+  "MJA_SHADOW_FOREGROUND_LOOP": {
+    "max_hit": 40,
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "shadow.exploration.page",
+          "shadow.foreground.ready"
+        ]
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "SHADOW_RUINS_DAILY",
+      "action_id": "advance_shadow_foreground_triplet",
+      "kind": "click",
+      "fixed_click_boxes": [
+        [
+          436,
+          536,
+          24,
+          24
+        ],
+        [
+          629,
+          536,
+          24,
+          24
+        ],
+        [
+          822,
+          536,
+          24,
+          24
+        ]
+      ],
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "shadow.exploration.page",
+        "target_name": "shadow.foreground.ready"
+      }
+    },
+    "next": [
+      "MJA_SHADOW_BATTLE_RESULT_PROBE",
+      "MJA_SHADOW_BATTLE_IN_PROGRESS_WAIT",
+      "MJA_SHADOW_BATTLE_GATE",
+      "MJA_SHADOW_BLACK_FREEZE_RECOVERY",
+      "MJA_SHADOW_EXPLORATION_PAGE"
+    ],
+    "on_error": [
+      "MJA_SHADOW_BATTLE_GATE",
+      "MJA_SHADOW_FOREGROUND_LOOP_EXHAUSTED"
+    ]
+  },
+  "MJA_SHADOW_BATTLE_LOOP": {
+    "max_hit": 12,
+    "timeout": 240000,
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "shadow.challenge.page",
+          "shadow.challenge.target"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "SHADOW_RUINS_DAILY",
+      "action_id": "challenge_shadow_stage",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "shadow.challenge.page",
+        "target_name": "shadow.challenge.target"
+      }
+    },
+    "next": [
+      "MJA_SHADOW_BATTLE_RESULT_PROBE",
+      "MJA_SHADOW_BATTLE_IN_PROGRESS_WAIT"
+    ],
+    "on_error": [
+      "MJA_SHADOW_BATTLE_LOOP_EXHAUSTED"
+    ]
+  },
+  "MJA_SHADOW_BATTLE_IN_PROGRESS_WAIT": {
+    "max_hit": 240,
+    "timeout": 240000,
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "shadow.battle.in_progress"
+        ]
+      }
+    },
+    "action": "DoNothing",
+    "post_delay": 1000,
+    "next": [
+      "MJA_SHADOW_BATTLE_RESULT_PROBE",
+      "MJA_SHADOW_BATTLE_IN_PROGRESS_WAIT"
+    ],
+    "on_error": [
+      "MJA_SHADOW_BATTLE_RESULT_PROBE",
+      "MJA_SHADOW_BATTLE_LOOP_EXHAUSTED"
+    ],
+    "retry_times": 0
+  },
+  "MJA_SHADOW_BATTLE_RESULT_PROBE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "shadow.battle.result.page"
+        ]
+      }
+    },
+    "action": "DoNothing",
+    "next": [
+      "MJA_SHADOW_BATTLE_RESULT_VICTORY",
+      "MJA_SHADOW_BATTLE_RESULT_DEFEAT"
+    ],
+    "on_error": [
+      "MJA_SHADOW_BATTLE_RESULT_UNKNOWN_RESULT"
+    ]
+  },
+  "MJA_SHADOW_BATTLE_RESULT_VICTORY": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "shadow.battle.result.page",
+          "shadow.battle.victory"
+        ]
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "SHADOW_RUINS_DAILY",
+      "action_id": "dismiss_shadow_battle_result",
+      "kind": "click",
+      "fixed_click_mode": "shadow_result_blank",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "shadow.battle.result.page",
+        "target_name": "shadow.battle.victory"
+      }
+    },
+    "next": [
+      "MJA_SHADOW_CLAIM_VICTORY_CHEST_FIRST"
+    ],
+    "on_error": [
+      "MJA_SHADOW_RECORD_FAILURE"
+    ],
+    "retry_times": 0,
+    "timeout": 50000
+  },
+  "MJA_SHADOW_CLAIM_VICTORY_CHEST_FIRST": {
+    "max_hit": 12,
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "shadow.exploration.page",
+          "shadow.foreground.ready"
+        ]
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "SHADOW_RUINS_DAILY",
+      "action_id": "advance_shadow_foreground_triplet",
+      "kind": "click",
+      "fixed_click_boxes": [
+        [
+          436,
+          536,
+          24,
+          24
+        ],
+        [
+          629,
+          536,
+          24,
+          24
+        ],
+        [
+          822,
+          536,
+          24,
+          24
+        ]
+      ],
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "shadow.exploration.page",
+        "target_name": "shadow.foreground.ready"
+      }
+    },
+    "next": [
+      "MJA_SHADOW_FINAL_PROBE",
+      "MJA_SHADOW_REWARD_PROBE",
+      "MJA_SHADOW_VICTORY_CHEST_REWARD_PROBE",
+      "MJA_SHADOW_CLAIM_VICTORY_CHEST_RETRY"
+    ],
+    "on_error": [
+      "MJA_SHADOW_FINAL_PROBE",
+      "MJA_SHADOW_REWARD_PROBE",
+      "MJA_SHADOW_VICTORY_CHEST_REWARD_PROBE",
+      "MJA_SHADOW_RECORD_FAILURE"
+    ],
+    "retry_times": 0,
+    "timeout": 50000
+  },
+  "MJA_SHADOW_CLAIM_VICTORY_CHEST_RETRY": {
+    "max_hit": 12,
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "shadow.exploration.page",
+          "shadow.foreground.ready"
+        ]
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "SHADOW_RUINS_DAILY",
+      "action_id": "advance_shadow_foreground_triplet",
+      "kind": "click",
+      "fixed_click_boxes": [
+        [
+          436,
+          536,
+          24,
+          24
+        ],
+        [
+          629,
+          536,
+          24,
+          24
+        ],
+        [
+          822,
+          536,
+          24,
+          24
+        ]
+      ],
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "shadow.exploration.page",
+        "target_name": "shadow.foreground.ready"
+      }
+    },
+    "next": [
+      "MJA_SHADOW_FINAL_PROBE",
+      "MJA_SHADOW_REWARD_PROBE",
+      "MJA_SHADOW_VICTORY_CHEST_REWARD_PROBE",
+      "MJA_SHADOW_VICTORY_CHEST_POST_RETRY_WAIT"
+    ],
+    "on_error": [
+      "MJA_SHADOW_FINAL_PROBE",
+      "MJA_SHADOW_REWARD_PROBE",
+      "MJA_SHADOW_VICTORY_CHEST_REWARD_PROBE",
+      "MJA_SHADOW_VICTORY_CHEST_POST_RETRY_WAIT"
+    ],
+    "retry_times": 0,
+    "timeout": 50000
+  },
+  "MJA_SHADOW_VICTORY_CHEST_POST_RETRY_WAIT": {
+    "max_hit": 12,
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "post_delay": 1000,
+    "next": [
+      "MJA_SHADOW_FINAL_PROBE",
+      "MJA_SHADOW_REWARD_PROBE",
+      "MJA_SHADOW_VICTORY_CHEST_REWARD_PROBE",
+      "MJA_SHADOW_RECORD_FAILURE"
+    ],
+    "on_error": [
+      "MJA_SHADOW_RECORD_FAILURE"
+    ],
+    "retry_times": 0
+  },
+  "MJA_SHADOW_VICTORY_CHEST_REWARD_PROBE": {
+    "max_hit": 12,
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "shadow.victory.chest.reward"
+        ]
+      }
+    },
+    "action": "DoNothing",
+    "next": [
+      "MJA_SHADOW_DISMISS_VICTORY_CHEST_REWARD"
+    ],
+    "on_error": [
+      "MJA_SHADOW_RECORD_FAILURE"
+    ],
+    "retry_times": 0,
+    "timeout": 8000
+  },
+  "MJA_SHADOW_DISMISS_VICTORY_CHEST_REWARD": {
+    "max_hit": 12,
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "shadow.victory.chest.reward"
+        ]
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "SHADOW_RUINS_DAILY",
+      "action_id": "dismiss_shadow_reward_popup",
+      "kind": "click",
+      "fixed_click_mode": "shadow_reward_blank",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 0,
+        "page_name": "shadow.victory.chest.reward",
+        "target_name": "shadow.victory.chest.reward"
+      }
+    },
+    "next": [
+      "MJA_SHADOW_EXPLORATION_PAGE"
+    ],
+    "on_error": [
+      "MJA_SHADOW_RECORD_FAILURE"
+    ],
+    "retry_times": 0,
+    "timeout": 8000,
+    "post_delay": 750
+  },
+  "MJA_SHADOW_BATTLE_RESULT_DEFEAT": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "shadow.battle.result.page",
+          "shadow.battle.defeat"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "SHADOW_RUINS_DAILY",
+      "action_id": "dismiss_shadow_battle_failure",
+      "kind": "click",
+      "fixed_click_mode": "shadow_result_blank",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "shadow.battle.result.page",
+        "target_name": "shadow.battle.defeat"
+      }
+    },
+    "next": [
+      "MJA_SHADOW_BATTLE_FAILURE"
+    ],
+    "on_error": [
+      "MJA_SHADOW_BATTLE_FAILURE"
+    ],
+    "retry_times": 0
+  },
+  "MJA_SHADOW_BATTLE_RESULT_UNKNOWN_RESULT": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "RecordTaskOutcome",
+    "custom_action_param": {
+      "task_id": "SHADOW_RUINS_DAILY",
+      "status": "failed",
+      "error_code": "SHADOW_BATTLE_RESULT_UNKNOWN",
+      "postcondition": "shadow.battle.result_known",
+      "native_fail_after_record": true
+    },
+    "Abort": true,
+    "next": [
+      "MJA_COMMON_ABORT"
+    ]
+  },
+  "MJA_SHADOW_REWARD_PROBE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "shadow.reward.close"
+        ]
+      }
+    },
+    "action": "DoNothing",
+    "next": [
+      "MJA_SHADOW_DISMISS_REWARD"
+    ],
+    "on_error": [
+      "MJA_SHADOW_REWARD_WAIT"
+    ]
+  },
+  "MJA_SHADOW_REWARD_WAIT": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "post_delay": 1000,
+    "max_hit": 35,
+    "next": [
+      "MJA_SHADOW_REWARD_PROBE"
+    ],
+    "on_error": [
+      "MJA_SHADOW_RECORD_FAILURE"
+    ]
+  },
+  "MJA_SHADOW_DISMISS_REWARD": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "shadow.reward",
+          "shadow.reward.close"
+        ]
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "SHADOW_RUINS_DAILY",
+      "action_id": "dismiss_shadow_reward_popup",
+      "kind": "click",
+      "fixed_click_mode": "shadow_reward_blank",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "shadow.reward",
+        "target_name": "shadow.reward.close"
+      }
+    },
+    "next": [
+      "MJA_SHADOW_EXPLORATION_PAGE"
+    ],
+    "on_error": [
+      "MJA_SHADOW_RECORD_FAILURE"
+    ],
+    "retry_times": 0,
+    "post_delay": 750
+  },
+  "MJA_SHADOW_FINAL_PROBE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "shadow.final.prompt"
+        ]
+      }
+    },
+    "action": "DoNothing",
+    "next": [
+      "MJA_SHADOW_CONFIRM_COMPLETION"
+    ],
+    "on_error": [
+      "MJA_SHADOW_RECORD_FAILURE"
+    ]
+  },
+  "MJA_SHADOW_CONFIRM_COMPLETION": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "shadow.final.prompt",
+          "shadow.final.confirm"
+        ]
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "SHADOW_RUINS_DAILY",
+      "action_id": "confirm_shadow_completion",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "shadow.final.prompt",
+        "target_name": "shadow.final.confirm"
+      }
+    },
+    "next": [
+      "MJA_SHADOW_FINAL_REWARD_PROBE"
+    ],
+    "on_error": [
+      "MJA_SHADOW_RECORD_FAILURE"
+    ],
+    "retry_times": 0,
+    "timeout": 50000
+  },
+  "MJA_SHADOW_FINAL_REWARD_PROBE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "shadow.reward.close"
+        ]
+      }
+    },
+    "action": "DoNothing",
+    "next": [
+      "MJA_SHADOW_FINAL_DISMISS_REWARD"
+    ],
+    "on_error": [
+      "MJA_SHADOW_RECORD_FAILURE"
+    ],
+    "timeout": 50000
+  },
+  "MJA_SHADOW_FINAL_DISMISS_REWARD": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "shadow.reward",
+          "shadow.reward.close"
+        ]
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "SHADOW_RUINS_DAILY",
+      "action_id": "dismiss_shadow_reward_popup",
+      "kind": "click",
+      "fixed_click_mode": "shadow_reward_blank",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "shadow.reward",
+        "target_name": "shadow.reward.close"
+      }
+    },
+    "next": [
+      "MJA_SHADOW_CLOSE_SHADOW_PAGE"
+    ],
+    "on_error": [
+      "MJA_SHADOW_RECORD_FAILURE"
+    ],
+    "retry_times": 0,
+    "post_delay": 750
+  },
+  "MJA_SHADOW_HOME_BOUNDARY_PROBE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "shadow.home.page"
+        ]
+      }
+    },
+    "timeout": 8000,
+    "action": "DoNothing",
+    "next": [
+      "MJA_SHADOW_RECORD_SUCCESS"
+    ],
+    "on_error": [
+      "MJA_SHADOW_BOUNDARY_FAILURE"
+    ]
+  },
+  "MJA_SHADOW_RECORD_SUCCESS": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "RecordTaskOutcome",
+    "custom_action_param": {
+      "task_id": "SHADOW_RUINS_DAILY",
+      "status": "success",
+      "postcondition": "shadow.final_reward_claimed_and_home"
+    },
+    "next": [
+      "MJA_COMMON_STOP"
+    ]
+  },
+  "MJA_SHADOW_BOUNDARY_FAILURE": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "RecordTaskOutcome",
+    "custom_action_param": {
+      "task_id": "SHADOW_RUINS_DAILY",
+      "status": "failed",
+      "error_code": "SHADOW_HOME_BOUNDARY_MISSING",
+      "postcondition": "home",
+      "native_fail_after_record": true
+    },
+    "Abort": true,
+    "next": [
+      "MJA_COMMON_ABORT"
+    ]
+  },
+  "MJA_SHADOW_FOREGROUND_LOOP_EXHAUSTED": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "RecordTaskOutcome",
+    "custom_action_param": {
+      "task_id": "SHADOW_RUINS_DAILY",
+      "status": "failed",
+      "error_code": "SHADOW_FOREGROUND_LIMIT",
+      "postcondition": "shadow.exploration.progress_known",
+      "native_fail_after_record": true
+    },
+    "Abort": true,
+    "next": [
+      "MJA_COMMON_ABORT"
+    ]
+  },
+  "MJA_SHADOW_BATTLE_LOOP_EXHAUSTED": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "RecordTaskOutcome",
+    "custom_action_param": {
+      "task_id": "SHADOW_RUINS_DAILY",
+      "status": "failed",
+      "error_code": "SHADOW_BATTLE_LIMIT",
+      "postcondition": "shadow.battle.result_known",
+      "native_fail_after_record": true
+    },
+    "Abort": true,
+    "next": [
+      "MJA_COMMON_ABORT"
+    ]
+  },
+  "MJA_SHADOW_ENTRY_UNKNOWN": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "RecordTaskOutcome",
+    "custom_action_param": {
+      "task_id": "SHADOW_RUINS_DAILY",
+      "status": "failed",
+      "error_code": "SHADOW_PAINTING_ENTRY_UNKNOWN",
+      "postcondition": "shadow.painting_entry_state_known",
+      "native_fail_after_record": true
+    },
+    "Abort": true,
+    "next": [
+      "MJA_COMMON_ABORT"
+    ]
+  },
+  "MJA_SHADOW_RECORD_FAILURE": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "RecordTaskOutcome",
+    "custom_action_param": {
+      "task_id": "SHADOW_RUINS_DAILY",
+      "status": "failed",
+      "error_code": "SHADOW_POSTCONDITION_MISSING",
+      "postcondition": "shadow.state_known",
+      "native_fail_after_record": true
+    },
+    "Abort": true,
+    "next": [
+      "MJA_COMMON_ABORT"
+    ]
+  },
+  "shadow.home.page": {
+    "recognition": {"type": "And", "param": {"all_of": ["MJA_GAME_HOME_PAGE"], "box_index": 0}},
+    "action": "DoNothing"
+  },
+  "shadow.home.dungeon": {
+    "recognition": "OCR",
+    "expected": "^副本$",
+    "roi": [
+      1035,
+      45,
+      80,
+      40
+    ],
+    "action": "DoNothing"
+  },
+  "shadow.home.trial": {
+    "recognition": "OCR",
+    "expected": "^试剑$",
+    "roi": [
+      965,
+      620,
+      100,
+      70
+    ],
+    "action": "DoNothing"
+  },
+  "shadow.painting.entry": {
+    "recognition": "OCR",
+    "expected": "^画卷$",
+    "roi": [
+      1095,
+      45,
+      85,
+      40
+    ],
+    "action": "DoNothing"
+  },
+  "shadow.painting.page": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "shadow.painting.page.title",
+          "shadow.painting.page.world",
+          "shadow.painting.page.region"
+        ],
+        "box_index": 0
+      }
+    },
+    "action": "DoNothing"
+  },
+  "shadow.painting.page.title": {
+    "recognition": "OCR",
+    "expected": "^画卷$",
+    "roi": [
+      60,
+      10,
+      120,
+      60
+    ],
+    "action": "DoNothing"
+  },
+  "shadow.painting.page.world": {
+    "recognition": "OCR",
+    "expected": "^·?偃武世界$",
+    "roi": [
+      90,
+      115,
+      190,
+      90
+    ],
+    "action": "DoNothing"
+  },
+  "shadow.painting.page.region": {
+    "recognition": "OCR",
+    "expected": "^云州$",
+    "roi": [
+      100,
+      210,
+      130,
+      90
+    ],
+    "action": "DoNothing"
+  },
+  "shadow.entry": {
+    "recognition": "OCR",
+    "expected": "^蜃影武墟$",
+    "roi": [
+      1090,
+      620,
+      145,
+      75
+    ],
+    "action": "DoNothing"
+  },
+  "shadow.page": {
+    "recognition": "OCR",
+    "expected": "蜃影武墟",
+    "roi": [
+      0,
+      0,
+      1280,
+      720
+    ],
+    "action": "DoNothing"
+  },
+  "shadow.active": {
+    "recognition": "OCR",
+    "expected": [
+      "探索中",
+      "可探索"
+    ],
+    "roi": [
+      80,
+      430,
+      720,
+      270
+    ],
+    "action": "DoNothing"
+  },
+  "shadow.challenge": {
+    "recognition": "OCR",
+    "expected": [
+      "可探索",
+      "探索中",
+      "蜃影武墟"
+    ],
+    "roi": [
+      900,
+      480,
+      350,
+      220
+    ],
+    "action": "DoNothing"
+  },
+  "shadow.stage_entry": {
+    "recognition": "OCR",
+    "expected": "^前往$",
+    "roi": [
+      820,
+      450,
+      180,
+      120
+    ],
+    "action": "DoNothing"
+  },
+  "shadow.stage.page": {
+    "recognition": "OCR",
+    "expected": [
+      "蜃影武墟",
+      "自动",
+      "加速"
+    ],
+    "roi": [
+      0,
+      0,
+      1280,
+      720
+    ],
+    "action": "DoNothing"
+  },
+  "shadow.battle.page": {
+    "recognition": "OCR",
+    "expected": [
+      "阵容",
+      "挑战"
+    ],
+    "roi": [
+      0,
+      0,
+      500,
+      120
+    ],
+    "action": "DoNothing"
+  },
+  "shadow.battle.in_progress": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "shadow.battle.in_progress.stats",
+          "shadow.battle.in_progress.status",
+          "shadow.battle.in_progress.timer"
+        ]
+      }
+    },
+    "action": "DoNothing"
+  },
+  "shadow.battle.in_progress.stats": {
+    "recognition": "OCR",
+    "expected": "^统计$",
+    "roi": [
+      40,
+      35,
+      60,
+      45
+    ],
+    "action": "DoNothing"
+  },
+  "shadow.battle.in_progress.status": {
+    "recognition": "OCR",
+    "expected": "^状态$",
+    "roi": [
+      100,
+      35,
+      70,
+      45
+    ],
+    "action": "DoNothing"
+  },
+  "shadow.battle.in_progress.timer": {
+    "recognition": "OCR",
+    "expected": "^\\d{2}:\\d{2}$",
+    "roi": [
+      190,
+      10,
+      85,
+      50
+    ],
+    "action": "DoNothing"
+  },
+  "shadow.exploration.page": {
+    "recognition": "OCR",
+    "expected": [
+      "沙漠废墟",
+      "第一层",
+      "离开"
+    ],
+    "roi": [
+      850,
+      0,
+      400,
+      720
+    ],
+    "action": "DoNothing"
+  },
+  "shadow.foreground.ready": {
+    "recognition": "OCR",
+    "expected": "^第.+层$",
+    "roi": [
+      1000,
+      40,
+      220,
+      120
+    ],
+    "action": "DoNothing"
+  },
+  "shadow.foreground.left": {
+    "recognition": "OCR",
+    "expected": "左",
+    "roi": [
+      280,
+      500,
+      300,
+      80
+    ],
+    "action": "DoNothing"
+  },
+  "shadow.foreground.center": {
+    "recognition": "OCR",
+    "expected": "中",
+    "roi": [
+      500,
+      500,
+      300,
+      80
+    ],
+    "action": "DoNothing"
+  },
+  "shadow.foreground.right": {
+    "recognition": "OCR",
+    "expected": "右",
+    "roi": [
+      720,
+      500,
+      300,
+      80
+    ],
+    "action": "DoNothing"
+  },
+  "shadow.battle.result.page": {
+    "recognition": "OCR",
+    "expected": [
+      "^战斗胜利$",
+      "^战斗失败$"
+    ],
+    "roi": [
+      0,
+      0,
+      1280,
+      300
+    ],
+    "action": "DoNothing"
+  },
+  "shadow.battle.victory": {
+    "recognition": "OCR",
+    "expected": [
+      "战斗胜利",
+      "胜利"
+    ],
+    "roi": [
+      650,
+      0,
+      630,
+      240
+    ],
+    "action": "DoNothing"
+  },
+  "shadow.battle.defeat": {
+    "recognition": "OCR",
+    "expected": "战斗失败",
+    "roi": [
+      650,
+      0,
+      630,
+      260
+    ],
+    "action": "DoNothing"
+  },
+  "shadow.failure.close": {
+    "recognition": "OCR",
+    "expected": [
+      "确定",
+      "关闭"
+    ],
+    "roi": [
+      760,
+      430,
+      250,
+      150
+    ],
+    "action": "DoNothing"
+  },
+  "shadow.victory.chest.reward": {
+    "recognition": "OCR",
+    "expected": "^恭喜获得$",
+    "roi": [
+      150,
+      200,
+      90,
+      290
+    ],
+    "action": "DoNothing"
+  },
+  "shadow.reward": {
+    "recognition": "OCR",
+    "expected": [
+      "恭喜获得",
+      "点击空白处关闭"
+    ],
+    "roi": [
+      0,
+      100,
+      1280,
+      620
+    ],
+    "action": "DoNothing"
+  },
+  "shadow.reward.close": {
+    "recognition": "OCR",
+    "expected": "点击空白处关闭",
+    "roi": [
+      350,
+      580,
+      600,
+      140
+    ],
+    "action": "DoNothing"
+  },
+  "shadow.final.prompt": {
+    "recognition": "OCR",
+    "expected": "首领已被击败",
+    "roi": [
+      320,
+      250,
+      650,
+      220
+    ],
+    "action": "DoNothing"
+  },
+  "shadow.final.confirm": {
+    "recognition": "OCR",
+    "expected": "确定",
+    "roi": [
+      780,
+      440,
+      220,
+      120
+    ],
+    "action": "DoNothing"
+  },
+  "MJA_SHADOW_SKIP_PREPARE_PROBE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "shadow.stage.page",
+          "shadow.skip_prepare.checked"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "DoNothing",
+    "next": [
+      "MJA_SHADOW_BATTLE_GATE"
+    ],
+    "on_error": [
+      "MJA_SHADOW_SKIP_PREPARE_CLICK"
+    ]
+  },
+  "MJA_SHADOW_SKIP_PREPARE_CLICK": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "shadow.stage.page",
+          "shadow.skip_prepare"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "SHADOW_RUINS_DAILY",
+      "action_id": "enable_shadow_skip_prepare",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "shadow.stage.page",
+        "target_name": "shadow.skip_prepare"
+      }
+    },
+    "next": [
+      "MJA_SHADOW_BATTLE_GATE"
+    ],
+    "on_error": [
+      "MJA_SHADOW_RECORD_FAILURE"
+    ],
+    "retry_times": 0
+  },
+  "MJA_SHADOW_BATTLE_FAILURE": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "RecordTaskOutcome",
+    "custom_action_param": {
+      "task_id": "SHADOW_RUINS_DAILY",
+      "status": "failed",
+      "error_code": "SHADOW_BATTLE_DEFEAT",
+      "postcondition": "shadow.battle.result_known",
+      "native_fail_after_record": true
+    },
+    "Abort": true,
+    "next": [
+      "MJA_COMMON_ABORT"
+    ]
+  },
+  "MJA_SHADOW_CLOSE_SHADOW_PAGE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "shadow.page",
+          "shadow.close"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "SHADOW_RUINS_DAILY",
+      "action_id": "close_shadow_page",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "shadow.page",
+        "target_name": "shadow.close"
+      }
+    },
+    "next": [
+      "MJA_SHADOW_HOME_BOUNDARY_PROBE"
+    ],
+    "on_error": [
+      "MJA_SHADOW_RECORD_FAILURE"
+    ],
+    "retry_times": 0
+  },
+  "shadow.challenge.page": {
+    "recognition": {
+      "type": "Or",
+      "param": {
+        "any_of": [
+          "shadow.stage.page",
+          "shadow.battle.page"
+        ]
+      }
+    },
+    "action": "DoNothing"
+  },
+  "shadow.challenge.target": {
+    "recognition": "OCR",
+    "expected": [
+      "挑战"
+    ],
+    "roi": [
+      900,
+      500,
+      380,
+      220
+    ],
+    "action": "DoNothing"
+  },
+  "shadow.skip_prepare": {
+    "recognition": "OCR",
+    "expected": "跳过战前准备",
+    "roi": [
+      780,
+      500,
+      430,
+      180
+    ],
+    "action": "DoNothing"
+  },
+  "shadow.skip_prepare.checked": {
+    "recognition": "OCR",
+    "expected": [
+      "√",
+      "✓",
+      "勾"
+    ],
+    "roi": [
+      760,
+      500,
+      120,
+      150
+    ],
+    "action": "DoNothing"
+  },
+  "shadow.close": {
+    "recognition": "OCR",
+    "expected": [
+      "返回",
+      "关闭",
+      "×",
+      "叉"
+    ],
+    "roi": [
+      1080,
+      0,
+      200,
+      140
+    ],
+    "action": "DoNothing"
+  }
+}

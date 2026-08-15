@@ -1,0 +1,52 @@
+{
+  "source": "install/mfw-android-all-20260809-r20-debug-break-r1/on_error/2026.08.09-17.56.44.752_MJA_BREAK_ARRAY_MARTIAL_DAILY_EXECUTE.png",
+  "sha256": "f125b03258ecc0a330410156cb72e5c6b6e3980bd79838c327f3754ee83e4abb",
+  "frame_size": [1280, 720],
+  "recognitions": {
+    "break_array.prepare_formation": {
+      "hit": true,
+      "box": [75, 29, 38, 21],
+      "text": "阵容"
+    },
+    "break_array.prepare_boss": {
+      "hit": true,
+      "box": [595, 27, 89, 24],
+      "text": "首领战斗"
+    },
+    "break_array.prepare_duration": {
+      "hit": true,
+      "box": [572, 52, 137, 22],
+      "text": "战斗时长：02:00"
+    },
+    "break_array.prepare_tactics": {
+      "hit": true,
+      "box": [996, 508, 90, 24],
+      "text": "战术谱"
+    },
+    "break_array.prepare_start": {
+      "hit": true,
+      "box": [1111, 560, 126, 125],
+      "color_count": 5630
+    },
+    "break_array.confirm_transition": {
+      "hit": false,
+      "box": null
+    },
+    "break_array.battle_loading": {
+      "hit": false,
+      "box": null
+    },
+    "break_array.battle": {
+      "hit": false,
+      "box": null,
+      "texts": [
+        "阵容",
+        "首领战斗",
+        "战斗时长：02:00",
+        "战术谱",
+        "战斗设置",
+        "开战"
+      ]
+    }
+  }
+}

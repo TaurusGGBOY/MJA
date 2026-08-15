@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "owner": "mja-batch-20260811-startup-repair",
+  "candidate": "/Volumes/my_disk/project/MJA/install/mfw-android-all-20260811-r2",
+  "started_at": "2026-08-11T01:40:18.069818+00:00",
+  "finished_at": "2026-08-11T01:42:04.683897+00:00",
+  "expected_tasks": [
+    "GAME_START"
+  ],
+  "result": "passed",
+  "tasks": {},
+  "gui_log_sha256": "16b4d8be1e4ba4e83f4d07a50cfc3339bc8e9fc58193b578b17178bb474b5698",
+  "maafw_log_sha256": "f2662a7b97d04647b35300b30552a2dab253ec72a82f4d72d7b2246bdeeb0a17"
+}

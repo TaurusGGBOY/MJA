@@ -1,0 +1,11 @@
+{
+  "task": [
+    {
+      "name": "JIANLIN_RESOURCE_CONDENSATE_STAMINA_DAILY",
+      "label": "剑林凝晶体力",
+      "default_check": true,
+      "group": ["日常"],
+      "entry": "MJA_JIANLIN_RESOURCE_CONDENSATE_STAMINA_DAILY_START"
+    }
+  ]
+}

@@ -1,0 +1,525 @@
+{
+  "MJA_GAME_START_ENTRY": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "max_hit": 1,
+    "timeout": 1000,
+    "next": ["MJA_GAME_START"],
+    "on_error": ["MJA_COMMON_STARTUP_RECOVERY_RESTART"]
+  },
+  "MJA_GAME_START": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "timeout": 1000,
+    "next": [
+      "[JumpBack]MJA_START_OPTIONAL_CLICK_BLANK_TO_CLOSE",
+      "[JumpBack]MJA_START_OPTIONAL_MONTHLY_REWARD_PAGE_CLOSE",
+      "MJA_GAME_READY",
+      "MJA_START_GAME_BUTTON_AFTER_RESTART"
+    ],
+    "on_error": ["MJA_COMMON_STARTUP_RECOVERY_RESTART"]
+  },
+  "MJA_GAME_START_AFTER_RESTART": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "post_delay": 20000,
+    "max_hit": 1,
+    "timeout": 1000,
+    "next": ["MJA_START_GAME_BUTTON_AFTER_RESTART"],
+    "on_error": ["MJA_GAME_START_RETRY_2"]
+  },
+  "MJA_GAME_START_RETRY_2": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "RestartGameSurface",
+    "custom_action_param": {
+      "package": "com.hanjiasongshu.dr22",
+      "activity": "com.hanjiasongshu.dr22/.MainActivity"
+    },
+    "timeout": 1000,
+    "max_hit": 1,
+    "post_delay": 0,
+    "next": ["MJA_GAME_START_AFTER_RESTART_2"],
+    "on_error": ["MJA_GAME_START_APP_RESTART_FAILED"]
+  },
+  "MJA_GAME_START_AFTER_RESTART_2": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "post_delay": 20000,
+    "max_hit": 1,
+    "timeout": 1000,
+    "next": ["MJA_START_GAME_BUTTON_AFTER_RESTART_2"],
+    "on_error": ["MJA_GAME_START_RETRY_3"]
+  },
+  "MJA_GAME_START_RETRY_3": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "RestartGameSurface",
+    "custom_action_param": {
+      "package": "com.hanjiasongshu.dr22",
+      "activity": "com.hanjiasongshu.dr22/.MainActivity"
+    },
+    "timeout": 1000,
+    "max_hit": 1,
+    "post_delay": 0,
+    "next": ["MJA_GAME_START_AFTER_RESTART_3"],
+    "on_error": ["MJA_GAME_START_APP_RESTART_FAILED"]
+  },
+  "MJA_GAME_START_AFTER_RESTART_3": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "post_delay": 20000,
+    "max_hit": 1,
+    "timeout": 1000,
+    "next": ["MJA_START_GAME_BUTTON_AFTER_RESTART_3"],
+    "on_error": ["MJA_GAME_START_RETRY_4"]
+  },
+  "MJA_GAME_START_RETRY_4": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "RestartGameSurface",
+    "custom_action_param": {
+      "package": "com.hanjiasongshu.dr22",
+      "activity": "com.hanjiasongshu.dr22/.MainActivity"
+    },
+    "timeout": 1000,
+    "max_hit": 1,
+    "post_delay": 0,
+    "next": ["MJA_GAME_START_AFTER_RESTART_4"],
+    "on_error": ["MJA_GAME_START_APP_RESTART_FAILED"]
+  },
+  "MJA_GAME_START_AFTER_RESTART_4": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "post_delay": 20000,
+    "max_hit": 1,
+    "timeout": 1000,
+    "next": ["MJA_START_GAME_BUTTON_AFTER_RESTART_4"],
+    "on_error": ["MJA_GAME_START_RETRY_5"]
+  },
+  "MJA_GAME_START_RETRY_5": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "RestartGameSurface",
+    "custom_action_param": {
+      "package": "com.hanjiasongshu.dr22",
+      "activity": "com.hanjiasongshu.dr22/.MainActivity"
+    },
+    "timeout": 1000,
+    "max_hit": 1,
+    "post_delay": 0,
+    "next": ["MJA_GAME_START_AFTER_RESTART_5"],
+    "on_error": ["MJA_GAME_START_APP_RESTART_FAILED"]
+  },
+  "MJA_GAME_START_AFTER_RESTART_5": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "post_delay": 20000,
+    "max_hit": 1,
+    "timeout": 1000,
+    "next": ["MJA_START_GAME_BUTTON_AFTER_RESTART_5"],
+    "on_error": ["MJA_GAME_START_START_BUTTON_NOT_FOUND"]
+  },
+  "MJA_START_STALE_CHEST_REWARD_RECOVERY": {
+    "recognition": "OCR",
+    "expected": "^恭喜获得$",
+    "roi": [150, 200, 90, 290],
+    "timeout": 5000,
+    "max_hit": 1,
+    "action": "Custom",
+    "custom_action": "RestartGameSurface",
+    "custom_action_param": {
+      "package": "com.hanjiasongshu.dr22",
+      "activity": "com.hanjiasongshu.dr22/.MainActivity"
+    },
+    "post_delay": 5000,
+    "next": ["MJA_GAME_START"]
+  },
+  "MJA_START_TRIAL_PAGE_CLOSE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["trial.page", "trial.close"],
+        "box_index": 1
+      }
+    },
+    "timeout": 5000,
+    "max_hit": 1,
+    "action": "Click",
+    "target": [1210, 40],
+    "post_delay": 500
+  },
+  "MJA_GAME_SIDE_PANEL_CLOSE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["MJA_GAME_SIDE_PANEL_OPEN"],
+        "box_index": 0
+      }
+    },
+    "timeout": 5000,
+    "max_hit": 1,
+    "action": "Click",
+    "target": [1230, 45],
+    "post_delay": 750
+  },
+  "MJA_START_SHADOW_PAGE_BACK": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "MJA_START_SHADOW_PAGE_TITLE",
+          "MJA_START_SHADOW_CARD_LIST"
+        ],
+        "box_index": 0
+      }
+    },
+    "timeout": 5000,
+    "max_hit": 1,
+    "action": "Custom",
+    "custom_action": "RestartGameSurface",
+    "custom_action_param": {
+      "package": "com.hanjiasongshu.dr22",
+      "activity": "com.hanjiasongshu.dr22/.MainActivity"
+    },
+    "post_delay": 5000,
+    "next": ["MJA_GAME_START"]
+  },
+  "MJA_START_SHADOW_PAGE_TITLE": {
+    "recognition": "OCR",
+    "expected": "蜃影武墟",
+    "roi": [250, 300, 1000, 400],
+    "action": "DoNothing"
+  },
+  "MJA_START_SHADOW_CARD_LIST": {
+    "recognition": "OCR",
+    "expected": "当前武墟等级",
+    "roi": [600, 400, 300, 100],
+    "action": "DoNothing"
+  },
+  "MJA_START_SHADOW_EXPLORATION_PAGE_BACK": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "MJA_START_SHADOW_EXPLORATION_LAYER_MARKER",
+          "MJA_START_SHADOW_EXPLORATION_TRANSFER_MARKER"
+        ],
+        "box_index": 0
+      }
+    },
+    "timeout": 5000,
+    "max_hit": 1,
+    "action": "Custom",
+    "custom_action": "RestartGameSurface",
+    "custom_action_param": {
+      "package": "com.hanjiasongshu.dr22",
+      "activity": "com.hanjiasongshu.dr22/.MainActivity"
+    },
+    "post_delay": 5000,
+    "next": ["MJA_GAME_START"]
+  },
+  "MJA_START_SHADOW_EXPLORATION_LAYER_MARKER": {
+    "recognition": "OCR",
+    "expected": "^第[一二三四五六七八九十]+层$",
+    "roi": [980, 60, 220, 90],
+    "action": "DoNothing"
+  },
+  "MJA_START_SHADOW_EXPLORATION_TRANSFER_MARKER": {
+    "recognition": "OCR",
+    "expected": "^传送$",
+    "roi": [900, 570, 200, 120],
+    "action": "DoNothing"
+  },
+  "MJA_START_ANNOUNCEMENT": {
+    "recognition": "OCR",
+    "expected": ["公告", "公告说明", "版本更新"],
+    "roi": [0, 0, 1280, 720],
+    "timeout": 5000,
+    "max_hit": 1,
+    "action": "Click",
+    "target": [1048, 125, 60, 50],
+    "post_delay": 750
+  },
+  "MJA_START_MOBILE_NETWORK_UPDATE": {
+    "recognition": "OCR",
+    "expected": ["移动网络", "下载热更", "允许下载"],
+    "roi": [300, 240, 700, 320],
+    "timeout": 5000,
+    "max_hit": 2,
+    "action": "Click",
+    "target": [731, 473, 123, 31],
+    "post_delay": 500
+  },
+  "MJA_START_UPDATE_PROGRESS": {
+    "recognition": "OCR",
+    "expected": ["下载中", "共计"],
+    "roi": [120, 570, 1040, 100],
+    "timeout": 30000,
+    "max_hit": 1,
+    "action": "DoNothing",
+    "post_delay": 1000
+  },
+  "MJA_START_OPTIONAL_CLICK_BLANK_TO_CLOSE": {
+    "recognition": "OCR",
+    "expected": [
+      "点击空白处关闭",
+      "点击任意空白区域关闭",
+      "点击空白位置关闭"
+    ],
+    "roi": [350, 580, 600, 140],
+    "timeout": 1500,
+    "max_hit": 1,
+    "action": "Click",
+    "post_delay": 500
+  },
+  "MJA_START_OPTIONAL_MONTHLY_REWARD_PAGE_CLOSE": {
+    "recognition": "OCR",
+    "expected": ["^本月可领取物品$", "^本月.*可领取.*物品$"],
+    "roi": [150, 100, 900, 520],
+    "timeout": 1500,
+    "max_hit": 1,
+    "action": "Click",
+    "target": [1060, 152, 16, 16],
+    "post_delay": 750
+  },
+  "MJA_GAME_READY": {
+    "recognition": "OCR",
+    "expected": "^画[卷券]$",
+    "roi": [1080, 0, 200, 120],
+    "timeout": 10000,
+    "action": "Custom",
+    "custom_action": "RuntimeHealth",
+    "post_delay": 750
+  },
+  "MJA_GAME_HOME_MARKER": {
+    "recognition": "TemplateMatch",
+    "template": "home/home_marker.png",
+    "roi": [1040, 0, 240, 110],
+    "threshold": 0.375,
+    "action": "DoNothing"
+  },
+  "MJA_GAME_HOME_DUNGEON": {
+    "recognition": "OCR",
+    "expected": "^副本$",
+    "roi": [1035, 45, 80, 40],
+    "action": "DoNothing"
+  },
+  "MJA_GAME_UID_READY": {
+    "recognition": "OCR",
+    "expected": ["UID:"],
+    "roi": [1040, 680, 240, 40],
+    "timeout": 5000,
+    "action": "DoNothing"
+  },
+  "MJA_GAME_IN_GAME_READY": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["MJA_GAME_READY", "MJA_GAME_UID_READY"],
+        "box_index": 1
+      }
+    },
+    "timeout": 10000,
+    "action": "Custom",
+    "custom_action": "RuntimeHealth",
+    "post_delay": 750
+  },
+  "MJA_GAME_DUNGEON_READY": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["dungeon.page", "dungeon.close"],
+        "box_index": 1
+      }
+    },
+    "timeout": 10000,
+    "action": "Custom",
+    "custom_action": "RuntimeHealth",
+    "post_delay": 750
+  },
+  "MJA_START_TITLE_OR_LOADING": {
+    "recognition": "OCR",
+    "expected": ["点击开始游戏", "点击开始游戏！", "点击开始游戏!", "进入游戏"],
+    "roi": [350, 540, 580, 170],
+    "timeout": 5000,
+    "max_hit": 1,
+    "action": "Click",
+    "post_delay": 1000
+  },
+  "MJA_START_AFTER_LAUNCH_TITLE": {
+    "recognition": "OCR",
+    "expected": ["点击开始游戏", "点击开始游戏！", "点击开始游戏!", "进入游戏"],
+    "roi": [350, 540, 580, 170],
+    "timeout": 5000,
+    "max_hit": 1,
+    "action": "DoNothing"
+  },
+  "MJA_START_TITLE_TEMPLATE": {
+    "recognition": "TemplateMatch",
+    "template": "home/start_game_button.png",
+    "roi": [560, 638, 180, 45],
+    "threshold": 0.225,
+    "timeout": 5000,
+    "action": "Click",
+    "target": [560, 610, 180, 60],
+    "max_hit": 1,
+    "post_delay": 500
+  },
+  "MJA_START_LOADING": {
+    "recognition": "OCR",
+    "expected": [
+      "穿梭入世",
+      "穿梭入世中",
+      "加载中",
+      "正在连接服务器",
+      "正在加载配置表",
+      "正在加载战斗资源",
+      "加载战斗资源"
+    ],
+    "roi": [350, 580, 900, 140],
+    "timeout": 30000,
+    "max_hit": 1,
+    "action": "DoNothing",
+    "post_delay": 1000
+  },
+  "MJA_START_BLACK_SCREEN_WAIT": {
+    "recognition": "ColorMatch",
+    "upper": [0, 0, 0],
+    "lower": [0, 0, 0],
+    "connected": true,
+    "count": 80000,
+    "timeout": 5000,
+    "max_hit": 1,
+    "action": "DoNothing",
+    "post_delay": 1000
+  },
+  "MJA_START_PERSISTENT_BLACK_SCREEN_RECOVERY": {
+    "recognition": "ColorMatch",
+    "upper": [0, 0, 0],
+    "lower": [0, 0, 0],
+    "connected": true,
+    "count": 80000,
+    "timeout": 5000,
+    "max_hit": 1,
+    "action": "Custom",
+    "custom_action": "RestartGameSurface",
+    "custom_action_param": {
+      "package": "com.hanjiasongshu.dr22",
+      "activity": "com.hanjiasongshu.dr22/.MainActivity"
+    },
+    "post_delay": 5000,
+    "next": ["MJA_GAME_START"]
+  },
+  "MJA_START_WHITE_SCREEN_WAIT": {
+    "recognition": "ColorMatch",
+    "upper": [255, 255, 255],
+    "lower": [255, 255, 255],
+    "connected": true,
+    "count": 80000,
+    "timeout": 5000,
+    "max_hit": 1,
+    "action": "DoNothing",
+    "post_delay": 1000
+  },
+  "MJA_START_GAME_BUTTON_AFTER_RESTART": {
+    "recognition": "OCR",
+    "expected": [
+      "^开始游戏$",
+      "^点击开始游戏$",
+      "^点击开始游戏[！!]?$"
+    ],
+    "roi": [350, 540, 580, 170],
+    "timeout": 10000,
+    "max_hit": 1,
+    "action": "Click",
+    "post_delay": 5000,
+    "next": ["MJA_START_ENTER_GAME_BUTTON_AFTER_RESTART"],
+    "on_error": ["MJA_GAME_START_RETRY_2"]
+  },
+  "MJA_START_GAME_BUTTON_AFTER_RESTART_2": {
+    "recognition": "OCR",
+    "expected": [
+      "^开始游戏$",
+      "^点击开始游戏$",
+      "^点击开始游戏[！!]?$"
+    ],
+    "roi": [350, 540, 580, 170],
+    "timeout": 10000,
+    "max_hit": 1,
+    "action": "Click",
+    "post_delay": 5000,
+    "next": ["MJA_START_ENTER_GAME_BUTTON_AFTER_RESTART"],
+    "on_error": ["MJA_GAME_START_RETRY_3"]
+  },
+  "MJA_START_GAME_BUTTON_AFTER_RESTART_3": {
+    "recognition": "OCR",
+    "expected": [
+      "^开始游戏$",
+      "^点击开始游戏$",
+      "^点击开始游戏[！!]?$"
+    ],
+    "roi": [350, 540, 580, 170],
+    "timeout": 10000,
+    "max_hit": 1,
+    "action": "Click",
+    "post_delay": 5000,
+    "next": ["MJA_START_ENTER_GAME_BUTTON_AFTER_RESTART"],
+    "on_error": ["MJA_GAME_START_RETRY_4"]
+  },
+  "MJA_START_GAME_BUTTON_AFTER_RESTART_4": {
+    "recognition": "OCR",
+    "expected": [
+      "^开始游戏$",
+      "^点击开始游戏$",
+      "^点击开始游戏[！!]?$"
+    ],
+    "roi": [350, 540, 580, 170],
+    "timeout": 10000,
+    "max_hit": 1,
+    "action": "Click",
+    "post_delay": 5000,
+    "next": ["MJA_START_ENTER_GAME_BUTTON_AFTER_RESTART"],
+    "on_error": ["MJA_GAME_START_RETRY_5"]
+  },
+  "MJA_START_GAME_BUTTON_AFTER_RESTART_5": {
+    "recognition": "OCR",
+    "expected": [
+      "^开始游戏$",
+      "^点击开始游戏$",
+      "^点击开始游戏[！!]?$"
+    ],
+    "roi": [350, 540, 580, 170],
+    "timeout": 10000,
+    "max_hit": 1,
+    "action": "Click",
+    "post_delay": 5000,
+    "next": ["MJA_START_ENTER_GAME_BUTTON_AFTER_RESTART"],
+    "on_error": ["MJA_GAME_START_START_BUTTON_NOT_FOUND"]
+  },
+  "MJA_START_ENTER_GAME_BUTTON_AFTER_RESTART": {
+    "recognition": "OCR",
+    "expected": ["^进入游戏[！!]?$", "^点击进入游戏[！!]?$"],
+    "roi": [350, 540, 580, 170],
+    "timeout": 10000,
+    "max_hit": 1,
+    "action": "Click",
+    "post_delay": 0,
+    "next": ["MJA_GAME_START_WAIT_AFTER_ENTER"],
+    "on_error": ["MJA_GAME_START_ENTER_BUTTON_NOT_FOUND"]
+  },
+  "MJA_GAME_START_WAIT_AFTER_ENTER": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "post_delay": 30000,
+    "max_hit": 1,
+    "timeout": 1000,
+    "next": [
+      "[JumpBack]MJA_START_OPTIONAL_CLICK_BLANK_TO_CLOSE",
+      "[JumpBack]MJA_START_OPTIONAL_MONTHLY_REWARD_PAGE_CLOSE",
+      "MJA_GAME_READY"
+    ],
+    "on_error": ["MJA_GAME_START_HOME_NOT_REACHED"]
+  },
+  "MJA_START_IDLE": {}
+}

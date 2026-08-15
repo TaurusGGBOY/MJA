@@ -1,0 +1,94 @@
+{
+  "MJA_PROBE_SUCCESS": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "BeginTask",
+    "custom_action_param": {
+      "task_id": "MAIL_REWARD_DAILY",
+      "run_id": "probe-success"
+    },
+    "next": ["MJA_PROBE_SUCCESS_RECORD"]
+  },
+  "MJA_PROBE_SUCCESS_RECORD": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "RecordTaskOutcome",
+    "custom_action_param": {
+      "task_id": "MAIL_REWARD_DAILY",
+      "status": "success",
+      "postcondition": "probe success"
+    },
+    "next": ["MJA_COMMON_STOP"]
+  },
+  "MJA_PROBE_ALREADY_COMPLETE": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "BeginTask",
+    "custom_action_param": {
+      "task_id": "MAIL_REWARD_DAILY",
+      "run_id": "probe-already"
+    },
+    "next": ["MJA_PROBE_ALREADY_COMPLETE_RECORD"]
+  },
+  "MJA_PROBE_ALREADY_COMPLETE_RECORD": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "RecordTaskOutcome",
+    "custom_action_param": {
+      "task_id": "MAIL_REWARD_DAILY",
+      "status": "already_complete",
+      "postcondition": "probe already complete"
+    },
+    "next": ["MJA_COMMON_STOP"]
+  },
+  "MJA_PROBE_NOT_ELIGIBLE": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "BeginTask",
+    "custom_action_param": {
+      "task_id": "WEEKLY_FREE_GIFT_MONDAY",
+      "run_id": "probe-not-eligible"
+    },
+    "next": ["MJA_PROBE_NOT_ELIGIBLE_RECORD"]
+  },
+  "MJA_PROBE_NOT_ELIGIBLE_RECORD": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "RecordTaskOutcome",
+    "custom_action_param": {
+      "task_id": "WEEKLY_FREE_GIFT_MONDAY",
+      "status": "not_eligible",
+      "postcondition": "probe not eligible"
+    },
+    "next": ["MJA_COMMON_STOP"]
+  },
+  "MJA_PROBE_BUSINESS_FAILURE_BEGIN": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "BeginTask",
+    "custom_action_param": {
+      "task_id": "MAIL_REWARD_DAILY",
+      "run_id": "probe-business-failure"
+    },
+    "next": ["MJA_PROBE_BUSINESS_FAILURE"]
+  },
+  "MJA_PROBE_BUSINESS_FAILURE": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "RecordTaskOutcome",
+    "Abort": true,
+    "custom_action_param": {
+      "task_id": "MAIL_REWARD_DAILY",
+      "status": "failed",
+      "postcondition": "probe business failure",
+      "error_code": "PROBE_BUSINESS_FAILURE",
+      "native_fail_after_record": true
+    },
+    "next": ["MJA_COMMON_ABORT"]
+  },
+  "MJA_PROBE_SENTINEL": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "next": ["MJA_COMMON_STOP"]
+  }
+}

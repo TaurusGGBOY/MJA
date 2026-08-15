@@ -29,3 +29,19 @@ def test_pinned_contract_and_ignored_runtime_paths() -> None:
         ".mja-state/",
     ):
         assert path in ignored
+
+
+def test_android_pipeline_uses_verified_live_1280x720_contract() -> None:
+    calibration = json.loads(
+        (ROOT / "assets/resource_android/calibration.json").read_text()
+    )
+    assert calibration["template_contract"]["profile"] == "android_live_capture"
+    assert calibration["template_contract"]["capture_size"] == [1280, 720]
+    assert calibration["template_contract"]["status"] == "live_capture_verified"
+    pipeline = json.loads(
+        (ROOT / "assets/resource_android/pipeline/mail_smoke_test.json").read_text()
+    )
+    for name, node in pipeline.items():
+        x, y, width, height = node["roi"]
+        assert 0 <= x and 0 <= y and width > 0 and height > 0, name
+        assert x + width <= 1280 and y + height <= 720, name

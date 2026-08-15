@@ -1,0 +1,1078 @@
+{
+  "MJA_BREAK_ARRAY_MARTIAL_DAILY_START": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "BeginTask",
+    "custom_action_param": {"task_id": "BREAK_ARRAY_MARTIAL_DAILY"},
+    "timeout": 8000,
+    "next": [
+      "MJA_BREAK_ARRAY_STARTUP_PROBE",
+      "MJA_BREAK_ARRAY_PAGE_PROBE",
+      "MJA_BREAK_ARRAY_ACTIVITY_PROBE",
+      "MJA_BREAK_ARRAY_HOME_PROBE"
+    ],
+    "on_error": ["MJA_BREAK_ARRAY_RECORD_FAILURE"],
+    "retry_times": 0
+  },
+  "MJA_BREAK_ARRAY_STARTUP_PROBE": {
+    "recognition": {"type": "And", "param": {"all_of": ["break_array.startup_loading"]}},
+    "timeout": 30000,
+    "action": "DoNothing",
+    "next": ["MJA_BREAK_ARRAY_STARTUP_LOOP"],
+    "on_error": [
+      "MJA_BREAK_ARRAY_PAGE_PROBE",
+      "MJA_BREAK_ARRAY_ACTIVITY_PROBE",
+      "MJA_BREAK_ARRAY_HOME_PROBE",
+      "MJA_BREAK_ARRAY_RECORD_FAILURE"
+    ]
+  },
+  "MJA_BREAK_ARRAY_STARTUP_LOOP": {
+    "max_hit": 12,
+    "timeout": 30000,
+    "recognition": {"type": "And", "param": {"all_of": ["break_array.startup_loading"]}},
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "BREAK_ARRAY_MARTIAL_DAILY",
+      "action_id": "wait_break_array_startup",
+      "kind": "none",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 0,
+        "page_name": "break_array.startup_loading",
+        "target_name": "break_array.startup_loading"
+      }
+    },
+    "next": ["MJA_BREAK_ARRAY_STARTUP_PROBE"],
+    "on_error": [
+      "MJA_BREAK_ARRAY_PAGE_PROBE",
+      "MJA_BREAK_ARRAY_ACTIVITY_PROBE",
+      "MJA_BREAK_ARRAY_HOME_PROBE",
+      "MJA_BREAK_ARRAY_STARTUP_EXHAUSTED"
+    ],
+    "retry_times": 0
+  },
+  "MJA_BREAK_ARRAY_HOME_PROBE": {
+    "recognition": {"type": "And", "param": {"all_of": ["break_array.home"]}},
+    "timeout": 8000,
+    "action": "DoNothing",
+    "next": ["MJA_BREAK_ARRAY_OPEN_ACTIVITY"],
+    "on_error": [
+      "MJA_BREAK_ARRAY_ACTIVITY_PROBE",
+      "MJA_BREAK_ARRAY_PAGE_PROBE",
+      "MJA_BREAK_ARRAY_RECORD_FAILURE"
+    ]
+  },
+  "MJA_BREAK_ARRAY_OPEN_ACTIVITY": {
+    "max_hit": 1,
+    "timeout": 8000,
+    "recognition": {
+      "type": "And",
+      "param": {"all_of": ["break_array.home", "activity.entry"], "box_index": 1}
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "BREAK_ARRAY_MARTIAL_DAILY",
+      "action_id": "open_break_array_activity",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "break_array.home",
+        "target_name": "activity.entry"
+      }
+    },
+    "next": ["MJA_BREAK_ARRAY_ACTIVITY_PROBE"],
+    "on_error": ["MJA_BREAK_ARRAY_RECORD_FAILURE"],
+    "retry_times": 0
+  },
+  "MJA_BREAK_ARRAY_ACTIVITY_PROBE": {
+    "recognition": {"type": "And", "param": {"all_of": ["activity.page"]}},
+    "timeout": 8000,
+    "action": "DoNothing",
+    "next": [
+      "MJA_BREAK_ARRAY_UNAVAILABLE_PROBE",
+      "MJA_BREAK_ARRAY_OPEN_ENTRY",
+      "MJA_BREAK_ARRAY_PAGE_PROBE"
+    ],
+    "on_error": [
+      "MJA_BREAK_ARRAY_PAGE_PROBE",
+      "MJA_BREAK_ARRAY_HOME_PROBE",
+      "MJA_BREAK_ARRAY_RECORD_FAILURE"
+    ]
+  },
+  "MJA_BREAK_ARRAY_OPEN_ENTRY": {
+    "max_hit": 1,
+    "timeout": 8000,
+    "recognition": {
+      "type": "And",
+      "param": {"all_of": ["activity.page", "break_array.entry"], "box_index": 1}
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "BREAK_ARRAY_MARTIAL_DAILY",
+      "action_id": "open_break_array",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "activity.page",
+        "target_name": "break_array.entry"
+      }
+    },
+    "next": ["MJA_BREAK_ARRAY_PAGE_PROBE"],
+    "on_error": ["MJA_BREAK_ARRAY_RECORD_FAILURE"],
+    "retry_times": 0
+  },
+  "MJA_BREAK_ARRAY_PAGE_PROBE": {
+    "recognition": {"type": "And", "param": {"all_of": ["break_array.page"]}},
+    "timeout": 8000,
+    "action": "DoNothing",
+    "next": [
+      "MJA_BREAK_ARRAY_UNAVAILABLE_PROBE",
+      "MJA_BREAK_ARRAY_COMPLETED_PROBE",
+      "MJA_BREAK_ARRAY_REMAINING_EXHAUSTED_PROBE",
+      "MJA_BREAK_ARRAY_RESULT_PROBE",
+      "MJA_BREAK_ARRAY_START_AVAILABLE_PROBE"
+    ],
+    "on_error": [
+      "MJA_BREAK_ARRAY_COMPLETED_PROBE",
+      "MJA_BREAK_ARRAY_UNAVAILABLE_PROBE",
+      "MJA_BREAK_ARRAY_RECORD_FAILURE"
+    ]
+  },
+  "MJA_BREAK_ARRAY_UNAVAILABLE_PROBE": {
+    "recognition": {"type": "And", "param": {"all_of": ["break_array.unavailable"]}},
+    "timeout": 8000,
+    "action": "DoNothing",
+    "next": ["MJA_BREAK_ARRAY_NOT_ELIGIBLE"],
+    "on_error": [
+      "MJA_BREAK_ARRAY_COMPLETED_PROBE",
+      "MJA_BREAK_ARRAY_REMAINING_EXHAUSTED_PROBE",
+      "MJA_BREAK_ARRAY_RESULT_PROBE",
+      "MJA_BREAK_ARRAY_START_AVAILABLE_PROBE"
+    ]
+  },
+  "MJA_BREAK_ARRAY_COMPLETED_PROBE": {
+    "recognition": {"type": "And", "param": {"all_of": ["break_array.completed"]}},
+    "timeout": 8000,
+    "action": "DoNothing",
+    "next": ["MJA_BREAK_ARRAY_ALREADY_COMPLETE"],
+    "on_error": [
+      "MJA_BREAK_ARRAY_REMAINING_EXHAUSTED_PROBE",
+      "MJA_BREAK_ARRAY_RESULT_PROBE",
+      "MJA_BREAK_ARRAY_START_AVAILABLE_PROBE"
+    ]
+  },
+  "MJA_BREAK_ARRAY_REMAINING_EXHAUSTED_PROBE": {
+    "recognition": {"type": "And", "param": {"all_of": ["break_array.remaining_exhausted"]}},
+    "timeout": 8000,
+    "action": "DoNothing",
+    "next": ["MJA_BREAK_ARRAY_ALREADY_COMPLETE"],
+    "on_error": [
+      "MJA_BREAK_ARRAY_RESULT_PROBE",
+      "MJA_BREAK_ARRAY_START_AVAILABLE_PROBE",
+      "MJA_BREAK_ARRAY_RECORD_FAILURE"
+    ]
+  },
+  "MJA_BREAK_ARRAY_START_AVAILABLE_PROBE": {
+    "recognition": {
+      "type": "And",
+      "param": {"all_of": ["break_array.page", "break_array.start"], "box_index": 1}
+    },
+    "timeout": 8000,
+    "action": "DoNothing",
+    "next": ["MJA_BREAK_ARRAY_CHALLENGE_LOOP"],
+    "on_error": [
+      "MJA_BREAK_ARRAY_REMAINING_EXHAUSTED_PROBE",
+      "MJA_BREAK_ARRAY_RECORD_FAILURE"
+    ]
+  },
+  "MJA_BREAK_ARRAY_CHALLENGE_LOOP": {
+    "max_hit": 3,
+    "timeout": 8000,
+    "recognition": {
+      "type": "And",
+      "param": {"all_of": ["break_array.page", "break_array.start"], "box_index": 1}
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "BREAK_ARRAY_MARTIAL_DAILY",
+      "action_id": "start_break_array_challenge",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "break_array.page",
+        "target_name": "break_array.start"
+      }
+    },
+    "next": ["MJA_BREAK_ARRAY_START_CONFIRM_PROBE"],
+    "on_error": [
+      "MJA_BREAK_ARRAY_CHALLENGE_LIMIT_PROBE",
+      "MJA_BREAK_ARRAY_REMAINING_EXHAUSTED_PROBE",
+      "MJA_BREAK_ARRAY_RECORD_FAILURE"
+    ],
+    "retry_times": 0
+  },
+  "MJA_BREAK_ARRAY_CHALLENGE_LIMIT_PROBE": {
+    "recognition": {
+      "type": "And",
+      "param": {"all_of": ["break_array.page", "break_array.start"], "box_index": 1}
+    },
+    "timeout": 8000,
+    "action": "DoNothing",
+    "next": ["MJA_BREAK_ARRAY_SUCCESS"],
+    "on_error": [
+      "MJA_BREAK_ARRAY_REMAINING_EXHAUSTED_AFTER_RESULT_PROBE",
+      "MJA_BREAK_ARRAY_RECORD_FAILURE"
+    ]
+  },
+  "MJA_BREAK_ARRAY_START_CONFIRM_PROBE": {
+    "recognition": {"type": "And", "param": {"all_of": ["break_array.start_confirm_dialog"]}},
+    "timeout": 8000,
+    "action": "DoNothing",
+    "next": ["MJA_BREAK_ARRAY_CONFIRM_CHALLENGE"],
+    "on_error": ["MJA_BREAK_ARRAY_RECORD_FAILURE"]
+  },
+  "MJA_BREAK_ARRAY_CONFIRM_CHALLENGE": {
+    "max_hit": 3,
+    "timeout": 8000,
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["break_array.start_confirm_dialog", "break_array.start_confirm_button"],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "BREAK_ARRAY_MARTIAL_DAILY",
+      "action_id": "confirm_break_array_challenge",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "break_array.start_confirm_dialog",
+        "target_name": "break_array.start_confirm_button"
+      }
+    },
+    "next": [
+      "MJA_BREAK_ARRAY_CONFIRM_TRANSITION_PROBE",
+      "MJA_BREAK_ARRAY_PREPARE_PAGE_PROBE",
+      "MJA_BREAK_ARRAY_BATTLE_LOADING_PROBE",
+      "MJA_BREAK_ARRAY_BATTLE_ACTIVE_PROBE",
+      "MJA_BREAK_ARRAY_RESULT_PROBE"
+    ],
+    "on_error": ["MJA_BREAK_ARRAY_RECORD_FAILURE"],
+    "retry_times": 0
+  },
+  "MJA_BREAK_ARRAY_CONFIRM_TRANSITION_PROBE": {
+    "recognition": {"type": "And", "param": {"all_of": ["break_array.confirm_transition"]}},
+    "timeout": 30000,
+    "action": "DoNothing",
+    "next": [
+      "MJA_BREAK_ARRAY_PREPARE_PAGE_PROBE",
+      "MJA_BREAK_ARRAY_BATTLE_LOADING_PROBE",
+      "MJA_BREAK_ARRAY_BATTLE_ACTIVE_PROBE",
+      "MJA_BREAK_ARRAY_RESULT_PROBE"
+    ],
+    "on_error": [
+      "MJA_BREAK_ARRAY_PREPARE_PAGE_PROBE",
+      "MJA_BREAK_ARRAY_BATTLE_LOADING_PROBE",
+      "MJA_BREAK_ARRAY_BATTLE_ACTIVE_PROBE",
+      "MJA_BREAK_ARRAY_RESULT_PROBE",
+      "MJA_BREAK_ARRAY_RECORD_FAILURE"
+    ]
+  },
+  "MJA_BREAK_ARRAY_PREPARE_PAGE_PROBE": {
+    "recognition": {"type": "And", "param": {"all_of": ["break_array.prepare_page"]}},
+    "timeout": 30000,
+    "action": "DoNothing",
+    "next": ["MJA_BREAK_ARRAY_START_BATTLE"],
+    "on_error": [
+      "MJA_BREAK_ARRAY_BATTLE_LOADING_PROBE",
+      "MJA_BREAK_ARRAY_BATTLE_ACTIVE_PROBE",
+      "MJA_BREAK_ARRAY_RESULT_PROBE",
+      "MJA_BREAK_ARRAY_RECORD_FAILURE"
+    ]
+  },
+  "MJA_BREAK_ARRAY_START_BATTLE": {
+    "max_hit": 3,
+    "timeout": 30000,
+    "recognition": {
+      "type": "And",
+      "param": {"all_of": ["break_array.prepare_page", "break_array.prepare_start"], "box_index": 1}
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "BREAK_ARRAY_MARTIAL_DAILY",
+      "action_id": "start_break_array_battle",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "break_array.prepare_page",
+        "target_name": "break_array.prepare_start"
+      }
+    },
+    "next": [
+      "MJA_BREAK_ARRAY_BATTLE_LOADING_PROBE",
+      "MJA_BREAK_ARRAY_BATTLE_ACTIVE_PROBE",
+      "MJA_BREAK_ARRAY_RESULT_PROBE"
+    ],
+    "on_error": ["MJA_BREAK_ARRAY_RECORD_FAILURE"],
+    "retry_times": 0
+  },
+  "MJA_BREAK_ARRAY_BATTLE_LOADING_PROBE": {
+    "max_hit": 12,
+    "recognition": {"type": "And", "param": {"all_of": ["break_array.battle_loading"]}},
+    "timeout": 60000,
+    "action": "DoNothing",
+    "next": ["MJA_BREAK_ARRAY_BATTLE_LOADING_LOOP"],
+    "on_error": [
+      "MJA_BREAK_ARRAY_BATTLE_ACTIVE_PROBE",
+      "MJA_BREAK_ARRAY_RESULT_PROBE",
+      "MJA_BREAK_ARRAY_BATTLE_UNKNOWN_RESULT"
+    ],
+    "retry_times": 0
+  },
+  "MJA_BREAK_ARRAY_BATTLE_LOADING_LOOP": {
+    "max_hit": 12,
+    "timeout": 60000,
+    "recognition": {"type": "And", "param": {"all_of": ["break_array.battle_loading"]}},
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "BREAK_ARRAY_MARTIAL_DAILY",
+      "action_id": "wait_break_array_battle",
+      "kind": "none",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 0,
+        "page_name": "break_array.battle_loading",
+        "target_name": "break_array.battle_loading"
+      }
+    },
+    "next": [
+      "MJA_BREAK_ARRAY_BATTLE_LOADING_PROBE",
+      "MJA_BREAK_ARRAY_BATTLE_ACTIVE_PROBE",
+      "MJA_BREAK_ARRAY_RESULT_PROBE"
+    ],
+    "on_error": [
+      "MJA_BREAK_ARRAY_BATTLE_ACTIVE_PROBE",
+      "MJA_BREAK_ARRAY_RESULT_PROBE",
+      "MJA_BREAK_ARRAY_BATTLE_LOOP_EXHAUSTED"
+    ],
+    "retry_times": 0
+  },
+  "MJA_BREAK_ARRAY_BATTLE_ACTIVE_PROBE": {
+    "recognition": {"type": "And", "param": {"all_of": ["break_array.battle"]}},
+    "timeout": 60000,
+    "action": "DoNothing",
+    "next": ["MJA_BREAK_ARRAY_BATTLE_LOOP"],
+    "on_error": [
+      "MJA_BREAK_ARRAY_BATTLE_LOADING_PROBE",
+      "MJA_BREAK_ARRAY_RESULT_PROBE",
+      "MJA_BREAK_ARRAY_BATTLE_UNKNOWN_RESULT"
+    ]
+  },
+  "MJA_BREAK_ARRAY_BATTLE_LOOP": {
+    "max_hit": 12,
+    "timeout": 60000,
+    "recognition": {"type": "And", "param": {"all_of": ["break_array.battle"]}},
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "BREAK_ARRAY_MARTIAL_DAILY",
+      "action_id": "wait_break_array_battle",
+      "kind": "none",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 0,
+        "page_name": "break_array.battle",
+        "target_name": "break_array.battle"
+      }
+    },
+    "next": [
+      "MJA_BREAK_ARRAY_BATTLE_ACTIVE_PROBE",
+      "MJA_BREAK_ARRAY_BATTLE_LOADING_PROBE",
+      "MJA_BREAK_ARRAY_RESULT_PROBE"
+    ],
+    "on_error": [
+      "MJA_BREAK_ARRAY_BATTLE_LOADING_PROBE",
+      "MJA_BREAK_ARRAY_RESULT_PROBE",
+      "MJA_BREAK_ARRAY_BATTLE_LOOP_EXHAUSTED"
+    ],
+    "retry_times": 0
+  },
+  "MJA_BREAK_ARRAY_RESULT_PROBE": {
+    "recognition": {"type": "And", "param": {"all_of": ["break_array.result.page"]}},
+    "timeout": 30000,
+    "action": "DoNothing",
+    "next": [
+      "MJA_BREAK_ARRAY_SUCCESS_RESULT_PROBE",
+      "MJA_BREAK_ARRAY_FAILURE_RESULT_PROBE",
+      "MJA_BREAK_ARRAY_RESULT_LOOP"
+    ],
+    "on_error": ["MJA_BREAK_ARRAY_BATTLE_UNKNOWN_RESULT"]
+  },
+  "MJA_BREAK_ARRAY_SUCCESS_RESULT_PROBE": {
+    "recognition": {
+      "type": "And",
+      "param": {"all_of": ["break_array.result.page", "break_array.success"], "box_index": 1}
+    },
+    "timeout": 8000,
+    "action": "DoNothing",
+    "next": ["MJA_BREAK_ARRAY_DISMISS_RESULT"],
+    "on_error": [
+      "MJA_BREAK_ARRAY_FAILURE_RESULT_PROBE",
+      "MJA_BREAK_ARRAY_RESULT_LOOP"
+    ]
+  },
+  "MJA_BREAK_ARRAY_FAILURE_RESULT_PROBE": {
+    "recognition": {
+      "type": "And",
+      "param": {"all_of": ["break_array.result.page", "break_array.failure"], "box_index": 1}
+    },
+    "timeout": 8000,
+    "action": "DoNothing",
+    "next": ["MJA_BREAK_ARRAY_BATTLE_DEFEAT"],
+    "on_error": ["MJA_BREAK_ARRAY_RESULT_LOOP"]
+  },
+  "MJA_BREAK_ARRAY_RESULT_LOOP": {
+    "max_hit": 3,
+    "timeout": 30000,
+    "recognition": {"type": "And", "param": {"all_of": ["break_array.result.page"]}},
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "BREAK_ARRAY_MARTIAL_DAILY",
+      "action_id": "wait_break_array_result",
+      "kind": "none",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 0,
+        "page_name": "break_array.result.page",
+        "target_name": "break_array.result.page"
+      }
+    },
+    "next": ["MJA_BREAK_ARRAY_RESULT_PROBE"],
+    "on_error": ["MJA_BREAK_ARRAY_RESULT_LOOP_EXHAUSTED"],
+    "retry_times": 0
+  },
+  "MJA_BREAK_ARRAY_DISMISS_RESULT": {
+    "max_hit": 3,
+    "timeout": 8000,
+    "recognition": {
+      "type": "And",
+      "param": {"all_of": ["break_array.result.page", "break_array.result_close"], "box_index": 1}
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "BREAK_ARRAY_MARTIAL_DAILY",
+      "action_id": "dismiss_break_array_result",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "break_array.result.page",
+        "target_name": "break_array.result_close"
+      }
+    },
+    "next": ["MJA_BREAK_ARRAY_POST_RESULT_PROBE"],
+    "on_error": [
+      "MJA_BREAK_ARRAY_RESULT_LOOP",
+      "MJA_BREAK_ARRAY_RESULT_LOOP_EXHAUSTED"
+    ],
+    "retry_times": 0
+  },
+  "MJA_BREAK_ARRAY_POST_RESULT_PROBE": {
+    "recognition": {"type": "And", "param": {"all_of": ["break_array.page"]}},
+    "timeout": 8000,
+    "action": "DoNothing",
+    "next": [
+      "MJA_BREAK_ARRAY_COMPLETED_AFTER_RESULT_PROBE",
+      "MJA_BREAK_ARRAY_REMAINING_EXHAUSTED_AFTER_RESULT_PROBE",
+      "MJA_BREAK_ARRAY_START_AVAILABLE_PROBE"
+    ],
+    "on_error": [
+      "MJA_BREAK_ARRAY_RESULT_PROBE",
+      "MJA_BREAK_ARRAY_RECORD_FAILURE"
+    ]
+  },
+  "MJA_BREAK_ARRAY_COMPLETED_AFTER_RESULT_PROBE": {
+    "recognition": {
+      "type": "And",
+      "param": {"all_of": ["break_array.page", "break_array.completed"]}
+    },
+    "timeout": 8000,
+    "action": "DoNothing",
+    "next": ["MJA_BREAK_ARRAY_SUCCESS"],
+    "on_error": [
+      "MJA_BREAK_ARRAY_REMAINING_EXHAUSTED_AFTER_RESULT_PROBE",
+      "MJA_BREAK_ARRAY_START_AVAILABLE_PROBE"
+    ]
+  },
+  "MJA_BREAK_ARRAY_REMAINING_EXHAUSTED_AFTER_RESULT_PROBE": {
+    "recognition": {
+      "type": "And",
+      "param": {"all_of": ["break_array.page", "break_array.remaining_exhausted"]}
+    },
+    "timeout": 8000,
+    "action": "DoNothing",
+    "next": ["MJA_BREAK_ARRAY_SUCCESS"],
+    "on_error": [
+      "MJA_BREAK_ARRAY_START_AVAILABLE_PROBE",
+      "MJA_BREAK_ARRAY_RECORD_FAILURE"
+    ]
+  },
+  "MJA_BREAK_ARRAY_SUCCESS": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "RecordTaskOutcome",
+    "custom_action_param": {
+      "task_id": "BREAK_ARRAY_MARTIAL_DAILY",
+      "status": "success",
+      "postcondition": "break_array.three_challenges"
+    },
+    "next": ["MJA_COMMON_STOP"],
+    "on_error": ["MJA_COMMON_STOP"]
+  },
+  "MJA_BREAK_ARRAY_ALREADY_COMPLETE": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "RecordTaskOutcome",
+    "custom_action_param": {
+      "task_id": "BREAK_ARRAY_MARTIAL_DAILY",
+      "status": "already_complete",
+      "postcondition": "break_array.daily_exhausted"
+    },
+    "next": ["MJA_COMMON_STOP"],
+    "on_error": ["MJA_COMMON_STOP"]
+  },
+  "MJA_BREAK_ARRAY_NOT_ELIGIBLE": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "RecordTaskOutcome",
+    "custom_action_param": {
+      "task_id": "BREAK_ARRAY_MARTIAL_DAILY",
+      "status": "not_eligible",
+      "postcondition": "break_array.unavailable"
+    },
+    "next": ["MJA_COMMON_STOP"],
+    "on_error": ["MJA_COMMON_STOP"]
+  },
+  "MJA_BREAK_ARRAY_BATTLE_DEFEAT": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "RecordTaskOutcome",
+    "custom_action_param": {
+      "task_id": "BREAK_ARRAY_MARTIAL_DAILY",
+      "status": "failed",
+      "error_code": "BREAK_ARRAY_BATTLE_DEFEAT",
+      "postcondition": "break_array.battle.result_known",
+      "native_fail_after_record": true
+    },
+    "Abort": true,
+    "next": ["MJA_COMMON_ABORT"]
+
+  },
+  "MJA_BREAK_ARRAY_BATTLE_UNKNOWN_RESULT": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "RecordTaskOutcome",
+    "custom_action_param": {
+      "task_id": "BREAK_ARRAY_MARTIAL_DAILY",
+      "status": "failed",
+      "error_code": "BREAK_ARRAY_BATTLE_RESULT_UNKNOWN",
+      "postcondition": "break_array.battle.result_known",
+      "native_fail_after_record": true
+    },
+    "Abort": true,
+    "next": ["MJA_COMMON_ABORT"]
+
+  },
+  "MJA_BREAK_ARRAY_STARTUP_EXHAUSTED": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "RecordTaskOutcome",
+    "custom_action_param": {
+      "task_id": "BREAK_ARRAY_MARTIAL_DAILY",
+      "status": "failed",
+      "error_code": "BREAK_ARRAY_STARTUP_LIMIT",
+      "postcondition": "break_array.game_foreground_or_recoverable_state",
+      "native_fail_after_record": true
+    },
+    "Abort": true,
+    "next": ["MJA_COMMON_ABORT"]
+
+  },
+  "MJA_BREAK_ARRAY_BATTLE_LOOP_EXHAUSTED": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "RecordTaskOutcome",
+    "custom_action_param": {
+      "task_id": "BREAK_ARRAY_MARTIAL_DAILY",
+      "status": "failed",
+      "error_code": "BREAK_ARRAY_BATTLE_LIMIT",
+      "postcondition": "break_array.battle.result_known",
+      "native_fail_after_record": true
+    },
+    "Abort": true,
+    "next": ["MJA_COMMON_ABORT"]
+
+  },
+  "MJA_BREAK_ARRAY_RESULT_LOOP_EXHAUSTED": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "RecordTaskOutcome",
+    "custom_action_param": {
+      "task_id": "BREAK_ARRAY_MARTIAL_DAILY",
+      "status": "failed",
+      "error_code": "BREAK_ARRAY_RESULT_LIMIT",
+      "postcondition": "break_array.result_known",
+      "native_fail_after_record": true
+    },
+    "Abort": true,
+    "next": ["MJA_COMMON_ABORT"]
+
+  },
+  "MJA_BREAK_ARRAY_RECORD_FAILURE": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "RecordTaskOutcome",
+    "custom_action_param": {
+      "task_id": "BREAK_ARRAY_MARTIAL_DAILY",
+      "status": "failed",
+      "error_code": "BREAK_ARRAY_POSTCONDITION_MISSING",
+      "postcondition": "break_array.state_known",
+      "native_fail_after_record": true
+    },
+    "Abort": true,
+    "next": ["MJA_COMMON_ABORT"]
+
+  },
+  "break_array.home": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["MJA_GAME_HOME_PAGE"],
+        "box_index": 0
+      }
+    },
+    "action": "DoNothing"
+  },
+  "break_array.startup_loading": {
+    "recognition": "OCR",
+    "expected": ["穿梭入世", "穿梭入世中", "加载中"],
+    "roi": [350, 580, 900, 140],
+    "action": "DoNothing"
+  },
+  "activity.entry": {
+    "recognition": "OCR",
+    "expected": ["活动", "活动中心"],
+    "roi": [840, 20, 110, 90],
+    "action": "DoNothing"
+  },
+  "activity.page": {
+    "recognition": "OCR",
+    "expected": ["破阵演武", "破阵"],
+    "roi": [0, 120, 1280, 600],
+    "action": "DoNothing"
+  },
+  "activity.close": {
+    "recognition": "TemplateMatch",
+    "template": "home/modal_close.png",
+    "roi": [1120, 0, 160, 140],
+    "threshold": 0.375,
+    "action": "DoNothing"
+  },
+  "break_array.entry": {
+    "recognition": "OCR",
+    "expected": ["破阵演武", "破阵"],
+    "roi": [0, 120, 1280, 600],
+    "action": "DoNothing"
+  },
+  "break_array.selected_entry": {
+    "recognition": "OCR",
+    "expected": "破阵演武",
+    "roi": [35, 390, 135, 100],
+    "action": "DoNothing"
+  },
+  "break_array.page": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["break_array.selected_entry", "break_array.remaining"]
+      }
+    },
+    "action": "DoNothing"
+  },
+  "break_array.start": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["break_array.start.top", "break_array.start.bottom"],
+        "box_index": 0
+      }
+    },
+    "action": "DoNothing"
+  },
+  "break_array.start.top": {
+    "recognition": "OCR",
+    "expected": "^开始$",
+    "roi": [1050, 520, 190, 90],
+    "action": "DoNothing"
+  },
+  "break_array.start.bottom": {
+    "recognition": "OCR",
+    "expected": "^挑战$",
+    "roi": [1050, 565, 190, 95],
+    "action": "DoNothing"
+  },
+  "break_array.start_confirm_title": {
+    "recognition": "OCR",
+    "expected": "^提\\s*示$",
+    "roi": [285, 175, 80, 110],
+    "action": "DoNothing"
+  },
+  "break_array.start_confirm_consume": {
+    "recognition": "OCR",
+    "expected": "开始挑战.*消耗\\s*1\\s*次挑战次数",
+    "roi": [400, 285, 520, 90],
+    "action": "DoNothing"
+  },
+  "break_array.start_confirm_prepare": {
+    "recognition": "OCR",
+    "expected": ["进入准备界面", "搭配适合的出战阵容"],
+    "roi": [430, 315, 470, 100],
+    "action": "DoNothing"
+  },
+  "break_array.start_confirm_dialog": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "break_array.start_confirm_title",
+          "break_array.start_confirm_consume",
+          "break_array.start_confirm_prepare"
+        ]
+      }
+    },
+    "action": "DoNothing"
+  },
+  "break_array.start_confirm_button": {
+    "recognition": "OCR",
+    "expected": "^确认$",
+    "roi": [790, 455, 180, 90],
+    "action": "DoNothing"
+  },
+  "break_array.confirm_transition.dark_field": {
+    "recognition": "ColorMatch",
+    "method": 4,
+    "lower": [0, 0, 0],
+    "upper": [8, 8, 8],
+    "roi": [140, 180, 1000, 420],
+    "connected": true,
+    "count": 400000,
+    "action": "DoNothing"
+  },
+  "break_array.confirm_transition.rumor_glyphs": {
+    "recognition": "ColorMatch",
+    "method": 4,
+    "lower": [210, 210, 210],
+    "upper": [255, 255, 255],
+    "roi": [430, 80, 840, 90],
+    "connected": false,
+    "count": 3000,
+    "action": "DoNothing"
+  },
+  "break_array.confirm_transition.uid_glyphs": {
+    "recognition": "ColorMatch",
+    "method": 4,
+    "lower": [80, 80, 65],
+    "upper": [190, 190, 175],
+    "roi": [1100, 680, 180, 40],
+    "connected": false,
+    "count": 350,
+    "action": "DoNothing"
+  },
+  "break_array.confirm_transition": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "break_array.confirm_transition.dark_field",
+          "break_array.confirm_transition.rumor_glyphs",
+          "break_array.confirm_transition.uid_glyphs"
+        ]
+      }
+    },
+    "action": "DoNothing"
+  },
+  "break_array.remaining": {
+    "recognition": "OCR",
+    "expected": [
+      "(?:(?:今日)?剩余挑战次数|今日剩余|剩余|挑战次数)\\s*[:：]?\\s*\\d{1,2}\\s*/\\s*[1-9]\\d?",
+      "\\d{1,2}\\s*/\\s*[1-9]\\d?"
+    ],
+    "roi": [1000, 620, 280, 100],
+    "action": "DoNothing"
+  },
+  "break_array.remaining_exact_0_of_9": {
+    "recognition": "OCR",
+    "expected": "(?:^|\\D)0\\s*/\\s*9(?:\\D|$)",
+    "roi": [1000, 620, 280, 100],
+    "action": "DoNothing"
+  },
+  "break_array.remaining_exact_1_of_9": {
+    "recognition": "OCR",
+    "expected": "(?:^|\\D)1\\s*/\\s*9(?:\\D|$)",
+    "roi": [1000, 620, 280, 100],
+    "action": "DoNothing"
+  },
+  "break_array.remaining_exact_2_of_9": {
+    "recognition": "OCR",
+    "expected": "(?:^|\\D)2\\s*/\\s*9(?:\\D|$)",
+    "roi": [1000, 620, 280, 100],
+    "action": "DoNothing"
+  },
+  "break_array.remaining_exact_3_of_9": {
+    "recognition": "OCR",
+    "expected": "(?:^|\\D)3\\s*/\\s*9(?:\\D|$)",
+    "roi": [1000, 620, 280, 100],
+    "action": "DoNothing"
+  },
+  "break_array.remaining_exact_4_of_9": {
+    "recognition": "OCR",
+    "expected": "(?:^|\\D)4\\s*/\\s*9(?:\\D|$)",
+    "roi": [1000, 620, 280, 100],
+    "action": "DoNothing"
+  },
+  "break_array.remaining_exact_5_of_9": {
+    "recognition": "OCR",
+    "expected": "(?:^|\\D)5\\s*/\\s*9(?:\\D|$)",
+    "roi": [1000, 620, 280, 100],
+    "action": "DoNothing"
+  },
+  "break_array.remaining_exact_6_of_9": {
+    "recognition": "OCR",
+    "expected": "(?:^|\\D)6\\s*/\\s*9(?:\\D|$)",
+    "roi": [1000, 620, 280, 100],
+    "action": "DoNothing"
+  },
+  "break_array.remaining_exact_7_of_9": {
+    "recognition": "OCR",
+    "expected": "(?:^|\\D)7\\s*/\\s*9(?:\\D|$)",
+    "roi": [1000, 620, 280, 100],
+    "action": "DoNothing"
+  },
+  "break_array.remaining_exact_8_of_9": {
+    "recognition": "OCR",
+    "expected": "(?:^|\\D)8\\s*/\\s*9(?:\\D|$)",
+    "roi": [1000, 620, 280, 100],
+    "action": "DoNothing"
+  },
+  "break_array.page.remaining_0_of_9": {
+    "recognition": {"type": "And", "param": {"all_of": ["break_array.selected_entry", "break_array.remaining_exact_0_of_9"]}},
+    "action": "DoNothing"
+  },
+  "break_array.page.remaining_1_of_9": {
+    "recognition": {"type": "And", "param": {"all_of": ["break_array.selected_entry", "break_array.remaining_exact_1_of_9"]}},
+    "action": "DoNothing"
+  },
+  "break_array.page.remaining_2_of_9": {
+    "recognition": {"type": "And", "param": {"all_of": ["break_array.selected_entry", "break_array.remaining_exact_2_of_9"]}},
+    "action": "DoNothing"
+  },
+  "break_array.page.remaining_3_of_9": {
+    "recognition": {"type": "And", "param": {"all_of": ["break_array.selected_entry", "break_array.remaining_exact_3_of_9"]}},
+    "action": "DoNothing"
+  },
+  "break_array.page.remaining_4_of_9": {
+    "recognition": {"type": "And", "param": {"all_of": ["break_array.selected_entry", "break_array.remaining_exact_4_of_9"]}},
+    "action": "DoNothing"
+  },
+  "break_array.page.remaining_5_of_9": {
+    "recognition": {"type": "And", "param": {"all_of": ["break_array.selected_entry", "break_array.remaining_exact_5_of_9"]}},
+    "action": "DoNothing"
+  },
+  "break_array.page.remaining_6_of_9": {
+    "recognition": {"type": "And", "param": {"all_of": ["break_array.selected_entry", "break_array.remaining_exact_6_of_9"]}},
+    "action": "DoNothing"
+  },
+  "break_array.page.remaining_7_of_9": {
+    "recognition": {"type": "And", "param": {"all_of": ["break_array.selected_entry", "break_array.remaining_exact_7_of_9"]}},
+    "action": "DoNothing"
+  },
+  "break_array.page.remaining_8_of_9": {
+    "recognition": {"type": "And", "param": {"all_of": ["break_array.selected_entry", "break_array.remaining_exact_8_of_9"]}},
+    "action": "DoNothing"
+  },
+  "break_array.remaining_exhausted": {
+    "recognition": "OCR",
+    "expected": [
+      "(?:(?:今日)?剩余挑战次数|今日剩余|剩余|挑战次数)\\s*[:：]?\\s*0\\s*/\\s*[1-9]\\d?",
+      "^0\\s*/\\s*[1-9]\\d?$"
+    ],
+    "roi": [1000, 620, 280, 100],
+    "action": "DoNothing"
+  },
+  "break_array.completed": {
+    "recognition": "OCR",
+    "expected": ["今日已完成", "挑战已完成", "已完成"],
+    "roi": [600, 120, 680, 240],
+    "action": "DoNothing"
+  },
+  "break_array.unavailable": {
+    "recognition": "OCR",
+    "expected": ["未开启", "暂未开放", "不可参与", "活动未开放"],
+    "roi": [200, 180, 880, 420],
+    "action": "DoNothing"
+  },
+  "break_array.prepare_formation": {
+    "recognition": "OCR",
+    "expected": "^阵容$",
+    "roi": [40, 10, 150, 70],
+    "action": "DoNothing"
+  },
+  "break_array.prepare_boss": {
+    "recognition": "OCR",
+    "expected": "^首领战斗$",
+    "roi": [520, 10, 240, 55],
+    "action": "DoNothing"
+  },
+  "break_array.prepare_duration": {
+    "recognition": "OCR",
+    "expected": "^战(?:斗)?时长\\s*[：:]\\s*02\\s*[：:]\\s*00$",
+    "roi": [520, 40, 250, 60],
+    "action": "DoNothing"
+  },
+  "break_array.prepare_tactics": {
+    "recognition": "OCR",
+    "expected": "^战术谱$",
+    "roi": [980, 480, 140, 80],
+    "action": "DoNothing"
+  },
+  "break_array.prepare_start": {
+    "recognition": "ColorMatch",
+    "method": 4,
+    "lower": [200, 65, 0],
+    "upper": [255, 170, 70],
+    "roi": [1100, 550, 150, 145],
+    "connected": false,
+    "count": 4500,
+    "action": "DoNothing"
+  },
+  "break_array.prepare_page": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "break_array.prepare_formation",
+          "break_array.prepare_boss",
+          "break_array.prepare_duration",
+          "break_array.prepare_tactics"
+        ]
+      }
+    },
+    "action": "DoNothing"
+  },
+  "break_array.battle_loading": {
+    "recognition": "OCR",
+    "expected": ["加载中", "正在进入战斗", "匹配中"],
+    "roi": [0, 240, 1280, 300],
+    "action": "DoNothing"
+  },
+  "break_array.battle": {
+    "recognition": "OCR",
+    "expected": ["^跳过$", "^自动战斗$", "^战斗中$"],
+    "roi": [0, 0, 1280, 720],
+    "action": "DoNothing"
+  },
+  "break_array.result": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["break_array.result.victory_title", "break_array.result.brand"],
+        "box_index": 0
+      }
+    },
+    "action": "DoNothing"
+  },
+  "break_array.result.page": {
+    "recognition": {
+      "type": "Or",
+      "param": {
+        "any_of": ["break_array.result", "break_array.failure"]
+      }
+    },
+    "action": "DoNothing"
+  },
+  "break_array.success": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["break_array.result.victory_title", "break_array.result.brand"],
+        "box_index": 0
+      }
+    },
+    "action": "DoNothing"
+  },
+  "break_array.result.victory_title": {
+    "recognition": "OCR",
+    "expected": "^战斗胜(?:利|禾)?$",
+    "roi": [700, 80, 550, 190],
+    "action": "DoNothing"
+  },
+  "break_array.result.brand": {
+    "recognition": "OCR",
+    "expected": "^对决[·•]?剑之川$",
+    "roi": [980, 225, 190, 60],
+    "action": "DoNothing"
+  },
+  "break_array.failure": {
+    "recognition": "OCR",
+    "expected": ["挑战失败", "战斗失败", "失败"],
+    "roi": [160, 100, 960, 420],
+    "action": "DoNothing"
+  },
+  "break_array.result_close": {
+    "recognition": "OCR",
+    "expected": ["确认", "继续", "点击空白处关闭", "返回"],
+    "roi": [760, 420, 440, 260],
+    "action": "DoNothing"
+  },
+  "break_array.close": {
+    "recognition": "TemplateMatch",
+    "template": "home/modal_close.png",
+    "roi": [1120, 0, 160, 140],
+    "threshold": 0.375,
+    "action": "DoNothing"
+  },
+  "break_array.unknown_dialog": {
+    "recognition": "OCR",
+    "expected": ["确定", "取消", "授权", "登录"],
+    "roi": [250, 150, 780, 430],
+    "action": "DoNothing"
+  },
+  "safety.paid": {
+    "recognition": "OCR",
+    "expected": ["购买元宝", "充值", "支付", "Apple Pay"],
+    "roi": [280, 160, 720, 420],
+    "action": "DoNothing"
+  },
+  "safety.verification": {
+    "recognition": "OCR",
+    "expected": ["验证码", "安全验证", "滑动验证"],
+    "roi": [0, 0, 1280, 720],
+    "action": "DoNothing"
+  }
+}

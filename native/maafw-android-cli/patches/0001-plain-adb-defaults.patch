@@ -1,0 +1,36 @@
+diff --git a/source/MaaPiCli/Impl/Runner.cpp b/source/MaaPiCli/Impl/Runner.cpp
+index bababd9..1a62e86 100644
+--- a/source/MaaPiCli/Impl/Runner.cpp
++++ b/source/MaaPiCli/Impl/Runner.cpp
+@@ -77,6 +77,19 @@ bool Runner::run(const RuntimeParam& param)
+     MaaController* controller_handle = nullptr;
+     if (const auto* p_adb_param = std::get_if<RuntimeParam::AdbParam>(&param.controller_param)) {
+         RuntimeParam::AdbParam adb_param = reconfig_adb(*p_adb_param);
++        if (adb_param.config.empty()) {
++            // A plain adb/emulator device has no toolkit-specific overrides,
++            // but the control unit still requires a valid JSON object.
++            adb_param.config = "{}";
++        }
++        if (adb_param.screencap == MaaAdbScreencapMethod_None) {
++            // MaaToolkit reconfiguration is optional. Keep plain ADB configs
++            // usable by selecting the portable screenshot implementations.
++            adb_param.screencap = MaaAdbScreencapMethod_Default;
++        }
++        if (adb_param.input == MaaAdbInputMethod_None) {
++            adb_param.input = MaaAdbInputMethod_Default;
++        }
+         controller_handle = MaaAdbControllerCreate(
+             adb_param.adb_path.c_str(),
+             adb_param.address.c_str(),
+diff --git a/source/MaaAdbControlUnit/General/DeviceInfo.cpp b/source/MaaAdbControlUnit/General/DeviceInfo.cpp
+index 98eef2c..dd44a73 100644
+--- a/source/MaaAdbControlUnit/General/DeviceInfo.cpp
++++ b/source/MaaAdbControlUnit/General/DeviceInfo.cpp
+@@ -15,6 +15,6 @@ bool DeviceInfo::parse(const json::value& config)
+     };
+     static const json::array kDefaultOrientationArgv = {
+-        "{ADB}", "-s", "{ADB_SERIAL}", "shell", "dumpsys input | grep SurfaceOrientation | tail -n 1 | grep -m 1 -o -E [0-9]",
++        "{ADB}", "-s", "{ADB_SERIAL}", "shell", "dumpsys window displays | sed -n 's/.*mDisplayRotation=ROTATION_\\([0-3]\\).*/\\1/p' | tail -n 1",
+     };
+
+     return parse_command("UUID", config, kDefaultUuidArgv, uuid_argv_)

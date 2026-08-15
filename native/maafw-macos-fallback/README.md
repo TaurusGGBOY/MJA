@@ -26,6 +26,16 @@ library and manifest through a staging directory. It never modifies the referenc
 
 The manifest and dylib are committed only after the build has been performed and verified.
 
+## MFW runtime bundle (v5.12.3)
+
+MFW candidates use the separately attested bundle at
+`vendor/maafw/v5.12.3/macos-arm64/`. It contains the patched
+`libMaaMacOSControlUnit.dylib` and `libMaaToolkit.dylib`; the installer validates
+the four official-base digests and replaces both the `maafw/` and
+`runtimes/osx-arm64/` copies. Build it with
+`native/maafw-macos-fallback/build-v5123.sh`, which applies all four patches in
+lexical order to MaaFramework v5.12.3.
+
 ## Manifest contract
 
 `manifest.json` is a UTF-8 JSON object with exactly these fields:

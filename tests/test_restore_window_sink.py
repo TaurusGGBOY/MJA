@@ -75,6 +75,11 @@ def test_nonterminal_events_do_not_restore() -> None:
     assert calls == []
 
 
+def test_embedded_agent_loader_can_construct_sink_without_external_restore() -> None:
+    sink = RestoreWindowSink()
+    sink.on_raw_notification(None, "Tasker.Task.Succeeded", {"task_id": 7})
+
+
 @pytest.mark.parametrize(
     ("node_name", "expected_code"),
     [

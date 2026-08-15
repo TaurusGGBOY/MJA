@@ -1,62 +1,39 @@
-from __future__ import annotations
-
 import json
-from pathlib import Path
 
 import pytest
 
-ROOT = Path(__file__).parents[1]
+from tools.project_interface import render_interface
+
+ROOT = "/Users/gaoguobin/project/MJA"
 
 
-def load(path: Path) -> dict:
-    return json.loads(path.read_text(encoding="utf-8"))
+def test_formal_interface_uses_imported_native_tasks_instead_of_legacy_rendering():
+    base = json.loads(open(f"{ROOT}/assets/interface.json", encoding="utf-8").read())
+    assert base["task"] == []
+    assert base["import"]
+    assert base["resource"][0]["path"] == ["./resource/base"]
+    assert "daily_all" not in json.dumps(base, ensure_ascii=False).casefold()
 
 
-def test_interface_exposes_one_safe_default_task() -> None:
-    pi = load(ROOT / "assets/interface.json")
-    assert pi["interface_version"] == 2
-    assert pi["controller"][0]["type"] == "MacOS"
-    assert pi["controller"][0]["display_short_side"] == 720
-    assert pi["controller"][0]["macos"] == {
-        "title_regex": "^对决！剑之川$",
-        "screencap": "ScreenCaptureKit",
-        "input": "GlobalEvent",
+def test_interface_renderer_is_deterministic_and_rejects_duplicate_ids():
+    base = {
+        "controller": [{"name": "android"}],
+        "resource": [{"name": "mja_android"}],
+        "task": [],
     }
-    assert pi["task"] == [
-        {
-            "name": "mail_smoke_test",
-            "label": "邮件菜单闭环测试",
-            "entry": "MJA_Start",
-            "default_check": True,
-            "resource": ["mja"],
-            "controller": ["macos"],
-        }
-    ]
-    assert pi["agent"] == {
-        "child_exec": ".venv/bin/python3",
-        "child_args": ["agent/main.py"],
-        "identifier": "mja-python-agent",
+    first = render_interface(["MAIL_REWARD_DAILY", "SHOP_FREE_GIFT_DAILY"], base=base)
+    second = render_interface(["MAIL_REWARD_DAILY", "SHOP_FREE_GIFT_DAILY"], base=base)
+    assert first == second
+    with pytest.raises(ValueError, match="unique"):
+        render_interface(["MAIL_REWARD_DAILY", "MAIL_REWARD_DAILY"], base=base)
+
+
+def test_interface_renderer_rejects_legacy_macos_controller():
+    base = {
+        "controller": [{"name": "android"}, {"name": "macos"}],
+        "resource": [{"name": "mja_android"}],
+        "task": [],
     }
 
-
-def test_pipeline_has_only_four_box_gated_inputs_and_no_claim_vocabulary() -> None:
-    pipeline = load(ROOT / "assets/resource/pipeline/mail_smoke_test.json")
-    serialized = json.dumps(pipeline, ensure_ascii=False).lower()
-    assert all(term not in serialized for term in ("领取", "claim", "startapp", '"click"'))
-    actions = [node for node in pipeline.values() if node.get("action") == "Custom"]
-    assert [node["custom_action"] for node in actions] == [
-        "MacOSForegroundClick",
-        "MacOSForegroundClick",
-        "MacOSForegroundClick",
-        "MacOSForegroundClick",
-    ]
-    assert all(node["recognition"] == "TemplateMatch" for node in actions)
-    assert all("template" in node for node in actions)
-    missing_templates = [
-        node["template"]
-        for node in pipeline.values()
-        if "template" in node
-        and not (ROOT / "assets/resource/image" / node["template"]).is_file()
-    ]
-    if missing_templates:
-        pytest.skip("live templates not captured: " + ", ".join(missing_templates))
+    with pytest.raises(ValueError, match="only the android controller"):
+        render_interface(["MAIL_REWARD_DAILY"], base=base)

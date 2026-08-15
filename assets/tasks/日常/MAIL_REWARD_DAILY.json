@@ -1,0 +1,11 @@
+{
+  "task": [
+    {
+      "name": "MAIL_REWARD_DAILY",
+      "label": "领取邮件奖励",
+      "default_check": true,
+      "group": ["日常"],
+      "entry": "MJA_MAIL_REWARD_DAILY_START"
+    }
+  ]
+}

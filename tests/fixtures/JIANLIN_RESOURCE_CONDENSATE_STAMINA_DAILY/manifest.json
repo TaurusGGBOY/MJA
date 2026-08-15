@@ -1,0 +1,65 @@
+{
+  "schema_version": 2,
+  "task_id": "JIANLIN_RESOURCE_CONDENSATE_STAMINA_DAILY",
+  "reference_size": [1280, 720],
+  "cases": {
+    "entry": {
+      "image": "entry.png",
+      "expected_page": "home",
+      "expected_targets": ["painting_scroll_entry"],
+      "expected_status": null
+    },
+    "startup_loading": {
+      "image": "entry.png",
+      "expected_page": "loading_or_unknown",
+      "expected_targets": [],
+      "expected_status": "failed",
+      "reason": "a loading or black frame cannot satisfy a business postcondition"
+    },
+    "actionable": {
+      "image": "actionable.png",
+      "expected_page": "jianlin_page",
+      "expected_targets": ["jianlin_buy_confirm"],
+      "expected_status": null
+    },
+    "preexisting_done": {
+      "image": "completed.png",
+      "expected_page": "jianlin_page",
+      "expected_targets": ["jianlin_done"],
+      "expected_status": "failed",
+      "reason": "the old daily-list green tick is not evidence of a fresh condensate challenge"
+    },
+    "existing_daily_page": {
+      "screenshot": "2026.08.11-16.31.15.917_MJA_JIANLIN_DAILY_PAGE_PROBE.png",
+      "expected_page": "daily.page",
+      "expected_targets": ["jianlin.daily.page"],
+      "expected_status": "failed",
+      "reason": "an existing daily page without a fresh target-row action must not pass"
+    },
+    "existing_daily_page_after_scroll": {
+      "screenshot": "2026.08.11-16.34.45.688_MJA_JIANLIN_SCROLL_DAILY_JIANLIN.png",
+      "expected_page": "daily.page",
+      "expected_targets": ["jianlin.daily.page"],
+      "expected_status": "failed",
+      "reason": "scrolling or observing an old page is not a condensate challenge"
+    },
+    "fresh_condensate_result": {
+      "screenshot": "fresh_capture_required",
+      "expected_page": "jianlin.battle.result",
+      "expected_targets": ["jianlin.battle.result.close"],
+      "expected_status": "success_only_after_action_chain",
+      "required_actions": [
+        "select_jianlin_condensate",
+        "challenge_condensate",
+        "start_jianlin_battle",
+        "close_condensate_result"
+      ]
+    },
+    "danger": {
+      "image": "danger.png",
+      "expected_page": "jianlin_page",
+      "expected_targets": ["unknown_dialog"],
+      "expected_status": "failed"
+    }
+  }
+}

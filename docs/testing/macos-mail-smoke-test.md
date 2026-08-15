@@ -16,17 +16,20 @@ install/.venv/bin/ruff check agent tools tests
 install/.venv/bin/python -m pytest -q
 ```
 
-预期：安装验证、Ruff 和测试全部成功；模板采集完成前，pipeline 静态测试会明确 skip，并在 7 个实机 PNG 采集后自动转为通过。
+预期：安装验证、Ruff 和测试全部成功。运行前置检查必须先把游戏窗口调整并验证为 `1280×720`；如果 macOS Accessibility 拒绝调整，任务必须以 `DISPLAY_CONTRACT_MISMATCH` 安全失败，不能降低阈值或使用 `923×720` 背景画面继续运行。
 
 ## 模板采集
 
-先执行：
+先执行窗口前置检查：
 
 ```bash
 install/.venv/bin/python -m agent.pretask
+osascript -e 'tell application "System Events" to tell process "ProductName" to tell window 1 to get {position, size}'
 MJA_WINDOW_ID=$(install/.venv/bin/python -c 'import json; print(json.load(open(".mja-state/window.json"))["snapshot"]["window_id"])')
 install/.venv/bin/python -m tools.capture_templates capture home --window-id "$MJA_WINDOW_ID"
 ```
+
+只有窗口尺寸验证为 `1280×720` 后才允许采集模板。模板采集工具默认拒绝非 canonical calibration；`capture_screen` 可以单独用于诊断非标准帧，但诊断帧不能写入业务 PNG。
 
 手动打开功能面板后执行：
 

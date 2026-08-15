@@ -1,56 +1,126 @@
 {
   "interface_version": 2,
-  "name": "mja",
-  "label": "对决剑之川 MJA",
-  "title": "对决！剑之川 · MJA",
-  "version": "0.1.0",
-  "description": "macOS 前台邮件菜单闭环测试。不会领取邮件、领取奖励或执行其他游戏操作。",
-  "license": "Private project",
+  "name": "MJA",
+  "retired_tasks": [
+    "BREAK_ARRAY_MARTIAL_DAILY"
+  ],
   "controller": [
     {
-      "name": "macos",
-      "label": "macOS 原生窗口",
-      "type": "MacOS",
+      "name": "android",
+      "label": "Android 模拟器",
+      "description": "通过 ADB 连接本机 Android 模拟器",
+      "type": "Adb",
       "display_short_side": 720,
-      "display_raw": false,
-      "macos": {
-        "title_regex": "^对决！剑之川$",
-        "screencap": "ScreenCaptureKit",
-        "input": "GlobalEvent"
-      }
+      "display_raw": false
     }
   ],
   "resource": [
     {
-      "name": "mja",
-      "label": "MJA 安全邮件测试资源",
+      "name": "mja_android",
+      "label": "MJA Android 模拟器资源",
       "path": [
-        "resource"
+        "./resource/base"
       ],
       "controller": [
-        "macos"
-      ]
-    }
-  ],
-  "task": [
-    {
-      "name": "mail_smoke_test",
-      "label": "邮件菜单闭环测试",
-      "entry": "MJA_Start",
-      "default_check": true,
-      "resource": [
-        "mja"
-      ],
-      "controller": [
-        "macos"
+        "android"
       ]
     }
   ],
   "agent": {
-    "child_exec": ".venv/bin/python3",
+    "child_exec": "python",
     "child_args": [
-      "agent/main.py"
+      "{PROJECT_DIR}/agent/main.py"
     ],
-    "identifier": "mja-python-agent"
-  }
+    "identifier": "mja_agent"
+  },
+  "group": [
+    {
+      "name": "启动",
+      "default_expand": true
+    },
+    {
+      "name": "日常",
+      "default_expand": true
+    },
+    {
+      "name": "周常",
+      "default_expand": true
+    },
+    {
+      "name": "工具",
+      "default_expand": false
+    }
+  ],
+  "import": [
+    "tasks/游戏启动.json",
+    "tasks/日常/MAIL_REWARD_DAILY.json",
+    "tasks/日常/SHOP_FREE_GIFT_DAILY.json",
+    "tasks/日常/BUY_TEA_DAILY.json",
+    "tasks/日常/FREE_APPRAISAL_DAILY.json",
+    "tasks/日常/TRIAL_SWORD_DAILY.json",
+    "tasks/日常/HERO_DISPATCH_DAILY.json",
+    "tasks/日常/COLLECTION_DEPLOYMENT_DAILY.json",
+    "tasks/日常/WEEKLY_FREE_GIFT_MONDAY.json",
+    "tasks/日常/SHADOW_RUINS_DAILY.json",
+    "tasks/日常/SPEND_CONDENSATE_DAILY.json",
+    "tasks/日常/MARTIAL_STUDY_BREAKTHROUGH_DAILY.json",
+    "tasks/日常/EAT_STAMINA_FOOD_DAILY.json",
+    "tasks/日常/EQUIPMENT_DECOMPOSE_DAILY.json",
+    "tasks/日常/DUNGEON_SWEEP_DAILY.json",
+    "tasks/日常/JIANLIN_RESOURCE_CONDENSATE_STAMINA_DAILY.json",
+    "tasks/日常/RING_CHALLENGE_DAILY.json",
+    "tasks/日常/BREAK_ARRAY_MARTIAL_DAILY.json",
+    "tasks/日常/GUILD_ACTIVITY_CHALLENGE_DAILY.json",
+    "tasks/日常/GUILD_AFFAIRS_DAILY.json",
+    "tasks/日常/GUILD_DONATION_DAILY.json",
+    "tasks/日常/DAILY_TASK_REWARD_CLAIM_DAILY.json",
+    "tasks/日常/BATTLE_PASS_REWARD_DAILY.json"
+  ],
+  "task": [],
+  "option": {},
+  "preset": [
+    {
+      "name": "日常-简化版",
+      "task": [
+        {"name": "GAME_START", "enabled": true},
+        {"name": "MAIL_REWARD_DAILY", "enabled": true},
+        {"name": "SHOP_FREE_GIFT_DAILY", "enabled": true},
+        {"name": "FREE_APPRAISAL_DAILY", "enabled": true},
+        {"name": "TRIAL_SWORD_DAILY", "enabled": true},
+        {"name": "HERO_DISPATCH_DAILY", "enabled": true},
+        {"name": "COLLECTION_DEPLOYMENT_DAILY", "enabled": true},
+        {"name": "WEEKLY_FREE_GIFT_MONDAY", "enabled": true},
+        {"name": "DAILY_TASK_REWARD_CLAIM_DAILY", "enabled": true},
+        {"name": "BATTLE_PASS_REWARD_DAILY", "enabled": true}
+      ]
+    },
+    {
+      "name": "日常-完整版",
+      "task": [
+        {"name": "GAME_START", "enabled": true},
+        {"name": "MAIL_REWARD_DAILY", "enabled": true},
+        {"name": "SHOP_FREE_GIFT_DAILY", "enabled": true},
+        {"name": "BUY_TEA_DAILY", "enabled": true},
+        {"name": "FREE_APPRAISAL_DAILY", "enabled": true},
+        {"name": "TRIAL_SWORD_DAILY", "enabled": true},
+        {"name": "HERO_DISPATCH_DAILY", "enabled": true},
+        {"name": "COLLECTION_DEPLOYMENT_DAILY", "enabled": true},
+        {"name": "WEEKLY_FREE_GIFT_MONDAY", "enabled": true},
+        {"name": "SHADOW_RUINS_DAILY", "enabled": true},
+        {"name": "SPEND_CONDENSATE_DAILY", "enabled": true},
+        {"name": "MARTIAL_STUDY_BREAKTHROUGH_DAILY", "enabled": true},
+        {"name": "EAT_STAMINA_FOOD_DAILY", "enabled": true},
+        {"name": "EQUIPMENT_DECOMPOSE_DAILY", "enabled": true},
+        {"name": "DUNGEON_SWEEP_DAILY", "enabled": true},
+        {"name": "JIANLIN_RESOURCE_CONDENSATE_STAMINA_DAILY", "enabled": true},
+        {"name": "RING_CHALLENGE_DAILY", "enabled": true},
+        {"name": "BREAK_ARRAY_MARTIAL_DAILY", "enabled": false},
+        {"name": "GUILD_ACTIVITY_CHALLENGE_DAILY", "enabled": true},
+        {"name": "GUILD_AFFAIRS_DAILY", "enabled": true},
+        {"name": "GUILD_DONATION_DAILY", "enabled": true},
+        {"name": "DAILY_TASK_REWARD_CLAIM_DAILY", "enabled": true},
+        {"name": "BATTLE_PASS_REWARD_DAILY", "enabled": true}
+      ]
+    }
+  ]
 }

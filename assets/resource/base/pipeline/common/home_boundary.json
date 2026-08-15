@@ -1,0 +1,35 @@
+{
+  "MJA_HOME_BOUNDARY": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["MJA_GAME_HOME_PAGE"],
+        "box_index": 0
+      }
+    },
+    "timeout": 5000,
+    "max_hit": 1,
+    "action": "Custom",
+    "custom_action": "CompleteTaskBoundary",
+    "custom_action_param": {
+      "boundary": "home"
+    },
+    "next": ["MJA_COMMON_STOP"],
+    "on_error": ["MJA_HOME_BOUNDARY_FAILURE"]
+  },
+  "MJA_HOME_BOUNDARY_FAILURE": {
+    "recognition": "DirectHit",
+    "timeout": 1000,
+    "max_hit": 1,
+    "action": "Custom",
+    "custom_action": "RecordActiveTaskFailure",
+    "custom_action_param": {
+      "postcondition": "home.boundary",
+      "error_code": "HOME_BOUNDARY_COMPLETION_FAILED",
+      "native_fail_after_record": true
+    },
+    "status": "failed",
+    "Abort": true,
+    "next": ["MJA_COMMON_ABORT"]
+  }
+}

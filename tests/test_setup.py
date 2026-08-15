@@ -12,12 +12,16 @@ from pathlib import Path
 import pytest
 
 from tools.setup import (
+    _assemble_install_in_place,
     assemble_install,
     assert_supported_platform,
+    build_android_maapi_cli,
     ensure_venv,
     extract_archive,
     overlay_patched_macos_control_unit,
+    _preserved_android_control_unit,
     stream_download,
+    sync_project_payload,
     verify_download,
 )
 
@@ -149,6 +153,117 @@ def test_ensure_venv_reuses_existing_python_without_recreating(tmp_path: Path) -
 
     assert result == python
     assert calls == []
+
+
+def test_assemble_emits_daily_workflow_manifest(tmp_path: Path) -> None:
+    project = tmp_path / "project"
+    (project / "assets").mkdir(parents=True)
+    (project / "assets" / "interface.json").write_text(
+        json.dumps(
+            {
+                "task": [
+                    {
+                        "name": "daily_all",
+                        "entry": "MJA_Daily_All",
+                        "resource": ["mja_android"],
+                        "controller": ["android"],
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    install = tmp_path / "install"
+    _assemble_install_in_place(install, {}, project_root=project)
+    manifest = json.loads((install / "mja-workflow-manifest.json").read_text())
+    assert manifest["resource"] == "mja_android"
+    assert manifest["controller"] == "android"
+    assert manifest["task_registry"][0]["name"] == "daily_all"
+
+
+def test_assemble_replaces_stale_android_resource_paths(tmp_path: Path) -> None:
+    project = tmp_path / "project"
+    source_pipeline = (
+        project / "assets" / "resource_android" / "pipeline" / "daily"
+    )
+    source_pipeline.mkdir(parents=True)
+    (source_pipeline / "trial_sword_daily.json").write_text(
+        '{"MJA_Daily_TRIAL_SWORD_DAILY": {"recognition": "DirectHit"}}\n',
+        encoding="utf-8",
+    )
+    install = tmp_path / "install"
+    stale_pipeline = install / "resource_android" / "pipeline"
+    stale_pipeline.mkdir(parents=True)
+    (stale_pipeline / "trial_sword_daily.json").write_text(
+        '{"MJA_Daily_TRIAL_SWORD_DAILY": {"recognition": "DirectHit"}}\n',
+        encoding="utf-8",
+    )
+    (stale_pipeline / "old_location.json").write_text(
+        '{"MJA_Daily_TRIAL_SWORD_DAILY": {"recognition": "DirectHit"}}\n',
+        encoding="utf-8",
+    )
+
+    _assemble_install_in_place(install, {}, project_root=project)
+
+    assert not (install / "resource_android" / "pipeline" / "old_location.json").exists()
+    assert (
+        install
+        / "resource_android"
+        / "pipeline"
+        / "daily"
+        / "trial_sword_daily.json"
+    ).is_file()
+
+
+def test_sync_project_payload_preserves_runtime_and_replaces_project_files(
+    tmp_path: Path,
+) -> None:
+    project = tmp_path / "project"
+    daily = project / "assets/resource_android/pipeline/daily"
+    daily.mkdir(parents=True)
+    (daily / "daily_all.json").write_text(
+        '{"MJA_Daily_All":{"recognition":"DirectHit"}}\n',
+        encoding="utf-8",
+    )
+    (project / "assets/interface.json").write_text(
+        json.dumps(
+            {
+                "task": [
+                    {
+                        "name": "daily_all",
+                        "entry": "MJA_Daily_All",
+                        "resource": ["mja_android"],
+                        "controller": ["android"],
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    (project / "agent").mkdir()
+    (project / "agent/new.py").write_text("VALUE = 1\n", encoding="utf-8")
+    install = project / "install"
+    (install / ".venv/bin").mkdir(parents=True)
+    (install / ".venv/bin/python3").write_text("runtime", encoding="utf-8")
+    (install / "runtime/maafw").mkdir(parents=True)
+    (install / "runtime/maafw/VERSION").write_text("5.12.2\n", encoding="utf-8")
+    (install / "agent").mkdir()
+    (install / "agent/stale.py").write_text("stale", encoding="utf-8")
+
+    sync_project_payload(project, install)
+
+    assert (install / ".venv/bin/python3").read_text(encoding="utf-8") == "runtime"
+    assert (install / "runtime/maafw/VERSION").read_text(encoding="utf-8") == "5.12.2\n"
+    assert (install / "agent/new.py").is_file()
+    assert not (install / "agent/stale.py").exists()
+    assert (install / "resource_android/pipeline/daily/daily_all.json").is_file()
+    manifest = json.loads((install / "mja-workflow-manifest.json").read_text())
+    assert manifest["task_registry"][0]["entry"] == "MJA_Daily_All"
+
+
+def test_sync_project_payload_requires_existing_install(tmp_path: Path) -> None:
+    with pytest.raises(RuntimeError, match="existing install is required"):
+        sync_project_payload(tmp_path, tmp_path / "missing")
 
 
 def test_artifact_from_manifest_requires_all_integrity_fields(tmp_path: Path) -> None:
@@ -324,6 +439,78 @@ def test_assemble_copies_maafw_bin_runtime_files_beside_cli(tmp_path: Path) -> N
     assert (install / "MaaPiCli").read_bytes() == b"cli"
     assert (install / "libMaaToolkit.dylib").read_bytes() == b"toolkit"
     assert (install / CONTROL_UNIT_NAME).read_bytes() == b"patched-control-unit"
+
+
+def test_build_android_maapi_cli_uses_pinned_build_script_when_source_is_given(
+    tmp_path: Path,
+) -> None:
+    install = tmp_path / "install"
+    install.mkdir()
+    (install / "MaaPiCli").write_bytes(b"old-cli")
+    calls: list[list[str]] = []
+
+    def runner(argv: list[str], **_: object) -> None:
+        calls.append(argv)
+        (install / "MaaPiCli").write_bytes(b"new-cli")
+
+    build_android_maapi_cli(
+        install,
+        source=tmp_path / "clean-source",
+        official_bin=install,
+        runner=runner,
+    )
+
+    assert calls == [[
+        os.fspath(Path(__file__).resolve().parents[1] / "native/maafw-android-cli/build.sh"),
+        "--source",
+        os.fspath(tmp_path / "clean-source"),
+        "--official-bin",
+        os.fspath(install),
+        "--output",
+        os.fspath(install),
+    ]]
+
+
+def test_preserved_android_control_unit_prefers_previous_patched_runtime(
+    tmp_path: Path,
+) -> None:
+    previous = tmp_path / "runtime/maafw.previous/bin/libMaaAdbControlUnit.dylib"
+    previous.parent.mkdir(parents=True)
+    previous.write_bytes(b"patched-adb-control-unit")
+    (tmp_path / "libMaaAdbControlUnit.dylib").write_bytes(b"official-adb-control-unit")
+    (tmp_path / "MaaPiCli.android.manifest.json").write_text(
+        json.dumps({"schema_version": 1}),
+        encoding="utf-8",
+    )
+
+    payload = _preserved_android_control_unit(tmp_path)
+
+    assert payload is not None
+    assert payload[0] == b"patched-adb-control-unit"
+
+
+def test_assemble_invokes_android_maapi_validation_hook(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    project = tmp_path / "project"
+    _make_bundle(
+        project / "vendor" / "maafw" / "v5.12.2" / "macos-arm64",
+        b"official-base",
+        b"patched-control-unit",
+    )
+    source = tmp_path / "maafw"
+    (source / "bin").mkdir(parents=True)
+    (source / "bin" / "MaaPiCli").write_bytes(b"cli")
+    (source / "bin" / CONTROL_UNIT_NAME).write_bytes(b"official-base")
+    calls: list[Path] = []
+    monkeypatch.setattr("tools.setup.build_android_maapi_cli", lambda root: calls.append(root))
+
+    install = tmp_path / "install"
+    assemble_install(install, {"maafw": source}, project_root=project)
+
+    assert len(calls) == 1
+    assert calls[0].parent == install.parent
+    assert calls[0].name.startswith(f".{install.name}.staging-")
 
 
 def test_assemble_preflights_bundle_before_mutating_existing_install(tmp_path: Path) -> None:

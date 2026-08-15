@@ -1,0 +1,6 @@
+diff --git a/app/core/runner/task_flow.py b/app/core/runner/task_flow.py
+--- a/app/core/runner/task_flow.py
++++ b/app/core/runner/task_flow.py
+@@
+-            return
++            return False

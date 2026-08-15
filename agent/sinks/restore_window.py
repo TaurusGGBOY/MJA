@@ -7,14 +7,6 @@ from typing import Any, Callable, Protocol
 
 from agent.errors import ErrorCode, MJAError
 
-try:  # MaaFw is installed in the assembled runtime, not during source tests.
-    from maa.tasker import TaskerEventSink
-except ImportError:  # pragma: no cover - exercised only outside the runtime
-    class TaskerEventSink:  # type: ignore[no-redef]
-        """Small import-time fallback so source-level tests need no MaaFw binary."""
-
-        pass
-
 
 class Diagnostics(Protocol):
     directory: Path
@@ -29,6 +21,10 @@ class Diagnostics(Protocol):
 Restore = Callable[[], None]
 ScreenWriter = Callable[[Any, Path], None]
 
+
+def _noop_restore() -> None:
+    """Default for MFW's no-argument embedded-agent component loader."""
+
 TERMINAL_MESSAGES = frozenset({"Tasker.Task.Succeeded", "Tasker.Task.Failed"})
 NODE_FAILURE_CODES = {
     "MJA_Start": ErrorCode.HOME_RECOGNITION_TIMEOUT,
@@ -41,8 +37,15 @@ NODE_FAILURE_CODES = {
 _LOGGER = logging.getLogger(__name__)
 
 
-class RestoreWindowSink(TaskerEventSink):
-    """Close one MJA task by recording its result and restoring the window.
+class RestoreWindowSink:
+    """Legacy diagnostic recorder retained for source-level compatibility.
+
+    This class is intentionally no longer a ``TaskerEventSink``.  MFW scans
+    every Python module under ``agent`` when assembling embedded components,
+    so keeping the old sink subclass would register a second terminal-event
+    boundary next to the native ``TaskFlowStopSink``.  The class remains
+    importable for old diagnostic tests, but it cannot be installed as an MFW
+    sink.
 
     MaaFramework can deliver terminal notifications more than once when a
     tasker is shut down. ``_terminal_task_ids`` is therefore updated before
@@ -52,14 +55,13 @@ class RestoreWindowSink(TaskerEventSink):
 
     def __init__(
         self,
-        restore: Restore,
+        restore: Restore | None = None,
         diagnostics: Diagnostics | None = None,
         *,
         screen_directory: Path | None = None,
         screen_writer: ScreenWriter | None = None,
     ) -> None:
-        super().__init__()
-        self._restore = restore
+        self._restore = restore or _noop_restore
         self._diagnostics = diagnostics
         self._screen_directory = Path(screen_directory) if screen_directory else None
         self._screen_writer = screen_writer or self._write_screen

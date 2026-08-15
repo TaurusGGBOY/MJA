@@ -2,7 +2,7 @@
 name = "mja"
 version = "0.1.0"
 description = "MaaFramework automation for the macOS iOS build of 对决剑之川"
-requires-python = ">=3.14,<3.15"
+requires-python = ">=3.12,<3.15"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -10,7 +10,7 @@ pythonpath = ["."]
 
 [tool.ruff]
 line-length = 100
-target-version = "py314"
+target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E", "F", "I"]

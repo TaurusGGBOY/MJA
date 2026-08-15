@@ -1,0 +1,11 @@
+{
+  "task": [
+    {
+      "name": "MARTIAL_STUDY_BREAKTHROUGH_DAILY",
+      "label": "武学研习突破",
+      "default_check": true,
+      "group": ["日常"],
+      "entry": "MJA_MARTIAL_STUDY_BREAKTHROUGH_DAILY_START"
+    }
+  ]
+}

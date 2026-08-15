@@ -1,0 +1,11 @@
+{
+  "task": [
+    {
+      "name": "TRIAL_SWORD_DAILY",
+      "label": "每日试剑",
+      "default_check": true,
+      "group": ["日常"],
+      "entry": "MJA_TRIAL_SWORD_DAILY_START"
+    }
+  ]
+}

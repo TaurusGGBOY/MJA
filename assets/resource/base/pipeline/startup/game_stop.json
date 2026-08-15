@@ -1,0 +1,6 @@
+{
+  "MJA_GAME_STOP": {
+    "action": "StopApp",
+    "package": "com.hanjiasongshu.dr22"
+  }
+}

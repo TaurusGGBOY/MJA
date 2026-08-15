@@ -1,0 +1,1069 @@
+{
+  "MJA_BATTLE_PASS_REWARD_DAILY_START": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "BeginTask",
+    "custom_action_param": {
+      "task_id": "BATTLE_PASS_REWARD_DAILY"
+    },
+    "max_hit": 1,
+    "next": [
+      "MJA_BP_RESUME_REWARD_PROBE",
+      "MJA_BP_RESUME_ITEM_PROBE",
+      "MJA_BP_TASKS_PAGE_PROBE",
+      "MJA_BP_REWARDS_START_PROBE",
+      "MJA_BP_PAGE_PROBE",
+      "MJA_BP_HOME_PROBE"
+    ],
+    "on_error": ["MJA_BP_RECORD_FAILURE"]
+  },
+  "MJA_BP_STATE_RESOLVE": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "next": [
+      "MJA_BP_RESUME_REWARD_PROBE",
+      "MJA_BP_RESUME_ITEM_PROBE",
+      "MJA_BP_TASKS_PAGE_PROBE",
+      "MJA_BP_REWARDS_START_PROBE",
+      "MJA_BP_PAGE_PROBE",
+      "MJA_BP_HOME_PROBE"
+    ],
+    "on_error": ["MJA_BP_RECORD_FAILURE"]
+  },
+  "MJA_BP_RESUME_REWARD_PROBE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["battle_pass.reward_popup", "battle_pass.reward_popup_close"],
+        "box_index": 0
+      }
+    },
+    "action": "DoNothing",
+    "next": ["MJA_BP_RESUME_CLOSE_REWARD"],
+    "on_error": ["MJA_BP_RECORD_FAILURE"]
+  },
+  "MJA_BP_RESUME_ITEM_PROBE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["battle_pass.item_popup", "battle_pass.item_popup_close"],
+        "box_index": 0
+      }
+    },
+    "action": "DoNothing",
+    "next": ["MJA_BP_RESUME_CLOSE_ITEM"],
+    "on_error": ["MJA_BP_RECORD_FAILURE"]
+  },
+  "MJA_BP_RESUME_CLOSE_REWARD": {
+    "max_hit": 1,
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["battle_pass.reward_popup", "battle_pass.reward_popup_close"],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "BATTLE_PASS_REWARD_DAILY",
+      "action_id": "close_reward_popup",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "battle_pass.reward_popup",
+        "target_name": "battle_pass.reward_popup_close"
+      }
+    },
+    "next": ["MJA_BP_STATE_RESOLVE"],
+    "on_error": ["MJA_BP_RECORD_FAILURE"],
+    "retry_times": 0
+  },
+  "MJA_BP_RESUME_CLOSE_ITEM": {
+    "max_hit": 1,
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["battle_pass.item_popup", "battle_pass.item_popup_close"],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "BATTLE_PASS_REWARD_DAILY",
+      "action_id": "close_reward_popup",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "battle_pass.item_popup",
+        "target_name": "battle_pass.item_popup_close"
+      }
+    },
+    "next": ["MJA_BP_STATE_RESOLVE"],
+    "on_error": ["MJA_BP_RECORD_FAILURE"],
+    "retry_times": 0
+  },
+  "MJA_BP_HOME_PROBE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["battle_pass.home.page", "battle_pass.open"],
+        "box_index": 0
+      }
+    },
+    "timeout": 8000,
+    "action": "DoNothing",
+    "next": ["MJA_BP_OPEN_BATTLE_PASS"],
+    "on_error": ["MJA_BP_RECORD_FAILURE"]
+  },
+  "MJA_BP_OPEN_BATTLE_PASS": {
+    "max_hit": 1,
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["battle_pass.home.page", "battle_pass.open"],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "BATTLE_PASS_REWARD_DAILY",
+      "action_id": "open_battle_pass",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "battle_pass.home.page",
+        "target_name": "battle_pass.open"
+      }
+    },
+    "next": [
+      "MJA_BP_TASKS_PAGE_PROBE",
+      "MJA_BP_REWARDS_START_PROBE",
+      "MJA_BP_PAGE_PROBE"
+    ],
+    "on_error": ["MJA_BP_RECORD_FAILURE"],
+    "retry_times": 0
+  },
+  "MJA_BP_PAGE_PROBE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["battle_pass.page", "battle_pass.tasks_tab"],
+        "box_index": 0
+      }
+    },
+    "timeout": 8000,
+    "action": "DoNothing",
+    "next": ["MJA_BP_OPEN_TASKS"],
+    "on_error": ["MJA_BP_RECORD_FAILURE"]
+  },
+  "MJA_BP_REWARDS_START_PROBE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["battle_pass.rewards", "battle_pass.tasks_tab"],
+        "box_index": 0
+      }
+    },
+    "timeout": 8000,
+    "action": "DoNothing",
+    "next": ["MJA_BP_OPEN_TASKS"],
+    "on_error": ["MJA_BP_RECORD_FAILURE"]
+  },
+  "MJA_BP_OPEN_TASKS": {
+    "max_hit": 1,
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["battle_pass.page", "battle_pass.tasks_tab"],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "BATTLE_PASS_REWARD_DAILY",
+      "action_id": "open_battle_pass_tasks",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "battle_pass.page",
+        "target_name": "battle_pass.tasks_tab"
+      }
+    },
+    "next": ["MJA_BP_TASKS_PAGE_PROBE"],
+    "on_error": ["MJA_BP_RECORD_FAILURE"],
+    "retry_times": 0
+  },
+  "MJA_BP_TASKS_PAGE_PROBE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["battle_pass.tasks"],
+        "box_index": 0
+      }
+    },
+    "timeout": 8000,
+    "action": "DoNothing",
+    "next": [
+      "MJA_BP_TASK_CLAIM_LOOP",
+      "MJA_BP_TASK_INITIAL_NO_CLAIM_PROBE"
+    ],
+    "on_error": ["MJA_BP_TASKS_AMBIGUOUS"]
+  },
+  "MJA_BP_TASK_CLAIM_LOOP": {
+    "max_hit": 50,
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["battle_pass.tasks", "battle_pass.task_reward_claim"],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "BATTLE_PASS_REWARD_DAILY",
+      "action_id": "claim_task_reward",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "battle_pass.tasks",
+        "target_name": "battle_pass.task_reward_claim"
+      }
+    },
+    "next": [
+      "MJA_BP_TASK_REWARD_PROBE",
+      "MJA_BP_TASK_ITEM_PROBE",
+      "MJA_BP_TASK_REWARD_VERIFY"
+    ],
+    "on_error": ["MJA_BP_RECORD_FAILURE"],
+    "retry_times": 0
+  },
+  "MJA_BP_TASK_CLAIM_LOOP_AFTER_CLAIM": {
+    "max_hit": 50,
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["battle_pass.tasks", "battle_pass.task_reward_claim"],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "BATTLE_PASS_REWARD_DAILY",
+      "action_id": "claim_task_reward",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "battle_pass.tasks",
+        "target_name": "battle_pass.task_reward_claim"
+      }
+    },
+    "next": [
+      "MJA_BP_TASK_REWARD_PROBE",
+      "MJA_BP_TASK_ITEM_PROBE",
+      "MJA_BP_TASK_REWARD_VERIFY"
+    ],
+    "on_error": ["MJA_BP_RECORD_FAILURE"],
+    "retry_times": 0
+  },
+  "MJA_BP_TASK_REWARD_PROBE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["battle_pass.reward_popup", "battle_pass.reward_popup_close"],
+        "box_index": 0
+      }
+    },
+    "action": "DoNothing",
+    "next": ["MJA_BP_TASK_CLOSE_REWARD"],
+    "on_error": ["MJA_BP_RECORD_FAILURE"]
+  },
+  "MJA_BP_TASK_ITEM_PROBE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["battle_pass.item_popup", "battle_pass.item_popup_close"],
+        "box_index": 0
+      }
+    },
+    "action": "DoNothing",
+    "next": ["MJA_BP_TASK_CLOSE_ITEM"],
+    "on_error": ["MJA_BP_RECORD_FAILURE"]
+  },
+  "MJA_BP_TASK_CLOSE_REWARD": {
+    "max_hit": 50,
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["battle_pass.reward_popup", "battle_pass.reward_popup_close"],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "BATTLE_PASS_REWARD_DAILY",
+      "action_id": "close_reward_popup",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "battle_pass.reward_popup",
+        "target_name": "battle_pass.reward_popup_close"
+      }
+    },
+    "next": ["MJA_BP_TASK_REWARD_VERIFY"],
+    "on_error": ["MJA_BP_RECORD_FAILURE"],
+    "retry_times": 0
+  },
+  "MJA_BP_TASK_CLOSE_ITEM": {
+    "max_hit": 50,
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["battle_pass.item_popup", "battle_pass.item_popup_close"],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "BATTLE_PASS_REWARD_DAILY",
+      "action_id": "close_reward_popup",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "battle_pass.item_popup",
+        "target_name": "battle_pass.item_popup_close"
+      }
+    },
+    "next": ["MJA_BP_TASK_REWARD_VERIFY"],
+    "on_error": ["MJA_BP_RECORD_FAILURE"],
+    "retry_times": 0
+  },
+  "MJA_BP_TASK_REWARD_VERIFY": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["battle_pass.tasks"],
+        "box_index": 0
+      }
+    },
+    "timeout": 8000,
+    "action": "DoNothing",
+    "next": [
+      "MJA_BP_TASK_CLAIM_LOOP_AFTER_CLAIM",
+      "MJA_BP_TASK_AFTER_CLAIM_NO_CLAIM_PROBE"
+    ],
+    "on_error": ["MJA_BP_RECORD_FAILURE"]
+  },
+  "MJA_BP_TASK_INITIAL_NO_CLAIM_PROBE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["battle_pass.tasks", "battle_pass.task_no_claimable"],
+        "box_index": 1
+      }
+    },
+    "action": "DoNothing",
+    "next": ["MJA_BP_OPEN_REWARDS_INITIAL"],
+    "on_error": ["MJA_BP_TASKS_AMBIGUOUS"]
+  },
+  "MJA_BP_TASK_AFTER_CLAIM_NO_CLAIM_PROBE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["battle_pass.tasks", "battle_pass.task_no_claimable"],
+        "box_index": 1
+      }
+    },
+    "action": "DoNothing",
+    "next": ["MJA_BP_OPEN_REWARDS_MUTATED"],
+    "on_error": ["MJA_BP_TASKS_AMBIGUOUS"]
+  },
+  "MJA_BP_OPEN_REWARDS_INITIAL": {
+    "max_hit": 1,
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["battle_pass.tasks", "battle_pass.rewards_tab"],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "BATTLE_PASS_REWARD_DAILY",
+      "action_id": "open_battle_pass_rewards",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "battle_pass.tasks",
+        "target_name": "battle_pass.rewards_tab"
+      }
+    },
+    "next": ["MJA_BP_INITIAL_REWARDS_PAGE_PROBE"],
+    "on_error": ["MJA_BP_REWARDS_AMBIGUOUS"],
+    "retry_times": 0
+  },
+  "MJA_BP_OPEN_REWARDS_MUTATED": {
+    "max_hit": 1,
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["battle_pass.tasks", "battle_pass.rewards_tab"],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "BATTLE_PASS_REWARD_DAILY",
+      "action_id": "open_battle_pass_rewards",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "battle_pass.tasks",
+        "target_name": "battle_pass.rewards_tab"
+      }
+    },
+    "next": ["MJA_BP_MUTATED_REWARDS_PAGE_PROBE"],
+    "on_error": ["MJA_BP_REWARDS_AMBIGUOUS"],
+    "retry_times": 0
+  },
+  "MJA_BP_INITIAL_REWARDS_PAGE_PROBE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["battle_pass.rewards", "battle_pass.close"],
+        "box_index": 0
+      }
+    },
+    "timeout": 8000,
+    "action": "DoNothing",
+    "next": [
+      "MJA_BP_BASIC_CLAIM_LOOP",
+      "MJA_BP_INITIAL_BASIC_STATUS_PROBE",
+      "MJA_BP_INITIAL_BASIC_CHECK_PROBE"
+    ],
+    "on_error": ["MJA_BP_REWARDS_AMBIGUOUS"]
+  },
+  "MJA_BP_MUTATED_REWARDS_PAGE_PROBE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["battle_pass.rewards", "battle_pass.close"],
+        "box_index": 0
+      }
+    },
+    "timeout": 8000,
+    "action": "DoNothing",
+    "next": [
+      "MJA_BP_MUTATED_BASIC_CLAIM_LOOP",
+      "MJA_BP_MUTATED_BASIC_STATUS_PROBE",
+      "MJA_BP_MUTATED_BASIC_CHECK_PROBE"
+    ],
+    "on_error": ["MJA_BP_REWARDS_AMBIGUOUS"]
+  },
+  "MJA_BP_INITIAL_BASIC_STATUS_PROBE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["battle_pass.rewards", "battle_pass.basic_all_claimed"],
+        "box_index": 1
+      }
+    },
+    "action": "DoNothing",
+    "next": ["MJA_BP_CLOSE_ALREADY_COMPLETE"],
+    "on_error": ["MJA_BP_REWARDS_AMBIGUOUS"]
+  },
+  "MJA_BP_MUTATED_BASIC_STATUS_PROBE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["battle_pass.rewards", "battle_pass.basic_all_claimed"],
+        "box_index": 1
+      }
+    },
+    "action": "DoNothing",
+    "next": ["MJA_BP_CLOSE_SUCCESS"],
+    "on_error": ["MJA_BP_REWARDS_AMBIGUOUS"]
+  },
+  "MJA_BP_INITIAL_BASIC_CHECK_PROBE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["battle_pass.rewards", "battle_pass.basic_claimed_check"],
+        "box_index": 1
+      }
+    },
+    "action": "DoNothing",
+    "next": ["MJA_BP_CLOSE_ALREADY_COMPLETE"],
+    "on_error": ["MJA_BP_REWARDS_AMBIGUOUS"]
+  },
+  "MJA_BP_MUTATED_BASIC_CHECK_PROBE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["battle_pass.rewards", "battle_pass.basic_claimed_check"],
+        "box_index": 1
+      }
+    },
+    "action": "DoNothing",
+    "next": ["MJA_BP_CLOSE_SUCCESS"],
+    "on_error": ["MJA_BP_REWARDS_AMBIGUOUS"]
+  },
+  "MJA_BP_BASIC_CLAIM_LOOP": {
+    "max_hit": 50,
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["battle_pass.rewards", "battle_pass.basic_red_dot_reward"],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "BATTLE_PASS_REWARD_DAILY",
+      "action_id": "claim_basic_red_dot_reward",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "battle_pass.rewards",
+        "target_name": "battle_pass.basic_red_dot_reward"
+      }
+    },
+    "next": [
+      "MJA_BP_BASIC_REWARD_PROBE",
+      "MJA_BP_BASIC_ITEM_PROBE",
+      "MJA_BP_BASIC_REWARD_VERIFY"
+    ],
+    "on_error": ["MJA_BP_RECORD_FAILURE"],
+    "retry_times": 0
+  },
+  "MJA_BP_MUTATED_BASIC_CLAIM_LOOP": {
+    "max_hit": 50,
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["battle_pass.rewards", "battle_pass.basic_red_dot_reward"],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "BATTLE_PASS_REWARD_DAILY",
+      "action_id": "claim_basic_red_dot_reward",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "battle_pass.rewards",
+        "target_name": "battle_pass.basic_red_dot_reward"
+      }
+    },
+    "next": [
+      "MJA_BP_BASIC_REWARD_PROBE",
+      "MJA_BP_BASIC_ITEM_PROBE",
+      "MJA_BP_BASIC_REWARD_VERIFY"
+    ],
+    "on_error": ["MJA_BP_RECORD_FAILURE"],
+    "retry_times": 0
+  },
+  "MJA_BP_BASIC_REWARD_PROBE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["battle_pass.reward_popup", "battle_pass.reward_popup_close"],
+        "box_index": 0
+      }
+    },
+    "timeout": 12000,
+    "action": "DoNothing",
+    "next": ["MJA_BP_BASIC_CLOSE_REWARD"],
+    "on_error": ["MJA_BP_BASIC_REWARD_WAIT"]
+  },
+  "MJA_BP_BASIC_REWARD_WAIT": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "post_delay": 1000,
+    "max_hit": 12,
+    "next": ["MJA_BP_BASIC_REWARD_PROBE"],
+    "on_error": ["MJA_BP_RECORD_FAILURE"]
+  },
+  "MJA_BP_BASIC_ITEM_PROBE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["battle_pass.item_popup", "battle_pass.item_popup_close"],
+        "box_index": 0
+      }
+    },
+    "timeout": 12000,
+    "action": "DoNothing",
+    "next": ["MJA_BP_BASIC_CLOSE_ITEM"],
+    "on_error": ["MJA_BP_RECORD_FAILURE"]
+  },
+  "MJA_BP_BASIC_CLOSE_REWARD": {
+    "max_hit": 50,
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["battle_pass.reward_popup", "battle_pass.reward_popup_close"],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "BATTLE_PASS_REWARD_DAILY",
+      "action_id": "close_reward_popup",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "battle_pass.reward_popup",
+        "target_name": "battle_pass.reward_popup_close"
+      }
+    },
+    "next": ["MJA_BP_BASIC_REWARD_VERIFY"],
+    "on_error": ["MJA_BP_RECORD_FAILURE"],
+    "retry_times": 0
+  },
+  "MJA_BP_BASIC_CLOSE_ITEM": {
+    "max_hit": 50,
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["battle_pass.item_popup", "battle_pass.item_popup_close"],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "BATTLE_PASS_REWARD_DAILY",
+      "action_id": "close_reward_popup",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "battle_pass.item_popup",
+        "target_name": "battle_pass.item_popup_close"
+      }
+    },
+    "next": ["MJA_BP_BASIC_REWARD_VERIFY"],
+    "on_error": ["MJA_BP_RECORD_FAILURE"],
+    "retry_times": 0
+  },
+  "MJA_BP_BASIC_REWARD_VERIFY": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["battle_pass.rewards", "battle_pass.close"],
+        "box_index": 0
+      }
+    },
+    "timeout": 8000,
+    "action": "DoNothing",
+    "next": ["MJA_BP_MUTATED_REWARDS_PAGE_PROBE"],
+    "on_error": ["MJA_BP_RECORD_FAILURE"]
+  },
+  "MJA_BP_CLOSE_ALREADY_COMPLETE": {
+    "max_hit": 1,
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["battle_pass.rewards", "battle_pass.close"],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "BATTLE_PASS_REWARD_DAILY",
+      "action_id": "close_battle_pass",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "battle_pass.rewards",
+        "target_name": "battle_pass.close"
+      }
+    },
+    "next": ["MJA_BP_HOME_AFTER_ALREADY_COMPLETE"],
+    "on_error": ["MJA_BP_HOME_BOUNDARY_FAILURE"],
+    "retry_times": 0
+  },
+  "MJA_BP_CLOSE_SUCCESS": {
+    "max_hit": 1,
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["battle_pass.rewards", "battle_pass.close"],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "BATTLE_PASS_REWARD_DAILY",
+      "action_id": "close_battle_pass",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "battle_pass.rewards",
+        "target_name": "battle_pass.close"
+      }
+    },
+    "next": ["MJA_BP_HOME_AFTER_SUCCESS"],
+    "on_error": ["MJA_BP_HOME_BOUNDARY_FAILURE"],
+    "retry_times": 0
+  },
+  "MJA_BP_HOME_AFTER_ALREADY_COMPLETE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["battle_pass.home.page", "battle_pass.open"],
+        "box_index": 0
+      }
+    },
+    "timeout": 8000,
+    "action": "DoNothing",
+    "next": ["MJA_BP_ALL_CLAIMED"],
+    "on_error": ["MJA_BP_HOME_BOUNDARY_FAILURE"]
+  },
+  "MJA_BP_HOME_AFTER_SUCCESS": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["battle_pass.home.page", "battle_pass.open"],
+        "box_index": 0
+      }
+    },
+    "timeout": 8000,
+    "action": "DoNothing",
+    "next": ["MJA_BP_ALL_CLAIMED_SUCCESS"],
+    "on_error": ["MJA_BP_HOME_BOUNDARY_FAILURE"]
+  },
+  "MJA_BP_ALL_CLAIMED": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "RecordTaskOutcome",
+    "custom_action_param": {
+      "task_id": "BATTLE_PASS_REWARD_DAILY",
+      "status": "already_complete",
+      "postcondition": "battle_pass.no_task_or_basic_claimable"
+    },
+    "next": ["MJA_COMMON_STOP", "[JumpBack]MJA_GAME_START"]
+  },
+  "MJA_BP_ALL_CLAIMED_SUCCESS": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "RecordTaskOutcome",
+    "custom_action_param": {
+      "task_id": "BATTLE_PASS_REWARD_DAILY",
+      "status": "success",
+      "postcondition": "battle_pass.no_task_or_basic_claimable"
+    },
+    "next": ["MJA_COMMON_STOP", "[JumpBack]MJA_GAME_START"]
+  },
+  "MJA_BP_TASKS_AMBIGUOUS": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "RecordTaskOutcome",
+    "custom_action_param": {
+      "task_id": "BATTLE_PASS_REWARD_DAILY",
+      "status": "failed",
+      "postcondition": "BATTLE_PASS_TASKS_PAGE_AMBIGUOUS",
+      "error_code": "BATTLE_PASS_TASKS_PAGE_AMBIGUOUS",
+      "native_fail_after_record": true
+    },
+    "Abort": true,
+    "next": ["MJA_COMMON_ABORT"]
+
+  },
+  "MJA_BP_REWARDS_AMBIGUOUS": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "RecordTaskOutcome",
+    "custom_action_param": {
+      "task_id": "BATTLE_PASS_REWARD_DAILY",
+      "status": "failed",
+      "postcondition": "BATTLE_PASS_REWARDS_PAGE_AMBIGUOUS",
+      "error_code": "BATTLE_PASS_REWARDS_PAGE_AMBIGUOUS",
+      "native_fail_after_record": true
+    },
+    "Abort": true,
+    "next": ["MJA_COMMON_ABORT"]
+
+  },
+  "MJA_BP_HOME_BOUNDARY_FAILURE": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "RecordTaskOutcome",
+    "custom_action_param": {
+      "task_id": "BATTLE_PASS_REWARD_DAILY",
+      "status": "failed",
+      "postcondition": "home",
+      "error_code": "BATTLE_PASS_HOME_BOUNDARY_MISSING",
+      "native_fail_after_record": true
+    },
+    "Abort": true,
+    "next": ["MJA_COMMON_ABORT"]
+
+  },
+  "MJA_BP_RECORD_FAILURE": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "RecordTaskOutcome",
+    "custom_action_param": {
+      "task_id": "BATTLE_PASS_REWARD_DAILY",
+      "status": "failed",
+      "postcondition": "BATTLE_PASS_POSTCONDITION_MISSING",
+      "error_code": "BATTLE_PASS_POSTCONDITION_MISSING",
+      "native_fail_after_record": true
+    },
+    "Abort": true,
+    "next": ["MJA_COMMON_ABORT"]
+
+  },
+  "battle_pass.home.page": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "battle_pass.home.activity",
+          "battle_pass.home.pray",
+          "battle_pass.home.dungeon",
+          "battle_pass.home.painting"
+        ],
+        "box_index": 0
+      }
+    },
+    "action": "DoNothing"
+  },
+  "battle_pass.home.activity": {
+    "recognition": "OCR",
+    "expected": "^活动$",
+    "roi": [870, 45, 60, 40],
+    "action": "DoNothing"
+  },
+  "battle_pass.home.pray": {
+    "recognition": "OCR",
+    "expected": "^祈福$",
+    "roi": [990, 45, 55, 40],
+    "action": "DoNothing"
+  },
+  "battle_pass.home.dungeon": {
+    "recognition": "OCR",
+    "expected": "^副本$",
+    "roi": [1045, 45, 60, 40],
+    "action": "DoNothing"
+  },
+  "battle_pass.home.painting": {
+    "recognition": "OCR",
+    "expected": "^画卷$",
+    "roi": [1105, 45, 60, 40],
+    "action": "DoNothing"
+  },
+  "battle_pass.open": {
+    "recognition": "OCR",
+    "expected": "^战令$",
+    "roi": [800, 45, 80, 40],
+    "action": "DoNothing"
+  },
+  "battle_pass.page": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["battle_pass.title", "battle_pass.period"],
+        "box_index": 0
+      }
+    },
+    "action": "DoNothing"
+  },
+  "battle_pass.title": {
+    "recognition": "OCR",
+    "expected": "^战令$",
+    "roi": [40, 15, 130, 60],
+    "action": "DoNothing"
+  },
+  "battle_pass.period": {
+    "recognition": "OCR",
+    "expected": "^本期剩余时间.*$",
+    "roi": [160, 165, 320, 80],
+    "action": "DoNothing"
+  },
+  "battle_pass.tasks": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "battle_pass.page",
+          "battle_pass.tasks_tab",
+          "battle_pass.tasks_content"
+        ],
+        "box_index": 0
+      }
+    },
+    "action": "DoNothing"
+  },
+  "battle_pass.tasks_content": {
+    "recognition": "OCR",
+    "expected": ["^每周任务$", "^当期任务$", "^追赶任务$"],
+    "roi": [180, 610, 500, 100],
+    "action": "DoNothing"
+  },
+  "battle_pass.tasks_tab": {
+    "recognition": "OCR",
+    "expected": "^任务$",
+    "roi": [40, 165, 100, 100],
+    "action": "DoNothing"
+  },
+  "battle_pass.task_reward_claim": {
+    "recognition": "OCR",
+    "expected": "^领取$",
+    "roi": [700, 190, 220, 180],
+    "action": "DoNothing"
+  },
+  "battle_pass.task_no_claimable": {
+    "recognition": "OCR",
+    "expected": ["^已领取$", "^暂无可领取$", "^未完成$", "^前往$"],
+    "roi": [700, 190, 220, 390],
+    "action": "DoNothing"
+  },
+  "battle_pass.rewards_tab": {
+    "recognition": "OCR",
+    "expected": "^奖励$",
+    "roi": [40, 70, 100, 90],
+    "action": "DoNothing"
+  },
+  "battle_pass.rewards": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "battle_pass.page",
+          "battle_pass.basic_track",
+          "battle_pass.level"
+        ],
+        "box_index": 0
+      }
+    },
+    "action": "DoNothing"
+  },
+  "battle_pass.basic_track": {
+    "recognition": "OCR",
+    "expected": "^基础版$",
+    "roi": [170, 330, 130, 150],
+    "action": "DoNothing"
+  },
+  "battle_pass.level": {
+    "recognition": "OCR",
+    "expected": "^战令等级$",
+    "roi": [160, 230, 170, 110],
+    "action": "DoNothing"
+  },
+  "battle_pass.basic_red_dot_reward": {
+    "recognition": "ColorMatch",
+    "method": 4,
+    "lower": [180, 0, 0],
+    "upper": [255, 120, 120],
+    "roi": [300, 330, 280, 60],
+    "connected": true,
+    "count": 80,
+    "order_by": "Area",
+    "index": 0,
+    "action": "DoNothing"
+  },
+  "battle_pass.basic_all_claimed": {
+    "recognition": "OCR",
+    "expected": "^已领取$",
+    "roi": [150, 220, 900, 430],
+    "action": "DoNothing"
+  },
+  "battle_pass.basic_claimed_check": {
+    "recognition": "TemplateMatch",
+    "template": "daily/BATTLE_PASS_REWARD_DAILY/basic_claimed.png",
+    "roi": [250, 320, 300, 150],
+    "threshold": 0.42,
+    "action": "DoNothing"
+  },
+  "battle_pass.reward_popup": {
+    "recognition": "OCR",
+    "expected": [
+      "^恭喜获得$",
+      "^恭喜$",
+      "^喜获得$",
+      "^罗喜获得$",
+      "^墨喜获得$",
+      "^获得$",
+      "^获得奖励$"
+    ],
+    "roi": [0, 100, 1280, 620],
+    "action": "DoNothing"
+  },
+  "battle_pass.reward_popup_close": {
+    "recognition": "OCR",
+    "expected": "^点击空白处关闭$",
+    "roi": [300, 540, 700, 180],
+    "action": "DoNothing"
+  },
+  "battle_pass.item_popup": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "battle_pass.item_popup_type",
+          "battle_pass.item_popup_owned"
+        ],
+        "box_index": 0
+      }
+    },
+    "action": "DoNothing"
+  },
+  "battle_pass.item_popup_type": {
+    "recognition": "OCR",
+    "expected": "^物品$",
+    "roi": [700, 240, 140, 100],
+    "action": "DoNothing"
+  },
+  "battle_pass.item_popup_owned": {
+    "recognition": "OCR",
+    "expected": "^当前拥有.*$",
+    "roi": [680, 300, 180, 100],
+    "action": "DoNothing"
+  },
+  "battle_pass.item_popup_close": {
+    "recognition": "OCR",
+    "expected": "^战令$",
+    "roi": [40, 15, 130, 60],
+    "action": "DoNothing"
+  },
+  "battle_pass.close": {
+    "recognition": "TemplateMatch",
+    "template": "daily/BUY_TEA_DAILY/shop_close.png",
+    "roi": [1170, 0, 110, 110],
+    "threshold": 0.36,
+    "action": "DoNothing"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "task": [
+    {
+      "name": "SHADOW_RUINS_DAILY",
+      "label": "蜃影武墟",
+      "default_check": true,
+      "group": ["日常"],
+      "entry": "MJA_SHADOW_RUINS_DAILY_START"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "owner": "final-r3:SHOP_FREE_GIFT_DAILY",
+  "candidate": "/Users/gaoguobin/project/MJA/install/mfw-game-startup-maa-bbb-20260808-final-r3",
+  "started_at": "2026-08-08T10:18:17.393315+00:00",
+  "finished_at": "2026-08-08T10:21:54.399440+00:00",
+  "expected_tasks": [
+    "GAME_START",
+    "SHOP_FREE_GIFT_DAILY"
+  ],
+  "result": "passed",
+  "tasks": {
+    "SHOP_FREE_GIFT_DAILY": {
+      "status": "already_complete",
+      "postcondition": "shop.daily_free_gift_claimed",
+      "result_path": "/Users/gaoguobin/project/MJA/install/mfw-game-startup-maa-bbb-20260808-final-r3/debug/acceptance/SHOP_FREE_GIFT_DAILY/20260808T101817393315Z/SHOP_FREE_GIFT_DAILY-result.json",
+      "sha256": "0797d40b315573b0d4b0dd184e70f44f4c42437d1588d3f1c173be90a0bce1ef"
+    }
+  },
+  "gui_log_sha256": "0c6235f52c89744c7051d866d8df4465e0a528d1723c78fafab57abd5f367611",
+  "maafw_log_sha256": "d2893d46c467124ce858f596b882ef6daa1b04030b198e08b28092d787192d23"
+}

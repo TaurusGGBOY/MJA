@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "task_id": "HERO_DISPATCH_DAILY",
+  "reference_size": [1280, 720],
+  "cases": {
+    "entry": {
+      "image": "entry.png",
+      "expected_page": "home",
+      "expected_targets": ["painting_scroll_entry"],
+      "expected_status": null
+    },
+    "actionable": {
+      "image": "actionable.png",
+      "expected_page": "dispatch_page",
+      "expected_targets": ["dispatch_action"],
+      "expected_status": null
+    },
+    "completed": {
+      "image": "completed.png",
+      "expected_page": "dispatch_page",
+      "expected_targets": ["first_visible_dispatch_in_progress"],
+      "expected_status": "already_complete"
+    },
+    "danger": {
+      "image": "danger.png",
+      "expected_page": "dispatch_page",
+      "expected_targets": ["unknown_dialog"],
+      "expected_status": "failed"
+    },
+    "r22_all_dispatched_waiting": {
+      "image": "r22_all_dispatched_waiting.png",
+      "frame_id": "r22:HERO_DISPATCH_DAILY:20260809T111556403782Z",
+      "state": "inspect",
+      "page_hits": {"hero.dispatch.page": 1},
+      "target_hits": {"hero.all_dispatched_waiting": 1},
+      "recognizer_frame_ids": {
+        "hero.dispatch.page": "r22:HERO_DISPATCH_DAILY:20260809T111556403782Z",
+        "hero.all_dispatched_waiting": "r22:HERO_DISPATCH_DAILY:20260809T111556403782Z"
+      },
+      "texts": ["任务:9/9 已完成:0 尚未选择派遣任务"],
+      "expected_status": "already_complete"
+    }
+  }
+}

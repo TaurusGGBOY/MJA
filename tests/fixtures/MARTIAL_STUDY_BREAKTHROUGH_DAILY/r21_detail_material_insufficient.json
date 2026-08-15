@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "source": {
+    "archive": "install/mfw-android-all-20260809-r21-debug-martial-r1",
+    "ticket": "acceptance/MARTIAL_STUDY_BREAKTHROUGH_DAILY/20260809T104603789790Z/ticket.json",
+    "image": "on_error/2026.08.09-18.47.06.509_MJA_MARTIAL_OPEN_SLOT_0.png",
+    "sha256": "c67e9977f35fcdda14e130080eed25c10e8aea5db7fb22f6b2f9bf6c9645bb48"
+  },
+  "resolution": [1280, 720],
+  "detail_boundary": {
+    "character": {"text": "剑川之主", "roi": [700, 100, 320, 90]},
+    "skill": {"text": "生死符", "roi": [520, 170, 230, 100]},
+    "progress": {"texts": ["五重", "六重"], "roi": [500, 290, 470, 90]},
+    "reset": {"text": "重置", "roi": [1070, 290, 130, 90]},
+    "breakthrough": {"text": "突破", "roi": [1080, 530, 160, 90]},
+    "close": {"roi": [1175, 5, 75, 75]}
+  },
+  "materials": [
+    {
+      "node": "martial.material.ratio.0",
+      "text": "60/1200",
+      "owned": 60,
+      "required": 1200,
+      "roi": [515, 535, 100, 75]
+    },
+    {
+      "node": "martial.material.ratio.1",
+      "text": "2/80",
+      "owned": 2,
+      "required": 80,
+      "roi": [610, 535, 105, 75]
+    }
+  ],
+  "expected": {
+    "material_relation": "owned<required",
+    "outcome_status": "not_eligible",
+    "postcondition": "martial.material_insufficient",
+    "forbidden_actions": [
+      "breakthrough_martial_slot",
+      "confirm_martial_breakthrough"
+    ]
+  }
+}

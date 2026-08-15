@@ -1,0 +1,11 @@
+{
+  "task": [
+    {
+      "name": "WEEKLY_FREE_GIFT_MONDAY",
+      "label": "周一免费礼包",
+      "default_check": true,
+      "group": ["周常"],
+      "entry": "MJA_WEEKLY_FREE_GIFT_MONDAY_START"
+    }
+  ]
+}

@@ -2,9 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Admit only genuinely live-verified Jianzhichuan tasks into one MFAAvalonia-visible daily preset, execute them in the approved order with safe skip and fail-fast semantics, and produce a complete reproducible acceptance record from the current checkout.
+**Goal:** Admit only genuinely live-verified Jianzhichuan tasks into one MFAAvalonia-visible daily preset, execute them in the approved order with safe skip and task-level continuation semantics, and produce a complete reproducible acceptance record from the current checkout.
 
-**Architecture:** Each task owns a committed verification record pointing to local diagnostic evidence and declaring fixture/live branch status. A gate refuses to render or register the aggregate preset until all required live branches are verified. The aggregate runner schedules tasks by date, keeps explicit child results, optionally reuses a recognized parent page, stops immediately on `blocked_safety` or `failed`, and delegates final window restoration to the existing idempotent lifecycle.
+**Architecture:** Each task owns a committed verification record pointing to local diagnostic evidence and declaring fixture/live branch status. A gate refuses to render or register the aggregate preset until all required live branches are verified. The aggregate runner schedules tasks by date, keeps explicit child results, optionally reuses a recognized parent page, continues after task-level `blocked_safety` or `failed` results, and stops only on device/runtime failures before delegating final window restoration to the existing idempotent lifecycle.
 
 **Tech Stack:** Python 3.14, MaaFramework Agent API 5.12.2, ProjectInterface V2 JSON, MFAAvalonia 2.13.0-beta.5, pytest, Ruff, macOS Computer Use visual verification.
 
@@ -14,9 +14,9 @@
 - Never stage or commit `AGENTS.md`; every commit command below names exact paths.
 - Do not turn fixture-only or unavailable conditional branches into `live_verified`. Keep them `live_pending` until the real branch is exercised.
 - The aggregate preset remains absent from `assets/interface.json` until the admission gate proves every required single task is live verified.
-- Task statuses remain exactly `completed`, `already_complete`, `not_eligible`, `blocked_safety`, and `failed`. The aggregate report uses a separate `stopped_before` list for tasks not started after fail-fast.
-- Continue only after `completed`, `already_complete`, or planned `not_eligible`. Stop before any later input after `blocked_safety` or `failed`.
-- Real-money/payment/login/security/unknown-currency signals stop the current task and aggregate immediately.
+- Task statuses remain exactly `completed`, `already_complete`, `not_eligible`, `blocked_safety`, and `failed`. The aggregate report contains one child result for every scheduled task unless a device/runtime failure prevents the next task from starting.
+- Continue after `completed`, `already_complete`, planned `not_eligible`, `blocked_safety`, or ordinary `failed`; stop only before the next task when the device/runtime itself fails.
+- Real-money/payment/login/security/unknown-currency signals stop the current task, record `blocked_safety`, and allow the aggregate to continue with the next task.
 - The weekly task is executed on Monday. On other weekdays the scheduler records a planned `not_eligible` result without opening the shop.
 - Battle pass remains the final workflow. No task may be reordered after it.
 - Live execution consumes only the previously authorized non-paid resources and never exceeds each task policy's committed counters.
@@ -198,7 +198,7 @@ git add -- verification/tasks/MAIL_REWARD_DAILY.json \
 git commit -m "test: admit live-verified daily workflows"
 ```
 
-### Task 3: Implement date-aware aggregate scheduling and fail-fast results
+### Task 3: Implement date-aware aggregate scheduling and task-continuing results
 
 **Files:**
 
@@ -258,7 +258,7 @@ def run_aggregate(driver: AggregateDriver, *, day: date) -> AggregateResult: ...
 
 - [ ] **Step 1: Add failing schedule and stop-semantics tests**
 
-Cover Monday execution of the weekly task; Tuesday planned `not_eligible` without opening the shop; exact order; battle pass last; continuation after completed/already-complete/not-eligible; and immediate stop with untouched later drivers after blocked-safety/failed.
+Cover Monday execution of the weekly task; Tuesday planned `not_eligible` without opening the shop; exact order; battle pass last; continuation after completed/already-complete/not-eligible/blocked-safety/ordinary-failed; and immediate stop with untouched later drivers only after a device/runtime exception.
 
 - [ ] **Step 2: Run focused tests**
 
@@ -304,9 +304,9 @@ def run_aggregate(driver: AggregateDriver, *, day: date) -> AggregateResult:
 
 `schedule_for(day)` always returns all 17 IDs in `AGGREGATE_ORDER`. It sets only `WEEKLY_FREE_GIFT_MONDAY.eligible` to `False` when `day.weekday() != 0`, with `ineligible_postcondition="weekday_not_monday"`; every other item is eligible.
 
-- [ ] **Step 4: Implement fail-fast and reporting**
+- [ ] **Step 4: Implement task-continuing reporting**
 
-On the first blocking result, stop before another screenshot-authorized input, preserve attempted child results, list remaining task IDs in `stopped_before`, and restore the window once through the outer lifecycle.
+After a task-level block or ordinary failure, preserve its result and continue with the next selected task. Stop before the next task only for a device/runtime exception, and restore the window once through the outer lifecycle.
 
 - [ ] **Step 5: Run tests and Ruff**
 
@@ -321,7 +321,7 @@ Expected: all checks pass.
 
 ```bash
 git add -- agent/workflows/aggregate.py tests/test_aggregate_workflow.py
-git commit -m "feat: add fail-fast Jianzhichuan daily aggregate"
+git commit -m "feat: add task-continuing Jianzhichuan daily aggregate"
 ```
 
 ### Task 4: Register the aggregate pipeline and MFAAvalonia task

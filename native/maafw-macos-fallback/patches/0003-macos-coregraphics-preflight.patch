@@ -1,0 +1,27 @@
+diff --git a/source/MaaMacOSControlUnit/Screencap/ScreenCaptureKitScreencap.mm b/source/MaaMacOSControlUnit/Screencap/ScreenCaptureKitScreencap.mm
+--- a/source/MaaMacOSControlUnit/Screencap/ScreenCaptureKitScreencap.mm
++++ b/source/MaaMacOSControlUnit/Screencap/ScreenCaptureKitScreencap.mm
+@@ -11,6 +11,7 @@
+ #include <cmath>
+ #include <cstdint>
+ #include <limits>
++#include <mutex>
+ #include <vector>
+ 
+ #include <ApplicationServices/ApplicationServices.h>
+@@ -151,6 +152,15 @@
+         if (backend_ == CaptureBackend::CoreGraphicsRegion) {
+             return screencap_window_core_graphics(window_id_);
+         }
++        if (!CGPreflightScreenCaptureAccess()) {
++            static std::once_flag screen_capture_access_request_once;
++            std::call_once(screen_capture_access_request_once, [] {
++                const bool request_result = CGRequestScreenCaptureAccess();
++                LogWarn << "MJA ScreenCaptureKit preflight is unavailable; screen capture authorization request "
++                        << (request_result ? "accepted" : "not accepted")
++                        << "; trying ScreenCaptureKit before fallback";
++            });
++        }
+         if (auto image = screencap_window_screen_capture_kit(window_id_)) {
+             return image;
+         }

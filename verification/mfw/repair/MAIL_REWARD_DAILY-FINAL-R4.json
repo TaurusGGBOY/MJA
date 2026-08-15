@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "owner": "final-r4:MAIL_REWARD_DAILY-ONLY",
+  "candidate": "/Users/gaoguobin/project/MJA/install/mfw-game-startup-maa-bbb-20260808-final-r4",
+  "started_at": "2026-08-08T10:36:23.757251+00:00",
+  "finished_at": "2026-08-08T10:37:20.266139+00:00",
+  "expected_tasks": [
+    "GAME_START",
+    "MAIL_REWARD_DAILY"
+  ],
+  "result": "passed",
+  "tasks": {
+    "MAIL_REWARD_DAILY": {
+      "status": "already_complete",
+      "postcondition": "mail.empty",
+      "result_path": "/Users/gaoguobin/project/MJA/install/mfw-game-startup-maa-bbb-20260808-final-r4/debug/acceptance/MAIL_REWARD_DAILY/20260808T103623757251Z/MAIL_REWARD_DAILY-result.json",
+      "sha256": "30b9acce90c8de8f433c3ec8d3e55ba2cb944ea312632fc480334bded3c9b959"
+    }
+  },
+  "gui_log_sha256": "bcb0e114e5acd0e6c91c6f62f756c1d0269822f78688dda44df44af34101df08",
+  "maafw_log_sha256": "508780a08e8e815186125a01b825fada12f794e0b3e530ebf640a28c6a16d61e"
+}

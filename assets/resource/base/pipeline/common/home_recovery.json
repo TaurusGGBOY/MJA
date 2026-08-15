@@ -1,0 +1,169 @@
+{
+  "MJA_HOME_RECOVER": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["MJA_GAME_HOME_PAGE"]
+      }
+    },
+    "timeout": 10000,
+    "max_hit": 1,
+    "action": "DoNothing",
+    "next": ["MJA_GAME_READY"]
+  },
+  "MJA_HOME_RECOVER_SAFE_NOTICE": {
+    "recognition": "OCR",
+    "expected": ["公告", "公告说明", "版本更新"],
+    "roi": [0, 0, 1280, 720],
+    "action": "DoNothing"
+  },
+  "MJA_HOME_RECOVER_SAFE_NOTICE_CLOSE_ICON": {
+    "recognition": "TemplateMatch",
+    "template": "home/modal_close.png",
+    "roi": [1180, 10, 70, 70],
+    "threshold": 0.39,
+    "action": "DoNothing"
+  },
+  "MJA_HOME_RECOVER_POPUP": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "MJA_HOME_RECOVER_SAFE_NOTICE",
+          "MJA_HOME_RECOVER_SAFE_NOTICE_CLOSE_ICON"
+        ],
+        "box_index": 1
+      }
+    },
+    "timeout": 5000,
+    "max_hit": 1,
+    "action": "Click",
+    "next": ["MJA_HOME_RECOVER"]
+  },
+  "MJA_HOME_RECOVER_UNKNOWN_ABORT": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "RecordActiveTaskFailure",
+    "custom_action_param": {
+      "postcondition": "startup.game_ready",
+      "error_code": "HOME_RECOVERY_UNKNOWN_STATE",
+      "native_fail_after_record": true
+    },
+    "status": "failed",
+    "Abort": true,
+    "timeout": 1000,
+    "max_hit": 1,
+    "next": ["MJA_COMMON_ABORT"]
+
+  },
+  "MJA_GAME_MAP_READY": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["MJA_GAME_MAP_WORLD", "MJA_GAME_MAP_REGION"],
+        "box_index": 1
+      }
+    },
+    "timeout": 8000,
+    "action": "DoNothing"
+  },
+  "MJA_GAME_MAP_WORLD": {
+    "recognition": "OCR",
+    "expected": "偃武世界",
+    "roi": [80, 100, 300, 120],
+    "action": "DoNothing"
+  },
+  "MJA_GAME_MAP_REGION": {
+    "recognition": "OCR",
+    "expected": "绿洲",
+    "roi": [400, 340, 320, 140],
+    "action": "DoNothing"
+  },
+  "MJA_GAME_HOME_PAGE": {
+    "recognition": "OCR",
+    "expected": "^画[卷券]$",
+    "roi": [1080, 0, 200, 120],
+    "action": "DoNothing"
+  },
+  "MJA_GAME_HOME_MAP_PAGE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["MJA_GAME_HOME_TITLE", "MJA_GAME_HOME_LOCATION"],
+        "box_index": 0
+      }
+    },
+    "action": "DoNothing"
+  },
+  "MJA_GAME_HOME_TITLE": {
+    "recognition": "OCR",
+    "expected": "^画卷$",
+    "roi": [0, 0, 350, 100],
+    "action": "DoNothing"
+  },
+  "MJA_GAME_HOME_LOCATION": {
+    "recognition": "OCR",
+    "expected": "^侠隐村$",
+    "roi": [1000, 180, 280, 130],
+    "action": "DoNothing"
+  },
+  "MJA_GAME_HOME_WORLD_TITLE": {
+    "recognition": "OCR",
+    "expected": "^画[卷券]$",
+    "roi": [1080, 0, 200, 120],
+    "action": "DoNothing"
+  },
+  "MJA_GAME_SIDE_PANEL_SHOP": {
+    "recognition": "OCR",
+    "expected": "^商城$",
+    "roi": [925, 270, 105, 75],
+    "action": "DoNothing"
+  },
+  "MJA_GAME_SIDE_PANEL_DAILY": {
+    "recognition": "OCR",
+    "expected": "^日常$",
+    "roi": [1040, 270, 120, 75],
+    "action": "DoNothing"
+  },
+  "MJA_GAME_SIDE_PANEL_OPEN": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "MJA_GAME_SIDE_PANEL_SHOP",
+          "MJA_GAME_SIDE_PANEL_DAILY"
+        ],
+        "box_index": 0
+      }
+    },
+    "action": "DoNothing"
+  },
+  "MJA_GAME_FUNCTION_PANEL_ENTRY": {
+    "recognition": "OCR",
+    "expected": "^画[卷券]$",
+    "roi": [1080, 0, 200, 120],
+    "action": "DoNothing"
+  },
+  "MJA_GAME_HOME_PANEL_OPEN": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["MJA_GAME_FUNCTION_PANEL_ENTRY"],
+        "box_index": 0
+      }
+    },
+    "action": "DoNothing"
+  },
+  "MJA_GAME_HOME_WORLD_PAGE": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "MJA_GAME_HOME_PANEL_OPEN"
+        ],
+        "box_index": 0
+      }
+    },
+    "action": "DoNothing"
+  }
+}

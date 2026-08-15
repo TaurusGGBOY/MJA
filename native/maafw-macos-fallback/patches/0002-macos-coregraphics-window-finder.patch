@@ -1,0 +1,195 @@
+diff --git a/source/MaaToolkit/DesktopWindow/DesktopWindowMacOSFinder.mm b/source/MaaToolkit/DesktopWindow/DesktopWindowMacOSFinder.mm
+index 0f9f447..22c7f30 100644
+--- a/source/MaaToolkit/DesktopWindow/DesktopWindowMacOSFinder.mm
++++ b/source/MaaToolkit/DesktopWindow/DesktopWindowMacOSFinder.mm
+@@ -4,68 +4,143 @@
+ 
+ #include "MaaUtils/Logger.h"
+ 
++#include <cmath>
++#include <cstdint>
++
++#import <ApplicationServices/ApplicationServices.h>
+ #import <Cocoa/Cocoa.h>
+ #import <CoreFoundation/CoreFoundation.h>
+-#import <ScreenCaptureKit/ScreenCaptureKit.h>
+ 
+ MAA_TOOLKIT_NS_BEGIN
+ 
++namespace
++{
++
++bool read_number(CFDictionaryRef dictionary, CFStringRef key, CFNumberType type, void* output)
++{
++    if (!dictionary || !output) {
++        return false;
++    }
++
++    CFTypeRef value = CFDictionaryGetValue(dictionary, key);
++    if (!value || CFGetTypeID(value) != CFNumberGetTypeID()) {
++        return false;
++    }
++    return CFNumberGetValue(static_cast<CFNumberRef>(value), type, output);
++}
++
++bool read_bool(CFDictionaryRef dictionary, CFStringRef key, bool& output)
++{
++    if (!dictionary) {
++        return false;
++    }
++
++    CFTypeRef value = CFDictionaryGetValue(dictionary, key);
++    if (!value || CFGetTypeID(value) != CFBooleanGetTypeID()) {
++        return false;
++    }
++    output = CFBooleanGetValue(static_cast<CFBooleanRef>(value));
++    return true;
++}
++
++bool read_bounds(CFDictionaryRef dictionary, CGRect& output)
++{
++    if (!dictionary) {
++        return false;
++    }
++
++    CFTypeRef value = CFDictionaryGetValue(dictionary, kCGWindowBounds);
++    if (!value || CFGetTypeID(value) != CFDictionaryGetTypeID()) {
++        return false;
++    }
++    return CGRectMakeWithDictionaryRepresentation(static_cast<CFDictionaryRef>(value), &output);
++}
++
++const char* read_utf8(CFDictionaryRef dictionary, CFStringRef key)
++{
++    if (!dictionary) {
++        return "";
++    }
++
++    CFTypeRef value = CFDictionaryGetValue(dictionary, key);
++    if (!value || CFGetTypeID(value) != CFStringGetTypeID()) {
++        return "";
++    }
++
++    NSString* string = (__bridge NSString*)value;
++    return string.UTF8String ? string.UTF8String : "";
++}
++
++bool usable_window(CFDictionaryRef dictionary, std::int64_t& window_id, CGRect& bounds)
++{
++    std::int64_t layer = -1;
++    std::int64_t owner_pid = -1;
++    double alpha = 0.0;
++    bool is_onscreen = false;
++    const bool has_onscreen_state = read_bool(dictionary, kCGWindowIsOnscreen, is_onscreen);
++    if (!read_number(dictionary, kCGWindowNumber, kCFNumberSInt64Type, &window_id)
++        || !read_number(dictionary, kCGWindowLayer, kCFNumberSInt64Type, &layer)
++        || !read_number(dictionary, kCGWindowOwnerPID, kCFNumberSInt64Type, &owner_pid)
++        || !read_number(dictionary, kCGWindowAlpha, kCFNumberDoubleType, &alpha)
++        || !read_bounds(dictionary, bounds)) {
++        return false;
++    }
++
++    return layer == 0 && owner_pid > 0 && (!has_onscreen_state || is_onscreen)
++           && std::isfinite(alpha) && alpha > 0.0
++           && !CGRectIsNull(bounds) && !CGRectIsInfinite(bounds) && std::isfinite(bounds.size.width)
++           && std::isfinite(bounds.size.height) && bounds.size.width >= 640.0
++           && bounds.size.width <= 4096.0 && bounds.size.height >= 360.0
++           && bounds.size.height <= 2160.0 && bounds.size.width > bounds.size.height;
++}
++
++} // namespace
++
+ std::vector<DesktopWindow> DesktopWindowMacOSFinder::find_all() const
+ {
+     LogFunc;
+ 
+     std::vector<DesktopWindow> windows;
+ 
+-    // 检查macOS版本
+-    if (@available(macOS 12.3, *)) {
+-        // 使用GCD信号量进行同步
+-        dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+-        __block std::vector<DesktopWindow> captured_windows;
+-
+-        // 异步获取可共享内容
+-        [SCShareableContent getShareableContentWithCompletionHandler:^(SCShareableContent* content, NSError* error) {
+-            if (error || !content) {
+-                LogError << "Failed to get shareable content: " << error.localizedDescription.UTF8String;
+-                dispatch_semaphore_signal(semaphore);
+-                return;
+-            }
+-
+-            // 枚举所有窗口（包括其他 Space 的全屏窗口）
+-            for (SCWindow* window in content.windows) {
+-                std::wstring class_name;
+-                if (window.owningApplication) {
+-                    NSString* bundleId = window.owningApplication.bundleIdentifier ? window.owningApplication.bundleIdentifier : @"";
+-                    class_name = MAA_NS::to_u16([bundleId UTF8String]);
+-                }
+-
+-                NSString* title = window.title ? window.title : @"";
+-                std::wstring window_name = MAA_NS::to_u16([title UTF8String]);
+-
+-                // 将CGWindowID转换为void*
+-                void* hwnd = (void*)(uintptr_t)window.windowID;
+-
+-                captured_windows.emplace_back(DesktopWindow {
+-                    .hwnd = hwnd,
+-                    .class_name = class_name,
+-                    .window_name = window_name,
+-                });
+-            }
+-
+-            dispatch_semaphore_signal(semaphore);
+-        }];
+-
+-        // 等待异步操作完成，超时5秒
+-        if (dispatch_semaphore_wait(semaphore, dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC)) != 0) {
+-            LogError << "Timeout waiting for shareable content";
+-            return {};
++    // `kCGWindowListOptionOnScreenOnly` omits a full-screen app that lives in
++    // another Space while MFW is in the foreground. `kCGWindowListOptionAll`
++    // still provides stable layer/bounds metadata without ScreenCaptureKit.
++    CFArrayRef window_list = CGWindowListCopyWindowInfo(kCGWindowListOptionAll, kCGNullWindowID);
++    if (!window_list) {
++        LogError << "MJA CoreGraphics window metadata enumeration failed";
++        return {};
++    }
++
++    const CFIndex window_count = CFArrayGetCount(window_list);
++    for (CFIndex index = 0; index < window_count; ++index) {
++        CFTypeRef item = CFArrayGetValueAtIndex(window_list, index);
++        if (!item || CFGetTypeID(item) != CFDictionaryGetTypeID()) {
++            continue;
+         }
+ 
+-        windows = std::move(captured_windows);
+-    }
+-    else {
+-        LogError << "macOS 12.3 or later required for window enumeration";
++        auto dictionary = static_cast<CFDictionaryRef>(item);
++        std::int64_t window_id = 0;
++        CGRect bounds = CGRectNull;
++        if (!usable_window(dictionary, window_id, bounds)) {
++            continue;
++        }
++
++        const char* owner_name = read_utf8(dictionary, kCGWindowOwnerName);
++        const char* title = read_utf8(dictionary, kCGWindowName);
++        const char* window_name = (title && *title) ? title : owner_name;
++        if (!window_name || !*window_name) {
++            continue;
++        }
++
++        windows.emplace_back(DesktopWindow {
++            .hwnd = reinterpret_cast<void*>(static_cast<uintptr_t>(window_id)),
++            .class_name = MAA_NS::to_u16(owner_name),
++            .window_name = MAA_NS::to_u16(window_name),
++        });
+     }
+ 
++    CFRelease(window_list);
++
+ #ifdef MAA_DEBUG
+     LogInfo << "Window list:" << windows;
+ #endif

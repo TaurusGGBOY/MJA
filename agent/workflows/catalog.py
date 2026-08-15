@@ -1,0 +1,424 @@
+"""The single canonical policy catalog for Jianzhichuan daily workflows."""
+
+from __future__ import annotations
+
+from datetime import date
+from types import MappingProxyType
+
+from .models import RiskLevel, TaskPolicy
+
+WORKFLOW_DEFINITION_ORDER = (
+    "MAIL_REWARD_DAILY",
+    "SHOP_FREE_GIFT_DAILY",
+    "WEEKLY_FREE_GIFT_MONDAY",
+    "TRIAL_SWORD_DAILY",
+    "FREE_APPRAISAL_DAILY",
+    "BUY_TEA_DAILY",
+    "COLLECTION_DEPLOYMENT_DAILY",
+    "HERO_DISPATCH_DAILY",
+    "SHADOW_RUINS_DAILY",
+    "SPEND_CONDENSATE_DAILY",
+    "MARTIAL_STUDY_BREAKTHROUGH_DAILY",
+    "EAT_STAMINA_FOOD_DAILY",
+    "DUNGEON_SWEEP_DAILY",
+    "JIANLIN_RESOURCE_CONDENSATE_STAMINA_DAILY",
+    "RING_CHALLENGE_DAILY",
+    "DAILY_TASK_REWARD_CLAIM_DAILY",
+    "BATTLE_PASS_REWARD_DAILY",
+)
+
+_PHASE_ORDER = (
+    "function_panel_setup",
+    "main_ui_direct",
+    "painting_scroll_setup",
+    "shadow_ruins_challenge",
+    "daily_task_objectives",
+    "daily_task_reward_claim",
+    "battle_pass",
+)
+
+_ORDER_HINTS = {
+    "MAIL_REWARD_DAILY": "function_panel_setup",
+    "SHOP_FREE_GIFT_DAILY": "function_panel_setup",
+    "WEEKLY_FREE_GIFT_MONDAY": "function_panel_setup",
+    "TRIAL_SWORD_DAILY": "main_ui_direct",
+    "FREE_APPRAISAL_DAILY": "main_ui_direct",
+    "BUY_TEA_DAILY": "painting_scroll_setup",
+    "COLLECTION_DEPLOYMENT_DAILY": "painting_scroll_setup",
+    "HERO_DISPATCH_DAILY": "painting_scroll_setup",
+    "SHADOW_RUINS_DAILY": "shadow_ruins_challenge",
+    "SPEND_CONDENSATE_DAILY": "daily_task_objectives",
+    "MARTIAL_STUDY_BREAKTHROUGH_DAILY": "daily_task_objectives",
+    "EAT_STAMINA_FOOD_DAILY": "daily_task_objectives",
+    "DUNGEON_SWEEP_DAILY": "daily_task_objectives",
+    "JIANLIN_RESOURCE_CONDENSATE_STAMINA_DAILY": "daily_task_objectives",
+    "RING_CHALLENGE_DAILY": "daily_task_objectives",
+    "DAILY_TASK_REWARD_CLAIM_DAILY": "daily_task_reward_claim",
+    "BATTLE_PASS_REWARD_DAILY": "battle_pass",
+}
+
+_LABELS = {
+    "MAIL_REWARD_DAILY": "邮件奖励",
+    "SHOP_FREE_GIFT_DAILY": "商城每日免费礼包",
+    "WEEKLY_FREE_GIFT_MONDAY": "周一免费福袋",
+    "TRIAL_SWORD_DAILY": "每日试剑",
+    "FREE_APPRAISAL_DAILY": "每日免费鉴宝",
+    "BUY_TEA_DAILY": "购买茶叶",
+    "COLLECTION_DEPLOYMENT_DAILY": "采集部署收获",
+    "HERO_DISPATCH_DAILY": "侠客派遣",
+    "EAT_STAMINA_FOOD_DAILY": "食用体力食物",
+    "SPEND_CONDENSATE_DAILY": "消耗凝晶",
+    "JIANLIN_RESOURCE_CONDENSATE_STAMINA_DAILY": "剑林凝晶体力",
+    "MARTIAL_STUDY_BREAKTHROUGH_DAILY": "武学研习突破",
+    "RING_CHALLENGE_DAILY": "擂台挑战",
+    "DUNGEON_SWEEP_DAILY": "副本扫荡",
+    "DAILY_TASK_REWARD_CLAIM_DAILY": "日常任务奖励领取",
+    "SHADOW_RUINS_DAILY": "蜃影武墟",
+    "BATTLE_PASS_REWARD_DAILY": "战令基础奖励",
+}
+
+
+def _policy(
+    task_id: str,
+    risks: frozenset[RiskLevel],
+    *,
+    max_steps: int,
+    action_caps: dict[str, int],
+    resources: dict[str, int] | None = None,
+    monday_only: bool = False,
+) -> TaskPolicy:
+    resource_caps = resources or {}
+    return TaskPolicy(
+        task_id=task_id,
+        label=_LABELS[task_id],
+        entry=f"MJA_Daily_{task_id}",
+        risk_levels=risks,
+        max_steps=max_steps,
+        action_caps=action_caps,
+        approved_resources=frozenset(resource_caps),
+        eligible_weekdays=frozenset({0}) if monday_only else None,
+        order_hint=_ORDER_HINTS[task_id],
+        resource_caps=resource_caps,
+    )
+
+
+_POLICY_VALUES = {
+    "MAIL_REWARD_DAILY": _policy(
+        "MAIL_REWARD_DAILY",
+        frozenset({RiskLevel.PROTECTED_CLAIM}),
+        max_steps=12,
+        action_caps={
+            "open_function_panel": 1,
+            "open_mail": 1,
+            "claim_all_mail": 1,
+            "close_reward_popup": 1,
+            "close_mail": 1,
+            "close_function_panel": 1,
+        },
+    ),
+    "SHOP_FREE_GIFT_DAILY": _policy(
+        "SHOP_FREE_GIFT_DAILY",
+        frozenset({RiskLevel.PROTECTED_CLAIM}),
+        max_steps=15,
+        action_caps={
+            "open_function_panel": 3,
+            "open_shop": 3,
+            "open_period_benefits": 3,
+            "claim_free_gift": 1,
+            "dismiss_free_gift_reward": 1,
+            "close_shop": 1,
+            "close_function_panel": 1,
+        },
+    ),
+    "WEEKLY_FREE_GIFT_MONDAY": _policy(
+        "WEEKLY_FREE_GIFT_MONDAY",
+        frozenset({RiskLevel.PROTECTED_CLAIM}),
+        max_steps=15,
+        action_caps={
+            "open_function_panel": 1,
+            "open_shop": 1,
+            "open_gift_tab": 1,
+            "open_weekly_must_buy": 1,
+            "claim_weekly_lucky_bag": 1,
+            "dismiss_weekly_reward": 1,
+            "close_shop": 1,
+        },
+        monday_only=True,
+    ),
+    "TRIAL_SWORD_DAILY": _policy(
+        "TRIAL_SWORD_DAILY",
+        frozenset({RiskLevel.PROTECTED_CLAIM}),
+        max_steps=20,
+        action_caps={
+            "open_trial_sword": 1,
+            "claim_trial_sword_reward": 1,
+            "close_reward_popup": 2,
+            "claim_free_trial": 1,
+            "confirm_free_trial": 1,
+            "close_trial": 1,
+        },
+    ),
+    "FREE_APPRAISAL_DAILY": _policy(
+        "FREE_APPRAISAL_DAILY",
+        frozenset({RiskLevel.PROTECTED_CLAIM}),
+        max_steps=14,
+        action_caps={
+            "close_function_panel": 1,
+            "open_appraisal": 1,
+            "claim_free_appraisal_once": 1,
+            "close_appraisal_popup": 1,
+            "close_appraisal_page": 1,
+        },
+    ),
+    "BUY_TEA_DAILY": _policy(
+        "BUY_TEA_DAILY",
+        frozenset({RiskLevel.CONSUMPTIVE}),
+        max_steps=32,
+        action_caps={
+            "open_painting_scroll": 1,
+            "select_yanwu_world": 1,
+            "open_universal_shop": 1,
+            "scroll_tea_list": 1,
+            "open_tea_tab": 1,
+            "open_tea_purchase": 1,
+            "set_tea_quantity_max": 1,
+            "buy_tea": 1,
+            "dismiss_tea_purchase_result": 1,
+            "close_function_panel": 1,
+        },
+        resources={"文": 500},
+    ),
+    "COLLECTION_DEPLOYMENT_DAILY": _policy(
+        "COLLECTION_DEPLOYMENT_DAILY",
+        frozenset({RiskLevel.STATEFUL}),
+        max_steps=16,
+        action_caps={
+            "open_painting_scroll": 1,
+            "select_yanwu_world": 1,
+            "open_collection_deployment": 1,
+            "claim_all_collection": 1,
+            "close_reward_popup": 1,
+            "close_collection_deployment": 1,
+            "close_collection_painting": 1,
+        },
+    ),
+    "HERO_DISPATCH_DAILY": _policy(
+        "HERO_DISPATCH_DAILY",
+        frozenset({RiskLevel.STATEFUL}),
+        max_steps=64,
+        action_caps={
+            "open_painting_scroll": 1,
+            "open_hero_dispatch": 1,
+            "claim_first_dispatch": 6,
+            "close_reward_popup": 6,
+            # Claiming and then refilling a row each require a fresh
+            # selection; six rows means at most twelve guarded selections.
+            "select_first_visible_dispatch": 12,
+            "smart_configure_team": 6,
+            "dispatch_team": 6,
+            "close_hero_dispatch": 1,
+            "close_hero_dispatch_painting": 1,
+        },
+    ),
+    "SHADOW_RUINS_DAILY": _policy(
+        "SHADOW_RUINS_DAILY",
+        frozenset({RiskLevel.COMBAT}),
+        max_steps=80,
+        action_caps={
+            "open_painting_scroll": 2,
+            "open_shadow": 1,
+            "select_active_shadow_card": 3,
+            "enter_shadow_stage": 2,
+            "enable_shadow_skip_prepare": 3,
+            "dismiss_shadow_battle_result": 12,
+            "dismiss_shadow_battle_failure": 3,
+            "dismiss_shadow_reward_popup": 12,
+            "confirm_shadow_completion": 1,
+            "advance_shadow_foreground_triplet": 40,
+            "move_shadow_foreground_left": 1,
+            "move_shadow_foreground_center": 1,
+            "move_shadow_foreground_right": 1,
+            "challenge_shadow_stage": 12,
+        },
+    ),
+    "SPEND_CONDENSATE_DAILY": _policy(
+        "SPEND_CONDENSATE_DAILY",
+        frozenset({RiskLevel.CONSUMPTIVE}),
+        max_steps=64,
+        action_caps={
+            "open_function_panel": 1,
+            "open_daily_tasks_initial": 1,
+            "close_daily_tasks": 1,
+            "close_function_panel": 1,
+            "open_painting_scroll": 1,
+            "select_yanwu_world": 1,
+            "open_yanwu_currency_purchase": 1,
+            "close_yanwu_currency_purchase": 1,
+            "set_yanwu_quantity_max": 1,
+            "buy_yanwu_currency_max": 1,
+            "dismiss_yanwu_reward_popup": 1,
+            "select_yunzhou": 1,
+            "open_yunzhou_currency_purchase": 1,
+            "close_yunzhou_currency_purchase": 1,
+            "set_yunzhou_quantity_max": 1,
+            "buy_yunzhou_currency_max": 1,
+            "dismiss_yunzhou_reward_popup": 1,
+        },
+        resources={"凝晶": 100_000},
+    ),
+    "MARTIAL_STUDY_BREAKTHROUGH_DAILY": _policy(
+        "MARTIAL_STUDY_BREAKTHROUGH_DAILY",
+        frozenset({RiskLevel.CONSUMPTIVE, RiskLevel.STATEFUL}),
+        max_steps=48,
+        action_caps={
+            "open_function_panel": 1,
+            "open_martial_study": 1,
+            "claim_success_card": 3,
+            "close_reward_popup": 3,
+            "close_martial": 1,
+            "close_martial_page": 1,
+            "open_martial_plus_slot_0": 1,
+            "open_martial_plus_slot_1": 1,
+            "open_martial_plus_slot_2": 1,
+            "study_martial_slot": 9,
+            "breakthrough_martial_slot": 3,
+            "confirm_martial_breakthrough": 3,
+        },
+    ),
+    "EAT_STAMINA_FOOD_DAILY": _policy(
+        "EAT_STAMINA_FOOD_DAILY",
+        frozenset({RiskLevel.CONSUMPTIVE}),
+        max_steps=48,
+        action_caps={
+            "close_dungeon_for_food": 1,
+            "open_resource_page": 1,
+            "open_bag": 1,
+            "open_food_category": 1,
+            "select_food_tab": 1,
+            "inspect_food_candidate": 5,
+            "eat_longjing_shrimp": 5,
+            "confirm_food_buff_replace": 5,
+            "close_bag": 1,
+        },
+        resources={"龙井虾仁": 6},
+    ),
+    "DUNGEON_SWEEP_DAILY": _policy(
+        "DUNGEON_SWEEP_DAILY",
+        frozenset({RiskLevel.CONSUMPTIVE, RiskLevel.COMBAT}),
+        max_steps=160,
+        action_caps={
+            "open_dungeon": 1,
+            "select_yanwangling": 1,
+            "open_sweep_panel": 2,
+            "select_yanwangling_in_panel": 1,
+            "close_dungeon_reward_preview": 1,
+            "assign_sweep_ticket": 100,
+            "start_yanwangling_master_sweep": 1,
+            "confirm_yanwangling_master_sweep": 1,
+            "dismiss_sweep_result": 1,
+            "close_dungeon": 2,
+        },
+        resources={"副本票": 20},
+    ),
+    "JIANLIN_RESOURCE_CONDENSATE_STAMINA_DAILY": _policy(
+        "JIANLIN_RESOURCE_CONDENSATE_STAMINA_DAILY",
+        frozenset({RiskLevel.CONSUMPTIVE, RiskLevel.COMBAT}),
+        max_steps=160,
+        action_caps={
+            "close_dungeon_for_jianlin": 1,
+            "open_function_panel": 1,
+            "open_daily_tasks": 1,
+            "scroll_daily_jianlin": 3,
+            "open_jianlin": 1,
+            "select_jianlin_condensate": 1,
+            "open_jianlin_stamina_purchase": 1,
+            "buy_stamina_once": 1,
+            "confirm_jianlin_stamina_purchase": 1,
+            "close_postpurchase_stamina_prompt": 1,
+            "dismiss_jianlin_stamina_result": 1,
+            "set_safe_count": 12,
+            "set_safe_multiplier": 12,
+            "challenge_condensate": 12,
+            "enable_jianlin_skip_prepare": 12,
+            "start_jianlin_battle": 12,
+            "close_condensate_result": 12,
+            "close_jianlin_page": 1,
+            "close_daily_tasks": 1,
+        },
+        resources={"紫色魂玉": 1, "体力": 360},
+    ),
+    "RING_CHALLENGE_DAILY": _policy(
+        "RING_CHALLENGE_DAILY",
+        frozenset({RiskLevel.CONSUMPTIVE, RiskLevel.COMBAT}),
+        max_steps=120,
+        action_caps={
+            "open_function_panel": 1,
+            "open_daily_tasks": 1,
+            "open_ring_challenge": 1,
+            "close_reward_popup": 1,
+            "open_ring_attempt_mode": 1,
+            "start_ring_matching": 12,
+            "fight_ring_opponent": 12,
+            "start_ring_battle": 12,
+            "wait_ring_battle": 12,
+            "skip_ring_battle": 12,
+            "sweep_ring": 1,
+            "confirm_ring_sweep": 1,
+            "dismiss_ring_reward": 12,
+            "dismiss_ring_result": 12,
+            "close_ring_opponents": 1,
+            "close_ring_page": 1,
+        },
+        resources={"擂台券": 12},
+    ),
+    "DAILY_TASK_REWARD_CLAIM_DAILY": _policy(
+        "DAILY_TASK_REWARD_CLAIM_DAILY",
+        frozenset({RiskLevel.PROTECTED_CLAIM}),
+        max_steps=70,
+        action_caps={
+            "open_function_panel": 1,
+            "open_daily_tasks": 1,
+            "claim_completed_daily_row": 50,
+            "scroll_daily_reward_rows": 5,
+            "close_reward_popup": 60,
+            "claim_unlocked_activity_chest": 10,
+            "close_daily_tasks": 1,
+        },
+    ),
+    "BATTLE_PASS_REWARD_DAILY": _policy(
+        "BATTLE_PASS_REWARD_DAILY",
+        frozenset({RiskLevel.PROTECTED_CLAIM}),
+        max_steps=65,
+        action_caps={
+            "open_battle_pass": 1,
+            "open_battle_pass_tasks": 1,
+            "claim_task_reward": 50,
+            "close_reward_popup": 50,
+            "open_battle_pass_rewards": 1,
+            "claim_basic_red_dot_reward": 50,
+            "close_battle_pass": 1,
+        },
+    ),
+}
+
+TASK_POLICIES = MappingProxyType(_POLICY_VALUES)
+
+
+def workflow_sequence_for_date(day: date | None = None) -> tuple[str, ...]:
+    """Return stable business order, filtering the Monday-only workflow."""
+
+    workflow_day = day or date.today()
+    phase_index = {phase: index for index, phase in enumerate(_PHASE_ORDER)}
+    ordered = sorted(
+        WORKFLOW_DEFINITION_ORDER,
+        key=lambda task_id: (
+            phase_index[TASK_POLICIES[task_id].order_hint],
+            WORKFLOW_DEFINITION_ORDER.index(task_id),
+        ),
+    )
+    return tuple(
+        task_id
+        for task_id in ordered
+        if TASK_POLICIES[task_id].eligible_weekdays is None
+        or workflow_day.weekday() in TASK_POLICIES[task_id].eligible_weekdays
+    )

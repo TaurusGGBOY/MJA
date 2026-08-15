@@ -1,91 +1,62 @@
+"""Socket-only entry point for the embedded MFW Agent."""
+
 from __future__ import annotations
 
-import os
 import sys
 from pathlib import Path
-from typing import Sequence
 
-# Maa launches this file by path (``agent/main.py``), so Python puts the
-# package directory—not its parent—on ``sys.path``. Bootstrap the assembled
-# install root before importing the sibling ``agent`` package.
-if __package__ in {None, ""}:
-    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+# MaaPiCli launches this file by path (``agent/main.py``), so Python places
+# ``agent`` itself on sys.path instead of the install root.  Put the package
+# root first before importing the embedded agent modules.
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from agent.actions import macos_foreground_click as _macos_foreground_click  # noqa: F401
-from agent.diagnostics import RunDiagnostics
-from agent.errors import ErrorCode, MJAError
-from agent.macos.window_lifecycle import WindowLifecycle, build_lifecycle
-from agent.sinks.restore_window import RestoreWindowSink
+from maa.agent.agent_server import AgentServer
 
-try:
-    from maa.agent.agent_server import AgentServer
-except ImportError:  # pragma: no cover - allows unit tests without MaaFw installed.
-    AgentServer = None  # type: ignore[assignment]
-
-
-def _write_failure_diagnostics(error: MJAError) -> None:
-    try:
-        root = Path(os.environ.get("MJA_DEBUG_DIR", "debug/runs"))
-        run = RunDiagnostics.create(root)
-        try:
-            run.fail(error)
-        finally:
-            run.close()
-    except Exception:
-        print(f"diagnostics unavailable: {error.code}: {error}", file=sys.stderr)
-
-
-def _configure_maa_log_dir() -> None:
-    debug_dir = os.environ.get("MJA_DEBUG_DIR")
-    if not debug_dir:
-        return
-    path = Path(debug_dir)
-    path.mkdir(parents=True, exist_ok=True)
-    try:
-        from maa.tasker import Tasker
-    except ImportError:  # pragma: no cover - only bare unit-test environments.
-        return
-    if not Tasker.set_log_dir(path):
-        raise RuntimeError(f"could not set Maa log directory: {path}")
+# Import every narrow action, recognition, and sink module referenced by the
+# shipped MFW resources.  The retired Python workflow/aggregate adapters are
+# intentionally absent: independent Pipeline entries own their own state,
+# terminal outcome, and native abort boundary.
+from agent.custom.action.break_array_martial_daily import (  # noqa: F401
+    BreakArrayMartialDailyAction as _break_array_martial_daily,
+)
+from agent.custom.action.convergence_lifecycle import (  # noqa: F401
+    ConvergenceLifecycle as _convergence_lifecycle,
+)
+from agent.custom.action.food_progress import (  # noqa: F401
+    VerifyFoodQuantityDecrease as _verify_food_quantity_decrease,
+)
+from agent.custom.action.guarded_input import GuardedInput as _guarded_input  # noqa: F401
+from agent.custom.action.jianlin_planner import (
+    PlanJianlinChallenge as _jianlin_planner,  # noqa: F401
+)
+from agent.custom.action.restart_game import (
+    RestartGameSurface as _restart_game_surface,  # noqa: F401
+)
+from agent.custom.action.runtime_health import RuntimeHealth as _runtime_health  # noqa: F401
+from agent.custom.action.task_lifecycle import (  # noqa: F401
+    BeginTask,
+    CompleteTaskBoundary,
+    FailStartupRecovery,
+    RecordActiveTaskFailure,
+    RecordTaskOutcome,
+)
+from agent.custom.recognition.martial_material import (  # noqa: F401
+    MartialMaterialRelation as _martial_material_relation,
+)
+from agent.custom.sink.task_flow import TaskFlowStopSink as _task_flow_stop_sink  # noqa: F401
 
 
-def _controller_error(exc: BaseException) -> MJAError:
-    if isinstance(exc, MJAError):
-        return exc
-    return MJAError(ErrorCode.CONTROLLER_CONNECT_FAILED, f"AgentServer failed: {exc}")
+def main(socket_id: str) -> int:
+    """Start the embedded AgentServer on one MFW-provided socket."""
 
-
-def _register_tasker_sink(lifecycle: WindowLifecycle) -> None:
-    if AgentServer is None or not hasattr(AgentServer, "tasker_sink"):
-        return
-
-    @AgentServer.tasker_sink()
-    class _MjaRestoreWindowSink(RestoreWindowSink):
-        def __init__(self) -> None:
-            super().__init__(restore=lifecycle.restore)
-
-
-    del _MjaRestoreWindowSink
-
-
-def main(argv: Sequence[str] | None = None) -> int:
-    args = list(sys.argv[1:] if argv is None else argv)
-    if len(args) != 1:
+    if not isinstance(socket_id, str) or not socket_id.strip():
         print("Usage: python -m agent.main <socket_id>", file=sys.stderr)
         return 2
 
-    lifecycle: WindowLifecycle = build_lifecycle()
     result = 0
     try:
-        if AgentServer is None:
-            raise MJAError(ErrorCode.CONTROLLER_CONNECT_FAILED, "Maa AgentServer is unavailable")
-        _register_tasker_sink(lifecycle)
-        _configure_maa_log_dir()
-        if not AgentServer.start_up(args[0]):
-            raise MJAError(
-                ErrorCode.CONTROLLER_CONNECT_FAILED,
-                "AgentServer.start_up returned false",
-            )
+        if not AgentServer.start_up(socket_id.strip()):
+            raise RuntimeError("AgentServer.start_up returned false")
         try:
             AgentServer.join()
         except KeyboardInterrupt:
@@ -93,25 +64,22 @@ def main(argv: Sequence[str] | None = None) -> int:
     except KeyboardInterrupt:
         result = 130
     except Exception as exc:
-        error = _controller_error(exc)
-        _write_failure_diagnostics(error)
-        print(f"{error.code}: {error}", file=sys.stderr)
+        print(f"AgentServer failed: {exc}", file=sys.stderr)
         result = 3
     finally:
-        if AgentServer is not None:
-            try:
-                AgentServer.shut_down()
-            except Exception as exc:
-                print(f"AgentServer shutdown failed: {exc}", file=sys.stderr)
         try:
-            lifecycle.restore()
+            AgentServer.shut_down()
         except Exception as exc:
-            print(f"window restore failed: {exc}", file=sys.stderr)
+            print(f"AgentServer shutdown failed: {exc}", file=sys.stderr)
     return result
 
 
 if __name__ == "__main__":  # pragma: no cover - exercised by the CLI.
-    raise SystemExit(main())
+    command_args = sys.argv[1:]
+    if len(command_args) != 1:
+        print("Usage: python -m agent.main <socket_id>", file=sys.stderr)
+        raise SystemExit(2)
+    raise SystemExit(main(command_args[0]))
 
 
 __all__ = ["main"]

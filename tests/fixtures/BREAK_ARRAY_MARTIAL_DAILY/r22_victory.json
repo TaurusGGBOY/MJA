@@ -1,0 +1,26 @@
+{
+  "source": "install/mfw-android-all-20260809-r22-debug-break-r1/on_error/2026.08.09-19.22.59.6_MJA_BREAK_ARRAY_MARTIAL_DAILY_EXECUTE.png",
+  "sha256": "c80f802c251c181e337a6903ba1744c47f79800faef0f8a20cec491375216d14",
+  "recognitions": {
+    "break_array.result.victory_title": {
+      "text": "战斗胜禾",
+      "box": [741, 97, 418, 149]
+    },
+    "break_array.result.brand": {
+      "text": "对决·剑之川",
+      "box": [1004, 247, 111, 13]
+    },
+    "break_array.result": {
+      "hit": true,
+      "text": "战斗胜禾",
+      "box": [741, 97, 418, 149]
+    },
+    "break_array.success": {
+      "hit": true,
+      "text": "战斗胜",
+      "box": [743, 100, 376, 144]
+    },
+    "break_array.failure": {"hit": false, "box": null},
+    "break_array.result_close": {"hit": false, "box": null}
+  }
+}
