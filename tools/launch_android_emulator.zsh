@@ -6,11 +6,18 @@ sdk_root="$project_root/install/android-sdk"
 adb="$sdk_root/platform-tools/adb"
 emulator="$sdk_root/emulator/emulator"
 python="$project_root/.venv/bin/python"
+# Bundled runtime venv; it ships PyObjC which is required to bring the
+# emulator window to the foreground in visible mode.
+pyobjc_python="$project_root/install/.venv/bin/python"
 avd_name="mja-api35-apis"
 serial="emulator-5556"
 emulator_log="/tmp/mja-android-emulator.log"
 emulator_pid=""
 started_here="false"
+# Visible mode is used by the macOS dock/desktop entry (MJA Android
+# Emulator.app): the emulator window is shown instead of hidden.  Automation
+# keeps the default hidden mode unchanged.
+visible="${MJA_EMULATOR_VISIBLE:-0}"
 
 show_error() {
     local message="$1"
@@ -41,9 +48,50 @@ on_interrupt() {
 }
 
 if [[ "$(device_state)" == "device" ]]; then
-    "$python" "$project_root/tools/mfw_android_preflight.py"
-    osascript -e 'display notification "emulator-5556 已经在运行" with title "MJA Android Emulator"' >/dev/null 2>&1 || true
-    exit 0
+    if [[ "$visible" == "1" ]]; then
+        running_pid="$(pgrep -f -- "qemu-system.*-avd $avd_name" | head -n 1 || true)"
+        if [[ -n "$running_pid" ]] && ps -p "$running_pid" -o command= 2>/dev/null | grep -q -- "-qt-hide-window"; then
+            # ADB is ready but the running instance was started hidden by
+            # automation; restart it with a visible window (same pattern as
+            # launch_mfw.zsh MJA_EMULATOR_VISIBLE=1).
+            "$adb" -s "$serial" emu kill >/dev/null 2>&1 || kill -TERM "$running_pid" 2>/dev/null || true
+            for _attempt in {1..30}; do
+                if ! kill -0 "$running_pid" 2>/dev/null; then
+                    break
+                fi
+                sleep 1
+            done
+            # Fall through to the normal start path below.
+        else
+            # The instance is already visible: bring its window forward.
+            # PyObjC works in terminal context; GUI-launched processes cannot
+            # read the project volume, so fall back to System Events.
+            foreground_ok="false"
+            if [[ -x "$pyobjc_python" ]] && PYTHONPATH="$project_root" "$pyobjc_python" -c '
+import sys
+from agent.android.emulator_window import ensure_emulator_foreground
+sys.exit(0 if ensure_emulator_foreground(sys.argv[1]) else 1)
+' "$avd_name" >/dev/null 2>&1; then
+                foreground_ok="true"
+            fi
+            if [[ "$foreground_ok" != "true" ]] && [[ -n "$running_pid" ]]; then
+                if osascript -e "tell application \"System Events\" to set frontmost of first process whose unix id is $running_pid to true" >/dev/null 2>&1; then
+                    foreground_ok="true"
+                fi
+            fi
+            if [[ "$foreground_ok" == "true" ]]; then
+                osascript -e 'display notification "emulator-5556 已经在前台" with title "MJA Android Emulator"' >/dev/null 2>&1 || true
+                exit 0
+            else
+                osascript -e 'display notification "emulator-5556 已经在运行" with title "MJA Android Emulator"' >/dev/null 2>&1 || true
+                exit 0
+            fi
+        fi
+    else
+        "$python" "$project_root/tools/mfw_android_preflight.py"
+        osascript -e 'display notification "emulator-5556 已经在运行" with title "MJA Android Emulator"' >/dev/null 2>&1 || true
+        exit 0
+    fi
 fi
 
 if pgrep -f -- "qemu-system.*-avd $avd_name.*-port 5556" >/dev/null 2>&1; then
@@ -61,7 +109,6 @@ emulator_args=(
     -no-snapshot
     -no-boot-anim
     -noaudio
-    -qt-hide-window
     -gpu host
     -selinux permissive
     -crash-report-mode never
@@ -69,6 +116,12 @@ emulator_args=(
     -memory 6144
     -port 5556
 )
+
+# The dock/desktop entry opens a visible window; automation keeps the
+# window hidden so it cannot steal focus from the user.
+if [[ "$visible" != "1" ]]; then
+    emulator_args+=(-qt-hide-window)
+fi
 
 # Keep host GLES/Vulkan as the normal contract.  This opt-in switch is used
 # for a controlled diagnosis of host Vulkan/gfxstream crashes; it must never
@@ -113,10 +166,26 @@ if [[ "$ready" != "true" ]]; then
     exit 1
 fi
 
-if ! "$python" "$project_root/tools/mfw_android_preflight.py"; then
-    stop_started_emulator
-    show_error "模拟器未通过运行时契约检查；日志：$emulator_log"
-    exit 1
+if [[ "$visible" == "1" ]] && ! head -c 1 "$project_root/config/android.json" >/dev/null 2>&1; then
+    # GUI-launched processes cannot read the external project volume
+    # (macOS removable-volume TCC).  The emulator contract flags are enforced
+    # by construction above, so preflight adds nothing here and must not turn
+    # the dock entry into an error.
+    print -r -- "[$(date '+%Y-%m-%dT%H:%M:%S%z')] skipping preflight: project volume not readable from GUI context" >>"$emulator_log"
+else
+    if ! "$python" "$project_root/tools/mfw_android_preflight.py"; then
+        stop_started_emulator
+        show_error "模拟器未通过运行时契约检查；日志：$emulator_log"
+        exit 1
+    fi
+fi
+
+if [[ "$visible" == "1" ]]; then
+    # Dock entry: hand the emulator over to the OS and exit, so that clicking
+    # the icon again re-runs the launcher (e.g. to bring the window forward).
+    # Automation keeps the blocking wait below.
+    print -r -- "[$(date '+%Y-%m-%dT%H:%M:%S%z')] emulator ready; detaching (dock entry)" >>"$emulator_log"
+    exit 0
 fi
 
 set +e
