@@ -371,10 +371,29 @@ _FIXED_CLICK_MODES: Mapping[tuple[str, str], tuple[int, int, int, int]] = {
         "close_jianlin_for_food",
         "jianlin_page_close",
     ): (1180, 15, 95, 95),
+    # Cross-map teleport confirm for shadow ruins: the dialog's 确认 button is
+    # OCR-unstable, so pin the click to the confirmed button area.
+    (
+        "confirm_shadow_teleport",
+        "shadow_teleport_confirm",
+    ): (875, 500, 60, 40),
+    # Guild activity defeat reward popup dismisses by tapping blank area.
+    (
+        "dismiss_guild_activity_reward_popup",
+        "guild_activity_reward_blank",
+    ): (560, 620, 160, 80),
+    # Appraisal reward overlay is a borderless dim-layer graphic with no close
+    # button; it dismisses on a blank tap.  Keep the tap below the paid
+    # 鉴宝 buttons (which end at y=643) so it cannot hit page controls.
+    (
+        "close_extra_reward_popup",
+        "appraisal_reward_blank",
+    ): (550, 665, 180, 45),
     **{
         (action_id, "function_panel_close"): (1195, 10, 70, 70)
         for action_id in (
             "close_function_panel",
+            "close_shop",
         )
     },
 }

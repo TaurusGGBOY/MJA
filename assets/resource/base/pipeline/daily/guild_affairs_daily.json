@@ -304,7 +304,7 @@
       "task_id": "GUILD_AFFAIRS_DAILY",
       "action_id": "claim_guild_affairs_reward",
       "kind": "click",
-      "evidence": {"page_index": 0, "target_index": 1, "page_name": "帮派事务-帮派事务-事务-页面", "target_name": "帮派事务-帮派事务-行1-可领取", "row_index": 1, "row_roi": [50, 300, 1180, 150], "target_roi": [930, 300, 300, 120]}
+      "evidence": {"page_index": 0, "target_index": 1, "page_name": "帮派事务-帮派事务-事务-页面", "target_name": "帮派事务-帮派事务-行1-可领取", "row_index": 1, "row_roi": [50, 240, 1180, 150], "target_roi": [930, 240, 300, 120]}
     },
     "next": ["帮派事务-领取-奖励-探测"],
     "on_error": ["帮派事务-记录-失败"],
@@ -325,7 +325,7 @@
       "task_id": "GUILD_AFFAIRS_DAILY",
       "action_id": "start_guild_affairs",
       "kind": "click",
-      "evidence": {"page_index": 0, "target_index": 1, "page_name": "帮派事务-帮派事务-事务-页面", "target_name": "帮派事务-帮派事务-行1-可开始", "row_index": 1, "row_roi": [50, 300, 1180, 150], "target_roi": [930, 300, 300, 120]}
+      "evidence": {"page_index": 0, "target_index": 1, "page_name": "帮派事务-帮派事务-事务-页面", "target_name": "帮派事务-帮派事务-行1-可开始", "row_index": 1, "row_roi": [50, 240, 1180, 150], "target_roi": [930, 240, 300, 120]}
     },
     "next": ["帮派事务-行1-完成-探测"],
     "on_error": ["帮派事务-记录-失败"],
@@ -363,7 +363,7 @@
       "task_id": "GUILD_AFFAIRS_DAILY",
       "action_id": "claim_guild_affairs_reward",
       "kind": "click",
-      "evidence": {"page_index": 0, "target_index": 1, "page_name": "帮派事务-帮派事务-事务-页面", "target_name": "帮派事务-帮派事务-行2-可领取", "row_index": 2, "row_roi": [50, 450, 1180, 150], "target_roi": [930, 450, 300, 120]}
+      "evidence": {"page_index": 0, "target_index": 1, "page_name": "帮派事务-帮派事务-事务-页面", "target_name": "帮派事务-帮派事务-行2-可领取", "row_index": 2, "row_roi": [50, 390, 1180, 150], "target_roi": [930, 390, 300, 120]}
     },
     "next": ["帮派事务-领取-奖励-探测"],
     "on_error": ["帮派事务-记录-失败"],
@@ -384,7 +384,7 @@
       "task_id": "GUILD_AFFAIRS_DAILY",
       "action_id": "start_guild_affairs",
       "kind": "click",
-      "evidence": {"page_index": 0, "target_index": 1, "page_name": "帮派事务-帮派事务-事务-页面", "target_name": "帮派事务-帮派事务-行2-可开始", "row_index": 2, "row_roi": [50, 450, 1180, 150], "target_roi": [930, 450, 300, 120]}
+      "evidence": {"page_index": 0, "target_index": 1, "page_name": "帮派事务-帮派事务-事务-页面", "target_name": "帮派事务-帮派事务-行2-可开始", "row_index": 2, "row_roi": [50, 390, 1180, 150], "target_roi": [930, 390, 300, 120]}
     },
     "next": ["帮派事务-行2-完成-探测"],
     "on_error": ["帮派事务-记录-失败"],
@@ -422,7 +422,7 @@
       "task_id": "GUILD_AFFAIRS_DAILY",
       "action_id": "claim_guild_affairs_reward",
       "kind": "click",
-      "evidence": {"page_index": 0, "target_index": 1, "page_name": "帮派事务-帮派事务-事务-页面", "target_name": "帮派事务-帮派事务-行3-可领取", "row_index": 3, "row_roi": [50, 600, 1180, 120], "target_roi": [930, 600, 300, 120]}
+      "evidence": {"page_index": 0, "target_index": 1, "page_name": "帮派事务-帮派事务-事务-页面", "target_name": "帮派事务-帮派事务-行3-可领取", "row_index": 3, "row_roi": [50, 540, 1180, 120], "target_roi": [930, 540, 300, 120]}
     },
     "next": ["帮派事务-领取-奖励-探测"],
     "on_error": ["帮派事务-记录-失败"],
@@ -443,7 +443,7 @@
       "task_id": "GUILD_AFFAIRS_DAILY",
       "action_id": "start_guild_affairs",
       "kind": "click",
-      "evidence": {"page_index": 0, "target_index": 1, "page_name": "帮派事务-帮派事务-事务-页面", "target_name": "帮派事务-帮派事务-行3-可开始", "row_index": 3, "row_roi": [50, 600, 1180, 120], "target_roi": [930, 600, 300, 120]}
+      "evidence": {"page_index": 0, "target_index": 1, "page_name": "帮派事务-帮派事务-事务-页面", "target_name": "帮派事务-帮派事务-行3-可开始", "row_index": 3, "row_roi": [50, 540, 1180, 120], "target_roi": [930, 540, 300, 120]}
     },
     "next": ["帮派事务-行3-之后-开始-探测"],
     "on_error": ["帮派事务-记录-失败"],
@@ -718,73 +718,73 @@
   "帮派事务-帮派事务-行1-付费": {
     "recognition": "OCR",
     "expected": ["购买", "付费", "充值", "价格", "¥", "￥", "元", "消耗"],
-    "roi": [930, 300, 300, 120],
+    "roi": [930, 240, 300, 120],
     "action": "DoNothing"
   },
   "帮派事务-帮派事务-行1-可领取": {
     "recognition": "OCR",
     "expected": "领取奖励",
-    "roi": [930, 300, 300, 120],
+    "roi": [930, 240, 300, 120],
     "action": "DoNothing"
   },
   "帮派事务-帮派事务-行1-可开始": {
     "recognition": "OCR",
     "expected": "开始事务",
-    "roi": [930, 300, 300, 120],
+    "roi": [930, 240, 300, 120],
     "action": "DoNothing"
   },
   "帮派事务-帮派事务-行1-无-动作": {
     "recognition": "OCR",
     "expected": ["进行中", "事务中", "已完成", "已领取", "暂无事务", "无可领取"],
-    "roi": [1040, 240, 180, 110],
+    "roi": [1040, 200, 180, 110],
     "action": "DoNothing"
   },
   "帮派事务-帮派事务-行2-付费": {
     "recognition": "OCR",
     "expected": ["购买", "付费", "充值", "价格", "¥", "￥", "元", "消耗"],
-    "roi": [930, 450, 300, 120],
+    "roi": [930, 390, 300, 120],
     "action": "DoNothing"
   },
   "帮派事务-帮派事务-行2-可领取": {
     "recognition": "OCR",
     "expected": "领取奖励",
-    "roi": [930, 450, 300, 120],
+    "roi": [930, 390, 300, 120],
     "action": "DoNothing"
   },
   "帮派事务-帮派事务-行2-可开始": {
     "recognition": "OCR",
     "expected": "开始事务",
-    "roi": [930, 450, 300, 120],
+    "roi": [930, 390, 300, 120],
     "action": "DoNothing"
   },
   "帮派事务-帮派事务-行2-无-动作": {
     "recognition": "OCR",
     "expected": ["进行中", "事务中", "已完成", "已领取", "暂无事务", "无可领取"],
-    "roi": [1040, 395, 180, 70],
+    "roi": [1040, 350, 180, 70],
     "action": "DoNothing"
   },
   "帮派事务-帮派事务-行3-付费": {
     "recognition": "OCR",
     "expected": ["购买", "付费", "充值", "价格", "¥", "￥", "元", "消耗"],
-    "roi": [930, 600, 300, 120],
+    "roi": [930, 540, 300, 120],
     "action": "DoNothing"
   },
   "帮派事务-帮派事务-行3-可领取": {
     "recognition": "OCR",
     "expected": "领取奖励",
-    "roi": [930, 600, 300, 120],
+    "roi": [930, 540, 300, 120],
     "action": "DoNothing"
   },
   "帮派事务-帮派事务-行3-可开始": {
     "recognition": "OCR",
     "expected": "开始事务",
-    "roi": [930, 600, 300, 120],
+    "roi": [930, 540, 300, 120],
     "action": "DoNothing"
   },
   "帮派事务-帮派事务-行3-无-动作": {
     "recognition": "OCR",
     "expected": ["进行中", "事务中", "已完成", "已领取", "暂无事务", "无可领取"],
-    "roi": [1040, 545, 180, 70],
+    "roi": [1040, 500, 180, 70],
     "action": "DoNothing"
   },
   "帮派事务-帮派事务-奖励-弹窗": {

@@ -49,7 +49,7 @@
   "副本扫荡-副本-扫荡-不可用-要求": {"recognition": "OCR", "expected": "累计通关6次可解锁该难度扫荡功能", "roi": [300, 200, 900, 520], "action": "DoNothing"},
   "副本扫荡-副本-扫荡-面板": {"recognition": {"type": "And", "param": {"all_of": ["副本扫荡-副本-扫荡-按钮", "副本扫荡-副本-扫荡-风雪-神道-卡片"]}}, "action": "DoNothing"},
   "副本扫荡-副本-扫荡-按钮": {"recognition": "OCR", "expected": ["开始扫荡", "开始扫"], "roi": [700, 500, 500, 180], "action": "DoNothing"},
-  "副本扫荡-副本-扫荡-风雪-神道-卡片": {"recognition": "OCR", "expected": "风雪神道", "roi": [880, 240, 400, 100], "action": "DoNothing"},
+  "副本扫荡-副本-扫荡-风雪-神道-卡片": {"recognition": "OCR", "expected": "风雪神道", "roi": [300, 240, 980, 100], "action": "DoNothing"},
   "副本扫荡-副本-宗师-80": {"recognition": "OCR", "expected": "大师\\s*80级?", "roi": [900, 370, 210, 100], "action": "DoNothing"},
   "副本扫荡-副本-券-加号": {"recognition": "ColorMatch", "lower": [85, 80, 60], "upper": [255, 255, 230], "roi": [1228, 400, 40, 40], "connected": true, "count": 40, "action": "DoNothing"},
   "副本扫荡-副本-券-图标": {"recognition": "TemplateMatch", "template": "daily/DUNGEON_SWEEP_DAILY/ticket_icon.png", "roi": [770, 510, 95, 75], "threshold": 0.64, "action": "DoNothing"},

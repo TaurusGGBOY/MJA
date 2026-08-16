@@ -160,7 +160,7 @@
   "武学突破-武学-入口": {"recognition": "OCR", "expected": ["武学研习", "研习"], "roi": [650, 120, 600, 560], "action": "DoNothing"},
   "武学突破-武学-页面": {"recognition": "OCR", "expected": "武学研习", "roi": [0, 0, 500, 420], "action": "DoNothing"},
   "武学突破-武学-成功-卡片": {"recognition": "TemplateMatch", "template": "daily/MARTIAL_STUDY_BREAKTHROUGH_DAILY/success.png", "roi": [760, 350, 500, 330], "threshold": 0.72, "action": "DoNothing"},
-  "武学突破-武学-成功-结果": {"recognition": "OCR", "expected": ["研习成功", "恭喜获得"], "roi": [0, 100, 1280, 620], "action": "DoNothing"},
+  "武学突破-武学-成功-结果": {"recognition": "OCR", "expected": ["点击任意空白处关闭", "点击任意空白区域关闭"], "roi": [350, 580, 600, 140], "action": "DoNothing"},
   "武学突破-武学-结果-关闭": {"recognition": "OCR", "expected": ["点击空白处关闭", "点击任意空白区域关闭"], "roi": [350, 580, 600, 140], "action": "DoNothing"},
   "武学突破-武学-关闭": {
     "recognition": "TemplateMatch",

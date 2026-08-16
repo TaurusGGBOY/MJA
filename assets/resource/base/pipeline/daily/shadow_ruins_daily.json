@@ -194,10 +194,69 @@
       }
     },
     "next": [
+      "影之遗迹-跨图-确认-探测",
       "影之遗迹-关卡-探测"
     ],
     "on_error": [
       "影之遗迹-记录-失败"
+    ],
+    "retry_times": 0
+  },
+  "影之遗迹-跨图-确认-文案": {
+    "recognition": "OCR",
+    "expected": "^确认$",
+    "roi": [760, 400, 300, 150],
+    "action": "DoNothing"
+  },
+  "影之遗迹-跨图-确认-探测": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "影之遗迹-跨图-确认-文案"
+        ],
+        "box_index": 0
+      }
+    },
+    "timeout": 8000,
+    "action": "DoNothing",
+    "next": [
+      "影之遗迹-跨图-确认"
+    ],
+    "on_error": [
+      "影之遗迹-关卡-探测"
+    ]
+  },
+  "影之遗迹-跨图-确认": {
+    "max_hit": 1,
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "影之遗迹-跨图-确认-文案"
+        ],
+        "box_index": 0
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "SHADOW_RUINS_DAILY",
+      "action_id": "confirm_shadow_teleport",
+      "kind": "click",
+      "fixed_click_mode": "shadow_teleport_confirm",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 0,
+        "page_name": "影之遗迹-跨图-确认-文案",
+        "target_name": "影之遗迹-跨图-确认-文案"
+      }
+    },
+    "next": [
+      "影之遗迹-关卡-探测"
+    ],
+    "on_error": [
+      "影之遗迹-关卡-探测"
     ],
     "retry_times": 0
   },
@@ -701,14 +760,13 @@
     "recognition": "OCR",
     "expected": [
       "蜃影武墟",
-      "自动",
       "加速"
     ],
     "roi": [
       0,
       0,
       1280,
-      720
+      300
     ],
     "action": "DoNothing"
   },

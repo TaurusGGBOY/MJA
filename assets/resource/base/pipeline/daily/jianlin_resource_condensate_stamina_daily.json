@@ -5422,9 +5422,9 @@
     ],
     "roi": [
       0,
-      80,
+      0,
       1280,
-      640
+      720
     ],
     "timeout": 8000,
     "action": "DoNothing"
@@ -5446,10 +5446,10 @@
     "recognition": "OCR",
     "expected": "^战胜一次剑林的首领[。.]?$",
     "roi": [
-      200,
-      170,
-      650,
-      550
+      100,
+      60,
+      700,
+      620
     ],
     "timeout": 8000,
     "action": "DoNothing"

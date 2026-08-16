@@ -425,7 +425,53 @@
   "帮派活动挑战-帮派-结果-失败": {
     "recognition": "DirectHit",
     "action": "DoNothing",
-    "next": ["帮派活动挑战-帮派-成功-退出-活动"]
+    "next": ["帮派活动挑战-帮派-恭喜获得-探测"]
+  },
+  "帮派活动挑战-帮派-恭喜获得-文案": {
+    "recognition": "OCR",
+    "expected": "恭喜获得",
+    "roi": [0, 100, 1280, 620],
+    "action": "DoNothing"
+  },
+  "帮派活动挑战-帮派-恭喜获得-探测": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["帮派活动挑战-帮派-恭喜获得-文案"],
+        "box_index": 0
+      }
+    },
+    "timeout": 8000,
+    "action": "DoNothing",
+    "next": ["帮派活动挑战-帮派-恭喜获得-关闭"],
+    "on_error": ["帮派活动挑战-帮派-成功-退出-活动"]
+  },
+  "帮派活动挑战-帮派-恭喜获得-关闭": {
+    "max_hit": 1,
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["帮派活动挑战-帮派-恭喜获得-文案", "公共-已知-点击空白关闭"],
+        "box_index": 0
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "GUILD_ACTIVITY_CHALLENGE_DAILY",
+      "action_id": "dismiss_guild_activity_reward_popup",
+      "kind": "click",
+      "fixed_click_mode": "guild_activity_reward_blank",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "帮派活动挑战-帮派-恭喜获得-文案",
+        "target_name": "公共-已知-点击空白关闭"
+      }
+    },
+    "next": ["帮派活动挑战-帮派-成功-退出-活动"],
+    "on_error": ["帮派活动挑战-帮派-成功-退出-活动"],
+    "retry_times": 0
   },
   "帮派活动挑战-帮派-未知结果": {
     "recognition": "DirectHit",
