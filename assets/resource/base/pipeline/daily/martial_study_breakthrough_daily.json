@@ -136,7 +136,7 @@
     "retry_times": 0
   },
 
-  "武学突破-成功-无-领取": {"recognition": "DirectHit", "action": "Custom", "custom_action": "RecordTaskOutcome", "custom_action_param": {"task_id": "MARTIAL_STUDY_BREAKTHROUGH_DAILY", "status": "success", "postcondition": "martial.claim_flow_completed"}, "timeout": 8000, "next": ["公共-主页边界"], "on_error": ["武学突破-记录-失败"]},
+  "武学突破-成功-无-领取": {"recognition": "DirectHit", "action": "Custom", "custom_action": "RecordTaskOutcome", "custom_action_param": {"task_id": "MARTIAL_STUDY_BREAKTHROUGH_DAILY", "status": "success", "postcondition": "martial.claim_flow_completed", "defer_home_boundary": true}, "timeout": 8000, "next": ["公共-主页边界"], "on_error": ["武学突破-记录-失败"]},
   "武学突破-领取-循环-耗尽": {"recognition": "DirectHit", "action": "Custom", "custom_action": "RecordTaskOutcome", "custom_action_param": {"task_id": "MARTIAL_STUDY_BREAKTHROUGH_DAILY", "status": "failed", "error_code": "MARTIAL_CLAIM_LIMIT", "postcondition": "martial.claim_state_known", "native_fail_after_record": true}, "Abort": true, "next": ["公共-通用中止"]},
   "武学突破-记录-失败": {"recognition": "DirectHit", "action": "Custom", "custom_action": "RecordTaskOutcome", "custom_action_param": {"task_id": "MARTIAL_STUDY_BREAKTHROUGH_DAILY", "status": "failed", "error_code": "MARTIAL_POSTCONDITION_MISSING", "postcondition": "martial.state_known", "native_fail_after_record": true}, "Abort": true, "next": ["公共-通用中止"]},
   "武学突破-武学-主页": {

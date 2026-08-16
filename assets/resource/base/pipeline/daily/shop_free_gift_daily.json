@@ -260,7 +260,8 @@
     "custom_action_param": {
       "task_id": "SHOP_FREE_GIFT_DAILY",
       "status": "success",
-      "postcondition": "shop.daily_free_gift_claimed"
+      "postcondition": "shop.daily_free_gift_claimed",
+      "defer_home_boundary": true
     },
     "next": ["公共-主页边界"],
     "on_error": ["商店免费礼包-记录-失败"]
@@ -272,7 +273,8 @@
     "custom_action_param": {
       "task_id": "SHOP_FREE_GIFT_DAILY",
       "status": "already_complete",
-      "postcondition": "shop.daily_free_gift_claimed"
+      "postcondition": "shop.daily_free_gift_claimed",
+      "defer_home_boundary": true
     },
     "next": ["公共-主页边界"],
     "on_error": ["商店免费礼包-记录-失败"]

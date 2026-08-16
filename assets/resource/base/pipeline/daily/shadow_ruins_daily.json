@@ -577,7 +577,8 @@
     "custom_action_param": {
       "task_id": "SHADOW_RUINS_DAILY",
       "status": "success",
-      "postcondition": "shadow.final_reward_claimed_and_home"
+      "postcondition": "shadow.final_reward_claimed_and_home",
+      "defer_home_boundary": true
     },
     "next": [
       "公共-主页边界"
