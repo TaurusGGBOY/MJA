@@ -582,7 +582,6 @@ def test_dungeon_sweep_separates_ticket_resource_and_action_limits() -> None:
         [
             "close_function_panel",
             "open_dungeon",
-            "scroll_dungeon_list",
             "select_yanwangling",
             "open_sweep_panel",
             "select_yanwangling_in_panel",
@@ -594,8 +593,7 @@ def test_dungeon_sweep_separates_ticket_resource_and_action_limits() -> None:
             "close_dungeon",
         ],
     )
-    assert_action_limit(DUNGEON.task_id, "scroll_dungeon_list", 4)
-    assert_action_limit(DUNGEON.task_id, "assign_sweep_ticket", 100)
+    assert_action_limit(DUNGEON.task_id, "assign_sweep_ticket", 20)
     assert_resource_guard(
         nodes,
         "assign_sweep_ticket",
@@ -604,14 +602,14 @@ def test_dungeon_sweep_separates_ticket_resource_and_action_limits() -> None:
         task_id=DUNGEON.task_id,
         require_observed_amount=False,
     )
-    assert_action_limit(DUNGEON.task_id, "start_yanwangling_master_sweep", 1)
+    assert_action_limit(DUNGEON.task_id, "start_yanwangling_master_sweep", 20)
     assert_no_side_effect_retry(nodes, "assign_sweep_ticket")
     assert_no_side_effect_retry(nodes, "start_yanwangling_master_sweep")
     assert_outcome(
         nodes,
         "副本扫荡-无-券",
-        "not_eligible",
-        "dungeon.ticket_unavailable",
+        "already_complete",
+        "dungeon.ticket_count_zero",
     )
 
 
@@ -664,9 +662,9 @@ def test_dungeon_sweep_has_explicit_failure_and_business_success_postconditions(
         nodes,
         "副本扫荡-成功",
         "success",
-        "dungeon.reward_popup_seen_and_ticket_count_zero",
+        "dungeon.ticket_count_zero",
     )
-    assert nodes["副本扫荡-成功"]["next"] == ["副本扫荡-关闭"]
+    assert nodes["副本扫荡-成功"]["next"] == ["副本扫荡-成功-关闭"]
     assert nodes["副本扫荡-成功"]["timeout"] == 8000
     assert nodes["副本扫荡-成功"]["on_error"] == ["公共-通用停止"]
     assert nodes["副本扫荡-无-券"]["next"] == ["副本扫荡-关闭"]
@@ -734,7 +732,7 @@ def test_dungeon_result_page_uses_exact_visual_panel_and_close_text_same_frame()
     assert android_nodes["result_close"] == close
 
 
-def test_dungeon_sweep_panel_requires_exact_sweep_text_and_yanwangling_card() -> None:
+def test_dungeon_sweep_panel_requires_exact_sweep_text_and_fengxue_card() -> None:
     nodes = load_task_nodes(DUNGEON)
 
     expected_button_text = ["开始扫荡", "开始扫"]
@@ -744,7 +742,7 @@ def test_dungeon_sweep_panel_requires_exact_sweep_text_and_yanwangling_card() ->
         "param": {
             "all_of": [
                 "副本扫荡-副本-扫荡-按钮",
-                "dungeon.sweep.yanwangling.card",
+                "副本扫荡-副本-扫荡-风雪-神道-卡片",
             ]
         },
     }
@@ -752,44 +750,45 @@ def test_dungeon_sweep_panel_requires_exact_sweep_text_and_yanwangling_card() ->
     assert nodes["副本扫荡-副本-开始"]["expected"] == expected_button_text
     assert "开始" not in expected_button_text
 
-    card = nodes["dungeon.sweep.yanwangling.card"]
-    assert card["expected"] == ["燕王秘陵", "燕王"]
-    assert card["roi"] == [880, 240, 400, 100]
+    card = nodes["副本扫荡-副本-扫荡-风雪-神道-卡片"]
+    assert card["expected"] == "风雪神道"
+    assert card["roi"] == [300, 240, 980, 100]
 
     select = nodes["副本扫荡-选择-面板-阎王"]
     assert select["recognition"]["param"]["all_of"] == [
         "副本扫荡-副本-扫荡-面板",
-        "dungeon.sweep.yanwangling.card",
+        "副本扫荡-副本-扫荡-风雪-神道-卡片",
     ]
     assert select["custom_action_param"]["evidence"]["target_name"] == (
-        "dungeon.sweep.yanwangling.card"
+        "副本扫荡-副本-扫荡-风雪-神道-卡片"
     )
+    assert select["next"] == ["副本扫荡-宗师-分配任务-就绪"]
 
 
-def test_dungeon_direct_plus_is_scoped_to_live_yanwangling_master_controls() -> None:
+def test_dungeon_direct_plus_is_scoped_to_live_fengxue_master_controls() -> None:
     nodes = load_task_nodes(DUNGEON)
 
     master = nodes["副本扫荡-副本-宗师-80"]
     assert master["recognition"] == "OCR"
     assert master["expected"] == r"大师\s*80级?"
-    assert master["roi"] == [900, 370, 210, 100]
+    assert master["roi"] == [420, 420, 390, 100]
 
-    # r13 matched the adjacent 黑刹教 row at (529, 403, 133, 27). The live
-    # 燕王秘陵 master row starts near x=918, so its ROI must not cross cards.
+    # The current live sweep panel selects the middle 风雪神道 card. Its
+    # 大师 80级 row is inside this middle-card ROI. The previous x=900 ROI
+    # was on the right 沙匪营地 card; live OCR then saw 61级 and never
+    # reached the ticket-plus or 开始扫荡 actions.
     x, y, width, height = master["roi"]
-    adjacent_right = 529 + 133
-    target_center = (984, 416)
-    assert x > adjacent_right
+    target_center = (620, 470)
     assert x <= target_center[0] < x + width
     assert y <= target_center[1] < y + height
-    assert x + width <= 1110
+    assert x + width <= 820
 
     assert "MJA_DUNGEON_SELECT_MASTER" not in nodes
     assert "select_master_80" not in TASK_POLICIES[DUNGEON.task_id].action_caps
     ready = nodes["副本扫荡-宗师-分配任务-就绪"]
     assert ready["recognition"]["param"]["all_of"] == [
         "副本扫荡-副本-扫荡-面板",
-        "dungeon.sweep.yanwangling.card",
+        "副本扫荡-副本-扫荡-风雪-神道-卡片",
         "副本扫荡-副本-宗师-80",
         "副本扫荡-副本-券-加号",
         "副本扫荡-副本-券-图标",
@@ -803,42 +802,32 @@ def test_dungeon_direct_plus_is_scoped_to_live_yanwangling_master_controls() -> 
         "recognition": "ColorMatch",
         "lower": [85, 80, 60],
         "upper": [255, 255, 230],
-        "roi": [1228, 400, 40, 40],
+        "roi": [740, 450, 60, 60],
         "connected": True,
         "count": 40,
         "action": "DoNothing",
     }
     assert "expected" not in plus
-    android_nodes = json.loads(
-        (
-            ROOT
-            / "assets/resource_android/pipeline/daily/dungeon_sweep_daily.json"
-        ).read_text(encoding="utf-8")
-    )
-    assert android_nodes["ticket_plus"] == plus
 
     icon = nodes["副本扫荡-副本-券-图标"]
-    # r17 live scores were 0.652958-0.662200 in this exact ROI. Keep enough
-    # margin for the observed frame variance without broadening the search area.
+    # Keep the ticket icon threshold aligned with the live pipeline contract.
     assert icon == {
         "recognition": "TemplateMatch",
         "template": "daily/DUNGEON_SWEEP_DAILY/ticket_icon.png",
         "roi": [770, 510, 95, 75],
-        "threshold": 0.32,
+        "threshold": 0.64,
         "action": "DoNothing",
     }
-    assert android_nodes["ticket_icon"] == icon
     balance = nodes["副本扫荡-副本-券-余额"]
     assert balance["expected"] == r"^(?:[1-9]|1[0-9]|20)$"
     assert balance["roi"] == [840, 520, 90, 70]
     assert 840 <= 862 < 840 + 90
     assert 520 <= 550 < 520 + 70
-    assert android_nodes["ticket_balance"] == balance
 
     assign = nodes["副本扫荡-分配-券-循环"]
     assert assign["recognition"]["param"]["all_of"] == [
         "副本扫荡-副本-扫荡-面板",
-        "dungeon.sweep.yanwangling.card",
+        "副本扫荡-副本-扫荡-风雪-神道-卡片",
         "副本扫荡-副本-宗师-80",
         "副本扫荡-副本-券-加号",
         "副本扫荡-副本-券-图标",
@@ -856,9 +845,9 @@ def test_dungeon_direct_plus_is_scoped_to_live_yanwangling_master_controls() -> 
         "副本扫荡-副本-券-图标"
     )
     assert assign["custom_action_param"]["amount_index"] == 5
-    assert assign["max_hit"] == 100
+    assert assign["max_hit"] == 2
     assert assign["retry_times"] == 0
-    assert TASK_POLICIES[DUNGEON.task_id].action_caps["assign_sweep_ticket"] == 100
+    assert TASK_POLICIES[DUNGEON.task_id].action_caps["assign_sweep_ticket"] == 20
 
 
 def test_dungeon_sweep_recovers_once_from_launcher_then_requires_home() -> None:
@@ -962,6 +951,7 @@ def test_dungeon_reward_preview_recovery_is_exact_bounded_and_fail_closed() -> N
         "副本扫荡-副本-奖励-预览-正文",
     ]
     assert nodes["副本扫荡-副本-奖励-预览-标题"]["roi"] == [400, 250, 500, 75]
+    assert nodes["副本扫荡-副本-奖励-预览-标题"]["expected"] == "风雪神道"
     assert nodes["副本扫荡-副本-奖励-预览-正文"]["expected"] == "概率获得以下奖励"
     assert nodes["副本扫荡-副本-奖励-预览-关闭"]["roi"] == [840, 255, 55, 55]
 

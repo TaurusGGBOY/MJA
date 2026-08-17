@@ -122,11 +122,10 @@ def test_game_start_entry_starts_the_game_before_readiness_checks() -> None:
     entry = startup["启动-游戏入口"]
 
     assert entry["recognition"] == "DirectHit"
-    assert entry["action"] == "StartApp"
-    assert entry["package"] == "com.hanjiasongshu.dr22/.MainActivity"
+    assert entry["action"] == "DoNothing"
+    assert entry["next"] == ["启动-游戏启动"]
+    assert entry["on_error"] == ["启动-游戏启动"]
     assert entry["max_hit"] == 1
-    assert entry["repeat"] == 5
-    assert entry["repeat_delay"] == 1000
     assert entry["timeout"] == 1000
 
 

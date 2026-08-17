@@ -424,6 +424,15 @@ def test_unknown_explicit_task_is_rejected(candidate: Path, tmp_path: Path) -> N
         )
 
 
+def test_repair_task_success_postconditions_include_branch_specific_markers() -> None:
+    assert "hero.claim_state_known" in mfw_task_selection.SUCCESS_POSTCONDITIONS[
+        "HERO_DISPATCH_DAILY"
+    ]
+    assert "equipment.no_reward_popup" in mfw_task_selection.SUCCESS_POSTCONDITIONS[
+        "EQUIPMENT_DECOMPOSE_DAILY"
+    ]
+
+
 def test_malformed_result_is_rejected_without_running_external_tools(
     candidate: Path, tmp_path: Path
 ) -> None:

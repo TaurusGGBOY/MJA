@@ -4,12 +4,15 @@ from __future__ import annotations
 
 import json
 import re
+import time
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from typing import Any
 
 from maa.agent.agent_server import AgentServer
 from maa.custom_action import CustomAction
+
+from agent.custom.support.controller_input import click_box
 
 
 @dataclass(frozen=True, slots=True)
@@ -31,8 +34,10 @@ def plan_safe_challenge(
     cost: int,
     visible_max: int,
     safe_multipliers: tuple[int, ...],
+    *,
+    max_total_cost: int | None = None,
 ) -> ChallengePlan:
-    """Calculate a bounded challenge without falling back to an unsafe value."""
+    """Calculate the largest declared safe challenge for the current stamina."""
 
     if (
         isinstance(stamina, bool)
@@ -56,8 +61,16 @@ def plan_safe_challenge(
     )
     if not multipliers:
         raise ValueError("unsafe multipliers")
+    if max_total_cost is not None and (
+        isinstance(max_total_cost, bool)
+        or not isinstance(max_total_cost, int)
+        or max_total_cost <= 0
+    ):
+        raise ValueError("unsafe maximum challenge cost")
     for multiplier in sorted(multipliers, reverse=True):
         count = min(stamina // (cost * multiplier), visible_max)
+        if max_total_cost is not None:
+            count = min(count, max_total_cost // (cost * multiplier))
         if count >= 1:
             return ChallengePlan(count=count, multiplier=multiplier)
     raise ValueError("insufficient stamina")
@@ -154,14 +167,16 @@ def _selected_plan(
     multiplier_index: int,
     max_total_cost: int,
 ) -> ChallengePlan:
-    """Use the already-selected controls when the live page exposes totals.
+    """Derive the per-run cost and recalculate both controls from stamina.
 
     Jianlin's live page shows the aggregate ``消耗体力`` for the current
     slider positions, not a per-run base cost.  The old planner treated that
     aggregate as a base cost and then multiplied it again, which rejected a
-    valid page such as ``400/310`` with ``消耗体力 360``.  Keeping the current
-    selection is safe when the page itself proves that its aggregate cost is
-    affordable and within this task's budget.
+    valid page such as ``400/310`` with ``消耗体力 360``.  The aggregate is
+    now divided by the visible count and multiplier, then the largest safe
+    combination is selected from the actual stamina and task budget.  This
+    also changes the default ``x1`` selection to the appropriate number of
+    runs instead of silently challenging only once.
     """
 
     stamina = _ocr_amount(_at(results, stamina_index))
@@ -171,13 +186,6 @@ def _selected_plan(
     multiplier = _ocr_amount(_at(results, multiplier_index))
     if count > visible_max or multiplier not in (1, 2, 3):
         raise ValueError("current challenge selection is unsafe")
-    if total_cost <= max_total_cost and total_cost <= stamina:
-        return ChallengePlan(count=count, multiplier=multiplier)
-
-    # The page's total is aggregate cost for the selected count and
-    # multiplier.  When the default selection is too expensive, derive the
-    # per-attempt base cost and choose the largest safe declared plan instead
-    # of abandoning an otherwise eligible Jianlin challenge.
     divisor = count * multiplier
     if divisor <= 0 or total_cost % divisor:
         raise ValueError("cannot derive challenge base cost")
@@ -187,12 +195,45 @@ def _selected_plan(
         base_cost,
         visible_max,
         (3, 2, 1),
+        max_total_cost=max_total_cost,
     )
 
 
 @AgentServer.custom_action("PlanJianlinChallenge")
 class PlanJianlinChallenge(CustomAction):
-    """Select one already-declared count/multiplier branch from one frame."""
+    """Choose safe slider values from one frame, then continue to verification."""
+
+    _SLIDER_LEFT = 930
+    _SLIDER_RIGHT = 1206
+    _MULTIPLIER_Y = 427
+    _COUNT_Y = 504
+
+    @classmethod
+    def _slider_box(cls, value: int, maximum: int, y: int) -> tuple[int, int, int, int]:
+        if not 1 <= value <= maximum or maximum <= 1 or maximum > 12:
+            raise ValueError("unsafe Jianlin slider value")
+        position = cls._SLIDER_LEFT + round(
+            (value - 1) * (cls._SLIDER_RIGHT - cls._SLIDER_LEFT) / (maximum - 1)
+        )
+        return position - 8, y - 14, 16, 28
+
+    @classmethod
+    def _apply_plan(cls, context: Any, plan: ChallengePlan, visible_max: int) -> None:
+        controller = context.tasker.controller
+        resolution = getattr(controller, "resolution", None)
+        click_box(
+            controller,
+            cls._slider_box(plan.count, visible_max, cls._COUNT_Y),
+            resolution=resolution,
+        )
+        # Let the first slider settle before changing the second one.  The
+        # following verification node still has to observe the new values.
+        time.sleep(0.15)
+        click_box(
+            controller,
+            cls._slider_box(plan.multiplier, 3, cls._MULTIPLIER_Y),
+            resolution=resolution,
+        )
 
     def run(self, context: Any, argv: CustomAction.RunArg) -> bool:
         try:
@@ -244,13 +285,18 @@ class PlanJianlinChallenge(CustomAction):
                     visible_max,
                     safe_multipliers,
                 )
-            branch = (
-                "剑林凝结体体力-设置-倍率-次数-"
-                f"{plan.count}-倍率-{plan.multiplier}"
-            )
+            # The planner chooses both controls.  The pipeline's first node
+            # must therefore be the count-setting node; that node verifies
+            # the new count and then routes to the multiplier-setting node.
+            # Jumping straight to the multiplier node leaves the old count
+            # selected (for example X4), so the challenge button can open the
+            # stamina-purchase dialog even though a safe plan was calculated.
+            branch = "剑林凝结体体力-挑战-凝结体"
             get_node_data = getattr(context, "get_node_data")
             if get_node_data(dispatch_node) is None or get_node_data(branch) is None:
                 return False
+            visible_max = _ocr_amount(_at(results, visible_max_index))
+            type(self)._apply_plan(context, plan, visible_max)
             override_next = getattr(context, "override_next")
             return bool(override_next(dispatch_node, [branch]))
         except (AttributeError, TypeError, ValueError, KeyError):

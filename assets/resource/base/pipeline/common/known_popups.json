@@ -65,7 +65,9 @@
     },
     "timeout": 5000,
     "max_hit": 1,
-    "action": "Click"
+    "action": "Custom",
+    "custom_action": "CloseKnownPaintingSurface",
+    "post_delay": 1000
   },
   "公共-已知-画卷-标题": {
     "recognition": "OCR",

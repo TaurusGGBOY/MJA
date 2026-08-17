@@ -61,7 +61,7 @@ def test_formal_interface_is_the_single_native_mfw_control_plane() -> None:
         "BATTLE_PASS_REWARD_DAILY",
     ]
     for preset in interface["preset"]:
-        assert [task["name"] for task in preset["task"]][0] == "GAME_START"
+        assert [task["name"] for task in preset["task"]][0] != "GAME_START"
         assert "GAME_STOP" not in {task["name"] for task in preset["task"]}
 
 

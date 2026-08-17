@@ -14,7 +14,10 @@ emulator_log="/tmp/mja-mfw-emulator.log"
 
 show_error() {
     local message="$1"
-    osascript -e "display alert \"MJA MFW 无法启动\" message \"$message\" as critical" >/dev/null 2>&1 || true
+    # Keep launcher failures non-blocking.  This script is normally started
+    # from another runner, so a modal alert would leave an outer process
+    # waiting even after the emulator/MFW child has stopped.
+    print -u2 -- "MJA MFW 无法启动：$message"
 }
 
 if [[ ! -x "$candidate/MFW" ]]; then
@@ -91,6 +94,12 @@ if [[ "$state" != "device" ]]; then
         )
         if [[ "${MJA_EMULATOR_VISIBLE:-0}" != "1" ]]; then
             emulator_args+=(-qt-hide-window)
+        fi
+        # Keep the mandated host GPU backend, but allow a controlled
+        # mitigation for the confirmed host-Vulkan/gfxstream SIGSEGV.  The
+        # Android emulator launcher exposes the same switch.
+        if [[ "${MJA_EMULATOR_DISABLE_VULKAN:-0}" == "1" ]]; then
+            emulator_args+=(-feature -Vulkan)
         fi
         if [[ "${MJA_EMULATOR_DISABLE_VULKAN_QUEUE:-1}" == "1" ]]; then
             emulator_args+=(-feature -VulkanQueueSubmitWithCommands)

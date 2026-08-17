@@ -1,9 +1,7 @@
 {
   "interface_version": 2,
   "name": "MJA",
-  "retired_tasks": [
-    "BREAK_ARRAY_MARTIAL_DAILY"
-  ],
+  "retired_tasks": [],
   "controller": [
     {
       "name": "android",
@@ -82,7 +80,6 @@
     {
       "name": "日常-简化版",
       "task": [
-        {"name": "GAME_START", "enabled": true},
         {"name": "MAIL_REWARD_DAILY", "enabled": true},
         {"name": "SHOP_FREE_GIFT_DAILY", "enabled": true},
         {"name": "FREE_APPRAISAL_DAILY", "enabled": true},
@@ -97,7 +94,6 @@
     {
       "name": "日常-完整版",
       "task": [
-        {"name": "GAME_START", "enabled": true},
         {"name": "MAIL_REWARD_DAILY", "enabled": true},
         {"name": "SHOP_FREE_GIFT_DAILY", "enabled": true},
         {"name": "BUY_TEA_DAILY", "enabled": true},
@@ -114,7 +110,7 @@
         {"name": "DUNGEON_SWEEP_DAILY", "enabled": true},
         {"name": "JIANLIN_RESOURCE_CONDENSATE_STAMINA_DAILY", "enabled": true},
         {"name": "RING_CHALLENGE_DAILY", "enabled": true},
-        {"name": "BREAK_ARRAY_MARTIAL_DAILY", "enabled": false},
+        {"name": "BREAK_ARRAY_MARTIAL_DAILY", "enabled": true},
         {"name": "GUILD_ACTIVITY_CHALLENGE_DAILY", "enabled": true},
         {"name": "GUILD_AFFAIRS_DAILY", "enabled": true},
         {"name": "GUILD_DONATION_DAILY", "enabled": true},

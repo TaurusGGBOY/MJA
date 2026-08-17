@@ -55,24 +55,42 @@ def _bounded(node: dict[str, Any]) -> bool:
 def assert_all_cycles_bounded(nodes: dict[str, dict[str, Any]]) -> None:
     """Reject every graph cycle that has no explicit bound on any cycle node."""
 
-    graph = {name: _targets(node) for name, node in nodes.items()}
+    # A cycle is unbounded exactly when it exists entirely in the subgraph of
+    # nodes without an explicit bound.  Checking that subgraph once avoids
+    # enumerating every path through the full pipeline graph, which becomes
+    # exponential as independent task routes converge on shared cleanup.
+    unbounded = {
+        name
+        for name, node in nodes.items()
+        if not _bounded(node)
+    }
+    graph = {
+        name: [target for target in _targets(nodes[name]) if target in unbounded]
+        for name in unbounded
+    }
+    visited: set[str] = set()
+    active: set[str] = set()
+    path: list[str] = []
+    path_index: dict[str, int] = {}
 
-    def visit(name: str, path: list[str], active: set[str]) -> None:
+    def visit(name: str) -> None:
         if name in active:
-            cycle = path[path.index(name) :]
-            assert any(_bounded(nodes[item]) for item in cycle), (
-                "unbounded pipeline cycle: " + " -> ".join(cycle)
-            )
+            cycle = path[path_index[name] :]
+            raise AssertionError("unbounded pipeline cycle: " + " -> ".join(cycle))
+        if name in visited:
             return
+        visited.add(name)
         active.add(name)
+        path_index[name] = len(path)
         path.append(name)
         for target in graph[name]:
-            visit(target, path, active)
+            visit(target)
         path.pop()
+        path_index.pop(name)
         active.remove(name)
 
-    for name in nodes:
-        visit(name, [], set())
+    for name in unbounded:
+        visit(name)
 
 
 def load_fixture_manifest(path: Path) -> dict[str, dict[str, Any]]:

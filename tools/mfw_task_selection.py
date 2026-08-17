@@ -41,14 +41,28 @@ SUCCESS_POSTCONDITIONS: dict[str, frozenset[str]] = {
     "BUY_TEA_DAILY": frozenset(
         {"tea.purchase_result_seen", "tea.sold_out", "tea.no_remaining_stock"}
     ),
-    "FREE_APPRAISAL_DAILY": frozenset({"appraisal.reward_popup_seen"}),
-    "TRIAL_SWORD_DAILY": frozenset({"trial.reward_popup_seen"}),
+    "FREE_APPRAISAL_DAILY": frozenset(
+        {
+            "appraisal.reward_popup_seen",
+            "appraisal.reward_popup_seen_and_home",
+        }
+    ),
+    "TRIAL_SWORD_DAILY": frozenset(
+        {"trial.reward_popup_seen", "trial.free_used", "trial.free_waiting"}
+    ),
     "HERO_DISPATCH_DAILY": frozenset(
-        {"hero.all_completed", "hero.all_dispatched_waiting", "hero.no_dispatch_tasks"}
+        {
+            "hero.all_completed",
+            "hero.all_dispatched_waiting",
+            "hero.no_dispatch_tasks",
+            "hero.claim_state_known",
+        }
     ),
     "COLLECTION_DEPLOYMENT_DAILY": frozenset({"collection.harvest_clicked"}),
     "WEEKLY_FREE_GIFT_MONDAY": frozenset({"weekly_gift.reward_popup_seen"}),
-    "SHADOW_RUINS_DAILY": frozenset({"shadow.final_reward_claimed_and_home"}),
+    "SHADOW_RUINS_DAILY": frozenset(
+        {"shadow.final_reward_claimed_and_home", "shadow.teleport_visible"}
+    ),
     "SPEND_CONDENSATE_DAILY": frozenset({"condensate.both_regions_sold_out"}),
     "MARTIAL_STUDY_BREAKTHROUGH_DAILY": frozenset(
         {
@@ -65,8 +79,15 @@ SUCCESS_POSTCONDITIONS: dict[str, frozenset[str]] = {
             "food.overfull",
         }
     ),
-    "EQUIPMENT_DECOMPOSE_DAILY": frozenset({"equipment.decomposition_confirmed"}),
-    "DUNGEON_SWEEP_DAILY": frozenset({"dungeon.reward_popup_seen"}),
+    "EQUIPMENT_DECOMPOSE_DAILY": frozenset(
+        {
+            "equipment.decomposition_confirmed",
+            "equipment.no_reward_popup",
+        }
+    ),
+    "DUNGEON_SWEEP_DAILY": frozenset(
+        {"dungeon.reward_popup_seen_and_ticket_count_zero", "dungeon.ticket_count_zero"}
+    ),
     "JIANLIN_RESOURCE_CONDENSATE_STAMINA_DAILY": frozenset(
         {
             "jianlin.challenge_condensate.required",
@@ -77,7 +98,7 @@ SUCCESS_POSTCONDITIONS: dict[str, frozenset[str]] = {
         {"ring.attempts_exhausted", "ring.manual_attempts_complete", "ring.challenge_done"}
     ),
     "BREAK_ARRAY_MARTIAL_DAILY": frozenset(
-        {"break_array.three_challenges", "break_array.daily_exhausted"}
+        {"break_array.remaining_zero_of_nine", "break_array.daily_exhausted"}
     ),
     "GUILD_ACTIVITY_CHALLENGE_DAILY": frozenset(
         {

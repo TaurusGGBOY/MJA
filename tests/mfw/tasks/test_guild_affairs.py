@@ -92,7 +92,41 @@ def test_guild_affairs_claims_consecutive_rewards_before_starting_a_row() -> Non
     claim_probe = nodes["帮派事务-首个-行-领取-探测"]
     start_probe = nodes["帮派事务-首个-行-开始-探测"]
     assert claim_probe["on_error"] == ["帮派事务-首个-行-开始-探测"]
-    assert start_probe["on_error"] == ["帮派事务-首个-行-完成-探测"]
+    fallback_nodes = [
+        "帮派事务-首个-行-进行中-探测",
+        "帮派事务-空页面-探测",
+        "帮派事务-无可刷新-探测",
+        "帮派事务-记录-失败",
+    ]
+    assert start_probe["on_error"] == fallback_nodes
+    assert nodes["帮派事务-事务-页面-探测"]["on_error"] == fallback_nodes
+    assert nodes["帮派事务-首个-行-完成-探测"]["on_error"] == [
+        "帮派事务-首个-行-进行中-探测",
+        "帮派事务-空页面-探测",
+        "帮派事务-无可刷新-探测",
+        "帮派事务-记录-失败",
+    ]
+    in_progress = nodes["帮派事务-首个-行-进行中-探测"]
+    assert in_progress["next"] == ["帮派事务-已在进行中"]
+    assert in_progress["on_error"] == ["帮派事务-空页面-探测"]
+    assert_outcome(
+        nodes,
+        "帮派事务-已在进行中",
+        "already_complete",
+        "guild.affairs.daily.all_rows_started_or_no_action",
+    )
+    assert nodes["帮派事务-空页面-探测"]["next"] == [
+        "帮派事务-无可处理事务"
+    ]
+    assert_outcome(
+        nodes,
+        "帮派事务-无可处理事务",
+        "already_complete",
+        "guild.affairs.daily.all_rows_started_or_no_action",
+    )
+    assert nodes["帮派事务-无可刷新-探测"]["next"] == [
+        "帮派事务-无可处理事务"
+    ]
     claim_action = nodes["帮派事务-领取-首个-行-奖励"]
     assert claim_action["recognition"]["param"] == {
         "all_of": [
@@ -157,7 +191,12 @@ def test_guild_affairs_normalizes_only_the_verified_claim_result_overlay() -> No
         "box_index": 1,
     }
     assert probe["timeout"] == 8_000
-    assert probe["on_error"] == ["帮派事务-记录-失败"]
+    assert probe["on_error"] == [
+        "帮派事务-首个-行-进行中-探测",
+        "帮派事务-空页面-探测",
+        "帮派事务-无可刷新-探测",
+        "帮派事务-记录-失败",
+    ]
 
     assert close["recognition"]["param"] == {
         "all_of": expected_boundary,
@@ -203,6 +242,9 @@ def test_guild_affairs_clicks_only_the_verified_first_row_and_rejects_paid_state
     no_action = nodes["帮派事务-帮派事务-首个-行-无-动作"]
     assert no_action["roi"] == [1040, 95, 180, 70]
     assert "进行中" in no_action["expected"]
+    in_progress_marker = nodes["帮派事务-帮派事务-首个-行-进行中"]
+    assert in_progress_marker["roi"] == [800, 80, 400, 180]
+    assert "事务进行中" in in_progress_marker["expected"]
 
     # The r17 Android frame placed `事务进行中` at [1062, 113, 106, 23].
     # Keep the postcondition inside the first row's right-hand status capsule;

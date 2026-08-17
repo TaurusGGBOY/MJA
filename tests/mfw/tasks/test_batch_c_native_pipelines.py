@@ -44,10 +44,10 @@ UNKNOWN_OR_FAILURE_TERMINALS = {
 
 SUCCESS_TERMINALS = {
     "影之遗迹-记录-成功": "shadow.no_active_or_done_and_home",
-    "副本扫荡-成功": "dungeon.reward_popup_seen_and_ticket_count_zero",
+    "副本扫荡-成功": "dungeon.ticket_count_zero",
     "擂台挑战-成功": "ring.challenge_done",
     "帮派活动挑战-成功": "guild.remaining_conquest_0_of_2",
-    "破阵武学-成功": "break_array.three_challenges",
+    "破阵武学-成功": "break_array.remaining_zero_of_nine",
 }
 
 

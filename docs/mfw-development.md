@@ -22,7 +22,16 @@ python3 tools/check_mfw_resources.py install/mfw-foundation-candidate/resource/b
 
 ## 配置档案与直接运行
 
-`tools/mfw_profile.py` 只解析已有档案并运行，不创建或修改 MFW 档案。真实验证时先打开新候选，在 MFW GUI 中保存精确的档案名，关闭 MFW，再运行：
+`tools/mfw_profile.py` 可以离线补齐并注册每个 active 任务的精确
+`GAME_START + 一个业务任务` 档案，也可以直接运行已保存档案。候选组装时安装器
+会自动执行同样的补齐；手动启动前无需打开 GUI 重新勾选：
+
+```bash
+python3 tools/mfw_profile.py ensure-pair-profiles \
+  --install install/mfw-foundation-candidate
+```
+
+命令输出 `task_id -> profile_name` 映射，随后直接运行对应档案：
 
 ```bash
 python3 tools/mfw_profile.py run \

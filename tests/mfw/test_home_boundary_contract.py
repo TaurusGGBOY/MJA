@@ -152,11 +152,35 @@ def test_public_home_boundary_is_strict_and_records_failure_before_abort() -> No
     boundary = resource["公共-主页边界"]
     failure = resource["公共-主页边界-失败"]
 
+    assert boundary["recognition"] == {
+        "type": "And",
+        "param": {
+            "all_of": ["公共-游戏主页-页面"],
+            "box_index": 0,
+        },
+    }
     assert boundary["custom_action"] == "CompleteTaskBoundary"
     assert boundary["custom_action_param"] == {"boundary": "home"}
     assert boundary["next"] == ["公共-通用停止"]
-    assert boundary["on_error"] == ["公共-主页边界-失败"]
+    assert boundary["on_error"] == ["公共-主页边界-尝试返回"]
+    rescue = resource["公共-主页边界-尝试返回"]
+    assert rescue["custom_action"] == "ReturnToWorldHome"
+    assert rescue["next"] == ["公共-主页边界"]
+    assert rescue["on_error"] == ["公共-主页边界-失败"]
     assert failure["custom_action"] == "RecordActiveTaskFailure"
     assert failure["custom_action_param"]["native_fail_after_record"] is True
     assert failure["Abort"] is True
     assert failure["next"] == ["公共-通用中止"]
+
+
+def test_known_painting_surface_cleanup_clicks_the_real_close_anchor() -> None:
+    resource = json.loads(
+        (
+            Path("assets/resource/base/pipeline/common/known_popups.json")
+        ).read_text(encoding="utf-8")
+    )
+    close = resource["公共-已知-画卷-关闭"]
+
+    assert close["action"] == "Custom"
+    assert close["custom_action"] == "CloseKnownPaintingSurface"
+    assert close["post_delay"] == 1000

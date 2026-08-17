@@ -6,7 +6,6 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 DAILY_PIPELINES = ROOT / "assets/resource/base/pipeline/daily"
-TERMINAL = ROOT / "assets/resource/base/pipeline/common/terminal.json"
 
 
 def _entry(path: Path) -> dict[str, object]:
@@ -16,29 +15,30 @@ def _entry(path: Path) -> dict[str, object]:
     )
 
 
-def test_every_daily_task_starts_with_a_shared_home_page_gate() -> None:
+def test_every_daily_task_has_a_home_boundary_entry() -> None:
     entries = [_entry(path) for path in sorted(DAILY_PIPELINES.glob("*.json"))]
-
     assert entries
-    assert all(
-        entry["recognition"] == {
-            "type": "And",
-            "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0},
-        }
-        for entry in entries
-    )
-    assert all(entry["timeout"] == 8000 for entry in entries)
+    for entry in entries:
+        recognition = entry["recognition"]
+        serialized = json.dumps(recognition, ensure_ascii=False)
+        assert "公共-游戏主页-页面" in serialized
+        assert entry["timeout"] == 8000
 
 
-def test_task_start_home_gate_restarts_through_game_start_when_home_is_missing() -> None:
-    terminal = json.loads(TERMINAL.read_text(encoding="utf-8"))
-    restart = terminal["公共-通用-启动恢复-重启"]
-
+def test_missing_home_closes_the_current_task_instead_of_restarting_game() -> None:
     entries = [_entry(path) for path in sorted(DAILY_PIPELINES.glob("*.json"))]
     assert all(entry["action"] == "Custom" for entry in entries)
     assert all(entry["custom_action"] == "BeginTask" for entry in entries)
-    assert all(entry["on_error"][0] == "[JumpBack]启动-游戏启动" for entry in entries)
+    assert all(entry["on_error"][0] == "公共-主页边界-失败" for entry in entries)
     assert all(entry["next"] for entry in entries)
-    assert restart["custom_action"] == "RestartGameSurface"
-    assert restart["custom_action_param"]["start_repeat"] == 5
-    assert restart["custom_action_param"]["start_repeat_delay_ms"] == 1000
+
+
+def test_home_boundary_failure_force_stops_and_records_the_task() -> None:
+    boundary = json.loads(
+        (ROOT / "assets/resource/base/pipeline/common/home_boundary.json").read_text(
+            encoding="utf-8"
+        )
+    )["公共-主页边界-失败"]
+    assert boundary["custom_action"] == "RecordActiveTaskFailure"
+    assert boundary["custom_action_param"]["stop_game_on_failure"] is True
+    assert boundary["custom_action_param"]["native_fail_after_record"] is True

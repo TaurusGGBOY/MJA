@@ -366,7 +366,7 @@ def assert_abort_code(
 
 
 def assert_task_contract(
-    contract: TaskContract, *, require_game_start_recovery: bool = True
+    contract: TaskContract, *, require_game_start_recovery: bool = False
 ) -> None:
     declaration = load_task_declaration(contract.task_id)
     assert declaration["label"]

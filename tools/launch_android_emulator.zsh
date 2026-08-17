@@ -21,7 +21,10 @@ visible="${MJA_EMULATOR_VISIBLE:-0}"
 
 show_error() {
     local message="$1"
-    osascript -e "display alert \"MJA Android Emulator 无法启动\" message \"$message\" as critical" >/dev/null 2>&1 || true
+    # Never open a modal alert here.  This script is also used as the
+    # emulator child of the MFW runner; a modal alert would keep the parent
+    # process alive forever after QEMU has already exited.
+    print -u2 -- "MJA Android Emulator 无法启动：$message"
 }
 
 if [[ ! -x "$adb" || ! -x "$emulator" ]]; then

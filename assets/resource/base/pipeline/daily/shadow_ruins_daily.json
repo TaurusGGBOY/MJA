@@ -1,8 +1,14 @@
 {
   "影之遗迹-任务入口": {
     "recognition": {
-      "type": "And",
-      "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}
+      "type": "Or",
+      "param": {
+        "any_of": [
+          "公共-游戏主页-页面",
+          "影之遗迹-影-画卷-页面-万用商店",
+          "影之遗迹-主页-画卷-全图"
+        ]
+      }
     },
     "action": "Custom",
     "custom_action": "BeginTask",
@@ -11,10 +17,12 @@
     },
     "timeout": 8000,
     "next": [
-      "影之遗迹-主页-探测"
+      "影之遗迹-主页-探测",
+      "影之遗迹-主页-画卷-全图",
+      "影之遗迹-画卷-页面"
     ],
     "on_error": [
-      "[JumpBack]启动-游戏启动",
+      "公共-主页边界-失败",
       "影之遗迹-入口-未知"
     ]
   },
@@ -27,6 +35,18 @@
         ]
       }
     },
+    "action": "DoNothing",
+    "next": [
+      "影之遗迹-打开-画卷"
+    ],
+    "on_error": [
+      "影之遗迹-入口-未知"
+    ]
+  },
+  "影之遗迹-主页-画卷-全图": {
+    "recognition": "OCR",
+    "expected": "画卷",
+    "roi": [0, 0, 1280, 720],
     "action": "DoNothing",
     "next": [
       "影之遗迹-打开-画卷"
@@ -60,7 +80,7 @@
       }
     },
     "next": [
-      "影之遗迹-画卷-页面"
+      "影之遗迹-打开-影"
     ],
     "on_error": [
       "影之遗迹-入口-未知"
@@ -70,10 +90,11 @@
   },
   "影之遗迹-画卷-页面": {
     "recognition": {
-      "type": "And",
+      "type": "Or",
       "param": {
-        "all_of": [
-          "影之遗迹-影-画卷-页面"
+        "any_of": [
+          "影之遗迹-影-画卷-页面",
+          "影之遗迹-影-画卷-页面-万用商店"
         ]
       }
     },
@@ -90,10 +111,9 @@
       "type": "And",
       "param": {
         "all_of": [
-          "影之遗迹-影-画卷-页面",
           "影之遗迹-影-入口"
         ],
-        "box_index": 1
+        "box_index": 0
       }
     },
     "action": "Custom",
@@ -104,8 +124,7 @@
       "kind": "click",
       "evidence": {
         "page_index": 0,
-        "target_index": 1,
-        "page_name": "影之遗迹-影-画卷-页面",
+        "target_index": 0,
         "target_name": "影之遗迹-影-入口"
       }
     },
@@ -194,6 +213,7 @@
       }
     },
     "next": [
+      "影之遗迹-传送-已出现-记录成功",
       "影之遗迹-跨图-确认-探测",
       "影之遗迹-关卡-探测"
     ],
@@ -205,7 +225,12 @@
   "影之遗迹-跨图-确认-文案": {
     "recognition": "OCR",
     "expected": "^确认$",
-    "roi": [760, 400, 300, 150],
+    "roi": [
+      760,
+      400,
+      300,
+      150
+    ],
     "action": "DoNothing"
   },
   "影之遗迹-跨图-确认-探测": {
@@ -253,7 +278,7 @@
       }
     },
     "next": [
-      "影之遗迹-关卡-探测"
+      "影之遗迹-传送-已出现-记录成功"
     ],
     "on_error": [
       "影之遗迹-关卡-探测"
@@ -276,6 +301,113 @@
     ],
     "on_error": [
       "影之遗迹-记录-失败"
+    ]
+  },
+  "影之遗迹-传送-已出现-记录成功": {
+    "recognition": "OCR",
+    "expected": "传送",
+    "roi": [
+      900,
+      560,
+      380,
+      160
+    ],
+    "action": "Custom",
+    "custom_action": "RecordTaskOutcome",
+    "custom_action_param": {
+      "task_id": "SHADOW_RUINS_DAILY",
+      "status": "success",
+      "postcondition": "shadow.teleport_visible",
+      "defer_home_boundary": true
+    },
+    "timeout": 8000,
+    "next": [
+      "影之遗迹-离开-关卡"
+    ],
+    "on_error": [
+      "影之遗迹-关卡-探测"
+    ]
+  },
+  "影之遗迹-离开-关卡": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "影之遗迹-影-离开"
+        ],
+        "box_index": 0
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "SHADOW_RUINS_DAILY",
+      "action_id": "leave_shadow_stage",
+      "kind": "click",
+      "fixed_click_mode": "shadow_stage_leave",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 0,
+        "target_name": "影之遗迹-影-离开"
+      }
+        },
+        "next": [
+          "影之遗迹-传送-主页边界-探测",
+          "影之遗迹-传送-关闭-影-页面"
+        ],
+    "on_error": [
+      "影之遗迹-边界-失败"
+    ]
+  },
+  "影之遗迹-传送-关闭-影-页面": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "影之遗迹-影-页面",
+          "影之遗迹-影-关闭"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "SHADOW_RUINS_DAILY",
+      "action_id": "close_shadow_page",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "影之遗迹-影-页面",
+        "target_name": "影之遗迹-影-关闭"
+      }
+    },
+    "next": [
+      "影之遗迹-传送-主页边界-探测"
+    ],
+    "on_error": [
+      "影之遗迹-边界-失败"
+    ],
+    "retry_times": 0
+  },
+    "影之遗迹-传送-主页边界-探测": {
+      "recognition": {
+        "type": "And",
+        "param": {
+          "all_of": [
+              "公共-游戏主页-页面"
+          ],
+          "box_index": 0
+      }
+    },
+    "timeout": 8000,
+    "action": "DoNothing",
+    "next": [
+      "公共-主页边界"
+    ],
+    "on_error": [
+      "影之遗迹-边界-失败"
     ]
   },
   "影之遗迹-探索-页面": {
@@ -445,9 +577,8 @@
       "status": "failed",
       "error_code": "SHADOW_BATTLE_RESULT_UNKNOWN",
       "postcondition": "shadow.battle.result_known",
-      "native_fail_after_record": true
+      "defer_home_boundary": true
     },
-    "Abort": true,
     "next": [
       "公共-通用中止"
     ]
@@ -587,15 +718,12 @@
   "影之遗迹-边界-失败": {
     "recognition": "DirectHit",
     "action": "Custom",
-    "custom_action": "RecordTaskOutcome",
+    "custom_action": "RecordActiveTaskFailure",
     "custom_action_param": {
-      "task_id": "SHADOW_RUINS_DAILY",
-      "status": "failed",
       "error_code": "SHADOW_HOME_BOUNDARY_MISSING",
       "postcondition": "home",
-      "native_fail_after_record": true
+      "stop_game_on_failure": true
     },
-    "Abort": true,
     "next": [
       "公共-通用中止"
     ]
@@ -609,9 +737,8 @@
       "status": "failed",
       "error_code": "SHADOW_BATTLE_LIMIT",
       "postcondition": "shadow.battle.result_known",
-      "native_fail_after_record": true
+      "defer_home_boundary": true
     },
-    "Abort": true,
     "next": [
       "公共-通用中止"
     ]
@@ -625,9 +752,8 @@
       "status": "failed",
       "error_code": "SHADOW_PAINTING_ENTRY_UNKNOWN",
       "postcondition": "shadow.painting_entry_state_known",
-      "native_fail_after_record": true
+      "defer_home_boundary": true
     },
-    "Abort": true,
     "next": [
       "公共-通用中止"
     ]
@@ -641,15 +767,22 @@
       "status": "failed",
       "error_code": "SHADOW_POSTCONDITION_MISSING",
       "postcondition": "shadow.state_known",
-      "native_fail_after_record": true
+      "defer_home_boundary": true
     },
-    "Abort": true,
     "next": [
       "公共-通用中止"
     ]
   },
   "影之遗迹-影-主页-页面": {
-    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "公共-游戏主页-页面"
+        ],
+        "box_index": 0
+      }
+    },
     "action": "DoNothing"
   },
   "影之遗迹-影-画卷-入口": {
@@ -664,17 +797,37 @@
     "action": "DoNothing"
   },
   "影之遗迹-影-画卷-页面": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": [
-          "影之遗迹-影-画卷-页面-标题",
-          "影之遗迹-影-画卷-页面-世界",
-          "影之遗迹-影-画卷-页面-区域"
-        ],
-        "box_index": 0
-      }
-    },
+    "recognition": "OCR",
+    "expected": "万用商店",
+    "roi": [
+      0,
+      0,
+      1280,
+      720
+    ],
+    "action": "DoNothing"
+  },
+  "影之遗迹-影-画卷-页面-可见": {
+    "recognition": "OCR",
+    "expected": "万用商店",
+    "roi": [0, 0, 1280, 720],
+    "action": "DoNothing"
+  },
+  "影之遗迹-影-画卷-页面-万用商店": {
+    "recognition": "OCR",
+    "expected": "万用商店",
+    "roi": [
+      0,
+      0,
+      1280,
+      720
+    ],
+    "action": "DoNothing"
+  },
+  "影之遗迹-影-离开": {
+    "recognition": "OCR",
+    "expected": "离开",
+    "roi": [1060, 580, 220, 110],
     "action": "DoNothing"
   },
   "影之遗迹-影-画卷-页面-标题": {
@@ -712,12 +865,12 @@
   },
   "影之遗迹-影-入口": {
     "recognition": "OCR",
-    "expected": "^蜃影武墟$",
+    "expected": "蜃影武墟",
     "roi": [
-      1090,
-      620,
-      145,
-      75
+      0,
+      0,
+      1280,
+      720
     ],
     "action": "DoNothing"
   },
@@ -993,9 +1146,8 @@
       "status": "failed",
       "error_code": "SHADOW_BATTLE_DEFEAT",
       "postcondition": "shadow.battle.result_known",
-      "native_fail_after_record": true
+      "defer_home_boundary": true
     },
-    "Abort": true,
     "next": [
       "公共-通用中止"
     ]

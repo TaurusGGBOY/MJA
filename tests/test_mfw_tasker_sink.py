@@ -105,13 +105,10 @@ def test_common_terminals_keep_normal_stop_separate_from_abort() -> None:
         "recognition": "DirectHit",
         "action": "StopTask",
     }
-    assert terminal["公共-通用中止"]["action"] == "StopTask"
-    assert terminal["公共-通用中止"]["Abort"] is True
-    startup_restart = terminal["公共-通用-启动恢复-重启"]
-    assert startup_restart["custom_action"] == "RestartGameSurface"
-    assert startup_restart["max_hit"] == 1
-    assert startup_restart["next"] == ["启动-游戏重启后"]
-    assert startup_restart["on_error"] == ["公共-游戏启动应用重启失败"]
+    assert terminal["公共-通用中止"]["action"] == "DoNothing"
+    assert terminal["公共-通用中止"]["next"] == ["公共-失败-主页-探测"]
+    assert terminal["公共-通用中止"]["on_error"] == ["公共-失败-返回主页"]
+    assert "公共-通用-启动恢复-重启" not in terminal
     startup_exhausted = terminal["公共-通用-启动恢复-耗尽"]
     assert startup_exhausted["action"] == "Custom"
     assert startup_exhausted["custom_action"] == "FailStartupRecovery"

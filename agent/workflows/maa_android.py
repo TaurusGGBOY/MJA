@@ -275,7 +275,7 @@ def _boundary_probe_names(action_id: str | None) -> tuple[str, ...]:
                 "hero.all_completed",
                 "hero.first_task_claimable",
                 "hero.first_task_dispatchable",
-                "hero.first_task_in_progress",
+                "hero.claim_state_known",
                 "hero.claim_button",
                 "hero.smart_configure",
                 "hero.dispatch_button",

@@ -2,10 +2,16 @@
   "吃体力食物-任务入口": {
     "recognition": {
       "type": "And",
-      "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}
+      "param": {
+        "all_of": [
+          "公共-游戏主页-页面"
+        ],
+        "box_index": 0
+      }
     },
     "action": "Custom",
-    "custom_action": "BeginTask", "max_hit": 1,
+    "custom_action": "BeginTask",
+    "max_hit": 1,
     "custom_action_param": {
       "task_id": "EAT_STAMINA_FOOD_DAILY"
     },
@@ -22,14 +28,19 @@
       "吃体力食物-打开-资源",
       "吃体力食物-游戏启动恢复"
     ],
-    "on_error": ["[JumpBack]启动-游戏启动", "吃体力食物-游戏启动恢复失败"],
+    "on_error": [
+      "公共-主页边界-失败",
+      "吃体力食物-游戏启动恢复失败"
+    ],
     "retry_times": 0
   },
   "吃体力食物-关闭-剑林-页面": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["剑林凝结体体力-剑林-页面"],
+        "all_of": [
+          "剑林凝结体体力-剑林-页面"
+        ],
         "box_index": 0
       }
     },
@@ -50,24 +61,43 @@
       "fixed_click_mode": "jianlin_page_close"
     },
     "post_delay": 1000,
-    "next": ["吃体力食物-打开-资源"],
-    "on_error": ["吃体力食物-记录-失败"],
+    "next": [
+      "吃体力食物-打开-资源"
+    ],
+    "on_error": [
+      "吃体力食物-记录-失败"
+    ],
     "retry_times": 0
   },
   "吃体力食物-面板-探测": {
-    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏侧边面板-打开"], "box_index": 0}},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "公共-游戏侧边面板-打开"
+        ],
+        "box_index": 0
+      }
+    },
     "timeout": 8000,
     "max_hit": 1,
     "action": "DoNothing",
-    "next": ["吃体力食物-面板-关闭"],
-    "on_error": ["吃体力食物-记录-失败"],
+    "next": [
+      "吃体力食物-面板-关闭"
+    ],
+    "on_error": [
+      "吃体力食物-记录-失败"
+    ],
     "retry_times": 0
   },
   "吃体力食物-面板-关闭": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["公共-已知-面板-标记", "公共-已知-面板-关闭"],
+        "all_of": [
+          "公共-已知-面板-标记",
+          "公共-已知-面板-关闭"
+        ],
         "box_index": 1
       }
     },
@@ -88,21 +118,29 @@
       }
     },
     "post_delay": 1000,
-    "next": ["吃体力食物-打开-资源"],
-    "on_error": ["吃体力食物-记录-失败"],
+    "next": [
+      "吃体力食物-打开-资源"
+    ],
+    "on_error": [
+      "吃体力食物-记录-失败"
+    ],
     "retry_times": 0
   },
   "吃体力食物-副本-页面-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["副本扫荡-副本-页面", "副本扫荡-副本-关闭"],
+        "all_of": [
+          "副本扫荡-副本-页面",
+          "副本扫荡-副本-关闭"
+        ],
         "box_index": 1
       }
     },
     "timeout": 8000,
     "action": "Custom",
-    "custom_action": "GuardedInput", "max_hit": 1,
+    "custom_action": "GuardedInput",
+    "max_hit": 1,
     "custom_action_param": {
       "task_id": "EAT_STAMINA_FOOD_DAILY",
       "action_id": "close_dungeon_for_food",
@@ -115,20 +153,28 @@
       }
     },
     "post_delay": 1000,
-    "next": ["吃体力食物-打开-资源"],
-    "on_error": ["吃体力食物-记录-失败"],
+    "next": [
+      "吃体力食物-打开-资源"
+    ],
+    "on_error": [
+      "吃体力食物-记录-失败"
+    ],
     "retry_times": 0
   },
   "吃体力食物-打开-资源": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["吃体力食物-食物-主页-页面", "吃体力食物-食物-资源-入口"],
+        "all_of": [
+          "吃体力食物-食物-主页-页面",
+          "吃体力食物-食物-资源-入口"
+        ],
         "box_index": 1
       }
     },
     "action": "Custom",
-    "custom_action": "GuardedInput", "max_hit": 1,
+    "custom_action": "GuardedInput",
+    "max_hit": 1,
     "custom_action_param": {
       "task_id": "EAT_STAMINA_FOOD_DAILY",
       "action_id": "open_resource_page",
@@ -141,8 +187,12 @@
       }
     },
     "timeout": 8000,
-    "next": ["吃体力食物-打开-分类"],
-    "on_error": ["吃体力食物-记录-失败"],
+    "next": [
+      "吃体力食物-打开-分类"
+    ],
+    "on_error": [
+      "吃体力食物-记录-失败"
+    ],
     "retry_times": 0
   },
   "吃体力食物-游戏启动恢复": {
@@ -152,8 +202,12 @@
     "package": "com.hanjiasongshu.dr22/.MainActivity",
     "post_delay": 5000,
     "retry_times": 0,
-    "next": ["吃体力食物-恢复-状态-探测"],
-    "on_error": ["吃体力食物-游戏启动恢复失败"]
+    "next": [
+      "吃体力食物-恢复-状态-探测"
+    ],
+    "on_error": [
+      "吃体力食物-游戏启动恢复失败"
+    ]
   },
   "吃体力食物-恢复-状态-探测": {
     "recognition": "DirectHit",
@@ -170,7 +224,9 @@
       "吃体力食物-打开-分类",
       "吃体力食物-打开-资源"
     ],
-    "on_error": ["吃体力食物-游戏启动恢复失败"]
+    "on_error": [
+      "吃体力食物-游戏启动恢复失败"
+    ]
   },
   "吃体力食物-游戏启动恢复失败": {
     "recognition": "DirectHit",
@@ -181,23 +237,27 @@
       "status": "failed",
       "postcondition": "food.game_foreground_or_recoverable_state",
       "error_code": "FOOD_GAME_START_RECOVERY_EXHAUSTED",
-      "native_fail_after_record": true
+      "defer_home_boundary": true
     },
-    "Abort": true,
-    "next": ["公共-通用中止"]
-
+    "next": [
+      "公共-通用中止"
+    ]
   },
   "吃体力食物-打开-分类": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["吃体力食物-食物-背包-页面", "吃体力食物-食物-分类"],
+        "all_of": [
+          "吃体力食物-食物-背包-页面",
+          "吃体力食物-食物-分类"
+        ],
         "box_index": 1
       }
     },
     "timeout": 8000,
     "action": "Custom",
-    "custom_action": "GuardedInput", "max_hit": 1,
+    "custom_action": "GuardedInput",
+    "max_hit": 1,
     "custom_action_param": {
       "task_id": "EAT_STAMINA_FOOD_DAILY",
       "action_id": "open_food_category",
@@ -209,20 +269,28 @@
         "target_name": "吃体力食物-食物-分类"
       }
     },
-    "next": ["吃体力食物-选择-标签"],
-    "on_error": ["吃体力食物-记录-失败"]
+    "next": [
+      "吃体力食物-选择-标签"
+    ],
+    "on_error": [
+      "吃体力食物-记录-失败"
+    ]
   },
   "吃体力食物-选择-标签": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["吃体力食物-食物-分类-页面", "吃体力食物-食物-食物-标签"],
+        "all_of": [
+          "吃体力食物-食物-分类-页面",
+          "吃体力食物-食物-食物-标签"
+        ],
         "box_index": 1
       }
     },
     "timeout": 8000,
     "action": "Custom",
-    "custom_action": "GuardedInput", "max_hit": 1,
+    "custom_action": "GuardedInput",
+    "max_hit": 1,
     "custom_action_param": {
       "task_id": "EAT_STAMINA_FOOD_DAILY",
       "action_id": "select_food_tab",
@@ -238,26 +306,38 @@
       "吃体力食物-重新检查-已满",
       "吃体力食物-候选-循环"
     ],
-    "on_error": ["吃体力食物-记录-失败"]
+    "on_error": [
+      "吃体力食物-记录-失败"
+    ]
   },
   "吃体力食物-重新检查-已满": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["吃体力食物-食物-食物-页面", "吃体力食物-食物-已超上限"],
+        "all_of": [
+          "吃体力食物-食物-食物-页面",
+          "吃体力食物-食物-已超上限"
+        ],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["吃体力食物-体力-已满-关闭-背包"],
-    "on_error": ["吃体力食物-记录-失败"]
+    "next": [
+      "吃体力食物-体力-已满-关闭-背包"
+    ],
+    "on_error": [
+      "吃体力食物-记录-失败"
+    ]
   },
   "吃体力食物-候选-循环": {
     "max_hit": 6,
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["吃体力食物-食物-食物-页面", "吃体力食物-食物-候选"],
+        "all_of": [
+          "吃体力食物-食物-食物-页面",
+          "吃体力食物-食物-候选"
+        ],
         "box_index": 1
       }
     },
@@ -274,13 +354,25 @@
         "target_name": "吃体力食物-食物-候选"
       }
     },
-    "next": ["吃体力食物-详情-探测"],
-    "on_error": ["吃体力食物-记录-失败"]
+    "next": [
+      "吃体力食物-详情-探测"
+    ],
+    "on_error": [
+      "吃体力食物-记录-失败"
+    ]
   },
   "吃体力食物-详情-探测": {
     "recognition": "OCR",
-    "expected": ["物品", "龙井虾仁"],
-    "roi": [800, 100, 450, 300],
+    "expected": [
+      "物品",
+      "龙井虾仁"
+    ],
+    "roi": [
+      800,
+      100,
+      450,
+      300
+    ],
     "timeout": 5000,
     "action": "DoNothing",
     "next": [
@@ -291,7 +383,9 @@
       "吃体力食物-次数-2-探测",
       "吃体力食物-次数-1-探测"
     ],
-    "on_error": ["吃体力食物-无安全卡-关闭-背包"]
+    "on_error": [
+      "吃体力食物-无安全卡-关闭-背包"
+    ]
   },
   "吃体力食物-次数-6-探测": {
     "recognition": {
@@ -307,8 +401,12 @@
       }
     },
     "action": "DoNothing",
-    "next": ["吃体力食物-食用-次数-6"],
-    "on_error": ["吃体力食物-记录-失败"]
+    "next": [
+      "吃体力食物-食用-次数-6"
+    ],
+    "on_error": [
+      "吃体力食物-记录-失败"
+    ]
   },
   "吃体力食物-次数-5-探测": {
     "recognition": {
@@ -324,8 +422,12 @@
       }
     },
     "action": "DoNothing",
-    "next": ["吃体力食物-食用-次数-5"],
-    "on_error": ["吃体力食物-记录-失败"]
+    "next": [
+      "吃体力食物-食用-次数-5"
+    ],
+    "on_error": [
+      "吃体力食物-记录-失败"
+    ]
   },
   "吃体力食物-次数-4-探测": {
     "recognition": {
@@ -341,8 +443,12 @@
       }
     },
     "action": "DoNothing",
-    "next": ["吃体力食物-食用-次数-4"],
-    "on_error": ["吃体力食物-记录-失败"]
+    "next": [
+      "吃体力食物-食用-次数-4"
+    ],
+    "on_error": [
+      "吃体力食物-记录-失败"
+    ]
   },
   "吃体力食物-次数-3-探测": {
     "recognition": {
@@ -358,8 +464,12 @@
       }
     },
     "action": "DoNothing",
-    "next": ["吃体力食物-食用-次数-3"],
-    "on_error": ["吃体力食物-记录-失败"]
+    "next": [
+      "吃体力食物-食用-次数-3"
+    ],
+    "on_error": [
+      "吃体力食物-记录-失败"
+    ]
   },
   "吃体力食物-次数-2-探测": {
     "recognition": {
@@ -375,8 +485,12 @@
       }
     },
     "action": "DoNothing",
-    "next": ["吃体力食物-食用-次数-2"],
-    "on_error": ["吃体力食物-记录-失败"]
+    "next": [
+      "吃体力食物-食用-次数-2"
+    ],
+    "on_error": [
+      "吃体力食物-记录-失败"
+    ]
   },
   "吃体力食物-次数-1-探测": {
     "recognition": {
@@ -392,8 +506,12 @@
       }
     },
     "action": "DoNothing",
-    "next": ["吃体力食物-食用-次数-1"],
-    "on_error": ["吃体力食物-记录-失败"]
+    "next": [
+      "吃体力食物-食用-次数-1"
+    ],
+    "on_error": [
+      "吃体力食物-记录-失败"
+    ]
   },
   "吃体力食物-食用-次数-6": {
     "recognition": {
@@ -409,7 +527,8 @@
       }
     },
     "action": "Custom",
-    "custom_action": "GuardedInput", "max_hit": 1,
+    "custom_action": "GuardedInput",
+    "max_hit": 6,
     "custom_action_param": {
       "task_id": "EAT_STAMINA_FOOD_DAILY",
       "action_id": "eat_longjing_shrimp",
@@ -432,7 +551,9 @@
       "吃体力食物-替换-确认-循环",
       "吃体力食物-使用-结果-探测"
     ],
-    "on_error": ["吃体力食物-记录-失败"],
+    "on_error": [
+      "吃体力食物-记录-失败"
+    ],
     "retry_times": 0
   },
   "吃体力食物-食用-次数-5": {
@@ -449,7 +570,8 @@
       }
     },
     "action": "Custom",
-    "custom_action": "GuardedInput", "max_hit": 1,
+    "custom_action": "GuardedInput",
+    "max_hit": 6,
     "custom_action_param": {
       "task_id": "EAT_STAMINA_FOOD_DAILY",
       "action_id": "eat_longjing_shrimp",
@@ -471,7 +593,9 @@
       "吃体力食物-替换-确认-循环",
       "吃体力食物-使用-结果-探测"
     ],
-    "on_error": ["吃体力食物-记录-失败"],
+    "on_error": [
+      "吃体力食物-记录-失败"
+    ],
     "retry_times": 0
   },
   "吃体力食物-食用-次数-4": {
@@ -488,7 +612,8 @@
       }
     },
     "action": "Custom",
-    "custom_action": "GuardedInput", "max_hit": 1,
+    "custom_action": "GuardedInput",
+    "max_hit": 6,
     "custom_action_param": {
       "task_id": "EAT_STAMINA_FOOD_DAILY",
       "action_id": "eat_longjing_shrimp",
@@ -510,7 +635,9 @@
       "吃体力食物-替换-确认-循环",
       "吃体力食物-使用-结果-探测"
     ],
-    "on_error": ["吃体力食物-记录-失败"],
+    "on_error": [
+      "吃体力食物-记录-失败"
+    ],
     "retry_times": 0
   },
   "吃体力食物-食用-次数-3": {
@@ -527,7 +654,8 @@
       }
     },
     "action": "Custom",
-    "custom_action": "GuardedInput", "max_hit": 1,
+    "custom_action": "GuardedInput",
+    "max_hit": 6,
     "custom_action_param": {
       "task_id": "EAT_STAMINA_FOOD_DAILY",
       "action_id": "eat_longjing_shrimp",
@@ -549,7 +677,9 @@
       "吃体力食物-替换-确认-循环",
       "吃体力食物-使用-结果-探测"
     ],
-    "on_error": ["吃体力食物-记录-失败"],
+    "on_error": [
+      "吃体力食物-记录-失败"
+    ],
     "retry_times": 0
   },
   "吃体力食物-食用-次数-2": {
@@ -566,7 +696,8 @@
       }
     },
     "action": "Custom",
-    "custom_action": "GuardedInput", "max_hit": 1,
+    "custom_action": "GuardedInput",
+    "max_hit": 6,
     "custom_action_param": {
       "task_id": "EAT_STAMINA_FOOD_DAILY",
       "action_id": "eat_longjing_shrimp",
@@ -588,7 +719,9 @@
       "吃体力食物-替换-确认-循环",
       "吃体力食物-使用-结果-探测"
     ],
-    "on_error": ["吃体力食物-记录-失败"],
+    "on_error": [
+      "吃体力食物-记录-失败"
+    ],
     "retry_times": 0
   },
   "吃体力食物-食用-次数-1": {
@@ -605,7 +738,8 @@
       }
     },
     "action": "Custom",
-    "custom_action": "GuardedInput", "max_hit": 1,
+    "custom_action": "GuardedInput",
+    "max_hit": 6,
     "custom_action_param": {
       "task_id": "EAT_STAMINA_FOOD_DAILY",
       "action_id": "eat_longjing_shrimp",
@@ -627,20 +761,29 @@
       "吃体力食物-替换-确认-循环",
       "吃体力食物-使用-结果-探测"
     ],
-    "on_error": ["吃体力食物-记录-失败"],
+    "on_error": [
+      "吃体力食物-记录-失败"
+    ],
     "retry_times": 0
   },
   "吃体力食物-已超上限-之后-食用-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["吃体力食物-食物-食物-页面", "吃体力食物-食物-已超上限"],
+        "all_of": [
+          "吃体力食物-食物-食物-页面",
+          "吃体力食物-食物-已超上限"
+        ],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["吃体力食物-体力-已满"],
-    "on_error": ["吃体力食物-记录-失败"]
+    "next": [
+      "吃体力食物-体力-已满-关闭-背包"
+    ],
+    "on_error": [
+      "吃体力食物-记录-失败"
+    ]
   },
   "吃体力食物-替换-确认-循环": {
     "max_hit": 6,
@@ -649,8 +792,7 @@
       "param": {
         "all_of": [
           "吃体力食物-食物-替换-提示",
-          "吃体力食物-食物-替换-确认",
-          "吃体力食物-食物-龙井虾仁-名称"
+          "吃体力食物-食物-替换-确认"
         ],
         "box_index": 1
       }
@@ -672,19 +814,28 @@
       "吃体力食物-已超上限-之后-食用-探测",
       "吃体力食物-使用-结果-探测"
     ],
-    "on_error": ["吃体力食物-记录-失败"]
+    "on_error": [
+      "吃体力食物-记录-失败"
+    ]
   },
   "吃体力食物-使用-结果-探测": {
     "recognition": {
       "type": "Or",
       "param": {
-        "any_of": ["吃体力食物-食物-使用-结果", "吃体力食物-食物-之后-使用-状态"]
+        "any_of": [
+          "吃体力食物-食物-使用-结果",
+          "吃体力食物-食物-之后-使用-状态"
+        ]
       }
     },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["吃体力食物-之后-使用-进度-探测"],
-    "on_error": ["吃体力食物-记录-失败"]
+    "next": [
+      "吃体力食物-之后-使用-进度-探测"
+    ],
+    "on_error": [
+      "吃体力食物-记录-失败"
+    ]
   },
   "吃体力食物-之后-使用-进度-探测": {
     "max_hit": 4,
@@ -695,7 +846,9 @@
       "吃体力食物-重新检查-已满",
       "吃体力食物-候选-循环"
     ],
-    "on_error": ["吃体力食物-关闭-背包"]
+    "on_error": [
+      "吃体力食物-关闭-背包"
+    ]
   },
   "吃体力食物-体力-已满": {
     "recognition": "DirectHit",
@@ -707,8 +860,12 @@
       "postcondition": "food.stamina_full",
       "defer_home_boundary": true
     },
-    "next": ["吃体力食物-收尾-主页-探测"],
-    "on_error": ["吃体力食物-记录-失败"]
+    "next": [
+      "吃体力食物-收尾-主页-探测"
+    ],
+    "on_error": [
+      "吃体力食物-记录-失败"
+    ]
   },
   "吃体力食物-成功": {
     "recognition": "DirectHit",
@@ -720,8 +877,12 @@
       "postcondition": "food.used_five_times",
       "defer_home_boundary": true
     },
-    "next": ["吃体力食物-收尾-主页-探测"],
-    "on_error": ["吃体力食物-记录-失败"]
+    "next": [
+      "吃体力食物-收尾-主页-探测"
+    ],
+    "on_error": [
+      "吃体力食物-记录-失败"
+    ]
   },
   "吃体力食物-无安全卡": {
     "recognition": "DirectHit",
@@ -733,8 +894,12 @@
       "postcondition": "food.longjing_shrimp_unavailable",
       "defer_home_boundary": true
     },
-    "next": ["吃体力食物-收尾-主页-探测"],
-    "on_error": ["吃体力食物-记录-失败"]
+    "next": [
+      "吃体力食物-收尾-主页-探测"
+    ],
+    "on_error": [
+      "吃体力食物-记录-失败"
+    ]
   },
   "吃体力食物-记录-失败": {
     "recognition": "DirectHit",
@@ -745,22 +910,26 @@
       "status": "failed",
       "postcondition": "FOOD_POSTCONDITION_MISSING",
       "error_code": "FOOD_POSTCONDITION_MISSING",
-      "native_fail_after_record": true
+      "defer_home_boundary": true
     },
-    "Abort": true,
-    "next": ["公共-通用中止"]
-
+    "next": [
+      "公共-通用中止"
+    ]
   },
   "吃体力食物-关闭-背包": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["吃体力食物-食物-食物-页面", "吃体力食物-食物-关闭"],
+        "all_of": [
+          "吃体力食物-食物-食物-页面",
+          "吃体力食物-食物-关闭"
+        ],
         "box_index": 1
       }
     },
     "action": "Custom",
-    "custom_action": "GuardedInput", "max_hit": 1,
+    "custom_action": "GuardedInput",
+    "max_hit": 1,
     "custom_action_param": {
       "task_id": "EAT_STAMINA_FOOD_DAILY",
       "action_id": "close_bag",
@@ -772,14 +941,21 @@
         "target_name": "吃体力食物-食物-关闭"
       }
     },
-    "next": ["吃体力食物-成功"],
-    "on_error": ["吃体力食物-记录-失败"]
+    "next": [
+      "吃体力食物-成功"
+    ],
+    "on_error": [
+      "吃体力食物-记录-失败"
+    ]
   },
   "吃体力食物-体力-已满-关闭-背包": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["吃体力食物-食物-食物-页面", "吃体力食物-食物-关闭"],
+        "all_of": [
+          "吃体力食物-食物-食物-页面",
+          "吃体力食物-食物-关闭"
+        ],
         "box_index": 1
       }
     },
@@ -797,14 +973,21 @@
         "target_name": "吃体力食物-食物-关闭"
       }
     },
-    "next": ["吃体力食物-体力-已满"],
-    "on_error": ["吃体力食物-记录-失败"]
+    "next": [
+      "吃体力食物-体力-已满"
+    ],
+    "on_error": [
+      "吃体力食物-记录-失败"
+    ]
   },
   "吃体力食物-无安全卡-关闭-背包": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["吃体力食物-食物-食物-页面", "吃体力食物-食物-关闭"],
+        "all_of": [
+          "吃体力食物-食物-食物-页面",
+          "吃体力食物-食物-关闭"
+        ],
         "box_index": 1
       }
     },
@@ -822,33 +1005,64 @@
         "target_name": "吃体力食物-食物-关闭"
       }
     },
-    "next": ["吃体力食物-无安全卡"],
-    "on_error": ["吃体力食物-记录-失败"]
+    "next": [
+      "吃体力食物-无安全卡"
+    ],
+    "on_error": [
+      "吃体力食物-记录-失败"
+    ]
   },
   "吃体力食物-收尾-主页-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["吃体力食物-食物-主页-页面"],
+        "all_of": [
+          "吃体力食物-食物-主页-页面"
+        ],
         "box_index": 0
       }
     },
     "timeout": 8000,
     "max_hit": 1,
     "action": "DoNothing",
-    "next": ["公共-主页边界"],
-    "on_error": ["吃体力食物-记录-失败"]
+    "next": [
+      "公共-主页边界"
+    ],
+    "on_error": [
+      "吃体力食物-记录-失败"
+    ]
   },
   "吃体力食物-食物-主页-页面": {
-    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "公共-游戏主页-页面"
+        ],
+        "box_index": 0
+      }
+    },
     "action": "DoNothing"
   },
   "吃体力食物-食物-资源-入口": {
     "recognition": "ColorMatch",
     "method": 4,
-    "lower": [100, 100, 90],
-    "upper": [255, 255, 255],
-    "roi": [0, 90, 70, 100],
+    "lower": [
+      100,
+      100,
+      90
+    ],
+    "upper": [
+      255,
+      255,
+      255
+    ],
+    "roi": [
+      0,
+      90,
+      70,
+      100
+    ],
     "connected": true,
     "count": 450,
     "order_by": "Area",
@@ -858,34 +1072,61 @@
   "吃体力食物-食物-背包-页面": {
     "recognition": "TemplateMatch",
     "template": "daily/EAT_STAMINA_FOOD_DAILY/food_bag_title_live.png",
-    "roi": [0, 0, 150, 120],
+    "roi": [
+      0,
+      0,
+      150,
+      120
+    ],
     "threshold": 0.8,
     "action": "DoNothing"
   },
   "吃体力食物-食物-分类": {
     "recognition": "TemplateMatch",
     "template": "daily/EAT_STAMINA_FOOD_DAILY/food_category_icon_live.png",
-    "roi": [0, 130, 150, 180],
+    "roi": [
+      0,
+      130,
+      150,
+      180
+    ],
     "threshold": 0.8,
     "action": "DoNothing"
   },
   "吃体力食物-食物-分类-页面": {
     "recognition": "OCR",
-    "expected": ["消耗品", "食物", "料理"],
-    "roi": [0, 0, 500, 720],
+    "expected": [
+      "消耗品",
+      "食物",
+      "料理"
+    ],
+    "roi": [
+      0,
+      0,
+      500,
+      720
+    ],
     "action": "DoNothing"
   },
   "吃体力食物-食物-食物-标签": {
     "recognition": "OCR",
     "expected": "食物",
-    "roi": [300, 30, 180, 75],
+    "roi": [
+      300,
+      30,
+      180,
+      75
+    ],
     "action": "DoNothing"
   },
   "吃体力食物-食物-食物-页面": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["吃体力食物-食物-分类-页面", "吃体力食物-食物-食物-标签"],
+        "all_of": [
+          "吃体力食物-食物-分类-页面",
+          "吃体力食物-食物-食物-标签"
+        ],
         "box_index": 1
       }
     },
@@ -894,68 +1135,123 @@
   "吃体力食物-食物-候选": {
     "recognition": "TemplateMatch",
     "template": "daily/EAT_STAMINA_FOOD_DAILY/longjing_shrimp.png",
-    "roi": [120, 80, 680, 540],
+    "roi": [
+      120,
+      80,
+      680,
+      540
+    ],
     "threshold": 0.78,
     "action": "DoNothing"
   },
   "吃体力食物-食物-详情": {
     "recognition": "OCR",
     "expected": "物品",
-    "roi": [800, 100, 450, 300],
+    "roi": [
+      800,
+      100,
+      450,
+      300
+    ],
     "action": "DoNothing"
   },
   "吃体力食物-食物-龙井虾仁-名称": {
     "recognition": "OCR",
     "expected": "龙井虾仁",
-    "roi": [800, 100, 450, 300],
+    "roi": [
+      800,
+      100,
+      450,
+      300
+    ],
     "action": "DoNothing"
   },
   "吃体力食物-食物-使用-目标": {
     "recognition": "OCR",
     "expected": "使用",
-    "roi": [1000, 600, 250, 120],
+    "roi": [
+      1000,
+      600,
+      250,
+      120
+    ],
     "action": "DoNothing"
   },
   "吃体力食物-食物-可用-6": {
     "recognition": "OCR",
     "expected": "(?<!\\d)(?:[6-9]|[1-9][0-9]+)(?!\\d)",
-    "roi": [1060, 180, 200, 100],
+    "roi": [
+      1060,
+      180,
+      200,
+      100
+    ],
     "action": "DoNothing"
   },
   "吃体力食物-食物-可用-5": {
     "recognition": "OCR",
     "expected": "(?<!\\d)5(?!\\d)",
-    "roi": [1060, 180, 200, 100],
+    "roi": [
+      1060,
+      180,
+      200,
+      100
+    ],
     "action": "DoNothing"
   },
   "吃体力食物-食物-可用-4": {
     "recognition": "OCR",
     "expected": "(?<!\\d)4(?!\\d)",
-    "roi": [1060, 180, 200, 100],
+    "roi": [
+      1060,
+      180,
+      200,
+      100
+    ],
     "action": "DoNothing"
   },
   "吃体力食物-食物-可用-3": {
     "recognition": "OCR",
     "expected": "(?<!\\d)3(?!\\d)",
-    "roi": [1060, 180, 200, 100],
+    "roi": [
+      1060,
+      180,
+      200,
+      100
+    ],
     "action": "DoNothing"
   },
   "吃体力食物-食物-可用-2": {
     "recognition": "OCR",
     "expected": "(?<!\\d)2(?!\\d)",
-    "roi": [1060, 180, 200, 100],
+    "roi": [
+      1060,
+      180,
+      200,
+      100
+    ],
     "action": "DoNothing"
   },
   "吃体力食物-食物-可用-1": {
     "recognition": "OCR",
     "expected": "(?<!\\d)1(?!\\d)",
-    "roi": [1060, 180, 200, 100],
+    "roi": [
+      1060,
+      180,
+      200,
+      100
+    ],
     "action": "DoNothing"
   },
   "吃体力食物-食物-可用-正向": {
     "recognition": "OCR",
     "expected": "(?<!\\d)[1-9][0-9]*(?!\\d)",
-    "roi": [1060, 180, 200, 100],
+    "roi": [
+      1060,
+      180,
+      200,
+      100
+    ],
     "action": "DoNothing"
   },
   "吃体力食物-食物-之后-使用-状态": {
@@ -976,21 +1272,40 @@
   "吃体力食物-食物-替换-提示": {
     "recognition": "TemplateMatch",
     "template": "daily/EAT_STAMINA_FOOD_DAILY/food_buff_replace_prompt.png",
-    "roi": [250, 130, 800, 500],
+    "roi": [
+      250,
+      130,
+      800,
+      500
+    ],
     "threshold": 0.35,
     "action": "DoNothing"
   },
   "吃体力食物-食物-替换-确认": {
     "recognition": "TemplateMatch",
     "template": "daily/EAT_STAMINA_FOOD_DAILY/food_buff_replace_confirm.png",
-    "roi": [780, 450, 250, 100],
-    "threshold": 0.35,
+    "roi": [
+      780,
+      450,
+      250,
+      100
+    ],
+    "threshold": 0.33,
     "action": "DoNothing"
   },
   "吃体力食物-食物-已超上限": {
     "recognition": "OCR",
-    "expected": ["吃得太撑", "手抚腹部", "歇着"],
-    "roi": [250, 250, 800, 250],
+    "expected": [
+      "吃得太撑",
+      "手抚腹部",
+      "歇着"
+    ],
+    "roi": [
+      250,
+      250,
+      800,
+      250
+    ],
     "action": "DoNothing"
   },
   "吃体力食物-食物-使用-结果": {
@@ -999,13 +1314,23 @@
       "正在恢复体力",
       "恢复体力成功"
     ],
-    "roi": [0, 0, 1280, 720],
+    "roi": [
+      0,
+      0,
+      1280,
+      720
+    ],
     "action": "DoNothing"
   },
   "吃体力食物-食物-关闭": {
     "recognition": "TemplateMatch",
     "template": "home/modal_close.png",
-    "roi": [1160, 0, 100, 100],
+    "roi": [
+      1160,
+      0,
+      100,
+      100
+    ],
     "threshold": 0.78,
     "action": "DoNothing"
   }

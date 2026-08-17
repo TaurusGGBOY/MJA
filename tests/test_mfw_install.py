@@ -18,6 +18,7 @@ from tools.mfw_install import (
     sha256,
     verify_candidate,
 )
+from tools.mfw_profile import profile_task_order, resolve_config_id
 from tools.mfw_release import ReleaseAsset
 
 
@@ -245,6 +246,79 @@ def test_build_install_emits_maa_bbb_layout(
     assert json.loads((output / "build-metadata.json").read_text())["mja_commit"] == "deadbeef"
     _assert_startup_payload(output)
     assert verify_candidate(repo_fixture, output) == metadata
+
+
+def test_build_install_generates_registered_pair_profiles_for_all_active_tasks(
+    repo_fixture: Path,
+    runtime_archives: tuple[Path, Path, ReleaseAsset, ReleaseAsset],
+    tmp_path: Path,
+) -> None:
+    active_tasks = (
+        "MAIL_REWARD_DAILY",
+        "WEEKLY_FREE_GIFT_MONDAY",
+        "EQUIPMENT_DECOMPOSE_DAILY",
+    )
+    task_dir = repo_fixture / "assets/tasks/日常"
+    task_dir.mkdir(parents=True)
+    imports = ["tasks/游戏启动.json"]
+    for task_id in (*active_tasks, "RETIRED_DAILY"):
+        relative = f"tasks/日常/{task_id}.json"
+        imports.append(relative)
+        (task_dir / f"{task_id}.json").write_text(
+            json.dumps(
+                {
+                    "task": [
+                        {
+                            "name": task_id,
+                            "entry": f"{task_id}-entry",
+                        }
+                    ]
+                }
+            ),
+            encoding="utf-8",
+        )
+    (repo_fixture / "assets/interface.mfw.json").write_text(
+        json.dumps(
+            {
+                "version": "0.1.0",
+                "agent": {
+                    "child_exec": "python3",
+                    "child_args": ["{PROJECT_DIR}/agent/main.py"],
+                    "embedded": False,
+                },
+                "resource": ["base"],
+                "import": imports,
+                "retired_tasks": ["RETIRED_DAILY"],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    mfw_archive, maa_archive, mfw_asset, maa_asset = runtime_archives
+    candidate = tmp_path / "candidate"
+    build_install(
+        repo_fixture,
+        candidate,
+        mfw_asset,
+        maa_asset,
+        "pair-profile-generation-commit",
+        mfw_archive=mfw_archive,
+        maa_archive=maa_archive,
+    )
+
+    registry = json.loads(
+        (candidate / "config/multi_config.json").read_text(encoding="utf-8")
+    )
+    for task_id in active_tasks:
+        profile_name = f"MJA auto GAME_START+{task_id}"
+        config_id = resolve_config_id(candidate, profile_name)
+        assert config_id in registry["config_list"]
+        assert profile_task_order(candidate, config_id) == ("GAME_START", task_id)
+    assert not any(
+        json.loads(path.read_text(encoding="utf-8")).get("name")
+        == "MJA auto GAME_START+RETIRED_DAILY"
+        for path in (candidate / "config/configs").glob("c_*.json")
+    )
 
 
 def test_generated_python_cache_does_not_break_candidate_integrity(

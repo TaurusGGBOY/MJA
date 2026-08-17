@@ -159,6 +159,7 @@ def test_r22_reward_close_is_same_frame_guarded_and_every_input_is_capped_once()
         "task_id": APPRAISAL.task_id,
         "action_id": "close_appraisal_popup",
         "kind": "click",
+        "fixed_click_mode": "appraisal_reward_blank",
         "evidence": {
             "page_index": 0,
             "target_index": 1,
@@ -170,6 +171,12 @@ def test_r22_reward_close_is_same_frame_guarded_and_every_input_is_capped_once()
         "[JumpBack]免费鉴定-额外-弹窗-关闭",
         "MJA_APPRAISAL_VERIFY",
         "免费鉴定-主页-之后-奖励",
+    ]
+
+    extra = nodes["免费鉴定-额外-弹窗-关闭"]
+    assert extra["recognition"]["param"]["all_of"] == [
+        "免费鉴定-鉴定-结果-弹窗",
+        "免费鉴定-鉴定-弹窗-关闭",
     ]
 
     policy = TASK_POLICIES[APPRAISAL.task_id]

@@ -183,8 +183,11 @@ _POLICIES = {
             # again to start the newly empty task.  Six rows therefore need
             # twelve bounded selection clicks in the same run.
             "select_first_visible_dispatch": 12,
-            "smart_configure_team": 6,
-            "dispatch_team": 6,
+            # The live dispatch page exposes twelve slots (for example
+            # `任务：9/12`).  Keep enough budget to fill every remaining slot
+            # instead of stopping after the old nine-slot limit.
+            "smart_configure_team": 12,
+            "dispatch_team": 12,
             "close_hero_dispatch": 1,
             "close_hero_dispatch_painting": 1,
         },
@@ -218,8 +221,16 @@ _POLICIES = {
             "move_shadow_foreground_right": 1,
             "challenge_shadow_stage": 12,
             "close_shadow_page": 1,
+            "leave_shadow_stage": 1,
             "close_shadow_painting": 1,
         },
+        cleanup_actions=frozenset(
+            {
+                "leave_shadow_stage",
+                "close_shadow_page",
+                "close_shadow_painting",
+            }
+        ),
     ),
     "SPEND_CONDENSATE_DAILY": _policy(
         "SPEND_CONDENSATE_DAILY",
@@ -273,9 +284,9 @@ _POLICIES = {
             "open_bag": 1,
             "open_food_category": 1,
             "select_food_tab": 1,
-            "inspect_food_candidate": 5,
-            "eat_longjing_shrimp": 5,
-            "confirm_food_buff_replace": 5,
+            "inspect_food_candidate": 6,
+            "eat_longjing_shrimp": 6,
+            "confirm_food_buff_replace": 6,
             "close_bag": 1,
         },
         resources={"龙井虾仁": 6},
@@ -299,6 +310,7 @@ _POLICIES = {
             "confirm_equipment_decompose_final": 1,
             "close_equipment_page": 1,
         },
+        cleanup_actions=frozenset({"close_equipment_page"}),
     ),
     "DUNGEON_SWEEP_DAILY": _policy(
         "DUNGEON_SWEEP_DAILY",
@@ -312,10 +324,10 @@ _POLICIES = {
             "open_sweep_panel": 2,
             "select_yanwangling_in_panel": 1,
             "close_dungeon_reward_preview": 1,
-            "assign_sweep_ticket": 100,
-            "start_yanwangling_master_sweep": 1,
-            "confirm_yanwangling_master_sweep": 1,
-            "dismiss_sweep_result": 1,
+            "assign_sweep_ticket": 20,
+            "start_yanwangling_master_sweep": 20,
+            "confirm_yanwangling_master_sweep": 20,
+            "dismiss_sweep_result": 20,
             "close_dungeon": 2,
         },
         resources={"副本票": 20},
@@ -336,12 +348,14 @@ _POLICIES = {
         action_caps={
             "close_function_panel": 1,
             "open_function_panel": 1,
+            "open_dueling_menu": 1,
             "close_ring_page": 1,
             "close_guild_activity_for_jianlin": 1,
             "close_guild_home_for_jianlin": 1,
             "open_daily_tasks": 1,
             "scroll_daily_jianlin": 3,
             "open_jianlin": 1,
+            "open_jianlin_resource": 1,
             "select_jianlin_condensate": 1,
             "open_jianlin_stamina_purchase": 1,
             "buy_stamina_once": 1,
@@ -353,6 +367,7 @@ _POLICIES = {
             "challenge_condensate": 12,
             "enable_jianlin_skip_prepare": 12,
             "start_jianlin_battle": 12,
+            "wait_jianlin_battle": 12,
             "close_condensate_result": 12,
             "close_jianlin_page": 1,
             "close_daily_tasks": 1,
@@ -367,6 +382,8 @@ _POLICIES = {
         max_steps=120,
         action_caps={
             "open_function_panel": 1,
+            "open_dueling_menu": 1,
+            "open_dueling": 1,
             "open_daily_tasks": 1,
             "open_ring_challenge": 1,
             "close_reward_popup": 1,
@@ -382,6 +399,7 @@ _POLICIES = {
             "dismiss_ring_result": 12,
             "close_ring_opponents": 1,
             "close_ring_page": 1,
+            "close_dueling_menu": 1,
         },
         resources={"擂台券": 12},
     ),

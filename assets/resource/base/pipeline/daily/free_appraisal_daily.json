@@ -2,11 +2,18 @@
   "免费鉴定-任务入口": {
     "recognition": {
       "type": "And",
-      "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}
+      "param": {
+        "all_of": [
+          "公共-游戏主页-页面"
+        ],
+        "box_index": 0
+      }
     },
     "action": "Custom",
     "custom_action": "BeginTask",
-    "custom_action_param": {"task_id": "FREE_APPRAISAL_DAILY"},
+    "custom_action_param": {
+      "task_id": "FREE_APPRAISAL_DAILY"
+    },
     "timeout": 8000,
     "next": [
       "[JumpBack]公共-已知-画卷-关闭",
@@ -18,8 +25,7 @@
       "免费鉴定-关闭-已恢复-面板"
     ],
     "on_error": [
-      "免费鉴定-运行时-恢复-尝试",
-      "免费鉴定-记录-失败"
+      "公共-主页边界-失败"
     ],
     "retry_times": 0
   },
@@ -33,9 +39,11 @@
       "免费鉴定-页面-探测",
       "免费鉴定-主页-探测",
       "免费鉴定-关闭-已恢复-面板",
-      "[JumpBack]启动-游戏启动"
+      "公共-主页边界-失败"
     ],
-    "on_error": ["免费鉴定-记录-失败"],
+    "on_error": [
+      "免费鉴定-记录-失败"
+    ],
     "retry_times": 0
   },
   "免费鉴定-已知-茶-商店-关闭": {
@@ -52,36 +60,64 @@
     },
     "timeout": 5000,
     "action": "Click",
-    "on_error": ["免费鉴定-记录-失败"],
+    "on_error": [
+      "免费鉴定-记录-失败"
+    ],
     "retry_times": 0
   },
   "免费鉴定-页面-探测": {
     "recognition": "OCR",
     "expected": "鉴宝",
-    "roi": [0, 0, 500, 220],
+    "roi": [
+      0,
+      0,
+      500,
+      220
+    ],
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["免费鉴定-领取", "MJA_APPRAISAL_STATUS_PROBE"],
-    "on_error": ["免费鉴定-记录-失败"],
+    "next": [
+      "免费鉴定-领取",
+      "MJA_APPRAISAL_STATUS_PROBE"
+    ],
+    "on_error": [
+      "免费鉴定-记录-失败"
+    ],
     "retry_times": 0
   },
   "MJA_APPRAISAL_STATUS_PROBE": {
-    "recognition": {"type": "And", "param": {
-      "all_of": ["免费鉴定-鉴定-页面", "appraisal.used"],
-      "box_index": 1
-    }},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "免费鉴定-鉴定-页面",
+          "appraisal.used"
+        ],
+        "box_index": 1
+      }
+    },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_APPRAISAL_CLOSE_ALREADY_COMPLETE_PAGE"],
-    "on_error": ["免费鉴定-记录-失败"],
+    "next": [
+      "MJA_APPRAISAL_CLOSE_ALREADY_COMPLETE_PAGE"
+    ],
+    "on_error": [
+      "免费鉴定-记录-失败"
+    ],
     "retry_times": 0
   },
   "MJA_APPRAISAL_CLOSE_ALREADY_COMPLETE_PAGE": {
     "max_hit": 1,
-    "recognition": {"type": "And", "param": {
-      "all_of": ["免费鉴定-鉴定-页面", "免费鉴定-鉴定-页面-关闭"],
-      "box_index": 1
-    }},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "免费鉴定-鉴定-页面",
+          "免费鉴定-鉴定-页面-关闭"
+        ],
+        "box_index": 1
+      }
+    },
     "timeout": 8000,
     "action": "Custom",
     "custom_action": "GuardedInput",
@@ -96,19 +132,33 @@
         "target_name": "免费鉴定-鉴定-页面-关闭"
       }
     },
-    "next": ["MJA_APPRAISAL_HOME_AFTER_ALREADY_COMPLETE"],
-    "on_error": ["免费鉴定-记录-失败"],
+    "next": [
+      "MJA_APPRAISAL_HOME_AFTER_ALREADY_COMPLETE"
+    ],
+    "on_error": [
+      "免费鉴定-记录-失败"
+    ],
     "retry_times": 0
   },
   "MJA_APPRAISAL_HOME_AFTER_ALREADY_COMPLETE": {
-    "recognition": {"type": "And", "param": {
-      "all_of": ["免费鉴定-鉴定-主页-页面", "免费鉴定-鉴定-主页-入口"],
-      "box_index": 0
-    }},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "免费鉴定-鉴定-主页-页面",
+          "免费鉴定-鉴定-主页-入口"
+        ],
+        "box_index": 0
+      }
+    },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["MJA_APPRAISAL_ALREADY_COMPLETE"],
-    "on_error": ["免费鉴定-记录-失败"]
+    "next": [
+      "MJA_APPRAISAL_ALREADY_COMPLETE"
+    ],
+    "on_error": [
+      "免费鉴定-记录-失败"
+    ]
   },
   "MJA_APPRAISAL_ALREADY_COMPLETE": {
     "recognition": "DirectHit",
@@ -120,14 +170,22 @@
       "postcondition": "appraisal.used",
       "defer_home_boundary": true
     },
-    "next": ["公共-主页边界"]
+    "next": [
+      "公共-主页边界"
+    ]
   },
   "免费鉴定-领取": {
     "max_hit": 1,
-    "recognition": {"type": "And", "param": {
-      "all_of": ["免费鉴定-鉴定-页面", "免费鉴定-鉴定-免费-一次"],
-      "box_index": 1
-    }},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "免费鉴定-鉴定-页面",
+          "免费鉴定-鉴定-免费-一次"
+        ],
+        "box_index": 1
+      }
+    },
     "action": "Custom",
     "custom_action": "GuardedInput",
     "custom_action_param": {
@@ -141,34 +199,55 @@
         "target_name": "免费鉴定-鉴定-免费-一次"
       }
     },
-    "next": ["免费鉴定-奖励-探测"],
-    "on_error": ["免费鉴定-记录-失败"],
+    "next": [
+      "免费鉴定-奖励-探测"
+    ],
+    "on_error": [
+      "免费鉴定-记录-失败"
+    ],
     "timeout": 8000,
     "retry_times": 0
   },
   "免费鉴定-奖励-探测": {
-    "recognition": {"type": "And", "param": {
-      "all_of": ["免费鉴定-鉴定-结果-弹窗", "免费鉴定-鉴定-弹窗-关闭"],
-      "box_index": 0
-    }},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "免费鉴定-鉴定-结果-弹窗",
+          "免费鉴定-鉴定-弹窗-关闭"
+        ],
+        "box_index": 0
+      }
+    },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["免费鉴定-关闭-奖励"],
-    "on_error": ["免费鉴定-记录-失败"]
+    "next": [
+      "免费鉴定-关闭-奖励"
+    ],
+    "on_error": [
+      "免费鉴定-记录-失败"
+    ]
   },
   "免费鉴定-关闭-奖励": {
     "max_hit": 1,
-    "recognition": {"type": "And", "param": {
-      "all_of": ["免费鉴定-鉴定-结果-弹窗", "免费鉴定-鉴定-弹窗-关闭"],
-      "box_index": 1
-    }},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "免费鉴定-鉴定-结果-弹窗",
+          "免费鉴定-鉴定-弹窗-关闭"
+        ],
+        "box_index": 1
+      }
+    },
     "action": "Custom",
     "custom_action": "GuardedInput",
-    "custom_action_param": {
-      "task_id": "FREE_APPRAISAL_DAILY",
-      "action_id": "close_appraisal_popup",
-      "kind": "click",
-      "evidence": {
+      "custom_action_param": {
+        "task_id": "FREE_APPRAISAL_DAILY",
+        "action_id": "close_appraisal_popup",
+        "kind": "click",
+        "fixed_click_mode": "appraisal_reward_blank",
+        "evidence": {
         "page_index": 0,
         "target_index": 1,
         "page_name": "免费鉴定-鉴定-结果-弹窗",
@@ -180,26 +259,45 @@
       "MJA_APPRAISAL_VERIFY",
       "免费鉴定-主页-之后-奖励"
     ],
-    "on_error": ["免费鉴定-记录-失败"],
-    "timeout": 8000,
-    "retry_times": 0
+      "on_error": [
+        "免费鉴定-记录-失败"
+      ],
+      "timeout": 8000,
+      "retry_times": 0,
+      "post_delay": 1000
   },
   "MJA_APPRAISAL_VERIFY": {
-    "recognition": {"type": "And", "param": {
-      "all_of": ["免费鉴定-鉴定-页面", "appraisal.used"],
-      "box_index": 1
-    }},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "免费鉴定-鉴定-页面",
+          "appraisal.used"
+        ],
+        "box_index": 1
+      }
+    },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["免费鉴定-关闭-成功-页面"],
-    "on_error": ["免费鉴定-记录-失败"]
+    "next": [
+      "免费鉴定-关闭-成功-页面"
+    ],
+    "on_error": [
+      "免费鉴定-记录-失败"
+    ]
   },
   "免费鉴定-关闭-成功-页面": {
     "max_hit": 1,
-    "recognition": {"type": "And", "param": {
-      "all_of": ["免费鉴定-鉴定-页面", "免费鉴定-鉴定-页面-关闭"],
-      "box_index": 1
-    }},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "免费鉴定-鉴定-页面",
+          "免费鉴定-鉴定-页面-关闭"
+        ],
+        "box_index": 1
+      }
+    },
     "action": "Custom",
     "custom_action": "GuardedInput",
     "custom_action_param": {
@@ -213,30 +311,54 @@
         "target_name": "免费鉴定-鉴定-页面-关闭"
       }
     },
-    "next": ["免费鉴定-主页成功后"],
-    "on_error": ["免费鉴定-记录-失败"],
+    "next": [
+      "免费鉴定-主页成功后"
+    ],
+    "on_error": [
+      "免费鉴定-记录-失败"
+    ],
     "timeout": 8000,
     "retry_times": 0
   },
   "免费鉴定-主页成功后": {
-    "recognition": {"type": "And", "param": {
-      "all_of": ["免费鉴定-鉴定-主页-页面", "免费鉴定-鉴定-主页-入口"],
-      "box_index": 0
-    }},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "免费鉴定-鉴定-主页-页面",
+          "免费鉴定-鉴定-主页-入口"
+        ],
+        "box_index": 0
+      }
+    },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["免费鉴定-成功"],
-    "on_error": ["免费鉴定-记录-失败"]
+    "next": [
+      "免费鉴定-成功"
+    ],
+    "on_error": [
+      "免费鉴定-记录-失败"
+    ]
   },
   "免费鉴定-主页-之后-奖励": {
-    "recognition": {"type": "And", "param": {
-      "all_of": ["免费鉴定-鉴定-主页-页面", "免费鉴定-鉴定-主页-入口"],
-      "box_index": 0
-    }},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "免费鉴定-鉴定-主页-页面",
+          "免费鉴定-鉴定-主页-入口"
+        ],
+        "box_index": 0
+      }
+    },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["免费鉴定-主页成功"],
-    "on_error": ["免费鉴定-记录-失败"]
+    "next": [
+      "免费鉴定-主页成功"
+    ],
+    "on_error": [
+      "免费鉴定-记录-失败"
+    ]
   },
   "免费鉴定-主页成功": {
     "recognition": "DirectHit",
@@ -248,7 +370,9 @@
       "postcondition": "appraisal.reward_popup_seen_and_home",
       "defer_home_boundary": true
     },
-    "next": ["公共-主页边界"]
+    "next": [
+      "公共-主页边界"
+    ]
   },
   "免费鉴定-成功": {
     "recognition": "DirectHit",
@@ -260,7 +384,9 @@
       "postcondition": "appraisal.used",
       "defer_home_boundary": true
     },
-    "next": ["公共-主页边界"]
+    "next": [
+      "公共-主页边界"
+    ]
   },
   "免费鉴定-记录-失败": {
     "recognition": "DirectHit",
@@ -271,27 +397,44 @@
       "status": "failed",
       "postcondition": "APPRAISAL_POSTCONDITION_MISSING",
       "error_code": "APPRAISAL_POSTCONDITION_MISSING",
-      "native_fail_after_record": true
+      "defer_home_boundary": true
     },
-    "Abort": true,
-    "next": ["公共-通用中止"]
+    "next": [
+      "公共-通用中止"
+    ]
   },
   "免费鉴定-主页-探测": {
-    "recognition": {"type": "And", "param": {
-      "all_of": ["免费鉴定-鉴定-主页-页面", "免费鉴定-鉴定-主页-入口"],
-      "box_index": 0
-    }},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "免费鉴定-鉴定-主页-页面",
+          "免费鉴定-鉴定-主页-入口"
+        ],
+        "box_index": 0
+      }
+    },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["免费鉴定-打开-鉴定"],
-    "on_error": ["免费鉴定-记录-失败"]
+    "next": [
+      "免费鉴定-打开-鉴定"
+    ],
+    "on_error": [
+      "免费鉴定-记录-失败"
+    ]
   },
   "免费鉴定-打开-鉴定": {
     "max_hit": 1,
-    "recognition": {"type": "And", "param": {
-      "all_of": ["免费鉴定-鉴定-主页-页面", "免费鉴定-鉴定-主页-入口"],
-      "box_index": 1
-    }},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "免费鉴定-鉴定-主页-页面",
+          "免费鉴定-鉴定-主页-入口"
+        ],
+        "box_index": 1
+      }
+    },
     "action": "Custom",
     "custom_action": "GuardedInput",
     "custom_action_param": {
@@ -305,16 +448,26 @@
         "target_name": "免费鉴定-鉴定-主页-入口"
       }
     },
-    "next": ["免费鉴定-页面-探测"],
-    "on_error": ["免费鉴定-记录-失败"],
+    "next": [
+      "免费鉴定-页面-探测"
+    ],
+    "on_error": [
+      "免费鉴定-记录-失败"
+    ],
     "retry_times": 0
   },
   "免费鉴定-关闭-已恢复-面板": {
     "max_hit": 1,
-    "recognition": {"type": "And", "param": {
-      "all_of": ["免费鉴定-鉴定-面板-页面", "免费鉴定-鉴定-面板-关闭"],
-      "box_index": 1
-    }},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "免费鉴定-鉴定-面板-页面",
+          "免费鉴定-鉴定-面板-关闭"
+        ],
+        "box_index": 1
+      }
+    },
     "timeout": 8000,
     "action": "Custom",
     "custom_action": "GuardedInput",
@@ -330,16 +483,26 @@
         "target_name": "免费鉴定-鉴定-面板-关闭"
       }
     },
-    "next": ["免费鉴定-主页-探测"],
-    "on_error": ["免费鉴定-记录-失败"],
+    "next": [
+      "免费鉴定-主页-探测"
+    ],
+    "on_error": [
+      "免费鉴定-记录-失败"
+    ],
     "retry_times": 0
   },
   "免费鉴定-额外-弹窗-关闭": {
     "max_hit": 1,
-    "recognition": {"type": "And", "param": {
-      "all_of": ["免费鉴定-鉴定-结果-弹窗", "免费鉴定-鉴定-弹窗-关闭", "免费鉴定-奖励-碎片-文本"],
-      "box_index": 1
-    }},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "免费鉴定-鉴定-结果-弹窗",
+          "免费鉴定-鉴定-弹窗-关闭"
+        ],
+        "box_index": 1
+      }
+    },
     "timeout": 8000,
     "action": "Custom",
     "custom_action": "GuardedInput",
@@ -360,96 +523,193 @@
       "免费鉴定-额外-弹窗-关闭-额外",
       "免费鉴定-额外-弹窗-关闭-返回"
     ],
-    "on_error": ["免费鉴定-记录-失败"]
+    "on_error": [
+      "免费鉴定-记录-失败"
+    ]
   },
   "免费鉴定-鉴定-主页-页面": {
     "recognition": "OCR",
-    "expected": ["战令", "活动", "祈福", "副本", "画卷"],
-    "roi": [800, 40, 370, 50],
+    "expected": [
+      "战令",
+      "活动",
+      "祈福",
+      "副本",
+      "画卷"
+    ],
+    "roi": [
+      800,
+      40,
+      370,
+      50
+    ],
     "action": "DoNothing"
   },
   "免费鉴定-鉴定-主页-入口": {
     "recognition": "OCR",
-    "expected": ["^鉴宝$", "^宝$"],
-    "roi": [925, 45, 65, 40],
+    "expected": [
+      "^鉴宝$",
+      "^宝$"
+    ],
+    "roi": [
+      925,
+      45,
+      65,
+      40
+    ],
     "action": "DoNothing"
   },
   "免费鉴定-鉴定-页面": {
     "recognition": "OCR",
     "expected": "^鉴宝$",
-    "roi": [0, 0, 500, 220],
+    "roi": [
+      0,
+      0,
+      500,
+      220
+    ],
     "action": "DoNothing"
   },
   "免费鉴定-鉴定-页面-关闭": {
     "recognition": "TemplateMatch",
     "template": "daily/BUY_TEA_DAILY/shop_close.png",
-    "roi": [1170, 0, 110, 110],
+    "roi": [
+      1170,
+      0,
+      110,
+      110
+    ],
     "threshold": 0.39,
     "action": "DoNothing"
   },
   "免费鉴定-鉴定-面板-页面": {
     "recognition": "OCR",
-    "expected": ["^活动$", "^商城$", "^日常$", "^武学研习$", "^秘宝$", "^帮会$", "^签到$"],
-    "roi": [700, 180, 500, 420],
+    "expected": [
+      "^活动$",
+      "^商城$",
+      "^日常$",
+      "^武学研习$",
+      "^秘宝$",
+      "^帮会$",
+      "^签到$"
+    ],
+    "roi": [
+      700,
+      180,
+      500,
+      420
+    ],
     "action": "DoNothing"
   },
   "免费鉴定-鉴定-面板-关闭": {
-    "recognition": {"type": "And", "param": {
-      "all_of": ["公共-游戏侧边面板-打开"],
-      "box_index": 0
-    }},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "公共-游戏侧边面板-打开"
+        ],
+        "box_index": 0
+      }
+    },
     "action": "DoNothing"
   },
   "免费鉴定-鉴定-万用-商店-页面": {
     "recognition": "OCR",
     "expected": "^玉盟商会$",
-    "roi": [0, 0, 280, 100],
+    "roi": [
+      0,
+      0,
+      280,
+      100
+    ],
     "action": "DoNothing"
   },
   "免费鉴定-鉴定-万用-商店-关闭": {
     "recognition": "TemplateMatch",
     "template": "daily/BUY_TEA_DAILY/shop_close.png",
-    "roi": [1160, 0, 100, 100],
+    "roi": [
+      1160,
+      0,
+      100,
+      100
+    ],
     "threshold": 0.39,
     "action": "DoNothing"
   },
   "免费鉴定-鉴定-免费-一次": {
     "recognition": "OCR",
     "expected": "^免费鉴宝$",
-    "roi": [470, 590, 160, 60],
+    "roi": [
+      470,
+      590,
+      160,
+      60
+    ],
     "action": "DoNothing"
   },
   "appraisal.used": {
     "recognition": "OCR",
     "expected": "^鉴宝一次$",
-    "roi": [460, 570, 190, 85],
+    "roi": [
+      460,
+      570,
+      190,
+      85
+    ],
     "action": "DoNothing"
   },
   "免费鉴定-鉴定-结果-弹窗": {
     "recognition": "TemplateMatch",
     "template": "daily/BUY_TEA_DAILY/shop_close.png",
-    "roi": [1170, 0, 110, 110],
+    "roi": [
+      1170,
+      0,
+      110,
+      110
+    ],
     "threshold": 0.39,
     "action": "DoNothing"
   },
   "免费鉴定-鉴定-额外-弹窗-页面": {
     "recognition": "OCR",
     "expected": "^秘宝收集$",
-    "roi": [500, 150, 330, 110],
+    "roi": [
+      500,
+      150,
+      330,
+      110
+    ],
     "action": "DoNothing"
   },
   "免费鉴定-鉴定-额外-弹窗-关闭": {
     "recognition": "TemplateMatch",
     "template": "daily/BUY_TEA_DAILY/shop_close.png",
-    "roi": [1160, 0, 100, 100],
+    "roi": [
+      1160,
+      0,
+      100,
+      100
+    ],
     "threshold": 0.39,
     "action": "DoNothing"
   },
   "免费鉴定-鉴定-弹窗-关闭": {
     "recognition": "ColorMatch",
-    "lower": [150, 150, 130],
-    "upper": [255, 255, 255],
-    "roi": [1180, 10, 65, 65],
+    "lower": [
+      150,
+      150,
+      130
+    ],
+    "upper": [
+      255,
+      255,
+      255
+    ],
+    "roi": [
+      1180,
+      10,
+      65,
+      65
+    ],
     "connected": true,
     "count": 250,
     "action": "DoNothing"
@@ -457,15 +717,26 @@
   "免费鉴定-奖励-碎片-文本": {
     "recognition": "OCR",
     "expected": "^已转化碎片",
-    "roi": [540, 260, 230, 60],
+    "roi": [
+      540,
+      260,
+      230,
+      60
+    ],
     "action": "DoNothing"
   },
   "免费鉴定-额外-弹窗-关闭-额外": {
     "max_hit": 1,
-    "recognition": {"type": "And", "param": {
-      "all_of": ["免费鉴定-鉴定-额外-弹窗-页面", "免费鉴定-鉴定-额外-弹窗-关闭"],
-      "box_index": 1
-    }},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "免费鉴定-鉴定-额外-弹窗-页面",
+          "免费鉴定-鉴定-额外-弹窗-关闭"
+        ],
+        "box_index": 1
+      }
+    },
     "timeout": 8000,
     "action": "Custom",
     "custom_action": "GuardedInput",
@@ -481,12 +752,16 @@
       }
     },
     "retry_times": 0,
-    "on_error": ["免费鉴定-记录-失败"]
+    "on_error": [
+      "免费鉴定-记录-失败"
+    ]
   },
   "免费鉴定-额外-弹窗-关闭-返回": {
     "recognition": "DirectHit",
     "timeout": 8000,
     "action": "DoNothing",
-    "on_error": ["免费鉴定-记录-失败"]
+    "on_error": [
+      "免费鉴定-记录-失败"
+    ]
   }
 }

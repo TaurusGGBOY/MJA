@@ -132,6 +132,32 @@ def test_restart_can_start_the_game_package_five_times(
     ]
 
 
+def test_restart_can_soft_relaunch_without_force_stopping(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    events: list[tuple[object, ...]] = []
+    monkeypatch.setattr(
+        restart_game,
+        "sleep",
+        lambda seconds: events.append(("cooldown", seconds)),
+        raising=False,
+    )
+    params = {
+        "package": GAME_PACKAGE,
+        "activity": GAME_ACTIVITY,
+        "force_stop": False,
+        "start_repeat": 1,
+    }
+
+    assert restart_game.RestartGameSurface().run(
+        _context(events), FakeArgv(json.dumps(params))
+    )
+    assert events == [
+        ("start", GAME_ACTIVITY),
+        ("start_wait",),
+    ]
+
+
 @pytest.mark.parametrize(
     "params",
     [
@@ -143,6 +169,8 @@ def test_restart_can_start_the_game_package_five_times(
         {"package": GAME_PACKAGE, "activity": GAME_ACTIVITY, "cooldown_ms": 5_001},
         {"package": GAME_PACKAGE, "activity": GAME_ACTIVITY, "cooldown_ms": 2.0},
         {"package": GAME_PACKAGE, "activity": GAME_ACTIVITY, "cooldown_ms": "2000"},
+        {"package": GAME_PACKAGE, "activity": GAME_ACTIVITY, "force_stop": None},
+        {"package": GAME_PACKAGE, "activity": GAME_ACTIVITY, "force_stop": "false"},
     ],
 )
 def test_restart_rejects_invalid_parameters_before_controller_calls(

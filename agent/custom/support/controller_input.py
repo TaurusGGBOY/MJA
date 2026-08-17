@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Sequence
+from time import sleep
 from typing import Any
 
 
@@ -81,6 +82,36 @@ def click_box(controller: Any, box: Any, *, resolution: Any = None) -> bool:
     return wait_for_controller(job, "click")
 
 
+def drag_tap_box(controller: Any, box: Any, *, resolution: Any = None) -> bool:
+    """Deliver a one-pixel touch tap for Unity controls that ignore post_click."""
+
+    normalized = box_values(box)
+    _ensure_on_screen(normalized, resolution)
+    x, y, width, height = normalized
+    start_x, start_y = x + width // 2, y + height // 2
+    post_down = getattr(controller, "post_touch_down", None)
+    post_move = getattr(controller, "post_touch_move", None)
+    post_up = getattr(controller, "post_touch_up", None)
+    if not all(callable(method) for method in (post_down, post_move, post_up)):
+        post_swipe = getattr(controller, "post_swipe", None)
+        if not callable(post_swipe):
+            raise RuntimeError("controller does not support drag tap")
+        job = post_swipe(start_x, start_y, start_x + 1, start_y + 1, 100)
+        return wait_for_controller(job, "drag tap")
+
+    wait_for_controller(post_down(start_x, start_y, contact=0, pressure=1), "touch down")
+    try:
+        sleep(0.1)
+        wait_for_controller(
+            post_move(start_x + 1, start_y + 1, contact=0, pressure=1),
+            "touch move",
+        )
+        sleep(0.05)
+    finally:
+        wait_for_controller(post_up(contact=0), "touch up")
+    return True
+
+
 def swipe_box(
     controller: Any,
     box: Any,
@@ -117,6 +148,7 @@ def swipe_box(
 __all__ = [
     "box_values",
     "click_box",
+    "drag_tap_box",
     "resolution_values",
     "swipe_box",
     "wait_for_controller",

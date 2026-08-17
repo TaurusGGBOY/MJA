@@ -244,7 +244,7 @@ def test_hero_dispatch_smart_configures_and_dispatches_up_to_six_teams():
     assert configure.intent.action_id == "smart_configure_team"
     assert configure.postcondition == "hero.dispatch_button"
     assert send.intent.action_id == "dispatch_team"
-    assert send.postcondition == "hero.first_task_in_progress"
+    assert send.postcondition == "hero.claim_state_known"
     assert send.next_state == "inspect"
 
     capped, _ = evaluate_decision(

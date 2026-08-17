@@ -35,10 +35,14 @@ from agent.custom.action.restart_game import (
 from agent.custom.action.runtime_health import RuntimeHealth as _runtime_health  # noqa: F401
 from agent.custom.action.task_lifecycle import (  # noqa: F401
     BeginTask,
+    CloseKnownPaintingSurface,
     CompleteTaskBoundary,
     FailStartupRecovery,
+    OpenGameHomeMenu,
     RecordActiveTaskFailure,
     RecordTaskOutcome,
+    ReturnToHome,
+    ReturnToWorldHome,
 )
 from agent.custom.recognition.martial_material import (  # noqa: F401
     MartialMaterialRelation as _martial_material_relation,

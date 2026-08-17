@@ -5,36 +5,46 @@
   },
   "公共-通用中止": {
     "recognition": "DirectHit",
-    "Abort": true,
-    "action": "StopTask"
-  },
-  "公共-通用-启动恢复-重启": {
-    "recognition": "DirectHit",
-    "action": "Custom",
-    "custom_action": "RestartGameSurface",
-    "custom_action_param": {
-      "package": "com.hanjiasongshu.dr22",
-      "activity": "com.hanjiasongshu.dr22/.MainActivity",
-      "start_repeat": 5,
-      "start_repeat_delay_ms": 1000
-    },
-    "timeout": 1000,
+    "action": "DoNothing",
+    "timeout": 10000,
     "max_hit": 1,
-    "post_delay": 0,
-    "next": ["启动-游戏重启后"],
-    "on_error": ["公共-游戏启动应用重启失败"]
+    "next": ["公共-失败-主页-探测"],
+    "on_error": ["公共-失败-返回主页"]
   },
-  "公共-游戏启动应用重启失败": {
+  "公共-失败-主页-探测": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["公共-游戏主页-页面"],
+        "box_index": 0
+      }
+    },
+    "timeout": 5000,
+    "max_hit": 1,
+    "action": "DoNothing",
+    "next": ["公共-主页边界"],
+    "on_error": ["公共-失败-返回主页"]
+  },
+  "公共-失败-返回主页": {
+    "recognition": "DirectHit",
+    "timeout": 10000,
+    "max_hit": 1,
+    "action": "Custom",
+    "custom_action": "ReturnToWorldHome",
+    "next": ["公共-失败-主页-探测"],
+    "on_error": ["公共-主页边界-失败"]
+  },
+  "公共-游戏启动失败": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "FailStartupRecovery",
     "custom_action_param": {
-      "error_code": "GAME_START_APP_RESTART_FAILED",
-      "postcondition": "startup.app_restarted",
-      "stage": "restart_app",
-      "expected": "APP 被停止后重新启动",
+      "error_code": "GAME_START_APP_START_FAILED",
+      "postcondition": "startup.app_started",
+      "stage": "start_app",
+      "expected": "APP 启动动作完成",
       "observed": "RestartGameSurface 返回失败",
-      "root_cause": "APP 重启动作未完成"
+      "root_cause": "APP 启动动作未完成"
     },
     "Abort": true,
     "timeout": 1000,

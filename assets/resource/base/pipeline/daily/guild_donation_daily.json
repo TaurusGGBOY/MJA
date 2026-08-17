@@ -2,7 +2,12 @@
   "帮派捐献-任务入口": {
     "recognition": {
       "type": "And",
-      "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}
+      "param": {
+        "all_of": [
+          "公共-游戏主页-页面"
+        ],
+        "box_index": 0
+      }
     },
     "action": "Custom",
     "custom_action": "BeginTask",
@@ -11,67 +16,143 @@
     },
     "max_hit": 1,
     "timeout": 8000,
-    "next": ["帮派捐献-主页-探测", "帮派捐献-开始-安全-探测"],
-    "on_error": ["帮派捐献-记录-失败"]
+    "next": [
+      "帮派捐献-主页-探测",
+      "帮派捐献-开始-安全-探测"
+    ],
+    "on_error": [
+      "公共-主页边界-失败"
+    ]
   },
   "帮派捐献-开始-安全-探测": {
-    "recognition": "OCR",
-    "expected": ["登录", "验证码", "安全验证"],
-    "roi": [0, 0, 1280, 720],
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "帮派捐献-帮派-捐献-免费"
+        ],
+        "box_index": 0
+      }
+    },
+    "expected": [
+      "登录",
+      "验证码",
+      "安全验证"
+    ],
+    "roi": [
+      0,
+      0,
+      1280,
+      720
+    ],
     "timeout": 2500,
     "action": "DoNothing",
-    "next": ["帮派捐献-安全-停止"],
-    "on_error": ["帮派捐献-开始-付费-探测"]
+    "next": [
+      "帮派捐献-安全-停止"
+    ],
+    "on_error": [
+      "帮派捐献-开始-付费-探测"
+    ]
   },
   "帮派捐献-开始-付费-探测": {
     "recognition": "OCR",
-    "expected": ["购买", "充值", "支付", "Apple Pay", "元宝", "价格", "￥", "¥", "消耗"],
-    "roi": [260, 150, 760, 440],
+    "expected": [
+      "购买",
+      "充值",
+      "支付",
+      "Apple Pay",
+      "元宝",
+      "价格",
+      "￥",
+      "¥",
+      "消耗"
+    ],
+    "roi": [
+      260,
+      150,
+      760,
+      440
+    ],
     "timeout": 2500,
     "action": "DoNothing",
-    "next": ["帮派捐献-付费-停止"],
-    "on_error": ["帮派捐献-开始-未知-弹窗-探测"]
+    "next": [
+      "帮派捐献-付费-停止"
+    ],
+    "on_error": [
+      "帮派捐献-开始-未知-弹窗-探测"
+    ]
   },
   "帮派捐献-开始-未知-弹窗-探测": {
     "recognition": "OCR",
-    "expected": ["确认", "取消", "重试", "关闭", "异常", "网络错误"],
-    "roi": [280, 160, 720, 420],
+    "expected": [
+      "确认",
+      "取消",
+      "重试",
+      "关闭",
+      "异常",
+      "网络错误"
+    ],
+    "roi": [
+      280,
+      160,
+      720,
+      420
+    ],
     "timeout": 2500,
     "action": "DoNothing",
-    "next": ["帮派捐献-未知-弹窗-停止"],
-    "on_error": ["帮派捐献-主页-探测"]
+    "next": [
+      "帮派捐献-未知-弹窗-停止"
+    ],
+    "on_error": [
+      "帮派捐献-主页-探测"
+    ]
   },
   "帮派捐献-页面-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["帮派捐献-帮派-捐献-页面", "帮派捐献-帮派-捐献-上下文"],
+        "all_of": [
+          "帮派捐献-帮派-捐献-免费"
+        ],
         "box_index": 0
       }
     },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["帮派捐献-不可用-探测"],
-    "on_error": ["帮派捐献-记录-失败"]
+    "next": [
+      "帮派捐献-剩余-门禁"
+    ],
+    "on_error": [
+      "帮派捐献-记录-失败"
+    ]
   },
   "帮派捐献-主页-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["公共-游戏主页-页面"],
+        "all_of": [
+          "公共-游戏主页-页面"
+        ],
         "box_index": 0
       }
     },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["帮派捐献-打开-面板"],
-    "on_error": ["帮派捐献-记录-失败"]
+    "next": [
+      "帮派捐献-打开-面板"
+    ],
+    "on_error": [
+      "帮派捐献-记录-失败"
+    ]
   },
   "帮派捐献-打开-面板": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["帮派捐献-帮派-捐献-主页-页面", "公共-游戏功能面板-入口"],
+        "all_of": [
+          "帮派捐献-帮派-捐献-主页-页面",
+          "公共-游戏功能面板-入口"
+        ],
         "box_index": 1
       }
     },
@@ -89,15 +170,22 @@
         "target_name": "公共-游戏功能面板-入口"
       }
     },
-    "next": ["帮派捐献-打开-帮派"],
-    "on_error": ["帮派捐献-记录-失败"],
+    "next": [
+      "帮派捐献-打开-帮派"
+    ],
+    "on_error": [
+      "帮派捐献-记录-失败"
+    ],
     "retry_times": 0
   },
   "帮派捐献-打开-帮派": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["公共-游戏侧边面板-打开", "帮派捐献-帮派-捐献-帮派-入口"],
+        "all_of": [
+          "公共-游戏侧边面板-打开",
+          "帮派捐献-帮派-捐献-帮派-入口"
+        ],
         "box_index": 1
       }
     },
@@ -115,27 +203,40 @@
         "target_name": "帮派捐献-帮派-捐献-帮派-入口"
       }
     },
-    "next": ["帮派捐献-帮派-页面-探测"],
-    "on_error": ["帮派捐献-记录-失败"],
+    "next": [
+      "帮派捐献-帮派-页面-探测"
+    ],
+    "on_error": [
+      "帮派捐献-记录-失败"
+    ],
     "retry_times": 0
   },
   "帮派捐献-帮派-页面-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["帮派捐献-帮派-捐献-帮派-页面"],
+        "all_of": [
+          "帮派捐献-帮派-捐献-帮派-页面"
+        ],
         "box_index": 0
       }
     },
     "action": "DoNothing",
-    "next": ["帮派捐献-打开-捐献"],
-    "on_error": ["帮派捐献-记录-失败"]
+    "next": [
+      "帮派捐献-打开-捐献"
+    ],
+    "on_error": [
+      "帮派捐献-记录-失败"
+    ]
   },
   "帮派捐献-打开-捐献": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["帮派捐献-帮派-捐献-帮派-页面", "帮派捐献-帮派-捐献-入口"],
+        "all_of": [
+          "帮派捐献-帮派-捐献-帮派-页面",
+          "帮派捐献-帮派-捐献-入口"
+        ],
         "box_index": 1
       }
     },
@@ -153,8 +254,12 @@
         "target_name": "帮派捐献-帮派-捐献-入口"
       }
     },
-    "next": ["帮派捐献-页面-探测"],
-    "on_error": ["帮派捐献-记录-失败"],
+    "next": [
+      "帮派捐献-页面-探测"
+    ],
+    "on_error": [
+      "帮派捐献-记录-失败"
+    ],
     "retry_times": 0
   },
   "帮派捐献-不可用-探测": {
@@ -170,8 +275,12 @@
       }
     },
     "action": "DoNothing",
-    "next": ["帮派捐献-不可用"],
-    "on_error": ["帮派捐献-剩余-门禁"]
+    "next": [
+      "帮派捐献-不可用"
+    ],
+    "on_error": [
+      "帮派捐献-剩余-门禁"
+    ]
   },
   "帮派捐献-剩余-门禁": {
     "recognition": "DirectHit",
@@ -181,7 +290,9 @@
       "帮派捐献-剩余-10-探测",
       "帮派捐献-剩余-无效-探测"
     ],
-    "on_error": ["帮派捐献-记录-失败"]
+    "on_error": [
+      "帮派捐献-记录-失败"
+    ]
   },
   "帮派捐献-剩余-9-探测": {
     "recognition": {
@@ -196,8 +307,12 @@
       }
     },
     "action": "DoNothing",
-    "next": ["帮派捐献-已完成"],
-    "on_error": ["帮派捐献-记录-失败"]
+    "next": [
+      "帮派捐献-已完成"
+    ],
+    "on_error": [
+      "帮派捐献-记录-失败"
+    ]
   },
   "帮派捐献-剩余-10-探测": {
     "recognition": {
@@ -212,8 +327,12 @@
       }
     },
     "action": "DoNothing",
-    "next": ["帮派捐献-捐献-免费"],
-    "on_error": ["帮派捐献-记录-失败"]
+    "next": [
+      "帮派捐献-捐献-免费"
+    ],
+    "on_error": [
+      "帮派捐献-记录-失败"
+    ]
   },
   "帮派捐献-剩余-无效-探测": {
     "recognition": {
@@ -228,20 +347,21 @@
       }
     },
     "action": "DoNothing",
-    "next": ["帮派捐献-计数-未知"],
-    "on_error": ["帮派捐献-记录-失败"]
+    "next": [
+      "帮派捐献-计数-未知"
+    ],
+    "on_error": [
+      "帮派捐献-记录-失败"
+    ]
   },
   "帮派捐献-捐献-免费": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
-          "帮派捐献-帮派-捐献-页面",
-          "帮派捐献-帮派-捐献-上下文",
-          "帮派捐献-帮派-捐献-剩余-10-共-10",
           "帮派捐献-帮派-捐献-免费"
         ],
-        "box_index": 3
+        "box_index": 0
       }
     },
     "action": "Custom",
@@ -253,14 +373,75 @@
       "kind": "click",
       "evidence": {
         "page_index": 0,
-        "target_index": 3,
-        "page_name": "帮派捐献-帮派-捐献-页面",
+        "target_index": 0,
+        "page_name": "帮派捐献-帮派-捐献-免费",
         "target_name": "帮派捐献-帮派-捐献-免费"
       }
     },
     "post_delay": 1500,
-    "next": ["帮派捐献-后置条件-探测"],
-    "on_error": ["帮派捐献-记录-失败"],
+    "next": [
+      "帮派捐献-捐献-奖励-弹窗-探测",
+      "帮派捐献-后置条件-探测"
+    ],
+    "on_error": [
+      "帮派捐献-记录-失败"
+    ],
+    "retry_times": 0
+  },
+  "帮派捐献-捐献-奖励-弹窗-探测": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "帮派捐献-捐献-奖励-弹窗",
+          "公共-已知-点击空白关闭"
+        ],
+        "box_index": 0
+      }
+    },
+    "timeout": 8000,
+    "action": "DoNothing",
+    "next": [
+      "帮派捐献-捐献-关闭-奖励"
+    ],
+    "on_error": [
+      "帮派捐献-后置条件-探测"
+    ]
+  },
+  "帮派捐献-捐献-关闭-奖励": {
+    "max_hit": 1,
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "帮派捐献-捐献-奖励-弹窗",
+          "公共-已知-点击空白关闭"
+        ],
+        "box_index": 1
+      }
+    },
+    "timeout": 8000,
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "GUILD_DONATION_DAILY",
+      "action_id": "close_android_donation_reward",
+      "kind": "click",
+      "fixed_click_mode": "guild_donation_reward_blank",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "帮派捐献-捐献-奖励-弹窗",
+        "target_name": "公共-已知-点击空白关闭"
+      }
+    },
+    "post_delay": 750,
+    "next": [
+      "帮派捐献-后置条件-探测"
+    ],
+    "on_error": [
+      "帮派捐献-后置条件-探测"
+    ],
     "retry_times": 0
   },
   "帮派捐献-后置条件-探测": {
@@ -276,26 +457,65 @@
       }
     },
     "action": "DoNothing",
-    "next": ["帮派捐献-成功"],
-    "on_error": ["帮派捐献-之后-付费-探测"]
+    "next": [
+      "帮派捐献-成功"
+    ],
+    "on_error": [
+      "帮派捐献-之后-付费-探测"
+    ]
   },
   "帮派捐献-之后-付费-探测": {
     "recognition": "OCR",
-    "expected": ["购买", "充值", "支付", "Apple Pay", "元宝", "价格", "￥", "¥", "消耗"],
-    "roi": [260, 150, 760, 440],
+    "expected": [
+      "购买",
+      "充值",
+      "支付",
+      "Apple Pay",
+      "元宝",
+      "价格",
+      "￥",
+      "¥",
+      "消耗"
+    ],
+    "roi": [
+      260,
+      150,
+      760,
+      440
+    ],
     "timeout": 2500,
     "action": "DoNothing",
-    "next": ["帮派捐献-付费-停止"],
-    "on_error": ["帮派捐献-之后-未知-弹窗-探测"]
+    "next": [
+      "帮派捐献-付费-停止"
+    ],
+    "on_error": [
+      "帮派捐献-之后-未知-弹窗-探测"
+    ]
   },
   "帮派捐献-之后-未知-弹窗-探测": {
     "recognition": "OCR",
-    "expected": ["确认", "取消", "重试", "关闭", "异常", "网络错误"],
-    "roi": [280, 160, 720, 420],
+    "expected": [
+      "确认",
+      "取消",
+      "重试",
+      "关闭",
+      "异常",
+      "网络错误"
+    ],
+    "roi": [
+      280,
+      160,
+      720,
+      420
+    ],
     "timeout": 2500,
     "action": "DoNothing",
-    "next": ["帮派捐献-未知-弹窗-停止"],
-    "on_error": ["帮派捐献-记录-失败"]
+    "next": [
+      "帮派捐献-未知-弹窗-停止"
+    ],
+    "on_error": [
+      "帮派捐献-记录-失败"
+    ]
   },
   "帮派捐献-不可用": {
     "recognition": "DirectHit",
@@ -308,8 +528,12 @@
       "defer_home_boundary": true
     },
     "timeout": 8000,
-    "next": ["帮派捐献-关闭-捐献"],
-    "on_error": ["帮派捐献-记录-失败"]
+    "next": [
+      "帮派捐献-关闭-捐献"
+    ],
+    "on_error": [
+      "帮派捐献-记录-失败"
+    ]
   },
   "帮派捐献-已完成": {
     "recognition": "DirectHit",
@@ -322,8 +546,12 @@
       "defer_home_boundary": true
     },
     "timeout": 8000,
-    "next": ["帮派捐献-关闭-捐献"],
-    "on_error": ["帮派捐献-记录-失败"]
+    "next": [
+      "帮派捐献-关闭-捐献"
+    ],
+    "on_error": [
+      "帮派捐献-记录-失败"
+    ]
   },
   "帮派捐献-成功": {
     "recognition": "DirectHit",
@@ -336,14 +564,21 @@
       "defer_home_boundary": true
     },
     "timeout": 8000,
-    "next": ["帮派捐献-关闭-捐献"],
-    "on_error": ["帮派捐献-记录-失败"]
+    "next": [
+      "帮派捐献-关闭-捐献"
+    ],
+    "on_error": [
+      "帮派捐献-记录-失败"
+    ]
   },
   "帮派捐献-关闭-捐献": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["帮派捐献-帮派-捐献-页面", "帮派捐献-帮派-捐献-关闭"],
+        "all_of": [
+          "帮派捐献-帮派-捐献-页面",
+          "帮派捐献-帮派-捐献-关闭"
+        ],
         "box_index": 1
       }
     },
@@ -362,8 +597,12 @@
       }
     },
     "post_delay": 750,
-    "next": ["帮派捐献-关闭-帮派"],
-    "on_error": ["帮派捐献-记录-失败"],
+    "next": [
+      "帮派捐献-关闭-帮派"
+    ],
+    "on_error": [
+      "帮派捐献-记录-失败"
+    ],
     "retry_times": 0
   },
   "帮派捐献-关闭-帮派": {
@@ -392,15 +631,22 @@
       }
     },
     "post_delay": 750,
-    "next": ["帮派捐献-关闭-面板"],
-    "on_error": ["帮派捐献-记录-失败"],
+    "next": [
+      "帮派捐献-关闭-面板"
+    ],
+    "on_error": [
+      "帮派捐献-记录-失败"
+    ],
     "retry_times": 0
   },
   "帮派捐献-关闭-面板": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["公共-已知-面板-标记", "公共-已知-面板-关闭"],
+        "all_of": [
+          "公共-已知-面板-标记",
+          "公共-已知-面板-关闭"
+        ],
         "box_index": 1
       }
     },
@@ -420,23 +666,33 @@
       }
     },
     "post_delay": 750,
-    "next": ["帮派捐献-收尾-主页-探测"],
-    "on_error": ["帮派捐献-记录-失败"],
+    "next": [
+      "帮派捐献-收尾-主页-探测"
+    ],
+    "on_error": [
+      "帮派捐献-记录-失败"
+    ],
     "retry_times": 0
   },
   "帮派捐献-收尾-主页-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["公共-游戏主页-页面"],
+        "all_of": [
+          "公共-游戏主页-页面"
+        ],
         "box_index": 0
       }
     },
     "timeout": 5000,
     "max_hit": 1,
     "action": "DoNothing",
-    "next": ["公共-主页边界"],
-    "on_error": ["帮派捐献-记录-失败"]
+    "next": [
+      "公共-主页边界"
+    ],
+    "on_error": [
+      "帮派捐献-记录-失败"
+    ]
   },
   "帮派捐献-计数-未知": {
     "recognition": "DirectHit",
@@ -447,10 +703,11 @@
       "status": "failed",
       "postcondition": "guild.donation.counter_known",
       "error_code": "GUILD_DONATION_COUNTER_UNKNOWN",
-      "native_fail_after_record": true
+      "defer_home_boundary": true
     },
-    "Abort": true,
-    "next": ["公共-通用中止"]
+    "next": [
+      "公共-通用中止"
+    ]
   },
   "帮派捐献-安全-停止": {
     "recognition": "DirectHit",
@@ -461,10 +718,11 @@
       "status": "failed",
       "postcondition": "guild.donation.safe_surface",
       "error_code": "GUILD_DONATION_SAFETY_SURFACE",
-      "native_fail_after_record": true
+      "defer_home_boundary": true
     },
-    "Abort": true,
-    "next": ["公共-通用中止"]
+    "next": [
+      "公共-通用中止"
+    ]
   },
   "帮派捐献-付费-停止": {
     "recognition": "DirectHit",
@@ -475,10 +733,11 @@
       "status": "failed",
       "postcondition": "guild.donation.no_paid_surface",
       "error_code": "GUILD_DONATION_PAID_SURFACE",
-      "native_fail_after_record": true
+      "defer_home_boundary": true
     },
-    "Abort": true,
-    "next": ["公共-通用中止"]
+    "next": [
+      "公共-通用中止"
+    ]
   },
   "帮派捐献-未知-弹窗-停止": {
     "recognition": "DirectHit",
@@ -489,10 +748,11 @@
       "status": "failed",
       "postcondition": "guild.donation.known_surface",
       "error_code": "GUILD_DONATION_UNKNOWN_POPUP",
-      "native_fail_after_record": true
+      "defer_home_boundary": true
     },
-    "Abort": true,
-    "next": ["公共-通用中止"]
+    "next": [
+      "公共-通用中止"
+    ]
   },
   "帮派捐献-记录-失败": {
     "recognition": "DirectHit",
@@ -503,16 +763,19 @@
       "status": "failed",
       "postcondition": "guild.donation.remaining_9_of_10",
       "error_code": "GUILD_DONATION_POSTCONDITION_MISSING",
-      "native_fail_after_record": true
+      "defer_home_boundary": true
     },
-    "Abort": true,
-    "next": ["公共-通用中止"]
+    "next": [
+      "公共-通用中止"
+    ]
   },
   "帮派捐献-帮派-捐献-主页-页面": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["公共-游戏主页-页面"],
+        "all_of": [
+          "公共-游戏主页-页面"
+        ],
         "box_index": 0
       }
     },
@@ -521,81 +784,200 @@
   "帮派捐献-帮派-捐献-帮派-入口": {
     "recognition": "OCR",
     "expected": "帮会",
-    "roi": [700, 100, 500, 600],
+    "roi": [
+      700,
+      100,
+      500,
+      600
+    ],
     "action": "DoNothing"
   },
   "帮派捐献-帮派-捐献-帮派-页面": {
     "recognition": "OCR",
-    "expected": ["帮会大厅", "帮会领地", "帮会名帖", "活跃度"],
-    "roi": [0, 180, 380, 300],
+    "expected": [
+      "帮会大厅",
+      "帮会领地",
+      "帮会名帖",
+      "活跃度"
+    ],
+    "roi": [
+      0,
+      180,
+      380,
+      300
+    ],
     "action": "DoNothing"
   },
   "帮派捐献-帮派-捐献-入口": {
     "recognition": "OCR",
     "expected": "捐献",
-    "roi": [1080, 580, 200, 140],
+    "roi": [
+      1080,
+      580,
+      200,
+      140
+    ],
     "action": "DoNothing"
   },
   "帮派捐献-帮派-捐献-页面": {
-    "recognition": "OCR",
-    "expected": "捐献",
-    "roi": [0, 0, 560, 150],
+    "recognition": "ColorMatch",
+    "method": 4,
+    "lower": [
+      180,
+      50,
+      0
+    ],
+    "upper": [
+      255,
+      210,
+      140
+    ],
+    "roi": [
+      700,
+      500,
+      360,
+      120
+    ],
+    "connected": true,
+    "count": 3000,
     "action": "DoNothing"
   },
   "帮派捐献-帮派-捐献-上下文": {
-    "recognition": "OCR",
-    "expected": "帮会",
-    "roi": [0, 0, 560, 150],
+    "recognition": "TemplateMatch",
+    "template": "home/modal_close.png",
+    "roi": [
+      1160,
+      0,
+      100,
+      100
+    ],
+    "threshold": 0.075,
     "action": "DoNothing"
   },
   "帮派捐献-帮派-捐献-免费": {
-    "recognition": "OCR",
-    "expected": "免费捐献",
-    "roi": [880, 260, 350, 180],
+    "recognition": "ColorMatch",
+    "method": 4,
+    "lower": [
+      180,
+      50,
+      0
+    ],
+    "upper": [
+      255,
+      210,
+      140
+    ],
+    "roi": [
+      700,
+      500,
+      360,
+      120
+    ],
+    "connected": true,
+    "count": 3000,
+    "action": "DoNothing"
+  },
+  "帮派捐献-捐献-奖励-弹窗": {
+    "recognition": "TemplateMatch",
+    "template": "daily/GUILD_AFFAIRS_DAILY/reward_popup_live.png",
+    "roi": [
+      120,
+      180,
+      180,
+      380
+    ],
+    "threshold": 0.78,
     "action": "DoNothing"
   },
   "帮派捐献-帮派-捐献-剩余-10-共-10": {
     "recognition": "OCR",
     "expected": "(?<!\\d)10\\s*/\\s*10(?!\\d)",
-    "roi": [560, 280, 500, 180],
+    "roi": [
+      500,
+      150,
+      600,
+      300
+    ],
     "action": "DoNothing"
   },
   "帮派捐献-帮派-捐献-剩余-9-共-10": {
     "recognition": "OCR",
     "expected": "(?<!\\d)9\\s*/\\s*10(?!\\d)",
-    "roi": [560, 280, 500, 180],
+    "roi": [
+      500,
+      150,
+      600,
+      300
+    ],
     "action": "DoNothing"
   },
   "帮派捐献-帮派-捐献-剩余-无效": {
     "recognition": "OCR",
     "expected": "(?<!\\d)[0-8]\\s*/\\s*10(?!\\d)",
-    "roi": [560, 280, 500, 180],
+    "roi": [
+      500,
+      150,
+      600,
+      300
+    ],
     "action": "DoNothing"
   },
   "帮派捐献-帮派-捐献-不可用": {
     "recognition": "OCR",
-    "expected": ["未加入帮会", "无帮会", "暂未开放"],
-    "roi": [280, 180, 720, 420],
+    "expected": [
+      "未加入帮会",
+      "无帮会",
+      "暂未开放"
+    ],
+    "roi": [
+      280,
+      180,
+      720,
+      420
+    ],
     "action": "DoNothing"
   },
   "帮派捐献-帮派-捐献-关闭": {
     "recognition": "TemplateMatch",
     "template": "home/modal_close.png",
-    "roi": [1160, 0, 100, 100],
-    "threshold": 0.39,
+    "roi": [
+      1160,
+      0,
+      100,
+      100
+    ],
+    "threshold": 0.2,
     "action": "DoNothing"
   },
   "帮派捐献-帮派-捐献-帮派-主页-页面": {
     "recognition": "OCR",
     "expected": "浮生城",
-    "roi": [0, 0, 380, 100],
+    "roi": [
+      0,
+      0,
+      380,
+      100
+    ],
     "action": "DoNothing"
   },
   "帮派捐献-帮派-捐献-帮派-主页-关闭": {
     "recognition": "ColorMatch",
-    "lower": [0, 0, 0],
-    "upper": [125, 125, 125],
-    "roi": [1180, 0, 100, 100],
+    "lower": [
+      0,
+      0,
+      0
+    ],
+    "upper": [
+      125,
+      125,
+      125
+    ],
+    "roi": [
+      1180,
+      0,
+      100,
+      100
+    ],
     "connected": true,
     "count": 180,
     "action": "DoNothing"

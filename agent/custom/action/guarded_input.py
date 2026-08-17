@@ -335,6 +335,44 @@ _FIXED_CLICK_MODES: Mapping[tuple[str, str], tuple[int, int, int, int]] = {
         "open_trial_sword",
         "trial_entry_button",
     ): (987, 530, 52, 60),
+    # The home-page dueling icon sits above the 310/310 counter.  It is a
+    # stable decorative icon, so use a bounded fixed box instead of guessing
+    # among the nearby OCR labels.
+    (
+        "open_dueling_menu",
+        "dueling_menu_button",
+    ): (1090, 585, 85, 80),
+    # The world-page function row is a decorative image strip.  OCR can
+    # merge 副本/画卷/祈福 into one box and clicking that merged box opens the
+    # wrong neighbouring icon.  This named mode is the only coordinate path
+    # for opening the painting scroll: the pipeline must first prove the
+    # world-page image marker in the same frame.
+    (
+        "open_painting_scroll",
+        "painting_scroll_button",
+    ): (1105, 35, 50, 55),
+    # The arena sweep control is a stable lower-left button.  Its label can
+    # be greyed out at 0/12 and then disappear from OCR, so the opponent-page
+    # evidence gates this fixed click instead of the label OCR.
+    (
+        "sweep_ring",
+        "ring_sweep_button",
+    ): (0, 570, 250, 140),
+    # The opponent and arena pages both close through the stable upper-right
+    # X.  Keep these taps action-specific and require page evidence in the
+    # pipeline before allowing them.
+    (
+        "close_ring_opponents",
+        "ring_opponents_close",
+    ): (1160, 0, 100, 90),
+    (
+        "close_ring_page",
+        "ring_page_close",
+    ): (1160, 0, 100, 90),
+    (
+        "close_dueling_menu",
+        "dueling_menu_close",
+    ): (1205, 33, 18, 18),
     (
         "enter_shadow_stage",
         "shadow_stage_entry_button",
@@ -371,20 +409,58 @@ _FIXED_CLICK_MODES: Mapping[tuple[str, str], tuple[int, int, int, int]] = {
         "close_jianlin_for_food",
         "jianlin_page_close",
     ): (1180, 15, 95, 95),
+    # Jianlin's resource/battle page uses the same stable upper-right X. The
+    # cleanup path deliberately gates this fixed tap with the Jianlin page
+    # marker because the icon is not reliably read as the word “关闭”.
+    (
+        "close_jianlin_page",
+        "jianlin_page_close",
+    ): (1205, 33, 18, 18),
+    # The equipment page's template covers a larger area than the actual X;
+    # click the center of the visible upper-right close icon instead of the
+    # template-box center, which is above the hit target.
+    (
+        "close_equipment_page",
+        "equipment_page_close",
+    ): (1198, 35, 40, 42),
     # Cross-map teleport confirm for shadow ruins: the dialog's 确认 button is
     # OCR-unstable, so pin the click to the confirmed button area.
     (
         "confirm_shadow_teleport",
         "shadow_teleport_confirm",
     ): (875, 500, 60, 40),
+    # Leave the shadow stage from the stage screen; Android BACK does not
+    # close this screen reliably.
+    (
+        "leave_shadow_stage",
+        "shadow_stage_leave",
+    ): (1080, 625, 150, 55),
     # Guild activity defeat reward popup dismisses by tapping blank area.
     (
         "dismiss_guild_activity_reward_popup",
         "guild_activity_reward_blank",
     ): (560, 620, 160, 80),
+    # Daily-task reward overlays have no dependable close label. The reward
+    # popup itself is still required as same-frame evidence; this named blank
+    # area only supplies the stable dismissal point.
+    (
+        "close_reward_popup",
+        "daily_reward_popup_blank",
+    ): (550, 665, 180, 45),
+    # Donation reward sheets use the same blank-tap dismissal as the other
+    # reward overlays. The popup and its close-text evidence are still
+    # required in the same frame before this fixed tap is permitted.
+    (
+        "close_android_donation_reward",
+        "guild_donation_reward_blank",
+    ): (550, 665, 180, 45),
     # Appraisal reward overlay is a borderless dim-layer graphic with no close
     # button; it dismisses on a blank tap.  Keep the tap below the paid
     # 鉴宝 buttons (which end at y=643) so it cannot hit page controls.
+    (
+        "close_appraisal_popup",
+        "appraisal_reward_blank",
+    ): (550, 665, 180, 45),
     (
         "close_extra_reward_popup",
         "appraisal_reward_blank",

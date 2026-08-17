@@ -2,7 +2,12 @@
   "日常任务奖励-任务入口": {
     "recognition": {
       "type": "And",
-      "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}
+      "param": {
+        "all_of": [
+          "公共-游戏主页-页面"
+        ],
+        "box_index": 0
+      }
     },
     "action": "Custom",
     "custom_action": "BeginTask",
@@ -17,26 +22,39 @@
       "日常任务奖励-面板-探测",
       "日常任务奖励-主页-探测"
     ],
-    "on_error": ["[JumpBack]启动-游戏启动", "日常任务奖励-记录-失败"]
+    "on_error": [
+      "公共-主页边界-失败",
+      "日常任务奖励-记录-失败"
+    ]
   },
   "日常任务奖励-恢复继续-奖励-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["日常任务奖励-日常-奖励-弹窗", "日常任务奖励-日常-奖励-弹窗-关闭"],
+        "all_of": [
+          "日常任务奖励-日常-奖励-弹窗",
+          "日常任务奖励-日常-奖励-弹窗-关闭"
+        ],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["日常任务奖励-关闭-奖励"],
-    "on_error": ["日常任务奖励-记录-失败"]
+    "next": [
+      "日常任务奖励-关闭-奖励"
+    ],
+    "on_error": [
+      "日常任务奖励-记录-失败"
+    ]
   },
   "日常任务奖励-关闭-奖励": {
     "max_hit": 60,
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["日常任务奖励-日常-奖励-弹窗", "日常任务奖励-日常-奖励-弹窗-关闭"],
+        "all_of": [
+          "日常任务奖励-日常-奖励-弹窗",
+          "日常任务奖励-日常-奖励-弹窗-关闭"
+        ],
         "box_index": 1
       }
     },
@@ -46,6 +64,7 @@
       "task_id": "DAILY_TASK_REWARD_CLAIM_DAILY",
       "action_id": "close_reward_popup",
       "kind": "click",
+      "fixed_click_mode": "daily_reward_popup_blank",
       "evidence": {
         "page_index": 0,
         "target_index": 1,
@@ -53,15 +72,21 @@
         "target_name": "日常任务奖励-日常-奖励-弹窗-关闭"
       }
     },
-    "next": ["日常任务奖励-奖励-页面-校验"],
-    "on_error": ["日常任务奖励-记录-失败"],
+    "next": [
+      "日常任务奖励-奖励-页面-校验"
+    ],
+    "on_error": [
+      "日常任务奖励-记录-失败"
+    ],
     "retry_times": 0
   },
   "日常任务奖励-奖励-页面-校验": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["日常任务奖励-日常-页面"]
+        "all_of": [
+          "日常任务奖励-日常-页面"
+        ]
       }
     },
     "timeout": 8000,
@@ -72,13 +97,17 @@
       "日常任务奖励-变更-无-领取-探测",
       "日常任务奖励-奖励-扫描-之后-变更"
     ],
-    "on_error": ["日常任务奖励-记录-失败"]
+    "on_error": [
+      "日常任务奖励-记录-失败"
+    ]
   },
   "日常任务奖励-页面-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["日常任务奖励-日常-页面"]
+        "all_of": [
+          "日常任务奖励-日常-页面"
+        ]
       }
     },
     "timeout": 8000,
@@ -89,50 +118,76 @@
       "日常任务奖励-初始-无-领取-探测",
       "日常任务奖励-奖励-扫描"
     ],
-    "on_error": ["日常任务奖励-记录-失败"]
+    "on_error": [
+      "日常任务奖励-记录-失败"
+    ]
   },
   "日常任务奖励-初始-行-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["日常任务奖励-日常-页面", "日常任务奖励-日常-已完成-行-领取"],
+        "all_of": [
+          "日常任务奖励-日常-页面",
+          "日常任务奖励-日常-已完成-行-领取"
+        ],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["日常任务奖励-领取-行"],
-    "on_error": ["日常任务奖励-记录-失败"]
+    "next": [
+      "日常任务奖励-领取-行"
+    ],
+    "on_error": [
+      "日常任务奖励-记录-失败"
+    ]
   },
   "日常任务奖励-初始-宝箱-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["日常任务奖励-日常-页面", "日常任务奖励-日常-已解锁-活动-宝箱"],
+        "all_of": [
+          "日常任务奖励-日常-页面",
+          "日常任务奖励-日常-已解锁-活动-宝箱"
+        ],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["日常任务奖励-领取-宝箱"],
-    "on_error": ["日常任务奖励-记录-失败"]
+    "next": [
+      "日常任务奖励-领取-宝箱"
+    ],
+    "on_error": [
+      "日常任务奖励-记录-失败"
+    ]
   },
   "日常任务奖励-初始-无-领取-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["日常任务奖励-日常-页面", "日常任务奖励-日常-无-可领取-全局"],
+        "all_of": [
+          "日常任务奖励-日常-页面",
+          "日常任务奖励-日常-无-可领取-全局"
+        ],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["日常任务奖励-奖励-无"],
-    "on_error": ["日常任务奖励-记录-失败"]
+    "next": [
+      "日常任务奖励-奖励-无"
+    ],
+    "on_error": [
+      "日常任务奖励-记录-失败"
+    ]
   },
   "日常任务奖励-奖励-扫描": {
     "max_hit": 5,
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["日常任务奖励-日常-页面", "日常任务奖励-日常-滚动-区域"],
+        "all_of": [
+          "日常任务奖励-日常-页面",
+          "日常任务奖励-日常-滚动-区域"
+        ],
         "box_index": 1
       }
     },
@@ -152,7 +207,9 @@
         "duration_ms": 350
       }
     },
-    "next": ["日常任务奖励-页面-探测"],
+    "next": [
+      "日常任务奖励-页面-探测"
+    ],
     "on_error": [
       "日常任务奖励-初始-扫描-耗尽-探测",
       "日常任务奖励-初始-已领取-耗尽-探测",
@@ -165,7 +222,10 @@
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["日常任务奖励-日常-页面", "日常任务奖励-日常-滚动-区域"],
+        "all_of": [
+          "日常任务奖励-日常-页面",
+          "日常任务奖励-日常-滚动-区域"
+        ],
         "box_index": 1
       }
     },
@@ -185,7 +245,9 @@
         "duration_ms": 350
       }
     },
-    "next": ["日常任务奖励-奖励-页面-校验"],
+    "next": [
+      "日常任务奖励-奖励-页面-校验"
+    ],
     "on_error": [
       "日常任务奖励-变更-扫描-耗尽-探测",
       "日常任务奖励-变更-已领取-耗尽-探测",
@@ -197,92 +259,144 @@
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["日常任务奖励-日常-页面", "日常任务奖励-日常-无-可领取-全局"],
+        "all_of": [
+          "日常任务奖励-日常-页面",
+          "日常任务奖励-日常-无-可领取-全局"
+        ],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["日常任务奖励-奖励-无"],
-    "on_error": ["日常任务奖励-扫描-耗尽"]
+    "next": [
+      "日常任务奖励-奖励-无"
+    ],
+    "on_error": [
+      "日常任务奖励-扫描-耗尽"
+    ]
   },
   "日常任务奖励-初始-已领取-耗尽-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["日常任务奖励-日常-页面", "日常任务奖励-日常-已领取-行"],
+        "all_of": [
+          "日常任务奖励-日常-页面",
+          "日常任务奖励-日常-已领取-行"
+        ],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["日常任务奖励-奖励-无"],
-    "on_error": ["日常任务奖励-扫描-耗尽"]
+    "next": [
+      "日常任务奖励-奖励-无"
+    ],
+    "on_error": [
+      "日常任务奖励-扫描-耗尽"
+    ]
   },
   "日常任务奖励-变更-行-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["日常任务奖励-日常-页面", "日常任务奖励-日常-已完成-行-领取"],
+        "all_of": [
+          "日常任务奖励-日常-页面",
+          "日常任务奖励-日常-已完成-行-领取"
+        ],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["日常任务奖励-领取-行"],
-    "on_error": ["日常任务奖励-记录-失败"]
+    "next": [
+      "日常任务奖励-领取-行"
+    ],
+    "on_error": [
+      "日常任务奖励-记录-失败"
+    ]
   },
   "日常任务奖励-变更-宝箱-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["日常任务奖励-日常-页面", "日常任务奖励-日常-已解锁-活动-宝箱"],
+        "all_of": [
+          "日常任务奖励-日常-页面",
+          "日常任务奖励-日常-已解锁-活动-宝箱"
+        ],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["日常任务奖励-领取-宝箱"],
-    "on_error": ["日常任务奖励-记录-失败"]
+    "next": [
+      "日常任务奖励-领取-宝箱"
+    ],
+    "on_error": [
+      "日常任务奖励-记录-失败"
+    ]
   },
   "日常任务奖励-变更-无-领取-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["日常任务奖励-日常-页面", "日常任务奖励-日常-无-可领取-全局"],
+        "all_of": [
+          "日常任务奖励-日常-页面",
+          "日常任务奖励-日常-无-可领取-全局"
+        ],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["日常任务奖励-奖励-完成"],
-    "on_error": ["日常任务奖励-记录-失败"]
+    "next": [
+      "日常任务奖励-奖励-完成"
+    ],
+    "on_error": [
+      "日常任务奖励-记录-失败"
+    ]
   },
   "日常任务奖励-变更-扫描-耗尽-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["日常任务奖励-日常-页面", "日常任务奖励-日常-无-可领取-全局"],
+        "all_of": [
+          "日常任务奖励-日常-页面",
+          "日常任务奖励-日常-无-可领取-全局"
+        ],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["日常任务奖励-奖励-完成"],
-    "on_error": ["日常任务奖励-扫描-耗尽"]
+    "next": [
+      "日常任务奖励-奖励-完成"
+    ],
+    "on_error": [
+      "日常任务奖励-扫描-耗尽"
+    ]
   },
   "日常任务奖励-变更-已领取-耗尽-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["日常任务奖励-日常-页面", "日常任务奖励-日常-已领取-行"],
+        "all_of": [
+          "日常任务奖励-日常-页面",
+          "日常任务奖励-日常-已领取-行"
+        ],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["日常任务奖励-奖励-完成"],
-    "on_error": ["日常任务奖励-扫描-耗尽"]
+    "next": [
+      "日常任务奖励-奖励-完成"
+    ],
+    "on_error": [
+      "日常任务奖励-扫描-耗尽"
+    ]
   },
   "日常任务奖励-领取-行": {
     "max_hit": 50,
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["日常任务奖励-日常-页面", "日常任务奖励-日常-已完成-行-领取"],
+        "all_of": [
+          "日常任务奖励-日常-页面",
+          "日常任务奖励-日常-已完成-行-领取"
+        ],
         "box_index": 1
       }
     },
@@ -300,10 +414,12 @@
       }
     },
     "next": [
-      "日常任务奖励-奖励-探测",
-      "日常任务奖励-奖励-页面-校验"
+      "日常任务奖励-奖励-探测"
     ],
-    "on_error": ["日常任务奖励-记录-失败"],
+    "on_error": [
+      "日常任务奖励-记录-失败"
+    ],
+    "post_delay": 1200,
     "retry_times": 0
   },
   "日常任务奖励-领取-宝箱": {
@@ -311,7 +427,10 @@
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["日常任务奖励-日常-页面", "日常任务奖励-日常-已解锁-活动-宝箱"],
+        "all_of": [
+          "日常任务奖励-日常-页面",
+          "日常任务奖励-日常-已解锁-活动-宝箱"
+        ],
         "box_index": 1
       }
     },
@@ -329,20 +448,58 @@
       }
     },
     "next": [
-      "日常任务奖励-奖励-探测",
-      "日常任务奖励-奖励-页面-校验"
+      "日常任务奖励-奖励-探测"
     ],
-    "on_error": ["日常任务奖励-记录-失败"],
+    "on_error": [
+      "日常任务奖励-记录-失败"
+    ],
+    "post_delay": 1200,
     "retry_times": 0
   },
   "日常任务奖励-奖励-探测": {
-    "recognition": "OCR",
-    "expected": ["恭喜获得", "获得"],
-    "roi": [0, 100, 1280, 620],
+    "recognition": {
+      "type": "Or",
+      "param": {
+        "any_of": [
+          "日常任务奖励-奖励-弹窗-模板",
+          "日常任务奖励-奖励-弹窗-OCR"
+        ]
+      }
+    },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["日常任务奖励-关闭-奖励"],
-    "on_error": ["日常任务奖励-记录-失败"]
+    "next": [
+      "日常任务奖励-关闭-奖励"
+    ],
+    "on_error": [
+      "日常任务奖励-奖励-页面-校验"
+    ]
+  },
+  "日常任务奖励-奖励-弹窗-模板": {
+    "recognition": "TemplateMatch",
+    "template": "daily/DAILY_TASK_REWARD_CLAIM_DAILY/reward_popup_live.png",
+    "roi": [
+      100,
+      170,
+      260,
+      380
+    ],
+    "threshold": 0.5,
+    "action": "DoNothing"
+  },
+  "日常任务奖励-奖励-弹窗-OCR": {
+    "recognition": "OCR",
+    "expected": [
+      "恭喜获得",
+      "获得"
+    ],
+    "roi": [
+      100,
+      150,
+      300,
+      420
+    ],
+    "action": "DoNothing"
   },
   "日常任务奖励-奖励-无": {
     "recognition": "DirectHit",
@@ -354,7 +511,9 @@
       "postcondition": "daily_reward.no_claimable",
       "defer_home_boundary": true
     },
-    "next": ["日常任务奖励-关闭"]
+    "next": [
+      "日常任务奖励-关闭"
+    ]
   },
   "日常任务奖励-奖励-完成": {
     "recognition": "DirectHit",
@@ -366,7 +525,9 @@
       "postcondition": "daily_reward.no_claimable",
       "defer_home_boundary": true
     },
-    "next": ["日常任务奖励-关闭"]
+    "next": [
+      "日常任务奖励-关闭"
+    ]
   },
   "日常任务奖励-扫描-耗尽": {
     "recognition": "DirectHit",
@@ -377,11 +538,11 @@
       "status": "failed",
       "postcondition": "DAILY_REWARD_SCAN_EXHAUSTED",
       "error_code": "DAILY_REWARD_SCAN_EXHAUSTED",
-      "native_fail_after_record": true
+      "defer_home_boundary": true
     },
-    "Abort": true,
-    "next": ["公共-通用中止"]
-
+    "next": [
+      "公共-通用中止"
+    ]
   },
   "日常任务奖励-记录-失败": {
     "recognition": "DirectHit",
@@ -392,31 +553,41 @@
       "status": "failed",
       "postcondition": "DAILY_REWARD_POSTCONDITION_MISSING",
       "error_code": "DAILY_REWARD_POSTCONDITION_MISSING",
-      "native_fail_after_record": true
+      "defer_home_boundary": true
     },
-    "Abort": true,
-    "next": ["公共-通用中止"]
-
+    "next": [
+      "公共-通用中止"
+    ]
   },
   "日常任务奖励-主页-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["日常任务奖励-日常-主页-页面", "日常任务奖励-日常-主页-面板-打开"],
+        "all_of": [
+          "日常任务奖励-日常-主页-页面",
+          "日常任务奖励-日常-主页-面板-打开"
+        ],
         "box_index": 0
       }
     },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["日常任务奖励-打开-面板"],
-    "on_error": ["日常任务奖励-记录-失败"]
+    "next": [
+      "日常任务奖励-打开-面板"
+    ],
+    "on_error": [
+      "日常任务奖励-记录-失败"
+    ]
   },
   "日常任务奖励-打开-面板": {
     "max_hit": 1,
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["日常任务奖励-日常-主页-页面", "日常任务奖励-日常-主页-面板-打开"],
+        "all_of": [
+          "日常任务奖励-日常-主页-页面",
+          "日常任务奖励-日常-主页-面板-打开"
+        ],
         "box_index": 1
       }
     },
@@ -433,28 +604,41 @@
         "target_name": "日常任务奖励-日常-主页-面板-打开"
       }
     },
-    "next": ["日常任务奖励-面板-探测"],
-    "on_error": ["日常任务奖励-记录-失败"],
+    "next": [
+      "日常任务奖励-面板-探测"
+    ],
+    "on_error": [
+      "日常任务奖励-记录-失败"
+    ],
     "retry_times": 0
   },
   "日常任务奖励-面板-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["日常任务奖励-日常-面板-页面"]
+        "all_of": [
+          "日常任务奖励-日常-面板-页面"
+        ]
       }
     },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["日常任务奖励-打开-日常"],
-    "on_error": ["日常任务奖励-记录-失败"]
+    "next": [
+      "日常任务奖励-打开-日常"
+    ],
+    "on_error": [
+      "日常任务奖励-记录-失败"
+    ]
   },
   "日常任务奖励-打开-日常": {
     "max_hit": 1,
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["日常任务奖励-日常-面板-页面", "日常任务奖励-日常-入口"],
+        "all_of": [
+          "日常任务奖励-日常-面板-页面",
+          "日常任务奖励-日常-入口"
+        ],
         "box_index": 1
       }
     },
@@ -471,8 +655,12 @@
         "target_name": "日常任务奖励-日常-入口"
       }
     },
-    "next": ["日常任务奖励-页面-探测"],
-    "on_error": ["日常任务奖励-记录-失败"],
+    "next": [
+      "日常任务奖励-页面-探测"
+    ],
+    "on_error": [
+      "日常任务奖励-记录-失败"
+    ],
     "retry_times": 0
   },
   "日常任务奖励-关闭": {
@@ -480,7 +668,10 @@
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["日常任务奖励-日常-页面", "日常任务奖励-日常-关闭"],
+        "all_of": [
+          "日常任务奖励-日常-页面",
+          "日常任务奖励-日常-关闭"
+        ],
         "box_index": 1
       }
     },
@@ -497,29 +688,45 @@
         "target_name": "日常任务奖励-日常-关闭"
       }
     },
-    "next": ["日常任务奖励-面板关闭后", "日常任务奖励-主页边界-探测"],
-    "on_error": ["日常任务奖励-主页边界-失败"],
+    "next": [
+      "日常任务奖励-面板关闭后",
+      "日常任务奖励-主页边界-探测"
+    ],
+    "on_error": [
+      "日常任务奖励-主页边界-失败"
+    ],
     "retry_times": 0
   },
   "日常任务奖励-面板关闭后": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["日常任务奖励-日常-面板-页面", "日常任务奖励-日常-面板-关闭"],
+        "all_of": [
+          "日常任务奖励-日常-面板-页面",
+          "日常任务奖励-日常-面板-关闭"
+        ],
         "box_index": 0
       }
     },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["日常任务奖励-关闭-面板", "日常任务奖励-主页边界-探测"],
-    "on_error": ["日常任务奖励-主页边界-失败"]
+    "next": [
+      "日常任务奖励-关闭-面板",
+      "日常任务奖励-主页边界-探测"
+    ],
+    "on_error": [
+      "日常任务奖励-主页边界-失败"
+    ]
   },
   "日常任务奖励-关闭-面板": {
     "max_hit": 1,
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["日常任务奖励-日常-面板-页面", "日常任务奖励-日常-面板-关闭"],
+        "all_of": [
+          "日常任务奖励-日常-面板-页面",
+          "日常任务奖励-日常-面板-关闭"
+        ],
         "box_index": 1
       }
     },
@@ -537,21 +744,31 @@
         "target_name": "日常任务奖励-日常-面板-关闭"
       }
     },
-    "next": ["日常任务奖励-主页边界-探测"],
-    "on_error": ["日常任务奖励-主页边界-失败"],
+    "next": [
+      "日常任务奖励-主页边界-探测"
+    ],
+    "on_error": [
+      "日常任务奖励-主页边界-失败"
+    ],
     "retry_times": 0
   },
   "日常任务奖励-主页边界-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["日常任务奖励-日常-主页-页面"]
+        "all_of": [
+          "日常任务奖励-日常-主页-页面"
+        ]
       }
     },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["公共-主页边界"],
-    "on_error": ["日常任务奖励-主页边界-失败"]
+    "next": [
+      "公共-主页边界"
+    ],
+    "on_error": [
+      "日常任务奖励-主页边界-失败"
+    ]
   },
   "日常任务奖励-主页边界-失败": {
     "recognition": "DirectHit",
@@ -562,23 +779,31 @@
       "status": "failed",
       "postcondition": "home",
       "error_code": "DAILY_REWARD_HOME_BOUNDARY_MISSING",
-      "native_fail_after_record": true
+      "defer_home_boundary": true
     },
-    "Abort": true,
-    "next": ["公共-通用中止"]
-
+    "next": [
+      "公共-通用中止"
+    ]
   },
   "日常任务奖励-日常-入口": {
     "recognition": "OCR",
     "expected": "^日常$",
-    "roi": [1040, 270, 120, 70],
+    "roi": [
+      1040,
+      270,
+      120,
+      70
+    ],
     "action": "DoNothing"
   },
   "日常任务奖励-日常-页面": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["日常任务奖励-日常-页面-标题", "日常任务奖励-日常-页面-活动"],
+        "all_of": [
+          "日常任务奖励-日常-页面-标题",
+          "日常任务奖励-日常-页面-活动"
+        ],
         "box_index": 0
       }
     },
@@ -587,62 +812,120 @@
   "日常任务奖励-日常-页面-标题": {
     "recognition": "OCR",
     "expected": "^日常任务$",
-    "roi": [70, 15, 130, 60],
+    "roi": [
+      70,
+      15,
+      130,
+      60
+    ],
     "action": "DoNothing"
   },
   "日常任务奖励-日常-页面-活动": {
     "recognition": "OCR",
     "expected": "^活跃度$",
-    "roi": [300, 75, 100, 115],
+    "roi": [
+      300,
+      75,
+      100,
+      115
+    ],
     "action": "DoNothing"
   },
   "日常任务奖励-日常-已完成-行-领取": {
     "recognition": "OCR",
     "expected": "领取",
-    "roi": [980, 180, 190, 130],
+    "roi": [
+      980,
+      180,
+      190,
+      130
+    ],
     "action": "DoNothing"
   },
   "日常任务奖励-日常-已解锁-活动-宝箱": {
     "recognition": "TemplateMatch",
     "template": "daily/DAILY_TASK_REWARD_CLAIM_DAILY/unlocked_chest_live.png",
-    "roi": [380, 65, 760, 100],
+    "roi": [
+      380,
+      65,
+      760,
+      100
+    ],
     "threshold": 0.72,
     "action": "DoNothing"
   },
   "日常任务奖励-日常-奖励-弹窗": {
-    "recognition": "OCR",
-    "expected": ["恭喜获得", "获得"],
-    "roi": [0, 100, 1280, 620],
+    "recognition": {
+      "type": "Or",
+      "param": {
+        "any_of": [
+          "日常任务奖励-奖励-弹窗-模板",
+          "日常任务奖励-奖励-弹窗-OCR"
+        ]
+      }
+    },
     "action": "DoNothing"
   },
   "日常任务奖励-日常-奖励-弹窗-关闭": {
-    "recognition": "OCR",
-    "expected": "点击空白处关闭",
-    "roi": [300, 560, 700, 160],
+    "recognition": {
+      "type": "Or",
+      "param": {
+        "any_of": [
+          "日常任务奖励-奖励-弹窗-模板",
+          "日常任务奖励-奖励-弹窗-OCR"
+        ]
+      }
+    },
     "action": "DoNothing"
   },
   "日常任务奖励-日常-无-可领取-全局": {
     "recognition": "OCR",
-    "expected": ["^暂无可领取$", "^前往$"],
-    "roi": [300, 100, 900, 620],
+    "expected": [
+      "^暂无可领取$",
+      "^前往$"
+    ],
+    "roi": [
+      300,
+      100,
+      900,
+      620
+    ],
     "action": "DoNothing"
   },
   "日常任务奖励-日常-已领取-行": {
     "recognition": "OCR",
     "expected": "^已领取$",
-    "roi": [300, 100, 900, 620],
+    "roi": [
+      300,
+      100,
+      900,
+      620
+    ],
     "action": "DoNothing"
   },
   "日常任务奖励-日常-滚动-区域": {
     "recognition": "OCR",
-    "expected": ["任务", "活跃度"],
-    "roi": [180, 190, 1000, 400],
+    "expected": [
+      "任务",
+      "活跃度"
+    ],
+    "roi": [
+      180,
+      190,
+      1000,
+      400
+    ],
     "action": "DoNothing"
   },
   "日常任务奖励-日常-关闭": {
     "recognition": "TemplateMatch",
     "template": "daily/TRIAL_SWORD_DAILY/trial_close.png",
-    "roi": [1160, 0, 100, 100],
+    "roi": [
+      1160,
+      0,
+      100,
+      100
+    ],
     "threshold": 0.72,
     "action": "DoNothing"
   },
@@ -650,7 +933,10 @@
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["日常任务奖励-日常-主页-副本", "日常任务奖励-日常-主页-试炼"],
+        "all_of": [
+          "日常任务奖励-日常-主页-副本",
+          "日常任务奖励-日常-主页-试炼"
+        ],
         "box_index": 0
       }
     },
@@ -659,24 +945,48 @@
   "日常任务奖励-日常-主页-副本": {
     "recognition": "OCR",
     "expected": "^副本$",
-    "roi": [1035, 45, 80, 40],
+    "roi": [
+      1035,
+      45,
+      80,
+      40
+    ],
     "action": "DoNothing"
   },
   "日常任务奖励-日常-主页-试炼": {
     "recognition": "OCR",
-    "expected": ["^试剑$", "^击破：\\d+(?:层)?$"],
-    "roi": [965, 620, 100, 70],
+    "expected": [
+      "^试剑$",
+      "^击破：\\d+(?:层)?$"
+    ],
+    "roi": [
+      965,
+      620,
+      100,
+      70
+    ],
     "action": "DoNothing"
   },
   "日常任务奖励-日常-主页-面板-打开": {
-    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏功能面板-入口"], "box_index": 0}},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "公共-游戏功能面板-入口"
+        ],
+        "box_index": 0
+      }
+    },
     "action": "DoNothing"
   },
   "日常任务奖励-日常-面板-页面": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["日常任务奖励-日常-面板-商店", "日常任务奖励-日常-面板-研习"],
+        "all_of": [
+          "日常任务奖励-日常-面板-商店",
+          "日常任务奖励-日常-面板-研习"
+        ],
         "box_index": 0
       }
     },
@@ -685,17 +995,35 @@
   "日常任务奖励-日常-面板-商店": {
     "recognition": "OCR",
     "expected": "^商城$",
-    "roi": [925, 270, 105, 75],
+    "roi": [
+      925,
+      270,
+      105,
+      75
+    ],
     "action": "DoNothing"
   },
   "日常任务奖励-日常-面板-研习": {
     "recognition": "OCR",
     "expected": "^武学研习$",
-    "roi": [680, 390, 140, 75],
+    "roi": [
+      680,
+      390,
+      140,
+      75
+    ],
     "action": "DoNothing"
   },
   "日常任务奖励-日常-面板-关闭": {
-    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏侧边面板-打开"], "box_index": 0}},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "公共-游戏侧边面板-打开"
+        ],
+        "box_index": 0
+      }
+    },
     "action": "DoNothing"
   }
 }

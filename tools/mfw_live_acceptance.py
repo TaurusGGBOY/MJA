@@ -41,17 +41,25 @@ TERMINAL_POSTCONDITIONS: dict[str, frozenset[str]] = {
     "BUY_TEA_DAILY": frozenset({"tea.sold_out", "tea.no_remaining_stock"}),
     "FREE_APPRAISAL_DAILY": frozenset({"appraisal.used"}),
     "HERO_DISPATCH_DAILY": frozenset(
-        {"hero.all_completed", "hero.all_dispatched_waiting", "hero.first_task_in_progress"}
+        {"hero.all_completed", "hero.all_dispatched_waiting", "hero.claim_state_known"}
     ),
+    "EQUIPMENT_DECOMPOSE_DAILY": frozenset({"equipment.no_reward_popup"}),
     "BREAK_ARRAY_MARTIAL_DAILY": frozenset(
-        {"break_array.daily_exhausted", "break_array.unavailable"}
+        {"break_array.remaining_zero_of_nine", "break_array.daily_exhausted"}
     ),
     "DUNGEON_SWEEP_DAILY": frozenset(
-        {"dungeon.ticket_unavailable", "dungeon.sweep_unavailable"}
+        {
+            "dungeon.ticket_count_zero",
+            "dungeon.ticket_unavailable",
+            "dungeon.sweep_unavailable",
+        }
     ),
     "EAT_STAMINA_FOOD_DAILY": frozenset({"food.longjing_shrimp_unavailable"}),
     "GUILD_DONATION_DAILY": frozenset({"guild.donation.unavailable"}),
     "SPEND_CONDENSATE_DAILY": frozenset({"condensate.both_regions_sold_out"}),
+    "RING_CHALLENGE_DAILY": frozenset(
+        {"ring.attempts_exhausted", "ring.manual_attempts_complete"}
+    ),
     "DAILY_TASK_REWARD_CLAIM_DAILY": frozenset({"daily_reward.no_claimable"}),
     "BATTLE_PASS_REWARD_DAILY": frozenset(
         {"battle_pass.no_task_or_basic_claimable"}
@@ -269,6 +277,14 @@ def _require_success_signal(task_id: str, payload: dict[str, Any]) -> str:
 
     terminal_allowed = TERMINAL_POSTCONDITIONS.get(task_id, frozenset())
     if signal in terminal_allowed:
+        return signal
+
+    # ``already_complete`` can be produced by a truthful branch-specific
+    # marker too.  For example, the trial page says “敬请期待” when its free
+    # slot is unavailable; that is not a consumptive terminal marker, but it
+    # is still the business result that proves the task is already complete.
+    success_allowed = SUCCESS_SIGNAL_POSTCONDITIONS.get(task_id, frozenset())
+    if signal in success_allowed:
         return signal
 
     normalized = signal.strip().casefold()

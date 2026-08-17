@@ -10,6 +10,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 import re
 from threading import RLock
+from time import sleep
 from typing import Any
 
 from maa.agent.agent_server import AgentServer
@@ -19,10 +20,21 @@ from agent.custom.support.diagnostics import TaskDiagnostics
 from agent.custom.support.models import TaskOutcomeStatus
 from agent.custom.support.policy import TASK_POLICIES
 from agent.custom.support.state import RUN_STORE
+from agent.custom.support.controller_input import click_box
 
 _ACTIVE_DIAGNOSTICS: dict[tuple[int, str], TaskDiagnostics] = {}
 _LOCK = RLock()
 _STARTUP_ERROR_CODE = re.compile(r"^GAME_START_[A-Z0-9_]+$")
+_GAME_PACKAGE = "com.hanjiasongshu.dr22"
+# The world HUD exposes the two-sword shortcut immediately above the
+# 310/310 counter.  This is the only fixed coordinate used to move from the
+# exploration HUD back to the bottom navigation home; it is deliberately kept
+# here, outside business-task action budgets, because it is lifecycle cleanup.
+_WORLD_HOME_MENU_BOX = (1090, 585, 85, 80)
+# Painting-scroll/world-map pages expose a separate close icon in the upper
+# right.  Android BACK is ignored on that surface, so cleanup must dismiss the
+# surface first and only then use BACK for any remaining nested page.
+_KNOWN_SURFACE_CLOSE_BOX = (1205, 33, 18, 18)
 _LOGGER = logging.getLogger(__name__)
 
 
@@ -101,6 +113,20 @@ def _pop_diagnostics(context: Any, task_id: str) -> TaskDiagnostics | None:
         return _ACTIVE_DIAGNOSTICS.pop(key, None)
 
 
+def _stop_game_surface(context: Any) -> bool:
+    """Stop the game through the MFW controller, without shelling out to ADB."""
+
+    controller = context.tasker.controller
+    stop_app = getattr(controller, "post_stop_app", None)
+    if not callable(stop_app):
+        return False
+    job = stop_app(_GAME_PACKAGE)
+    wait = getattr(job, "wait", None)
+    if not callable(wait):
+        return False
+    return bool(wait())
+
+
 def finish_task(
     context: Any,
     task_id: str,
@@ -176,7 +202,7 @@ def complete_task_boundary(context: Any, boundary: str) -> bool:
 
     task_id = _active_task_id(context)
     if task_id is None:
-        return False
+        return True
     diagnostics = diagnostics_for(context, task_id)
     if diagnostics is None:
         return False
@@ -248,8 +274,6 @@ class RecordTaskOutcome(CustomAction):
             if not isinstance(defer_home_boundary, bool):
                 raise ValueError("defer_home_boundary must be a boolean")
             if defer_home_boundary:
-                if native_fail_after_record or status is TaskOutcomeStatus.FAILED:
-                    raise ValueError("deferred business result cannot fail natively")
                 if not seal_task(context, task_id, status, postcondition, error_code):
                     return False
             elif not finish_task(context, task_id, status, postcondition, error_code):
@@ -272,6 +296,125 @@ class CompleteTaskBoundary(CustomAction):
             return complete_task_boundary(context, boundary)
         except (KeyError, RuntimeError, TypeError, ValueError, PermissionError):
             return False
+
+
+@AgentServer.custom_action("ReturnToHome")
+class ReturnToHome(CustomAction):
+    """Unwind nested game pages before the shared home-boundary check."""
+
+    def run(self, context: Any, argv: CustomAction.RunArg) -> bool:
+        try:
+            controller = context.tasker.controller
+            post_key = getattr(controller, "post_click_key", None)
+            if not callable(post_key):
+                return False
+            # Some map/stage screens consume one BACK only to dismiss their
+            # transition layer. Keep unwinding until the common home-boundary
+            # detector can observe the actual game home.
+            for _ in range(8):
+                job = post_key(4)  # Android BACK; controller remains MFW-owned.
+                wait = getattr(job, "wait", None)
+                if not callable(wait) or not wait():
+                    return False
+                sleep(0.35)
+            # Back unwinds task-specific sheets, but the world HUD is a
+            # separate surface from the bottom-navigation home.  Once the
+            # nested pages are unwound, use the same fixed two-sword shortcut
+            # as startup recovery to open that home surface.
+            resolution = getattr(controller, "resolution", None)
+            click_box(controller, _WORLD_HOME_MENU_BOX, resolution=resolution)
+            sleep(1.5)
+            return True
+        except Exception:
+            return False
+
+
+@AgentServer.custom_action("ReturnToWorldHome")
+class ReturnToWorldHome(CustomAction):
+    """Back out to the exploration/world HUD without opening the sword page.
+
+    The two-sword shortcut is a business-task entry for 擂台 and 剑林.  It is
+    therefore not a valid generic cleanup action: clicking it during a shared
+    task boundary moves the app away from the world HUD.  This action only
+    unwinds nested pages; the following pipeline recognition is responsible
+    for proving that the world HUD was actually reached.
+    """
+
+    def run(self, context: Any, argv: CustomAction.RunArg) -> bool:
+        try:
+            controller = context.tasker.controller
+            post_key = getattr(controller, "post_click_key", None)
+            if not callable(post_key):
+                return False
+            # The painting-scroll/world-map surface visibly has an upper-right
+            # close icon but consumes no Android BACK event.  A best-effort
+            # close is safe on pages without that icon (it lands on empty HUD
+            # space), while making the known surface dismissible before the
+            # bounded BACK unwind below.
+            resolution = getattr(controller, "resolution", None)
+            try:
+                click_box(
+                    controller,
+                    _KNOWN_SURFACE_CLOSE_BOX,
+                    resolution=resolution,
+                )
+                sleep(0.5)
+            except Exception:
+                _LOGGER.debug("known surface close icon was not actionable", exc_info=True)
+            for _ in range(8):
+                job = post_key(4)  # Android BACK; controller remains MFW-owned.
+                wait = getattr(job, "wait", None)
+                if not callable(wait) or not wait():
+                    return False
+                sleep(0.35)
+            return True
+        except Exception:
+            return False
+
+
+@AgentServer.custom_action("CloseKnownPaintingSurface")
+class CloseKnownPaintingSurface(CustomAction):
+    """Dismiss the painting/world-map surface at its calibrated close icon.
+
+    The shared ``公共-已知-画卷-关闭`` node already proves that the painting
+    surface and its upper-right icon are visible.  Maa's generic ``Click``
+    action clicked the full 72px template box and landed below the icon on the
+    live 1280x720 frame, so this lifecycle-only action uses the small verified
+    anchor used by home recovery instead.
+    """
+
+    def run(self, context: Any, argv: CustomAction.RunArg) -> bool:
+        del argv
+        try:
+            controller = context.tasker.controller
+            resolution = getattr(controller, "resolution", None)
+            click_box(controller, _KNOWN_SURFACE_CLOSE_BOX, resolution=resolution)
+            sleep(1.0)
+        except Exception:
+            return False
+        return True
+
+
+@AgentServer.custom_action("OpenGameHomeMenu")
+class OpenGameHomeMenu(CustomAction):
+    """Open the bottom-navigation home from the game lifecycle boundary.
+
+    The two-sword shortcut is a game lifecycle control, not a business task
+    action. Its position is fixed on the 1280x720 Android renderer. On the
+    bottom-navigation home the same point is intentionally empty, so calling
+    this action there is a harmless no-op; on the world HUD it opens the
+    bottom-navigation home.
+    """
+
+    def run(self, context: Any, argv: CustomAction.RunArg) -> bool:
+        try:
+            controller = context.tasker.controller
+            resolution = getattr(controller, "resolution", None)
+            click_box(controller, _WORLD_HOME_MENU_BOX, resolution=resolution)
+            sleep(1.5)
+        except Exception:
+            return False
+        return True
 
 
 @AgentServer.custom_action("FailStartupRecovery")
@@ -319,6 +462,11 @@ class FailStartupRecovery(CustomAction):
                 "[GAME_START_FAILURE] %s",
                 json.dumps(record, ensure_ascii=False, sort_keys=True),
             )
+            # A startup recovery failure is also a lifecycle boundary.  Stop
+            # the game surface so the next continuation cannot inherit the
+            # same unknown page or half-started Activity.
+            if not _stop_game_surface(context):
+                _LOGGER.error("[GAME_START_FAILURE] unable to stop game surface")
         except (KeyError, RuntimeError, TypeError, ValueError, PermissionError):
             return False
         except OSError:
@@ -349,9 +497,14 @@ class RecordActiveTaskFailure(CustomAction):
             native_fail_after_record = payload.get("native_fail_after_record", True)
             if not isinstance(native_fail_after_record, bool):
                 raise ValueError("native_fail_after_record must be a boolean")
+            stop_game_on_failure = payload.get("stop_game_on_failure", False)
+            if not isinstance(stop_game_on_failure, bool):
+                raise ValueError("stop_game_on_failure must be a boolean")
 
             active_task_ids = _active_task_ids(context)
             if len(active_task_ids) != 1:
+                if stop_game_on_failure:
+                    _stop_game_surface(context)
                 return False
             task_id = active_task_ids[0]
             snapshot = RUN_STORE.snapshot(task_id)
@@ -366,6 +519,8 @@ class RecordActiveTaskFailure(CustomAction):
                 context, task_id, TaskOutcomeStatus.FAILED, postcondition, error_code
             ):
                 return False
+            if stop_game_on_failure and not _stop_game_surface(context):
+                return False
         except (KeyError, RuntimeError, TypeError, ValueError, PermissionError):
             return False
         return not native_fail_after_record
@@ -373,10 +528,13 @@ class RecordActiveTaskFailure(CustomAction):
 
 __all__ = [
     "BeginTask",
+    "CloseKnownPaintingSurface",
     "CompleteTaskBoundary",
     "FailStartupRecovery",
     "RecordActiveTaskFailure",
     "RecordTaskOutcome",
+    "OpenGameHomeMenu",
+    "ReturnToWorldHome",
     "diagnostics_for",
     "finish_task",
     "complete_task_boundary",

@@ -2,7 +2,12 @@
   "商店免费礼包-任务入口": {
     "recognition": {
       "type": "And",
-      "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}
+      "param": {
+        "all_of": [
+          "公共-游戏主页-页面"
+        ],
+        "box_index": 0
+      }
     },
     "action": "Custom",
     "custom_action": "BeginTask",
@@ -21,15 +26,18 @@
       "商店免费礼包-主页-探测"
     ],
     "on_error": [
-      "商店免费礼包-运行时-恢复-尝试-1",
-      "商店免费礼包-运行时-恢复-尝试-2",
-      "商店免费礼包-运行时-恢复-耗尽"
+      "公共-主页边界-失败"
     ]
   },
   "商店免费礼包-页面-探测": {
     "recognition": "OCR",
     "expected": "商城",
-    "roi": [0, 0, 1280, 720],
+    "roi": [
+      0,
+      0,
+      1280,
+      720
+    ],
     "timeout": 8000,
     "action": "DoNothing",
     "next": [
@@ -47,10 +55,18 @@
   "商店免费礼包-权益-页面-探测": {
     "recognition": "OCR",
     "expected": "周期福利",
-    "roi": [0, 100, 1280, 620],
+    "roi": [
+      0,
+      100,
+      1280,
+      620
+    ],
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["商店免费礼包-状态-探测", "商店免费礼包-领取-门禁"],
+    "next": [
+      "商店免费礼包-状态-探测",
+      "商店免费礼包-领取-门禁"
+    ],
     "on_error": [
       "商店免费礼包-运行时-恢复-尝试-1",
       "商店免费礼包-运行时-恢复-尝试-2",
@@ -59,11 +75,22 @@
   },
   "商店免费礼包-状态-探测": {
     "recognition": "OCR",
-    "expected": ["已领取", "今日已领取", "领取完毕"],
-    "roi": [0, 100, 1280, 620],
+    "expected": [
+      "已领取",
+      "今日已领取",
+      "领取完毕"
+    ],
+    "roi": [
+      0,
+      100,
+      1280,
+      620
+    ],
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["商店免费礼包-已完成"],
+    "next": [
+      "商店免费礼包-已完成"
+    ],
     "on_error": [
       "商店免费礼包-领取-门禁",
       "商店免费礼包-运行时-恢复-尝试-1",
@@ -74,20 +101,29 @@
   "商店免费礼包-已完成": {
     "recognition": "DirectHit",
     "action": "DoNothing",
-    "next": ["商店免费礼包-关闭-已完成"],
-    "on_error": ["商店免费礼包-记录-失败"]
+    "next": [
+      "商店免费礼包-关闭-已完成"
+    ],
+    "on_error": [
+      "商店免费礼包-记录-失败"
+    ]
   },
   "商店免费礼包-直接-状态-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["商店免费礼包-商店-页面", "商店免费礼包-商店-日常-免费-礼包-已领取"],
+        "all_of": [
+          "商店免费礼包-商店-页面",
+          "商店免费礼包-商店-日常-免费-礼包-已领取"
+        ],
         "box_index": 1
       }
     },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["商店免费礼包-已完成"],
+    "next": [
+      "商店免费礼包-已完成"
+    ],
     "on_error": [
       "商店免费礼包-直接-领取-门禁",
       "商店免费礼包-权益-页面-探测",
@@ -102,7 +138,10 @@
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["商店免费礼包-商店-周期-权益-页面", "商店免费礼包-商店-日常-免费-礼包"],
+        "all_of": [
+          "商店免费礼包-商店-周期-权益-页面",
+          "商店免费礼包-商店-日常-免费-礼包"
+        ],
         "box_index": 1
       }
     },
@@ -120,20 +159,29 @@
         "target_name": "商店免费礼包-商店-日常-免费-礼包"
       }
     },
-    "next": ["商店免费礼包-奖励-探测"],
-    "on_error": ["商店免费礼包-记录-失败"],
+    "next": [
+      "商店免费礼包-奖励-探测"
+    ],
+    "on_error": [
+      "商店免费礼包-记录-失败"
+    ],
     "retry_times": 0
   },
   "商店免费礼包-直接-领取-门禁": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["商店免费礼包-商店-页面", "商店免费礼包-商店-日常-免费-礼包"],
+        "all_of": [
+          "商店免费礼包-商店-页面",
+          "商店免费礼包-商店-日常-免费-礼包"
+        ],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["商店免费礼包-直接-领取"],
+    "next": [
+      "商店免费礼包-直接-领取"
+    ],
     "on_error": [
       "商店免费礼包-权益-页面-探测",
       "商店免费礼包-页面-探测",
@@ -147,7 +195,10 @@
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["商店免费礼包-商店-页面", "商店免费礼包-商店-日常-免费-礼包"],
+        "all_of": [
+          "商店免费礼包-商店-页面",
+          "商店免费礼包-商店-日常-免费-礼包"
+        ],
         "box_index": 1
       }
     },
@@ -165,17 +216,31 @@
         "target_name": "商店免费礼包-商店-日常-免费-礼包"
       }
     },
-    "next": ["商店免费礼包-奖励-探测"],
-    "on_error": ["商店免费礼包-记录-失败"],
+    "next": [
+      "商店免费礼包-奖励-探测"
+    ],
+    "on_error": [
+      "商店免费礼包-记录-失败"
+    ],
     "retry_times": 0
   },
   "商店免费礼包-奖励-探测": {
     "recognition": "OCR",
-    "expected": ["恭喜获得", "点击空白处关闭"],
-    "roi": [0, 120, 1280, 600],
+    "expected": [
+      "恭喜获得",
+      "点击空白处关闭"
+    ],
+    "roi": [
+      0,
+      120,
+      1280,
+      600
+    ],
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["商店免费礼包-关闭-奖励"],
+    "next": [
+      "商店免费礼包-关闭-奖励"
+    ],
     "on_error": [
       "商店免费礼包-领取后-恢复-尝试-1",
       "商店免费礼包-领取后-恢复-尝试-2",
@@ -186,7 +251,10 @@
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["商店免费礼包-商店-免费-礼包-奖励", "商店免费礼包-商店-免费-礼包-关闭"],
+        "all_of": [
+          "商店免费礼包-商店-免费-礼包-奖励",
+          "商店免费礼包-商店-免费-礼包-关闭"
+        ],
         "box_index": 1
       }
     },
@@ -219,12 +287,17 @@
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["商店免费礼包-商店-周期-权益-页面", "商店免费礼包-商店-日常-免费-礼包-已领取"],
+        "all_of": [
+          "商店免费礼包-商店-周期-权益-页面",
+          "商店免费礼包-商店-日常-免费-礼包-已领取"
+        ],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["商店免费礼包-成功"],
+    "next": [
+      "商店免费礼包-成功"
+    ],
     "on_error": [
       "商店免费礼包-领取后-恢复-尝试-1",
       "商店免费礼包-领取后-恢复-尝试-2",
@@ -235,12 +308,17 @@
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["商店免费礼包-商店-页面", "商店免费礼包-商店-日常-免费-礼包-已领取"],
+        "all_of": [
+          "商店免费礼包-商店-页面",
+          "商店免费礼包-商店-日常-免费-礼包-已领取"
+        ],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["商店免费礼包-成功"],
+    "next": [
+      "商店免费礼包-成功"
+    ],
     "on_error": [
       "商店免费礼包-领取后-恢复-尝试-1",
       "商店免费礼包-领取后-恢复-尝试-2",
@@ -250,8 +328,12 @@
   "商店免费礼包-成功": {
     "recognition": "DirectHit",
     "action": "DoNothing",
-    "next": ["商店免费礼包-关闭"],
-    "on_error": ["商店免费礼包-记录-失败"]
+    "next": [
+      "商店免费礼包-关闭"
+    ],
+    "on_error": [
+      "商店免费礼包-记录-失败"
+    ]
   },
   "商店免费礼包-记录-成功": {
     "recognition": "DirectHit",
@@ -263,8 +345,12 @@
       "postcondition": "shop.daily_free_gift_claimed",
       "defer_home_boundary": true
     },
-    "next": ["公共-主页边界"],
-    "on_error": ["商店免费礼包-记录-失败"]
+    "next": [
+      "公共-主页边界"
+    ],
+    "on_error": [
+      "商店免费礼包-记录-失败"
+    ]
   },
   "商店免费礼包-记录-已完成": {
     "recognition": "DirectHit",
@@ -276,8 +362,12 @@
       "postcondition": "shop.daily_free_gift_claimed",
       "defer_home_boundary": true
     },
-    "next": ["公共-主页边界"],
-    "on_error": ["商店免费礼包-记录-失败"]
+    "next": [
+      "公共-主页边界"
+    ],
+    "on_error": [
+      "商店免费礼包-记录-失败"
+    ]
   },
   "商店免费礼包-记录-失败": {
     "recognition": "DirectHit",
@@ -288,16 +378,27 @@
       "status": "failed",
       "postcondition": "SHOP_POSTCONDITION_MISSING",
       "error_code": "SHOP_POSTCONDITION_MISSING",
-      "native_fail_after_record": true
+      "defer_home_boundary": true
     },
-    "Abort": true,
-    "next": ["公共-通用中止"]
+    "next": [
+      "公共-通用中止"
+    ]
   },
   "商店免费礼包-主页-探测": {
-    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "公共-游戏主页-页面"
+        ],
+        "box_index": 0
+      }
+    },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["商店免费礼包-打开-面板"],
+    "next": [
+      "商店免费礼包-打开-面板"
+    ],
     "on_error": [
       "商店免费礼包-运行时-恢复-尝试-1",
       "商店免费礼包-运行时-恢复-尝试-2",
@@ -308,7 +409,10 @@
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["公共-游戏主页-页面", "公共-游戏功能面板-入口"],
+        "all_of": [
+          "公共-游戏主页-页面",
+          "公共-游戏功能面板-入口"
+        ],
         "box_index": 1
       }
     },
@@ -326,7 +430,9 @@
         "target_name": "公共-游戏功能面板-入口"
       }
     },
-    "next": ["商店免费礼包-面板-探测"],
+    "next": [
+      "商店免费礼包-面板-探测"
+    ],
     "on_error": [
       "商店免费礼包-运行时-恢复-尝试-1",
       "商店免费礼包-运行时-恢复-尝试-2",
@@ -337,11 +443,18 @@
   "商店免费礼包-面板-探测": {
     "recognition": {
       "type": "And",
-      "param": {"all_of": ["公共-游戏侧边面板-打开"], "box_index": 0}
+      "param": {
+        "all_of": [
+          "公共-游戏侧边面板-打开"
+        ],
+        "box_index": 0
+      }
     },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["商店免费礼包-打开-商店"],
+    "next": [
+      "商店免费礼包-打开-商店"
+    ],
     "on_error": [
       "商店免费礼包-运行时-恢复-尝试-1",
       "商店免费礼包-运行时-恢复-尝试-2",
@@ -352,7 +465,10 @@
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["公共-游戏侧边面板-打开", "商店免费礼包-商店-入口"],
+        "all_of": [
+          "公共-游戏侧边面板-打开",
+          "商店免费礼包-商店-入口"
+        ],
         "box_index": 1
       }
     },
@@ -370,7 +486,9 @@
         "target_name": "商店免费礼包-商店-入口"
       }
     },
-    "next": ["商店免费礼包-页面-探测"],
+    "next": [
+      "商店免费礼包-页面-探测"
+    ],
     "on_error": [
       "商店免费礼包-运行时-恢复-尝试-1",
       "商店免费礼包-运行时-恢复-尝试-2",
@@ -382,7 +500,10 @@
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["商店免费礼包-商店-页面", "商店免费礼包-商店-周期-权益-页面"],
+        "all_of": [
+          "商店免费礼包-商店-页面",
+          "商店免费礼包-商店-周期-权益-页面"
+        ],
         "box_index": 1
       }
     },
@@ -400,7 +521,9 @@
         "target_name": "商店免费礼包-商店-周期-权益-页面"
       }
     },
-    "next": ["商店免费礼包-权益-页面-探测"],
+    "next": [
+      "商店免费礼包-权益-页面-探测"
+    ],
     "on_error": [
       "商店免费礼包-运行时-恢复-尝试-1",
       "商店免费礼包-运行时-恢复-尝试-2",
@@ -412,7 +535,10 @@
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["商店免费礼包-商店-页面", "商店免费礼包-商店-关闭"],
+        "all_of": [
+          "商店免费礼包-商店-页面",
+          "商店免费礼包-商店-关闭"
+        ],
         "box_index": 1
       }
     },
@@ -430,95 +556,40 @@
         "target_name": "商店免费礼包-商店-关闭"
       }
     },
-    "next": ["商店免费礼包-面板关闭后"],
-    "on_error": ["商店免费礼包-记录-失败"]
+    "next": [
+      "商店免费礼包-面板关闭后"
+    ],
+    "on_error": [
+      "商店免费礼包-记录-失败"
+    ]
   },
   "商店免费礼包-面板关闭后": {
     "recognition": {
       "type": "And",
-      "param": {"all_of": ["公共-游戏侧边面板-打开"], "box_index": 0}
+      "param": {
+        "all_of": [
+          "公共-游戏侧边面板-打开"
+        ],
+        "box_index": 0
+      }
     },
     "timeout": 5000,
     "action": "DoNothing",
-    "next": ["商店免费礼包-关闭-面板"],
-    "on_error": ["商店免费礼包-记录-失败"]
+    "next": [
+      "商店免费礼包-关闭-面板"
+    ],
+    "on_error": [
+      "商店免费礼包-记录-失败"
+    ]
   },
   "商店免费礼包-关闭-面板": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["公共-已知-面板-标记", "公共-已知-面板-关闭"],
-        "box_index": 1
-      }
-    },
-    "action": "Custom",
-    "max_hit": 1,
-    "custom_action": "GuardedInput",
-  "custom_action_param": {
-    "task_id": "SHOP_FREE_GIFT_DAILY",
-    "action_id": "close_function_panel",
-    "kind": "click",
-    "fixed_click_mode": "function_panel_close",
-    "evidence": {
-      "page_index": 0,
-      "target_index": 1,
-        "page_name": "公共-已知-面板-标记",
-        "target_name": "公共-已知-面板-关闭"
-      }
-    },
-    "next": ["商店免费礼包-主页-返回-探测"],
-    "on_error": ["商店免费礼包-记录-失败"]
-  },
-  "商店免费礼包-主页-返回-探测": {
-    "recognition": {
-      "type": "And",
-      "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}
-    },
-    "timeout": 8000,
-    "action": "DoNothing",
-    "next": ["商店免费礼包-记录-成功"],
-    "on_error": ["商店免费礼包-记录-失败"]
-  },
-  "商店免费礼包-关闭-已完成": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": ["商店免费礼包-商店-页面", "商店免费礼包-商店-关闭"],
-        "box_index": 1
-      }
-    },
-    "action": "Custom",
-    "max_hit": 1,
-    "custom_action": "GuardedInput",
-    "custom_action_param": {
-      "task_id": "SHOP_FREE_GIFT_DAILY",
-      "action_id": "close_shop",
-      "kind": "click",
-      "evidence": {
-        "page_index": 0,
-        "target_index": 1,
-        "page_name": "商店免费礼包-商店-页面",
-        "target_name": "商店免费礼包-商店-关闭"
-      }
-    },
-    "next": ["商店免费礼包-面板关闭后-已完成"],
-    "on_error": ["商店免费礼包-记录-失败"]
-  },
-  "商店免费礼包-面板关闭后-已完成": {
-    "recognition": {
-      "type": "And",
-      "param": {"all_of": ["公共-游戏侧边面板-打开"], "box_index": 0}
-    },
-    "timeout": 5000,
-    "action": "DoNothing",
-    "next": ["商店免费礼包-关闭-面板-已完成"],
-    "on_error": ["商店免费礼包-记录-失败"]
-  },
-  "商店免费礼包-关闭-面板-已完成": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": ["公共-已知-面板-标记", "公共-已知-面板-关闭"],
+        "all_of": [
+          "公共-已知-面板-标记",
+          "公共-已知-面板-关闭"
+        ],
         "box_index": 1
       }
     },
@@ -537,29 +608,150 @@
         "target_name": "公共-已知-面板-关闭"
       }
     },
-    "next": ["商店免费礼包-主页-返回-探测-已完成"],
-    "on_error": ["商店免费礼包-记录-失败"]
+    "next": [
+      "商店免费礼包-主页-返回-探测"
+    ],
+    "on_error": [
+      "商店免费礼包-记录-失败"
+    ]
+  },
+  "商店免费礼包-主页-返回-探测": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "公共-游戏主页-页面"
+        ],
+        "box_index": 0
+      }
+    },
+    "timeout": 8000,
+    "action": "DoNothing",
+    "next": [
+      "商店免费礼包-记录-成功"
+    ],
+    "on_error": [
+      "商店免费礼包-记录-失败"
+    ]
+  },
+  "商店免费礼包-关闭-已完成": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "商店免费礼包-商店-页面",
+          "商店免费礼包-商店-关闭"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "max_hit": 1,
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "SHOP_FREE_GIFT_DAILY",
+      "action_id": "close_shop",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "商店免费礼包-商店-页面",
+        "target_name": "商店免费礼包-商店-关闭"
+      }
+    },
+    "next": [
+      "商店免费礼包-面板关闭后-已完成"
+    ],
+    "on_error": [
+      "商店免费礼包-记录-失败"
+    ]
+  },
+  "商店免费礼包-面板关闭后-已完成": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "公共-游戏侧边面板-打开"
+        ],
+        "box_index": 0
+      }
+    },
+    "timeout": 5000,
+    "action": "DoNothing",
+    "next": [
+      "商店免费礼包-关闭-面板-已完成"
+    ],
+    "on_error": [
+      "商店免费礼包-记录-失败"
+    ]
+  },
+  "商店免费礼包-关闭-面板-已完成": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "公共-已知-面板-标记",
+          "公共-已知-面板-关闭"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "max_hit": 1,
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "SHOP_FREE_GIFT_DAILY",
+      "action_id": "close_function_panel",
+      "kind": "click",
+      "fixed_click_mode": "function_panel_close",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "公共-已知-面板-标记",
+        "target_name": "公共-已知-面板-关闭"
+      }
+    },
+    "next": [
+      "商店免费礼包-主页-返回-探测-已完成"
+    ],
+    "on_error": [
+      "商店免费礼包-记录-失败"
+    ]
   },
   "商店免费礼包-主页-返回-探测-已完成": {
     "recognition": {
       "type": "And",
-      "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}
+      "param": {
+        "all_of": [
+          "公共-游戏主页-页面"
+        ],
+        "box_index": 0
+      }
     },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["商店免费礼包-记录-已完成"],
-    "on_error": ["商店免费礼包-记录-失败"]
+    "next": [
+      "商店免费礼包-记录-已完成"
+    ],
+    "on_error": [
+      "商店免费礼包-记录-失败"
+    ]
   },
   "商店免费礼包-领取-门禁": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["商店免费礼包-商店-周期-权益-页面", "商店免费礼包-商店-日常-免费-礼包"],
+        "all_of": [
+          "商店免费礼包-商店-周期-权益-页面",
+          "商店免费礼包-商店-日常-免费-礼包"
+        ],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["商店免费礼包-领取"],
+    "next": [
+      "商店免费礼包-领取"
+    ],
     "on_error": [
       "商店免费礼包-运行时-恢复-尝试-1",
       "商店免费礼包-运行时-恢复-尝试-2",
@@ -579,7 +771,7 @@
       "商店免费礼包-面板-探测",
       "商店免费礼包-页面-探测",
       "商店免费礼包-主页-探测",
-      "[JumpBack]启动-游戏启动"
+      "公共-主页边界-失败"
     ],
     "on_error": [
       "商店免费礼包-运行时-恢复-尝试-2",
@@ -599,9 +791,11 @@
       "商店免费礼包-面板-探测",
       "商店免费礼包-页面-探测",
       "商店免费礼包-主页-探测",
-      "[JumpBack]启动-游戏启动"
+      "公共-主页边界-失败"
     ],
-    "on_error": ["商店免费礼包-运行时-恢复-耗尽"]
+    "on_error": [
+      "商店免费礼包-运行时-恢复-耗尽"
+    ]
   },
   "商店免费礼包-运行时-恢复-耗尽": {
     "recognition": "DirectHit",
@@ -612,10 +806,11 @@
       "status": "failed",
       "postcondition": "shop.runtime_recovered",
       "error_code": "SHOP_RUNTIME_RECOVERY_EXHAUSTED",
-      "native_fail_after_record": true
+      "defer_home_boundary": true
     },
-    "Abort": true,
-    "next": ["公共-通用中止"]
+    "next": [
+      "公共-通用中止"
+    ]
   },
   "商店免费礼包-领取后-恢复-尝试-1": {
     "max_hit": 2,
@@ -626,7 +821,7 @@
       "商店免费礼包-领取-校验",
       "商店免费礼包-直接-领取-校验",
       "商店免费礼包-领取后-页面-探测",
-      "[JumpBack]启动-游戏启动"
+      "公共-主页边界-失败"
     ],
     "on_error": [
       "商店免费礼包-领取后-恢复-尝试-2",
@@ -642,9 +837,11 @@
       "商店免费礼包-领取-校验",
       "商店免费礼包-直接-领取-校验",
       "商店免费礼包-领取后-页面-探测",
-      "[JumpBack]启动-游戏启动"
+      "公共-主页边界-失败"
     ],
-    "on_error": ["商店免费礼包-领取后-恢复-耗尽"]
+    "on_error": [
+      "商店免费礼包-领取后-恢复-耗尽"
+    ]
   },
   "商店免费礼包-领取后-恢复-耗尽": {
     "recognition": "DirectHit",
@@ -655,15 +852,21 @@
       "status": "failed",
       "postcondition": "shop.daily_free_gift_claim_state_known",
       "error_code": "SHOP_POST_CLAIM_STATE_UNKNOWN",
-      "native_fail_after_record": true
+      "defer_home_boundary": true
     },
-    "Abort": true,
-    "next": ["公共-通用中止"]
+    "next": [
+      "公共-通用中止"
+    ]
   },
   "商店免费礼包-领取后-页面-探测": {
     "recognition": "OCR",
     "expected": "商城",
-    "roi": [0, 0, 1280, 720],
+    "roi": [
+      0,
+      0,
+      1280,
+      720
+    ],
     "timeout": 8000,
     "action": "DoNothing",
     "next": [
@@ -680,7 +883,10 @@
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["商店免费礼包-商店-页面", "商店免费礼包-商店-周期-权益-页面"],
+        "all_of": [
+          "商店免费礼包-商店-页面",
+          "商店免费礼包-商店-周期-权益-页面"
+        ],
         "box_index": 1
       }
     },
@@ -698,7 +904,9 @@
         "target_name": "商店免费礼包-商店-周期-权益-页面"
       }
     },
-    "next": ["商店免费礼包-领取-校验"],
+    "next": [
+      "商店免费礼包-领取-校验"
+    ],
     "on_error": [
       "商店免费礼包-领取后-恢复-尝试-1",
       "商店免费礼包-领取后-恢复-尝试-2",
@@ -708,50 +916,105 @@
   "商店免费礼包-商店-页面": {
     "recognition": "OCR",
     "expected": "商城",
-    "roi": [0, 0, 1280, 720],
+    "roi": [
+      0,
+      0,
+      1280,
+      720
+    ],
     "action": "DoNothing"
   },
   "商店免费礼包-商店-入口": {
     "recognition": "OCR",
     "expected": "商城",
-    "roi": [700, 150, 500, 500],
+    "roi": [
+      700,
+      150,
+      500,
+      500
+    ],
     "action": "DoNothing"
   },
   "商店免费礼包-商店-周期-权益-页面": {
     "recognition": "OCR",
     "expected": "周期福利",
-    "roi": [0, 100, 1280, 620],
+    "roi": [
+      0,
+      100,
+      1280,
+      620
+    ],
     "action": "DoNothing"
   },
   "商店免费礼包-商店-日常-免费-礼包": {
     "recognition": "OCR",
     "expected": "免费领取",
-    "roi": [1000, 150, 280, 160],
+    "roi": [
+      1000,
+      150,
+      280,
+      160
+    ],
     "action": "DoNothing"
   },
   "商店免费礼包-商店-日常-免费-礼包-已领取": {
     "recognition": "OCR",
-    "expected": ["已领取", "今日已领取", "领取完毕"],
-    "roi": [0, 100, 1280, 620],
+    "expected": [
+      "已领取",
+      "今日已领取",
+      "领取完毕"
+    ],
+    "roi": [
+      0,
+      100,
+      1280,
+      620
+    ],
     "action": "DoNothing"
   },
   "商店免费礼包-商店-免费-礼包-奖励": {
     "recognition": "OCR",
-    "expected": ["恭喜获得", "点击空白处关闭"],
-    "roi": [0, 120, 1280, 600],
+    "expected": [
+      "恭喜获得",
+      "点击空白处关闭"
+    ],
+    "roi": [
+      0,
+      120,
+      1280,
+      600
+    ],
     "action": "DoNothing"
   },
   "商店免费礼包-商店-免费-礼包-关闭": {
     "recognition": "OCR",
     "expected": "点击空白处关闭",
-    "roi": [300, 560, 700, 160],
+    "roi": [
+      300,
+      560,
+      700,
+      160
+    ],
     "action": "DoNothing"
   },
   "商店免费礼包-商店-关闭": {
     "recognition": "ColorMatch",
-    "lower": [0, 0, 0],
-    "upper": [125, 125, 125],
-    "roi": [1180, 0, 100, 100],
+    "lower": [
+      0,
+      0,
+      0
+    ],
+    "upper": [
+      125,
+      125,
+      125
+    ],
+    "roi": [
+      1180,
+      0,
+      100,
+      100
+    ],
     "connected": true,
     "count": 180,
     "action": "DoNothing"

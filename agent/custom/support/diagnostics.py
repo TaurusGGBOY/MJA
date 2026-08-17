@@ -234,12 +234,10 @@ class TaskDiagnostics:
         postcondition: str,
         error_code: str | None,
     ) -> None:
-        """Persist business evidence while keeping the home boundary open."""
+        """Persist any business evidence while keeping the home boundary open."""
 
         key = _task_key(task_id)
         outcome = TaskOutcomeStatus(status)
-        if outcome is TaskOutcomeStatus.FAILED:
-            raise ValueError("failed business results must use finish")
         if not isinstance(postcondition, str) or not postcondition.strip():
             raise ValueError("postcondition must be non-empty")
         if error_code is not None and not isinstance(error_code, str):

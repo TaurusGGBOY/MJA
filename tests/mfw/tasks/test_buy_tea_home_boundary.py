@@ -56,10 +56,25 @@ def test_normal_buy_tea_outcomes_cleanup_to_home_boundary() -> None:
     assert nodes["买茶-完成-主页-探测"]["next"] == ["公共-主页边界"]
 
 
-def test_buy_tea_failure_path_remains_abort() -> None:
+def test_buy_tea_failure_path_defers_abort_until_home_boundary() -> None:
     nodes = load_task_nodes(TEA)
     failure = nodes["买茶-记录-失败"]
     assert failure["custom_action_param"]["status"] == "failed"
-    assert failure["custom_action_param"]["native_fail_after_record"] is True
-    assert failure["Abort"] is True
+    assert failure["custom_action_param"]["defer_home_boundary"] is True
+    assert "native_fail_after_record" not in failure["custom_action_param"]
+    assert "Abort" not in failure
     assert failure["next"] == ["公共-通用中止"]
+
+
+def test_buy_tea_painting_entry_uses_world_image_and_action_specific_anchor() -> None:
+    nodes = load_task_nodes(TEA)
+    entry = nodes["买茶-打开-画卷"]
+    target = nodes["买茶-茶-画卷-滚动-入口"]
+
+    assert target["recognition"] == "TemplateMatch"
+    assert target["template"] == "home/home_marker.png"
+    assert target["roi"] == [1040, 0, 240, 110]
+    assert target["threshold"] == 0.375
+    assert entry["custom_action_param"]["fixed_click_mode"] == (
+        "painting_scroll_button"
+    )

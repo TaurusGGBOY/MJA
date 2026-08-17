@@ -2,11 +2,18 @@
   "帮派事务-任务入口": {
     "recognition": {
       "type": "And",
-      "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}
+      "param": {
+        "all_of": [
+          "公共-游戏主页-页面"
+        ],
+        "box_index": 0
+      }
     },
     "action": "Custom",
     "custom_action": "BeginTask",
-    "custom_action_param": {"task_id": "GUILD_AFFAIRS_DAILY"},
+    "custom_action_param": {
+      "task_id": "GUILD_AFFAIRS_DAILY"
+    },
     "timeout": 8000,
     "next": [
       "帮派事务-事务-页面-探测",
@@ -14,43 +21,87 @@
       "帮派事务-主页-探测",
       "帮派事务-打开-帮派"
     ],
-    "on_error": ["[JumpBack]启动-游戏启动", "帮派事务-记录-失败"]
+    "on_error": [
+      "公共-主页边界-失败",
+      "帮派事务-记录-失败"
+    ]
   },
   "帮派事务-事务-页面-探测": {
     "recognition": "OCR",
     "expected": "帮会事务",
-    "roi": [0, 0, 1280, 240],
+    "roi": [
+      0,
+      0,
+      1280,
+      240
+    ],
     "timeout": 8000,
     "action": "DoNothing",
     "next": [
       "帮派事务-首个-行-付费-防护",
       "帮派事务-首个-行-领取-探测",
       "帮派事务-首个-行-开始-探测",
-      "帮派事务-首个-行-完成-探测"
+      "帮派事务-首个-行-完成-探测",
+      "帮派事务-首个-行-进行中-探测",
+      "帮派事务-空页面-探测",
+      "帮派事务-无可刷新-探测"
     ],
-    "on_error": ["帮派事务-记录-失败"]
+    "on_error": [
+      "帮派事务-首个-行-进行中-探测",
+      "帮派事务-空页面-探测",
+      "帮派事务-无可刷新-探测",
+      "帮派事务-记录-失败"
+    ]
   },
   "帮派事务-帮派-页面-探测": {
     "recognition": "OCR",
-    "expected": ["帮会名帖", "成员数量", "活跃度"],
-    "roi": [0, 180, 380, 300],
+    "expected": [
+      "帮会名帖",
+      "成员数量",
+      "活跃度"
+    ],
+    "roi": [
+      0,
+      180,
+      380,
+      300
+    ],
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["帮派事务-打开-事务"],
-    "on_error": ["帮派事务-主页-探测"]
+    "next": [
+      "帮派事务-打开-事务"
+    ],
+    "on_error": [
+      "帮派事务-主页-探测"
+    ]
   },
   "帮派事务-主页-探测": {
-    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "公共-游戏主页-页面"
+        ],
+        "box_index": 0
+      }
+    },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["帮派事务-打开-面板"],
-    "on_error": ["帮派事务-打开-帮派"]
+    "next": [
+      "帮派事务-打开-面板"
+    ],
+    "on_error": [
+      "帮派事务-打开-帮派"
+    ]
   },
   "帮派事务-打开-面板": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["公共-游戏主页-页面", "公共-游戏功能面板-入口"],
+        "all_of": [
+          "公共-游戏主页-页面",
+          "公共-游戏功能面板-入口"
+        ],
         "box_index": 1
       }
     },
@@ -68,15 +119,22 @@
         "target_name": "公共-游戏功能面板-入口"
       }
     },
-    "next": ["帮派事务-打开-帮派"],
-    "on_error": ["帮派事务-记录-失败"],
+    "next": [
+      "帮派事务-打开-帮派"
+    ],
+    "on_error": [
+      "帮派事务-记录-失败"
+    ],
     "retry_times": 0
   },
   "帮派事务-打开-帮派": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["公共-游戏侧边面板-打开", "帮派事务-帮派事务-帮派-入口"],
+        "all_of": [
+          "公共-游戏侧边面板-打开",
+          "帮派事务-帮派事务-帮派-入口"
+        ],
         "box_index": 1
       }
     },
@@ -94,15 +152,22 @@
         "target_name": "帮派事务-帮派事务-帮派-入口"
       }
     },
-    "next": ["帮派事务-帮派-页面-探测"],
-    "on_error": ["帮派事务-记录-失败"],
+    "next": [
+      "帮派事务-帮派-页面-探测"
+    ],
+    "on_error": [
+      "帮派事务-记录-失败"
+    ],
     "retry_times": 0
   },
   "帮派事务-打开-事务": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["帮派事务-帮派事务-帮派-页面", "帮派事务-帮派事务-事务-入口"],
+        "all_of": [
+          "帮派事务-帮派事务-帮派-页面",
+          "帮派事务-帮派事务-事务-入口"
+        ],
         "box_index": 1
       }
     },
@@ -120,40 +185,61 @@
         "target_name": "帮派事务-帮派事务-事务-入口"
       }
     },
-    "next": ["帮派事务-事务-页面-探测"],
-    "on_error": ["帮派事务-记录-失败"],
+    "next": [
+      "帮派事务-事务-页面-探测"
+    ],
+    "on_error": [
+      "帮派事务-记录-失败"
+    ],
     "retry_times": 0
   },
   "帮派事务-首个-行-付费-防护": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-首个-行-付费"],
+        "all_of": [
+          "帮派事务-帮派事务-事务-页面",
+          "帮派事务-帮派事务-首个-行-付费"
+        ],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["帮派事务-付费-或-歧义"],
-    "on_error": ["帮派事务-首个-行-领取-探测"]
+    "next": [
+      "帮派事务-付费-或-歧义"
+    ],
+    "on_error": [
+      "帮派事务-首个-行-领取-探测"
+    ]
   },
   "帮派事务-首个-行-领取-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-首个-行-可领取"],
+        "all_of": [
+          "帮派事务-帮派事务-事务-页面",
+          "帮派事务-帮派事务-首个-行-可领取"
+        ],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["帮派事务-领取-首个-行-奖励"],
-    "on_error": ["帮派事务-首个-行-开始-探测"]
+    "next": [
+      "帮派事务-领取-首个-行-奖励"
+    ],
+    "on_error": [
+      "帮派事务-首个-行-开始-探测"
+    ]
   },
   "帮派事务-领取-首个-行-奖励": {
     "max_hit": 6,
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-首个-行-可领取"],
+        "all_of": [
+          "帮派事务-帮派事务-事务-页面",
+          "帮派事务-帮派事务-首个-行-可领取"
+        ],
         "box_index": 1
       }
     },
@@ -169,12 +255,29 @@
         "page_name": "帮派事务-帮派事务-事务-页面",
         "target_name": "帮派事务-帮派事务-首个-行-可领取",
         "row_index": 0,
-        "row_roi": [50, 150, 1180, 150],
-        "target_roi": [930, 150, 300, 120]
+        "row_roi": [
+          50,
+          150,
+          1180,
+          150
+        ],
+        "target_roi": [
+          930,
+          150,
+          300,
+          120
+        ]
       }
     },
-    "next": ["帮派事务-领取-奖励-探测"],
-    "on_error": ["帮派事务-记录-失败"],
+    "next": [
+      "帮派事务-领取-奖励-探测"
+    ],
+    "on_error": [
+      "帮派事务-首个-行-进行中-探测",
+      "帮派事务-空页面-探测",
+      "帮派事务-无可刷新-探测",
+      "帮派事务-记录-失败"
+    ],
     "retry_times": 0
   },
   "帮派事务-领取-奖励-探测": {
@@ -190,15 +293,25 @@
     },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["帮派事务-关闭-奖励"],
-    "on_error": ["帮派事务-记录-失败"]
+    "next": [
+      "帮派事务-关闭-奖励"
+    ],
+    "on_error": [
+      "帮派事务-首个-行-进行中-探测",
+      "帮派事务-空页面-探测",
+      "帮派事务-无可刷新-探测",
+      "帮派事务-记录-失败"
+    ]
   },
   "帮派事务-关闭-奖励": {
     "max_hit": 6,
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["帮派事务-帮派事务-奖励-弹窗", "帮派事务-帮派事务-奖励-弹窗-关闭"],
+        "all_of": [
+          "帮派事务-帮派事务-奖励-弹窗",
+          "帮派事务-帮派事务-奖励-弹窗-关闭"
+        ],
         "box_index": 1
       }
     },
@@ -221,7 +334,9 @@
       "帮派事务-首个-行-开始-探测",
       "帮派事务-首个-行-完成-探测"
     ],
-    "on_error": ["帮派事务-记录-失败"],
+    "on_error": [
+      "帮派事务-记录-失败"
+    ],
     "post_delay": 500,
     "retry_times": 0
   },
@@ -229,19 +344,32 @@
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-首个-行-可开始"],
+        "all_of": [
+          "帮派事务-帮派事务-事务-页面",
+          "帮派事务-帮派事务-首个-行-可开始"
+        ],
         "box_index": 1
       }
     },
     "action": "DoNothing",
-    "next": ["帮派事务-开始-首个-行"],
-    "on_error": ["帮派事务-首个-行-完成-探测"]
+    "next": [
+      "帮派事务-开始-首个-行"
+    ],
+    "on_error": [
+      "帮派事务-首个-行-进行中-探测",
+      "帮派事务-空页面-探测",
+      "帮派事务-无可刷新-探测",
+      "帮派事务-记录-失败"
+    ]
   },
   "帮派事务-开始-首个-行": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-首个-行-可开始"],
+        "all_of": [
+          "帮派事务-帮派事务-事务-页面",
+          "帮派事务-帮派事务-首个-行-可开始"
+        ],
         "box_index": 1
       }
     },
@@ -258,19 +386,39 @@
         "page_name": "帮派事务-帮派事务-事务-页面",
         "target_name": "帮派事务-帮派事务-首个-行-可开始",
         "row_index": 0,
-        "row_roi": [50, 150, 1180, 150],
-        "target_roi": [930, 150, 300, 120]
+        "row_roi": [
+          50,
+          150,
+          1180,
+          150
+        ],
+        "target_roi": [
+          930,
+          150,
+          300,
+          120
+        ]
       }
     },
-    "next": ["帮派事务-首个-行-完成-探测"],
-    "on_error": ["帮派事务-记录-失败"],
+    "next": [
+      "帮派事务-首个-行-完成-探测"
+    ],
+    "on_error": [
+      "帮派事务-首个-行-进行中-探测",
+      "帮派事务-空页面-探测",
+      "帮派事务-无可刷新-探测",
+      "帮派事务-记录-失败"
+    ],
     "retry_times": 0
   },
   "帮派事务-首个-行-完成-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-首个-行-无-动作"],
+        "all_of": [
+          "帮派事务-帮派事务-事务-页面",
+          "帮派事务-帮派事务-首个-行-无-动作"
+        ],
         "box_index": 1
       }
     },
@@ -281,58 +429,264 @@
       "帮派事务-行1-开始-探测",
       "帮派事务-行1-完成-探测"
     ],
-    "on_error": ["帮派事务-记录-失败"]
+    "on_error": [
+      "帮派事务-首个-行-进行中-探测",
+      "帮派事务-空页面-探测",
+      "帮派事务-无可刷新-探测",
+      "帮派事务-记录-失败"
+    ]
+  },
+  "帮派事务-首个-行-进行中-探测": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "帮派事务-帮派事务-事务-页面",
+          "帮派事务-帮派事务-首个-行-进行中"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "DoNothing",
+    "next": [
+      "帮派事务-已在进行中"
+    ],
+    "on_error": [
+      "帮派事务-空页面-探测"
+    ]
+  },
+  "帮派事务-已在进行中": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "RecordTaskOutcome",
+    "custom_action_param": {
+      "task_id": "GUILD_AFFAIRS_DAILY",
+      "status": "already_complete",
+      "postcondition": "guild.affairs.daily.all_rows_started_or_no_action",
+      "defer_home_boundary": true
+    },
+    "next": [
+      "帮派事务-完成-收尾"
+    ],
+    "on_error": [
+      "帮派事务-记录-失败"
+    ]
+  },
+  "帮派事务-空页面-探测": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "帮派事务-帮派事务-事务-页面",
+          "帮派事务-帮派事务-事务-空页面"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "DoNothing",
+    "next": [
+      "帮派事务-无可处理事务"
+    ],
+    "on_error": [
+      "帮派事务-记录-失败"
+    ]
+  },
+  "帮派事务-无可处理事务": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "RecordTaskOutcome",
+    "custom_action_param": {
+      "task_id": "GUILD_AFFAIRS_DAILY",
+      "status": "already_complete",
+      "postcondition": "guild.affairs.daily.all_rows_started_or_no_action",
+      "defer_home_boundary": true
+    },
+    "next": [
+      "帮派事务-完成-收尾"
+    ],
+    "on_error": [
+      "帮派事务-记录-失败"
+    ]
+  },
+  "帮派事务-无可刷新-探测": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "帮派事务-帮派事务-事务-页面",
+          "帮派事务-帮派事务-事务-无可刷新"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "DoNothing",
+    "next": [
+      "帮派事务-无可处理事务"
+    ],
+    "on_error": [
+      "帮派事务-记录-失败"
+    ]
   },
   "帮派事务-行1-付费-防护": {
-    "recognition": {"type": "And", "param": {"all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-行1-付费"], "box_index": 1}},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "帮派事务-帮派事务-事务-页面",
+          "帮派事务-帮派事务-行1-付费"
+        ],
+        "box_index": 1
+      }
+    },
     "action": "DoNothing",
-    "next": ["帮派事务-付费-或-歧义"],
-    "on_error": ["帮派事务-行1-领取-探测"]
+    "next": [
+      "帮派事务-付费-或-歧义"
+    ],
+    "on_error": [
+      "帮派事务-行1-领取-探测"
+    ]
   },
   "帮派事务-行1-领取-探测": {
-    "recognition": {"type": "And", "param": {"all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-行1-可领取"], "box_index": 1}},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "帮派事务-帮派事务-事务-页面",
+          "帮派事务-帮派事务-行1-可领取"
+        ],
+        "box_index": 1
+      }
+    },
     "action": "DoNothing",
-    "next": ["帮派事务-行1-领取"],
-    "on_error": ["帮派事务-行1-开始-探测"]
+    "next": [
+      "帮派事务-行1-领取"
+    ],
+    "on_error": [
+      "帮派事务-行1-开始-探测"
+    ]
   },
   "帮派事务-行1-领取": {
     "max_hit": 6,
-    "recognition": {"type": "And", "param": {"all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-行1-可领取"], "box_index": 1}},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "帮派事务-帮派事务-事务-页面",
+          "帮派事务-帮派事务-行1-可领取"
+        ],
+        "box_index": 1
+      }
+    },
     "action": "Custom",
     "custom_action": "GuardedInput",
     "custom_action_param": {
       "task_id": "GUILD_AFFAIRS_DAILY",
       "action_id": "claim_guild_affairs_reward",
       "kind": "click",
-      "evidence": {"page_index": 0, "target_index": 1, "page_name": "帮派事务-帮派事务-事务-页面", "target_name": "帮派事务-帮派事务-行1-可领取", "row_index": 1, "row_roi": [50, 240, 1180, 150], "target_roi": [930, 240, 300, 120]}
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "帮派事务-帮派事务-事务-页面",
+        "target_name": "帮派事务-帮派事务-行1-可领取",
+        "row_index": 1,
+        "row_roi": [
+          50,
+          240,
+          1180,
+          150
+        ],
+        "target_roi": [
+          930,
+          240,
+          300,
+          120
+        ]
+      }
     },
-    "next": ["帮派事务-领取-奖励-探测"],
-    "on_error": ["帮派事务-记录-失败"],
+    "next": [
+      "帮派事务-领取-奖励-探测"
+    ],
+    "on_error": [
+      "帮派事务-记录-失败"
+    ],
     "retry_times": 0
   },
   "帮派事务-行1-开始-探测": {
-    "recognition": {"type": "And", "param": {"all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-行1-可开始"], "box_index": 1}},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "帮派事务-帮派事务-事务-页面",
+          "帮派事务-帮派事务-行1-可开始"
+        ],
+        "box_index": 1
+      }
+    },
     "action": "DoNothing",
-    "next": ["帮派事务-行1-开始"],
-    "on_error": ["帮派事务-行1-完成-探测"]
+    "next": [
+      "帮派事务-行1-开始"
+    ],
+    "on_error": [
+      "帮派事务-行1-完成-探测"
+    ]
   },
   "帮派事务-行1-开始": {
     "max_hit": 6,
-    "recognition": {"type": "And", "param": {"all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-行1-可开始"], "box_index": 1}},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "帮派事务-帮派事务-事务-页面",
+          "帮派事务-帮派事务-行1-可开始"
+        ],
+        "box_index": 1
+      }
+    },
     "action": "Custom",
     "custom_action": "GuardedInput",
     "custom_action_param": {
       "task_id": "GUILD_AFFAIRS_DAILY",
       "action_id": "start_guild_affairs",
       "kind": "click",
-      "evidence": {"page_index": 0, "target_index": 1, "page_name": "帮派事务-帮派事务-事务-页面", "target_name": "帮派事务-帮派事务-行1-可开始", "row_index": 1, "row_roi": [50, 240, 1180, 150], "target_roi": [930, 240, 300, 120]}
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "帮派事务-帮派事务-事务-页面",
+        "target_name": "帮派事务-帮派事务-行1-可开始",
+        "row_index": 1,
+        "row_roi": [
+          50,
+          240,
+          1180,
+          150
+        ],
+        "target_roi": [
+          930,
+          240,
+          300,
+          120
+        ]
+      }
     },
-    "next": ["帮派事务-行1-完成-探测"],
-    "on_error": ["帮派事务-记录-失败"],
+    "next": [
+      "帮派事务-行1-完成-探测"
+    ],
+    "on_error": [
+      "帮派事务-记录-失败"
+    ],
     "retry_times": 0
   },
   "帮派事务-行1-完成-探测": {
-    "recognition": {"type": "And", "param": {"all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-行1-无-动作"], "box_index": 1}},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "帮派事务-帮派事务-事务-页面",
+          "帮派事务-帮派事务-行1-无-动作"
+        ],
+        "box_index": 1
+      }
+    },
     "action": "DoNothing",
     "next": [
       "帮派事务-行2-付费-防护",
@@ -340,58 +694,170 @@
       "帮派事务-行2-开始-探测",
       "帮派事务-行2-完成-探测"
     ],
-    "on_error": ["帮派事务-记录-失败"]
+    "on_error": [
+      "帮派事务-记录-失败"
+    ]
   },
   "帮派事务-行2-付费-防护": {
-    "recognition": {"type": "And", "param": {"all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-行2-付费"], "box_index": 1}},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "帮派事务-帮派事务-事务-页面",
+          "帮派事务-帮派事务-行2-付费"
+        ],
+        "box_index": 1
+      }
+    },
     "action": "DoNothing",
-    "next": ["帮派事务-付费-或-歧义"],
-    "on_error": ["帮派事务-行2-领取-探测"]
+    "next": [
+      "帮派事务-付费-或-歧义"
+    ],
+    "on_error": [
+      "帮派事务-行2-领取-探测"
+    ]
   },
   "帮派事务-行2-领取-探测": {
-    "recognition": {"type": "And", "param": {"all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-行2-可领取"], "box_index": 1}},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "帮派事务-帮派事务-事务-页面",
+          "帮派事务-帮派事务-行2-可领取"
+        ],
+        "box_index": 1
+      }
+    },
     "action": "DoNothing",
-    "next": ["帮派事务-行2-领取"],
-    "on_error": ["帮派事务-行2-开始-探测"]
+    "next": [
+      "帮派事务-行2-领取"
+    ],
+    "on_error": [
+      "帮派事务-行2-开始-探测"
+    ]
   },
   "帮派事务-行2-领取": {
     "max_hit": 6,
-    "recognition": {"type": "And", "param": {"all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-行2-可领取"], "box_index": 1}},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "帮派事务-帮派事务-事务-页面",
+          "帮派事务-帮派事务-行2-可领取"
+        ],
+        "box_index": 1
+      }
+    },
     "action": "Custom",
     "custom_action": "GuardedInput",
     "custom_action_param": {
       "task_id": "GUILD_AFFAIRS_DAILY",
       "action_id": "claim_guild_affairs_reward",
       "kind": "click",
-      "evidence": {"page_index": 0, "target_index": 1, "page_name": "帮派事务-帮派事务-事务-页面", "target_name": "帮派事务-帮派事务-行2-可领取", "row_index": 2, "row_roi": [50, 390, 1180, 150], "target_roi": [930, 390, 300, 120]}
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "帮派事务-帮派事务-事务-页面",
+        "target_name": "帮派事务-帮派事务-行2-可领取",
+        "row_index": 2,
+        "row_roi": [
+          50,
+          390,
+          1180,
+          150
+        ],
+        "target_roi": [
+          930,
+          390,
+          300,
+          120
+        ]
+      }
     },
-    "next": ["帮派事务-领取-奖励-探测"],
-    "on_error": ["帮派事务-记录-失败"],
+    "next": [
+      "帮派事务-领取-奖励-探测"
+    ],
+    "on_error": [
+      "帮派事务-记录-失败"
+    ],
     "retry_times": 0
   },
   "帮派事务-行2-开始-探测": {
-    "recognition": {"type": "And", "param": {"all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-行2-可开始"], "box_index": 1}},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "帮派事务-帮派事务-事务-页面",
+          "帮派事务-帮派事务-行2-可开始"
+        ],
+        "box_index": 1
+      }
+    },
     "action": "DoNothing",
-    "next": ["帮派事务-行2-开始"],
-    "on_error": ["帮派事务-行2-完成-探测"]
+    "next": [
+      "帮派事务-行2-开始"
+    ],
+    "on_error": [
+      "帮派事务-行2-完成-探测"
+    ]
   },
   "帮派事务-行2-开始": {
     "max_hit": 6,
-    "recognition": {"type": "And", "param": {"all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-行2-可开始"], "box_index": 1}},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "帮派事务-帮派事务-事务-页面",
+          "帮派事务-帮派事务-行2-可开始"
+        ],
+        "box_index": 1
+      }
+    },
     "action": "Custom",
     "custom_action": "GuardedInput",
     "custom_action_param": {
       "task_id": "GUILD_AFFAIRS_DAILY",
       "action_id": "start_guild_affairs",
       "kind": "click",
-      "evidence": {"page_index": 0, "target_index": 1, "page_name": "帮派事务-帮派事务-事务-页面", "target_name": "帮派事务-帮派事务-行2-可开始", "row_index": 2, "row_roi": [50, 390, 1180, 150], "target_roi": [930, 390, 300, 120]}
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "帮派事务-帮派事务-事务-页面",
+        "target_name": "帮派事务-帮派事务-行2-可开始",
+        "row_index": 2,
+        "row_roi": [
+          50,
+          390,
+          1180,
+          150
+        ],
+        "target_roi": [
+          930,
+          390,
+          300,
+          120
+        ]
+      }
     },
-    "next": ["帮派事务-行2-完成-探测"],
-    "on_error": ["帮派事务-记录-失败"],
+    "next": [
+      "帮派事务-行2-完成-探测"
+    ],
+    "on_error": [
+      "帮派事务-记录-失败"
+    ],
     "retry_times": 0
   },
   "帮派事务-行2-完成-探测": {
-    "recognition": {"type": "And", "param": {"all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-行2-无-动作"], "box_index": 1}},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "帮派事务-帮派事务-事务-页面",
+          "帮派事务-帮派事务-行2-无-动作"
+        ],
+        "box_index": 1
+      }
+    },
     "action": "DoNothing",
     "next": [
       "帮派事务-行3-付费-防护",
@@ -399,67 +865,196 @@
       "帮派事务-行3-开始-探测",
       "帮派事务-行3-完成-探测"
     ],
-    "on_error": ["帮派事务-记录-失败"]
+    "on_error": [
+      "帮派事务-记录-失败"
+    ]
   },
   "帮派事务-行3-付费-防护": {
-    "recognition": {"type": "And", "param": {"all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-行3-付费"], "box_index": 1}},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "帮派事务-帮派事务-事务-页面",
+          "帮派事务-帮派事务-行3-付费"
+        ],
+        "box_index": 1
+      }
+    },
     "action": "DoNothing",
-    "next": ["帮派事务-付费-或-歧义"],
-    "on_error": ["帮派事务-行3-领取-探测"]
+    "next": [
+      "帮派事务-付费-或-歧义"
+    ],
+    "on_error": [
+      "帮派事务-行3-领取-探测"
+    ]
   },
   "帮派事务-行3-领取-探测": {
-    "recognition": {"type": "And", "param": {"all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-行3-可领取"], "box_index": 1}},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "帮派事务-帮派事务-事务-页面",
+          "帮派事务-帮派事务-行3-可领取"
+        ],
+        "box_index": 1
+      }
+    },
     "action": "DoNothing",
-    "next": ["帮派事务-行3-领取"],
-    "on_error": ["帮派事务-行3-开始-探测"]
+    "next": [
+      "帮派事务-行3-领取"
+    ],
+    "on_error": [
+      "帮派事务-行3-开始-探测"
+    ]
   },
   "帮派事务-行3-领取": {
     "max_hit": 6,
-    "recognition": {"type": "And", "param": {"all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-行3-可领取"], "box_index": 1}},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "帮派事务-帮派事务-事务-页面",
+          "帮派事务-帮派事务-行3-可领取"
+        ],
+        "box_index": 1
+      }
+    },
     "action": "Custom",
     "custom_action": "GuardedInput",
     "custom_action_param": {
       "task_id": "GUILD_AFFAIRS_DAILY",
       "action_id": "claim_guild_affairs_reward",
       "kind": "click",
-      "evidence": {"page_index": 0, "target_index": 1, "page_name": "帮派事务-帮派事务-事务-页面", "target_name": "帮派事务-帮派事务-行3-可领取", "row_index": 3, "row_roi": [50, 540, 1180, 120], "target_roi": [930, 540, 300, 120]}
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "帮派事务-帮派事务-事务-页面",
+        "target_name": "帮派事务-帮派事务-行3-可领取",
+        "row_index": 3,
+        "row_roi": [
+          50,
+          540,
+          1180,
+          120
+        ],
+        "target_roi": [
+          930,
+          540,
+          300,
+          120
+        ]
+      }
     },
-    "next": ["帮派事务-领取-奖励-探测"],
-    "on_error": ["帮派事务-记录-失败"],
+    "next": [
+      "帮派事务-领取-奖励-探测"
+    ],
+    "on_error": [
+      "帮派事务-记录-失败"
+    ],
     "retry_times": 0
   },
   "帮派事务-行3-开始-探测": {
-    "recognition": {"type": "And", "param": {"all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-行3-可开始"], "box_index": 1}},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "帮派事务-帮派事务-事务-页面",
+          "帮派事务-帮派事务-行3-可开始"
+        ],
+        "box_index": 1
+      }
+    },
     "action": "DoNothing",
-    "next": ["帮派事务-行3-开始"],
-    "on_error": ["帮派事务-行3-完成-探测"]
+    "next": [
+      "帮派事务-行3-开始"
+    ],
+    "on_error": [
+      "帮派事务-行3-完成-探测"
+    ]
   },
   "帮派事务-行3-开始": {
     "max_hit": 6,
-    "recognition": {"type": "And", "param": {"all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-行3-可开始"], "box_index": 1}},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "帮派事务-帮派事务-事务-页面",
+          "帮派事务-帮派事务-行3-可开始"
+        ],
+        "box_index": 1
+      }
+    },
     "action": "Custom",
     "custom_action": "GuardedInput",
     "custom_action_param": {
       "task_id": "GUILD_AFFAIRS_DAILY",
       "action_id": "start_guild_affairs",
       "kind": "click",
-      "evidence": {"page_index": 0, "target_index": 1, "page_name": "帮派事务-帮派事务-事务-页面", "target_name": "帮派事务-帮派事务-行3-可开始", "row_index": 3, "row_roi": [50, 540, 1180, 120], "target_roi": [930, 540, 300, 120]}
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "帮派事务-帮派事务-事务-页面",
+        "target_name": "帮派事务-帮派事务-行3-可开始",
+        "row_index": 3,
+        "row_roi": [
+          50,
+          540,
+          1180,
+          120
+        ],
+        "target_roi": [
+          930,
+          540,
+          300,
+          120
+        ]
+      }
     },
-    "next": ["帮派事务-行3-之后-开始-探测"],
-    "on_error": ["帮派事务-记录-失败"],
+    "next": [
+      "帮派事务-行3-之后-开始-探测"
+    ],
+    "on_error": [
+      "帮派事务-记录-失败"
+    ],
     "retry_times": 0
   },
   "帮派事务-行3-之后-开始-探测": {
-    "recognition": {"type": "And", "param": {"all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-行3-无-动作"], "box_index": 1}},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "帮派事务-帮派事务-事务-页面",
+          "帮派事务-帮派事务-行3-无-动作"
+        ],
+        "box_index": 1
+      }
+    },
     "action": "DoNothing",
-    "next": ["帮派事务-成功"],
-    "on_error": ["帮派事务-记录-失败"]
+    "next": [
+      "帮派事务-成功"
+    ],
+    "on_error": [
+      "帮派事务-记录-失败"
+    ]
   },
   "帮派事务-行3-完成-探测": {
-    "recognition": {"type": "And", "param": {"all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-行3-无-动作"], "box_index": 1}},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "帮派事务-帮派事务-事务-页面",
+          "帮派事务-帮派事务-行3-无-动作"
+        ],
+        "box_index": 1
+      }
+    },
     "action": "DoNothing",
-    "next": ["帮派事务-已完成"],
-    "on_error": ["帮派事务-记录-失败"]
+    "next": [
+      "帮派事务-已完成"
+    ],
+    "on_error": [
+      "帮派事务-记录-失败"
+    ]
   },
   "帮派事务-付费-或-歧义": {
     "recognition": "DirectHit",
@@ -470,10 +1065,11 @@
       "status": "failed",
       "postcondition": "GUILD_FIRST_ROW_SAFE_TARGET_MISSING",
       "error_code": "GUILD_FIRST_ROW_PAID_OR_AMBIGUOUS",
-      "native_fail_after_record": true
+      "defer_home_boundary": true
     },
-    "Abort": true,
-    "next": ["公共-通用中止"]
+    "next": [
+      "公共-通用中止"
+    ]
   },
   "帮派事务-记录-失败": {
     "recognition": "DirectHit",
@@ -484,10 +1080,11 @@
       "status": "failed",
       "postcondition": "GUILD_AFFAIRS_POSTCONDITION_MISSING",
       "error_code": "GUILD_AFFAIRS_POSTCONDITION_MISSING",
-      "native_fail_after_record": true
+      "defer_home_boundary": true
     },
-    "Abort": true,
-    "next": ["公共-通用中止"]
+    "next": [
+      "公共-通用中止"
+    ]
   },
   "帮派事务-已完成": {
     "recognition": "DirectHit",
@@ -499,7 +1096,9 @@
       "postcondition": "guild.affairs.daily.all_rows_started_or_no_action",
       "defer_home_boundary": true
     },
-    "next": ["帮派事务-完成-收尾"]
+    "next": [
+      "帮派事务-完成-收尾"
+    ]
   },
   "帮派事务-成功": {
     "recognition": "DirectHit",
@@ -511,7 +1110,9 @@
       "postcondition": "guild.affairs.daily.all_rows_started_or_no_action",
       "defer_home_boundary": true
     },
-    "next": ["帮派事务-完成-收尾"]
+    "next": [
+      "帮派事务-完成-收尾"
+    ]
   },
   "帮派事务-完成-收尾": {
     "recognition": "DirectHit",
@@ -524,13 +1125,18 @@
       "帮派事务-退出-面板-探测",
       "帮派事务-主页-之后-关闭-探测"
     ],
-    "on_error": ["帮派事务-记录-失败"]
+    "on_error": [
+      "帮派事务-记录-失败"
+    ]
   },
   "帮派事务-关闭": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["帮派事务-帮派事务-事务-页面", "帮派事务-帮派事务-事务-关闭"],
+        "all_of": [
+          "帮派事务-帮派事务-事务-页面",
+          "帮派事务-帮派事务-事务-关闭"
+        ],
         "box_index": 1
       }
     },
@@ -548,25 +1154,45 @@
         "target_name": "帮派事务-帮派事务-事务-关闭"
       }
     },
-    "next": ["帮派事务-退出-帮派-页面-探测"],
-    "on_error": ["帮派事务-记录-失败"],
+    "next": [
+      "帮派事务-退出-帮派-页面-探测"
+    ],
+    "on_error": [
+      "帮派事务-记录-失败"
+    ],
     "retry_times": 0
   },
   "帮派事务-退出-帮派-页面-探测": {
     "recognition": "OCR",
-    "expected": ["帮会名帖", "成员数量", "活跃度"],
-    "roi": [0, 180, 380, 300],
+    "expected": [
+      "帮会名帖",
+      "成员数量",
+      "活跃度"
+    ],
+    "roi": [
+      0,
+      180,
+      380,
+      300
+    ],
     "timeout": 5000,
     "max_hit": 1,
     "action": "DoNothing",
-    "next": ["帮派事务-关闭-帮派-主页"],
-    "on_error": ["帮派事务-退出-清理-停止"]
+    "next": [
+      "帮派事务-关闭-帮派-主页"
+    ],
+    "on_error": [
+      "帮派事务-退出-清理-停止"
+    ]
   },
   "帮派事务-关闭-帮派-主页": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["帮派事务-帮派事务-帮派-页面", "帮派事务-帮派事务-帮派-关闭"],
+        "all_of": [
+          "帮派事务-帮派事务-帮派-页面",
+          "帮派事务-帮派事务-帮派-关闭"
+        ],
         "box_index": 1
       }
     },
@@ -585,22 +1211,41 @@
         "target_name": "帮派事务-帮派事务-帮派-关闭"
       }
     },
-    "next": ["帮派事务-退出-面板-探测"],
-    "on_error": ["帮派事务-退出-清理-停止"]
+    "next": [
+      "帮派事务-退出-面板-探测"
+    ],
+    "on_error": [
+      "帮派事务-退出-清理-停止"
+    ]
   },
   "帮派事务-退出-面板-探测": {
-    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏侧边面板-打开"], "box_index": 0}},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "公共-游戏侧边面板-打开"
+        ],
+        "box_index": 0
+      }
+    },
     "timeout": 5000,
     "max_hit": 1,
     "action": "DoNothing",
-    "next": ["帮派事务-关闭-面板"],
-    "on_error": ["帮派事务-退出-清理-停止"]
+    "next": [
+      "帮派事务-关闭-面板"
+    ],
+    "on_error": [
+      "帮派事务-退出-清理-停止"
+    ]
   },
   "帮派事务-关闭-面板": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["公共-游戏侧边面板-打开", "帮派事务-帮派事务-面板-关闭"],
+        "all_of": [
+          "公共-游戏侧边面板-打开",
+          "帮派事务-帮派事务-面板-关闭"
+        ],
         "box_index": 1
       }
     },
@@ -620,16 +1265,32 @@
         "target_name": "帮派事务-帮派事务-面板-关闭"
       }
     },
-    "next": ["帮派事务-主页-之后-关闭-探测"],
-    "on_error": ["帮派事务-退出-清理-停止"]
+    "next": [
+      "帮派事务-主页-之后-关闭-探测"
+    ],
+    "on_error": [
+      "帮派事务-退出-清理-停止"
+    ]
   },
   "帮派事务-主页-之后-关闭-探测": {
-    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "公共-游戏主页-页面"
+        ],
+        "box_index": 0
+      }
+    },
     "timeout": 5000,
     "max_hit": 1,
     "action": "DoNothing",
-    "next": ["公共-主页边界"],
-    "on_error": ["帮派事务-退出-清理-停止"]
+    "next": [
+      "公共-主页边界"
+    ],
+    "on_error": [
+      "帮派事务-退出-清理-停止"
+    ]
   },
   "帮派事务-退出-清理-停止": {
     "recognition": "DirectHit",
@@ -640,164 +1301,423 @@
       "status": "failed",
       "postcondition": "guild.affairs.daily.exit_home",
       "error_code": "GUILD_AFFAIRS_CLOSE_FAILED",
-      "native_fail_after_record": true
+      "defer_home_boundary": true
     },
-    "Abort": true,
-    "next": ["公共-通用中止"]
+    "next": [
+      "公共-通用中止"
+    ]
   },
   "帮派事务-帮派事务-帮派-入口": {
     "recognition": "OCR",
     "expected": "帮会",
-    "roi": [700, 100, 500, 600],
+    "roi": [
+      700,
+      100,
+      500,
+      600
+    ],
     "action": "DoNothing"
   },
   "帮派事务-帮派事务-帮派-页面": {
     "recognition": "OCR",
-    "expected": ["帮会名帖", "成员数量", "活跃度"],
-    "roi": [0, 180, 380, 300],
+    "expected": [
+      "帮会名帖",
+      "成员数量",
+      "活跃度"
+    ],
+    "roi": [
+      0,
+      180,
+      380,
+      300
+    ],
     "action": "DoNothing"
   },
   "帮派事务-帮派事务-帮派-关闭": {
     "recognition": "ColorMatch",
-    "lower": [0, 0, 0],
-    "upper": [125, 125, 125],
-    "roi": [1180, 0, 100, 100],
+    "lower": [
+      0,
+      0,
+      0
+    ],
+    "upper": [
+      125,
+      125,
+      125
+    ],
+    "roi": [
+      1180,
+      0,
+      100,
+      100
+    ],
     "connected": true,
     "count": 180,
     "action": "DoNothing"
   },
   "帮派事务-帮派事务-面板-关闭": {
-    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏侧边面板-打开"], "box_index": 0}},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "公共-游戏侧边面板-打开"
+        ],
+        "box_index": 0
+      }
+    },
     "action": "DoNothing"
   },
   "帮派事务-帮派事务-事务-入口": {
     "recognition": "OCR",
     "expected": "帮会事务",
-    "roi": [900, 230, 330, 170],
+    "roi": [
+      900,
+      230,
+      330,
+      170
+    ],
     "action": "DoNothing"
   },
   "帮派事务-帮派事务-事务-页面": {
     "recognition": "OCR",
     "expected": "帮会事务",
-    "roi": [0, 0, 1280, 240],
+    "roi": [
+      0,
+      0,
+      1280,
+      240
+    ],
     "action": "DoNothing"
   },
   "帮派事务-帮派事务-事务-关闭": {
     "recognition": "ColorMatch",
-    "lower": [0, 0, 0],
-    "upper": [125, 125, 125],
-    "roi": [1180, 0, 100, 100],
+    "lower": [
+      0,
+      0,
+      0
+    ],
+    "upper": [
+      125,
+      125,
+      125
+    ],
+    "roi": [
+      1180,
+      0,
+      100,
+      100
+    ],
     "connected": true,
     "count": 180,
     "action": "DoNothing"
   },
   "帮派事务-帮派事务-首个-行-付费": {
     "recognition": "OCR",
-    "expected": ["购买", "付费", "充值", "价格", "¥", "￥", "元", "消耗"],
-    "roi": [930, 150, 300, 120],
+    "expected": [
+      "购买",
+      "付费",
+      "充值",
+      "价格",
+      "¥",
+      "￥",
+      "元",
+      "消耗"
+    ],
+    "roi": [
+      930,
+      150,
+      300,
+      120
+    ],
     "action": "DoNothing"
   },
   "帮派事务-帮派事务-首个-行-可领取": {
     "recognition": "OCR",
     "expected": "领取奖励",
-    "roi": [930, 150, 300, 120],
+    "roi": [
+      930,
+      150,
+      300,
+      120
+    ],
     "action": "DoNothing"
   },
   "帮派事务-帮派事务-首个-行-可开始": {
     "recognition": "OCR",
     "expected": "开始事务",
-    "roi": [930, 150, 300, 120],
+    "roi": [
+      930,
+      150,
+      300,
+      120
+    ],
     "action": "DoNothing"
   },
   "帮派事务-帮派事务-首个-行-无-动作": {
     "recognition": "OCR",
-    "expected": ["进行中", "事务中", "已完成", "已领取", "暂无事务", "无可领取"],
-    "roi": [1040, 95, 180, 70],
+    "expected": [
+      "进行中",
+      "事务中",
+      "已完成",
+      "已领取",
+      "暂无事务",
+      "无可领取"
+    ],
+    "roi": [
+      1040,
+      95,
+      180,
+      70
+    ],
+    "action": "DoNothing"
+  },
+  "帮派事务-帮派事务-首个-行-进行中": {
+    "recognition": "OCR",
+    "expected": [
+      "事务进行中",
+      "进行中",
+      "事务中"
+    ],
+    "roi": [
+      800,
+      80,
+      400,
+      180
+    ],
+    "action": "DoNothing"
+  },
+  "帮派事务-帮派事务-事务-空页面": {
+    "recognition": "OCR",
+    "expected": [
+      "这里空空如也",
+      "空空如也",
+      "暂无事务",
+      "暂无可刷新事务"
+    ],
+    "roi": [
+      80,
+      250,
+      1140,
+      420
+    ],
+    "action": "DoNothing"
+  },
+  "帮派事务-帮派事务-事务-无可刷新": {
+    "recognition": "OCR",
+    "expected": [
+      "暂无可刷新事务",
+      "暂无可刷新",
+      "无可刷新事务"
+    ],
+    "roi": [
+      80,
+      540,
+      420,
+      120
+    ],
     "action": "DoNothing"
   },
   "帮派事务-帮派事务-行1-付费": {
     "recognition": "OCR",
-    "expected": ["购买", "付费", "充值", "价格", "¥", "￥", "元", "消耗"],
-    "roi": [930, 240, 300, 120],
+    "expected": [
+      "购买",
+      "付费",
+      "充值",
+      "价格",
+      "¥",
+      "￥",
+      "元",
+      "消耗"
+    ],
+    "roi": [
+      930,
+      240,
+      300,
+      120
+    ],
     "action": "DoNothing"
   },
   "帮派事务-帮派事务-行1-可领取": {
     "recognition": "OCR",
     "expected": "领取奖励",
-    "roi": [930, 240, 300, 120],
+    "roi": [
+      930,
+      240,
+      300,
+      120
+    ],
     "action": "DoNothing"
   },
   "帮派事务-帮派事务-行1-可开始": {
     "recognition": "OCR",
     "expected": "开始事务",
-    "roi": [930, 240, 300, 120],
+    "roi": [
+      930,
+      240,
+      300,
+      120
+    ],
     "action": "DoNothing"
   },
   "帮派事务-帮派事务-行1-无-动作": {
     "recognition": "OCR",
-    "expected": ["进行中", "事务中", "已完成", "已领取", "暂无事务", "无可领取"],
-    "roi": [1040, 200, 180, 110],
+    "expected": [
+      "进行中",
+      "事务中",
+      "已完成",
+      "已领取",
+      "暂无事务",
+      "无可领取"
+    ],
+    "roi": [
+      1040,
+      200,
+      180,
+      110
+    ],
     "action": "DoNothing"
   },
   "帮派事务-帮派事务-行2-付费": {
     "recognition": "OCR",
-    "expected": ["购买", "付费", "充值", "价格", "¥", "￥", "元", "消耗"],
-    "roi": [930, 390, 300, 120],
+    "expected": [
+      "购买",
+      "付费",
+      "充值",
+      "价格",
+      "¥",
+      "￥",
+      "元",
+      "消耗"
+    ],
+    "roi": [
+      930,
+      390,
+      300,
+      120
+    ],
     "action": "DoNothing"
   },
   "帮派事务-帮派事务-行2-可领取": {
     "recognition": "OCR",
     "expected": "领取奖励",
-    "roi": [930, 390, 300, 120],
+    "roi": [
+      930,
+      390,
+      300,
+      120
+    ],
     "action": "DoNothing"
   },
   "帮派事务-帮派事务-行2-可开始": {
     "recognition": "OCR",
     "expected": "开始事务",
-    "roi": [930, 390, 300, 120],
+    "roi": [
+      930,
+      390,
+      300,
+      120
+    ],
     "action": "DoNothing"
   },
   "帮派事务-帮派事务-行2-无-动作": {
     "recognition": "OCR",
-    "expected": ["进行中", "事务中", "已完成", "已领取", "暂无事务", "无可领取"],
-    "roi": [1040, 350, 180, 70],
+    "expected": [
+      "进行中",
+      "事务中",
+      "已完成",
+      "已领取",
+      "暂无事务",
+      "无可领取"
+    ],
+    "roi": [
+      1040,
+      350,
+      180,
+      70
+    ],
     "action": "DoNothing"
   },
   "帮派事务-帮派事务-行3-付费": {
     "recognition": "OCR",
-    "expected": ["购买", "付费", "充值", "价格", "¥", "￥", "元", "消耗"],
-    "roi": [930, 540, 300, 120],
+    "expected": [
+      "购买",
+      "付费",
+      "充值",
+      "价格",
+      "¥",
+      "￥",
+      "元",
+      "消耗"
+    ],
+    "roi": [
+      930,
+      540,
+      300,
+      120
+    ],
     "action": "DoNothing"
   },
   "帮派事务-帮派事务-行3-可领取": {
     "recognition": "OCR",
     "expected": "领取奖励",
-    "roi": [930, 540, 300, 120],
+    "roi": [
+      930,
+      540,
+      300,
+      120
+    ],
     "action": "DoNothing"
   },
   "帮派事务-帮派事务-行3-可开始": {
     "recognition": "OCR",
     "expected": "开始事务",
-    "roi": [930, 540, 300, 120],
+    "roi": [
+      930,
+      540,
+      300,
+      120
+    ],
     "action": "DoNothing"
   },
   "帮派事务-帮派事务-行3-无-动作": {
     "recognition": "OCR",
-    "expected": ["进行中", "事务中", "已完成", "已领取", "暂无事务", "无可领取"],
-    "roi": [1040, 500, 180, 70],
+    "expected": [
+      "进行中",
+      "事务中",
+      "已完成",
+      "已领取",
+      "暂无事务",
+      "无可领取"
+    ],
+    "roi": [
+      1040,
+      500,
+      180,
+      70
+    ],
     "action": "DoNothing"
   },
   "帮派事务-帮派事务-奖励-弹窗": {
     "recognition": "TemplateMatch",
     "template": "daily/GUILD_AFFAIRS_DAILY/reward_popup_live.png",
-    "roi": [120, 180, 180, 380],
+    "roi": [
+      120,
+      180,
+      180,
+      380
+    ],
     "threshold": 0.78,
     "action": "DoNothing"
   },
   "帮派事务-帮派事务-奖励-弹窗-关闭": {
     "recognition": "TemplateMatch",
     "template": "daily/GUILD_AFFAIRS_DAILY/reward_popup_close_live.png",
-    "roi": [450, 600, 400, 120],
+    "roi": [
+      450,
+      600,
+      400,
+      120
+    ],
     "threshold": 0.72,
     "action": "DoNothing"
   }

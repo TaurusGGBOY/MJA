@@ -10,6 +10,7 @@ from agent.custom.action.runtime_health import RuntimeHealth
 from agent.custom.action.restart_game import RestartGameSurface
 from agent.custom.action.task_lifecycle import (
     BeginTask,
+    CloseKnownPaintingSurface,
     RecordActiveTaskFailure,
     RecordTaskOutcome,
 )
@@ -56,6 +57,72 @@ def test_guarded_input_clicks_verified_target_box_inside_and_result():
 
     assert GuardedInput().run(context, argv) is True
     assert context.tasker.controller.actions == [("click", (170, 250))]
+
+
+def test_guarded_input_opens_painting_scroll_at_named_world_anchor():
+    context = FakeContext()
+    RUN_STORE.begin("BUY_TEA_DAILY")
+    payload = {
+        "task_id": "BUY_TEA_DAILY",
+        "action_id": "open_painting_scroll",
+        "kind": "click",
+        "fixed_click_mode": "painting_scroll_button",
+        "evidence": {
+            "page_index": 0,
+            "target_index": 1,
+            "page_name": "买茶-茶-主页-页面",
+            "target_name": "买茶-茶-画卷-滚动-入口",
+        },
+    }
+    argv = FakeArgv(
+        json.dumps(payload),
+        reco_detail=and_reco(
+            hit_reco("买茶-茶-主页-页面", (1040, 0, 240, 110)),
+            hit_reco("买茶-茶-画卷-滚动-入口", (1040, 0, 240, 110)),
+        ),
+    )
+
+    assert GuardedInput().run(context, argv) is True
+    assert context.tasker.controller.actions == [("click", (1130, 62))]
+
+
+def test_guarded_input_closes_equipment_page_with_a_regular_controller_click():
+    context = FakeContext()
+    RUN_STORE.begin("EQUIPMENT_DECOMPOSE_DAILY")
+    payload = {
+        "task_id": "EQUIPMENT_DECOMPOSE_DAILY",
+        "action_id": "close_equipment_page",
+        "kind": "click",
+        "fixed_click_mode": "equipment_page_close",
+        "evidence": {
+            "page_index": 0,
+            "target_index": 1,
+            "page_name": "分解装备-装备-分解-页面",
+            "target_name": "分解装备-装备-关闭",
+        },
+    }
+    argv = FakeArgv(
+        json.dumps(payload),
+        reco_detail=and_reco(
+            hit_reco("分解装备-装备-分解-页面", (0, 0, 1280, 720)),
+            hit_reco("分解装备-装备-关闭", (1160, 0, 100, 100)),
+        ),
+    )
+
+    assert GuardedInput().run(context, argv) is True
+    assert context.tasker.controller.actions == [("click", (1218, 56))]
+
+
+def test_known_painting_surface_cleanup_uses_the_small_close_anchor(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    from agent.custom.action import task_lifecycle
+
+    monkeypatch.setattr(task_lifecycle, "sleep", lambda _seconds: None)
+    context = FakeContext()
+
+    assert CloseKnownPaintingSurface().run(context, FakeArgv("{}")) is True
+    assert context.tasker.controller.actions == [("click", (1214, 42))]
 
 
 def test_guarded_input_clicks_shadow_foreground_triplet_in_fixed_order():

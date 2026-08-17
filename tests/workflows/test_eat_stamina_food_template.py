@@ -123,4 +123,41 @@ def test_food_candidate_click_uses_match_box_and_requires_after_probe() -> None:
 
     unknown_failure = pipeline["吃体力食物-记录-失败"]
     assert unknown_failure["custom_action_param"]["status"] == "failed"
-    assert unknown_failure["Abort"] is True
+    assert "Abort" not in unknown_failure
+    assert unknown_failure["next"] == ["公共-通用中止"]
+
+
+def test_food_replacement_confirm_accepts_the_live_button_match_margin() -> None:
+    pipeline = _load_pipeline()
+    confirm = pipeline["吃体力食物-食物-替换-确认"]
+
+    assert confirm["recognition"] == "TemplateMatch"
+    assert confirm["template"] == (
+        "daily/EAT_STAMINA_FOOD_DAILY/food_buff_replace_confirm.png"
+    )
+    assert confirm["roi"] == [780, 450, 250, 100]
+    # The live popup matched the confirm button at 0.341823. Keep the
+    # threshold below that observed score while the prompt remains mandatory.
+    assert confirm["threshold"] <= 0.34
+
+
+def test_food_replacement_confirmation_does_not_require_the_covered_item_name() -> None:
+    pipeline = _load_pipeline()
+    loop = pipeline["吃体力食物-替换-确认-循环"]
+    recognition = loop["recognition"]
+
+    assert recognition["type"] == "And"
+    assert recognition["param"] == {
+        "all_of": [
+            "吃体力食物-食物-替换-提示",
+            "吃体力食物-食物-替换-确认",
+        ],
+        "box_index": 1,
+    }
+
+
+def test_food_full_branch_closes_the_bag_before_recording_success() -> None:
+    pipeline = _load_pipeline()
+    full_probe = pipeline["吃体力食物-已超上限-之后-食用-探测"]
+
+    assert full_probe["next"] == ["吃体力食物-体力-已满-关闭-背包"]

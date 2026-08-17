@@ -105,7 +105,7 @@ def test_r20_function_panel_entry_is_distinct_from_home_power_ocr() -> None:
         "upper": [255, 225, 180],
         "roi": [1170, 10, 60, 60],
         "connected": True,
-        "count": 80,
+        "count": 50,
         "order_by": "Area",
         "index": 0,
         "action": "DoNothing",

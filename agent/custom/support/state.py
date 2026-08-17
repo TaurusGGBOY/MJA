@@ -185,12 +185,15 @@ class TaskRunStore:
         postcondition: str,
         error_code: str | None,
     ) -> None:
-        """Seal business evidence while leaving the home boundary pending."""
+        """Seal business evidence while leaving the home boundary pending.
+
+        Failure is intentionally sealable too: a failed business outcome still
+        has to pass through the same home-boundary cleanup as success and
+        already-complete outcomes. The boundary decides the final status.
+        """
 
         key = _task_key(task_id)
         outcome = TaskOutcomeStatus(status)
-        if outcome is TaskOutcomeStatus.FAILED:
-            raise ValueError("failed business results must use finish")
         if not isinstance(postcondition, str) or not postcondition.strip():
             raise ValueError("postcondition must be non-empty")
         if error_code is not None and not isinstance(error_code, str):

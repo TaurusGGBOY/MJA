@@ -192,7 +192,7 @@ HERO_DISPATCH_DAILY_DEFINITION = HeroDispatchDailyDefinition(
             "dispatch_team",
             "hero.dispatch.page",
             "hero.dispatch_button",
-            "hero.first_task_in_progress",
+            "hero.claim_state_known",
             "inspect",
         ),
         "close_dispatch": _tr(

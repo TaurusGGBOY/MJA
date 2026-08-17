@@ -162,6 +162,9 @@ def test_home_entry_uses_same_frame_world_boundary_and_exact_painting_target() -
         "param": {"all_of": same_frame, "box_index": 1},
     }
     assert open_painting["custom_action"] == "GuardedInput"
+    assert open_painting["custom_action_param"]["fixed_click_mode"] == (
+        "painting_scroll_button"
+    )
     assert open_painting["custom_action_param"]["evidence"] == {
         "page_index": 0,
         "target_index": 1,

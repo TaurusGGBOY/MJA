@@ -900,7 +900,7 @@ def test_confirm_transition_never_spends_battle_wait_and_unknown_still_fails():
 
 
 def test_terminal_postconditions_are_stable_and_distinct():
-    assert terminal_postcondition(TaskStatus.COMPLETED) == "break_array.three_challenges"
-    assert terminal_postcondition(TaskStatus.ALREADY_COMPLETE) == "break_array.daily_exhausted"
+    assert terminal_postcondition(TaskStatus.COMPLETED) == "break_array.remaining_zero_of_nine"
+    assert terminal_postcondition(TaskStatus.ALREADY_COMPLETE) == "break_array.remaining_zero_of_nine"
     assert terminal_postcondition(TaskStatus.NOT_ELIGIBLE) == "break_array.unavailable"
     assert terminal_postcondition(TaskStatus.FAILED) == "break_array.postcondition_missing"

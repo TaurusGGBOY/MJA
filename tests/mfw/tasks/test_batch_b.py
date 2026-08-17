@@ -419,6 +419,7 @@ def test_food_alternatives_follow_real_maa_next_list_semantics() -> None:
         count_probe = nodes[f"吃体力食物-次数-{count}-探测"]
         assert count_probe["on_error"] == ["吃体力食物-记录-失败"]
         eat = nodes[f"吃体力食物-食用-次数-{count}"]
+        assert eat["max_hit"] == 6
         assert eat["next"] == after_eat
         assert eat["on_error"] == ["吃体力食物-记录-失败"]
         assert eat["retry_times"] == 0
@@ -524,8 +525,10 @@ def test_jianlin_has_one_verified_refill_and_bounded_challenges() -> None:
         [
             "open_function_panel",
             "open_daily_tasks",
+            "open_dueling_menu",
             "scroll_daily_jianlin",
             "open_jianlin",
+            "open_jianlin_resource",
             "select_jianlin_condensate",
             "open_jianlin_stamina_purchase",
             "buy_stamina_once",
@@ -535,7 +538,9 @@ def test_jianlin_has_one_verified_refill_and_bounded_challenges() -> None:
             "set_safe_count",
             "set_safe_multiplier",
             "challenge_condensate",
+            "enable_jianlin_skip_prepare",
             "start_jianlin_battle",
+            "wait_jianlin_battle",
             "close_condensate_result",
             "close_jianlin_page",
             "close_ring_page",
@@ -567,6 +572,7 @@ def test_jianlin_has_one_verified_refill_and_bounded_challenges() -> None:
         and node.get("custom_action_param", {}).get("action_id") == "buy_stamina_once"
     )
     assert TASK_POLICIES[JIANLIN.task_id].action_caps["buy_stamina_once"] == 1
+    assert TASK_POLICIES[JIANLIN.task_id].action_caps["wait_jianlin_battle"] == 12
     assert_loop_bound(nodes, "剑林凝结体体力-挑战-循环", maximum=12)
     assert_no_side_effect_retry(nodes, "buy_stamina_once")
     assert_no_side_effect_retry(nodes, "start_jianlin_battle")

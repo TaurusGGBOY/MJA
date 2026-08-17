@@ -38,7 +38,6 @@ def test_mfw_imports_startup_and_batch_a_tasks_separately() -> None:
     ]
     expected = {
         "日常-简化版": [
-            "GAME_START",
             "MAIL_REWARD_DAILY",
             "SHOP_FREE_GIFT_DAILY",
             "FREE_APPRAISAL_DAILY",
@@ -50,7 +49,6 @@ def test_mfw_imports_startup_and_batch_a_tasks_separately() -> None:
             "BATTLE_PASS_REWARD_DAILY",
         ],
         "日常-完整版": [
-            "GAME_START",
             "MAIL_REWARD_DAILY",
             "SHOP_FREE_GIFT_DAILY",
             "BUY_TEA_DAILY",
@@ -112,13 +110,12 @@ def test_imported_ids_preserve_final_canonical_order() -> None:
     assert imported == [task_id for task_id in final if task_id in imported]
 
 
-def test_presets_start_with_one_safe_game_start_and_never_close_the_game() -> None:
+def test_presets_contain_business_tasks_only_and_never_close_the_game() -> None:
     interface = json.loads(
         (ROOT / "assets/interface.json").read_text(encoding="utf-8")
     )
     for preset in interface["preset"]:
         names = [task["name"] for task in preset["task"]]
-        assert names.count("GAME_START") == 1
-        assert names[0] == "GAME_START"
+        assert "GAME_START" not in names
         assert "GAME_STOP" not in names
         assert "daily_all" not in names

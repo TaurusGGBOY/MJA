@@ -16,8 +16,9 @@ def test_base_resource_contains_ocr_and_common_terminals() -> None:
     assert (root / "model/ocr/keys.txt").is_file()
     nodes = load_pipeline_nodes(root / "pipeline")
     assert nodes["公共-通用停止"]["action"] == "StopTask"
-    assert nodes["公共-通用中止"]["Abort"] is True
-    assert nodes["公共-通用中止"]["action"] == "StopTask"
+    assert nodes["公共-通用中止"]["action"] == "DoNothing"
+    assert nodes["公共-通用中止"]["next"] == ["公共-失败-主页-探测"]
+    assert nodes["公共-通用中止"]["on_error"] == ["公共-失败-返回主页"]
 
 
 def test_pipeline_validator_rejects_forbidden_control_planes(tmp_path: Path) -> None:

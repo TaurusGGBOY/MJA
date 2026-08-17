@@ -67,10 +67,14 @@ def map_box_center(
     )
 
 
-def _wait_job(job: Any) -> None:
+def _wait_job(
+    job: Any, *, timeout_seconds: float = CONTROLLER_JOB_TIMEOUT_SECONDS
+) -> None:
     wait = getattr(job, "wait", None)
     if not callable(wait):
         raise RuntimeError("Android controller gesture did not return a waitable job")
+    if timeout_seconds <= 0:
+        raise ValueError("Android controller job timeout must be positive")
 
     # Maa jobs normally complete quickly, but a dead ADB transport can leave
     # the native wait blocked forever while the outer task supervisor keeps
@@ -89,7 +93,7 @@ def _wait_job(job: Any) -> None:
             completed.set()
 
     threading.Thread(target=wait_for_native_job, daemon=True).start()
-    if not completed.wait(CONTROLLER_JOB_TIMEOUT_SECONDS):
+    if not completed.wait(timeout_seconds):
         raise RuntimeError(
             "Android controller gesture wait timed out; ADB/Maa transport is unavailable"
         )

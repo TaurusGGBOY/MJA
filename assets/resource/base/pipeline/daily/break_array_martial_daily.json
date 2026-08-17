@@ -2,25 +2,44 @@
   "破阵武学-任务入口": {
     "recognition": {
       "type": "And",
-      "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}
+      "param": {
+        "all_of": [
+          "公共-游戏主页-页面"
+        ],
+        "box_index": 0
+      }
     },
     "action": "Custom",
     "custom_action": "BeginTask",
-    "custom_action_param": {"task_id": "BREAK_ARRAY_MARTIAL_DAILY"},
+    "custom_action_param": {
+      "task_id": "BREAK_ARRAY_MARTIAL_DAILY"
+    },
     "timeout": 8000,
     "next": [
       "破阵武学-页面-探测",
       "破阵武学-活动-探测",
       "破阵武学-主页-探测"
     ],
-    "on_error": ["[JumpBack]启动-游戏启动", "破阵武学-记录-失败"],
+    "on_error": [
+      "公共-主页边界-失败",
+      "破阵武学-记录-失败"
+    ],
     "retry_times": 0
   },
   "破阵武学-主页-探测": {
-    "recognition": {"type": "And", "param": {"all_of": ["破阵武学-突破-阵法-主页"]}},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "破阵武学-突破-阵法-主页"
+        ]
+      }
+    },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["破阵武学-打开-活动"],
+    "next": [
+      "破阵武学-打开-活动"
+    ],
     "on_error": [
       "破阵武学-活动-探测",
       "破阵武学-记录-失败"
@@ -31,7 +50,13 @@
     "timeout": 8000,
     "recognition": {
       "type": "And",
-      "param": {"all_of": ["破阵武学-突破-阵法-主页", "破阵武学-活动-入口"], "box_index": 1}
+      "param": {
+        "all_of": [
+          "破阵武学-突破-阵法-主页",
+          "破阵武学-活动-入口"
+        ],
+        "box_index": 1
+      }
     },
     "action": "Custom",
     "custom_action": "GuardedInput",
@@ -46,12 +71,23 @@
         "target_name": "破阵武学-活动-入口"
       }
     },
-    "next": ["破阵武学-活动-探测"],
-    "on_error": ["破阵武学-记录-失败"],
+    "next": [
+      "破阵武学-活动-探测"
+    ],
+    "on_error": [
+      "破阵武学-记录-失败"
+    ],
     "retry_times": 0
   },
   "破阵武学-活动-探测": {
-    "recognition": {"type": "And", "param": {"all_of": ["破阵武学-活动-页面"]}},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "破阵武学-活动-页面"
+        ]
+      }
+    },
     "timeout": 8000,
     "action": "DoNothing",
     "next": [
@@ -59,14 +95,22 @@
       "破阵武学-打开-入口",
       "破阵武学-页面-探测"
     ],
-    "on_error": ["破阵武学-记录-失败"]
+    "on_error": [
+      "破阵武学-记录-失败"
+    ]
   },
   "破阵武学-打开-入口": {
     "max_hit": 1,
     "timeout": 8000,
     "recognition": {
       "type": "And",
-      "param": {"all_of": ["破阵武学-活动-页面", "破阵武学-突破-阵法-入口"], "box_index": 1}
+      "param": {
+        "all_of": [
+          "破阵武学-活动-页面",
+          "破阵武学-突破-阵法-入口"
+        ],
+        "box_index": 1
+      }
     },
     "action": "Custom",
     "custom_action": "GuardedInput",
@@ -81,16 +125,31 @@
         "target_name": "破阵武学-突破-阵法-入口"
       }
     },
-    "next": ["破阵武学-页面-探测"],
-    "on_error": ["破阵武学-记录-失败"],
+    "next": [
+      "破阵武学-页面-探测"
+    ],
+    "on_error": [
+      "破阵武学-记录-失败"
+    ],
     "retry_times": 0
   },
   "破阵武学-页面-探测": {
-    "recognition": {"type": "And", "param": {"all_of": ["破阵武学-突破-阵法-页面"]}},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "破阵武学-突破-阵法-页面"
+        ]
+      }
+    },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["破阵武学-安全-探测"],
-    "on_error": ["破阵武学-记录-失败"]
+    "next": [
+      "破阵武学-安全-探测"
+    ],
+    "on_error": [
+      "破阵武学-记录-失败"
+    ]
   },
   "破阵武学-安全-探测": {
     "recognition": {
@@ -105,7 +164,9 @@
     },
     "timeout": 5000,
     "action": "DoNothing",
-    "next": ["破阵武学-安全-停止"],
+    "next": [
+      "破阵武学-安全-停止"
+    ],
     "on_error": [
       "破阵武学-不可用-探测",
       "破阵武学-已完成-探测",
@@ -116,32 +177,73 @@
     ]
   },
   "破阵武学-不可用-探测": {
-    "recognition": {"type": "And", "param": {"all_of": ["破阵武学-突破-阵法-不可用"]}},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "破阵武学-突破-阵法-不可用"
+        ]
+      }
+    },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["破阵武学-不符合条件"],
-    "on_error": ["破阵武学-已完成-探测"]
+    "next": [
+      "破阵武学-不符合条件"
+    ],
+    "on_error": [
+      "破阵武学-已完成-探测"
+    ]
   },
   "破阵武学-已完成-探测": {
-    "recognition": {"type": "And", "param": {"all_of": ["破阵武学-突破-阵法-已完成"]}},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "破阵武学-突破-阵法-已完成"
+        ]
+      }
+    },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["破阵武学-已完成"],
-    "on_error": ["破阵武学-剩余-耗尽-探测"]
+    "next": [
+      "破阵武学-已完成"
+    ],
+    "on_error": [
+      "破阵武学-剩余-耗尽-探测"
+    ]
   },
   "破阵武学-剩余-耗尽-探测": {
-    "recognition": {"type": "And", "param": {"all_of": ["破阵武学-突破-阵法-剩余-耗尽"]}},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "破阵武学-突破-阵法-剩余-耗尽"
+        ]
+      }
+    },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["破阵武学-已完成"],
-    "on_error": ["破阵武学-结果-探测", "破阵武学-挑战-循环", "破阵武学-记录-失败"]
+    "next": [
+      "破阵武学-已完成"
+    ],
+    "on_error": [
+      "破阵武学-结果-探测",
+      "破阵武学-挑战-循环",
+      "破阵武学-记录-失败"
+    ]
   },
   "破阵武学-挑战-循环": {
     "max_hit": 3,
     "timeout": 8000,
     "recognition": {
       "type": "And",
-      "param": {"all_of": ["破阵武学-突破-阵法-页面", "破阵武学-突破-阵法-开始"], "box_index": 1}
+      "param": {
+        "all_of": [
+          "破阵武学-突破-阵法-页面",
+          "破阵武学-突破-阵法-开始"
+        ],
+        "box_index": 1
+      }
     },
     "action": "Custom",
     "custom_action": "GuardedInput",
@@ -156,16 +258,32 @@
         "target_name": "破阵武学-突破-阵法-开始"
       }
     },
-    "next": ["破阵武学-开始-确认-探测"],
-    "on_error": ["破阵武学-剩余-耗尽-探测", "破阵武学-记录-失败"],
+    "next": [
+      "破阵武学-开始-确认-探测"
+    ],
+    "on_error": [
+      "破阵武学-剩余-耗尽-探测",
+      "破阵武学-记录-失败"
+    ],
     "retry_times": 0
   },
   "破阵武学-开始-确认-探测": {
-    "recognition": {"type": "And", "param": {"all_of": ["破阵武学-突破-阵法-开始-确认-对话框"]}},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "破阵武学-突破-阵法-开始-确认-对话框"
+        ]
+      }
+    },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["破阵武学-确认-挑战"],
-    "on_error": ["破阵武学-记录-失败"]
+    "next": [
+      "破阵武学-确认-挑战"
+    ],
+    "on_error": [
+      "破阵武学-记录-失败"
+    ]
   },
   "破阵武学-确认-挑战": {
     "max_hit": 3,
@@ -173,7 +291,10 @@
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["破阵武学-突破-阵法-开始-确认-对话框", "破阵武学-突破-阵法-开始-确认-按钮"],
+        "all_of": [
+          "破阵武学-突破-阵法-开始-确认-对话框",
+          "破阵武学-突破-阵法-开始-确认-按钮"
+        ],
         "box_index": 1
       }
     },
@@ -197,11 +318,20 @@
       "破阵武学-战斗-循环",
       "破阵武学-结果-探测"
     ],
-    "on_error": ["破阵武学-记录-失败"],
+    "on_error": [
+      "破阵武学-记录-失败"
+    ],
     "retry_times": 0
   },
   "破阵武学-确认-过渡-探测": {
-    "recognition": {"type": "And", "param": {"all_of": ["破阵武学-突破-阵法-确认-过渡"]}},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "破阵武学-突破-阵法-确认-过渡"
+        ]
+      }
+    },
     "timeout": 30000,
     "action": "DoNothing",
     "next": [
@@ -219,10 +349,19 @@
     ]
   },
   "破阵武学-准备-页面-探测": {
-    "recognition": {"type": "And", "param": {"all_of": ["破阵武学-突破-阵法-准备-页面"]}},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "破阵武学-突破-阵法-准备-页面"
+        ]
+      }
+    },
     "timeout": 30000,
     "action": "DoNothing",
-    "next": ["破阵武学-开始-战斗"],
+    "next": [
+      "破阵武学-开始-战斗"
+    ],
     "on_error": [
       "破阵武学-战斗-加载-循环",
       "破阵武学-战斗-循环",
@@ -235,7 +374,13 @@
     "timeout": 30000,
     "recognition": {
       "type": "And",
-      "param": {"all_of": ["破阵武学-突破-阵法-准备-页面", "破阵武学-突破-阵法-准备-开始"], "box_index": 1}
+      "param": {
+        "all_of": [
+          "破阵武学-突破-阵法-准备-页面",
+          "破阵武学-突破-阵法-准备-开始"
+        ],
+        "box_index": 1
+      }
     },
     "action": "Custom",
     "custom_action": "GuardedInput",
@@ -255,13 +400,22 @@
       "破阵武学-战斗-循环",
       "破阵武学-结果-探测"
     ],
-    "on_error": ["破阵武学-记录-失败"],
+    "on_error": [
+      "破阵武学-记录-失败"
+    ],
     "retry_times": 0
   },
   "破阵武学-战斗-加载-循环": {
     "max_hit": 12,
     "timeout": 60000,
-    "recognition": {"type": "And", "param": {"all_of": ["破阵武学-突破-阵法-战斗-加载"]}},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "破阵武学-突破-阵法-战斗-加载"
+        ]
+      }
+    },
     "action": "Custom",
     "custom_action": "GuardedInput",
     "custom_action_param": {
@@ -275,7 +429,11 @@
         "target_name": "破阵武学-突破-阵法-战斗-加载"
       }
     },
-    "next": ["破阵武学-战斗-加载-循环", "破阵武学-战斗-循环", "破阵武学-结果-探测"],
+    "next": [
+      "破阵武学-战斗-加载-循环",
+      "破阵武学-战斗-循环",
+      "破阵武学-结果-探测"
+    ],
     "on_error": [
       "破阵武学-战斗-循环",
       "破阵武学-结果-探测",
@@ -286,7 +444,14 @@
   "破阵武学-战斗-循环": {
     "max_hit": 12,
     "timeout": 60000,
-    "recognition": {"type": "And", "param": {"all_of": ["破阵武学-突破-阵法-战斗"]}},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "破阵武学-突破-阵法-战斗"
+        ]
+      }
+    },
     "action": "Custom",
     "custom_action": "GuardedInput",
     "custom_action_param": {
@@ -300,7 +465,11 @@
         "target_name": "破阵武学-突破-阵法-战斗"
       }
     },
-    "next": ["破阵武学-战斗-循环", "破阵武学-战斗-加载-循环", "破阵武学-结果-探测"],
+    "next": [
+      "破阵武学-战斗-循环",
+      "破阵武学-战斗-加载-循环",
+      "破阵武学-结果-探测"
+    ],
     "on_error": [
       "破阵武学-战斗-加载-循环",
       "破阵武学-结果-探测",
@@ -309,7 +478,14 @@
     "retry_times": 0
   },
   "破阵武学-结果-探测": {
-    "recognition": {"type": "And", "param": {"all_of": ["破阵武学-突破-阵法-结果-页面"]}},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "破阵武学-突破-阵法-结果-页面"
+        ]
+      }
+    },
     "timeout": 30000,
     "action": "DoNothing",
     "next": [
@@ -317,16 +493,26 @@
       "破阵武学-失败-结果-探测",
       "破阵武学-结果-循环"
     ],
-    "on_error": ["破阵武学-战斗-未知-结果"]
+    "on_error": [
+      "破阵武学-战斗-未知-结果"
+    ]
   },
   "破阵武学-成功-结果-探测": {
     "recognition": {
       "type": "And",
-      "param": {"all_of": ["破阵武学-突破-阵法-结果-页面", "破阵武学-突破-阵法-成功"], "box_index": 1}
+      "param": {
+        "all_of": [
+          "破阵武学-突破-阵法-结果-页面",
+          "破阵武学-突破-阵法-成功"
+        ],
+        "box_index": 1
+      }
     },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["破阵武学-关闭-结果"],
+    "next": [
+      "破阵武学-关闭-结果"
+    ],
     "on_error": [
       "破阵武学-失败-结果-探测",
       "破阵武学-结果-循环"
@@ -335,17 +521,34 @@
   "破阵武学-失败-结果-探测": {
     "recognition": {
       "type": "And",
-      "param": {"all_of": ["破阵武学-突破-阵法-结果-页面", "破阵武学-突破-阵法-失败"], "box_index": 1}
+      "param": {
+        "all_of": [
+          "破阵武学-突破-阵法-结果-页面",
+          "破阵武学-突破-阵法-失败"
+        ],
+        "box_index": 1
+      }
     },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["破阵武学-战斗-失败"],
-    "on_error": ["破阵武学-结果-循环"]
+    "next": [
+      "破阵武学-战斗-失败"
+    ],
+    "on_error": [
+      "破阵武学-结果-循环"
+    ]
   },
   "破阵武学-结果-循环": {
     "max_hit": 3,
     "timeout": 30000,
-    "recognition": {"type": "And", "param": {"all_of": ["破阵武学-突破-阵法-结果-页面"]}},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "破阵武学-突破-阵法-结果-页面"
+        ]
+      }
+    },
     "action": "Custom",
     "custom_action": "GuardedInput",
     "custom_action_param": {
@@ -359,8 +562,12 @@
         "target_name": "破阵武学-突破-阵法-结果-页面"
       }
     },
-    "next": ["破阵武学-结果-探测"],
-    "on_error": ["破阵武学-结果-循环-耗尽"],
+    "next": [
+      "破阵武学-结果-探测"
+    ],
+    "on_error": [
+      "破阵武学-结果-循环-耗尽"
+    ],
     "retry_times": 0
   },
   "破阵武学-关闭-结果": {
@@ -368,7 +575,13 @@
     "timeout": 8000,
     "recognition": {
       "type": "And",
-      "param": {"all_of": ["破阵武学-突破-阵法-结果-页面", "破阵武学-突破-阵法-结果-关闭"], "box_index": 1}
+      "param": {
+        "all_of": [
+          "破阵武学-突破-阵法-结果-页面",
+          "破阵武学-突破-阵法-结果-关闭"
+        ],
+        "box_index": 1
+      }
     },
     "action": "Custom",
     "custom_action": "GuardedInput",
@@ -383,7 +596,9 @@
         "target_name": "破阵武学-突破-阵法-结果-关闭"
       }
     },
-    "next": ["破阵武学-结果后-探测"],
+    "next": [
+      "破阵武学-结果后-探测"
+    ],
     "on_error": [
       "破阵武学-结果-循环",
       "破阵武学-结果-循环-耗尽"
@@ -391,7 +606,14 @@
     "retry_times": 0
   },
   "破阵武学-结果后-探测": {
-    "recognition": {"type": "And", "param": {"all_of": ["破阵武学-突破-阵法-页面"]}},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "破阵武学-突破-阵法-页面"
+        ]
+      }
+    },
     "timeout": 8000,
     "action": "DoNothing",
     "next": [
@@ -399,16 +621,25 @@
       "破阵武学-剩余-耗尽-之后-结果-探测",
       "破阵武学-挑战-循环"
     ],
-    "on_error": ["破阵武学-记录-失败"]
+    "on_error": [
+      "破阵武学-记录-失败"
+    ]
   },
   "破阵武学-已完成-之后-结果-探测": {
     "recognition": {
       "type": "And",
-      "param": {"all_of": ["破阵武学-突破-阵法-页面", "破阵武学-突破-阵法-已完成"]}
+      "param": {
+        "all_of": [
+          "破阵武学-突破-阵法-页面",
+          "破阵武学-突破-阵法-已完成"
+        ]
+      }
     },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["破阵武学-成功"],
+    "next": [
+      "破阵武学-成功"
+    ],
     "on_error": [
       "破阵武学-剩余-耗尽-之后-结果-探测",
       "破阵武学-挑战-循环"
@@ -417,12 +648,22 @@
   "破阵武学-剩余-耗尽-之后-结果-探测": {
     "recognition": {
       "type": "And",
-      "param": {"all_of": ["破阵武学-突破-阵法-页面", "破阵武学-突破-阵法-剩余-耗尽"]}
+      "param": {
+        "all_of": [
+          "破阵武学-突破-阵法-页面",
+          "破阵武学-突破-阵法-剩余-耗尽"
+        ]
+      }
     },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["破阵武学-成功"],
-    "on_error": ["破阵武学-挑战-循环", "破阵武学-记录-失败"]
+    "next": [
+      "破阵武学-成功"
+    ],
+    "on_error": [
+      "破阵武学-挑战-循环",
+      "破阵武学-记录-失败"
+    ]
   },
   "破阵武学-成功": {
     "recognition": "DirectHit",
@@ -431,11 +672,15 @@
     "custom_action_param": {
       "task_id": "BREAK_ARRAY_MARTIAL_DAILY",
       "status": "success",
-      "postcondition": "break_array.three_challenges",
+      "postcondition": "break_array.remaining_zero_of_nine",
       "defer_home_boundary": true
     },
-    "next": ["破阵武学-完成-收尾"],
-    "on_error": ["破阵武学-记录-失败"]
+    "next": [
+      "破阵武学-完成-收尾"
+    ],
+    "on_error": [
+      "破阵武学-记录-失败"
+    ]
   },
   "破阵武学-已完成": {
     "recognition": "DirectHit",
@@ -444,11 +689,15 @@
     "custom_action_param": {
       "task_id": "BREAK_ARRAY_MARTIAL_DAILY",
       "status": "already_complete",
-      "postcondition": "break_array.daily_exhausted",
+      "postcondition": "break_array.remaining_zero_of_nine",
       "defer_home_boundary": true
     },
-    "next": ["破阵武学-完成-收尾"],
-    "on_error": ["破阵武学-记录-失败"]
+    "next": [
+      "破阵武学-完成-收尾"
+    ],
+    "on_error": [
+      "破阵武学-记录-失败"
+    ]
   },
   "破阵武学-不符合条件": {
     "recognition": "DirectHit",
@@ -460,8 +709,12 @@
       "postcondition": "break_array.unavailable",
       "defer_home_boundary": true
     },
-    "next": ["破阵武学-完成-收尾"],
-    "on_error": ["破阵武学-记录-失败"]
+    "next": [
+      "破阵武学-完成-收尾"
+    ],
+    "on_error": [
+      "破阵武学-记录-失败"
+    ]
   },
   "破阵武学-完成-收尾": {
     "recognition": "DirectHit",
@@ -473,13 +726,18 @@
       "破阵武学-完成-关闭-活动",
       "破阵武学-完成-主页-探测"
     ],
-    "on_error": ["破阵武学-记录-失败"]
+    "on_error": [
+      "破阵武学-记录-失败"
+    ]
   },
   "破阵武学-完成-关闭-阵法": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["破阵武学-突破-阵法-页面", "破阵武学-突破-阵法-关闭"],
+        "all_of": [
+          "破阵武学-突破-阵法-页面",
+          "破阵武学-突破-阵法-关闭"
+        ],
         "box_index": 1
       }
     },
@@ -498,15 +756,23 @@
     },
     "timeout": 8000,
     "max_hit": 1,
-    "next": ["破阵武学-完成-关闭-活动", "破阵武学-完成-主页-探测"],
-    "on_error": ["破阵武学-记录-失败"],
+    "next": [
+      "破阵武学-完成-关闭-活动",
+      "破阵武学-完成-主页-探测"
+    ],
+    "on_error": [
+      "破阵武学-记录-失败"
+    ],
     "retry_times": 0
   },
   "破阵武学-完成-关闭-活动": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["破阵武学-活动-页面", "破阵武学-活动-关闭"],
+        "all_of": [
+          "破阵武学-活动-页面",
+          "破阵武学-活动-关闭"
+        ],
         "box_index": 1
       }
     },
@@ -525,20 +791,33 @@
     },
     "timeout": 8000,
     "max_hit": 1,
-    "next": ["破阵武学-完成-主页-探测"],
-    "on_error": ["破阵武学-记录-失败"],
+    "next": [
+      "破阵武学-完成-主页-探测"
+    ],
+    "on_error": [
+      "破阵武学-记录-失败"
+    ],
     "retry_times": 0
   },
   "破阵武学-完成-主页-探测": {
     "recognition": {
       "type": "And",
-      "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}
+      "param": {
+        "all_of": [
+          "公共-游戏主页-页面"
+        ],
+        "box_index": 0
+      }
     },
     "timeout": 8000,
     "max_hit": 1,
     "action": "DoNothing",
-    "next": ["公共-主页边界"],
-    "on_error": ["破阵武学-记录-失败"]
+    "next": [
+      "公共-主页边界"
+    ],
+    "on_error": [
+      "破阵武学-记录-失败"
+    ]
   },
   "破阵武学-战斗-失败": {
     "recognition": "DirectHit",
@@ -549,11 +828,11 @@
       "status": "failed",
       "error_code": "BREAK_ARRAY_BATTLE_DEFEAT",
       "postcondition": "break_array.battle.result_known",
-      "native_fail_after_record": true
+      "defer_home_boundary": true
     },
-    "Abort": true,
-    "next": ["公共-通用中止"]
-
+    "next": [
+      "公共-通用中止"
+    ]
   },
   "破阵武学-战斗-未知-结果": {
     "recognition": "DirectHit",
@@ -564,11 +843,11 @@
       "status": "failed",
       "error_code": "BREAK_ARRAY_BATTLE_RESULT_UNKNOWN",
       "postcondition": "break_array.battle.result_known",
-      "native_fail_after_record": true
+      "defer_home_boundary": true
     },
-    "Abort": true,
-    "next": ["公共-通用中止"]
-
+    "next": [
+      "公共-通用中止"
+    ]
   },
   "破阵武学-战斗-循环-耗尽": {
     "recognition": "DirectHit",
@@ -579,11 +858,11 @@
       "status": "failed",
       "error_code": "BREAK_ARRAY_BATTLE_LIMIT",
       "postcondition": "break_array.battle.result_known",
-      "native_fail_after_record": true
+      "defer_home_boundary": true
     },
-    "Abort": true,
-    "next": ["公共-通用中止"]
-
+    "next": [
+      "公共-通用中止"
+    ]
   },
   "破阵武学-结果-循环-耗尽": {
     "recognition": "DirectHit",
@@ -594,11 +873,11 @@
       "status": "failed",
       "error_code": "BREAK_ARRAY_RESULT_LIMIT",
       "postcondition": "break_array.result_known",
-      "native_fail_after_record": true
+      "defer_home_boundary": true
     },
-    "Abort": true,
-    "next": ["公共-通用中止"]
-
+    "next": [
+      "公共-通用中止"
+    ]
   },
   "破阵武学-安全-停止": {
     "recognition": "DirectHit",
@@ -609,11 +888,11 @@
       "status": "failed",
       "error_code": "BREAK_ARRAY_DANGEROUS_PAGE",
       "postcondition": "break_array.no_paid_or_verification",
-      "native_fail_after_record": true
+      "defer_home_boundary": true
     },
-    "Abort": true,
-    "next": ["公共-通用中止"]
-
+    "next": [
+      "公共-通用中止"
+    ]
   },
   "破阵武学-记录-失败": {
     "recognition": "DirectHit",
@@ -624,17 +903,19 @@
       "status": "failed",
       "error_code": "BREAK_ARRAY_POSTCONDITION_MISSING",
       "postcondition": "break_array.state_known",
-      "native_fail_after_record": true
+      "defer_home_boundary": true
     },
-    "Abort": true,
-    "next": ["公共-通用中止"]
-
+    "next": [
+      "公共-通用中止"
+    ]
   },
   "破阵武学-突破-阵法-主页": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["公共-游戏主页-页面"],
+        "all_of": [
+          "公共-游戏主页-页面"
+        ],
         "box_index": 0
       }
     },
@@ -642,40 +923,77 @@
   },
   "破阵武学-活动-入口": {
     "recognition": "OCR",
-    "expected": ["活动", "活动中心"],
-    "roi": [840, 20, 110, 90],
+    "expected": [
+      "活动",
+      "活动中心"
+    ],
+    "roi": [
+      840,
+      20,
+      110,
+      90
+    ],
     "action": "DoNothing"
   },
   "破阵武学-活动-页面": {
     "recognition": "OCR",
-    "expected": ["破阵演武", "破阵"],
-    "roi": [0, 120, 1280, 600],
+    "expected": [
+      "破阵演武",
+      "破阵"
+    ],
+    "roi": [
+      0,
+      120,
+      1280,
+      600
+    ],
     "action": "DoNothing"
   },
   "破阵武学-活动-关闭": {
     "recognition": "TemplateMatch",
     "template": "home/modal_close.png",
-    "roi": [1120, 0, 160, 140],
+    "roi": [
+      1120,
+      0,
+      160,
+      140
+    ],
     "threshold": 0.375,
     "action": "DoNothing"
   },
   "破阵武学-突破-阵法-入口": {
     "recognition": "OCR",
-    "expected": ["破阵演武", "破阵"],
-    "roi": [0, 120, 1280, 600],
+    "expected": [
+      "破阵演武",
+      "破阵"
+    ],
+    "roi": [
+      0,
+      120,
+      1280,
+      600
+    ],
     "action": "DoNothing"
   },
   "破阵武学-突破-阵法-已选择-入口": {
     "recognition": "OCR",
     "expected": "破阵演武",
-    "roi": [35, 390, 135, 100],
+    "roi": [
+      35,
+      390,
+      135,
+      100
+    ],
     "action": "DoNothing"
   },
   "破阵武学-突破-阵法-页面": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["破阵武学-突破-阵法-已选择-入口", "破阵武学-突破-阵法-剩余"]
+        "all_of": [
+          "破阵武学-突破-阵法-已选择-入口",
+          "破阵武学-突破-阵法-剩余"
+        ]
       }
     },
     "action": "DoNothing"
@@ -684,7 +1002,10 @@
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["破阵武学-突破-阵法-开始-顶部", "破阵武学-突破-阵法-开始-底部"],
+        "all_of": [
+          "破阵武学-突破-阵法-开始-顶部",
+          "破阵武学-突破-阵法-开始-底部"
+        ],
         "box_index": 0
       }
     },
@@ -693,31 +1014,59 @@
   "破阵武学-突破-阵法-开始-顶部": {
     "recognition": "OCR",
     "expected": "^开始$",
-    "roi": [1050, 520, 190, 90],
+    "roi": [
+      1050,
+      520,
+      190,
+      90
+    ],
     "action": "DoNothing"
   },
   "破阵武学-突破-阵法-开始-底部": {
     "recognition": "OCR",
     "expected": "^挑战$",
-    "roi": [1050, 565, 190, 95],
+    "roi": [
+      1050,
+      565,
+      190,
+      95
+    ],
     "action": "DoNothing"
   },
   "破阵武学-突破-阵法-开始-确认-标题": {
     "recognition": "OCR",
     "expected": "^提\\s*示$",
-    "roi": [285, 175, 80, 110],
+    "roi": [
+      285,
+      175,
+      80,
+      110
+    ],
     "action": "DoNothing"
   },
   "破阵武学-突破-阵法-开始-确认-消耗": {
     "recognition": "OCR",
     "expected": "开始挑战.*消耗\\s*1\\s*次挑战次数",
-    "roi": [400, 285, 520, 90],
+    "roi": [
+      400,
+      285,
+      520,
+      90
+    ],
     "action": "DoNothing"
   },
   "破阵武学-突破-阵法-开始-确认-准备": {
     "recognition": "OCR",
-    "expected": ["进入准备界面", "搭配适合的出战阵容"],
-    "roi": [430, 315, 470, 100],
+    "expected": [
+      "进入准备界面",
+      "搭配适合的出战阵容"
+    ],
+    "roi": [
+      430,
+      315,
+      470,
+      100
+    ],
     "action": "DoNothing"
   },
   "破阵武学-突破-阵法-开始-确认-对话框": {
@@ -736,15 +1085,33 @@
   "破阵武学-突破-阵法-开始-确认-按钮": {
     "recognition": "OCR",
     "expected": "^确认$",
-    "roi": [790, 455, 180, 90],
+    "roi": [
+      790,
+      455,
+      180,
+      90
+    ],
     "action": "DoNothing"
   },
   "破阵武学-突破-阵法-确认-过渡-暗-字段": {
     "recognition": "ColorMatch",
     "method": 4,
-    "lower": [0, 0, 0],
-    "upper": [8, 8, 8],
-    "roi": [140, 180, 1000, 420],
+    "lower": [
+      0,
+      0,
+      0
+    ],
+    "upper": [
+      8,
+      8,
+      8
+    ],
+    "roi": [
+      140,
+      180,
+      1000,
+      420
+    ],
     "connected": true,
     "count": 400000,
     "action": "DoNothing"
@@ -752,9 +1119,22 @@
   "破阵武学-突破-阵法-确认-过渡-传闻-字形": {
     "recognition": "ColorMatch",
     "method": 4,
-    "lower": [210, 210, 210],
-    "upper": [255, 255, 255],
-    "roi": [430, 80, 840, 90],
+    "lower": [
+      210,
+      210,
+      210
+    ],
+    "upper": [
+      255,
+      255,
+      255
+    ],
+    "roi": [
+      430,
+      80,
+      840,
+      90
+    ],
     "connected": false,
     "count": 3000,
     "action": "DoNothing"
@@ -762,9 +1142,22 @@
   "破阵武学-突破-阵法-确认-过渡-用户标识-字形": {
     "recognition": "ColorMatch",
     "method": 4,
-    "lower": [80, 80, 65],
-    "upper": [190, 190, 175],
-    "roi": [1100, 680, 180, 40],
+    "lower": [
+      80,
+      80,
+      65
+    ],
+    "upper": [
+      190,
+      190,
+      175
+    ],
+    "roi": [
+      1100,
+      680,
+      180,
+      40
+    ],
     "connected": false,
     "count": 350,
     "action": "DoNothing"
@@ -788,60 +1181,122 @@
       "(?:(?:今日)?剩余挑战次数|今日剩余|剩余|挑战次数)\\s*[:：]?\\s*\\d{1,2}\\s*/\\s*[1-9]\\d?",
       "\\d{1,2}\\s*/\\s*[1-9]\\d?"
     ],
-    "roi": [1000, 620, 280, 100],
+    "roi": [
+      1000,
+      620,
+      280,
+      100
+    ],
     "action": "DoNothing"
   },
   "破阵武学-突破-阵法-剩余-耗尽": {
     "recognition": "OCR",
     "expected": [
-      "(?:(?:今日)?剩余挑战次数|今日剩余|剩余|挑战次数)\\s*[:：]?\\s*0\\s*/\\s*[1-9]\\d?",
-      "^0\\s*/\\s*[1-9]\\d?$"
+      "(?:(?:今日)?剩余挑战次数|今日剩余|剩余|挑战次数)\\s*[:：]?\\s*0\\s*/\\s*9",
+      "^0\\s*/\\s*9$"
     ],
-    "roi": [1000, 620, 280, 100],
+    "roi": [
+      1000,
+      620,
+      280,
+      100
+    ],
     "action": "DoNothing"
   },
   "破阵武学-突破-阵法-已完成": {
     "recognition": "OCR",
-    "expected": ["今日已完成", "挑战已完成", "已完成"],
-    "roi": [600, 120, 680, 240],
+    "expected": [
+      "今日已完成",
+      "挑战已完成",
+      "已完成"
+    ],
+    "roi": [
+      600,
+      120,
+      680,
+      240
+    ],
     "action": "DoNothing"
   },
   "破阵武学-突破-阵法-不可用": {
     "recognition": "OCR",
-    "expected": ["未开启", "暂未开放", "不可参与", "活动未开放"],
-    "roi": [200, 180, 880, 420],
+    "expected": [
+      "未开启",
+      "暂未开放",
+      "不可参与",
+      "活动未开放"
+    ],
+    "roi": [
+      200,
+      180,
+      880,
+      420
+    ],
     "action": "DoNothing"
   },
   "破阵武学-突破-阵法-准备-阵容": {
     "recognition": "OCR",
     "expected": "^阵容$",
-    "roi": [40, 10, 150, 70],
+    "roi": [
+      40,
+      10,
+      150,
+      70
+    ],
     "action": "DoNothing"
   },
   "破阵武学-突破-阵法-准备-首领": {
     "recognition": "OCR",
     "expected": "^首领战斗$",
-    "roi": [520, 10, 240, 55],
+    "roi": [
+      520,
+      10,
+      240,
+      55
+    ],
     "action": "DoNothing"
   },
   "破阵武学-突破-阵法-准备-时长": {
     "recognition": "OCR",
     "expected": "^战(?:斗)?时长\\s*[：:]\\s*02\\s*[：:]\\s*00$",
-    "roi": [520, 40, 250, 60],
+    "roi": [
+      520,
+      40,
+      250,
+      60
+    ],
     "action": "DoNothing"
   },
   "破阵武学-突破-阵法-准备-战术": {
     "recognition": "OCR",
     "expected": "^战术谱$",
-    "roi": [980, 480, 140, 80],
+    "roi": [
+      980,
+      480,
+      140,
+      80
+    ],
     "action": "DoNothing"
   },
   "破阵武学-突破-阵法-准备-开始": {
     "recognition": "ColorMatch",
     "method": 4,
-    "lower": [200, 65, 0],
-    "upper": [255, 170, 70],
-    "roi": [1100, 550, 150, 145],
+    "lower": [
+      200,
+      65,
+      0
+    ],
+    "upper": [
+      255,
+      170,
+      70
+    ],
+    "roi": [
+      1100,
+      550,
+      150,
+      145
+    ],
     "connected": false,
     "count": 4500,
     "action": "DoNothing"
@@ -862,21 +1317,42 @@
   },
   "破阵武学-突破-阵法-战斗-加载": {
     "recognition": "OCR",
-    "expected": ["加载中", "正在进入战斗", "匹配中"],
-    "roi": [0, 240, 1280, 300],
+    "expected": [
+      "加载中",
+      "正在进入战斗",
+      "匹配中"
+    ],
+    "roi": [
+      0,
+      240,
+      1280,
+      300
+    ],
     "action": "DoNothing"
   },
   "破阵武学-突破-阵法-战斗": {
     "recognition": "OCR",
-    "expected": ["^跳过$", "^自动战斗$", "^战斗中$"],
-    "roi": [0, 0, 1280, 720],
+    "expected": [
+      "^跳过$",
+      "^自动战斗$",
+      "^战斗中$"
+    ],
+    "roi": [
+      0,
+      0,
+      1280,
+      720
+    ],
     "action": "DoNothing"
   },
   "破阵武学-突破-阵法-结果": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["破阵武学-突破-阵法-结果-胜利-标题", "破阵武学-突破-阵法-结果-标识"],
+        "all_of": [
+          "破阵武学-突破-阵法-结果-胜利-标题",
+          "破阵武学-突破-阵法-结果-标识"
+        ],
         "box_index": 0
       }
     },
@@ -886,7 +1362,10 @@
     "recognition": {
       "type": "Or",
       "param": {
-        "any_of": ["破阵武学-突破-阵法-结果", "破阵武学-突破-阵法-失败"]
+        "any_of": [
+          "破阵武学-突破-阵法-结果",
+          "破阵武学-突破-阵法-失败"
+        ]
       }
     },
     "action": "DoNothing"
@@ -895,7 +1374,10 @@
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["破阵武学-突破-阵法-结果-胜利-标题", "破阵武学-突破-阵法-结果-标识"],
+        "all_of": [
+          "破阵武学-突破-阵法-结果-胜利-标题",
+          "破阵武学-突破-阵法-结果-标识"
+        ],
         "box_index": 0
       }
     },
@@ -904,50 +1386,113 @@
   "破阵武学-突破-阵法-结果-胜利-标题": {
     "recognition": "OCR",
     "expected": "^战斗胜(?:利|禾)?$",
-    "roi": [700, 80, 550, 190],
+    "roi": [
+      700,
+      80,
+      550,
+      190
+    ],
     "action": "DoNothing"
   },
   "破阵武学-突破-阵法-结果-标识": {
     "recognition": "OCR",
     "expected": "^对决[·•]?剑之川$",
-    "roi": [980, 225, 190, 60],
+    "roi": [
+      980,
+      225,
+      190,
+      60
+    ],
     "action": "DoNothing"
   },
   "破阵武学-突破-阵法-失败": {
     "recognition": "OCR",
-    "expected": ["挑战失败", "战斗失败", "失败"],
-    "roi": [160, 100, 960, 420],
+    "expected": [
+      "挑战失败",
+      "战斗失败",
+      "失败"
+    ],
+    "roi": [
+      160,
+      100,
+      960,
+      420
+    ],
     "action": "DoNothing"
   },
   "破阵武学-突破-阵法-结果-关闭": {
     "recognition": "OCR",
-    "expected": ["确认", "继续", "点击空白处关闭", "返回"],
-    "roi": [760, 420, 440, 260],
+    "expected": [
+      "确认",
+      "继续",
+      "点击空白处关闭",
+      "返回"
+    ],
+    "roi": [
+      760,
+      420,
+      440,
+      260
+    ],
     "action": "DoNothing"
   },
   "破阵武学-突破-阵法-关闭": {
     "recognition": "TemplateMatch",
     "template": "home/modal_close.png",
-    "roi": [1120, 0, 160, 140],
+    "roi": [
+      1120,
+      0,
+      160,
+      140
+    ],
     "threshold": 0.375,
     "action": "DoNothing"
   },
   "破阵武学-突破-阵法-未知-对话框": {
     "recognition": "OCR",
-    "expected": ["确定", "取消", "授权", "登录"],
-    "roi": [250, 150, 780, 430],
+    "expected": [
+      "确定",
+      "取消",
+      "授权",
+      "登录"
+    ],
+    "roi": [
+      250,
+      150,
+      780,
+      430
+    ],
     "action": "DoNothing"
   },
   "破阵武学-安全-付费": {
     "recognition": "OCR",
-    "expected": ["购买元宝", "充值", "支付", "Apple Pay"],
-    "roi": [280, 160, 720, 420],
+    "expected": [
+      "购买元宝",
+      "充值",
+      "支付",
+      "Apple Pay"
+    ],
+    "roi": [
+      280,
+      160,
+      720,
+      420
+    ],
     "action": "DoNothing"
   },
   "破阵武学-安全-校验": {
     "recognition": "OCR",
-    "expected": ["验证码", "安全验证", "滑动验证"],
-    "roi": [0, 0, 1280, 720],
+    "expected": [
+      "验证码",
+      "安全验证",
+      "滑动验证"
+    ],
+    "roi": [
+      0,
+      0,
+      1280,
+      720
+    ],
     "action": "DoNothing"
   }
 }

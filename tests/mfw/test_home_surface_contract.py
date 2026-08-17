@@ -19,7 +19,6 @@ SHARED_HOME_PROBES = {
     "帮派活动挑战-主页-探测",
     "帮派事务-主页-探测",
     "帮派事务-主页-之后-关闭-探测",
-    "帮派事务-帮派事务-主页-页面",
     "帮派捐献-主页-探测",
     "帮派捐献-帮派-捐献-主页-页面",
     "剑林凝结体体力-主页-探测",
@@ -61,3 +60,29 @@ def test_daily_home_probes_share_the_startup_task_ready_surface() -> None:
         if name in SHARED_HOME_PROBES
     }
     assert discovered == SHARED_HOME_PROBES
+
+
+def test_public_home_surface_uses_bottom_right_victory_text_only() -> None:
+    resource = json.loads(
+        (
+            ROOT
+            / "assets/resource/base/pipeline/common/home_recovery.json"
+        ).read_text(encoding="utf-8")
+    )
+
+    public_home = resource["公共-游戏主页-页面"]
+    assert public_home == {
+        "recognition": "OCR",
+        "expected": "已击破",
+        "roi": [920, 650, 220, 60],
+        "action": "DoNothing",
+    }
+    assert "^" not in public_home["expected"]
+    assert "$" not in public_home["expected"]
+
+    # The world/map surface remains a separate startup-recovery marker.
+    world_page = resource["公共-游戏世界-页面"]
+    assert world_page["recognition"] == "TemplateMatch"
+    assert world_page["template"] == "home/home_marker.png"
+    assert world_page["roi"] == [1040, 0, 240, 110]
+    assert world_page != public_home

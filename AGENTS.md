@@ -22,6 +22,14 @@
 - 项目入口、运行脚本和自动化代码禁止自行启动或控制 `Terminal.app`（包括 AppleScript `tell application "Terminal"`、`open -a Terminal` 等方式）。
 - 项目命令必须在调用方已有的执行环境中运行；需要用户查看日志时输出日志路径或使用当前执行会话，不得为了执行项目而新开 Terminal 窗口。
 
+## MPE 跨设备连接约束
+
+- MPE Local Bridge 在 Mac 上运行、Windows 浏览器使用 MPE 时，Windows 端的 `localhost` 指向 Windows 自己，不是 Mac；不得把 `https://mpe.codax.site/stable/?link_lb=true&port=9066` 直接当作跨设备方案。
+- 跨设备使用必须提供一个持续运行的局域网前端入口，并让前端 WebSocket 指向当前页面所在 Mac 的局域网地址；临时后台 HTTP 服务退出后，Windows 端会表现为页面或端口连接超时。
+- Mac Bridge 应监听 `0.0.0.0:9066`，局域网前端可使用 `192.168.31.152:9067`（或当次实际有效的 Mac 局域网地址和端口）。
+- 验收不能只看 TCP 端口或裸 WebSocket `Open`：必须在 Windows 端加载 MPE 页面，并确认 Mac Bridge 日志出现来自 Windows 客户端的 MPE 握手、协议版本校验成功，以及 `/mpe/debug/capabilities` 处理记录。
+- 若通过兼容层把 `ws://localhost:<port>` 改写为局域网地址，必须保留原生 `WebSocket` 静态常量（尤其是 `WebSocket.OPEN`），否则会出现“底层已连接但 MPE 握手未发送”的假连接超时。
+
 ## Android 模拟器并发修复约束
 
 - 每个正式 MFW 业务任务使用一个独立 sub-agent/worktree；禁止多个 sub-agent 直接修改同一个工作区。
@@ -40,4 +48,4 @@
 ## tips
 
 - 用户如果需要查看pipeline，可以使用MaaPipelineEditor(MPE)
-
+- 鼓励使用subagent，能用就用，加快效率

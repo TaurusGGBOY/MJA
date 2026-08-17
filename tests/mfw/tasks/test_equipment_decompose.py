@@ -61,16 +61,28 @@ def test_equipment_success_closes_before_deferred_home_boundary() -> None:
 
     outcome = nodes["分解装备-分解-成功"]
     assert outcome["custom_action_param"]["defer_home_boundary"] is True
-    assert outcome["next"] == ["分解装备-关闭-探测"]
-    assert nodes["分解装备-关闭-探测"]["next"] == ["公共-主页边界"]
-    assert nodes["分解装备-关闭-探测"]["on_error"] == ["分解装备-记录-失败"]
+    assert outcome["next"] == ["公共-主页边界"]
 
-    # The GuardedInput close must happen while the business result is still
-    # mutable; the outcome is sealed only after the home probe succeeds.
-    assert nodes["分解装备-之后-确认-探测"]["next"] == ["分解装备-关闭"]
+    # The reward evidence is detected first, then the reward popup and
+    # equipment page are closed, and only then is the deferred success
+    # outcome recorded.
+    assert nodes["分解装备-之后-确认-探测"]["next"] == ["分解装备-关闭-奖励"]
+    assert nodes["分解装备-之后-确认-探测"]["on_error"] == [
+        "分解装备-无可分解-已完成"
+    ]
+    reward_close = nodes["分解装备-关闭-奖励"]
+    assert reward_close["action"] == "Click"
+    assert reward_close["recognition"]["param"] == {
+        "all_of": ["分解装备-装备-分解-成功", "公共-已知-点击空白关闭"],
+        "box_index": 1,
+    }
+    assert reward_close["next"] == ["分解装备-关闭"]
     assert nodes["分解装备-关闭"]["next"] == ["分解装备-主页-之后-关闭"]
     assert nodes["分解装备-主页-之后-关闭"]["next"] == ["分解装备-分解-成功"]
     assert nodes["分解装备-关闭"]["on_error"] == ["分解装备-记录-失败"]
+    assert nodes["分解装备-关闭"]["custom_action_param"]["fixed_click_mode"] == (
+        "equipment_page_close"
+    )
     assert_reachable(nodes, "分解装备-分解-成功", "公共-通用停止")
 
 
@@ -85,17 +97,96 @@ def test_equipment_decompose_uses_the_requested_quality_and_level_filters() -> N
     }
     assert nodes["分解装备-装备-品质-筛选"]["expected"] == "品质"
     assert nodes["分解装备-装备-品质-对话框"]["expected"] == "品质"
-    assert nodes["分解装备-装备-品质-乙级或以下"]["expected"] == "乙级及以下"
+    assert nodes["分解装备-装备-品质-乙级或以下"]["expected"] == "乙品质及以下"
     assert nodes["分解装备-装备-等级-筛选"]["expected"] == "级"
     assert nodes["分解装备-装备-等级-对话框"]["expected"] == "级及以下"
     assert nodes["分解装备-装备-等级-选项-80-或-以下"]["expected"] == "80"
     assert nodes["分解装备-装备-批量-选择"]["expected"] == "批量选择"
     assert nodes["分解装备-装备-确认-分解"]["expected"] == "确认分解"
     assert nodes["分解装备-装备-确认-最终"]["expected"] == "确认"
-    assert nodes["分解装备-装备-分解-成功"]["expected"] == [
-        "分解成功",
-        "分解完成",
+    assert nodes["分解装备-装备-分解-成功"]["expected"] == "恭喜获得"
+
+    level_selection = nodes["分解装备-选择-等级"]
+    assert level_selection["recognition"]["param"]["box_index"] == 2
+    assert level_selection["custom_action_param"]["evidence"] == {
+        "page_index": 0,
+        "target_index": 2,
+        "page_name": "分解装备-装备-分解-页面",
+        "target_name": "分解装备-装备-等级-选项-80-或-以下",
+    }
+
+    assert nodes["分解装备-装备-批量-选择"]["roi"] == [620, 620, 240, 100]
+
+
+def test_equipment_second_confirmation_matches_the_live_reward_dialog() -> None:
+    nodes = load_task_nodes(EQUIPMENT)
+    expected = nodes["分解装备-装备-确认-对话框"]["expected"]
+
+    assert "分解后将获得" in expected
+
+
+def test_equipment_success_uses_only_the_reward_title_as_business_evidence() -> None:
+    node = load_task_nodes(EQUIPMENT)["分解装备-装备-分解-成功"]
+
+    # The live popup visibly says 恭喜获得.  The close hint is cleanup
+    # evidence, not a success signal.
+    assert node["expected"] == "恭喜获得"
+    assert "恭喜获得" in node["expected"]
+    assert "悉喜获得" not in node["expected"]
+    assert "点击空白处关闭" not in node["expected"]
+    assert load_task_nodes(EQUIPMENT)["分解装备-关闭-奖励"]["next"] == [
+        "分解装备-关闭"
     ]
+
+
+def test_equipment_without_eligible_items_is_already_complete_and_returns_home() -> None:
+    nodes = load_task_nodes(EQUIPMENT)
+
+    # After the first successful run the live page remained on the filtered
+    # equipment screen, with no second confirmation popup.  That is the
+    # bounded evidence for “nothing matching the requested filters remains”.
+    assert nodes["分解装备-确认-分解"]["on_error"] == ["分解装备-无可分解-探测"]
+    probe = nodes["分解装备-无可分解-探测"]
+    assert probe["recognition"] == {
+        "type": "And",
+        "param": {
+            "all_of": [
+                "分解装备-装备-分解-页面",
+                "分解装备-装备-批量-选择",
+            ],
+            "box_index": 1,
+        },
+    }
+    assert probe["next"] == ["分解装备-无可分解-已完成"]
+    assert probe["on_error"] == ["分解装备-记录-失败"]
+
+    completed = nodes["分解装备-无可分解-已完成"]
+    assert completed["custom_action_param"] == {
+        "task_id": EQUIPMENT.task_id,
+        "status": "already_complete",
+        "postcondition": "equipment.no_reward_popup",
+        "defer_home_boundary": True,
+    }
+    assert completed["next"] == ["分解装备-无可分解-关闭"]
+    close = nodes["分解装备-无可分解-关闭"]
+    assert close["action"] == "Click"
+    assert close["post_delay"] == 500
+    assert close["next"] == ["分解装备-无可分解-主页-探测"]
+    probe_after_close = nodes["分解装备-无可分解-主页-探测"]
+    assert probe_after_close["on_error"] == ["分解装备-无可分解-重启"]
+    restart = nodes["分解装备-无可分解-重启"]
+    assert restart["custom_action"] == "RestartGameSurface"
+    assert restart["custom_action_param"] == {
+        "package": "com.hanjiasongshu.dr22",
+        "activity": "com.hanjiasongshu.dr22/.MainActivity",
+        "force_stop": True,
+        "cooldown_ms": 2000,
+        "start_repeat": 1,
+    }
+    assert nodes["分解装备-无可分解-重启后-主页-探测"]["next"] == [
+        "公共-主页边界"
+    ]
+    assert_reachable(nodes, "分解装备-无可分解-已完成", "公共-通用停止")
 
 
 def test_equipment_entry_roi_excludes_the_annotation_book_icon() -> None:
@@ -132,6 +223,7 @@ def test_equipment_decompose_policy_is_bounded_and_has_no_resource_purchase() ->
     assert policy.risk_levels == frozenset({"consumptive", "stateful"})
     assert policy.max_steps == 32
     assert dict(policy.resource_caps) == {}
+    assert policy.cleanup_action_ids == frozenset({"close_equipment_page"})
     assert dict(policy.action_caps) == {
         "close_function_panel": 1,
         "open_resource_page": 1,

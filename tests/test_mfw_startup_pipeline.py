@@ -34,6 +34,7 @@ def test_game_start_keeps_the_five_start_reliability_contract() -> None:
     assert start["repeat_delay"] == 1000
     assert start["next"] == [
         "[JumpBack]启动-可选关闭公告页",
+        "[JumpBack]启动-数据校验失败-继续下载",
         "启动-游戏启动成功-左下12探测",
     ]
 
@@ -62,12 +63,13 @@ def test_startup_button_flow_has_no_restart_aliases() -> None:
         "post_delay": 1000,
     }
     assert setting_probe["next"] == [
-        "[JumpBack]启动-数据校验失败-继续下载",
         "[JumpBack]启动-可选关闭月签到奖励页",
         "[JumpBack]启动-游戏启动后-进入按钮",
         "启动-游戏就绪",
     ]
     data_check = startup["启动-数据校验失败-继续下载"]
+    assert data_check["expected"] == "继续下载"
+    assert data_check["roi"] == [630, 450, 330, 80]
     assert "next" not in data_check
     assert "on_error" not in data_check
     assert setting_probe["on_error"] == ["公共-游戏启动失败"]
@@ -79,6 +81,7 @@ def test_startup_button_flow_has_no_restart_aliases() -> None:
     assert "启动-欢迎页-进入游戏" not in startup
     assert _startup()["启动-游戏启动"]["next"] == [
         "[JumpBack]启动-可选关闭公告页",
+        "[JumpBack]启动-数据校验失败-继续下载",
         "启动-游戏启动成功-左下12探测",
     ]
     assert enter_button["target"] == [430, 600, 420, 100]

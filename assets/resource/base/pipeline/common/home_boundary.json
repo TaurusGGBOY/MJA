@@ -15,6 +15,15 @@
       "boundary": "home"
     },
     "next": ["公共-通用停止"],
+    "on_error": ["公共-主页边界-尝试返回"]
+  },
+  "公共-主页边界-尝试返回": {
+    "recognition": "DirectHit",
+    "timeout": 30000,
+    "max_hit": 1,
+    "action": "Custom",
+    "custom_action": "ReturnToWorldHome",
+    "next": ["公共-主页边界"],
     "on_error": ["公共-主页边界-失败"]
   },
   "公共-主页边界-失败": {
@@ -26,6 +35,7 @@
     "custom_action_param": {
       "postcondition": "home.boundary",
       "error_code": "HOME_BOUNDARY_COMPLETION_FAILED",
+      "stop_game_on_failure": true,
       "native_fail_after_record": true
     },
     "status": "failed",

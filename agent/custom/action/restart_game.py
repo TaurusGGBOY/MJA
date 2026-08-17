@@ -18,6 +18,10 @@ GAME_ACTIVITY = "com.hanjiasongshu.dr22/.MainActivity"
 DEFAULT_PROCESS_DETACH_COOLDOWN_MS = 2_000
 MIN_PROCESS_DETACH_COOLDOWN_MS = 1_000
 MAX_PROCESS_DETACH_COOLDOWN_MS = 5_000
+DEFAULT_FORCE_STOP = True
+DEFAULT_START_TIMEOUT_MS = 15_000
+MIN_START_TIMEOUT_MS = 1_000
+MAX_START_TIMEOUT_MS = 30_000
 DEFAULT_START_REPEAT = 1
 MIN_START_REPEAT = 1
 MAX_START_REPEAT = 5
@@ -83,17 +87,45 @@ def _start_repeat_delay_seconds(params: Mapping[str, Any]) -> float:
     return delay_ms / 1_000
 
 
+def _force_stop(params: Mapping[str, Any]) -> bool:
+    value = params.get("force_stop", DEFAULT_FORCE_STOP)
+    if not isinstance(value, bool):
+        raise ValueError("force_stop must be a boolean")
+    return value
+
+
+def _start_timeout_seconds(params: Mapping[str, Any]) -> float:
+    value = params.get("start_timeout_ms", DEFAULT_START_TIMEOUT_MS)
+    if isinstance(value, bool) or not isinstance(value, Integral):
+        raise ValueError("start_timeout_ms must be an integer")
+    timeout_ms = int(value)
+    if not MIN_START_TIMEOUT_MS <= timeout_ms <= MAX_START_TIMEOUT_MS:
+        raise ValueError(
+            f"start_timeout_ms must be between {MIN_START_TIMEOUT_MS} and "
+            f"{MAX_START_TIMEOUT_MS}"
+        )
+    return timeout_ms / 1_000
+
+
 @AgentServer.custom_action("RestartGameSurface")
 class RestartGameSurface(CustomAction):
-    """Force-stop and relaunch only the configured game package.
+    """Relaunch only the configured game package.
+
+    Startup invariant: Android/Unity may kill the newly started surface about
+    0.7 seconds after ``post_start_app`` returns.  Therefore startup recovery
+    must use five starts spaced one second apart.  This is not an optional
+    retry optimization: one start can report success while the game process
+    has already been killed, so reducing the count can recreate the false
+    startup-success failure.
 
     The action is intentionally narrow: it is used after the live
     ``蜃影武墟`` card-list surface has been recognized and has ignored both
     visual close controls and Android Back.  Maa's controller remains the
     only transport; this does not clear application data or shell out to ADB.
-    ``start_repeat`` can issue a bounded burst of package starts after the
-    single force-stop, matching the startup pipeline's repeated StartApp
-    behavior without repeating the stop operation.
+    ``force_stop`` is retained for non-startup recovery, but startup recovery
+    can use a soft relaunch.  On the macOS host GPU path, force-stopping Unity
+    while the emulator is tearing down its Vulkan surface can crash QEMU and
+    take ADB down with it.
     """
 
     def run(self, context: Any, argv: CustomAction.RunArg) -> bool:
@@ -103,22 +135,27 @@ class RestartGameSurface(CustomAction):
             activity = params.get("activity")
             if package != GAME_PACKAGE or activity != GAME_ACTIVITY:
                 return False
+            force_stop = _force_stop(params)
             cooldown_seconds = _process_detach_cooldown_seconds(params)
+            start_timeout_seconds = _start_timeout_seconds(params)
             start_repeat = _start_repeat(params)
             start_repeat_delay_seconds = _start_repeat_delay_seconds(params)
 
             controller = context.tasker.controller
             stop_app = getattr(controller, "post_stop_app", None)
             start_app = getattr(controller, "post_start_app", None)
-            if not callable(stop_app) or not callable(start_app):
+            if not callable(start_app) or (force_stop and not callable(stop_app)):
                 return False
 
-            _wait_job(stop_app(package))
-            sleep(cooldown_seconds)
+            if force_stop:
+                _wait_job(stop_app(package))
+                sleep(cooldown_seconds)
             for index in range(start_repeat):
                 if index:
                     sleep(start_repeat_delay_seconds)
-                _wait_job(start_app(activity))
+                _wait_job(
+                    start_app(activity), timeout_seconds=start_timeout_seconds
+                )
         except Exception:
             return False
         return True

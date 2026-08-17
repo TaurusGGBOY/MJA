@@ -26,6 +26,7 @@ from tools.mfw_pyqt6_patch import (
     apply_mfw_pyqt6_runtime_patch,
     verify_mfw_pyqt6_runtime_patch,
 )
+from tools.mfw_profile import ensure_pair_profiles
 from tools.mfw_release import (
     MAA_ASSET_PATTERN,
     MAA_REPO,
@@ -358,6 +359,26 @@ def _rewrite_android_controller_paths(output: Path, repo_root: Path) -> None:
             )
 
 
+def _disable_mfw_auto_update(output: Path) -> None:
+    """Disable the GUI updater in every assembled MJA candidate.
+
+    The bundled MFW GUI otherwise starts its updater before GAME_START and
+    shows a ``GitHub更新失败`` banner when no update source is configured.
+    Updating the game resource is a separate, explicit pipeline decision; it
+    must not run as a side effect of launching MJA.
+    """
+
+    path = Path(output) / "config/config.json"
+    if not path.is_file():
+        return
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    update = payload.setdefault("Update", {})
+    if not isinstance(update, dict):
+        raise ValueError("MFW config Update section must be an object")
+    update["auto_update"] = False
+    path.write_text(json.dumps(payload, ensure_ascii=False, indent=4) + "\n", encoding="utf-8")
+
+
 @dataclass(frozen=True)
 class BuildMetadata:
     mja_commit: str
@@ -668,7 +689,9 @@ def build_install(
     _mfw_layout(output)
     _copy_project_payload(repo_root, output)
     _rewrite_installed_interface(output)
+    _disable_mfw_auto_update(output)
     _rewrite_android_controller_paths(output, repo_root)
+    ensure_pair_profiles(output)
     apply_mfw_pyqt6_runtime_patch(output / "MFW")
     _activate_production_shared_runtime(repo_root, output)
     _remove_appledouble_files(output)
@@ -691,6 +714,13 @@ def _copy_base_runtime(base: Path, output: Path) -> None:
             or _is_project_file(relative)
             or _is_generated_runtime_cache(relative)
         ):
+            return
+        # Debug logs are mutable run evidence, not part of the executable
+        # candidate.  Copying them into every derived candidate duplicates
+        # gigabytes of prior MFW logs and can exhaust the shared volume
+        # before the next candidate is even assembled.  The acceptance run
+        # creates a fresh debug tree when it starts.
+        if relative.parts[:1] == ("debug",):
             return
         # A derived candidate must retain the base candidate's saved MFW
         # profile and its current profile id.  These files are the executable
@@ -724,7 +754,9 @@ def build_from_base(
         raise FileNotFoundError(f"required MFW native bundle is missing: {native_bundle}")
     _copy_project_payload(repo_root, output)
     _rewrite_installed_interface(output)
+    _disable_mfw_auto_update(output)
     _rewrite_android_controller_paths(output, repo_root)
+    ensure_pair_profiles(output)
     apply_mfw_pyqt6_runtime_patch(output / "MFW")
     _activate_production_shared_runtime(repo_root, output)
     _remove_appledouble_files(output)

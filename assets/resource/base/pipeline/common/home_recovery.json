@@ -1,4 +1,11 @@
 {
+  "公共-游戏世界-页面": {
+    "recognition": "TemplateMatch",
+    "template": "home/home_marker.png",
+    "roi": [1040, 0, 240, 110],
+    "threshold": 0.375,
+    "action": "DoNothing"
+  },
   "公共-游戏主页-页面": {
     "recognition": "OCR",
     "expected": "已击破",
@@ -37,7 +44,7 @@
     "upper": [255, 225, 180],
     "roi": [1170, 10, 60, 60],
     "connected": true,
-    "count": 80,
+    "count": 50,
     "order_by": "Area",
     "index": 0,
     "action": "DoNothing"

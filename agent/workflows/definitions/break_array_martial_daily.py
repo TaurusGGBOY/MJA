@@ -204,8 +204,8 @@ class BreakArrayMartialDailyDefinition:
     }
 
     terminal_postconditions = {
-        TaskStatus.COMPLETED: "break_array.three_challenges",
-        TaskStatus.ALREADY_COMPLETE: "break_array.daily_exhausted",
+        TaskStatus.COMPLETED: "break_array.remaining_zero_of_nine",
+        TaskStatus.ALREADY_COMPLETE: "break_array.remaining_zero_of_nine",
         TaskStatus.NOT_ELIGIBLE: "break_array.unavailable",
         TaskStatus.FAILED: "break_array.postcondition_missing",
     }

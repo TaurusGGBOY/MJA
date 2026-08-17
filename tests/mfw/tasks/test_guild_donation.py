@@ -446,6 +446,18 @@ def test_guild_donation_terminal_outcomes_cleanup_and_verify_home() -> None:
         "action": "DoNothing",
     }
 
+    donation_close = nodes["帮派捐献-帮派-捐献-关闭"]
+    assert donation_close == {
+        "recognition": "TemplateMatch",
+        "template": "home/modal_close.png",
+        "roi": [1160, 0, 100, 100],
+        # On the real donation page the close icon scores about 0.255. The
+        # page-color marker is already part of the parent And recognizer, so
+        # this lower threshold does not authorize a click on unrelated pages.
+        "threshold": 0.2,
+        "action": "DoNothing",
+    }
+
     guild_home_page = nodes["帮派捐献-帮派-捐献-帮派-主页-页面"]
     assert guild_home_page == {
         "recognition": "OCR",

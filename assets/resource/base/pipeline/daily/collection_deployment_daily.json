@@ -2,7 +2,12 @@
   "采集部署-任务入口": {
     "recognition": {
       "type": "And",
-      "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}
+      "param": {
+        "all_of": [
+          "公共-游戏主页-页面"
+        ],
+        "box_index": 0
+      }
     },
     "action": "Custom",
     "custom_action": "BeginTask",
@@ -16,7 +21,10 @@
       "采集部署-页面-探测",
       "采集部署-主页-探测"
     ],
-    "on_error": ["[JumpBack]启动-游戏启动", "采集部署-记录-失败"]
+    "on_error": [
+      "公共-主页边界-失败",
+      "采集部署-记录-失败"
+    ]
   },
   "采集部署-恢复继续-奖励-探测": {
     "recognition": {
@@ -30,24 +38,40 @@
       }
     },
     "action": "DoNothing",
-    "next": ["采集部署-收获-成功"],
-    "on_error": ["采集部署-记录-失败"]
+    "next": [
+      "采集部署-收获-成功"
+    ],
+    "on_error": [
+      "采集部署-记录-失败"
+    ]
   },
   "采集部署-页面-探测": {
     "recognition": "OCR",
     "expected": "采集部署",
-    "roi": [0, 0, 420, 110],
+    "roi": [
+      0,
+      0,
+      420,
+      110
+    ],
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["采集部署-领取"],
-    "on_error": ["采集部署-记录-失败"]
+    "next": [
+      "采集部署-领取"
+    ],
+    "on_error": [
+      "采集部署-记录-失败"
+    ]
   },
   "采集部署-领取": {
     "max_hit": 1,
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["采集部署-采集-页面", "采集部署-采集-收获-全部"],
+        "all_of": [
+          "采集部署-采集-页面",
+          "采集部署-采集-收获-全部"
+        ],
         "box_index": 1
       }
     },
@@ -64,8 +88,12 @@
         "target_name": "采集部署-采集-收获-全部"
       }
     },
-    "next": ["采集部署-收获-成功"],
-    "on_error": ["采集部署-记录-失败"],
+    "next": [
+      "采集部署-收获-成功"
+    ],
+    "on_error": [
+      "采集部署-记录-失败"
+    ],
     "retry_times": 0
   },
   "采集部署-收获-成功": {
@@ -78,8 +106,12 @@
       "postcondition": "collection.harvest_clicked",
       "defer_home_boundary": true
     },
-    "next": ["采集部署-关闭-奖励"],
-    "on_error": ["采集部署-记录-失败"]
+    "next": [
+      "采集部署-关闭-奖励"
+    ],
+    "on_error": [
+      "采集部署-关闭"
+    ]
   },
   "采集部署-关闭-奖励": {
     "max_hit": 1,
@@ -106,21 +138,31 @@
         "target_name": "采集部署-采集-弹窗-关闭"
       }
     },
-  "next": ["采集部署-奖励-画卷-探测"],
-    "on_error": ["采集部署-边界-失败"],
+    "next": [
+      "采集部署-奖励-画卷-探测"
+    ],
+    "on_error": [
+      "采集部署-关闭"
+    ],
     "retry_times": 0
   },
   "采集部署-奖励-画卷-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["采集部署-采集-画卷-页面"]
+        "all_of": [
+          "采集部署-采集-画卷-页面"
+        ]
       }
     },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["采集部署-关闭-画卷"],
-    "on_error": ["采集部署-边界-失败"]
+    "next": [
+      "采集部署-关闭-画卷"
+    ],
+    "on_error": [
+      "采集部署-边界-失败"
+    ]
   },
   "采集部署-记录-失败": {
     "recognition": "DirectHit",
@@ -131,11 +173,11 @@
       "status": "failed",
       "postcondition": "COLLECTION_POSTCONDITION_MISSING",
       "error_code": "COLLECTION_POSTCONDITION_MISSING",
-      "native_fail_after_record": true
+      "defer_home_boundary": true
     },
-    "Abort": true,
-    "next": ["公共-通用中止"]
-
+    "next": [
+      "公共-通用中止"
+    ]
   },
   "采集部署-主页-探测": {
     "recognition": {
@@ -150,15 +192,22 @@
     },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["采集部署-打开-画卷"],
-    "on_error": ["采集部署-记录-失败"]
+    "next": [
+      "采集部署-打开-画卷"
+    ],
+    "on_error": [
+      "采集部署-记录-失败"
+    ]
   },
   "采集部署-打开-画卷": {
     "max_hit": 1,
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["采集部署-采集-主页-页面", "采集部署-采集-画卷-滚动-入口"],
+        "all_of": [
+          "采集部署-采集-主页-页面",
+          "采集部署-采集-画卷-滚动-入口"
+        ],
         "box_index": 1
       }
     },
@@ -168,6 +217,7 @@
       "task_id": "COLLECTION_DEPLOYMENT_DAILY",
       "action_id": "open_painting_scroll",
       "kind": "click",
+      "fixed_click_mode": "painting_scroll_button",
       "evidence": {
         "page_index": 0,
         "target_index": 1,
@@ -175,28 +225,41 @@
         "target_name": "采集部署-采集-画卷-滚动-入口"
       }
     },
-    "next": ["采集部署-画卷-探测"],
-    "on_error": ["采集部署-记录-失败"],
+    "next": [
+      "采集部署-画卷-探测"
+    ],
+    "on_error": [
+      "采集部署-记录-失败"
+    ],
     "retry_times": 0
   },
   "采集部署-画卷-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["采集部署-采集-画卷-页面"]
+        "all_of": [
+          "采集部署-采集-画卷-页面"
+        ]
       }
     },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["采集部署-打开-偃武"],
-    "on_error": ["采集部署-记录-失败"]
+    "next": [
+      "采集部署-打开-偃武"
+    ],
+    "on_error": [
+      "采集部署-记录-失败"
+    ]
   },
   "采集部署-打开-偃武": {
     "max_hit": 1,
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["采集部署-采集-画卷-页面", "采集部署-采集-偃武-世界"],
+        "all_of": [
+          "采集部署-采集-画卷-页面",
+          "采集部署-采集-偃武-世界"
+        ],
         "box_index": 1
       }
     },
@@ -213,25 +276,41 @@
         "target_name": "采集部署-采集-偃武-世界"
       }
     },
-    "next": ["采集部署-偃武-探测"],
-    "on_error": ["采集部署-记录-失败"],
+    "next": [
+      "采集部署-偃武-探测"
+    ],
+    "on_error": [
+      "采集部署-记录-失败"
+    ],
     "retry_times": 0
   },
   "采集部署-偃武-探测": {
     "recognition": "OCR",
     "expected": "偃武世界",
-    "roi": [0, 100, 600, 620],
+    "roi": [
+      0,
+      100,
+      600,
+      620
+    ],
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["采集部署-打开-采集"],
-    "on_error": ["采集部署-记录-失败"]
+    "next": [
+      "采集部署-打开-采集"
+    ],
+    "on_error": [
+      "采集部署-记录-失败"
+    ]
   },
   "采集部署-打开-采集": {
     "max_hit": 1,
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["采集部署-采集-偃武-页面", "采集部署-采集-打开"],
+        "all_of": [
+          "采集部署-采集-偃武-页面",
+          "采集部署-采集-打开"
+        ],
         "box_index": 1
       }
     },
@@ -248,25 +327,41 @@
         "target_name": "采集部署-采集-打开"
       }
     },
-    "next": ["采集部署-之后-打开-页面-探测"],
-    "on_error": ["采集部署-记录-失败"],
+    "next": [
+      "采集部署-之后-打开-页面-探测"
+    ],
+    "on_error": [
+      "采集部署-记录-失败"
+    ],
     "retry_times": 0
   },
   "采集部署-之后-打开-页面-探测": {
     "recognition": "OCR",
     "expected": "采集部署",
-    "roi": [0, 0, 420, 110],
+    "roi": [
+      0,
+      0,
+      420,
+      110
+    ],
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["采集部署-领取"],
-    "on_error": ["采集部署-记录-失败"]
+    "next": [
+      "采集部署-领取"
+    ],
+    "on_error": [
+      "采集部署-记录-失败"
+    ]
   },
   "采集部署-关闭": {
     "max_hit": 1,
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["采集部署-采集-页面", "采集部署-采集-关闭"],
+        "all_of": [
+          "采集部署-采集-页面",
+          "采集部署-采集-关闭"
+        ],
         "box_index": 1
       }
     },
@@ -283,8 +378,12 @@
         "target_name": "采集部署-采集-关闭"
       }
     },
-    "next": ["采集部署-奖励-画卷-探测"],
-    "on_error": ["采集部署-边界-失败"],
+    "next": [
+      "采集部署-奖励-画卷-探测"
+    ],
+    "on_error": [
+      "采集部署-边界-失败"
+    ],
     "retry_times": 0
   },
   "采集部署-关闭-画卷": {
@@ -292,7 +391,10 @@
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["采集部署-采集-画卷-页面", "采集部署-采集-画卷-关闭"],
+        "all_of": [
+          "采集部署-采集-画卷-页面",
+          "采集部署-采集-画卷-关闭"
+        ],
         "box_index": 1
       }
     },
@@ -309,21 +411,31 @@
         "target_name": "采集部署-采集-画卷-关闭"
       }
     },
-    "next": ["采集部署-主页边界-探测"],
-    "on_error": ["采集部署-边界-失败"],
+    "next": [
+      "采集部署-主页边界-探测"
+    ],
+    "on_error": [
+      "采集部署-边界-失败"
+    ],
     "retry_times": 0
   },
   "采集部署-主页边界-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["采集部署-采集-主页-页面"]
+        "all_of": [
+          "采集部署-采集-主页-页面"
+        ]
       }
     },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["公共-主页边界"],
-    "on_error": ["采集部署-边界-失败"]
+    "next": [
+      "公共-主页边界"
+    ],
+    "on_error": [
+      "采集部署-边界-失败"
+    ]
   },
   "采集部署-边界-失败": {
     "recognition": "DirectHit",
@@ -334,82 +446,153 @@
       "status": "failed",
       "postcondition": "home",
       "error_code": "COLLECTION_HOME_BOUNDARY_MISSING",
-      "native_fail_after_record": true
+      "defer_home_boundary": true
     },
-    "Abort": true,
-    "next": ["公共-通用中止"]
-
+    "next": [
+      "公共-通用中止"
+    ]
   },
   "采集部署-采集-主页-页面": {
-    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "公共-游戏主页-页面"
+        ],
+        "box_index": 0
+      }
+    },
     "action": "DoNothing"
   },
   "采集部署-采集-画卷-滚动-入口": {
     "recognition": "OCR",
     "expected": "画卷",
-    "roi": [800, 40, 370, 50],
+    "roi": [
+      800,
+      40,
+      370,
+      50
+    ],
     "action": "DoNothing"
   },
   "采集部署-采集-画卷-页面": {
     "recognition": "OCR",
-    "expected": ["偃武世界", "云州", "蜃影武墟"],
-    "roi": [0, 0, 1280, 720],
+    "expected": [
+      "偃武世界",
+      "云州",
+      "蜃影武墟"
+    ],
+    "roi": [
+      0,
+      0,
+      1280,
+      720
+    ],
     "action": "DoNothing"
   },
   "采集部署-采集-偃武-世界": {
     "recognition": "OCR",
     "expected": "偃武世界",
-    "roi": [0, 100, 600, 620],
+    "roi": [
+      0,
+      100,
+      600,
+      620
+    ],
     "action": "DoNothing"
   },
   "采集部署-采集-偃武-页面": {
     "recognition": "OCR",
     "expected": "偃武世界",
-    "roi": [0, 100, 600, 620],
+    "roi": [
+      0,
+      100,
+      600,
+      620
+    ],
     "action": "DoNothing"
   },
   "采集部署-采集-打开": {
     "recognition": "OCR",
     "expected": "采集部署",
-    "roi": [0, 350, 500, 370],
+    "roi": [
+      0,
+      350,
+      500,
+      370
+    ],
     "action": "DoNothing"
   },
   "采集部署-采集-页面": {
     "recognition": "OCR",
     "expected": "采集部署",
-    "roi": [0, 0, 420, 110],
+    "roi": [
+      0,
+      0,
+      420,
+      110
+    ],
     "action": "DoNothing"
   },
   "采集部署-采集-收获-全部": {
     "recognition": "OCR",
     "expected": "^(?:一)?键收获$",
-    "roi": [880, 610, 320, 85],
+    "roi": [
+      880,
+      610,
+      320,
+      85
+    ],
     "action": "DoNothing"
   },
   "采集部署-采集-关闭": {
     "recognition": "TemplateMatch",
     "template": "daily/TRIAL_SWORD_DAILY/trial_close.png",
-    "roi": [1160, 0, 100, 100],
+    "roi": [
+      1160,
+      0,
+      100,
+      100
+    ],
     "threshold": 0.36,
     "action": "DoNothing"
   },
   "采集部署-采集-奖励-弹窗": {
     "recognition": "OCR",
-    "expected": ["恭喜获得", "获得", "据传太吾旧影"],
-    "roi": [0, 120, 1280, 520],
+    "expected": [
+      "恭喜获得",
+      "获得",
+      "据传太吾旧影"
+    ],
+    "roi": [
+      0,
+      120,
+      1280,
+      520
+    ],
     "action": "DoNothing"
   },
   "采集部署-采集-弹窗-关闭": {
     "recognition": "OCR",
     "expected": "点击空白处关闭",
-    "roi": [350, 580, 600, 140],
+    "roi": [
+      350,
+      580,
+      600,
+      140
+    ],
     "action": "DoNothing"
   },
   "采集部署-采集-画卷-关闭": {
     "recognition": "TemplateMatch",
     "template": "daily/HERO_DISPATCH_DAILY/painting_close.png",
-    "roi": [1175, 5, 75, 75],
-    "threshold": 0.70,
+    "roi": [
+      1175,
+      5,
+      75,
+      75
+    ],
+    "threshold": 0.7,
     "green_mask": true,
     "action": "DoNothing"
   }

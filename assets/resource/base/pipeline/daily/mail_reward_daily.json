@@ -2,7 +2,12 @@
   "邮件奖励-任务入口": {
     "recognition": {
       "type": "And",
-      "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}
+      "param": {
+        "all_of": [
+          "公共-游戏主页-页面"
+        ],
+        "box_index": 0
+      }
     },
     "action": "Custom",
     "custom_action": "BeginTask",
@@ -17,13 +22,19 @@
       "邮件奖励-打开-邮件",
       "邮件奖励-主页-探测"
     ],
-    "on_error": ["[JumpBack]启动-游戏启动", "邮件奖励-记录-失败"]
+    "on_error": [
+      "公共-主页边界-失败",
+      "邮件奖励-记录-失败"
+    ]
   },
   "邮件奖励-领取": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["邮件奖励-邮件-页面", "邮件奖励-邮件-领取-全部"],
+        "all_of": [
+          "邮件奖励-邮件-页面",
+          "邮件奖励-邮件-领取-全部"
+        ],
         "box_index": 1
       }
     },
@@ -41,21 +52,32 @@
         "target_name": "邮件奖励-邮件-领取-全部"
       }
     },
-    "next": ["邮件奖励-奖励-探测"],
-    "on_error": ["邮件奖励-空-探测"]
+    "next": [
+      "邮件奖励-奖励-探测"
+    ],
+    "on_error": [
+      "邮件奖励-空-探测"
+    ]
   },
   "邮件奖励-空-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["邮件奖励-邮件-页面", "邮件奖励-邮件-空"],
+        "all_of": [
+          "邮件奖励-邮件-页面",
+          "邮件奖励-邮件-空"
+        ],
         "box_index": 1
       }
     },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["邮件奖励-已完成"],
-    "on_error": ["邮件奖励-记录-失败"]
+    "next": [
+      "邮件奖励-已完成"
+    ],
+    "on_error": [
+      "邮件奖励-记录-失败"
+    ]
   },
   "邮件奖励-已完成": {
     "recognition": "DirectHit",
@@ -67,23 +89,42 @@
       "postcondition": "mail.empty",
       "defer_home_boundary": true
     },
-    "next": ["邮件奖励-关闭"],
-    "on_error": ["邮件奖励-记录-失败"]
+    "next": [
+      "邮件奖励-关闭"
+    ],
+    "on_error": [
+      "邮件奖励-记录-失败"
+    ]
   },
   "邮件奖励-奖励-探测": {
     "recognition": "OCR",
-    "expected": ["恭喜获得", "点击空白处关闭"],
-    "roi": [0, 120, 1280, 600],
+    "expected": [
+      "恭喜获得",
+      "点击空白处关闭"
+    ],
+    "roi": [
+      0,
+      120,
+      1280,
+      600
+    ],
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["邮件奖励-领取-成功"],
-    "on_error": ["邮件奖励-记录-失败"]
+    "next": [
+      "邮件奖励-领取-成功"
+    ],
+    "on_error": [
+      "邮件奖励-记录-失败"
+    ]
   },
   "邮件奖励-关闭-奖励": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["邮件奖励-邮件-奖励-弹窗", "邮件奖励-邮件-奖励-弹窗-关闭"],
+        "all_of": [
+          "邮件奖励-邮件-奖励-弹窗",
+          "邮件奖励-邮件-奖励-弹窗-关闭"
+        ],
         "box_index": 1
       }
     },
@@ -101,8 +142,12 @@
         "target_name": "邮件奖励-邮件-奖励-弹窗-关闭"
       }
     },
-    "next": ["邮件奖励-关闭"],
-    "on_error": ["邮件奖励-记录-失败"]
+    "next": [
+      "邮件奖励-关闭"
+    ],
+    "on_error": [
+      "邮件奖励-记录-失败"
+    ]
   },
   "邮件奖励-领取-成功": {
     "recognition": "DirectHit",
@@ -114,7 +159,9 @@
       "postcondition": "mail.reward_claimed",
       "defer_home_boundary": true
     },
-    "next": ["邮件奖励-关闭-奖励"]
+    "next": [
+      "邮件奖励-关闭-奖励"
+    ]
   },
   "邮件奖励-记录-失败": {
     "recognition": "DirectHit",
@@ -125,23 +172,39 @@
       "status": "failed",
       "postcondition": "MAIL_POSTCONDITION_MISSING",
       "error_code": "MAIL_POSTCONDITION_MISSING",
-      "native_fail_after_record": true
+      "defer_home_boundary": true
     },
-    "Abort": true,
-    "next": ["公共-通用中止"]
+    "next": [
+      "公共-通用中止"
+    ]
   },
   "邮件奖励-主页-探测": {
-    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "公共-游戏主页-页面"
+        ],
+        "box_index": 0
+      }
+    },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["邮件奖励-打开-面板"],
-    "on_error": ["[JumpBack]启动-游戏启动"]
+    "next": [
+      "邮件奖励-打开-面板"
+    ],
+    "on_error": [
+      "公共-主页边界-失败"
+    ]
   },
   "邮件奖励-打开-面板": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["公共-游戏主页-页面", "公共-游戏功能面板-入口"],
+        "all_of": [
+          "公共-游戏主页-页面",
+          "公共-游戏功能面板-入口"
+        ],
         "box_index": 1
       }
     },
@@ -159,14 +222,21 @@
         "target_name": "公共-游戏功能面板-入口"
       }
     },
-    "next": ["邮件奖励-打开-邮件"],
-    "on_error": ["邮件奖励-记录-失败"]
+    "next": [
+      "邮件奖励-打开-邮件"
+    ],
+    "on_error": [
+      "邮件奖励-记录-失败"
+    ]
   },
   "邮件奖励-打开-邮件": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["公共-游戏侧边面板-打开", "邮件奖励-面板-邮件-入口"],
+        "all_of": [
+          "公共-游戏侧边面板-打开",
+          "邮件奖励-面板-邮件-入口"
+        ],
         "box_index": 1
       }
     },
@@ -184,14 +254,21 @@
         "target_name": "邮件奖励-面板-邮件-入口"
       }
     },
-    "next": ["邮件奖励-邮件-页面"],
-    "on_error": ["邮件奖励-记录-失败"]
+    "next": [
+      "邮件奖励-邮件-页面"
+    ],
+    "on_error": [
+      "邮件奖励-记录-失败"
+    ]
   },
   "邮件奖励-关闭": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["邮件奖励-邮件-页面", "邮件奖励-邮件-关闭"],
+        "all_of": [
+          "邮件奖励-邮件-页面",
+          "邮件奖励-邮件-关闭"
+        ],
         "box_index": 1
       }
     },
@@ -209,14 +286,21 @@
         "target_name": "邮件奖励-邮件-关闭"
       }
     },
-    "next": ["邮件奖励-关闭-面板"],
-    "on_error": ["邮件奖励-记录-失败"]
+    "next": [
+      "邮件奖励-关闭-面板"
+    ],
+    "on_error": [
+      "邮件奖励-记录-失败"
+    ]
   },
   "邮件奖励-关闭-面板": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["公共-已知-面板-标记", "公共-已知-面板-关闭"],
+        "all_of": [
+          "公共-已知-面板-标记",
+          "公共-已知-面板-关闭"
+        ],
         "box_index": 1
       }
     },
@@ -235,21 +319,31 @@
         "target_name": "公共-已知-面板-关闭"
       }
     },
-    "next": ["邮件奖励-主页边界-探测"],
-    "on_error": ["邮件奖励-边界-失败"]
+    "next": [
+      "邮件奖励-主页边界-探测"
+    ],
+    "on_error": [
+      "邮件奖励-边界-失败"
+    ]
   },
   "邮件奖励-主页边界-探测": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["邮件奖励-主页-页面"],
+        "all_of": [
+          "邮件奖励-主页-页面"
+        ],
         "box_index": 0
       }
     },
     "timeout": 8000,
     "action": "DoNothing",
-    "next": ["公共-主页边界"],
-    "on_error": ["邮件奖励-边界-失败"]
+    "next": [
+      "公共-主页边界"
+    ],
+    "on_error": [
+      "邮件奖励-边界-失败"
+    ]
   },
   "邮件奖励-边界-失败": {
     "recognition": "DirectHit",
@@ -260,67 +354,141 @@
       "status": "failed",
       "postcondition": "home",
       "error_code": "MAIL_HOME_BOUNDARY_MISSING",
-      "native_fail_after_record": true
+      "defer_home_boundary": true
     },
-    "Abort": true,
-    "next": ["公共-通用中止"]
+    "next": [
+      "公共-通用中止"
+    ]
   },
   "邮件奖励-主页-页面": {
-    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "公共-游戏主页-页面"
+        ],
+        "box_index": 0
+      }
+    },
     "action": "DoNothing"
   },
   "邮件奖励-主页-面板-打开": {
-    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏功能面板-入口"], "box_index": 0}},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "公共-游戏功能面板-入口"
+        ],
+        "box_index": 0
+      }
+    },
     "action": "DoNothing"
   },
   "邮件奖励-面板-页面": {
-    "recognition": {"type": "And", "param": {"all_of": ["公共-游戏侧边面板-打开"], "box_index": 0}},
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "公共-游戏侧边面板-打开"
+        ],
+        "box_index": 0
+      }
+    },
     "action": "DoNothing"
   },
   "邮件奖励-面板-邮件-入口": {
     "recognition": "TemplateMatch",
     "template": "panel/mail_entry.png",
-    "roi": [1120, 115, 160, 210],
+    "roi": [
+      1120,
+      115,
+      160,
+      210
+    ],
     "threshold": 0.39,
     "action": "DoNothing"
   },
   "邮件奖励-邮件-页面": {
     "recognition": "OCR",
-    "expected": ["邮件数量", "邮件"],
-    "roi": [300, 90, 420, 100],
+    "expected": [
+      "邮件数量",
+      "邮件"
+    ],
+    "roi": [
+      300,
+      90,
+      420,
+      100
+    ],
     "timeout": 8000,
-    "next": ["邮件奖励-领取"],
-    "on_error": ["邮件奖励-空-探测"],
+    "next": [
+      "邮件奖励-领取"
+    ],
+    "on_error": [
+      "邮件奖励-空-探测"
+    ],
     "action": "DoNothing"
   },
   "邮件奖励-邮件-领取-全部": {
     "recognition": "OCR",
     "expected": "全部领取",
-    "roi": [205, 525, 150, 65],
+    "roi": [
+      205,
+      525,
+      150,
+      65
+    ],
     "action": "DoNothing"
   },
   "邮件奖励-邮件-空": {
     "recognition": "OCR",
-    "expected": ["删除已读", "除已读", "暂无可领取"],
-    "roi": [300, 520, 900, 180],
+    "expected": [
+      "删除已读",
+      "除已读",
+      "暂无可领取"
+    ],
+    "roi": [
+      300,
+      520,
+      900,
+      180
+    ],
     "action": "DoNothing"
   },
   "邮件奖励-邮件-奖励-弹窗": {
     "recognition": "OCR",
-    "expected": ["恭喜获得", "点击空白处关闭"],
-    "roi": [0, 120, 1280, 600],
+    "expected": [
+      "恭喜获得",
+      "点击空白处关闭"
+    ],
+    "roi": [
+      0,
+      120,
+      1280,
+      600
+    ],
     "action": "DoNothing"
   },
   "邮件奖励-邮件-奖励-弹窗-关闭": {
     "recognition": "OCR",
     "expected": "点击空白处关闭",
-    "roi": [300, 560, 700, 160],
+    "roi": [
+      300,
+      560,
+      700,
+      160
+    ],
     "action": "DoNothing"
   },
   "邮件奖励-邮件-关闭": {
     "recognition": "TemplateMatch",
     "template": "daily/MAIL_REWARD_DAILY/mail_close_live.png",
-    "roi": [1040, 115, 80, 80],
+    "roi": [
+      1040,
+      115,
+      80,
+      80
+    ],
     "threshold": 0.72,
     "action": "DoNothing"
   }

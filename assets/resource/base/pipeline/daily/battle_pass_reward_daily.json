@@ -2,7 +2,12 @@
   "战令奖励-任务入口": {
     "recognition": {
       "type": "And",
-      "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}
+      "param": {
+        "all_of": [
+          "公共-游戏主页-页面"
+        ],
+        "box_index": 0
+      }
     },
     "action": "Custom",
     "custom_action": "BeginTask",
@@ -15,7 +20,7 @@
       "战令奖励-主页-探测"
     ],
     "on_error": [
-      "[JumpBack]启动-游戏启动",
+      "公共-主页边界-失败",
       "战令奖励-记录-失败"
     ]
   },
@@ -644,9 +649,8 @@
       "status": "failed",
       "postcondition": "BATTLE_PASS_TASKS_PAGE_AMBIGUOUS",
       "error_code": "BATTLE_PASS_TASKS_PAGE_AMBIGUOUS",
-      "native_fail_after_record": true
+      "defer_home_boundary": true
     },
-    "Abort": true,
     "next": [
       "公共-通用中止"
     ]
@@ -660,9 +664,8 @@
       "status": "failed",
       "postcondition": "BATTLE_PASS_REWARDS_PAGE_AMBIGUOUS",
       "error_code": "BATTLE_PASS_REWARDS_PAGE_AMBIGUOUS",
-      "native_fail_after_record": true
+      "defer_home_boundary": true
     },
-    "Abort": true,
     "next": [
       "公共-通用中止"
     ]
@@ -676,9 +679,8 @@
       "status": "failed",
       "postcondition": "home",
       "error_code": "BATTLE_PASS_HOME_BOUNDARY_MISSING",
-      "native_fail_after_record": true
+      "defer_home_boundary": true
     },
-    "Abort": true,
     "next": [
       "公共-通用中止"
     ]
@@ -692,9 +694,8 @@
       "status": "failed",
       "postcondition": "BATTLE_PASS_POSTCONDITION_MISSING",
       "error_code": "BATTLE_PASS_POSTCONDITION_MISSING",
-      "native_fail_after_record": true
+      "defer_home_boundary": true
     },
-    "Abort": true,
     "next": [
       "公共-通用中止"
     ]

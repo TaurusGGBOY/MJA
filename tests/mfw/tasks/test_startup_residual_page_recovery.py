@@ -27,6 +27,7 @@ def test_startup_has_no_business_task_restart_handoff() -> None:
     assert pipeline["启动-游戏启动"]["repeat_delay"] == 1000
     assert pipeline["启动-游戏启动"]["next"] == [
         "[JumpBack]启动-可选关闭公告页",
+        "[JumpBack]启动-数据校验失败-继续下载",
         "启动-游戏启动成功-左下12探测",
     ]
     assert pipeline["启动-可选关闭公告页"] == {
@@ -46,11 +47,12 @@ def test_startup_has_no_business_task_restart_handoff() -> None:
         "公共-游戏启动失败"
     ]
     assert pipeline["启动-游戏启动成功-左下12探测"]["next"] == [
-        "[JumpBack]启动-数据校验失败-继续下载",
         "[JumpBack]启动-可选关闭月签到奖励页",
         "[JumpBack]启动-游戏启动后-进入按钮",
         "启动-游戏就绪",
     ]
+    assert pipeline["启动-数据校验失败-继续下载"]["expected"] == "继续下载"
+    assert pipeline["启动-数据校验失败-继续下载"]["roi"] == [630, 450, 330, 80]
     assert "next" not in pipeline["启动-数据校验失败-继续下载"]
     assert "on_error" not in pipeline["启动-数据校验失败-继续下载"]
     assert "next" not in pipeline["启动-可选关闭月签到奖励页"]

@@ -7,7 +7,9 @@ from pathlib import Path
 import pytest
 
 from tools.mfw_live_acceptance import (
+    TERMINAL_POSTCONDITIONS,
     SUCCESS_SIGNAL_POSTCONDITIONS,
+    _require_success_signal,
     begin_acceptance,
     finish_acceptance,
     finish_partial_acceptance,
@@ -153,7 +155,37 @@ def test_martial_acceptance_accepts_claimed_or_no_successful_breakthrough_signal
 
 def test_equipment_decompose_acceptance_requires_confirmed_decomposition() -> None:
     assert SUCCESS_SIGNAL_POSTCONDITIONS["EQUIPMENT_DECOMPOSE_DAILY"] == frozenset(
-        {"equipment.decomposition_confirmed"}
+        {
+            "equipment.decomposition_confirmed",
+            "equipment.no_reward_popup",
+        }
+    )
+
+
+@pytest.mark.parametrize(
+    ("task_id", "status", "postcondition"),
+    [
+        ("HERO_DISPATCH_DAILY", "success", "hero.claim_state_known"),
+        ("EQUIPMENT_DECOMPOSE_DAILY", "success", "equipment.no_reward_popup"),
+        (
+            "EQUIPMENT_DECOMPOSE_DAILY",
+            "already_complete",
+            "equipment.no_reward_popup",
+        ),
+    ],
+)
+def test_repair_task_branch_specific_postconditions_are_accepted(
+    task_id: str, status: str, postcondition: str
+) -> None:
+    assert _require_success_signal(
+        task_id,
+        {"status": status, "postcondition": postcondition},
+    ) == postcondition
+
+
+def test_equipment_no_reward_popup_is_a_terminal_postcondition() -> None:
+    assert TERMINAL_POSTCONDITIONS["EQUIPMENT_DECOMPOSE_DAILY"] == frozenset(
+        {"equipment.no_reward_popup"}
     )
 
 
@@ -413,6 +445,27 @@ def test_all_acceptance_accepts_mail_already_complete(candidate: Path) -> None:
     payload = load_json(summary)
     assert payload["tasks"]["MAIL_REWARD_DAILY"]["status"] == "already_complete"
     assert payload["tasks"]["MAIL_REWARD_DAILY"]["postcondition"] == "mail.empty"
+
+
+def test_all_acceptance_accepts_branch_specific_already_complete_signal(
+    candidate: Path,
+) -> None:
+    ticket = begin_acceptance(candidate, "integrator", None)
+    append_run(
+        candidate,
+        ("GAME_START", "MAIL_REWARD_DAILY", "SHOP_FREE_GIFT_DAILY"),
+        {
+            "MAIL_REWARD_DAILY": "already_complete",
+            "SHOP_FREE_GIFT_DAILY": "success",
+        },
+        postconditions={"MAIL_REWARD_DAILY": "mail.reward_claimed"},
+    )
+    summary = finish_acceptance(ticket)
+    payload = load_json(summary)
+    assert payload["tasks"]["MAIL_REWARD_DAILY"]["status"] == "already_complete"
+    assert payload["tasks"]["MAIL_REWARD_DAILY"]["postcondition"] == (
+        "mail.reward_claimed"
+    )
 
 
 @pytest.mark.parametrize("status", ["completed"])

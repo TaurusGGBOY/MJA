@@ -16,6 +16,7 @@
     "post_delay": 5000,
     "next": [
       "[JumpBack]启动-可选关闭公告页",
+      "[JumpBack]启动-数据校验失败-继续下载",
       "启动-游戏启动成功-左下12探测"
     ],
     "on_error": ["公共-游戏启动失败"]
@@ -28,7 +29,6 @@
     "max_hit": 1,
     "action": "DoNothing",
     "next": [
-      "[JumpBack]启动-数据校验失败-继续下载",
       "[JumpBack]启动-可选关闭月签到奖励页",
       "[JumpBack]启动-游戏启动后-进入按钮",
       "启动-游戏就绪"
@@ -47,8 +47,8 @@
   },
   "启动-数据校验失败-继续下载": {
     "recognition": "OCR",
-    "expected": "数据校验失败",
-    "roi": [250, 150, 800, 430],
+    "expected": "继续下载",
+    "roi": [630, 450, 330, 80],
     "timeout": 3000,
     "max_hit": 1,
     "action": "Click",

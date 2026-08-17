@@ -3,7 +3,7 @@
     {
       "name": "BREAK_ARRAY_MARTIAL_DAILY",
       "label": "破阵演武（每日三次）",
-      "default_check": false,
+      "default_check": true,
       "group": ["日常"],
       "entry": "破阵武学-任务入口"
     }

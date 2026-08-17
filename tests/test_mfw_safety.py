@@ -46,6 +46,7 @@ def test_legacy_policies_match_business_data_and_mfw_only_extensions_are_explici
     jianlin = TASK_POLICIES["JIANLIN_RESOURCE_CONDENSATE_STAMINA_DAILY"]
     assert "dismiss_guild_defeat_result" not in jianlin.action_caps
     assert jianlin.action_caps["start_jianlin_battle"] > 0
+    assert jianlin.action_caps["wait_jianlin_battle"] == 12
 
     affairs = TASK_POLICIES["GUILD_AFFAIRS_DAILY"]
     assert affairs.label == "帮会事务"
@@ -163,7 +164,7 @@ def test_dungeon_result_dismiss_is_visual_bound_and_preserves_postcondition():
         "page_name": "副本扫荡-副本-结果",
         "target_name": "副本扫荡-副本-结果-关闭",
     }
-    assert TASK_POLICIES["DUNGEON_SWEEP_DAILY"].action_caps["dismiss_sweep_result"] == 1
+    assert TASK_POLICIES["DUNGEON_SWEEP_DAILY"].action_caps["dismiss_sweep_result"] == 20
     assert nodes["MJA_DUNGEON_POST_PROBE"]["recognition"]["param"]["all_of"] == [
         "副本扫荡-副本-页面",
         "dungeon.ticket.depleted",
