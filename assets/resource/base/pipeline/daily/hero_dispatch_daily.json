@@ -122,10 +122,18 @@
     "timeout": 8000,
     "action": "DoNothing",
     "next": [
-      "英雄派遣-初始-就已完成"
+      "英雄派遣-初始-已完成决策"
     ],
     "on_error": [
       "英雄派遣-记录-失败"
+    ]
+  },
+  "英雄派遣-初始-已完成决策": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "next": [
+      "英雄派遣-初始-就已完成",
+      "英雄派遣-初始-决策中"
     ]
   },
   "英雄派遣-初始-就已完成": {
@@ -141,9 +149,6 @@
     "action": "DoNothing",
     "next": [
       "英雄派遣-已完成-全部"
-    ],
-    "on_error": [
-      "英雄派遣-初始-决策中"
     ]
   },
   "英雄派遣-非初始-已完成": {
@@ -157,7 +162,7 @@
       }
     },
     "action": "DoNothing",
-    "max_hit": 1,
+    "max_hit": 12,
     "retry_times": 0,
     "next": [
       "英雄派遣-成功-进度"
@@ -185,7 +190,7 @@
       }
     },
     "action": "Custom",
-    "max_hit": 1,
+    "max_hit": 12,
     "custom_action": "GuardedInput",
     "custom_action_param": {
       "task_id": "HERO_DISPATCH_DAILY",
@@ -214,7 +219,7 @@
       }
     },
     "action": "Custom",
-    "max_hit": 1,
+    "max_hit": 12,
     "custom_action": "GuardedInput",
     "custom_action_param": {
       "task_id": "HERO_DISPATCH_DAILY",
@@ -246,7 +251,7 @@
       }
     },
     "action": "Custom",
-    "max_hit": 1,
+    "max_hit": 12,
     "custom_action": "GuardedInput",
     "custom_action_param": {
       "task_id": "HERO_DISPATCH_DAILY",
@@ -277,6 +282,7 @@
     ],
     "timeout": 8000,
     "action": "DoNothing",
+    "max_hit": 12,
     "next": [
       "英雄派遣-关闭-奖励"
     ],
@@ -296,7 +302,7 @@
       }
     },
     "action": "Custom",
-    "max_hit": 1,
+    "max_hit": 12,
     "custom_action": "GuardedInput",
     "custom_action_param": {
       "task_id": "HERO_DISPATCH_DAILY",
@@ -325,7 +331,8 @@
       "status": "success",
       "postcondition": "hero.claim_state_known",
       "defer_home_boundary": true
-    }
+    },
+    "max_hit": 12
   },
   "英雄派遣-配置": {
     "recognition": {
@@ -339,7 +346,7 @@
       }
     },
     "action": "Custom",
-    "max_hit": 1,
+    "max_hit": 12,
     "custom_action": "GuardedInput",
     "custom_action_param": {
       "task_id": "HERO_DISPATCH_DAILY",
@@ -371,7 +378,7 @@
       }
     },
     "action": "Custom",
-    "max_hit": 1,
+    "max_hit": 12,
     "custom_action": "GuardedInput",
     "custom_action_param": {
       "task_id": "HERO_DISPATCH_DAILY",
@@ -397,7 +404,11 @@
       "status": "success",
       "postcondition": "hero.claim_state_known",
       "defer_home_boundary": true
-    }
+    },
+    "max_hit": 12,
+    "next": [
+      "英雄派遣-关闭-派遣"
+    ]
   },
   "英雄派遣-已完成-全部": {
     "recognition": "DirectHit",
@@ -409,6 +420,7 @@
       "postcondition": "hero.all_dispatched_waiting",
       "defer_home_boundary": true
     },
+    "max_hit": 12,
     "next": [
       "英雄派遣-关闭-派遣"
     ]
@@ -424,6 +436,7 @@
       "error_code": "HERO_POSTCONDITION_MISSING",
       "defer_home_boundary": true
     },
+    "max_hit": 12,
     "next": [
       "英雄派遣-关闭-派遣"
     ]
@@ -440,6 +453,7 @@
       }
     },
     "action": "Custom",
+    "max_hit": 12,
     "custom_action": "GuardedInput",
     "custom_action_param": {
       "task_id": "HERO_DISPATCH_DAILY",
@@ -452,7 +466,6 @@
         "target_name": "英雄派遣-英雄-派遣-关闭"
       }
     },
-    "max_hit": 1,
     "retry_times": 0,
     "next": [
       "英雄派遣-关闭-画卷"
@@ -474,6 +487,7 @@
       }
     },
     "action": "Custom",
+    "max_hit": 12,
     "custom_action": "GuardedInput",
     "custom_action_param": {
       "task_id": "HERO_DISPATCH_DAILY",
@@ -486,7 +500,6 @@
         "target_name": "英雄派遣-英雄-画卷-关闭"
       }
     },
-    "max_hit": 1,
     "retry_times": 0,
     "next": [
       "英雄派遣-主页边界-探测"
@@ -506,6 +519,7 @@
     },
     "timeout": 8000,
     "action": "DoNothing",
+    "max_hit": 12,
     "next": [
       "公共-主页边界"
     ],
@@ -606,16 +620,16 @@
     ],
     "action": "DoNothing"
   },
-  "英雄派遣-英雄-首个-任务-无耗时": {
-    "recognition": "OCR",
-    "expected": "耗时",
-    "inverse": true,
+  "英雄派遣-英雄-首个-任务-有时钟": {
+    "recognition": "TemplateMatch",
+    "template": "daily/HERO_DISPATCH_DAILY/dispatch_clock.png",
     "roi": [
-      20,
-      130,
-      300,
-      130
+      100,
+      170,
+      55,
+      45
     ],
+    "threshold": 0.75,
     "action": "DoNothing"
   },
   "英雄派遣-英雄-首个-任务-无完成派遣": {
@@ -688,8 +702,7 @@
       "param": {
         "all_of": [
           "英雄派遣-英雄-派遣-页面",
-          "英雄派遣-英雄-首个-任务-无耗时",
-          "英雄派遣-英雄-首个-任务-无完成派遣"
+          "英雄派遣-英雄-首个-任务-有时钟"
         ],
         "box_index": 1
       }
