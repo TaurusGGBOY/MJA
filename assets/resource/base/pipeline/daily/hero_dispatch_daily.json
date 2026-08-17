@@ -2,7 +2,12 @@
   "英雄派遣-任务入口": {
     "recognition": {
       "type": "And",
-      "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0}
+      "param": {
+        "all_of": [
+          "公共-游戏主页-页面"
+        ],
+        "box_index": 0
+      }
     },
     "action": "Custom",
     "custom_action": "BeginTask",
@@ -12,21 +17,6 @@
     "timeout": 8000,
     "next": [
       "英雄派遣-主页-探测"
-    ],
-    "on_error": [
-      "[JumpBack]启动-游戏启动",
-      "英雄派遣-游戏启动恢复",
-      "英雄派遣-记录-失败"
-    ]
-  },
-  "英雄派遣-游戏启动恢复": {
-    "max_hit": 1,
-    "recognition": "DirectHit",
-    "timeout": 30000,
-    "action": "DoNothing",
-    "next": [
-      "英雄派遣-主页-探测",
-      "[JumpBack]启动-游戏启动"
     ],
     "on_error": [
       "英雄派遣-记录-失败"
@@ -44,44 +34,9 @@
     "timeout": 8000,
     "action": "DoNothing",
     "next": [
-      "英雄派遣-打开-画卷",
       "英雄派遣-打开-画卷-世界"
     ],
     "on_error": [
-      "英雄派遣-派遣-页面-探测"
-    ]
-  },
-  "英雄派遣-打开-画卷": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": [
-          "英雄派遣-英雄-主页-页面",
-          "英雄派遣-画卷-滚动-入口"
-        ],
-        "box_index": 1
-      }
-    },
-    "action": "Custom",
-    "custom_action": "GuardedInput",
-    "custom_action_param": {
-      "task_id": "HERO_DISPATCH_DAILY",
-      "action_id": "open_painting_scroll",
-      "kind": "click",
-      "evidence": {
-        "page_index": 0,
-        "target_index": 1,
-        "page_name": "英雄派遣-英雄-主页-页面",
-        "target_name": "英雄派遣-画卷-滚动-入口"
-      }
-    },
-    "max_hit": 1,
-    "retry_times": 0,
-    "next": [
-      "英雄派遣-打开-派遣"
-    ],
-    "on_error": [
-      "英雄派遣-打开-画卷-世界",
       "英雄派遣-记录-失败"
     ]
   },
@@ -145,8 +100,8 @@
     "timeout": 8000,
     "max_hit": 1,
     "retry_times": 0,
-  "next": [
-    "英雄派遣-派遣-页面-探测"
+    "next": [
+      "英雄派遣-派遣-页面-探测"
     ],
     "on_error": [
       "英雄派遣-记录-失败"
@@ -155,7 +110,7 @@
   "英雄派遣-派遣-页面-探测": {
     "recognition": "OCR",
     "expected": [
-      "^(?:侠客派遣|俠客派遣)$",
+      "(?:侠客派遣|俠客派遣)",
       "派遣等级"
     ],
     "roi": [
@@ -167,18 +122,31 @@
     "timeout": 8000,
     "action": "DoNothing",
     "next": [
-      "英雄派遣-初始-等待中-门禁",
-      "英雄派遣-初始-全部",
-      "英雄派遣-初始-进度",
-      "英雄派遣-初始-无-任务",
-      "英雄派遣-初始-领取",
-      "英雄派遣-初始-选择"
+      "英雄派遣-初始-就已完成"
     ],
     "on_error": [
-      "英雄派遣-打开-派遣"
+      "英雄派遣-记录-失败"
     ]
   },
-  "英雄派遣-初始-等待中-门禁": {
+  "英雄派遣-初始-就已完成": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "英雄派遣-英雄-全部-已派遣-等待中"
+        ],
+        "box_index": 0
+      }
+    },
+    "action": "DoNothing",
+    "next": [
+      "英雄派遣-已完成-全部"
+    ],
+    "on_error": [
+      "英雄派遣-初始-决策中"
+    ]
+  },
+  "英雄派遣-非初始-已完成": {
     "recognition": {
       "type": "And",
       "param": {
@@ -192,67 +160,17 @@
     "max_hit": 1,
     "retry_times": 0,
     "next": [
-      "英雄派遣-已完成-等待中"
-    ],
-    "on_error": [
-      "英雄派遣-初始-全部"
+      "英雄派遣-成功-进度"
     ]
   },
-  "英雄派遣-初始-全部": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": [
-          "英雄派遣-英雄-派遣-页面",
-          "英雄派遣-英雄-全部-已完成"
-        ],
-        "box_index": 1
-      }
-    },
+  "英雄派遣-初始-决策中": {
+    "recognition": "DirectHit",
     "action": "DoNothing",
+    "max_hit": 12,
     "next": [
-      "英雄派遣-已完成-全部"
-    ],
-    "on_error": [
-      "英雄派遣-初始-进度"
-    ]
-  },
-  "英雄派遣-初始-进度": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": [
-          "英雄派遣-英雄-派遣-页面",
-          "英雄派遣-英雄-首个-任务-中-进度"
-        ],
-        "box_index": 1
-      }
-    },
-    "action": "DoNothing",
-    "next": [
-      "英雄派遣-已完成-进度"
-    ],
-    "on_error": [
-      "英雄派遣-初始-无-任务"
-    ]
-  },
-  "英雄派遣-初始-无-任务": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": [
-          "英雄派遣-英雄-派遣-页面",
-          "英雄派遣-英雄-无-派遣-任务"
-        ],
-        "box_index": 1
-      }
-    },
-    "action": "DoNothing",
-    "next": [
-      "英雄派遣-成功-无-任务"
-    ],
-    "on_error": [
-      "英雄派遣-初始-领取"
+      "[JumpBack]英雄派遣-初始-领取",
+      "[JumpBack]英雄派遣-初始-选择",
+      "英雄派遣-非初始-已完成"
     ]
   },
   "英雄派遣-初始-领取": {
@@ -282,9 +200,6 @@
     },
     "next": [
       "英雄派遣-初始-领取-动作"
-    ],
-    "on_error": [
-      "英雄派遣-初始-选择"
     ]
   },
   "英雄派遣-初始-领取-动作": {
@@ -410,10 +325,7 @@
       "status": "success",
       "postcondition": "hero.claim_state_known",
       "defer_home_boundary": true
-    },
-    "next": [
-      "英雄派遣-关闭-派遣"
-    ]
+    }
   },
   "英雄派遣-配置": {
     "recognition": {
@@ -472,9 +384,6 @@
         "target_name": "英雄派遣-英雄-派遣-按钮"
       }
     },
-    "next": [
-      "英雄派遣-成功-进度"
-    ],
     "on_error": [
       "英雄派遣-记录-失败"
     ]
@@ -486,56 +395,11 @@
     "custom_action_param": {
       "task_id": "HERO_DISPATCH_DAILY",
       "status": "success",
-      "postcondition": "hero.first_task_in_progress",
+      "postcondition": "hero.claim_state_known",
       "defer_home_boundary": true
-    },
-    "next": [
-      "英雄派遣-关闭-派遣"
-    ]
-  },
-  "英雄派遣-成功-无-任务": {
-    "recognition": "DirectHit",
-    "action": "Custom",
-    "custom_action": "RecordTaskOutcome",
-    "custom_action_param": {
-      "task_id": "HERO_DISPATCH_DAILY",
-      "status": "success",
-      "postcondition": "hero.no_dispatch_tasks",
-      "defer_home_boundary": true
-    },
-    "next": [
-      "英雄派遣-关闭-派遣"
-    ]
+    }
   },
   "英雄派遣-已完成-全部": {
-    "recognition": "DirectHit",
-    "action": "Custom",
-    "custom_action": "RecordTaskOutcome",
-    "custom_action_param": {
-      "task_id": "HERO_DISPATCH_DAILY",
-      "status": "already_complete",
-      "postcondition": "hero.all_completed",
-      "defer_home_boundary": true
-    },
-    "next": [
-      "英雄派遣-关闭-派遣"
-    ]
-  },
-  "英雄派遣-已完成-进度": {
-    "recognition": "DirectHit",
-    "action": "Custom",
-    "custom_action": "RecordTaskOutcome",
-    "custom_action_param": {
-      "task_id": "HERO_DISPATCH_DAILY",
-      "status": "already_complete",
-      "postcondition": "hero.first_task_in_progress",
-      "defer_home_boundary": true
-    },
-    "next": [
-      "英雄派遣-关闭-派遣"
-    ]
-  },
-  "英雄派遣-已完成-等待中": {
     "recognition": "DirectHit",
     "action": "Custom",
     "custom_action": "RecordTaskOutcome",
@@ -545,8 +409,6 @@
       "postcondition": "hero.all_dispatched_waiting",
       "defer_home_boundary": true
     },
-    "max_hit": 1,
-    "retry_times": 0,
     "next": [
       "英雄派遣-关闭-派遣"
     ]
@@ -560,11 +422,10 @@
       "status": "failed",
       "postcondition": "HERO_POSTCONDITION_MISSING",
       "error_code": "HERO_POSTCONDITION_MISSING",
-      "native_fail_after_record": true
+      "defer_home_boundary": true
     },
-    "Abort": true,
     "next": [
-      "公共-通用中止"
+      "英雄派遣-关闭-派遣"
     ]
   },
   "英雄派遣-关闭-派遣": {
@@ -649,23 +510,7 @@
       "公共-主页边界"
     ],
     "on_error": [
-      "英雄派遣-边界-失败"
-    ]
-  },
-  "英雄派遣-边界-失败": {
-    "recognition": "DirectHit",
-    "action": "Custom",
-    "custom_action": "RecordTaskOutcome",
-    "custom_action_param": {
-      "task_id": "HERO_DISPATCH_DAILY",
-      "status": "failed",
-      "postcondition": "home",
-      "error_code": "HERO_HOME_BOUNDARY_MISSING",
-      "native_fail_after_record": true
-    },
-    "Abort": true,
-    "next": [
-      "公共-通用中止"
+      "公共-主页边界-失败"
     ]
   },
   "英雄派遣-英雄-主页-页面": {
@@ -679,20 +524,9 @@
     },
     "action": "DoNothing"
   },
-  "英雄派遣-画卷-滚动-入口": {
-    "recognition": "OCR",
-    "expected": "^画卷$",
-    "roi": [
-      70,
-      10,
-      95,
-      60
-    ],
-    "action": "DoNothing"
-  },
   "英雄派遣-画卷-滚动-入口-世界": {
     "recognition": "OCR",
-    "expected": "^画卷$",
+    "expected": "画卷",
     "roi": [
       1080,
       0,
@@ -716,7 +550,7 @@
   },
   "英雄派遣-画卷-页面-标题": {
     "recognition": "OCR",
-    "expected": "^画卷$",
+    "expected": "画卷",
     "roi": [
       70,
       10,
@@ -727,7 +561,7 @@
   },
   "英雄派遣-画卷-页面-偃武-世界": {
     "recognition": "OCR",
-    "expected": "^偃武世界$",
+    "expected": "偃武世界",
     "roi": [
       110,
       120,
@@ -738,7 +572,7 @@
   },
   "英雄派遣-英雄-派遣-入口": {
     "recognition": "OCR",
-    "expected": "^(?:侠客派遣|俠客派遣)$",
+    "expected": "(?:侠客派遣|俠客派遣)",
     "roi": [
       985,
       625,
@@ -750,7 +584,7 @@
   "英雄派遣-英雄-派遣-页面": {
     "recognition": "OCR",
     "expected": [
-      "^(?:侠客派遣|俠客派遣)$",
+      "(?:侠客派遣|俠客派遣)",
       "派遣等级"
     ],
     "roi": [
@@ -763,11 +597,31 @@
   },
   "英雄派遣-英雄-首个-任务-可领取": {
     "recognition": "OCR",
-    "expected": [
-      "完成派遣",
-      "可领取",
-      "领取"
+    "expected": "完成派遣",
+    "roi": [
+      20,
+      130,
+      300,
+      130
     ],
+    "action": "DoNothing"
+  },
+  "英雄派遣-英雄-首个-任务-无耗时": {
+    "recognition": "OCR",
+    "expected": "耗时",
+    "inverse": true,
+    "roi": [
+      20,
+      130,
+      300,
+      130
+    ],
+    "action": "DoNothing"
+  },
+  "英雄派遣-英雄-首个-任务-无完成派遣": {
+    "recognition": "OCR",
+    "expected": "完成派遣",
+    "inverse": true,
     "roi": [
       20,
       130,
@@ -796,7 +650,7 @@
       "正在派遣中",
       "派遣中",
       "剩余\\s*\\d{1,2}:\\d{2}:\\d{2}",
-      "^\\d{1,2}:\\d{2}:\\d{2}$"
+      "\\d{1,2}:\\d{2}:\\d{2}"
     ],
     "roi": [
       20,
@@ -806,20 +660,9 @@
     ],
     "action": "DoNothing"
   },
-  "英雄派遣-英雄-全部-派遣-槽位-已分配": {
-    "recognition": "OCR",
-    "expected": "^任务\\s*[:：]?\\s*9\\s*/\\s*9$",
-  "roi": [
-    20,
-    150,
-    190,
-    70
-    ],
-    "action": "DoNothing"
-  },
   "英雄派遣-英雄-零-派遣-任务": {
     "recognition": "OCR",
-    "expected": "^任务\\s*[:：]?\\s*0\\s*/\\s*9$",
+    "expected": "任务\\s*[:：]?\\s*0\\s*/\\s*12",
     "roi": [
       20,
       80,
@@ -830,12 +673,12 @@
   },
   "英雄派遣-英雄-零-已完成-派遣任务": {
     "recognition": "OCR",
-    "expected": "^已完成\\s*[:：]?\\s*0$",
-  "roi": [
-    190,
-    150,
-    180,
-    70
+    "expected": "已完成\\s*[:：]?\\s*0",
+    "roi": [
+      190,
+      150,
+      180,
+      70
     ],
     "action": "DoNothing"
   },
@@ -845,8 +688,8 @@
       "param": {
         "all_of": [
           "英雄派遣-英雄-派遣-页面",
-          "英雄派遣-英雄-全部-派遣-槽位-已分配",
-          "英雄派遣-英雄-零-已完成-派遣任务"
+          "英雄派遣-英雄-首个-任务-无耗时",
+          "英雄派遣-英雄-首个-任务-无完成派遣"
         ],
         "box_index": 1
       }
@@ -856,8 +699,8 @@
   "英雄派遣-英雄-全部-已完成": {
     "recognition": "OCR",
     "expected": [
-      "任务\\s*[:：]?\\s*9\\s*/\\s*9",
-      "已完成\\s*[:：]?\\s*9"
+      "任务\\s*[:：]?\\s*12\\s*/\\s*12",
+      "已完成\\s*[:：]?\\s*12"
     ],
     "roi": [
       0,
@@ -957,7 +800,7 @@
       75,
       75
     ],
-    "threshold": 0.70,
+    "threshold": 0.7,
     "green_mask": true,
     "action": "DoNothing"
   },
@@ -970,7 +813,7 @@
       75,
       75
     ],
-    "threshold": 0.70,
+    "threshold": 0.7,
     "green_mask": true,
     "action": "DoNothing"
   }
