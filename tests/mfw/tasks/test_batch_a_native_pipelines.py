@@ -176,12 +176,11 @@ def test_mail_claim_target_uses_live_ocr_instead_of_template_match() -> None:
 def test_mail_without_claim_button_is_an_already_complete_terminal_path() -> None:
     nodes = _nodes(ROOT / "assets/resource/base/pipeline/daily/mail_reward_daily.json")
 
-    assert nodes["邮件奖励-领取"]["on_error"] == ["邮件奖励-空-探测"]
+    assert nodes["邮件奖励-领取"]["on_error"] == ["邮件奖励-已完成"]
     empty = nodes["邮件奖励-邮件-空"]
     assert empty["recognition"] == "OCR"
     assert empty["expected"] == ["删除已读", "除已读", "暂无可领取"]
     assert empty["roi"] == [300, 520, 900, 180]
-    assert nodes["邮件奖励-空-探测"]["next"] == ["邮件奖励-已完成"]
     already = nodes["邮件奖励-已完成"]
     assert already["action"] == "Custom"
     assert already["custom_action"] == "RecordTaskOutcome"

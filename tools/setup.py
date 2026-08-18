@@ -732,6 +732,9 @@ def _assemble_install_in_place(
     resource = project_root / "assets/resource"
     if resource.is_dir():
         _replace_project_tree(resource, install_root / "resource")
+    tasks = project_root / "assets/tasks"
+    if tasks.is_dir():
+        _replace_project_tree(tasks, install_root / "tasks")
     android_resource = project_root / "assets/resource_android"
     if android_resource.is_dir():
         _replace_project_tree(android_resource, install_root / "resource_android")

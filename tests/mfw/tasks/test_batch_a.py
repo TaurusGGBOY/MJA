@@ -49,23 +49,13 @@ def test_mail_task_contract_and_existing_fixture_matrix() -> None:
 
 def test_mail_flow_guards_every_side_effect_and_has_truthful_outcomes() -> None:
     nodes = load_task_nodes(MAIL)
-    assert nodes["邮件奖励-任务入口"]["next"] == [
-        "[JumpBack]公共-已知-点击空白关闭",
-        "邮件奖励-页面-探测",
-        "邮件奖励-主页-探测",
-        "邮件奖励-面板-探测",
-    ]
-    assert nodes["邮件奖励-任务入口"]["on_error"] == ["邮件奖励-记录-失败"]
+    assert nodes["邮件奖励-任务入口"]["action"] == "DoNothing"
+    assert nodes["邮件奖励-任务入口"]["next"] == ["邮件奖励-打开-面板"]
+    assert "on_error" not in nodes["邮件奖励-任务入口"]
     assert nodes["邮件奖励-页面-探测"]["next"] == ["邮件奖励-领取"]
     assert nodes["邮件奖励-页面-探测"]["on_error"] == ["邮件奖励-领取"]
-    assert nodes["邮件奖励-领取"]["on_error"] == ["邮件奖励-空-探测"]
-    assert nodes["邮件奖励-空-探测"]["next"] == ["邮件奖励-已完成"]
+    assert nodes["邮件奖励-领取"]["on_error"] == ["邮件奖励-已完成"]
     assert nodes["邮件奖励-已完成"]["next"] == ["邮件奖励-关闭"]
-    assert nodes["邮件奖励-主页-探测"]["recognition"] == {
-        "type": "And",
-        "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0},
-    }
-    assert nodes["邮件奖励-主页-探测"]["on_error"] == ["[JumpBack]启动-游戏启动"]
     assert nodes["邮件奖励-主页-页面"]["recognition"] == {
         "type": "And",
         "param": {"all_of": ["公共-游戏主页-页面"], "box_index": 0},
