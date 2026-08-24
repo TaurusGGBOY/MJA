@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "upstream_repository": "https://github.com/MaaXYZ/MaaFramework",
+  "upstream_tag": "v5.12.2",
+  "target": "macos-arm64",
+  "base_library_sha256": "f9f341ca13db62ef6f8bd642862510d191efbfc55de896fdec523b5b507ffc9a",
+  "patch_sha256": "1ac43a3994b5285ab32cdfe873fe5d7ad8e690d17536102803a7229b772e0fc9",
+  "patched_library_sha256": "37a2fee6c7397d2d8207f8cbcfac16b42434156a5e83a4f97818c46e518a8c6c",
+  "patched_library_size": 279264
+}

@@ -1,0 +1,90 @@
+diff --git a/source/MaaMacOSControlUnit/Screencap/ScreenCaptureKitScreencap.h b/source/MaaMacOSControlUnit/Screencap/ScreenCaptureKitScreencap.h
+--- a/source/MaaMacOSControlUnit/Screencap/ScreenCaptureKitScreencap.h
++++ b/source/MaaMacOSControlUnit/Screencap/ScreenCaptureKitScreencap.h
+@@ -32,6 +32,7 @@
+         double y = 0.0;
+         double width = 0.0;
+         double height = 0.0;
++        bool has_onscreen_state = false;
+     };
+ 
+     std::optional<LogicalWindowBounds> validate_window(uint32_t wid);
+diff --git a/source/MaaMacOSControlUnit/Screencap/ScreenCaptureKitScreencap.mm b/source/MaaMacOSControlUnit/Screencap/ScreenCaptureKitScreencap.mm
+--- a/source/MaaMacOSControlUnit/Screencap/ScreenCaptureKitScreencap.mm
++++ b/source/MaaMacOSControlUnit/Screencap/ScreenCaptureKitScreencap.mm
+@@ -170,7 +170,7 @@
+ std::optional<ScreenCaptureKitScreencap::LogicalWindowBounds> ScreenCaptureKitScreencap::validate_window(uint32_t wid)
+ {
+     ScopedResource<CFArrayRef, release_window_list> window_list(
+-        CGWindowListCopyWindowInfo(kCGWindowListOptionOnScreenOnly, kCGNullWindowID));
++        CGWindowListCopyWindowInfo(kCGWindowListOptionAll, kCGNullWindowID));
+     if (!window_list) {
+         LogError << "MJA window metadata enumeration failed for window" << wid;
+         return std::nullopt;
+@@ -206,25 +206,32 @@
+     std::int64_t target_owner_pid = -1;
+     double target_alpha = 0.0;
+     bool target_is_onscreen = false;
++    const bool target_has_onscreen_state = read_bool(target, kCGWindowIsOnscreen, target_is_onscreen);
+     CGRect bounds = CGRectNull;
+     if (!read_number(target, kCGWindowLayer, kCFNumberSInt64Type, &target_layer)
+         || !read_number(target, kCGWindowOwnerPID, kCFNumberSInt64Type, &target_owner_pid)
+         || !read_number(target, kCGWindowAlpha, kCFNumberDoubleType, &target_alpha)
+-        || !read_bool(target, kCGWindowIsOnscreen, target_is_onscreen) || !read_bounds(target, bounds)) {
++        || !read_bounds(target, bounds)) {
+         LogError << "MJA target window metadata is incomplete:" << wid;
+         return std::nullopt;
+     }
+ 
+-    if (target_layer != 0 || target_owner_pid <= 0 || !target_is_onscreen || !std::isfinite(target_alpha)
++    if (target_layer != 0 || target_owner_pid <= 0 || (target_has_onscreen_state && !target_is_onscreen)
++        || !std::isfinite(target_alpha)
+         || target_alpha <= 0.0 || !has_finite_geometry(bounds) || bounds.size.width <= 0.0
+         || bounds.size.height <= 0.0 || bounds.size.width <= bounds.size.height
+         || bounds.size.width < kMinimumWindowWidth || bounds.size.width > kMaximumWindowWidth
+         || bounds.size.height < kMinimumWindowHeight || bounds.size.height > kMaximumWindowHeight) {
+-        LogError << "MJA target window failed layer, alpha, onscreen, or logical-bounds validation:" << wid;
++        LogError << "MJA target window failed layer, alpha, visibility, or logical-bounds validation:" << wid;
+         return std::nullopt;
+     }
+ 
+-    for (CFIndex front_index = 0; front_index < target_index; ++front_index) {
++    // A full-screen window in another Space has no kCGWindowIsOnscreen value.
++    // In that case current-Space windows are not valid occlusion evidence.
++    const bool target_is_full_screen = bounds.origin.x <= 0.0 && bounds.origin.y <= 0.0
++                                       && bounds.size.width >= 1400.0 && bounds.size.height >= 1000.0;
++    if (target_has_onscreen_state && !target_is_full_screen) {
++        for (CFIndex front_index = 0; front_index < target_index; ++front_index) {
+         CFTypeRef item = CFArrayGetValueAtIndex(window_list.get(), front_index);
+         if (!item || CFGetTypeID(item) != CFDictionaryGetTypeID()) {
+             LogError << "MJA front-window metadata is malformed";
+@@ -256,6 +262,7 @@
+                 return std::nullopt;
+             }
+         }
++    }
+     }
+ 
+     const LogicalWindowBounds logical_bounds {
+@@ -263,6 +270,7 @@
+         bounds.origin.y,
+         bounds.size.width,
+         bounds.size.height,
++        target_has_onscreen_state,
+     };
+     if (stable_window_bounds_) {
+         const bool same_bounds = stable_window_bounds_->x == logical_bounds.x
+@@ -365,6 +373,10 @@
+     if (!logical_bounds) {
+         return std::nullopt;
+     }
++    if (!logical_bounds->has_onscreen_state) {
++        LogError << "MJA CoreGraphicsRegion cannot capture a window in another Space";
++        return std::nullopt;
++    }
+ 
+     const CGRect bounds = CGRectMake(
+         logical_bounds->x,
+         logical_bounds->y,
+         logical_bounds->width,
+         logical_bounds->height);

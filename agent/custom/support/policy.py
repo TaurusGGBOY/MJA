@@ -1,0 +1,560 @@
+"""The immutable MFW safety policy catalog.
+
+This is a business-data migration of ``agent.workflows.catalog._POLICY_VALUES``.
+Only labels, risks, eligibility, step budgets, action caps, and resource caps are
+kept here; scheduling and navigation control-plane fields are intentionally absent.
+"""
+
+from __future__ import annotations
+
+from types import MappingProxyType
+
+from .models import TaskPolicy
+
+
+def _policy(
+    task_id: str,
+    label: str,
+    risks: frozenset[str],
+    *,
+    max_steps: int,
+    action_caps: dict[str, int],
+    resources: dict[str, int] | None = None,
+    cleanup_actions: frozenset[str] = frozenset(),
+) -> TaskPolicy:
+    resource_caps = resources or {}
+    return TaskPolicy(
+        task_id=task_id,
+        label=label,
+        risk_levels=risks,
+        max_steps=max_steps,
+        action_caps=action_caps,
+        approved_resources=frozenset(resource_caps),
+        resource_caps=resource_caps,
+        eligible_weekdays=None,
+        cleanup_action_ids=cleanup_actions,
+    )
+
+
+_POLICIES = {
+    "MAIL_REWARD_DAILY": _policy(
+        "MAIL_REWARD_DAILY",
+        "邮件奖励",
+        frozenset({"protected_claim"}),
+        max_steps=12,
+        action_caps={
+            "open_function_panel": 1,
+            "open_mail": 1,
+            "claim_all_mail": 1,
+            "close_reward_popup": 1,
+            "close_mail": 1,
+            "close_function_panel": 1,
+        },
+        cleanup_actions=frozenset(
+            {"close_reward_popup", "close_mail", "close_function_panel"}
+        ),
+    ),
+    "SHOP_FREE_GIFT_DAILY": _policy(
+        "SHOP_FREE_GIFT_DAILY",
+        "商城每日免费礼包",
+        frozenset({"protected_claim"}),
+        max_steps=15,
+        action_caps={
+            "open_function_panel": 3,
+            "open_shop": 3,
+            "open_period_benefits": 3,
+            "claim_free_gift": 1,
+            "dismiss_free_gift_reward": 1,
+            "close_shop": 1,
+            "close_function_panel": 1,
+        },
+        cleanup_actions=frozenset({"close_shop", "close_function_panel"}),
+    ),
+    "WEEKLY_FREE_GIFT_DAILY": _policy(
+        "WEEKLY_FREE_GIFT_DAILY",
+        "每周免费礼包",
+        frozenset({"protected_claim"}),
+        max_steps=15,
+        action_caps={
+            "open_function_panel": 1,
+            "open_shop": 1,
+            "open_gift_tab": 1,
+            "open_weekly_must_buy": 1,
+            "claim_weekly_lucky_bag": 1,
+            "dismiss_weekly_reward": 1,
+            "close_shop": 1,
+            "close_function_panel": 1,
+        },
+        cleanup_actions=frozenset(
+            {"dismiss_weekly_reward", "close_shop", "close_function_panel"}
+        ),
+    ),
+    "TRIAL_SWORD_DAILY": _policy(
+        "TRIAL_SWORD_DAILY",
+        "每日试剑",
+        frozenset({"protected_claim"}),
+        max_steps=20,
+        action_caps={
+            "open_trial_sword": 1,
+            "claim_trial_sword_reward": 1,
+            "close_reward_popup": 2,
+            "claim_free_trial": 1,
+            "confirm_free_trial": 1,
+            "close_trial": 1,
+        },
+        cleanup_actions=frozenset({"close_reward_popup", "close_trial"}),
+    ),
+    "FREE_APPRAISAL_DAILY": _policy(
+        "FREE_APPRAISAL_DAILY",
+        "每日免费鉴宝",
+        frozenset({"protected_claim"}),
+        max_steps=16,
+        action_caps={
+            "close_function_panel": 1,
+            "close_extra_reward_popup": 2,
+            "open_appraisal": 1,
+            "claim_free_appraisal_once": 1,
+            "close_appraisal_popup": 1,
+            "close_appraisal_page": 1,
+        },
+        cleanup_actions=frozenset(
+            {
+                "close_function_panel",
+                "close_extra_reward_popup",
+                "close_appraisal_popup",
+                "close_appraisal_page",
+            }
+        ),
+    ),
+    "BUY_TEA_DAILY": _policy(
+        "BUY_TEA_DAILY",
+        "购买茶叶",
+        frozenset({"consumptive"}),
+        max_steps=32,
+        action_caps={
+            "open_painting_scroll": 1,
+            "select_yanwu_world": 1,
+            "open_universal_shop": 1,
+            "scroll_tea_list": 1,
+            "open_tea_tab": 1,
+            "open_tea_purchase": 1,
+            "set_tea_quantity_max": 1,
+            "buy_tea": 1,
+            "dismiss_tea_purchase_result": 1,
+            "close_shop": 1,
+            "close_function_panel": 1,
+        },
+        cleanup_actions=frozenset({"close_shop", "close_function_panel"}),
+        resources={"文": 500},
+    ),
+    "COLLECTION_DEPLOYMENT_DAILY": _policy(
+        "COLLECTION_DEPLOYMENT_DAILY",
+        "采集部署收获",
+        frozenset({"stateful"}),
+        max_steps=16,
+        action_caps={
+            "open_painting_scroll": 1,
+            "select_yanwu_world": 1,
+            "open_collection_deployment": 1,
+            "deploy_all_collection": 1,
+            "confirm_collection_deployment": 1,
+            "claim_all_collection": 1,
+            "close_reward_popup": 1,
+            "close_collection_deployment": 1,
+            "close_collection_painting": 1,
+        },
+        cleanup_actions=frozenset(
+            {
+                "close_reward_popup",
+                "close_collection_deployment",
+                "close_collection_painting",
+            }
+        ),
+    ),
+    "HERO_DISPATCH_DAILY": _policy(
+        "HERO_DISPATCH_DAILY",
+        "侠客派遣",
+        frozenset({"stateful"}),
+        max_steps=64,
+        action_caps={
+            "open_painting_scroll": 1,
+            "open_hero_dispatch": 1,
+            "claim_first_dispatch": 6,
+            "close_reward_popup": 6,
+            # A row is selected once to claim its completed reward and once
+            # again to start the newly empty task.  Six rows therefore need
+            # twelve bounded selection clicks in the same run.
+            "select_first_visible_dispatch": 12,
+            # The live dispatch page exposes twelve slots (for example
+            # `任务：9/12`).  Keep enough budget to fill every remaining slot
+            # instead of stopping after the old nine-slot limit.
+            "smart_configure_team": 12,
+            "dispatch_team": 12,
+            "close_hero_dispatch": 1,
+            "close_hero_dispatch_painting": 1,
+        },
+        cleanup_actions=frozenset(
+            {
+                "close_reward_popup",
+                "close_hero_dispatch",
+                "close_hero_dispatch_painting",
+            }
+        ),
+    ),
+    "SHADOW_RUINS_DAILY": _policy(
+        "SHADOW_RUINS_DAILY",
+        "蜃影武墟",
+        frozenset({"combat"}),
+        max_steps=160,
+        action_caps={
+            "open_painting_scroll": 2,
+            "open_shadow": 2,
+            "select_active_shadow_card": 3,
+            "enter_shadow_stage": 2,
+            "enable_shadow_skip_prepare": 3,
+            "dismiss_shadow_battle_result": 12,
+            "dismiss_shadow_battle_failure": 3,
+            "dismiss_shadow_reward_popup": 12,
+            "confirm_shadow_teleport": 1,
+            "confirm_shadow_completion": 1,
+            "advance_shadow_foreground_triplet": 160,
+            "move_shadow_foreground_left": 1,
+            "move_shadow_foreground_center": 1,
+            "move_shadow_foreground_right": 1,
+            "challenge_shadow_stage": 12,
+            "close_shadow_page": 1,
+            "leave_shadow_stage": 1,
+            "close_shadow_painting": 1,
+        },
+        cleanup_actions=frozenset(
+            {
+                "leave_shadow_stage",
+                "close_shadow_page",
+                "close_shadow_painting",
+            }
+        ),
+    ),
+    "SPEND_CONDENSATE_DAILY": _policy(
+        "SPEND_CONDENSATE_DAILY",
+        "消耗凝晶",
+        frozenset({"consumptive"}),
+        max_steps=64,
+        action_caps={
+            "open_function_panel": 1,
+            "open_daily_tasks_initial": 1,
+            "close_daily_tasks": 1,
+            "close_function_panel": 1,
+            "open_painting_scroll": 1,
+            "select_yanwu_world": 1,
+            "open_yanwu_currency_purchase": 1,
+            "close_yanwu_currency_purchase": 1,
+            "set_yanwu_quantity_max": 1,
+            "buy_yanwu_currency_max": 1,
+            "dismiss_yanwu_reward_popup": 1,
+            "select_yunzhou": 1,
+            "open_yunzhou_currency_purchase": 1,
+            "close_yunzhou_currency_purchase": 1,
+            "set_yunzhou_quantity_max": 1,
+            "buy_yunzhou_currency_max": 1,
+            "dismiss_yunzhou_reward_popup": 1,
+        },
+        resources={"凝晶": 999_999_999},
+    ),
+    "MARTIAL_STUDY_BREAKTHROUGH_DAILY": _policy(
+        "MARTIAL_STUDY_BREAKTHROUGH_DAILY",
+        "武学研习突破",
+        frozenset({"stateful"}),
+        max_steps=24,
+        action_caps={
+            "open_function_panel": 1,
+            "open_martial_study": 1,
+            "claim_success_card": 3,
+            "close_reward_popup": 3,
+            "close_martial_page": 1,
+        },
+    ),
+    "EAT_STAMINA_FOOD_DAILY": _policy(
+        "EAT_STAMINA_FOOD_DAILY",
+        "食用体力食物",
+        frozenset({"consumptive"}),
+        max_steps=48,
+        action_caps={
+            "close_function_panel": 1,
+            "close_dungeon_for_food": 1,
+            "close_jianlin_for_food": 1,
+            "open_resource_page": 1,
+            "open_bag": 1,
+            "open_food_category": 1,
+            "select_food_tab": 1,
+            "inspect_food_candidate": 6,
+            "eat_longjing_shrimp": 6,
+            "confirm_food_buff_replace": 6,
+            "close_bag": 1,
+        },
+        resources={"龙井虾仁": 6},
+    ),
+    "EQUIPMENT_DECOMPOSE_DAILY": _policy(
+        "EQUIPMENT_DECOMPOSE_DAILY",
+        "装备分解（背包整理）",
+        frozenset({"consumptive", "stateful"}),
+        max_steps=32,
+        action_caps={
+            "close_function_panel": 1,
+            "open_resource_page": 1,
+            "open_equipment_inventory": 1,
+            "open_equipment_decompose": 1,
+            "open_quality_filter": 1,
+            "select_quality_b_or_below": 1,
+            "open_level_filter": 1,
+            "select_level_80_or_below": 1,
+            "batch_select_equipment": 1,
+            "confirm_equipment_decompose": 1,
+            "confirm_equipment_decompose_final": 1,
+            "close_equipment_page": 2,
+        },
+        cleanup_actions=frozenset({"close_equipment_page"}),
+    ),
+    "DUNGEON_SWEEP_DAILY": _policy(
+        "DUNGEON_SWEEP_DAILY",
+        "副本扫荡",
+        frozenset({"consumptive", "combat"}),
+        max_steps=160,
+        action_caps={
+            "close_function_panel": 1,
+            "open_dungeon": 1,
+            "select_yanwangling": 1,
+            "open_sweep_panel": 2,
+            "select_yanwangling_in_panel": 1,
+            "close_dungeon_reward_preview": 1,
+            "assign_sweep_ticket": 20,
+            "start_yanwangling_master_sweep": 20,
+            "confirm_yanwangling_master_sweep": 20,
+            "dismiss_sweep_result": 20,
+            "close_dungeon": 2,
+        },
+        resources={"副本票": 20},
+        cleanup_actions=frozenset(
+            {
+                "close_function_panel",
+                "close_dungeon_reward_preview",
+                "dismiss_sweep_result",
+                "close_dungeon",
+            }
+        ),
+    ),
+    "JIANLIN_RESOURCE_CONDENSATE_STAMINA_DAILY": _policy(
+        "JIANLIN_RESOURCE_CONDENSATE_STAMINA_DAILY",
+        "剑林凝晶体力",
+        frozenset({"consumptive", "combat"}),
+        max_steps=160,
+        action_caps={
+            "close_function_panel": 1,
+            "open_function_panel": 1,
+            "open_dueling_menu": 1,
+            "close_ring_page": 1,
+            "close_guild_activity_for_jianlin": 1,
+            "close_guild_home_for_jianlin": 1,
+            "open_daily_tasks": 1,
+            "scroll_daily_jianlin": 3,
+            "open_jianlin": 1,
+            "open_jianlin_resource": 1,
+            "select_jianlin_condensate": 1,
+            "open_jianlin_stamina_purchase": 1,
+            "buy_stamina_once": 1,
+            "dismiss_jianlin_stamina_purchase": 1,
+            "confirm_jianlin_stamina_purchase": 1,
+            "close_postpurchase_stamina_prompt": 1,
+            "dismiss_jianlin_stamina_result": 1,
+            "set_safe_count": 12,
+            "set_safe_multiplier": 12,
+            "challenge_condensate": 12,
+            "enable_jianlin_skip_prepare": 12,
+            "start_jianlin_battle": 12,
+            "wait_jianlin_battle": 12,
+            "close_condensate_result": 12,
+            "close_jianlin_page": 1,
+            "close_daily_tasks": 1,
+        },
+        resources={"紫色魂玉": 1, "体力": 360},
+        cleanup_actions=frozenset(
+            {
+                "dismiss_jianlin_stamina_purchase",
+                "close_jianlin_page",
+                "close_daily_tasks",
+            }
+        ),
+    ),
+    "RING_CHALLENGE_DAILY": _policy(
+        "RING_CHALLENGE_DAILY",
+        "擂台挑战",
+        frozenset({"consumptive", "combat"}),
+        max_steps=120,
+        action_caps={
+            "open_function_panel": 1,
+            "open_dueling_menu": 1,
+            "open_dueling": 1,
+            "open_daily_tasks": 1,
+            "open_ring_challenge": 1,
+            "close_reward_popup": 1,
+            "open_ring_attempt_mode": 1,
+            "start_ring_matching": 12,
+            "fight_ring_opponent": 12,
+            "start_ring_battle": 12,
+            "wait_ring_battle": 12,
+            "skip_ring_battle": 12,
+            "confirm_ring_skip": 12,
+            "sweep_ring": 1,
+            "confirm_ring_sweep": 1,
+            "dismiss_ring_reward": 12,
+            "dismiss_ring_result": 12,
+            "close_ring_opponents": 1,
+            "close_ring_page": 1,
+            "close_dueling_menu": 1,
+        },
+        resources={"擂台券": 12},
+    ),
+    "BREAK_ARRAY_MARTIAL_DAILY": _policy(
+        "BREAK_ARRAY_MARTIAL_DAILY",
+        "破阵演武",
+        frozenset({"combat"}),
+        max_steps=448,
+        action_caps={
+            "open_break_array_activity": 1,
+            "open_break_array": 1,
+            "resume_break_array": 1,
+            "start_break_array_challenge": 9,
+            "confirm_break_array_challenge": 9,
+            "start_break_array_battle": 9,
+            "wait_break_array_battle": 360,
+            "wait_break_array_result": 9,
+            "resume_break_array_result": 1,
+            "dismiss_break_array_result": 9,
+            "close_break_array_page": 1,
+            "close_break_array_activity": 1,
+        },
+        cleanup_actions=frozenset(
+            {"close_break_array_page", "close_break_array_activity"}
+        ),
+    ),
+    # MFW-only task.  The legacy workflow catalog intentionally remains
+    # unchanged until the main agent integrates this task's control-plane
+    # definition and interface import.
+    "GUILD_ACTIVITY_CHALLENGE_DAILY": _policy(
+        "GUILD_ACTIVITY_CHALLENGE_DAILY",
+        "帮会活动征讨",
+        frozenset({"stateful", "combat"}),
+        max_steps=32,
+        action_caps={
+            "close_dungeon_for_guild": 1,
+            "close_jianlin_for_guild": 1,
+            "close_daily_tasks_for_guild": 1,
+            "open_function_panel": 1,
+            "open_guild": 1,
+            "open_guild_activity": 1,
+            "challenge_guild_activity": 2,
+            "confirm_guild_challenge": 2,
+            "start_guild_challenge": 2,
+            "dismiss_guild_result": 2,
+            "dismiss_guild_defeat_result": 1,
+            "dismiss_guild_activity_reward_popup": 1,
+            "exit_guild_activity": 1,
+            "exit_guild_home": 1,
+            "close_function_panel": 1,
+        },
+    ),
+    "GUILD_AFFAIRS_DAILY": _policy(
+        "GUILD_AFFAIRS_DAILY",
+        "帮会事务",
+        frozenset({"protected_claim", "stateful"}),
+        max_steps=48,
+        action_caps={
+            "open_function_panel": 1,
+            "open_guild": 1,
+            "open_guild_affairs": 1,
+            "scroll_guild_affairs": 8,
+            # Completed rows compact toward the top after each claim.  The
+            # affairs page stores at most six rows, so one bounded run may
+            # safely claim and dismiss at most six consecutive rewards.
+            "claim_guild_affairs_reward": 6,
+            "dismiss_guild_affairs_reward": 6,
+            # A row can move into the first visible slot after a reward is
+            # claimed.  Keep the action budget bounded across the whole page,
+            # while allowing all visible rows to be started in one run.
+            "start_guild_affairs": 6,
+            "close_guild_affairs": 1,
+            "close_guild_home": 1,
+            "close_function_panel": 1,
+        },
+        cleanup_actions=frozenset(
+            {
+                "dismiss_guild_affairs_reward",
+                "close_guild_affairs",
+                "close_guild_home",
+                "close_function_panel",
+            }
+        ),
+    ),
+    "GUILD_DONATION_DAILY": _policy(
+        "GUILD_DONATION_DAILY",
+        "帮会捐献",
+        frozenset({"stateful"}),
+        max_steps=24,
+        action_caps={
+            "open_function_panel": 1,
+            "open_guild": 1,
+            "open_guild_donation": 1,
+            "open_android_function_panel": 1,
+            "open_android_guild": 1,
+            "open_android_guild_donation": 1,
+            # The only mutating action is the free donation.  There is no
+            # paid/充值 action in this policy by construction.
+            "donate_guild_free_once": 1,
+            "donate_android_guild_free_once": 1,
+            "close_android_donation_reward": 1,
+            "close_guild_member": 1,
+            "close_guild_donation": 1,
+            "close_guild_home": 1,
+            "close_function_panel": 1,
+        },
+        cleanup_actions=frozenset(
+            {"close_guild_donation", "close_guild_home", "close_function_panel"}
+        ),
+    ),
+    "DAILY_TASK_REWARD_CLAIM_DAILY": _policy(
+        "DAILY_TASK_REWARD_CLAIM_DAILY",
+        "日常任务奖励领取",
+        frozenset({"protected_claim"}),
+        max_steps=70,
+        action_caps={
+            "open_function_panel": 1,
+            "open_daily_tasks": 1,
+            "claim_completed_daily_row": 50,
+            "scroll_daily_reward_rows": 5,
+            "close_reward_popup": 60,
+            "claim_unlocked_activity_chest": 10,
+            "close_daily_tasks": 1,
+            "close_function_panel": 1,
+        },
+        cleanup_actions=frozenset({"close_daily_tasks", "close_function_panel"}),
+    ),
+    "BATTLE_PASS_REWARD_DAILY": _policy(
+        "BATTLE_PASS_REWARD_DAILY",
+        "战令基础奖励",
+        frozenset({"protected_claim"}),
+        max_steps=65,
+        action_caps={
+            "open_battle_pass": 1,
+            "open_battle_pass_tasks": 1,
+            "claim_task_reward": 50,
+            "close_reward_popup": 50,
+            "open_battle_pass_rewards": 1,
+            "claim_basic_red_dot_reward": 50,
+            "close_battle_pass": 1,
+        },
+    ),
+}
+
+
+TASK_POLICIES = MappingProxyType(_POLICIES)
+
+__all__ = ["TASK_POLICIES"]

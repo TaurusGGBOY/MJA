@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "upstream_repository": "https://github.com/MaaXYZ/MaaFramework",
+  "upstream_tag": "v5.12.3",
+  "upstream_commit": "0c3f6454902b8ff9f7697cc6b09a7a935a41cdbb",
+  "target": "macos-arm64",
+  "base_libraries_sha256": {
+    "maafw/libMaaMacOSControlUnit.dylib": "5139b683fa411d2c6307c4cd7a07f552afa23e0426a272fc4366c44d3d5c8d4a",
+    "maafw/libMaaToolkit.dylib": "fef873bc4dff84d2f96a188eda75933a80afc8dc19448dedd6b2dea7ee1585e9",
+    "runtimes/osx-arm64/libMaaMacOSControlUnit.dylib": "854bfdd7ad0f11f8bff9e9b2edbcec7b4b7148cbc37ceda0ec10201e877bc034",
+    "runtimes/osx-arm64/libMaaToolkit.dylib": "28ba65d7c8a6891c0f49153e82f9987086f03599182b1ce7a57adf690bf4e902"
+  },
+  "patches_sha256": {
+    "0001-macos-coregraphics-region-fallback.patch": "1ac43a3994b5285ab32cdfe873fe5d7ad8e690d17536102803a7229b772e0fc9",
+    "0002-macos-coregraphics-window-finder.patch": "0763c162c848f207b3b0f7afc332dfe77972599cd58628dafb9527bd6351bcbf",
+    "0003-macos-coregraphics-preflight.patch": "77fa18e09abb9a952610d7c16f0047542e66910b68faa28f420f9943a5ca156d",
+    "0004-macos-coregraphics-capture-guard.patch": "2188c397e11e743a1bec95bbe8b6fccd9cdfd02dcb1d69e976072d87ba94620e"
+  },
+  "patched_libraries_sha256": {
+    "libMaaMacOSControlUnit.dylib": "109f1971a17306be2ec9554e1fa2fc6f88f38286497d3591bacee487eb9a4694",
+    "libMaaToolkit.dylib": "199a68e7204a4eaa9751f8afe22c6a985822e78a9bfcc35da8e667cdb4e84481"
+  },
+  "patched_libraries_size": {
+    "libMaaMacOSControlUnit.dylib": 279984,
+    "libMaaToolkit.dylib": 395008
+  }
+}
