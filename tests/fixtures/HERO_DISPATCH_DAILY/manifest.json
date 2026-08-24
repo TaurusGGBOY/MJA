@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "task_id": "HERO_DISPATCH_DAILY",
+  "reference_size": [1280, 720],
+  "cases": {
+    "entry": {
+      "image": "entry.png",
+      "expected_page": "home",
+      "expected_targets": ["painting_scroll_entry"]
+    },
+    "actionable": {
+      "image": "actionable.png",
+      "expected_page": "dispatch_page",
+      "expected_targets": ["dispatch_action"]
+    },
+    "completed": {
+      "image": "completed.png",
+      "expected_page": "dispatch_page",
+      "expected_targets": ["first_visible_dispatch_in_progress"]
+    },
+    "danger": {
+      "image": "danger.png",
+      "expected_page": "dispatch_page",
+      "expected_targets": ["unknown_dialog"]
+    },
+    "r22_all_dispatched_waiting": {
+      "image": "r22_all_dispatched_waiting.png",
+      "frame_id": "r22:HERO_DISPATCH_DAILY:20260809T111556403782Z",
+      "state": "inspect",
+      "page_hits": {"0742-英雄派遣-英雄-派遣-页面": 1},
+      "target_hits": {"0750-英雄派遣-英雄-全部-已派遣-等待中": 1},
+      "recognizer_frame_ids": {
+        "0742-英雄派遣-英雄-派遣-页面": "r22:HERO_DISPATCH_DAILY:20260809T111556403782Z",
+        "0750-英雄派遣-英雄-全部-已派遣-等待中": "r22:HERO_DISPATCH_DAILY:20260809T111556403782Z"
+      },
+      "texts": ["任务:9/9 已完成:0 尚未选择派遣任务"]
+    }
+  }
+}

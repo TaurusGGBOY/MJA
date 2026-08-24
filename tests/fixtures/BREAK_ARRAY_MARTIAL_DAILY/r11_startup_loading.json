@@ -1,0 +1,12 @@
+{
+  "source": "verification/mfw/repair/20260811-r11-final-full-regression/debug/on_error/2026.08.11-22.04.34.901_MJA_BREAK_ARRAY_MARTIAL_DAILY_EXECUTE.png",
+  "sha256": "d3cd73adc3b528d331517103afe7728887ff099332f97be518756ab6b5b69414",
+  "frame_size": [1280, 720],
+  "recognitions": {
+    "破阵武学-突破-阵法-启动-加载": {
+      "hit": true,
+      "box": [1060, 649, 162, 33],
+      "text": "穿梭入世中"
+    }
+  }
+}

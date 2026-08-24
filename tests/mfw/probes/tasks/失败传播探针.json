@@ -1,0 +1,18 @@
+{
+  "task": [
+    {
+      "name": "PROBE_BUSINESS_FAILURE",
+      "label": "MFW 探针：业务失败",
+      "default_check": false,
+      "group": ["工具"],
+      "entry": "MJA_PROBE_BUSINESS_FAILURE_BEGIN"
+    },
+    {
+      "name": "PROBE_SENTINEL",
+      "label": "MFW 探针：哨兵",
+      "default_check": false,
+      "group": ["工具"],
+      "entry": "MJA_PROBE_SENTINEL"
+    }
+  ]
+}

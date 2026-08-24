@@ -1,0 +1,23 @@
+{
+  "MJA_PROBE_BUSINESS_FAILURE_BEGIN": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "BeginTask",
+    "custom_action_param": {
+      "task_id": "MAIL_REWARD_DAILY"
+    },
+    "next": ["MJA_PROBE_BUSINESS_FAILURE"]
+  },
+  "MJA_PROBE_BUSINESS_FAILURE": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "FailTask",
+    "Abort": true,
+    "custom_action_param": {}
+  },
+  "MJA_PROBE_SENTINEL": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "next": ["1369-公共-通用停止"]
+  }
+}

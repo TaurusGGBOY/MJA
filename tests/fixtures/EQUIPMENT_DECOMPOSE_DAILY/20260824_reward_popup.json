@@ -1,0 +1,21 @@
+{
+  "source": "install/mfw-observe-all-20260824T033709Z/debug/on_error/2026.08.24-11.44.54.557_0449-分解装备-确认-最终.png",
+  "acceptance_source": "install/mfw-observe-all-20260824T033709Z/debug/acceptance/BATCH/20260824T033818717509Z/acceptance.json",
+  "maafw_log_source": "install/mfw-observe-all-20260824T033709Z/debug/acceptance/BATCH/20260824T033818717509Z/maafw.log.slice",
+  "sha256": "c885fecbd282b261b9a9c9906072c833b828cd55fc990749f1ff6470e8ce11d9",
+  "frame_size": [1280, 720],
+  "native_terminal": "Failed",
+  "recognitions": {
+    "0473-分解装备-装备-分解-成功": {
+      "text": "悉喜获得",
+      "box": [165, 232, 60, 241],
+      "score": 0.774581
+    },
+    "0038-公共-已知-点击空白关闭": {
+      "text": "点击空白处关闭",
+      "box": [572, 660, 137, 26],
+      "score": 0.999476
+    }
+  },
+  "reward_quantity": 180
+}

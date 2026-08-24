@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "task_id": "MAIL_REWARD_DAILY",
+  "reference_size": [1280, 720],
+  "cases": {
+    "entry": {"image": "entry.png", "expected_page": "home", "expected_targets": ["function_panel.open"]},
+    "actionable": {"image": "actionable.png", "expected_page": "邮件奖励-邮件-页面", "expected_targets": ["1049-邮件奖励-邮件-领取-全部"]},
+    "completed": {"image": "completed.png", "expected_page": "邮件奖励-邮件-页面", "expected_targets": ["1050-邮件奖励-邮件-空"]},
+    "danger": {"image": "danger.png", "expected_page": "邮件奖励-邮件-页面", "expected_targets": ["unknown_dialog"]}
+  }
+}
