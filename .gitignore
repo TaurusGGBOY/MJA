@@ -33,6 +33,7 @@ verification/mfw/live/native-fallback/
 docs/prompt/
 docs/superpowers/
 docs/verification/
+.mfw-task-sequence/
 verification/20260817-*/
 verification/mfw-*/
 verification/mfw/
