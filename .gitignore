@@ -1,0 +1,46 @@
+.DS_Store
+
+# Local editor and IDE state
+.idea/
+.vscode/
+.claude/
+*.swp
+*.swo
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+
+# Generated runtime, diagnostics, and local state
+.venv/
+install/
+downloads/
+artifacts/*.apk
+debug/
+diagnostics/
+.mja-state/
+.mfw-simulator-leases/
+.playwright-mcp/
+._*
+
+# Large local-only runtime and verification artifacts
+runtime/MJAAndroidEmulator.app/
+.codebase-memory/
+verification/mfw/repair/
+verification/mfw/live/controller-probe-raw/
+verification/mfw/live/native-fallback/
+docs/prompt/
+docs/superpowers/
+docs/verification/
+verification/20260817-*/
+verification/mfw-*/
+verification/mfw/
+verification/._*
+verification/*.json
+verification/*.log
+
+# Python test/build cache
+__pycache__/
+*.py[cod]
+.pytest_cache/

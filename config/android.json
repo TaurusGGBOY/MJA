@@ -1,0 +1,18 @@
+{
+  "avd_name": "mja-api35-apis",
+  "serial": "emulator-5556",
+  "package_name": "com.hanjiasongshu.dr22",
+  "game_label": "对决！剑之川",
+  "display_size": [
+    1280,
+    720
+  ],
+  "apk_path": "artifacts/jianzhichuan.apk",
+  "keep_running": true,
+  "login_timeout_seconds": 900,
+  "system_image_package": "system-images;android-35;google_apis;arm64-v8a",
+  "selinux_mode": "permissive",
+  "data_partition_size_gb": 12,
+  "sdk_root": "install/android-sdk",
+  "avd_ram_size_mb": 6144
+}
