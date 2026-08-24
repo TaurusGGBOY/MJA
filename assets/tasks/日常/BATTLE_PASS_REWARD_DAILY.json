@@ -1,0 +1,11 @@
+{
+  "task": [
+    {
+      "name": "BATTLE_PASS_REWARD_DAILY",
+      "label": "战令基础奖励",
+      "default_check": true,
+      "group": ["日常"],
+      "entry": "0001-战令奖励-任务入口"
+    }
+  ]
+}

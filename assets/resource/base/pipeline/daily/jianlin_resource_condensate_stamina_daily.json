@@ -1,0 +1,1020 @@
+{
+  "0014-剑林凝结体体力-任务入口": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0026-公共-游戏主页-页面"
+        ],
+        "box_index": 0
+      }
+    },
+    "action": "Custom",
+    "custom_action": "BeginTask",
+    "max_hit": 2,
+    "custom_action_param": {
+      "task_id": "JIANLIN_RESOURCE_CONDENSATE_STAMINA_DAILY"
+    },
+    "timeout": 5000,
+    "on_error": ["MJA-任务入口失败-JIANLIN_RESOURCE_CONDENSATE_STAMINA_DAILY", "MJA-公共-任务入口-恢复耗尽"],
+    "next": [
+      "0763-剑林凝结体体力-打开-资源-入口"
+    ]
+  },
+  "0763-剑林凝结体体力-打开-资源-入口": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0026-公共-游戏主页-页面"
+        ],
+        "box_index": 0
+      }
+    },
+    "timeout": 8000,
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "max_hit": 1,
+    "custom_action_param": {
+      "task_id": "JIANLIN_RESOURCE_CONDENSATE_STAMINA_DAILY",
+      "action_id": "open_dueling_menu",
+      "kind": "click",
+      "fixed_click_mode": "dueling_menu_button",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 0,
+        "page_name": "0026-公共-游戏主页-页面",
+        "target_name": "0026-公共-游戏主页-页面"
+      }
+    },
+    "next": [
+      "0764-剑林凝结体体力-点击-资源"
+    ],
+    "retry_times": 0
+  },
+  "0764-剑林凝结体体力-点击-资源": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0975-剑林凝结体体力-资源-入口"
+        ],
+        "box_index": 0
+      }
+    },
+    "timeout": 8000,
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "max_hit": 1,
+    "custom_action_param": {
+      "task_id": "JIANLIN_RESOURCE_CONDENSATE_STAMINA_DAILY",
+      "action_id": "open_jianlin_resource",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 0,
+        "page_name": "0975-剑林凝结体体力-资源-入口",
+        "target_name": "0975-剑林凝结体体力-资源-入口"
+      }
+    },
+    "next": [
+      "0774-剑林凝结体体力-选择-凝结体"
+    ],
+    "retry_times": 0
+  },
+  "0774-剑林凝结体体力-选择-凝结体": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0973-剑林凝结体体力-剑林-页面",
+          "0976-剑林凝结体体力-剑林-凝结体-资源"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "max_hit": 1,
+    "custom_action_param": {
+      "task_id": "JIANLIN_RESOURCE_CONDENSATE_STAMINA_DAILY",
+      "action_id": "select_jianlin_condensate",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "0973-剑林凝结体体力-剑林-页面",
+        "target_name": "0976-剑林凝结体体力-剑林-凝结体-资源"
+      }
+    },
+    "next": [
+      "0778-剑林凝结体体力-打开-体力-购买"
+    ]
+  },
+  "0778-剑林凝结体体力-打开-体力-购买": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0973-剑林凝结体体力-剑林-页面",
+          "0976-剑林凝结体体力-剑林-凝结体-资源",
+          "0977-剑林凝结体体力-剑林-体力-加号"
+        ],
+        "box_index": 2
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "max_hit": 1,
+    "custom_action_param": {
+      "task_id": "JIANLIN_RESOURCE_CONDENSATE_STAMINA_DAILY",
+      "action_id": "open_jianlin_stamina_purchase",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 2,
+        "page_name": "0973-剑林凝结体体力-剑林-页面",
+        "target_name": "0977-剑林凝结体体力-剑林-体力-加号"
+      }
+    },
+    "timeout": 5000,
+    "next": [
+      "0780-剑林凝结体体力-购买-体力-一次",
+      "0790-剑林凝结体体力-购买-体力-80可选50"
+    ]
+  },
+  "0780-剑林凝结体体力-购买-体力-一次": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0978-剑林凝结体体力-剑林-体力-购买-提示",
+          "0979-剑林凝结体体力-剑林-体力-加号80",
+          "0981-剑林凝结体体力-剑林-体力-价格10"
+        ],
+        "box_index": 2
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "max_hit": 1,
+    "custom_action_param": {
+      "task_id": "JIANLIN_RESOURCE_CONDENSATE_STAMINA_DAILY",
+      "action_id": "buy_stamina_once",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 2,
+        "page_name": "0978-剑林凝结体体力-剑林-体力-购买-提示",
+        "target_name": "0981-剑林凝结体体力-剑林-体力-价格10"
+      }
+    },
+    "next": [
+      "0782-剑林凝结体体力-确认-体力-购买"
+    ]
+  },
+  "0790-剑林凝结体体力-购买-体力-80可选50": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0978-剑林凝结体体力-剑林-体力-购买-提示",
+          "0979-剑林凝结体体力-剑林-体力-加号80",
+          "0981-剑林凝结体体力-剑林-体力-价格50-可选"
+        ],
+        "box_index": 2
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "max_hit": 1,
+    "post_delay": 1000,
+    "custom_action_param": {
+      "task_id": "JIANLIN_RESOURCE_CONDENSATE_STAMINA_DAILY",
+      "action_id": "dismiss_jianlin_stamina_purchase",
+      "kind": "click",
+      "fixed_click_mode": "jianlin_page_close",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 2,
+        "page_name": "0978-剑林凝结体体力-剑林-体力-购买-提示",
+        "target_name": "0981-剑林凝结体体力-剑林-体力-价格50-可选"
+      }
+    },
+    "next": [
+      "0787-剑林凝结体体力-重新识别-体力"
+    ]
+  },
+  "0782-剑林凝结体体力-确认-体力-购买": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0983-剑林凝结体体力-剑林-体力-确认弹窗-提示",
+          "0984-剑林凝结体体力-剑林-体力-确认弹窗-资源",
+          "0985-剑林凝结体体力-剑林-体力-确认弹窗-价格10",
+          "0986-剑林凝结体体力-剑林-体力-确认弹窗-数量80",
+          "0987-剑林凝结体体力-剑林-体力-确认弹窗-确认"
+        ],
+        "box_index": 4
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "max_hit": 1,
+    "custom_action_param": {
+      "task_id": "JIANLIN_RESOURCE_CONDENSATE_STAMINA_DAILY",
+      "action_id": "confirm_jianlin_stamina_purchase",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 4,
+        "page_name": "0983-剑林凝结体体力-剑林-体力-确认弹窗-提示",
+        "target_name": "0987-剑林凝结体体力-剑林-体力-确认弹窗-确认"
+      }
+    },
+    "next": [
+      "0784-剑林凝结体体力-关闭-体力-结果"
+    ]
+  },
+  "0784-剑林凝结体体力-关闭-体力-结果": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0988-剑林凝结体体力-剑林-体力-结果",
+          "0989-剑林凝结体体力-剑林-体力-结果-关闭"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "max_hit": 1,
+    "custom_action_param": {
+      "task_id": "JIANLIN_RESOURCE_CONDENSATE_STAMINA_DAILY",
+      "action_id": "dismiss_jianlin_stamina_result",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "0988-剑林凝结体体力-剑林-体力-结果",
+        "target_name": "0989-剑林凝结体体力-剑林-体力-结果-关闭"
+      }
+    },
+    "next": [
+      "0791-剑林凝结体体力-关闭-购买-面板",
+      "0787-剑林凝结体体力-重新识别-体力"
+    ]
+  },
+  "0791-剑林凝结体体力-关闭-购买-面板": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0978-剑林凝结体体力-剑林-体力-购买-提示",
+          "0979-剑林凝结体体力-剑林-体力-加号80",
+          "0981-剑林凝结体体力-剑林-体力-价格10"
+        ],
+        "box_index": 2
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "max_hit": 1,
+    "post_delay": 1000,
+    "custom_action_param": {
+      "task_id": "JIANLIN_RESOURCE_CONDENSATE_STAMINA_DAILY",
+      "action_id": "dismiss_jianlin_stamina_purchase",
+      "kind": "click",
+      "fixed_click_mode": "jianlin_page_close",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 2,
+        "page_name": "0978-剑林凝结体体力-剑林-体力-购买-提示",
+        "target_name": "0981-剑林凝结体体力-剑林-体力-价格10"
+      }
+    },
+    "next": [
+      "0787-剑林凝结体体力-重新识别-体力"
+    ],
+    "retry_times": 0
+  },
+  "0787-剑林凝结体体力-重新识别-体力": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0973-剑林凝结体体力-剑林-页面",
+          "0992-剑林凝结体体力-剑林-体力-当前",
+          "1016-剑林凝结体体力-剑林-挑战-按钮"
+        ],
+        "box_index": 2
+      }
+    },
+    "action": "DoNothing",
+    "next": [
+      "[JumpBack]0788-剑林凝结体体力-计划"
+    ]
+  },
+  "0788-剑林凝结体体力-计划": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0973-剑林凝结体体力-剑林-页面",
+          "0992-剑林凝结体体力-剑林-体力-当前",
+          "1016-剑林凝结体体力-剑林-挑战-按钮"
+        ],
+        "box_index": 2
+      }
+    },
+    "action": "Custom",
+    "custom_action": "PlanJianlinChallenge",
+    "max_hit": 10,
+    "custom_action_param": {
+      "dispatch_node": "0788-剑林凝结体体力-计划",
+      "stamina_index": 1,
+      "stamina_per_multiplier": 20,
+      "max_multiplier": 6,
+      "stop_stamina_at_or_below": 20,
+      "insufficient_node": "0789-剑林凝结体体力-体力耗尽"
+    },
+    "next": [
+      "0789-剑林凝结体体力-体力耗尽",
+      "[JumpBack]0937-剑林凝结体体力-跳过-准备-点击",
+      "[JumpBack]0934-剑林凝结体体力-挑战-凝结体"
+    ]
+},
+  "0789-剑林凝结体体力-体力耗尽": {
+    "recognition": "OCR",
+    "expected": [
+      "当前体力\\s*[:：]?\\s*(?:0|[1-9]|1[0-9]|20)\\b",
+      "体力\\s*(?:0|[1-9]|1[0-9]|20)\\s*/",
+      "^(?:0|[1-9]|1[0-9]|20)\\s*/\\s*\\d{1,4}$"
+    ],
+    "roi": [
+      1000,
+      0,
+      250,
+      100
+    ],
+    "action": "DoNothing",
+    "next": [
+      "0959-剑林凝结体体力-清理-页面-关闭"
+    ]
+  },
+  "0934-剑林凝结体体力-挑战-凝结体": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0973-剑林凝结体体力-剑林-页面",
+          "1012-剑林凝结体体力-剑林-倍率-已选择",
+          "1016-剑林凝结体体力-剑林-挑战-按钮"
+        ],
+        "box_index": 2
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "JIANLIN_RESOURCE_CONDENSATE_STAMINA_DAILY",
+      "action_id": "challenge_condensate",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 2,
+        "page_name": "0973-剑林凝结体体力-剑林-页面",
+        "target_name": "1016-剑林凝结体体力-剑林-挑战-按钮"
+      }
+    },
+    "next": [
+      "0953-剑林凝结体体力-战斗-结果-探测",
+      "0952-剑林凝结体体力-战斗-中-等待",
+      "0935-剑林凝结体体力-战斗-页面-探测"
+    ],
+    "timeout": 180000
+  },
+  "0935-剑林凝结体体力-战斗-页面-探测": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "1017-剑林凝结体体力-剑林-战斗-页面",
+          "1020-剑林凝结体体力-剑林-开战"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "DoNothing",
+    "next": [
+      "0953-剑林凝结体体力-战斗-结果-探测",
+      "剑林凝结体体力-开始-战斗-开战"
+    ]
+  },
+  "剑林凝结体体力-开始-战斗-开战": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "1017-剑林凝结体体力-剑林-战斗-页面",
+          "1020-剑林凝结体体力-剑林-开战"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "JIANLIN_RESOURCE_CONDENSATE_STAMINA_DAILY",
+      "action_id": "start_jianlin_battle",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "1017-剑林凝结体体力-剑林-战斗-页面",
+        "target_name": "1020-剑林凝结体体力-剑林-开战"
+      }
+    },
+    "retry_times": 0,
+    "timeout": 180000,
+    "next": [
+      "0953-剑林凝结体体力-战斗-结果-探测",
+      "0952-剑林凝结体体力-战斗-中-等待"
+    ]
+  },
+  "0937-剑林凝结体体力-跳过-准备-点击": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "1017-剑林凝结体体力-剑林-战斗-页面",
+          "1019-剑林凝结体体力-剑林-跳过-准备"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "JIANLIN_RESOURCE_CONDENSATE_STAMINA_DAILY",
+      "action_id": "enable_jianlin_skip_prepare",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "1017-剑林凝结体体力-剑林-战斗-页面",
+        "target_name": "1019-剑林凝结体体力-剑林-跳过-准备"
+      }
+    }
+  },
+  "0952-剑林凝结体体力-战斗-中-等待": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "1018-剑林凝结体体力-剑林-战斗-中"
+        ]
+      }
+    },
+    "max_hit": 12,
+    "timeout": 180000,
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "JIANLIN_RESOURCE_CONDENSATE_STAMINA_DAILY",
+      "action_id": "wait_jianlin_battle",
+      "kind": "none",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 0,
+        "page_name": "1018-剑林凝结体体力-剑林-战斗-中",
+        "target_name": "1018-剑林凝结体体力-剑林-战斗-中"
+      }
+    },
+    "next": [
+      "0953-剑林凝结体体力-战斗-结果-探测"
+    ],
+    "retry_times": 0
+  },
+  "0953-剑林凝结体体力-战斗-结果-探测": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "1022-剑林凝结体体力-剑林-战斗-结果",
+          "1023-剑林凝结体体力-剑林-战斗结果关闭"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "DoNothing",
+    "next": [
+      "0954-剑林凝结体体力-关闭-凝结体-结果"
+    ],
+    "timeout": 50000
+  },
+  "0954-剑林凝结体体力-关闭-凝结体-结果": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "1022-剑林凝结体体力-剑林-战斗-结果",
+          "1023-剑林凝结体体力-剑林-战斗结果关闭"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "max_hit": 12,
+    "retry_times": 0,
+    "custom_action_param": {
+      "task_id": "JIANLIN_RESOURCE_CONDENSATE_STAMINA_DAILY",
+      "action_id": "close_condensate_result",
+      "kind": "click",
+      "fixed_click_mode": "jianlin_result_blank",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "1022-剑林凝结体体力-剑林-战斗-结果",
+        "target_name": "1023-剑林凝结体体力-剑林-战斗结果关闭"
+      }
+    },
+    "next": [
+      "0787-剑林凝结体体力-重新识别-体力"
+    ]
+  },
+  "0959-剑林凝结体体力-清理-页面-关闭": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "1032-剑林凝结体体力-剑林-清理-页面",
+          "1031-剑林凝结体体力-剑林-页面-关闭"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "max_hit": 1,
+    "custom_action_param": {
+      "task_id": "JIANLIN_RESOURCE_CONDENSATE_STAMINA_DAILY",
+      "action_id": "close_jianlin_page",
+      "kind": "click",
+      "fixed_click_mode": "jianlin_page_close",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "1032-剑林凝结体体力-剑林-清理-页面",
+        "target_name": "1031-剑林凝结体体力-剑林-页面-关闭"
+      }
+    },
+    "post_delay": 1500,
+    "retry_times": 0,
+    "next": [
+      "0960-剑林凝结体体力-清理-日常-关闭",
+      "1371-公共-原生成功-主页边界"
+    ]
+  },
+  "0960-剑林凝结体体力-清理-日常-关闭": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "1032-剑林凝结体体力-剑林-清理-页面",
+          "1031-剑林凝结体体力-剑林-页面-关闭"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "max_hit": 1,
+    "custom_action_param": {
+      "task_id": "JIANLIN_RESOURCE_CONDENSATE_STAMINA_DAILY",
+      "action_id": "close_daily_tasks",
+      "kind": "click",
+      "fixed_click_mode": "jianlin_page_close",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "1032-剑林凝结体体力-剑林-清理-页面",
+        "target_name": "1031-剑林凝结体体力-剑林-页面-关闭"
+      }
+    },
+    "retry_times": 0,
+    "next": [
+      "1371-公共-原生成功-主页边界"
+    ]
+  },
+  "0962-剑林凝结体体力-预算-不安全": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "FailTask",
+    "Abort": true
+  },
+  "0973-剑林凝结体体力-剑林-页面": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0974-剑林凝结体体力-剑林-页面-标题",
+          "1011-剑林凝结体体力-剑林-倍率-条"
+        ],
+        "box_index": 0
+      }
+    },
+    "timeout": 8000,
+    "action": "DoNothing"
+  },
+  "0974-剑林凝结体体力-剑林-页面-标题": {
+    "recognition": "OCR",
+    "expected": [
+      "^剑林\\s*/\\s*养成$",
+      "^养成\\s*/\\s*资源$",
+      "^剑林\\s*/\\s*资源$"
+    ],
+    "roi": [
+      40,
+      0,
+      280,
+      100
+    ],
+    "timeout": 8000,
+    "action": "DoNothing"
+  },
+  "0975-剑林凝结体体力-资源-入口": {
+    "recognition": "OCR",
+    "expected": [
+      "^资$",
+      "^资源$",
+      "资源"
+    ],
+    "roi": [
+      250,
+      90,
+      450,
+      500
+    ],
+    "action": "DoNothing"
+  },
+  "0976-剑林凝结体体力-剑林-凝结体-资源": {
+    "recognition": "OCR",
+    "expected": "凝晶",
+    "roi": [
+      0,
+      150,
+      400,
+      450
+    ],
+    "timeout": 8000,
+    "action": "DoNothing"
+  },
+  "0977-剑林凝结体体力-剑林-体力-加号": {
+    "recognition": "OCR",
+    "expected": "\\+",
+    "roi": [
+      1080,
+      0,
+      100,
+      100
+    ],
+    "timeout": 8000,
+    "action": "DoNothing"
+  },
+  "0978-剑林凝结体体力-剑林-体力-购买-提示": {
+    "recognition": "OCR",
+    "expected": "补充体力",
+    "roi": [
+      300,
+      100,
+      900,
+      500
+    ],
+    "timeout": 8000,
+    "action": "DoNothing"
+  },
+  "0979-剑林凝结体体力-剑林-体力-加号80": {
+    "recognition": "OCR",
+    "expected": "\\+80",
+    "roi": [
+      600,
+      250,
+      300,
+      160
+    ],
+    "timeout": 8000,
+    "action": "DoNothing"
+  },
+  "0980-剑林凝结体体力-剑林-体力-资源": {
+    "recognition": "OCR",
+    "expected": "紫色魂玉",
+    "roi": [
+      400,
+      160,
+      600,
+      250
+    ],
+    "timeout": 8000,
+    "action": "DoNothing"
+  },
+  "0981-剑林凝结体体力-剑林-体力-价格10": {
+    "recognition": "OCR",
+    "expected": "(?<!\\d)(?:10|１０)(?!\\d)",
+    "roi": [
+      300,
+      100,
+      900,
+      500
+    ],
+    "timeout": 8000,
+    "action": "DoNothing"
+  },
+  "0981-剑林凝结体体力-剑林-体力-价格50-可选": {
+    "recognition": "OCR",
+    "expected": "(?<!\\d)50(?!\\d)",
+    "roi": [
+      300,
+      100,
+      900,
+      500
+    ],
+    "timeout": 8000,
+    "action": "DoNothing"
+  },
+  "0982-剑林凝结体体力-剑林-体力-购买-确认": {
+    "recognition": "TemplateMatch",
+    "template": "daily/JIANLIN_RESOURCE_CONDENSATE_STAMINA_DAILY/buy_confirm.png",
+    "roi": [
+      760,
+      430,
+      230,
+      130
+    ],
+    "threshold": 0.78,
+    "timeout": 8000,
+    "action": "DoNothing"
+  },
+  "0983-剑林凝结体体力-剑林-体力-确认弹窗-提示": {
+    "recognition": "OCR",
+    "expected": [
+      "体力将于",
+      "是否花费"
+    ],
+    "roi": [
+      350,
+      240,
+      650,
+      200
+    ],
+    "timeout": 8000,
+    "action": "DoNothing"
+  },
+  "0984-剑林凝结体体力-剑林-体力-确认弹窗-资源": {
+    "recognition": "OCR",
+    "expected": "魂玉",
+    "roi": [
+      450,
+      300,
+      260,
+      130
+    ],
+    "timeout": 8000,
+    "action": "DoNothing"
+  },
+  "0985-剑林凝结体体力-剑林-体力-确认弹窗-价格10": {
+    "recognition": "OCR",
+    "expected": "(?<!\\d)10(?!\\d)",
+    "roi": [
+      450,
+      300,
+      260,
+      130
+    ],
+    "timeout": 8000,
+    "action": "DoNothing"
+  },
+  "0986-剑林凝结体体力-剑林-体力-确认弹窗-数量80": {
+    "recognition": "OCR",
+    "expected": "(?<!\\d)80(?!\\d)",
+    "roi": [
+      620,
+      280,
+      250,
+      150
+    ],
+    "timeout": 8000,
+    "action": "DoNothing"
+  },
+  "0987-剑林凝结体体力-剑林-体力-确认弹窗-确认": {
+    "recognition": "OCR",
+    "expected": "^确认$",
+    "roi": [
+      780,
+      430,
+      230,
+      130
+    ],
+    "timeout": 8000,
+    "action": "DoNothing"
+  },
+  "0988-剑林凝结体体力-剑林-体力-结果": {
+    "recognition": "OCR",
+    "expected": [
+      "购买成功",
+      "恭喜获得",
+      "获得"
+    ],
+    "roi": [
+      0,
+      120,
+      1280,
+      520
+    ],
+    "timeout": 8000,
+    "action": "DoNothing"
+  },
+  "0989-剑林凝结体体力-剑林-体力-结果-关闭": {
+    "recognition": "OCR",
+    "expected": "点击空白处关闭",
+    "roi": [
+      350,
+      580,
+      600,
+      140
+    ],
+    "timeout": 8000,
+    "action": "DoNothing"
+  },
+  "0992-剑林凝结体体力-剑林-体力-当前": {
+    "recognition": "OCR",
+    "expected": [
+      "当前体力\\s*[:：]?\\s*\\d{1,4}",
+      "体力\\s*\\d{1,4}\\s*/",
+      "\\d{1,4}\\s*/\\s*\\d{1,4}"
+    ],
+    "roi": [
+      1000,
+      0,
+      250,
+      100
+    ],
+    "timeout": 8000,
+    "action": "DoNothing"
+  },
+  "1011-剑林凝结体体力-剑林-倍率-条": {
+    "recognition": "OCR",
+    "expected": "结算倍率",
+    "roi": [
+      850,
+      350,
+      400,
+      130
+    ],
+    "timeout": 8000,
+    "action": "DoNothing"
+  },
+  "1012-剑林凝结体体力-剑林-倍率-已选择": {
+    "recognition": "OCR",
+    "expected": [
+    "结算倍率\\s*[:：]?\\s*[xX×]\\s*(?:[1-6]|[lI])",
+    "[xX×]\\s*(?:[1-6]|[lI])",
+    "(?:[1-6]|[lI])\\s*倍"
+    ],
+    "roi": [
+      850,
+      350,
+      400,
+      130
+    ],
+    "timeout": 8000,
+    "action": "DoNothing"
+  },
+  "1016-剑林凝结体体力-剑林-挑战-按钮": {
+    "recognition": "OCR",
+    "expected": "挑战",
+    "roi": [
+      900,
+      550,
+      380,
+      170
+    ],
+    "timeout": 8000,
+    "action": "DoNothing"
+  },
+  "1017-剑林凝结体体力-剑林-战斗-页面": {
+    "recognition": "OCR",
+    "expected": [
+      "阵容",
+      "出战",
+      "开战",
+      "首领战",
+      "剑林"
+    ],
+    "roi": [
+      0,
+      0,
+      1280,
+      720
+    ],
+    "timeout": 8000,
+    "action": "DoNothing"
+  },
+  "1018-剑林凝结体体力-剑林-战斗-中": {
+    "recognition": "OCR",
+    "expected": [
+      "^自动战斗中$",
+      "^自动中(?:…|\\.\\.\\.)?$",
+      "^战斗中$"
+    ],
+    "roi": [
+      1030,
+      620,
+      240,
+      100
+    ],
+    "action": "DoNothing"
+  },
+  "1019-剑林凝结体体力-剑林-跳过-准备": {
+    "recognition": "OCR",
+    "expected": "跳过战前准备",
+    "roi": [
+      780,
+      500,
+      430,
+      180
+    ],
+    "timeout": 8000,
+    "action": "DoNothing"
+  },
+  "1020-剑林凝结体体力-剑林-开战": {
+    "recognition": "OCR",
+    "expected": "^开战$",
+    "roi": [
+      1080,
+      520,
+      200,
+      200
+    ],
+    "timeout": 8000,
+    "action": "DoNothing"
+  },
+  "1022-剑林凝结体体力-剑林-战斗-结果": {
+    "recognition": "OCR",
+    "expected": [
+      "挑战成功",
+      "恭喜获得",
+      "挑战失败",
+      "战斗失败",
+      "战斗结束",
+      "战斗胜利",
+      "获得奖励"
+    ],
+    "roi": [
+      0,
+      0,
+      1280,
+      720
+    ],
+    "timeout": 8000,
+    "action": "DoNothing"
+  },
+  "1023-剑林凝结体体力-剑林-战斗结果关闭": {
+    "recognition": "OCR",
+    "expected": [
+      "点击空白处关闭",
+      "战斗胜利",
+      "战斗失败",
+      "获得奖励"
+    ],
+    "roi": [
+      0,
+      0,
+      1280,
+      720
+    ],
+    "timeout": 8000,
+    "action": "DoNothing"
+  },
+  "1031-剑林凝结体体力-剑林-页面-关闭": {
+    "recognition": "DirectHit",
+    "action": "DoNothing"
+  },
+  "1032-剑林凝结体体力-剑林-清理-页面": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0974-剑林凝结体体力-剑林-页面-标题",
+          "1031-剑林凝结体体力-剑林-页面-关闭"
+        ],
+        "box_index": 0
+      }
+    },
+    "timeout": 8000,
+    "action": "DoNothing"
+  }
+}

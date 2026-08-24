@@ -1,0 +1,13 @@
+{
+  "task": [
+    {
+      "name": "GUILD_DONATION_DAILY",
+      "label": "帮会捐献",
+      "default_check": true,
+      "group": [
+        "日常"
+      ],
+      "entry": "0012-帮派捐献-任务入口"
+    }
+  ]
+}

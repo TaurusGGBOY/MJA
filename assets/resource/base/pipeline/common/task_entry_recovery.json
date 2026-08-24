@@ -1,0 +1,248 @@
+{
+  "MJA-公共-任务入口-恢复耗尽": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "FailTask",
+    "Abort": true,
+    "timeout": 1000
+  },
+  "MJA-公共-任务入口-重启游戏": {
+    "recognition": "DirectHit",
+    "action": "StopApp",
+    "package": "com.hanjiasongshu.dr22",
+    "max_hit": 1,
+    "timeout": 5000,
+    "next": ["0023-启动-游戏入口"]
+  },
+  "MJA-任务入口失败-BATTLE_PASS_REWARD_DAILY": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "max_hit": 1,
+    "timeout": 5000,
+    "on_error": ["MJA-公共-任务入口-恢复耗尽"],
+    "next": [
+      "[JumpBack]MJA-公共-任务入口-重启游戏",
+      "0001-战令奖励-任务入口"
+    ]
+  },
+  "MJA-任务入口失败-BUY_TEA_DAILY": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "max_hit": 1,
+    "timeout": 5000,
+    "on_error": ["MJA-公共-任务入口-恢复耗尽"],
+    "next": [
+      "[JumpBack]MJA-公共-任务入口-重启游戏",
+      "0003-买茶-任务入口"
+    ]
+  },
+  "MJA-任务入口失败-COLLECTION_DEPLOYMENT_DAILY": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "max_hit": 1,
+    "timeout": 5000,
+    "on_error": ["MJA-公共-任务入口-恢复耗尽"],
+    "next": [
+      "[JumpBack]MJA-公共-任务入口-重启游戏",
+      "0004-采集部署-打开-画卷"
+    ]
+  },
+  "MJA-任务入口失败-DAILY_TASK_REWARD_CLAIM_DAILY": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "max_hit": 1,
+    "timeout": 5000,
+    "on_error": ["MJA-公共-任务入口-恢复耗尽"],
+    "next": [
+      "[JumpBack]MJA-公共-任务入口-重启游戏",
+      "0005-日常任务奖励-任务入口"
+    ]
+  },
+  "MJA-任务入口失败-DUNGEON_SWEEP_DAILY": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "max_hit": 1,
+    "timeout": 5000,
+    "on_error": ["MJA-公共-任务入口-恢复耗尽"],
+    "next": [
+      "[JumpBack]MJA-公共-任务入口-重启游戏",
+      "0006-副本扫荡-任务入口"
+    ]
+  },
+  "MJA-任务入口失败-EAT_STAMINA_FOOD_DAILY": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "max_hit": 1,
+    "timeout": 5000,
+    "on_error": ["MJA-公共-任务入口-恢复耗尽"],
+    "next": [
+      "[JumpBack]MJA-公共-任务入口-重启游戏",
+      "0007-吃体力食物-任务入口"
+    ]
+  },
+  "MJA-任务入口失败-EQUIPMENT_DECOMPOSE_DAILY": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "max_hit": 1,
+    "timeout": 5000,
+    "on_error": ["MJA-公共-任务入口-恢复耗尽"],
+    "next": [
+      "[JumpBack]MJA-公共-任务入口-重启游戏",
+      "0008-分解装备-任务入口"
+    ]
+  },
+  "MJA-任务入口失败-FREE_APPRAISAL_DAILY": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "max_hit": 1,
+    "timeout": 5000,
+    "on_error": ["MJA-公共-任务入口-恢复耗尽"],
+    "next": [
+      "[JumpBack]MJA-公共-任务入口-重启游戏",
+      "0009-免费鉴定-任务入口"
+    ]
+  },
+  "MJA-任务入口失败-GUILD_ACTIVITY_CHALLENGE_DAILY": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "max_hit": 1,
+    "timeout": 5000,
+    "on_error": ["MJA-公共-任务入口-恢复耗尽"],
+    "next": [
+      "[JumpBack]MJA-公共-任务入口-重启游戏",
+      "0010-帮派活动挑战-任务入口"
+    ]
+  },
+  "MJA-任务入口失败-GUILD_AFFAIRS_DAILY": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "max_hit": 1,
+    "timeout": 5000,
+    "on_error": ["MJA-公共-任务入口-恢复耗尽"],
+    "next": [
+      "[JumpBack]MJA-公共-任务入口-重启游戏",
+      "0011-帮派事务-任务入口"
+    ]
+  },
+  "MJA-任务入口失败-GUILD_DONATION_DAILY": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "max_hit": 1,
+    "timeout": 5000,
+    "on_error": ["MJA-公共-任务入口-恢复耗尽"],
+    "next": [
+      "[JumpBack]MJA-公共-任务入口-重启游戏",
+      "0012-帮派捐献-任务入口"
+    ]
+  },
+  "MJA-任务入口失败-HERO_DISPATCH_DAILY": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "max_hit": 1,
+    "timeout": 5000,
+    "on_error": ["MJA-公共-任务入口-恢复耗尽"],
+    "next": [
+      "[JumpBack]MJA-公共-任务入口-重启游戏",
+      "0013-英雄派遣-任务入口"
+    ]
+  },
+  "MJA-任务入口失败-JIANLIN_RESOURCE_CONDENSATE_STAMINA_DAILY": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "max_hit": 1,
+    "timeout": 5000,
+    "on_error": ["MJA-公共-任务入口-恢复耗尽"],
+    "next": [
+      "[JumpBack]MJA-公共-任务入口-重启游戏",
+      "0014-剑林凝结体体力-任务入口"
+    ]
+  },
+  "MJA-任务入口失败-MAIL_REWARD_DAILY": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "max_hit": 1,
+    "timeout": 5000,
+    "on_error": ["MJA-公共-任务入口-恢复耗尽"],
+    "next": [
+      "[JumpBack]MJA-公共-任务入口-重启游戏",
+      "0015-邮件奖励-任务入口"
+    ]
+  },
+  "MJA-任务入口失败-MARTIAL_STUDY_BREAKTHROUGH_DAILY": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "max_hit": 1,
+    "timeout": 5000,
+    "on_error": ["MJA-公共-任务入口-恢复耗尽"],
+    "next": [
+      "[JumpBack]MJA-公共-任务入口-重启游戏",
+      "0016-武学突破-任务入口"
+    ]
+  },
+  "MJA-任务入口失败-RING_CHALLENGE_DAILY": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "max_hit": 1,
+    "timeout": 5000,
+    "on_error": ["MJA-公共-任务入口-恢复耗尽"],
+    "next": [
+      "[JumpBack]MJA-公共-任务入口-重启游戏",
+      "0017-擂台挑战-任务入口"
+    ]
+  },
+  "MJA-任务入口失败-SHADOW_RUINS_DAILY": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "max_hit": 1,
+    "timeout": 5000,
+    "on_error": ["MJA-公共-任务入口-恢复耗尽"],
+    "next": [
+      "[JumpBack]MJA-公共-任务入口-重启游戏",
+      "0018-影之遗迹-任务入口"
+    ]
+  },
+  "MJA-任务入口失败-SHOP_FREE_GIFT_DAILY": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "max_hit": 1,
+    "timeout": 5000,
+    "on_error": ["MJA-公共-任务入口-恢复耗尽"],
+    "next": [
+      "[JumpBack]MJA-公共-任务入口-重启游戏",
+      "0019-商店免费礼包-任务入口"
+    ]
+  },
+  "MJA-任务入口失败-SPEND_CONDENSATE_DAILY": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "max_hit": 1,
+    "timeout": 5000,
+    "on_error": ["MJA-公共-任务入口-恢复耗尽"],
+    "next": [
+      "[JumpBack]MJA-公共-任务入口-重启游戏",
+      "0020-消耗凝结体-任务入口"
+    ]
+  },
+  "MJA-任务入口失败-TRIAL_SWORD_DAILY": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "max_hit": 1,
+    "timeout": 5000,
+    "on_error": ["MJA-公共-任务入口-恢复耗尽"],
+    "next": [
+      "[JumpBack]MJA-公共-任务入口-重启游戏",
+      "0021-试剑-任务入口"
+    ]
+  },
+  "MJA-任务入口失败-WEEKLY_FREE_GIFT_DAILY": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "max_hit": 1,
+    "timeout": 5000,
+    "on_error": ["MJA-公共-任务入口-恢复耗尽"],
+    "next": [
+      "[JumpBack]MJA-公共-任务入口-重启游戏",
+      "0022-每周免费礼包-任务入口"
+    ]
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "task": [
+    {
+      "name": "GAME_START",
+      "label": "启动并进入游戏",
+      "default_check": true,
+      "group": [
+        "启动"
+      ],
+      "entry": "0023-启动-游戏入口"
+    },
+    {
+      "name": "GAME_STOP",
+      "label": "退出/关闭游戏",
+      "default_check": false,
+      "group": [
+        "启动"
+      ],
+      "entry": "0024-启动-游戏停止"
+    }
+  ]
+}

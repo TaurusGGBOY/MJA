@@ -1,0 +1,885 @@
+{
+  "0013-英雄派遣-任务入口": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0026-公共-游戏主页-页面"
+        ],
+        "box_index": 0
+      }
+    },
+    "action": "Custom",
+    "max_hit": 2,
+    "custom_action": "BeginTask",
+    "custom_action_param": {
+      "task_id": "HERO_DISPATCH_DAILY"
+    },
+    "timeout": 5000,
+    "on_error": ["MJA-任务入口失败-HERO_DISPATCH_DAILY", "MJA-公共-任务入口-恢复耗尽"],
+    "next": [
+      "0714-英雄派遣-主页-探测"
+    ]
+  },
+  "0714-英雄派遣-主页-探测": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0736-英雄派遣-英雄-主页-页面"
+        ]
+      }
+    },
+    "timeout": 8000,
+    "action": "DoNothing",
+    "next": [
+      "0715-英雄派遣-打开-画卷-世界",
+      "英雄派遣-打开-画卷"
+    ]
+  },
+  "英雄派遣-打开-画卷": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0736-英雄派遣-英雄-主页-页面",
+          "英雄派遣-画卷-滚动-入口"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "HERO_DISPATCH_DAILY",
+      "action_id": "open_painting_scroll",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "0736-英雄派遣-英雄-主页-页面",
+        "target_name": "英雄派遣-画卷-滚动-入口"
+      }
+    },
+    "max_hit": 1,
+    "retry_times": 0,
+    "next": [
+      "0716-英雄派遣-打开-派遣"
+    ]
+  },
+  "英雄派遣-画卷-滚动-入口": {
+    "recognition": "OCR",
+    "expected": "^画卷$",
+    "roi": [
+      70,
+      10,
+      95,
+      60
+    ],
+    "action": "DoNothing"
+  },
+  "0715-英雄派遣-打开-画卷-世界": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0736-英雄派遣-英雄-主页-页面",
+          "0737-英雄派遣-画卷-滚动-入口-世界"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "HERO_DISPATCH_DAILY",
+      "action_id": "open_painting_scroll",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "0736-英雄派遣-英雄-主页-页面",
+        "target_name": "0737-英雄派遣-画卷-滚动-入口-世界"
+      }
+    },
+    "max_hit": 1,
+    "retry_times": 0,
+    "next": [
+      "0716-英雄派遣-打开-派遣"
+    ]
+  },
+  "0716-英雄派遣-打开-派遣": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0738-英雄派遣-画卷-页面",
+          "0741-英雄派遣-英雄-派遣-入口"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "HERO_DISPATCH_DAILY",
+      "action_id": "open_hero_dispatch",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "0738-英雄派遣-画卷-页面",
+        "target_name": "0741-英雄派遣-英雄-派遣-入口"
+      }
+    },
+    "timeout": 8000,
+    "max_hit": 1,
+    "retry_times": 0,
+    "next": [
+      "0717-英雄派遣-派遣-页面-探测"
+    ]
+  },
+  "0717-英雄派遣-派遣-页面-探测": {
+    "recognition": "OCR",
+    "expected": [
+      "(?:侠客派遣|俠客派遣)",
+      "派遣等级"
+    ],
+    "roi": [
+      0,
+      0,
+      520,
+      180
+    ],
+    "timeout": 8000,
+    "action": "DoNothing",
+    "next": [
+      "0718-英雄派遣-初始-已完成决策"
+    ]
+  },
+  "0718-英雄派遣-初始-已完成决策": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "next": [
+      "0719-英雄派遣-初始-就已完成",
+      "0720-英雄派遣-初始-决策中"
+    ]
+  },
+  "0719-英雄派遣-初始-就已完成": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0750-英雄派遣-英雄-全部-已派遣-等待中"
+        ],
+        "box_index": 0
+      }
+    },
+    "action": "DoNothing",
+    "next": [
+      "0731-英雄派遣-已完成-全部"
+    ]
+  },
+  "0721-英雄派遣-非初始-已完成": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0750-英雄派遣-英雄-全部-已派遣-等待中"
+        ],
+        "box_index": 0
+      }
+    },
+    "action": "DoNothing",
+    "max_hit": 12,
+    "retry_times": 0,
+    "next": [
+      "0730-英雄派遣-成功-进度"
+    ]
+  },
+  "0720-英雄派遣-初始-决策中": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "max_hit": 12,
+    "next": [
+      "[JumpBack]0722-英雄派遣-初始-领取",
+      "[JumpBack]0724-英雄派遣-初始-选择",
+      "英雄派遣-初始-无-任务",
+      "0721-英雄派遣-非初始-已完成",
+      "英雄派遣-之后-无-完成无耗时"
+    ]
+  },
+  "0722-英雄派遣-初始-领取": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0742-英雄派遣-英雄-派遣-页面",
+          "0743-英雄派遣-英雄-首个-任务-可领取"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "max_hit": 12,
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "HERO_DISPATCH_DAILY",
+      "action_id": "select_first_visible_dispatch",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "0742-英雄派遣-英雄-派遣-页面",
+        "target_name": "0743-英雄派遣-英雄-首个-任务-可领取"
+      }
+    },
+    "next": [
+      "0723-英雄派遣-初始-领取-动作"
+    ]
+  },
+  "0723-英雄派遣-初始-领取-动作": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0742-英雄派遣-英雄-派遣-页面",
+          "0754-英雄派遣-英雄-领取-按钮"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "max_hit": 6,
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "HERO_DISPATCH_DAILY",
+      "action_id": "claim_first_dispatch",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "0742-英雄派遣-英雄-派遣-页面",
+        "target_name": "0754-英雄派遣-英雄-领取-按钮"
+      }
+    },
+    "next": [
+      "0725-英雄派遣-领取-奖励-探测"
+    ]
+  },
+  "0724-英雄派遣-初始-选择": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0742-英雄派遣-英雄-派遣-页面",
+          "0746-英雄派遣-英雄-首个-任务-可派遣"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "max_hit": 12,
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "HERO_DISPATCH_DAILY",
+      "action_id": "select_first_visible_dispatch",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "0742-英雄派遣-英雄-派遣-页面",
+        "target_name": "0746-英雄派遣-英雄-首个-任务-可派遣"
+      }
+    },
+    "next": [
+      "0728-英雄派遣-配置"
+    ]
+  },
+  "0725-英雄派遣-领取-奖励-探测": {
+    "recognition": "OCR",
+    "expected": "点击空白处关闭",
+    "roi": [
+      350,
+      580,
+      600,
+      140
+    ],
+    "timeout": 8000,
+    "action": "DoNothing",
+    "max_hit": 6,
+    "next": [
+      "0726-英雄派遣-关闭-奖励"
+    ]
+  },
+  "0726-英雄派遣-关闭-奖励": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0757-英雄派遣-英雄-奖励-弹窗",
+          "0758-英雄派遣-英雄-奖励-弹窗-关闭"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "max_hit": 6,
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "HERO_DISPATCH_DAILY",
+      "action_id": "close_reward_popup",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "0757-英雄派遣-英雄-奖励-弹窗",
+        "target_name": "0758-英雄派遣-英雄-奖励-弹窗-关闭"
+      }
+    },
+    "next": [
+      "0727-英雄派遣-成功-领取"
+    ]
+  },
+  "0727-英雄派遣-成功-领取": {
+    "recognition": "DirectHit",
+    "action": "DoNothing"
+  },
+  "0728-英雄派遣-配置": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0742-英雄派遣-英雄-派遣-页面",
+          "0755-英雄派遣-英雄-智能-配置"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "max_hit": 12,
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "HERO_DISPATCH_DAILY",
+      "action_id": "smart_configure_team",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "0742-英雄派遣-英雄-派遣-页面",
+        "target_name": "0755-英雄派遣-英雄-智能-配置"
+      }
+    },
+    "next": [
+      "0729-英雄派遣-发送"
+    ],
+    "on_error": [
+      "0729-英雄派遣-发送"
+    ]
+  },
+  "0729-英雄派遣-发送": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0742-英雄派遣-英雄-派遣-页面",
+          "0756-英雄派遣-英雄-派遣-按钮"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "max_hit": 12,
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "HERO_DISPATCH_DAILY",
+      "action_id": "dispatch_team",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "0742-英雄派遣-英雄-派遣-页面",
+        "target_name": "0756-英雄派遣-英雄-派遣-按钮"
+      }
+    }
+  },
+  "0730-英雄派遣-成功-进度": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "max_hit": 1,
+    "next": [
+      "0733-英雄派遣-关闭-派遣"
+    ]
+  },
+  "0731-英雄派遣-已完成-全部": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "max_hit": 1,
+    "next": [
+      "0733-英雄派遣-关闭-派遣"
+    ]
+  },
+  "英雄派遣-初始-无-任务": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0742-英雄派遣-英雄-派遣-页面",
+          "0753-英雄派遣-英雄-无-派遣-任务"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "DoNothing",
+    "max_hit": 1,
+    "next": [
+      "英雄派遣-成功-无-任务"
+    ]
+  },
+  "英雄派遣-之后-无-任务": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0742-英雄派遣-英雄-派遣-页面",
+          "0753-英雄派遣-英雄-无-派遣-任务"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "DoNothing",
+    "max_hit": 1,
+    "next": [
+      "英雄派遣-成功-无-任务"
+    ]
+  },
+  "英雄派遣-之后-无-完成无耗时": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0742-英雄派遣-英雄-派遣-页面",
+          "0745-英雄派遣-英雄-首个-任务-无完成派遣",
+          "0761-英雄派遣-英雄-首个-任务-无耗时"
+        ],
+        "box_index": 0
+      }
+    },
+    "timeout": 5000,
+    "action": "DoNothing",
+    "next": [
+      "0730-英雄派遣-成功-进度"
+    ],
+    "on_error": [
+      "0730-英雄派遣-成功-进度"
+    ]
+  },
+  "英雄派遣-成功-无-任务": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "next": [
+      "0733-英雄派遣-关闭-派遣"
+    ]
+  },
+  "0733-英雄派遣-关闭-派遣": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0742-英雄派遣-英雄-派遣-页面",
+          "0759-英雄派遣-英雄-派遣-关闭"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "max_hit": 1,
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "HERO_DISPATCH_DAILY",
+      "action_id": "close_hero_dispatch",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "0742-英雄派遣-英雄-派遣-页面",
+        "target_name": "0759-英雄派遣-英雄-派遣-关闭"
+      }
+    },
+    "retry_times": 0,
+    "next": [
+      "0734-英雄派遣-关闭-画卷"
+    ],
+    "on_error": [
+      "0734-英雄派遣-关闭-画卷",
+      "0735-英雄派遣-主页边界-探测"
+    ]
+  },
+  "0734-英雄派遣-关闭-画卷": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0738-英雄派遣-画卷-页面",
+          "0760-英雄派遣-英雄-画卷-关闭"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "max_hit": 1,
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "HERO_DISPATCH_DAILY",
+      "action_id": "close_hero_dispatch_painting",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "0738-英雄派遣-画卷-页面",
+        "target_name": "0760-英雄派遣-英雄-画卷-关闭"
+      }
+    },
+    "retry_times": 0,
+    "next": [
+      "0735-英雄派遣-主页边界-探测"
+    ],
+    "on_error": [
+      "0735-英雄派遣-主页边界-探测"
+    ]
+  },
+  "0735-英雄派遣-主页边界-探测": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0736-英雄派遣-英雄-主页-页面"
+        ]
+      }
+    },
+    "timeout": 8000,
+    "action": "DoNothing",
+    "max_hit": 1,
+    "next": [
+      "1371-公共-原生成功-主页边界"
+    ],
+    "on_error": [
+      "1372-公共-原生成功-尝试返回"
+    ]
+  },
+  "0736-英雄派遣-英雄-主页-页面": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0026-公共-游戏主页-页面"
+        ]
+      }
+    },
+    "action": "DoNothing"
+  },
+  "0737-英雄派遣-画卷-滚动-入口-世界": {
+    "recognition": "OCR",
+    "expected": "画卷",
+    "roi": [
+      1080,
+      0,
+      200,
+      120
+    ],
+    "action": "DoNothing"
+  },
+  "0738-英雄派遣-画卷-页面": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0739-英雄派遣-画卷-页面-标题",
+          "0740-英雄派遣-画卷-页面-偃武-世界"
+        ],
+        "box_index": 0
+      }
+    },
+    "action": "DoNothing"
+  },
+  "0739-英雄派遣-画卷-页面-标题": {
+    "recognition": "OCR",
+    "expected": "画卷",
+    "roi": [
+      70,
+      10,
+      95,
+      60
+    ],
+    "action": "DoNothing"
+  },
+  "0740-英雄派遣-画卷-页面-偃武-世界": {
+    "recognition": "OCR",
+    "expected": "偃武世界",
+    "roi": [
+      110,
+      120,
+      150,
+      70
+    ],
+    "action": "DoNothing"
+  },
+  "0741-英雄派遣-英雄-派遣-入口": {
+    "recognition": "OCR",
+    "expected": "(?:侠客派遣|俠客派遣)",
+    "roi": [
+      985,
+      625,
+      125,
+      70
+    ],
+    "action": "DoNothing"
+  },
+  "0742-英雄派遣-英雄-派遣-页面": {
+    "recognition": "OCR",
+    "expected": [
+      "(?:侠客派遣|俠客派遣)",
+      "派遣等级"
+    ],
+    "roi": [
+      0,
+      0,
+      520,
+      180
+    ],
+    "action": "DoNothing"
+  },
+  "0743-英雄派遣-英雄-首个-任务-可领取": {
+    "recognition": "OCR",
+    "expected": "完成",
+    "roi": [
+      20,
+      130,
+      300,
+      130
+    ],
+    "action": "DoNothing"
+  },
+  "0744-英雄派遣-英雄-首个-任务-有时钟": {
+    "recognition": "TemplateMatch",
+    "template": "daily/HERO_DISPATCH_DAILY/dispatch_clock.png",
+    "roi": [
+      100,
+      170,
+      55,
+      45
+    ],
+    "threshold": 0.75,
+    "action": "DoNothing"
+  },
+  "0745-英雄派遣-英雄-首个-任务-无完成派遣": {
+    "recognition": "OCR",
+    "expected": "完成",
+    "inverse": true,
+    "roi": [
+      20,
+      130,
+      300,
+      130
+    ],
+    "action": "DoNothing"
+  },
+  "0761-英雄派遣-英雄-首个-任务-无耗时": {
+    "recognition": "OCR",
+    "expected": "耗时",
+    "inverse": true,
+    "roi": [
+      20,
+      130,
+      300,
+      130
+    ],
+    "action": "DoNothing"
+  },
+  "0746-英雄派遣-英雄-首个-任务-可派遣": {
+    "recognition": "OCR",
+    "expected": "耗时",
+    "roi": [
+      20,
+      130,
+      300,
+      130
+    ],
+    "action": "DoNothing"
+  },
+  "0747-英雄派遣-英雄-首个-任务-中-进度": {
+    "recognition": "OCR",
+    "expected": [
+      "正在派遣中",
+      "派遣中",
+      "剩余\\s*\\d{1,2}:\\d{2}:\\d{2}",
+      "\\d{1,2}:\\d{2}:\\d{2}"
+    ],
+    "roi": [
+      20,
+      130,
+      300,
+      130
+    ],
+    "action": "DoNothing"
+  },
+  "0748-英雄派遣-英雄-零-派遣-任务": {
+    "recognition": "OCR",
+    "expected": "任务\\s*[:：]?\\s*0\\s*/\\s*12",
+    "roi": [
+      20,
+      80,
+      190,
+      70
+    ],
+    "action": "DoNothing"
+  },
+  "0749-英雄派遣-英雄-零-已完成-派遣任务": {
+    "recognition": "OCR",
+    "expected": "已完成\\s*[:：]?\\s*0",
+    "roi": [
+      190,
+      150,
+      180,
+      70
+    ],
+    "action": "DoNothing"
+  },
+  "0750-英雄派遣-英雄-全部-已派遣-等待中": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0742-英雄派遣-英雄-派遣-页面",
+          "0744-英雄派遣-英雄-首个-任务-有时钟"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "DoNothing"
+  },
+  "0751-英雄派遣-英雄-全部-已完成": {
+    "recognition": "OCR",
+    "expected": [
+      "任务\\s*[:：]?\\s*12\\s*/\\s*12",
+      "已完成\\s*[:：]?\\s*12"
+    ],
+    "roi": [
+      0,
+      80,
+      360,
+      70
+    ],
+    "action": "DoNothing"
+  },
+  "0752-英雄派遣-英雄-无-已选择-派遣-任务": {
+    "recognition": "OCR",
+    "expected": "尚未选择派遣任务",
+    "roi": [
+      930,
+      250,
+      340,
+      220
+    ],
+    "action": "DoNothing"
+  },
+  "0753-英雄派遣-英雄-无-派遣-任务": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0742-英雄派遣-英雄-派遣-页面",
+          "0748-英雄派遣-英雄-零-派遣-任务",
+          "0749-英雄派遣-英雄-零-已完成-派遣任务",
+          "0752-英雄派遣-英雄-无-已选择-派遣-任务"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "DoNothing"
+  },
+  "0754-英雄派遣-英雄-领取-按钮": {
+    "recognition": "OCR",
+    "expected": [
+      "领取",
+      "领 取"
+    ],
+    "roi": [
+      900,
+      450,
+      380,
+      220
+    ],
+    "action": "DoNothing"
+  },
+  "0755-英雄派遣-英雄-智能-配置": {
+    "recognition": "OCR",
+    "expected": "智能配置",
+    "roi": [
+      760,
+      520,
+      220,
+      100
+    ],
+    "action": "DoNothing"
+  },
+  "0756-英雄派遣-英雄-派遣-按钮": {
+    "recognition": "OCR",
+    "expected": "派遣",
+    "roi": [
+      950,
+      520,
+      300,
+      100
+    ],
+    "action": "DoNothing"
+  },
+  "0757-英雄派遣-英雄-奖励-弹窗": {
+    "recognition": "OCR",
+    "expected": "点击空白处关闭",
+    "roi": [
+      350,
+      580,
+      600,
+      140
+    ],
+    "action": "DoNothing"
+  },
+  "0758-英雄派遣-英雄-奖励-弹窗-关闭": {
+    "recognition": "OCR",
+    "expected": "点击空白处关闭",
+    "roi": [
+      350,
+      580,
+      600,
+      140
+    ],
+    "action": "DoNothing"
+  },
+  "0759-英雄派遣-英雄-派遣-关闭": {
+    "recognition": "TemplateMatch",
+    "template": "daily/HERO_DISPATCH_DAILY/dispatch_close.png",
+    "roi": [
+      1175,
+      5,
+      75,
+      75
+    ],
+    "threshold": 0.7,
+    "green_mask": true,
+    "action": "DoNothing"
+  },
+  "0760-英雄派遣-英雄-画卷-关闭": {
+    "recognition": "TemplateMatch",
+    "template": "daily/HERO_DISPATCH_DAILY/painting_close.png",
+    "roi": [
+      1175,
+      5,
+      75,
+      75
+    ],
+    "threshold": 0.7,
+    "green_mask": true,
+    "action": "DoNothing"
+  }
+}

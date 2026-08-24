@@ -1,0 +1,588 @@
+{
+  "0001-战令奖励-任务入口": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0026-公共-游戏主页-页面"
+        ],
+        "box_index": 0
+      }
+    },
+    "action": "Custom",
+    "custom_action": "BeginTask",
+    "custom_action_param": {
+      "task_id": "BATTLE_PASS_REWARD_DAILY"
+    },
+    "timeout": 5000,
+    "max_hit": 2,
+    "on_error": ["MJA-任务入口失败-BATTLE_PASS_REWARD_DAILY", "MJA-公共-任务入口-恢复耗尽"],
+    "next": [
+      "0044-战令奖励-打开-战斗-战令"
+    ]
+  },
+  "0044-战令奖励-打开-战斗-战令": {
+    "max_hit": 1,
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0070-战令奖励-战斗-战令-主页-页面",
+          "0075-战令奖励-战斗-战令-打开"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "BATTLE_PASS_REWARD_DAILY",
+      "action_id": "open_battle_pass",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "0070-战令奖励-战斗-战令-主页-页面",
+        "target_name": "0075-战令奖励-战斗-战令-打开"
+      }
+    },
+    "next": [
+      "0046-战令奖励-打开-任务"
+    ],
+    "retry_times": 0
+  },
+  "0046-战令奖励-打开-任务": {
+    "max_hit": 1,
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0076-战令奖励-战斗-战令-页面",
+          "0081-战令奖励-战斗-战令-任务-标签"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "BATTLE_PASS_REWARD_DAILY",
+      "action_id": "open_battle_pass_tasks",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "0076-战令奖励-战斗-战令-页面",
+        "target_name": "0081-战令奖励-战斗-战令-任务-标签"
+      }
+    },
+    "next": [
+      "0048-战令奖励-任务-领取",
+      "0054-战令奖励-打开-奖励"
+    ],
+    "retry_times": 0
+  },
+  "0048-战令奖励-任务-领取": {
+    "max_hit": 1,
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0079-战令奖励-战斗-战令-任务",
+          "0082-战令奖励-战斗-战令-任务-奖励-领取"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "BATTLE_PASS_REWARD_DAILY",
+      "action_id": "claim_task_reward",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "0079-战令奖励-战斗-战令-任务",
+        "target_name": "0082-战令奖励-战斗-战令-任务-奖励-领取"
+      }
+    },
+    "next": [
+      "0052-战令奖励-任务-关闭-奖励"
+    ],
+    "retry_times": 0
+  },
+  "0052-战令奖励-任务-关闭-奖励": {
+    "max_hit": 1,
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0092-战令奖励-战斗-战令-奖励-弹窗",
+          "0093-战令奖励-战斗-战令-奖励-弹窗-关闭"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "BATTLE_PASS_REWARD_DAILY",
+      "action_id": "close_reward_popup",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "0092-战令奖励-战斗-战令-奖励-弹窗",
+        "target_name": "0093-战令奖励-战斗-战令-奖励-弹窗-关闭"
+      }
+    },
+    "next": [
+      "0054-战令奖励-打开-奖励"
+    ],
+    "retry_times": 0
+  },
+  "0054-战令奖励-打开-奖励": {
+    "max_hit": 1,
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0079-战令奖励-战斗-战令-任务",
+          "0084-战令奖励-战斗-战令-奖励-标签"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "BATTLE_PASS_REWARD_DAILY",
+      "action_id": "open_battle_pass_rewards",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "0079-战令奖励-战斗-战令-任务",
+        "target_name": "0084-战令奖励-战斗-战令-奖励-标签"
+      }
+    },
+    "next": [
+      "0056-战令奖励-基础-领取",
+      "0063-战令奖励-关闭-成功"
+    ],
+    "retry_times": 0
+  },
+  "0056-战令奖励-基础-领取": {
+    "max_hit": 1,
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0085-战令奖励-战斗-战令-奖励",
+          "0088-战令奖励-战斗-战令-基础-红色-红点-奖励"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "BATTLE_PASS_REWARD_DAILY",
+      "action_id": "claim_basic_red_dot_reward",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "0085-战令奖励-战斗-战令-奖励",
+        "target_name": "0088-战令奖励-战斗-战令-基础-红色-红点-奖励"
+      }
+    },
+    "next": [
+      "0060-战令奖励-基础-关闭-奖励"
+    ],
+    "on_error": [
+      "0063-战令奖励-关闭-成功"
+    ],
+    "retry_times": 0
+  },
+  "0060-战令奖励-基础-关闭-奖励": {
+    "max_hit": 1,
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0092-战令奖励-战斗-战令-奖励-弹窗",
+          "0093-战令奖励-战斗-战令-奖励-弹窗-关闭"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "BATTLE_PASS_REWARD_DAILY",
+      "action_id": "close_reward_popup",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "0092-战令奖励-战斗-战令-奖励-弹窗",
+        "target_name": "0093-战令奖励-战斗-战令-奖励-弹窗-关闭"
+      }
+    },
+    "next": [
+      "0063-战令奖励-关闭-成功"
+    ],
+    "retry_times": 0
+  },
+  "0063-战令奖励-关闭-成功": {
+    "max_hit": 1,
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0085-战令奖励-战斗-战令-奖励",
+          "0098-战令奖励-战斗-战令-关闭"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "BATTLE_PASS_REWARD_DAILY",
+      "action_id": "close_battle_pass",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "0085-战令奖励-战斗-战令-奖励",
+        "target_name": "0098-战令奖励-战斗-战令-关闭"
+      }
+    },
+    "retry_times": 0,
+    "next": [
+      "1371-公共-原生成功-主页边界"
+    ]
+  },
+  "0070-战令奖励-战斗-战令-主页-页面": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0071-战令奖励-战斗-战令-主页-活动",
+          "0072-战令奖励-战斗-战令-主页-祈福",
+          "0073-战令奖励-战斗-战令-主页-副本",
+          "0074-战令奖励-战斗-战令-主页-画卷"
+        ],
+        "box_index": 0
+      }
+    },
+    "action": "DoNothing"
+  },
+  "0071-战令奖励-战斗-战令-主页-活动": {
+    "recognition": "OCR",
+    "expected": [
+      "^活动$",
+      "^动$"
+    ],
+    "roi": [
+      840,
+      20,
+      110,
+      90
+    ],
+    "action": "DoNothing"
+  },
+  "0072-战令奖励-战斗-战令-主页-祈福": {
+    "recognition": "OCR",
+    "expected": "^祈福$",
+    "roi": [
+      960,
+      20,
+      100,
+      90
+    ],
+    "action": "DoNothing"
+  },
+  "0073-战令奖励-战斗-战令-主页-副本": {
+    "recognition": "OCR",
+    "expected": "^副本$",
+    "roi": [
+      1020,
+      20,
+      120,
+      90
+    ],
+    "action": "DoNothing"
+  },
+  "0074-战令奖励-战斗-战令-主页-画卷": {
+    "recognition": "OCR",
+    "expected": "^画卷$",
+    "roi": [
+      1080,
+      20,
+      120,
+      90
+    ],
+    "action": "DoNothing"
+  },
+  "0075-战令奖励-战斗-战令-打开": {
+    "recognition": "OCR",
+    "expected": "战令",
+    "roi": [
+      760,
+      20,
+      140,
+      90
+    ],
+    "action": "DoNothing"
+  },
+  "0076-战令奖励-战斗-战令-页面": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0077-战令奖励-战斗-战令-标题",
+          "0078-战令奖励-战斗-战令-周期"
+        ],
+        "box_index": 0
+      }
+    },
+    "action": "DoNothing"
+  },
+  "0077-战令奖励-战斗-战令-标题": {
+    "recognition": "OCR",
+    "expected": "^战令$",
+    "roi": [
+      40,
+      15,
+      130,
+      60
+    ],
+    "action": "DoNothing"
+  },
+  "0078-战令奖励-战斗-战令-周期": {
+    "recognition": "OCR",
+    "expected": "^本期剩余时间.*$",
+    "roi": [
+      160,
+      165,
+      320,
+      80
+    ],
+    "action": "DoNothing"
+  },
+  "0079-战令奖励-战斗-战令-任务": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0076-战令奖励-战斗-战令-页面",
+          "0081-战令奖励-战斗-战令-任务-标签",
+          "0080-战令奖励-战斗-战令-任务-内容"
+        ],
+        "box_index": 0
+      }
+    },
+    "action": "DoNothing"
+  },
+  "0080-战令奖励-战斗-战令-任务-内容": {
+    "recognition": "OCR",
+    "expected": [
+      "^每周任务$",
+      "^当期任务$",
+      "^追赶任务$"
+    ],
+    "roi": [
+      180,
+      610,
+      500,
+      100
+    ],
+    "action": "DoNothing"
+  },
+  "0081-战令奖励-战斗-战令-任务-标签": {
+    "recognition": "OCR",
+    "expected": "^任务$",
+    "roi": [
+      40,
+      165,
+      100,
+      100
+    ],
+    "action": "DoNothing"
+  },
+  "0082-战令奖励-战斗-战令-任务-奖励-领取": {
+    "recognition": "OCR",
+    "expected": "^领取$",
+    "roi": [
+      700,
+      190,
+      220,
+      180
+    ],
+    "action": "DoNothing"
+  },
+  "0084-战令奖励-战斗-战令-奖励-标签": {
+    "recognition": "OCR",
+    "expected": "^奖励$",
+    "roi": [
+      40,
+      70,
+      100,
+      90
+    ],
+    "action": "DoNothing"
+  },
+  "0085-战令奖励-战斗-战令-奖励": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0076-战令奖励-战斗-战令-页面",
+          "0086-战令奖励-战斗-战令-基础-轨道",
+          "0087-战令奖励-战斗-战令-等级"
+        ],
+        "box_index": 0
+      }
+    },
+    "action": "DoNothing"
+  },
+  "0086-战令奖励-战斗-战令-基础-轨道": {
+    "recognition": "OCR",
+    "expected": "^基础版$",
+    "roi": [
+      170,
+      330,
+      130,
+      150
+    ],
+    "action": "DoNothing"
+  },
+  "0087-战令奖励-战斗-战令-等级": {
+    "recognition": "OCR",
+    "expected": "^战令等级$",
+    "roi": [
+      160,
+      230,
+      170,
+      110
+    ],
+    "action": "DoNothing"
+  },
+  "0088-战令奖励-战斗-战令-基础-红色-红点-奖励": {
+    "recognition": "ColorMatch",
+    "method": 4,
+    "lower": [
+      180,
+      0,
+      0
+    ],
+    "upper": [
+      255,
+      120,
+      120
+    ],
+    "roi": [
+      300,
+      330,
+      280,
+      60
+    ],
+    "connected": true,
+    "count": 80,
+    "order_by": "Area",
+    "index": 0,
+    "action": "DoNothing"
+  },
+  "0092-战令奖励-战斗-战令-奖励-弹窗": {
+    "recognition": "OCR",
+    "expected": [
+      "^恭喜获得$",
+      "^恭喜$",
+      "^喜获得$",
+      "^罗喜获得$",
+      "^墨喜获得$",
+      "^获得$",
+      "^获得奖励$"
+    ],
+    "roi": [
+      0,
+      100,
+      1280,
+      620
+    ],
+    "action": "DoNothing"
+  },
+  "0093-战令奖励-战斗-战令-奖励-弹窗-关闭": {
+    "recognition": "OCR",
+    "expected": "^点击空白处关闭$",
+    "roi": [
+      300,
+      540,
+      700,
+      180
+    ],
+    "action": "DoNothing"
+  },
+  "0094-战令奖励-战斗-战令-物品-弹窗": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0095-战令奖励-战斗-战令-物品-弹窗-类型",
+          "0096-战令奖励-战斗-战令-物品-弹窗-拥有"
+        ],
+        "box_index": 0
+      }
+    },
+    "action": "DoNothing"
+  },
+  "0095-战令奖励-战斗-战令-物品-弹窗-类型": {
+    "recognition": "OCR",
+    "expected": "^物品$",
+    "roi": [
+      700,
+      240,
+      140,
+      100
+    ],
+    "action": "DoNothing"
+  },
+  "0096-战令奖励-战斗-战令-物品-弹窗-拥有": {
+    "recognition": "OCR",
+    "expected": "^当前拥有.*$",
+    "roi": [
+      680,
+      300,
+      180,
+      100
+    ],
+    "action": "DoNothing"
+  },
+  "0097-战令奖励-战斗-战令-物品-弹窗-关闭": {
+    "recognition": "OCR",
+    "expected": "^战令$",
+    "roi": [
+      40,
+      15,
+      130,
+      60
+    ],
+    "action": "DoNothing"
+  },
+  "0098-战令奖励-战斗-战令-关闭": {
+    "recognition": "TemplateMatch",
+    "template": "daily/BUY_TEA_DAILY/shop_close.png",
+    "roi": [
+      1170,
+      0,
+      110,
+      110
+    ],
+    "threshold": 0.36,
+    "action": "DoNothing"
+  }
+}

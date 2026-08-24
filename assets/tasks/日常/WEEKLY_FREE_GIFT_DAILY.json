@@ -1,0 +1,11 @@
+{
+  "task": [
+    {
+      "name": "WEEKLY_FREE_GIFT_DAILY",
+      "label": "每周免费礼包",
+      "default_check": true,
+      "group": ["日常"],
+      "entry": "0022-每周免费礼包-任务入口"
+    }
+  ]
+}

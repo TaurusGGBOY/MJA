@@ -1,0 +1,52 @@
+{
+  "0025-公共-游戏世界-页面": {
+    "recognition": "TemplateMatch",
+    "template": "home/home_marker.png",
+    "roi": [1040, 0, 240, 110],
+    "threshold": 0.375,
+    "action": "DoNothing"
+  },
+  "0026-公共-游戏主页-页面": {
+    "recognition": "OCR",
+    "expected": ["已击破", "侠客", "道具", "载具", "成就"],
+    "roi": [920, 540, 220, 100],
+    "action": "DoNothing"
+  },
+  "0027-公共-游戏侧边面板-商店": {
+    "recognition": "OCR",
+    "expected": "^商城$",
+    "roi": [925, 270, 105, 75],
+    "action": "DoNothing"
+  },
+  "0028-公共-游戏侧边面板-日常": {
+    "recognition": "OCR",
+    "expected": "^日常$",
+    "roi": [1040, 270, 120, 75],
+    "action": "DoNothing"
+  },
+  "0029-公共-游戏侧边面板-打开": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0027-公共-游戏侧边面板-商店",
+          "0028-公共-游戏侧边面板-日常"
+        ],
+        "box_index": 0
+      }
+    },
+    "action": "DoNothing"
+  },
+  "0030-公共-游戏功能面板-入口": {
+    "recognition": "ColorMatch",
+    "method": 4,
+    "lower": [165, 135, 75],
+    "upper": [255, 225, 180],
+    "roi": [1170, 10, 60, 60],
+    "connected": true,
+    "count": 50,
+    "order_by": "Area",
+    "index": 0,
+    "action": "DoNothing"
+  }
+}

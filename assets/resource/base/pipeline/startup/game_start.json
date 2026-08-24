@@ -1,0 +1,199 @@
+{
+  "0023-启动-游戏入口": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "max_hit": 1,
+    "timeout": 1000,
+    "next": ["1356-启动-游戏启动"]
+  },
+  "1356-启动-游戏启动": {
+    "recognition": "DirectHit",
+    "action": "StartApp",
+    "package": "com.hanjiasongshu.dr22/.MainActivity",
+    "repeat": 5,
+    "repeat_delay": 1000,
+    "timeout": 120000,
+    "post_delay": 5000,
+    "next": [
+      "[JumpBack]1379-启动-关闭装备残留页",
+      "[JumpBack]1376-启动-关闭副本残留页",
+      "[JumpBack]1373-启动-关闭剑林残留页",
+      "[JumpBack]1359-启动-可选关闭公告页",
+      "[JumpBack]1360-启动-数据校验失败-继续下载",
+      "1357-启动-游戏启动成功-左下12探测",
+      "1362-启动-游戏就绪"
+    ],
+    "on_error": ["关闭游戏"]
+  },
+  "1379-启动-关闭装备残留页": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "1380-启动-装备残留页-标题",
+          "1381-启动-装备残留页-关闭"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Click",
+    "target": [1202, 30, 24, 24],
+    "max_hit": 1,
+    "post_delay": 1500
+  },
+  "1380-启动-装备残留页-标题": {
+    "recognition": "OCR",
+    "expected": "^装备$",
+    "roi": [0, 0, 160, 100],
+    "action": "DoNothing"
+  },
+  "1381-启动-装备残留页-关闭": {
+    "recognition": "TemplateMatch",
+    "template": "home/modal_close.png",
+    "roi": [1160, 0, 100, 100],
+    "threshold": 0.075,
+    "action": "DoNothing"
+  },
+  "1376-启动-关闭副本残留页": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "1377-启动-副本残留页-标题",
+          "1378-启动-副本残留页-关闭"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Click",
+    "target": [1202, 30, 24, 24],
+    "max_hit": 1,
+    "post_delay": 1500
+  },
+  "1377-启动-副本残留页-标题": {
+    "recognition": "OCR",
+    "expected": "燕王秘陵",
+    "roi": [300, 300, 700, 180],
+    "action": "DoNothing"
+  },
+  "1378-启动-副本残留页-关闭": {
+    "recognition": "TemplateMatch",
+    "template": "home/modal_close.png",
+    "roi": [1160, 0, 100, 100],
+    "threshold": 0.075,
+    "action": "DoNothing"
+  },
+  "1373-启动-关闭剑林残留页": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "1374-启动-剑林残留页-标题",
+          "1375-启动-剑林残留页-关闭"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Click",
+    "target": [1205, 33, 18, 18],
+    "max_hit": 1,
+    "post_delay": 1500
+  },
+  "1374-启动-剑林残留页-标题": {
+    "recognition": "OCR",
+    "expected": [
+      "^剑林\\s*/\\s*养成$",
+      "^养成\\s*/\\s*资源$",
+      "^剑林\\s*/\\s*资源$"
+    ],
+    "roi": [40, 0, 280, 100],
+    "action": "DoNothing"
+  },
+  "1375-启动-剑林残留页-关闭": {
+    "recognition": "DirectHit",
+    "action": "DoNothing"
+  },
+  "1357-启动-游戏启动成功-左下12探测": {
+    "recognition": "OCR",
+    "expected": "^12\\+?$",
+    "roi": [0, 560, 540, 160],
+    "timeout": 200000,
+    "max_hit": 1,
+    "action": "DoNothing",
+    "next": [
+      "[JumpBack]1361-启动-可选关闭月签到奖励页",
+      "[JumpBack]1370-启动-游戏启动后-进入按钮",
+      "1362-启动-游戏就绪"
+    ]
+  },
+  "1359-启动-可选关闭公告页": {
+    "recognition": "OCR",
+    "expected": "公告|公|告",
+    "roi": [0, 0, 420, 520],
+    "timeout": 1500,
+    "max_hit": 1,
+    "action": "Click",
+    "target": [1160, 0, 120, 100],
+    "post_delay": 1000
+  },
+  "1360-启动-数据校验失败-继续下载": {
+    "recognition": "OCR",
+    "expected": ["允许下载", "继续下载"],
+    "roi": [630, 450, 330, 80],
+    "timeout": 3000,
+    "max_hit": 1,
+    "action": "Click",
+    "target": [650, 450, 300, 80],
+    "post_delay": 1000
+  },
+  "1361-启动-可选关闭月签到奖励页": {
+    "recognition": "OCR",
+    "expected": ["^本月可领取物品$", "^本月.*可领取.*物品$"],
+    "roi": [150, 100, 900, 520],
+    "timeout": 1500,
+    "max_hit": 1,
+    "action": "Click",
+    "target": [1060, 152, 16, 16]
+  },
+  "1362-启动-游戏就绪": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0026-公共-游戏主页-页面"
+        ],
+        "box_index": 0
+      }
+    },
+    "timeout": 10000,
+    "action": "Custom",
+    "custom_action": "RuntimeHealth"
+  },
+  "关闭游戏": {
+    "recognition": "DirectHit",
+    "action": "StopApp",
+    "package": "com.hanjiasongshu.dr22",
+    "max_hit": 1,
+    "next": ["1356-启动-游戏启动"]
+  },
+  "1370-启动-游戏启动后-进入按钮": {
+    "recognition": "OCR",
+    "expected": [
+      "开始游戏",
+      "点击开始游戏[！!]?",
+      "点击开始游戏",
+      "进入游戏[！!]?",
+      "点击进入游戏[！!]?",
+      "点击开始游戏[！!]?",
+      "进入游戏[！!?]?",
+      "点击进入游戏[！!?]?",
+      "戏"
+    ],
+    "roi": [350, 540, 580, 170],
+    "timeout": 15000,
+    "max_hit": 2,
+    "action": "Click",
+    "target": [575, 620, 120, 25],
+    "post_delay": 10000
+  }
+}

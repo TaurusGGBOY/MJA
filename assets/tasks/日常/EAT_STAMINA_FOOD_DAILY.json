@@ -1,0 +1,11 @@
+{
+  "task": [
+    {
+      "name": "EAT_STAMINA_FOOD_DAILY",
+      "label": "食用体力食物",
+      "default_check": true,
+      "group": ["日常"],
+      "entry": "0007-吃体力食物-任务入口"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "task": [
+    {
+      "name": "BREAK_ARRAY_MARTIAL_DAILY",
+      "label": "破阵演武",
+      "default_check": true,
+      "group": ["日常"],
+      "entry": "0002-破阵武学-任务入口"
+    }
+  ]
+}

@@ -1,0 +1,1131 @@
+{
+  "0018-影之遗迹-任务入口": {
+    "recognition": {
+      "type": "Or",
+      "param": {
+        "any_of": [
+          "0026-公共-游戏主页-页面",
+          "1185-影之遗迹-影-画卷-页面-万用商店"
+        ]
+      }
+    },
+    "action": "Custom",
+    "custom_action": "BeginTask",
+    "custom_action_param": {
+      "task_id": "SHADOW_RUINS_DAILY"
+    },
+    "timeout": 5000,
+    "max_hit": 2,
+    "next": [
+      "[JumpBack]1170-影之遗迹-打开-画卷"
+    ],
+    "on_error": ["MJA-任务入口失败-SHADOW_RUINS_DAILY", "MJA-公共-任务入口-恢复耗尽"]
+  },
+  "1170-影之遗迹-打开-画卷": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "1181-影之遗迹-影-主页-页面",
+          "1182-影之遗迹-影-画卷-入口"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "SHADOW_RUINS_DAILY",
+      "action_id": "open_painting_scroll",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "1181-影之遗迹-影-主页-页面",
+        "target_name": "1182-影之遗迹-影-画卷-入口"
+      }
+    },
+    "next": [
+      "1172-影之遗迹-打开-影"
+    ],
+    "retry_times": 0
+  },
+  "1208-影之遗迹-跳过-准备-点击": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "1194-影之遗迹-影-关卡-页面",
+          "1224-影之遗迹-影-跳过-准备",
+          "1226-影之遗迹-影-跳过-准备-未勾选"
+        ],
+        "box_index": 2
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "SHADOW_RUINS_DAILY",
+      "action_id": "enable_shadow_skip_prepare",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 2,
+        "page_name": "1194-影之遗迹-影-关卡-页面",
+        "target_name": "1226-影之遗迹-影-跳过-准备-未勾选"
+      }
+    },
+    "next": [
+      "1501-MJA-影之遗迹地图推进-前景三点循环"
+    ],
+    "retry_times": 0
+  },
+  "1172-影之遗迹-打开-影": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "1190-影之遗迹-影-入口"
+        ],
+        "box_index": 0
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "SHADOW_RUINS_DAILY",
+      "action_id": "open_shadow",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 0,
+        "target_name": "1190-影之遗迹-影-入口"
+      }
+    },
+    "next": [
+      "1173-影之遗迹-选择-进行中"
+    ],
+    "on_error": [
+      "1591-MJA-影之遗迹-关闭-影-页面"
+    ],
+    "retry_times": 0
+  },
+  "1590-MJA-影之遗迹-影-关闭-图标": {
+    "recognition": "TemplateMatch",
+    "template": "daily/BUY_TEA_DAILY/shop_close.png",
+    "roi": [
+      1160,
+      0,
+      120,
+      120
+    ],
+    "threshold": 0.39,
+    "action": "DoNothing"
+  },
+  "1591-MJA-影之遗迹-关闭-影-页面": {
+    "timeout": 8000,
+    "max_hit": 1,
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "1191-影之遗迹-影-页面",
+          "1590-MJA-影之遗迹-影-关闭-图标"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "SHADOW_RUINS_DAILY",
+      "action_id": "close_shadow_page",
+      "kind": "click",
+      "fixed_click_mode": "shadow_page_close",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "1191-影之遗迹-影-页面",
+        "target_name": "1590-MJA-影之遗迹-影-关闭-图标"
+      }
+    },
+    "next": [
+      "[JumpBack]1277-公共-已知-画卷-关闭",
+      "1371-公共-原生成功-主页边界"
+    ],
+    "retry_times": 0
+  },
+  "1173-影之遗迹-选择-进行中": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "1191-影之遗迹-影-页面",
+          "1192-影之遗迹-影-进行中"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "SHADOW_RUINS_DAILY",
+      "action_id": "select_active_shadow_card",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "1191-影之遗迹-影-页面",
+        "target_name": "1192-影之遗迹-影-进行中"
+      }
+    },
+    "next": [
+      "1174-影之遗迹-进入-关卡"
+    ],
+    "on_error": [
+      "1369-公共-通用停止"
+    ],
+    "retry_times": 0
+  },
+  "1174-影之遗迹-进入-关卡": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "1191-影之遗迹-影-页面",
+          "1193-影之遗迹-影-关卡-入口"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "SHADOW_RUINS_DAILY",
+      "action_id": "enter_shadow_stage",
+      "kind": "click",
+      "fixed_click_mode": "shadow_stage_entry_button",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "1191-影之遗迹-影-页面",
+        "target_name": "1193-影之遗迹-影-关卡-入口"
+      }
+    },
+    "next": [
+      "1176-影之遗迹-跨图-确认",
+      "1593-MJA-影之遗迹-进入-探索页",
+      "1592-MJA-影之遗迹-自动寻路-等待-关卡"
+    ],
+    "retry_times": 0
+  },
+  "1593-MJA-影之遗迹-进入-探索页": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "1528-MJA-影之遗迹地图推进-识别-探索页"
+        ],
+        "box_index": 0
+      }
+    },
+    "action": "DoNothing",
+    "next": [
+      "1501-MJA-影之遗迹地图推进-前景三点循环"
+    ]
+  },
+  "1594-MJA-影之遗迹-开始战斗": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "1534-MJA-影之遗迹地图推进-识别-战斗目标"
+        ],
+        "box_index": 0
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "SHADOW_RUINS_DAILY",
+      "action_id": "challenge_shadow_stage",
+      "kind": "click",
+      "fixed_click_mode": "shadow_battle_start",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 0,
+        "page_name": "1534-MJA-影之遗迹地图推进-识别-战斗目标",
+        "target_name": "1534-MJA-影之遗迹地图推进-识别-战斗目标"
+      }
+    },
+    "next": [
+      "[JumpBack]1509-MJA-影之遗迹地图推进-战斗等待"
+    ],
+    "retry_times": 0,
+    "timeout": 20000
+  },
+  "1595-MJA-影之遗迹-确认退出": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "1596-MJA-影之遗迹-退出确认-文案"
+        ],
+        "box_index": 0
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "SHADOW_RUINS_DAILY",
+      "action_id": "confirm_shadow_completion",
+      "kind": "click",
+      "fixed_click_mode": "shadow_completion_confirm",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 0,
+        "page_name": "1596-MJA-影之遗迹-退出确认-文案",
+        "target_name": "1596-MJA-影之遗迹-退出确认-文案"
+      }
+    },
+    "next": [
+      "1597-MJA-影之遗迹-关闭奖励弹窗",
+      "[JumpBack]1591-MJA-影之遗迹-关闭-影-页面",
+      "1371-公共-原生成功-主页边界"
+    ],
+    "retry_times": 0,
+    "timeout": 10000
+  },
+  "1592-MJA-影之遗迹-自动寻路-等待-关卡": {
+    "timeout": 120000,
+    "max_hit": 1,
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "1194-影之遗迹-影-关卡-页面"
+        ],
+        "box_index": 0
+      }
+    },
+    "action": "DoNothing",
+    "next": [
+      "1208-影之遗迹-跳过-准备-点击"
+    ],
+    "on_error": [
+      "1221-影之遗迹-记录-失败"
+    ],
+    "retry_times": 0
+  },
+  "1175-影之遗迹-跨图-确认-文案": {
+    "recognition": "OCR",
+    "expected": "^确认$",
+    "roi": [
+      760,
+      400,
+      300,
+      150
+    ],
+    "action": "DoNothing"
+  },
+  "1176-影之遗迹-跨图-确认": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "1175-影之遗迹-跨图-确认-文案"
+        ],
+        "box_index": 0
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "SHADOW_RUINS_DAILY",
+      "action_id": "confirm_shadow_teleport",
+      "kind": "click",
+      "fixed_click_mode": "shadow_teleport_confirm",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 0,
+        "page_name": "1175-影之遗迹-跨图-确认-文案",
+        "target_name": "1175-影之遗迹-跨图-确认-文案"
+      }
+    },
+    "next": [
+      "[JumpBack]1170-影之遗迹-打开-画卷"
+    ],
+    "retry_times": 0
+  },
+  "1178-影之遗迹-离开-关卡": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "1186-影之遗迹-影-离开"
+        ],
+        "box_index": 0
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "SHADOW_RUINS_DAILY",
+      "action_id": "leave_shadow_stage",
+      "kind": "click",
+      "fixed_click_mode": "shadow_stage_leave",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 0,
+        "target_name": "1186-影之遗迹-影-离开"
+      }
+    },
+    "next": [
+      "1591-MJA-影之遗迹-关闭-影-页面"
+    ]
+  },
+  "1180-影之遗迹-战斗未知结果-结果": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "FailTask",
+    "Abort": true
+  },
+  "1216-影之遗迹-战斗-循环-耗尽": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "FailTask",
+    "Abort": true
+  },
+  "1221-影之遗迹-记录-失败": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "FailTask",
+    "Abort": true
+  },
+  "1181-影之遗迹-影-主页-页面": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0026-公共-游戏主页-页面"
+        ],
+        "box_index": 0
+      }
+    },
+    "action": "DoNothing"
+  },
+  "1182-影之遗迹-影-画卷-入口": {
+    "recognition": "OCR",
+    "expected": "^画卷$",
+    "roi": [
+      1095,
+      45,
+      85,
+      40
+    ],
+    "action": "DoNothing"
+  },
+  "1183-影之遗迹-影-画卷-页面": {
+    "recognition": "OCR",
+    "expected": "万用商店",
+    "roi": [
+      0,
+      0,
+      1280,
+      720
+    ],
+    "action": "DoNothing"
+  },
+  "1184-影之遗迹-影-画卷-页面-可见": {
+    "recognition": "OCR",
+    "expected": "万用商店",
+    "roi": [0, 0, 1280, 720],
+    "action": "DoNothing"
+  },
+  "1185-影之遗迹-影-画卷-页面-万用商店": {
+    "recognition": "OCR",
+    "expected": "万用商店",
+    "roi": [
+      0,
+      0,
+      1280,
+      720
+    ],
+    "action": "DoNothing"
+  },
+  "1186-影之遗迹-影-离开": {
+    "recognition": "OCR",
+    "expected": "离开",
+    "roi": [1060, 580, 220, 110],
+    "action": "DoNothing"
+  },
+  "1187-影之遗迹-影-画卷-页面-标题": {
+    "recognition": "OCR",
+    "expected": "^画卷$",
+    "roi": [
+      60,
+      10,
+      120,
+      60
+    ],
+    "action": "DoNothing"
+  },
+  "1188-影之遗迹-影-画卷-页面-世界": {
+    "recognition": "OCR",
+    "expected": "^·?偃武世界$",
+    "roi": [
+      90,
+      115,
+      190,
+      90
+    ],
+    "action": "DoNothing"
+  },
+  "1189-影之遗迹-影-画卷-页面-区域": {
+    "recognition": "OCR",
+    "expected": "^云州$",
+    "roi": [
+      100,
+      210,
+      130,
+      90
+    ],
+    "action": "DoNothing"
+  },
+  "1190-影之遗迹-影-入口": {
+    "recognition": "OCR",
+    "expected": "蜃影武墟",
+    "roi": [
+      0,
+      0,
+      1280,
+      720
+    ],
+    "action": "DoNothing"
+  },
+  "1191-影之遗迹-影-页面": {
+    "recognition": "OCR",
+    "expected": "蜃影武墟",
+    "roi": [
+      0,
+      0,
+      1280,
+      720
+    ],
+    "action": "DoNothing"
+  },
+  "1192-影之遗迹-影-进行中": {
+    "recognition": "OCR",
+    "expected": [
+      "探索中",
+      "可探索"
+    ],
+    "roi": [
+      80,
+      430,
+      720,
+      270
+    ],
+    "action": "DoNothing"
+  },
+  "1193-影之遗迹-影-关卡-入口": {
+    "recognition": "OCR",
+    "expected": "^前往$",
+    "roi": [
+      820,
+      450,
+      180,
+      120
+    ],
+    "action": "DoNothing"
+  },
+  "1194-影之遗迹-影-关卡-页面": {
+    "recognition": "OCR",
+    "expected": [
+      "蜃影武墟",
+      "加速"
+    ],
+    "roi": [
+      0,
+      0,
+      1280,
+      300
+    ],
+    "action": "DoNothing"
+  },
+  "1195-影之遗迹-影-战斗-页面": {
+    "recognition": "OCR",
+    "expected": [
+      "阵容",
+      "挑战"
+    ],
+    "roi": [
+      0,
+      0,
+      500,
+      120
+    ],
+    "action": "DoNothing"
+  },
+  "1196-影之遗迹-影-战斗-中-进度": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "1197-影之遗迹-影-战斗-中-进度-统计",
+          "1198-影之遗迹-影-战斗-中-进度-状态",
+          "1199-影之遗迹-影-战斗-中-进度-计时器"
+        ]
+      }
+    },
+    "action": "DoNothing"
+  },
+  "1197-影之遗迹-影-战斗-中-进度-统计": {
+    "recognition": "OCR",
+    "expected": "^统计$",
+    "roi": [
+      40,
+      35,
+      60,
+      45
+    ],
+    "action": "DoNothing"
+  },
+  "1198-影之遗迹-影-战斗-中-进度-状态": {
+    "recognition": "OCR",
+    "expected": "^状态$",
+    "roi": [
+      100,
+      35,
+      70,
+      45
+    ],
+    "action": "DoNothing"
+  },
+  "1199-影之遗迹-影-战斗-中-进度-计时器": {
+    "recognition": "OCR",
+    "expected": "^\\d{2}:\\d{2}$",
+    "roi": [
+      190,
+      10,
+      85,
+      50
+    ],
+    "action": "DoNothing"
+  },
+  "1200-影之遗迹-影-探索-页面": {
+    "recognition": "OCR",
+    "expected": [
+      "沙漠废墟",
+      "第一层",
+      "离开"
+    ],
+    "roi": [
+      850,
+      0,
+      400,
+      720
+    ],
+    "action": "DoNothing"
+  },
+  "1201-影之遗迹-影-战斗-结果-页面": {
+    "recognition": "OCR",
+    "expected": [
+      "^战斗胜利$",
+      "^战斗失败$"
+    ],
+    "roi": [
+      0,
+      0,
+      1280,
+      300
+    ],
+    "action": "DoNothing"
+  },
+  "1202-影之遗迹-影-战斗-胜利": {
+    "recognition": "OCR",
+    "expected": [
+      "战斗胜利",
+      "胜利"
+    ],
+    "roi": [
+      650,
+      0,
+      630,
+      240
+    ],
+    "action": "DoNothing"
+  },
+  "1203-影之遗迹-影-战斗-失败": {
+    "recognition": "OCR",
+    "expected": "战斗失败",
+    "roi": [
+      650,
+      0,
+      630,
+      260
+    ],
+    "action": "DoNothing"
+  },
+  "1222-影之遗迹-影-挑战-页面": {
+    "recognition": {
+      "type": "Or",
+      "param": {
+        "any_of": [
+          "1194-影之遗迹-影-关卡-页面",
+          "1195-影之遗迹-影-战斗-页面"
+        ]
+      }
+    },
+    "action": "DoNothing"
+  },
+  "1223-影之遗迹-影-挑战-目标": {
+    "recognition": "OCR",
+    "expected": [
+      "挑战"
+    ],
+    "roi": [
+      900,
+      500,
+      380,
+      220
+    ],
+    "action": "DoNothing"
+  },
+  "1224-影之遗迹-影-跳过-准备": {
+    "recognition": "OCR",
+    "expected": "跳过战前准备",
+    "roi": [
+      780,
+      500,
+      430,
+      180
+    ],
+    "action": "DoNothing"
+  },
+  "1225-影之遗迹-影-跳过-准备-已勾选": {
+    "recognition": "OCR",
+    "expected": [
+      "√",
+      "✓",
+      "勾"
+    ],
+    "roi": [
+      760,
+      500,
+      120,
+      150
+    ],
+    "action": "DoNothing"
+  },
+  "1226-影之遗迹-影-跳过-准备-未勾选": {
+    "recognition": "ColorMatch",
+    "method": 4,
+    "lower": [
+      80,
+      80,
+      80
+    ],
+    "upper": [
+      120,
+      120,
+      120
+    ],
+    "roi": [
+      1045,
+      430,
+      35,
+      35
+    ],
+    "connected": true,
+    "count": 250,
+    "order_by": "Area",
+    "index": 0,
+    "action": "DoNothing"
+  },
+  "1501-MJA-影之遗迹地图推进-前景三点循环": {
+    "max_hit": 160,
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "1528-MJA-影之遗迹地图推进-识别-探索页",
+          "1529-MJA-影之遗迹地图推进-识别-前景就绪"
+        ]
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "SHADOW_RUINS_DAILY",
+      "action_id": "advance_shadow_foreground_triplet",
+      "kind": "click",
+      "fixed_click_boxes": [
+        [
+          436,
+          536,
+          24,
+          24
+        ],
+        [
+          629,
+          536,
+          24,
+          24
+        ],
+        [
+          822,
+          536,
+          24,
+          24
+        ]
+      ],
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "1528-MJA-影之遗迹地图推进-识别-探索页",
+        "target_name": "1529-MJA-影之遗迹地图推进-识别-前景就绪"
+      }
+    },
+    "next": [
+      "1595-MJA-影之遗迹-确认退出",
+      "1594-MJA-影之遗迹-开始战斗",
+      "[JumpBack]1509-MJA-影之遗迹地图推进-战斗等待",
+      "[JumpBack]1515-MJA-影之遗迹地图推进-关闭胜利宝箱奖励",
+      "1178-影之遗迹-离开-关卡",
+      "[JumpBack]1501-MJA-影之遗迹地图推进-前景三点循环"
+    ]
+  },
+  "1509-MJA-影之遗迹地图推进-战斗等待": {
+    "timeout": 240000,
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "1538-MJA-影之遗迹地图推进-识别-战斗中"
+        ]
+      }
+    },
+    "action": "DoNothing",
+    "next": [
+      "1511-MJA-影之遗迹地图推进-战斗胜利"
+    ],
+    "retry_times": 0
+  },
+  "1511-MJA-影之遗迹地图推进-战斗胜利": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "1539-MJA-影之遗迹地图推进-识别-战斗结果页面",
+          "1540-MJA-影之遗迹地图推进-识别-战斗胜利"
+        ]
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "SHADOW_RUINS_DAILY",
+      "action_id": "dismiss_shadow_battle_result",
+      "kind": "click",
+      "fixed_click_mode": "shadow_result_blank",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "1539-MJA-影之遗迹地图推进-识别-战斗结果页面",
+        "target_name": "1540-MJA-影之遗迹地图推进-识别-战斗胜利"
+      }
+    },
+    "next": [
+      "1501-MJA-影之遗迹地图推进-前景三点循环"
+    ],
+    "retry_times": 0,
+    "timeout": 50000
+  },
+  "1515-MJA-影之遗迹地图推进-关闭胜利宝箱奖励": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "1546-MJA-影之遗迹地图推进-识别-胜利宝箱奖励"
+        ]
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "SHADOW_RUINS_DAILY",
+      "action_id": "dismiss_shadow_reward_popup",
+      "kind": "click",
+      "fixed_click_mode": "shadow_reward_blank",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 0,
+        "page_name": "1546-MJA-影之遗迹地图推进-识别-胜利宝箱奖励",
+        "target_name": "1546-MJA-影之遗迹地图推进-识别-胜利宝箱奖励"
+      }
+    },
+    "next": [
+      "1501-MJA-影之遗迹地图推进-前景三点循环"
+    ],
+    "retry_times": 0,
+    "timeout": 8000,
+    "post_delay": 750
+  },
+  "1528-MJA-影之遗迹地图推进-识别-探索页": {
+    "recognition": "OCR",
+    "expected": [
+      "沙漠废墟",
+      "第一层",
+      "传送",
+      "离开"
+    ],
+    "roi": [
+      850,
+      0,
+      400,
+      720
+    ],
+    "action": "DoNothing"
+  },
+  "1529-MJA-影之遗迹地图推进-识别-前景就绪": {
+    "recognition": "OCR",
+    "expected": [
+      "^第.+层$",
+      "^●-$"
+    ],
+    "roi": [
+      500,
+      0,
+      300,
+      120
+    ],
+    "action": "DoNothing"
+  },
+  "1596-MJA-影之遗迹-退出确认-文案": {
+    "recognition": "OCR",
+    "expected": "离开武墟",
+    "roi": [
+      760,
+      280,
+      220,
+      100
+    ],
+    "action": "DoNothing"
+  },
+  "1597-MJA-影之遗迹-关闭奖励弹窗": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "1598-MJA-影之遗迹-奖励弹窗文案"
+        ],
+        "box_index": 0
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "SHADOW_RUINS_DAILY",
+      "action_id": "dismiss_shadow_reward_popup",
+      "kind": "click",
+      "fixed_click_mode": "shadow_reward_blank",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 0,
+        "page_name": "1598-MJA-影之遗迹-奖励弹窗文案",
+        "target_name": "1598-MJA-影之遗迹-奖励弹窗文案"
+      }
+    },
+  "next": [
+    "1597-MJA-影之遗迹-关闭奖励弹窗",
+    "[JumpBack]1591-MJA-影之遗迹-关闭-影-页面",
+    "1371-公共-原生成功-主页边界"
+  ],
+    "retry_times": 0,
+    "timeout": 10000
+  },
+  "1598-MJA-影之遗迹-奖励弹窗文案": {
+    "recognition": "OCR",
+    "expected": [
+      "^恭$",
+      "^喜获得$",
+      "^[恭泰]喜获得$"
+    ],
+    "roi": [
+      100,
+      180,
+      220,
+      350
+    ],
+    "action": "DoNothing"
+  },
+  "1530-MJA-影之遗迹地图推进-识别-跨图入口": {
+    "recognition": "OCR",
+    "expected": "^传送$",
+    "roi": [
+      900,
+      570,
+      260,
+      150
+    ],
+    "action": "DoNothing"
+  },
+  "1531-MJA-影之遗迹地图推进-识别-跨图页面": {
+    "recognition": "OCR",
+    "expected": "传送",
+    "roi": [
+      300,
+      540,
+      320,
+      180
+    ],
+    "action": "DoNothing"
+  },
+  "1532-MJA-影之遗迹地图推进-识别-跨图确认": {
+    "recognition": "OCR",
+    "expected": "传送",
+    "roi": [
+      300,
+      540,
+      320,
+      180
+    ],
+    "action": "DoNothing"
+  },
+  "1533-MJA-影之遗迹地图推进-识别-战斗页面": {
+    "recognition": "OCR",
+    "expected": [
+      "^阵容一$",
+      "^推荐阵容$"
+    ],
+    "roi": [
+      0,
+      0,
+      500,
+      120
+    ],
+    "action": "DoNothing"
+  },
+  "1534-MJA-影之遗迹地图推进-识别-战斗目标": {
+    "recognition": "OCR",
+    "expected": "开战",
+    "roi": [
+      1080,
+      540,
+      200,
+      180
+    ],
+    "action": "DoNothing"
+  },
+  "1535-MJA-影之遗迹地图推进-识别-战斗统计": {
+    "recognition": "OCR",
+    "expected": "^统计$",
+    "roi": [
+      40,
+      35,
+      60,
+      45
+    ],
+    "action": "DoNothing"
+  },
+  "1536-MJA-影之遗迹地图推进-识别-战斗状态": {
+    "recognition": "OCR",
+    "expected": "^状态$",
+    "roi": [
+      100,
+      35,
+      70,
+      45
+    ],
+    "action": "DoNothing"
+  },
+  "1537-MJA-影之遗迹地图推进-识别-战斗计时器": {
+    "recognition": "OCR",
+    "expected": "^\\d{2}:\\d{2}$",
+    "roi": [
+      190,
+      10,
+      85,
+      50
+    ],
+    "action": "DoNothing"
+  },
+  "1538-MJA-影之遗迹地图推进-识别-战斗中": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "1535-MJA-影之遗迹地图推进-识别-战斗统计",
+          "1536-MJA-影之遗迹地图推进-识别-战斗状态",
+          "1537-MJA-影之遗迹地图推进-识别-战斗计时器"
+        ]
+      }
+    },
+    "action": "DoNothing"
+  },
+  "1539-MJA-影之遗迹地图推进-识别-战斗结果页面": {
+    "recognition": "OCR",
+    "expected": [
+      "^战斗胜利$",
+      "^战斗失败$"
+    ],
+    "roi": [
+      0,
+      0,
+      1280,
+      300
+    ],
+    "action": "DoNothing"
+  },
+  "1540-MJA-影之遗迹地图推进-识别-战斗胜利": {
+    "recognition": "OCR",
+    "expected": [
+      "战斗胜利",
+      "胜利"
+    ],
+    "roi": [
+      650,
+      0,
+      630,
+      240
+    ],
+    "action": "DoNothing"
+  },
+  "1541-MJA-影之遗迹地图推进-识别-战斗失败": {
+    "recognition": "OCR",
+    "expected": "战斗失败",
+    "roi": [
+      650,
+      0,
+      630,
+      260
+    ],
+    "action": "DoNothing"
+  },
+  "1546-MJA-影之遗迹地图推进-识别-胜利宝箱奖励": {
+    "recognition": "OCR",
+    "expected": "^恭喜获得$",
+    "roi": [
+      150,
+      200,
+      90,
+      290
+    ],
+    "action": "DoNothing"
+  },
+  "1547-MJA-影之遗迹地图推进-识别-失败关闭": {
+    "recognition": "OCR",
+    "expected": [
+      "确定",
+      "关闭"
+    ],
+    "roi": [
+      760,
+      430,
+      250,
+      150
+    ],
+    "action": "DoNothing"
+  }
+}

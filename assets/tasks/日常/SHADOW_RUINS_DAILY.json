@@ -1,0 +1,11 @@
+{
+  "task": [
+    {
+      "name": "SHADOW_RUINS_DAILY",
+      "label": "蜃影武墟",
+      "default_check": true,
+      "group": ["日常"],
+      "entry": "0018-影之遗迹-任务入口"
+    }
+  ]
+}

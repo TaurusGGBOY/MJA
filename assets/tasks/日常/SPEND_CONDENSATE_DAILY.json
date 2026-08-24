@@ -1,0 +1,11 @@
+{
+  "task": [
+    {
+      "name": "SPEND_CONDENSATE_DAILY",
+      "label": "消耗凝晶",
+      "default_check": true,
+      "group": ["日常"],
+      "entry": "0020-消耗凝结体-任务入口"
+    }
+  ]
+}

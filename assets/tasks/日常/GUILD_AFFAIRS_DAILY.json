@@ -1,0 +1,11 @@
+{
+  "task": [
+    {
+      "name": "GUILD_AFFAIRS_DAILY",
+      "label": "帮会事务",
+      "default_check": true,
+      "group": ["日常"],
+      "entry": "0011-帮派事务-任务入口"
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "1369-公共-通用停止": {
+    "recognition": "DirectHit",
+    "action": "StopTask"
+  },
+  "1366-公共-通用中止": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "FailTask",
+    "Abort": true,
+    "timeout": 10000,
+    "max_hit": 1
+  },
+  "1358-公共-游戏启动失败": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "FailTask",
+    "Abort": true,
+    "timeout": 1000,
+    "max_hit": 1
+  },
+  "0039-公共-游戏启动开始按钮未找到": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "FailTask",
+    "Abort": true,
+    "timeout": 1000,
+    "max_hit": 1
+  },
+  "0040-公共-游戏启动进入按钮未找到": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "FailTask",
+    "Abort": true,
+    "timeout": 1000,
+    "max_hit": 1
+  },
+  "0041-公共-游戏启动主页未到达": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "FailTask",
+    "Abort": true,
+    "timeout": 1000,
+    "max_hit": 1
+  },
+  "0042-公共-通用-启动恢复-耗尽": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "FailTask",
+    "Abort": true,
+    "timeout": 1000,
+    "max_hit": 1
+  }
+}

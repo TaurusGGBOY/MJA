@@ -1,0 +1,782 @@
+{
+  "0008-分解装备-任务入口": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0456-分解装备-装备-主页"
+        ],
+        "box_index": 0
+      }
+    },
+    "action": "Custom",
+    "max_hit": 2,
+    "custom_action": "BeginTask",
+    "custom_action_param": {"task_id": "EQUIPMENT_DECOMPOSE_DAILY"},
+    "timeout": 5000,
+    "on_error": ["MJA-任务入口失败-EQUIPMENT_DECOMPOSE_DAILY", "MJA-公共-任务入口-恢复耗尽"],
+    "next": ["0439-分解装备-打开-资源"],
+    "retry_times": 0
+  },
+  "0439-分解装备-打开-资源": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0456-分解装备-装备-主页",
+          "0457-分解装备-装备-资源-入口"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "max_hit": 2,
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "EQUIPMENT_DECOMPOSE_DAILY",
+      "action_id": "open_resource_page",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "0456-分解装备-装备-主页",
+        "target_name": "0457-分解装备-装备-资源-入口"
+      }
+    },
+    "timeout": 5000,
+    "on_error": ["MJA-任务入口失败-EQUIPMENT_DECOMPOSE_DAILY", "MJA-公共-任务入口-恢复耗尽"],
+    "next": ["0440-分解装备-打开-库存"],
+    "retry_times": 0
+  },
+  "0440-分解装备-打开-库存": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0458-分解装备-装备-资源-页面",
+          "0459-分解装备-装备-入口"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "max_hit": 1,
+    "custom_action_param": {
+      "task_id": "EQUIPMENT_DECOMPOSE_DAILY",
+      "action_id": "open_equipment_inventory",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "0458-分解装备-装备-资源-页面",
+        "target_name": "0459-分解装备-装备-入口"
+      }
+    },
+    "post_delay": 1000,
+    "next": [
+      "0441-分解装备-打开-分解"
+    ],
+    "retry_times": 0
+  },
+  "0441-分解装备-打开-分解": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0460-分解装备-装备-页面",
+          "0461-分解装备-装备-分解-按钮"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "max_hit": 1,
+    "custom_action_param": {
+      "task_id": "EQUIPMENT_DECOMPOSE_DAILY",
+      "action_id": "open_equipment_decompose",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "0460-分解装备-装备-页面",
+        "target_name": "0461-分解装备-装备-分解-按钮"
+      }
+    },
+    "post_delay": 1000,
+    "next": [
+      "0442-分解装备-打开-品质"
+    ],
+    "retry_times": 0
+  },
+  "0442-分解装备-打开-品质": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0462-分解装备-装备-分解-页面",
+          "0463-分解装备-装备-品质-筛选"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "max_hit": 1,
+    "custom_action_param": {
+      "task_id": "EQUIPMENT_DECOMPOSE_DAILY",
+      "action_id": "open_quality_filter",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "0462-分解装备-装备-分解-页面",
+        "target_name": "0463-分解装备-装备-品质-筛选"
+      }
+    },
+    "post_delay": 500,
+    "next": [
+      "0443-分解装备-选择-品质"
+    ],
+    "retry_times": 0
+  },
+  "0443-分解装备-选择-品质": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0462-分解装备-装备-分解-页面",
+          "0464-分解装备-装备-品质-对话框",
+          "0465-分解装备-装备-品质-乙级或以下"
+        ],
+        "box_index": 2
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "max_hit": 1,
+    "custom_action_param": {
+      "task_id": "EQUIPMENT_DECOMPOSE_DAILY",
+      "action_id": "select_quality_b_or_below",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 2,
+        "page_name": "0462-分解装备-装备-分解-页面",
+        "target_name": "0465-分解装备-装备-品质-乙级或以下"
+      }
+    },
+    "post_delay": 500,
+    "next": [
+      "0444-分解装备-打开-等级"
+    ],
+    "retry_times": 0
+  },
+  "0444-分解装备-打开-等级": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0462-分解装备-装备-分解-页面",
+          "0466-分解装备-装备-等级-筛选"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "max_hit": 1,
+    "custom_action_param": {
+      "task_id": "EQUIPMENT_DECOMPOSE_DAILY",
+      "action_id": "open_level_filter",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "0462-分解装备-装备-分解-页面",
+        "target_name": "0466-分解装备-装备-等级-筛选"
+      }
+    },
+    "post_delay": 500,
+    "next": [
+      "0445-分解装备-选择-等级"
+    ],
+    "retry_times": 0
+  },
+  "0445-分解装备-选择-等级": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0462-分解装备-装备-分解-页面",
+          "0467-分解装备-装备-等级-对话框",
+          "0468-分解装备-装备-等级-选项-80-或-以下"
+        ],
+        "box_index": 2
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "max_hit": 1,
+    "custom_action_param": {
+      "task_id": "EQUIPMENT_DECOMPOSE_DAILY",
+      "action_id": "select_level_80_or_below",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 2,
+        "page_name": "0462-分解装备-装备-分解-页面",
+        "target_name": "0468-分解装备-装备-等级-选项-80-或-以下"
+      }
+    },
+    "post_delay": 500,
+    "next": [
+      "0446-分解装备-批量-选择"
+    ],
+    "retry_times": 0
+  },
+  "0446-分解装备-批量-选择": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0462-分解装备-装备-分解-页面",
+          "0469-分解装备-装备-批量-选择"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "max_hit": 1,
+    "custom_action_param": {
+      "task_id": "EQUIPMENT_DECOMPOSE_DAILY",
+      "action_id": "batch_select_equipment",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "0462-分解装备-装备-分解-页面",
+        "target_name": "0469-分解装备-装备-批量-选择"
+      }
+    },
+    "post_delay": 500,
+    "next": [
+      "0447-分解装备-确认-分解"
+    ],
+    "retry_times": 0
+  },
+  "0447-分解装备-确认-分解": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0462-分解装备-装备-分解-页面",
+          "0470-分解装备-装备-确认-分解"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "max_hit": 1,
+    "custom_action_param": {
+      "task_id": "EQUIPMENT_DECOMPOSE_DAILY",
+      "action_id": "confirm_equipment_decompose",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "0462-分解装备-装备-分解-页面",
+        "target_name": "0470-分解装备-装备-确认-分解"
+      }
+    },
+    "post_delay": 500,
+    "timeout": 5000,
+    "next": ["0449-分解装备-确认-最终"],
+    "on_error": ["0448-分解装备-无可分解-探测"],
+    "retry_times": 0
+  },
+  "0448-分解装备-无可分解-探测": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0462-分解装备-装备-分解-页面",
+          "0469-分解装备-装备-批量-选择"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "DoNothing",
+    "next": ["0451-分解装备-无可分解-已完成"]
+  },
+  "0451-分解装备-无可分解-已完成": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "next": ["0452-分解装备-无可分解-关闭"]
+  },
+  "0452-分解装备-无可分解-关闭": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["0462-分解装备-装备-分解-页面"],
+        "box_index": 0
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "max_hit": 1,
+    "custom_action_param": {
+      "task_id": "EQUIPMENT_DECOMPOSE_DAILY",
+      "action_id": "close_equipment_page",
+      "kind": "click",
+      "fixed_click_mode": "equipment_page_close",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 0,
+        "page_name": "0462-分解装备-装备-分解-页面",
+        "target_name": "0462-分解装备-装备-分解-页面"
+      }
+    },
+    "post_delay": 500,
+    "timeout": 30000,
+    "next": ["0480-分解装备-无可分解-关闭装备页"]
+  },
+  "0480-分解装备-无可分解-关闭装备页": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0460-分解装备-装备-页面",
+          "0474-分解装备-装备-关闭"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "max_hit": 1,
+    "custom_action_param": {
+      "task_id": "EQUIPMENT_DECOMPOSE_DAILY",
+      "action_id": "close_equipment_page",
+      "kind": "click",
+      "fixed_click_mode": "equipment_page_close",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "0460-分解装备-装备-页面",
+        "target_name": "0474-分解装备-装备-关闭"
+      }
+    },
+    "post_delay": 500,
+    "timeout": 5000,
+    "next": ["0453-分解装备-无可分解-主页-探测"],
+    "retry_times": 0
+  },
+  "0453-分解装备-无可分解-主页-探测": {
+    "recognition": {
+      "type": "And",
+      "param": {"all_of": ["0456-分解装备-装备-主页"]}
+    },
+    "action": "DoNothing",
+    "next": ["1371-公共-原生成功-主页边界"]
+  },
+  "0454-分解装备-无可分解-重启": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "RestartGameSurface",
+    "custom_action_param": {
+      "package": "com.hanjiasongshu.dr22",
+      "activity": "com.hanjiasongshu.dr22/.MainActivity",
+      "force_stop": true,
+      "cooldown_ms": 2000,
+      "start_repeat": 1
+    },
+    "timeout": 30000,
+    "max_hit": 1,
+    "next": [
+      "1370-启动-游戏启动后-进入按钮",
+      "0455-分解装备-无可分解-重启后-主页-探测"
+    ]
+  },
+  "0455-分解装备-无可分解-重启后-主页-探测": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["0026-公共-游戏主页-页面"],
+        "box_index": 0
+      }
+    },
+    "timeout": 30000,
+    "max_hit": 1,
+    "action": "DoNothing",
+    "next": ["1371-公共-原生成功-主页边界"]
+  },
+  "0449-分解装备-确认-最终": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0471-分解装备-装备-确认-对话框",
+          "0472-分解装备-装备-确认-最终"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "max_hit": 1,
+    "custom_action_param": {
+      "task_id": "EQUIPMENT_DECOMPOSE_DAILY",
+      "action_id": "confirm_equipment_decompose_final",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "0471-分解装备-装备-确认-对话框",
+        "target_name": "0472-分解装备-装备-确认-最终"
+      }
+    },
+    "post_delay": 1000,
+    "next": ["0450-分解装备-之后-确认-探测"],
+    "retry_times": 0
+  },
+  "0450-分解装备-之后-确认-探测": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0473-分解装备-装备-分解-成功",
+          "0038-公共-已知-点击空白关闭"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "DoNothing",
+    "next": ["0475-分解装备-关闭-奖励"],
+    "on_error": ["0451-分解装备-无可分解-已完成"]
+  },
+  "0478-分解装备-分解-成功": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "timeout": 8000,
+    "next": ["1371-公共-原生成功-主页边界"]
+  },
+  "0476-分解装备-关闭": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0462-分解装备-装备-分解-页面",
+          "0474-分解装备-装备-关闭"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "max_hit": 1,
+    "custom_action_param": {
+      "task_id": "EQUIPMENT_DECOMPOSE_DAILY",
+      "action_id": "close_equipment_page",
+      "kind": "click",
+      "fixed_click_mode": "equipment_page_close",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "0462-分解装备-装备-分解-页面",
+        "target_name": "0474-分解装备-装备-关闭"
+      }
+    },
+    "post_delay": 500,
+    "next": ["0482-分解装备-成功-关闭装备页"],
+    "retry_times": 0
+  },
+  "0482-分解装备-成功-关闭装备页": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0460-分解装备-装备-页面",
+          "0474-分解装备-装备-关闭"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "max_hit": 1,
+    "custom_action_param": {
+      "task_id": "EQUIPMENT_DECOMPOSE_DAILY",
+      "action_id": "close_equipment_page",
+      "kind": "click",
+      "fixed_click_mode": "equipment_page_close",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "0460-分解装备-装备-页面",
+        "target_name": "0474-分解装备-装备-关闭"
+      }
+    },
+    "post_delay": 500,
+    "timeout": 5000,
+    "next": ["0477-分解装备-主页-之后-关闭"],
+    "retry_times": 0
+  },
+  "0477-分解装备-主页-之后-关闭": {
+    "recognition": {
+      "type": "And",
+      "param": {"all_of": ["0456-分解装备-装备-主页"]}
+    },
+    "action": "DoNothing",
+    "next": ["0478-分解装备-分解-成功"]
+  },
+  "0479-分解装备-记录-失败": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "FailTask",
+    "Abort": true
+  },
+  "0456-分解装备-装备-主页": {
+    "recognition": "OCR",
+    "expected": "已击破",
+    "roi": [
+      1000,
+      550,
+      220,
+      100
+    ],
+    "action": "DoNothing"
+  },
+  "0457-分解装备-装备-资源-入口": {
+    "recognition": "OCR",
+    "expected": "(?:道)?具",
+    "roi": [
+      980,
+      580,
+      300,
+      140
+    ],
+    "action": "DoNothing"
+  },
+  "0458-分解装备-装备-资源-页面": {
+    "recognition": "OCR",
+    "expected": "资源",
+    "roi": [
+      0,
+      0,
+      180,
+      100
+    ],
+    "action": "DoNothing"
+  },
+  "0459-分解装备-装备-入口": {
+    "recognition": "TemplateMatch",
+    "template": "daily/EQUIPMENT_DECOMPOSE_DAILY/equipment_entry.png",
+    "roi": [
+      25,
+      315,
+      80,
+      80
+    ],
+    "threshold": 0.3,
+    "action": "DoNothing"
+  },
+  "0460-分解装备-装备-页面": {
+    "recognition": "OCR",
+    "expected": "装备",
+    "roi": [
+      0,
+      0,
+      260,
+      140
+    ],
+    "action": "DoNothing"
+  },
+  "0461-分解装备-装备-分解-按钮": {
+    "recognition": "OCR",
+    "expected": "分解",
+    "roi": [
+      620,
+      620,
+      240,
+      100
+    ],
+    "action": "DoNothing"
+  },
+  "0462-分解装备-装备-分解-页面": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0460-分解装备-装备-页面",
+          "0463-分解装备-装备-品质-筛选"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "DoNothing"
+  },
+  "0463-分解装备-装备-品质-筛选": {
+    "recognition": "OCR",
+    "expected": "品质",
+    "roi": [
+      0,
+      520,
+      500,
+      200
+    ],
+    "action": "DoNothing"
+  },
+  "0464-分解装备-装备-品质-对话框": {
+    "recognition": "OCR",
+    "expected": "品质",
+    "roi": [
+      100,
+      400,
+      320,
+      260
+    ],
+    "action": "DoNothing"
+  },
+  "0465-分解装备-装备-品质-乙级或以下": {
+    "recognition": "OCR",
+    "expected": "乙品质及以下",
+    "roi": [
+      100,
+      400,
+      320,
+      260
+    ],
+    "action": "DoNothing"
+  },
+  "0466-分解装备-装备-等级-筛选": {
+    "recognition": "OCR",
+    "expected": "级",
+    "roi": [
+      0,
+      520,
+      500,
+      200
+    ],
+    "action": "DoNothing"
+  },
+  "0467-分解装备-装备-等级-对话框": {
+    "recognition": "OCR",
+    "expected": "级及以下",
+    "roi": [
+      100,
+      315,
+      420,
+      340
+    ],
+    "action": "DoNothing"
+  },
+  "0468-分解装备-装备-等级-选项-80-或-以下": {
+    "recognition": "OCR",
+    "expected": "80",
+    "roi": [
+      100,
+      315,
+      420,
+      340
+    ],
+    "action": "DoNothing"
+  },
+  "0469-分解装备-装备-批量-选择": {
+    "recognition": "OCR",
+    "expected": "批量选择",
+    "roi": [
+      620,
+      620,
+      240,
+      100
+    ],
+    "action": "DoNothing"
+  },
+  "0470-分解装备-装备-确认-分解": {
+    "recognition": "OCR",
+    "expected": "确认分解",
+    "roi": [
+      700,
+      500,
+      560,
+      200
+    ],
+    "action": "DoNothing"
+  },
+  "0471-分解装备-装备-确认-对话框": {
+    "recognition": "OCR",
+    "expected": [
+      "确认分解",
+      "确定分解",
+      "是否分解",
+      "分解后将获得"
+    ],
+    "roi": [
+      280,
+      150,
+      720,
+      400
+    ],
+    "action": "DoNothing"
+  },
+  "0472-分解装备-装备-确认-最终": {
+    "recognition": "OCR",
+    "expected": "确认",
+    "roi": [
+      700,
+      430,
+      560,
+      250
+    ],
+    "action": "DoNothing"
+  },
+  "0473-分解装备-装备-分解-成功": {
+    "recognition": "OCR",
+    "expected": [
+      "恭喜获得",
+      "悉喜获得"
+    ],
+    "roi": [
+      0,
+      0,
+      1280,
+      720
+    ],
+    "action": "DoNothing"
+  },
+  "0474-分解装备-装备-关闭": {
+    "recognition": "TemplateMatch",
+    "template": "home/modal_close.png",
+    "roi": [
+      1160,
+      0,
+      100,
+      100
+    ],
+    "threshold": 0.075,
+    "action": "DoNothing"
+  },
+  "0475-分解装备-关闭-奖励": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0473-分解装备-装备-分解-成功",
+          "0038-公共-已知-点击空白关闭"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Click",
+    "timeout": 8000,
+    "max_hit": 1,
+    "post_delay": 500,
+    "next": [
+      "0476-分解装备-关闭"
+    ]
+  }
+}

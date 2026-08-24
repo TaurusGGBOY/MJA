@@ -1,0 +1,417 @@
+{
+  "0007-吃体力食物-任务入口": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0412-吃体力食物-食物-主页-页面"
+        ],
+        "box_index": 0
+      }
+    },
+    "action": "Custom",
+    "max_hit": 2,
+    "custom_action": "BeginTask",
+    "custom_action_param": {"task_id": "EAT_STAMINA_FOOD_DAILY"},
+    "timeout": 5000,
+    "on_error": ["MJA-任务入口失败-EAT_STAMINA_FOOD_DAILY", "MJA-公共-任务入口-恢复耗尽"],
+    "next": ["0382-吃体力食物-打开-资源"],
+    "retry_times": 0
+  },
+  "0382-吃体力食物-打开-资源": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0412-吃体力食物-食物-主页-页面",
+          "0413-吃体力食物-食物-资源-入口"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "max_hit": 2,
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "EAT_STAMINA_FOOD_DAILY",
+      "action_id": "open_resource_page",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "0412-吃体力食物-食物-主页-页面",
+        "target_name": "0413-吃体力食物-食物-资源-入口"
+      }
+    },
+    "timeout": 5000,
+    "on_error": ["MJA-任务入口失败-EAT_STAMINA_FOOD_DAILY", "MJA-公共-任务入口-恢复耗尽"],
+    "next": ["0383-吃体力食物-打开-分类"],
+    "retry_times": 0
+  },
+  "0383-吃体力食物-打开-分类": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0414-吃体力食物-食物-背包-页面",
+          "0415-吃体力食物-食物-分类"
+        ],
+        "box_index": 1
+      }
+    },
+    "timeout": 8000,
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "EAT_STAMINA_FOOD_DAILY",
+      "action_id": "open_food_category",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "0414-吃体力食物-食物-背包-页面",
+        "target_name": "0415-吃体力食物-食物-分类"
+      }
+    },
+    "next": [
+      "[JumpBack]0385-吃体力食物-候选-循环"
+    ],
+    "on_error": [
+      "0404-吃体力食物-关闭-背包"
+    ]
+  },
+  "0385-吃体力食物-候选-循环": {
+    "max_hit": 6,
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0418-吃体力食物-食物-食物-页面",
+          "0419-吃体力食物-食物-候选"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "EAT_STAMINA_FOOD_DAILY",
+      "action_id": "inspect_food_candidate",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "0418-吃体力食物-食物-食物-页面",
+        "target_name": "0419-吃体力食物-食物-候选"
+      }
+    },
+    "next": [
+      "0392-吃体力食物-六次上限-成功",
+      "0393-吃体力食物-食用-龙井虾仁"
+    ]
+  },
+  "0392-吃体力食物-六次上限-成功": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0418-吃体力食物-食物-食物-页面",
+          "0419-吃体力食物-食物-候选"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "FoodBudgetReached",
+    "custom_action_param": {
+      "task_id": "EAT_STAMINA_FOOD_DAILY",
+      "action_id": "eat_longjing_shrimp",
+      "limit": 6
+    },
+    "on_error": ["0393-吃体力食物-食用-龙井虾仁"],
+    "next": ["1371-公共-原生成功-主页边界"]
+  },
+  "0393-吃体力食物-食用-龙井虾仁": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0420-吃体力食物-食物-详情",
+          "0422-吃体力食物-食物-使用-目标",
+          "0423-吃体力食物-食物-当前拥有"
+        ],
+        "box_index": 2
+      }
+    },
+    "timeout": 2000,
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "EAT_STAMINA_FOOD_DAILY",
+      "action_id": "eat_longjing_shrimp",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "0420-吃体力食物-食物-详情",
+        "target_name": "0422-吃体力食物-食物-使用-目标"
+      }
+    },
+    "next": [
+      "0406-吃体力食物-吃得太撑-成功",
+      "[JumpBack]0399-吃体力食物-替换-确认-循环",
+      "0385-吃体力食物-候选-循环"
+    ],
+    "on_error": [
+      "0404-吃体力食物-关闭-背包"
+    ]
+  },
+  "0399-吃体力食物-替换-确认-循环": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0431-吃体力食物-食物-替换-提示",
+          "0432-吃体力食物-食物-替换-确认"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "EAT_STAMINA_FOOD_DAILY",
+      "action_id": "confirm_food_buff_replace",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "0431-吃体力食物-食物-替换-提示",
+        "target_name": "0432-吃体力食物-食物-替换-确认"
+      }
+    },
+    "next": []
+  },
+  "0404-吃体力食物-关闭-背包": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0418-吃体力食物-食物-食物-页面",
+          "0435-吃体力食物-食物-关闭"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "EAT_STAMINA_FOOD_DAILY",
+      "action_id": "close_bag",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "0418-吃体力食物-食物-食物-页面",
+        "target_name": "0435-吃体力食物-食物-关闭"
+      }
+    },
+    "next": []
+  },
+  "0406-吃体力食物-吃得太撑-成功": {
+    "recognition": "OCR",
+    "expected": "^你吃得太",
+    "roi": [300, 200, 700, 300],
+    "action": "Custom",
+    "custom_action": "FoodTooFullTerminal",
+    "custom_action_param": {
+      "task_id": "EAT_STAMINA_FOOD_DAILY",
+      "min_successful_eats": 3
+    },
+    "next": ["0407-吃体力食物-吃得太撑-关闭-背包"]
+  },
+  "0407-吃体力食物-吃得太撑-关闭-背包": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0418-吃体力食物-食物-食物-页面",
+          "0435-吃体力食物-食物-关闭"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "EAT_STAMINA_FOOD_DAILY",
+      "action_id": "close_bag",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "0418-吃体力食物-食物-食物-页面",
+        "target_name": "0435-吃体力食物-食物-关闭"
+      }
+    },
+    "next": ["1371-公共-原生成功-主页边界"]
+  },
+  "0412-吃体力食物-食物-主页-页面": {
+    "recognition": "OCR",
+    "expected": "已击破",
+    "roi": [
+      1000,
+      550,
+      220,
+      100
+    ],
+    "action": "DoNothing"
+  },
+  "0413-吃体力食物-食物-资源-入口": {
+    "recognition": "OCR",
+    "expected": "(?:道)?具",
+    "roi": [
+      980,
+      580,
+      300,
+      140
+    ],
+    "action": "DoNothing"
+  },
+  "0414-吃体力食物-食物-背包-页面": {
+    "recognition": "TemplateMatch",
+    "template": "daily/EAT_STAMINA_FOOD_DAILY/food_bag_title_live.png",
+    "roi": [
+      0,
+      0,
+      150,
+      120
+    ],
+    "threshold": 0.8,
+    "action": "DoNothing"
+  },
+  "0415-吃体力食物-食物-分类": {
+    "recognition": "TemplateMatch",
+    "template": "daily/EAT_STAMINA_FOOD_DAILY/food_category_icon_live.png",
+    "roi": [
+      0,
+      130,
+      150,
+      180
+    ],
+    "threshold": 0.8,
+    "action": "DoNothing"
+  },
+  "0416-吃体力食物-食物-分类-页面": {
+    "recognition": "OCR",
+    "expected": ["消耗品", "食物", "料理"],
+    "roi": [0, 0, 500, 720],
+    "action": "DoNothing"
+  },
+  "0417-吃体力食物-食物-食物-标签": {
+    "recognition": "OCR",
+    "expected": "食物",
+    "roi": [300, 30, 180, 75],
+    "action": "DoNothing"
+  },
+  "0418-吃体力食物-食物-食物-页面": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0416-吃体力食物-食物-分类-页面",
+          "0417-吃体力食物-食物-食物-标签"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "DoNothing"
+  },
+  "0419-吃体力食物-食物-候选": {
+    "recognition": "TemplateMatch",
+    "template": "daily/EAT_STAMINA_FOOD_DAILY/longjing_shrimp.png",
+    "roi": [
+      120,
+      80,
+      680,
+      540
+    ],
+    "threshold": 0.78,
+    "action": "DoNothing"
+  },
+  "0420-吃体力食物-食物-详情": {
+    "recognition": "OCR",
+    "expected": "物品",
+    "roi": [
+      800,
+      100,
+      450,
+      300
+    ],
+    "action": "DoNothing"
+  },
+  "0421-吃体力食物-食物-龙井虾仁-名称": {
+    "recognition": "OCR",
+    "expected": "龙井虾仁",
+    "roi": [
+      800,
+      100,
+      450,
+      300
+    ],
+    "action": "DoNothing"
+  },
+  "0422-吃体力食物-食物-使用-目标": {
+    "recognition": "OCR",
+    "expected": "使用",
+    "roi": [
+      1000,
+      600,
+      250,
+      120
+    ],
+    "action": "DoNothing"
+  },
+  "0423-吃体力食物-食物-当前拥有": {
+    "recognition": "OCR",
+    "expected": "^\\d+$",
+    "roi": [1140, 220, 80, 45],
+    "action": "DoNothing"
+  },
+  "0431-吃体力食物-食物-替换-提示": {
+    "recognition": "TemplateMatch",
+    "template": "daily/EAT_STAMINA_FOOD_DAILY/food_buff_replace_prompt.png",
+    "roi": [
+      250,
+      130,
+      800,
+      500
+    ],
+    "threshold": 0.35,
+    "action": "DoNothing"
+  },
+  "0432-吃体力食物-食物-替换-确认": {
+    "recognition": "TemplateMatch",
+    "template": "daily/EAT_STAMINA_FOOD_DAILY/food_buff_replace_confirm.png",
+    "roi": [
+      780,
+      450,
+      250,
+      100
+    ],
+    "threshold": 0.28,
+    "action": "DoNothing"
+  },
+  "0435-吃体力食物-食物-关闭": {
+    "recognition": "TemplateMatch",
+    "template": "home/modal_close.png",
+    "roi": [
+      1160,
+      0,
+      100,
+      100
+    ],
+    "threshold": 0.78,
+    "action": "DoNothing"
+  }
+}

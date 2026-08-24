@@ -1,0 +1,11 @@
+{
+  "task": [
+    {
+      "name": "EQUIPMENT_DECOMPOSE_DAILY",
+      "label": "装备分解（背包整理）",
+      "default_check": true,
+      "group": ["日常"],
+      "entry": "0008-分解装备-任务入口"
+    }
+  ]
+}

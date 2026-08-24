@@ -1,0 +1,106 @@
+{
+  "0031-公共-已知-面板-标记": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["0029-公共-游戏侧边面板-打开"],
+        "box_index": 0
+      }
+    },
+    "action": "DoNothing"
+  },
+  "0032-公共-已知-面板-关闭": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["0029-公共-游戏侧边面板-打开"],
+        "box_index": 0
+      }
+    },
+    "action": "DoNothing"
+  },
+  "0206-公共-已知-茶-详情-关闭": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["0219-买茶-茶-详情", "0033-公共-已知-茶-关闭"],
+        "box_index": 1
+      }
+    },
+    "timeout": 5000,
+    "max_hit": 1,
+    "action": "Click"
+  },
+  "0207-公共-已知-茶-商店-关闭": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["0216-买茶-茶-万用-商店-页面", "0033-公共-已知-茶-关闭"],
+        "box_index": 1
+      }
+    },
+    "timeout": 5000,
+    "max_hit": 1,
+    "action": "Click"
+  },
+  "0033-公共-已知-茶-关闭": {
+    "recognition": "TemplateMatch",
+    "template": "daily/BUY_TEA_DAILY/shop_close.png",
+    "roi": [1160, 0, 100, 100],
+    "threshold": 0.39,
+    "action": "DoNothing"
+  },
+  "1277-公共-已知-画卷-关闭": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0034-公共-已知-画卷-标题",
+          "0035-公共-已知-画卷-世界",
+          "0036-公共-已知-画卷-商店",
+          "0037-公共-已知-画卷-关闭-图标"
+        ],
+        "box_index": 3
+      }
+    },
+    "timeout": 5000,
+    "max_hit": 1,
+    "action": "Custom",
+    "custom_action": "CloseKnownPaintingSurface",
+    "post_delay": 1000
+  },
+  "0034-公共-已知-画卷-标题": {
+    "recognition": "OCR",
+    "expected": "画卷",
+    "roi": [0, 0, 350, 100],
+    "action": "DoNothing"
+  },
+  "0035-公共-已知-画卷-世界": {
+    "recognition": "OCR",
+    "expected": "偃武世界",
+    "roi": [0, 90, 600, 180],
+    "action": "DoNothing"
+  },
+  "0036-公共-已知-画卷-商店": {
+    "recognition": "OCR",
+    "expected": ["万用商店", "采集部署"],
+    "roi": [0, 550, 400, 170],
+    "action": "DoNothing"
+  },
+  "0037-公共-已知-画卷-关闭-图标": {
+    "recognition": "TemplateMatch",
+    "template": "daily/BUY_TEA_DAILY/shop_close.png",
+    "roi": [1160, 0, 120, 120],
+    "threshold": 0.39,
+    "action": "DoNothing"
+  },
+  "0038-公共-已知-点击空白关闭": {
+    "recognition": "OCR",
+    "expected": ["点击空白处关闭", "点击任意空白区域关闭"],
+    "roi": [350, 580, 600, 140],
+    "timeout": 5000,
+    "max_hit": 1,
+    "action": "Click",
+    "post_delay": 500
+  }
+}
