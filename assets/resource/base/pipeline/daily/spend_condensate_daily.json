@@ -628,14 +628,16 @@
     "action": "DoNothing"
   },
   "1294-消耗凝结体-凝结体-偃武-货币-入口": {
-    "recognition": "OCR",
-    "expected": "^\\d+两\\d+文$",
+    "recognition": "TemplateMatch",
+    "template": "daily/SPEND_CONDENSATE_DAILY/yanwu_currency_icon.png",
     "roi": [
-      990,
-      0,
-      210,
-      90
+      991,
+      25,
+      32,
+      40
     ],
+    "threshold": 0.8,
+    "green_mask": true,
     "action": "DoNothing"
   },
   "1295-消耗凝结体-凝结体-偃武-购买-页面": {
@@ -747,14 +749,16 @@
     "action": "DoNothing"
   },
   "1304-消耗凝结体-凝结体-云州-货币-入口": {
-    "recognition": "OCR",
-    "expected": "^(?:商)?\\d+两\\d+文$",
+    "recognition": "TemplateMatch",
+    "template": "daily/SPEND_CONDENSATE_DAILY/yunzhou_currency_icon.png",
     "roi": [
-      990,
-      0,
-      210,
-      90
+      1012,
+      24,
+      36,
+      42
     ],
+    "threshold": 0.8,
+    "green_mask": true,
     "action": "DoNothing"
   },
   "1305-消耗凝结体-凝结体-云州-购买-页面": {

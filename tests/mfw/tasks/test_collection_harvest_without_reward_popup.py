@@ -40,10 +40,12 @@ def test_collected_marker_without_reward_popup_still_reaches_native_success_boun
     }
     assert nodes["0234-采集部署-关闭-奖励"]["next"] == [
         "0235-采集部署-关闭",
+        "0236-采集部署-关闭-画卷",
         "1371-公共-原生成功-主页边界",
     ]
     assert nodes["0234-采集部署-关闭-奖励"]["on_error"] == [
-        "0235-采集部署-关闭"
+        "0235-采集部署-关闭",
+        "0236-采集部署-关闭-画卷",
     ]
 
     collected = nodes["0251-采集部署-采集-已采集"]
@@ -78,6 +80,7 @@ def test_collected_marker_without_reward_popup_still_reaches_native_success_boun
     assert "on_error" not in nodes["0236-采集部署-关闭-画卷"]
     assert nodes["0234-采集部署-关闭-奖励"]["next"] == [
         "0235-采集部署-关闭",
+        "0236-采集部署-关闭-画卷",
         "1371-公共-原生成功-主页边界",
     ]
 

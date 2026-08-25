@@ -130,6 +130,18 @@ def test_stamina_price_fifty_is_an_optional_skip_branch() -> None:
     )
 
 
+def test_stamina_cleanup_closes_the_next_fifty_cost_offer() -> None:
+    nodes = _load("daily/jianlin_resource_condensate_stamina_daily.json")
+    cleanup = nodes["0791-剑林凝结体体力-关闭-购买-面板"]
+
+    assert cleanup["recognition"]["param"]["all_of"][-1] == (
+        "0981-剑林凝结体体力-剑林-体力-价格50-可选"
+    )
+    assert cleanup["custom_action_param"]["evidence"]["target_name"] == (
+        "0981-剑林凝结体体力-剑林-体力-价格50-可选"
+    )
+
+
 def test_jianlin_cleanup_closes_both_nested_pages_before_home_success() -> None:
     nodes = _load("daily/jianlin_resource_condensate_stamina_daily.json")
     page_close = nodes["0959-剑林凝结体体力-清理-页面-关闭"]

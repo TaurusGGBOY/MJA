@@ -22,6 +22,220 @@
     "retry_times": 0,
     "on_error": ["MJA-任务入口失败-GUILD_ACTIVITY_CHALLENGE_DAILY", "MJA-公共-任务入口-恢复耗尽"]
   },
+  "0519-帮派活动挑战-零次-奖励检查": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0566-帮派活动挑战-帮派-活动-页面",
+          "0570-帮派活动挑战-帮派-剩余-耗尽"
+        ],
+        "box_index": 0
+      }
+    },
+    "action": "DoNothing",
+    "max_hit": 3,
+    "next": [
+      "0591-帮派活动挑战-打开-击破奖励",
+      "0593-帮派活动挑战-打开-征讨奖励",
+      "0527-帮派活动挑战-帮派-已完成-退出-活动"
+    ],
+    "timeout": 8000,
+    "retry_times": 0
+  },
+  "0591-帮派活动挑战-打开-击破奖励": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0566-帮派活动挑战-帮派-活动-页面",
+          "0570-帮派活动挑战-帮派-剩余-耗尽",
+          "0598-帮派活动挑战-击破奖励-入口",
+          "0599-帮派活动挑战-击破奖励-红点"
+        ],
+        "box_index": 2
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "max_hit": 1,
+    "custom_action_param": {
+      "task_id": "GUILD_ACTIVITY_CHALLENGE_DAILY",
+      "action_id": "open_guild_defeat_reward",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 2,
+        "page_name": "0566-帮派活动挑战-帮派-活动-页面",
+        "target_name": "0598-帮派活动挑战-击破奖励-入口"
+      }
+    },
+    "next": [
+      "0592-帮派活动挑战-关闭-击破奖励",
+      "0519-帮派活动挑战-零次-奖励检查"
+    ],
+    "timeout": 8000,
+    "retry_times": 0
+  },
+  "0592-帮派活动挑战-关闭-击破奖励": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0038-公共-已知-点击空白关闭"
+        ],
+        "box_index": 0
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "max_hit": 1,
+    "custom_action_param": {
+      "task_id": "GUILD_ACTIVITY_CHALLENGE_DAILY",
+      "action_id": "dismiss_guild_defeat_reward",
+      "kind": "click",
+      "fixed_click_mode": "guild_activity_reward_blank",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 0,
+        "page_name": "0038-公共-已知-点击空白关闭",
+        "target_name": "0038-公共-已知-点击空白关闭"
+      }
+    },
+    "next": [
+      "0519-帮派活动挑战-零次-奖励检查"
+    ],
+    "timeout": 8000,
+    "retry_times": 0
+  },
+  "0593-帮派活动挑战-打开-征讨奖励": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0566-帮派活动挑战-帮派-活动-页面",
+          "0570-帮派活动挑战-帮派-剩余-耗尽",
+          "0600-帮派活动挑战-征讨奖励-入口",
+          "0601-帮派活动挑战-征讨奖励-红点"
+        ],
+        "box_index": 2
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "max_hit": 1,
+    "custom_action_param": {
+      "task_id": "GUILD_ACTIVITY_CHALLENGE_DAILY",
+      "action_id": "open_guild_conquest_reward",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 2,
+        "page_name": "0566-帮派活动挑战-帮派-活动-页面",
+        "target_name": "0600-帮派活动挑战-征讨奖励-入口"
+      }
+    },
+    "next": [
+      "0594-帮派活动挑战-领取-征讨宝箱"
+    ],
+    "timeout": 8000,
+    "retry_times": 0
+  },
+  "0594-帮派活动挑战-领取-征讨宝箱": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0602-帮派活动挑战-征讨奖励-页面",
+          "0603-帮派活动挑战-征讨奖励-第一排宝箱"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "max_hit": 1,
+    "custom_action_param": {
+      "task_id": "GUILD_ACTIVITY_CHALLENGE_DAILY",
+      "action_id": "claim_guild_conquest_reward",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "0602-帮派活动挑战-征讨奖励-页面",
+        "target_name": "0603-帮派活动挑战-征讨奖励-第一排宝箱"
+      }
+    },
+    "next": [
+      "0595-帮派活动挑战-关闭-征讨领取结果"
+    ],
+    "timeout": 8000,
+    "retry_times": 0
+  },
+  "0595-帮派活动挑战-关闭-征讨领取结果": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0038-公共-已知-点击空白关闭"
+        ],
+        "box_index": 0
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "max_hit": 1,
+    "custom_action_param": {
+      "task_id": "GUILD_ACTIVITY_CHALLENGE_DAILY",
+      "action_id": "dismiss_guild_conquest_reward",
+      "kind": "click",
+      "fixed_click_mode": "guild_activity_reward_blank",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 0,
+        "page_name": "0038-公共-已知-点击空白关闭",
+        "target_name": "0038-公共-已知-点击空白关闭"
+      }
+    },
+    "next": [
+      "0596-帮派活动挑战-关闭-征讨奖励页",
+      "0519-帮派活动挑战-零次-奖励检查"
+    ],
+    "timeout": 8000,
+    "retry_times": 0
+  },
+  "0596-帮派活动挑战-关闭-征讨奖励页": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0602-帮派活动挑战-征讨奖励-页面",
+          "0604-帮派活动挑战-征讨奖励-关闭"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "max_hit": 1,
+    "custom_action_param": {
+      "task_id": "GUILD_ACTIVITY_CHALLENGE_DAILY",
+      "action_id": "close_guild_conquest_reward",
+      "kind": "click",
+      "fixed_click_mode": "guild_activity_close",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "0602-帮派活动挑战-征讨奖励-页面",
+        "target_name": "0604-帮派活动挑战-征讨奖励-关闭"
+      }
+    },
+    "next": [
+      "0519-帮派活动挑战-零次-奖励检查"
+    ],
+    "timeout": 8000,
+    "retry_times": 0
+  },
   "0527-帮派活动挑战-帮派-已完成-退出-活动": {
     "recognition": {
       "type": "And",
@@ -36,7 +250,7 @@
       }
     },
     "timeout": 8000,
-    "max_hit": 1,
+    "max_hit": 2,
     "action": "Custom",
     "custom_action": "GuardedInput",
     "custom_action_param": {
@@ -203,7 +417,7 @@
     "action": "DoNothing"
   },
   "0547-帮派活动挑战-帮派-恭喜获得-关闭": {
-    "max_hit": 1,
+    "max_hit": 2,
     "recognition": {
       "type": "And",
       "param": {
@@ -229,11 +443,12 @@
     },
     "retry_times": 0,
     "next": [
-      "0527-帮派活动挑战-帮派-已完成-退出-活动",
+      "0547-帮派活动挑战-帮派-恭喜获得-关闭",
+      "0519-帮派活动挑战-零次-奖励检查",
       "[JumpBack]0533-帮派活动挑战-帮派-挑战-循环"
     ],
     "on_error": [
-      "0527-帮派活动挑战-帮派-已完成-退出-活动",
+      "0519-帮派活动挑战-零次-奖励检查",
       "[JumpBack]0533-帮派活动挑战-帮派-挑战-循环"
     ]
   },
@@ -262,7 +477,7 @@
       }
     },
     "next": [
-      "0527-帮派活动挑战-帮派-已完成-退出-活动",
+      "0519-帮派活动挑战-零次-奖励检查",
       "[JumpBack]0533-帮派活动挑战-帮派-挑战-循环"
     ],
     "retry_times": 0
@@ -468,6 +683,68 @@
     "recognition": "OCR",
     "expected": "今日剩余征讨次数\\s*[：:]\\s*0\\s*/\\s*2",
     "roi": [1000, 560, 280, 80],
+    "action": "DoNothing"
+  },
+  "0598-帮派活动挑战-击破奖励-入口": {
+    "recognition": "OCR",
+    "expected": "^击破奖励$",
+    "roi": [1130, 450, 150, 80],
+    "action": "DoNothing"
+  },
+  "0599-帮派活动挑战-击破奖励-红点": {
+    "recognition": "ColorMatch",
+    "lower": [180, 0, 0],
+    "upper": [255, 120, 120],
+    "roi": [1210, 415, 45, 45],
+    "connected": true,
+    "count": 8,
+    "order_by": "Area",
+    "index": 0,
+    "action": "DoNothing"
+  },
+  "0600-帮派活动挑战-征讨奖励-入口": {
+    "recognition": "OCR",
+    "expected": "^征讨奖励$",
+    "roi": [1130, 340, 150, 80],
+    "action": "DoNothing"
+  },
+  "0601-帮派活动挑战-征讨奖励-红点": {
+    "recognition": "ColorMatch",
+    "lower": [180, 0, 0],
+    "upper": [255, 120, 120],
+    "roi": [1210, 305, 45, 45],
+    "connected": true,
+    "count": 8,
+    "order_by": "Area",
+    "index": 0,
+    "action": "DoNothing"
+  },
+  "0602-帮派活动挑战-征讨奖励-页面": {
+    "recognition": "OCR",
+    "expected": "累计征讨\\s*\\d+\\s*次",
+    "roi": [300, 150, 450, 450],
+    "action": "DoNothing"
+  },
+  "0603-帮派活动挑战-征讨奖励-第一排宝箱": {
+    "recognition": "ColorMatch",
+    "lower": [180, 0, 0],
+    "upper": [255, 120, 120],
+    "roi": [940, 190, 70, 80],
+    "connected": true,
+    "count": 8,
+    "order_by": "Area",
+    "index": 0,
+    "action": "DoNothing"
+  },
+  "0604-帮派活动挑战-征讨奖励-关闭": {
+    "recognition": "ColorMatch",
+    "lower": [0, 0, 0],
+    "upper": [125, 125, 125],
+    "roi": [990, 110, 90, 90],
+    "connected": true,
+    "count": 80,
+    "order_by": "Area",
+    "index": 0,
     "action": "DoNothing"
   },
   "0571-帮派活动挑战-帮派-挑战-确认-页面": {

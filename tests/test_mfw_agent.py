@@ -348,6 +348,48 @@ def test_guarded_input_uses_named_blank_area_for_guild_defeat_dismissal():
     assert context.tasker.controller.actions == [("click", (640, 660))]
 
 
+def test_guarded_input_allows_new_guild_reward_dismiss_and_close_actions():
+    cases = (
+        (
+            "dismiss_guild_defeat_reward",
+            "guild_activity_reward_blank",
+            (640, 660),
+        ),
+        (
+            "dismiss_guild_conquest_reward",
+            "guild_activity_reward_blank",
+            (640, 660),
+        ),
+        (
+            "close_guild_conquest_reward",
+            "guild_activity_close",
+            (1221, 46),
+        ),
+    )
+    for action_id, mode, expected_point in cases:
+        context = FakeContext()
+        RUN_STORE.begin("GUILD_ACTIVITY_CHALLENGE_DAILY")
+        payload = {
+            "task_id": "GUILD_ACTIVITY_CHALLENGE_DAILY",
+            "action_id": action_id,
+            "kind": "click",
+            "fixed_click_mode": mode,
+            "evidence": {
+                "page_index": 0,
+                "target_index": 0,
+                "page_name": "reward-target",
+                "target_name": "reward-target",
+            },
+        }
+        argv = FakeArgv(
+            json.dumps(payload),
+            reco_detail=and_reco(hit_reco("reward-target", (500, 600, 200, 80))),
+        )
+
+        assert GuardedInput().run(context, argv) is True
+        assert context.tasker.controller.actions == [("click", expected_point)]
+
+
 def test_guarded_input_uses_separate_safe_blank_area_for_shadow_reward_dismissal():
     context = FakeContext()
     RUN_STORE.begin("SHADOW_RUINS_DAILY")

@@ -30,7 +30,9 @@ def test_r21_fixture_keeps_the_martial_page_contract() -> None:
     fixture = _fixture()
     assert fixture["materials"]
     assert nodes["1057-武学突破-打开-研习"]["next"] == [
-        "1058-武学突破-领取-循环",
+        "1058-武学突破-领取-左框",
+        "1080-武学突破-领取-中框",
+        "1081-武学突破-领取-右框",
         "1061-武学突破-无-成功-突破",
     ]
 
@@ -62,8 +64,14 @@ def test_martial_status_migration_has_no_custom_outcome_or_breakthrough_actions(
         assert marker not in serialized
     assert "道具" not in serialized
     assert "加号" not in serialized
-    assert nodes["1058-武学突破-领取-循环"]["max_hit"] == 3
-    assert nodes["1058-武学突破-领取-循环"].get("on_error") is None
+    for name in (
+        "1058-武学突破-领取-左框",
+        "1080-武学突破-领取-中框",
+        "1081-武学突破-领取-右框",
+    ):
+        assert nodes[name]["max_hit"] == 1
+        assert nodes[name].get("on_error") is None
     assert nodes["1061-武学突破-无-成功-突破"]["next"] == [
-        "1062-武学突破-关闭-页面-用于-成功"
+        "1084-武学突破-打开-馈赠奖励",
+        "1062-武学突破-关闭-页面-用于-成功",
     ]

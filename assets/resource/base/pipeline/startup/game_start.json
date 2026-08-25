@@ -15,15 +15,174 @@
     "timeout": 120000,
     "post_delay": 5000,
     "next": [
+      "[JumpBack]0038-公共-已知-点击空白关闭",
+      "[JumpBack]1277-公共-已知-画卷-关闭",
+      "[JumpBack]1394-启动-关闭武学研习详情残留页",
+      "[JumpBack]1385-启动-关闭帮会奖励预览残留页",
+      "[JumpBack]1388-启动-关闭帮会活动残留页",
+      "[JumpBack]1391-启动-关闭帮会主页残留页",
+      "[JumpBack]1393-启动-关闭功能面板残留页",
+      "[JumpBack]1382-启动-关闭武学研习残留页",
       "[JumpBack]1379-启动-关闭装备残留页",
       "[JumpBack]1376-启动-关闭副本残留页",
       "[JumpBack]1373-启动-关闭剑林残留页",
       "[JumpBack]1359-启动-可选关闭公告页",
       "[JumpBack]1360-启动-数据校验失败-继续下载",
+      "[JumpBack]1361-启动-可选关闭月签到奖励页",
       "1357-启动-游戏启动成功-左下12探测",
       "1362-启动-游戏就绪"
     ],
     "on_error": ["关闭游戏"]
+  },
+  "1385-启动-关闭帮会奖励预览残留页": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "1386-启动-帮会奖励预览残留页-累计征讨",
+          "1387-启动-帮会奖励预览残留页-关闭"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Click",
+    "target": [1019, 138, 28, 28],
+    "max_hit": 1,
+    "post_delay": 1500
+  },
+  "1386-启动-帮会奖励预览残留页-累计征讨": {
+    "recognition": "OCR",
+    "expected": "累计征讨\\s*\\d+\\s*次",
+    "roi": [300, 150, 450, 450],
+    "action": "DoNothing"
+  },
+  "1387-启动-帮会奖励预览残留页-关闭": {
+    "recognition": "ColorMatch",
+    "lower": [0, 0, 0],
+    "upper": [125, 125, 125],
+    "roi": [990, 110, 90, 90],
+    "connected": true,
+    "count": 80,
+    "order_by": "Area",
+    "index": 0,
+    "action": "DoNothing"
+  },
+  "1388-启动-关闭帮会活动残留页": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "1389-启动-帮会活动残留页-标题",
+          "1390-启动-帮会页面残留-关闭"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Click",
+    "target": [1201, 27, 40, 39],
+    "max_hit": 1,
+    "post_delay": 1500
+  },
+  "1389-启动-帮会活动残留页-标题": {
+    "recognition": "OCR",
+    "expected": "^幻境征讨$",
+    "roi": [100, 0, 250, 100],
+    "action": "DoNothing"
+  },
+  "1390-启动-帮会页面残留-关闭": {
+    "recognition": "ColorMatch",
+    "lower": [0, 0, 0],
+    "upper": [125, 125, 125],
+    "roi": [1180, 0, 100, 100],
+    "connected": true,
+    "count": 180,
+    "action": "DoNothing"
+  },
+  "1391-启动-关闭帮会主页残留页": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "1392-启动-帮会主页残留页-标题",
+          "1390-启动-帮会页面残留-关闭"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Click",
+    "target": [1201, 27, 40, 39],
+    "max_hit": 1,
+    "post_delay": 1500
+  },
+  "1392-启动-帮会主页残留页-标题": {
+    "recognition": "OCR",
+    "expected": "^浮生城$",
+    "roi": [0, 0, 380, 100],
+    "action": "DoNothing"
+  },
+  "1393-启动-关闭功能面板残留页": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": ["0029-公共-游戏侧边面板-打开"],
+        "box_index": 0
+      }
+    },
+    "action": "Click",
+    "target": [1195, 10, 70, 70],
+    "max_hit": 1,
+    "post_delay": 1500
+  },
+  "1394-启动-关闭武学研习详情残留页": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "1395-启动-武学研习详情残留页-研习按钮",
+          "1384-启动-武学研习残留页-关闭"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Click",
+    "target": [1202, 30, 24, 24],
+    "max_hit": 1,
+    "post_delay": 1500
+  },
+  "1395-启动-武学研习详情残留页-研习按钮": {
+    "recognition": "OCR",
+    "expected": "^研习$",
+    "roi": [850, 500, 350, 110],
+    "action": "DoNothing"
+  },
+  "1382-启动-关闭武学研习残留页": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "1383-启动-武学研习残留页-标题",
+          "1384-启动-武学研习残留页-关闭"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Click",
+    "target": [1202, 30, 24, 24],
+    "max_hit": 1,
+    "post_delay": 1500
+  },
+  "1383-启动-武学研习残留页-标题": {
+    "recognition": "OCR",
+    "expected": "^武学研习$",
+    "roi": [40, 0, 280, 100],
+    "action": "DoNothing"
+  },
+  "1384-启动-武学研习残留页-关闭": {
+    "recognition": "TemplateMatch",
+    "template": "home/modal_close.png",
+    "roi": [1160, 0, 100, 100],
+    "threshold": 0.075,
+    "action": "DoNothing"
   },
   "1379-启动-关闭装备残留页": {
     "recognition": {
@@ -148,7 +307,11 @@
   },
   "1361-启动-可选关闭月签到奖励页": {
     "recognition": "OCR",
-    "expected": ["^本月可领取物品$", "^本月.*可领取.*物品$"],
+    "expected": [
+      "^本月可领取物品$",
+      "^本月.*可领取.*物品$",
+      "^[0-9一二三四五六七八九十]+月签到$"
+    ],
     "roi": [150, 100, 900, 520],
     "timeout": 1500,
     "max_hit": 1,

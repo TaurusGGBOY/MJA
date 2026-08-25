@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import struct
 from collections.abc import Mapping
 from pathlib import Path
 
@@ -45,17 +46,49 @@ def _targets(node: Mapping[str, object]) -> list[str]:
     return targets
 
 
-def test_silver_entry_is_scoped_to_the_upper_right_currency_region() -> None:
+def test_currency_entry_uses_tight_green_masked_icon_templates_in_both_regions() -> None:
     nodes = load_task_nodes(CONDENSATE)
 
-    for name in (
-        "1294-消耗凝结体-凝结体-偃武-货币-入口",
-        "1304-消耗凝结体-凝结体-云州-货币-入口",
-    ):
-        target = nodes[name]
-        assert target["recognition"] == "OCR"
-        assert target["expected"] == r"^\d+两\d+文$"
-        assert target["roi"] == [990, 0, 210, 90]
+    pairs = (
+        (
+            "1256-消耗凝结体-打开-偃武",
+            "1293-消耗凝结体-凝结体-偃武-页面",
+            "1294-消耗凝结体-凝结体-偃武-货币-入口",
+            "daily/SPEND_CONDENSATE_DAILY/yanwu_currency_icon.png",
+        ),
+        (
+            "1266-消耗凝结体-打开-云州-恢复",
+            "1303-消耗凝结体-凝结体-云州-页面",
+            "1304-消耗凝结体-凝结体-云州-货币-入口",
+            "daily/SPEND_CONDENSATE_DAILY/yunzhou_currency_icon.png",
+        ),
+    )
+    for action_name, page_name, target_name, template in pairs:
+        target = nodes[target_name]
+        assert target["recognition"] == "TemplateMatch"
+        assert target["template"] == template
+        expected_roi = [1012, 24, 36, 42] if "云州" in target_name else [991, 25, 32, 40]
+        assert target["roi"] == expected_roi
+        assert target["threshold"] == 0.8
+        assert target["green_mask"] is True
+        assert target["action"] == "DoNothing"
+        assert "expected" not in target
+        image_path = PIPELINE_PATH.parents[2] / "image" / template
+        png = image_path.read_bytes()
+        assert png[:8] == b"\x89PNG\r\n\x1a\n"
+        assert struct.unpack(">II", png[16:24]) == (26, 32)
+
+        action = nodes[action_name]
+        assert action["recognition"]["param"] == {
+            "all_of": [page_name, target_name],
+            "box_index": 1,
+        }
+        assert action["custom_action_param"]["evidence"] == {
+            "page_index": 0,
+            "target_index": 1,
+            "page_name": page_name,
+            "target_name": target_name,
+        }
 
 
 def test_first_region_purchase_failure_continues_to_the_second_region() -> None:

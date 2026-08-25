@@ -36,11 +36,20 @@ def test_game_start_keeps_the_five_start_reliability_contract() -> None:
     assert start["repeat_delay"] == 1000
     assert start["timeout"] == 120000
     assert start["next"] == [
+        "[JumpBack]0038-公共-已知-点击空白关闭",
+        "[JumpBack]1277-公共-已知-画卷-关闭",
+        "[JumpBack]1394-启动-关闭武学研习详情残留页",
+        "[JumpBack]1385-启动-关闭帮会奖励预览残留页",
+        "[JumpBack]1388-启动-关闭帮会活动残留页",
+        "[JumpBack]1391-启动-关闭帮会主页残留页",
+        "[JumpBack]1393-启动-关闭功能面板残留页",
+        "[JumpBack]1382-启动-关闭武学研习残留页",
         "[JumpBack]1379-启动-关闭装备残留页",
         "[JumpBack]1376-启动-关闭副本残留页",
         "[JumpBack]1373-启动-关闭剑林残留页",
         "[JumpBack]1359-启动-可选关闭公告页",
         "[JumpBack]1360-启动-数据校验失败-继续下载",
+        "[JumpBack]1361-启动-可选关闭月签到奖励页",
         "1357-启动-游戏启动成功-左下12探测",
         "1362-启动-游戏就绪",
     ]
@@ -71,6 +80,11 @@ def test_startup_button_flow_has_no_restart_aliases() -> None:
         "target": [1160, 0, 120, 100],
         "post_delay": 1000,
     }
+    assert startup["1361-启动-可选关闭月签到奖励页"]["expected"] == [
+        "^本月可领取物品$",
+        "^本月.*可领取.*物品$",
+        "^[0-9一二三四五六七八九十]+月签到$",
+    ]
     assert setting_probe["next"] == [
         "[JumpBack]1361-启动-可选关闭月签到奖励页",
         "[JumpBack]1370-启动-游戏启动后-进入按钮",
@@ -97,11 +111,20 @@ def test_startup_button_flow_has_no_restart_aliases() -> None:
     assert "启动-进入游戏后等待" not in startup
     assert "启动-欢迎页-进入游戏" not in startup
     assert _startup()["1356-启动-游戏启动"]["next"] == [
+        "[JumpBack]0038-公共-已知-点击空白关闭",
+        "[JumpBack]1277-公共-已知-画卷-关闭",
+        "[JumpBack]1394-启动-关闭武学研习详情残留页",
+        "[JumpBack]1385-启动-关闭帮会奖励预览残留页",
+        "[JumpBack]1388-启动-关闭帮会活动残留页",
+        "[JumpBack]1391-启动-关闭帮会主页残留页",
+        "[JumpBack]1393-启动-关闭功能面板残留页",
+        "[JumpBack]1382-启动-关闭武学研习残留页",
         "[JumpBack]1379-启动-关闭装备残留页",
         "[JumpBack]1376-启动-关闭副本残留页",
         "[JumpBack]1373-启动-关闭剑林残留页",
         "[JumpBack]1359-启动-可选关闭公告页",
         "[JumpBack]1360-启动-数据校验失败-继续下载",
+        "[JumpBack]1361-启动-可选关闭月签到奖励页",
         "1357-启动-游戏启动成功-左下12探测",
         "1362-启动-游戏就绪",
     ]
@@ -142,6 +165,58 @@ def test_startup_button_flow_has_no_restart_aliases() -> None:
     assert equipment_residual["action"] == "Click"
     assert equipment_residual["target"] == [1202, 30, 24, 24]
     assert equipment_residual["max_hit"] == 1
+    martial_residual = startup["1382-启动-关闭武学研习残留页"]
+    assert martial_residual["recognition"]["param"] == {
+        "all_of": [
+            "1383-启动-武学研习残留页-标题",
+            "1384-启动-武学研习残留页-关闭",
+        ],
+        "box_index": 1,
+    }
+    assert martial_residual["action"] == "Click"
+    assert martial_residual["target"] == [1202, 30, 24, 24]
+    assert martial_residual["max_hit"] == 1
+    assert martial_residual["post_delay"] == 1500
+    guild_reward = startup["1385-启动-关闭帮会奖励预览残留页"]
+    assert guild_reward["recognition"]["param"] == {
+        "all_of": [
+            "1386-启动-帮会奖励预览残留页-累计征讨",
+            "1387-启动-帮会奖励预览残留页-关闭",
+        ],
+        "box_index": 1,
+    }
+    assert guild_reward["action"] == "Click"
+    assert guild_reward["target"] == [1019, 138, 28, 28]
+    assert guild_reward["max_hit"] == 1
+    guild_activity = startup["1388-启动-关闭帮会活动残留页"]
+    assert guild_activity["recognition"]["param"]["all_of"] == [
+        "1389-启动-帮会活动残留页-标题",
+        "1390-启动-帮会页面残留-关闭",
+    ]
+    assert guild_activity["target"] == [1201, 27, 40, 39]
+    assert guild_activity["max_hit"] == 1
+    guild_home = startup["1391-启动-关闭帮会主页残留页"]
+    assert guild_home["recognition"]["param"]["all_of"] == [
+        "1392-启动-帮会主页残留页-标题",
+        "1390-启动-帮会页面残留-关闭",
+    ]
+    assert guild_home["max_hit"] == 1
+    panel = startup["1393-启动-关闭功能面板残留页"]
+    assert panel["recognition"]["param"]["all_of"] == [
+        "0029-公共-游戏侧边面板-打开"
+    ]
+    assert panel["target"] == [1195, 10, 70, 70]
+    assert panel["max_hit"] == 1
+    martial_detail = startup["1394-启动-关闭武学研习详情残留页"]
+    assert martial_detail["recognition"]["param"] == {
+        "all_of": [
+            "1395-启动-武学研习详情残留页-研习按钮",
+            "1384-启动-武学研习残留页-关闭",
+        ],
+        "box_index": 1,
+    }
+    assert martial_detail["target"] == [1202, 30, 24, 24]
+    assert martial_detail["max_hit"] == 1
 
 
 def test_startup_confirms_the_single_public_home_boundary() -> None:

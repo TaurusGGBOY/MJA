@@ -503,11 +503,17 @@ _FIXED_CLICK_MODES: Mapping[tuple[str, str], tuple[int, int, int, int]] = {
         "leave_shadow_stage",
         "shadow_stage_leave",
     ): (1080, 625, 150, 55),
-    # Guild activity defeat reward popup dismisses by tapping blank area.
-    (
-        "dismiss_guild_activity_reward_popup",
-        "guild_activity_reward_blank",
-    ): (560, 620, 160, 80),
+    # Guild activity reward popups dismiss by tapping the same verified blank
+    # area.  Each business action still requires its own same-frame popup
+    # evidence before this named click mode is accepted.
+    **{
+        (action_id, "guild_activity_reward_blank"): (560, 620, 160, 80)
+        for action_id in (
+            "dismiss_guild_activity_reward_popup",
+            "dismiss_guild_defeat_reward",
+            "dismiss_guild_conquest_reward",
+        )
+    },
     # Daily-task reward overlays have no dependable close label. The reward
     # popup itself is still required as same-frame evidence; this named blank
     # area only supplies the stable dismissal point.
@@ -531,10 +537,13 @@ _FIXED_CLICK_MODES: Mapping[tuple[str, str], tuple[int, int, int, int]] = {
     ): (550, 665, 180, 45),
     # The guild activity page's close icon is stable in known-good native
     # traces, while ColorMatch can degrade to the full 100x100 ROI.
-    (
-        "exit_guild_activity",
-        "guild_activity_close",
-    ): (1201, 27, 40, 39),
+    **{
+        (action_id, "guild_activity_close"): (1201, 27, 40, 39)
+        for action_id in (
+            "exit_guild_activity",
+            "close_guild_conquest_reward",
+        )
+    },
     **{
         (action_id, "function_panel_close"): (1195, 10, 70, 70)
         for action_id in (
