@@ -67,6 +67,8 @@ def test_startup_has_no_business_task_restart_handoff() -> None:
     assert pipeline["1356-启动-游戏启动"]["on_error"] == ["关闭游戏"]
     assert "on_error" not in pipeline["1357-启动-游戏启动成功-左下12探测"]
     assert pipeline["1357-启动-游戏启动成功-左下12探测"]["next"] == [
+        "[JumpBack]0038-公共-已知-点击空白关闭",
+        "[JumpBack]1359-启动-可选关闭公告页",
         "[JumpBack]1361-启动-可选关闭月签到奖励页",
         "[JumpBack]1370-启动-游戏启动后-进入按钮",
         "1362-启动-游戏就绪",

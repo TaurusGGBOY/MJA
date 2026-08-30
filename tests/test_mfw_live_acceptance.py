@@ -186,3 +186,34 @@ def test_acceptance_requires_expected_terminal_before_observing_run(candidate: P
 
     with pytest.raises(ValueError, match="expected native terminal"):
         finish_acceptance(ticket)
+
+
+def test_partial_acceptance_archives_incomplete_task_order(candidate: Path) -> None:
+    ticket = begin_acceptance(
+        candidate,
+        "worker:partial",
+        None,
+        selected_tasks=("MAIL_REWARD_DAILY", "SHOP_FREE_GIFT_DAILY"),
+    )
+    append_native_run(candidate, ("GAME_START", "MAIL_REWARD_DAILY"))
+
+    payload = load_json(finish_acceptance(ticket, partial=True))
+
+    assert payload["result"] == "partial"
+    assert "exact task order mismatch" in payload["errors"][0]
+    assert payload["tasks"]["SHOP_FREE_GIFT_DAILY"]["native_terminal"] == "Missing"
+
+
+def test_acceptance_merges_native_log_rotation(candidate: Path) -> None:
+    ticket = begin_acceptance(candidate, "worker:rotation", "MAIL_REWARD_DAILY")
+    append_native_run(candidate, ("GAME_START",))
+    maafw = candidate / "debug/maafw.log"
+    backup = candidate / "debug/maafw.bak.2026.08.30-00.00.00.000.log"
+    maafw.replace(backup)
+    append_native_run(candidate, ("MAIL_REWARD_DAILY",))
+
+    payload = load_json(finish_acceptance(ticket))
+
+    assert payload["result"] == "passed"
+    assert payload["tasks"]["GAME_START"]["native_terminal"] == "Succeeded"
+    assert payload["tasks"]["MAIL_REWARD_DAILY"]["native_terminal"] == "Succeeded"

@@ -348,17 +348,22 @@ def test_guarded_input_uses_named_blank_area_for_guild_defeat_dismissal():
     assert context.tasker.controller.actions == [("click", (640, 660))]
 
 
-def test_guarded_input_allows_new_guild_reward_dismiss_and_close_actions():
+def test_guarded_input_uses_mid_lower_blank_area_for_guild_reward_overlays():
     cases = (
+        (
+            "dismiss_guild_activity_reward_popup",
+            "guild_activity_reward_blank",
+            (640, 550),
+        ),
         (
             "dismiss_guild_defeat_reward",
             "guild_activity_reward_blank",
-            (640, 660),
+            (640, 550),
         ),
         (
             "dismiss_guild_conquest_reward",
             "guild_activity_reward_blank",
-            (640, 660),
+            (640, 550),
         ),
         (
             "close_guild_conquest_reward",

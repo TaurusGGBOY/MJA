@@ -41,7 +41,10 @@
       "0527-帮派活动挑战-帮派-已完成-退出-活动"
     ],
     "timeout": 8000,
-    "retry_times": 0
+    "retry_times": 0,
+    "on_error": [
+      "0610-帮派活动挑战-失败-返回主页"
+    ]
   },
   "0591-帮派活动挑战-打开-击破奖励": {
     "recognition": {
@@ -71,11 +74,15 @@
       }
     },
     "next": [
+      "0547-帮派活动挑战-帮派-恭喜获得-关闭",
       "0592-帮派活动挑战-关闭-击破奖励",
       "0519-帮派活动挑战-零次-奖励检查"
     ],
     "timeout": 8000,
-    "retry_times": 0
+    "retry_times": 0,
+    "on_error": [
+      "0610-帮派活动挑战-失败-返回主页"
+    ]
   },
   "0592-帮派活动挑战-关闭-击破奖励": {
     "recognition": {
@@ -106,7 +113,10 @@
       "0519-帮派活动挑战-零次-奖励检查"
     ],
     "timeout": 8000,
-    "retry_times": 0
+    "retry_times": 0,
+    "on_error": [
+      "0610-帮派活动挑战-失败-返回主页"
+    ]
   },
   "0593-帮派活动挑战-打开-征讨奖励": {
     "recognition": {
@@ -202,6 +212,7 @@
       "0519-帮派活动挑战-零次-奖励检查"
     ],
     "timeout": 8000,
+    "post_delay": 1000,
     "retry_times": 0
   },
   "0596-帮派活动挑战-关闭-征讨奖励页": {
@@ -406,6 +417,7 @@
     "recognition": "OCR",
     "expected": [
       "^恭喜获得$",
+      "^喜获得$",
       "^战斗胜利$"
     ],
     "roi": [
@@ -417,7 +429,7 @@
     "action": "DoNothing"
   },
   "0547-帮派活动挑战-帮派-恭喜获得-关闭": {
-    "max_hit": 2,
+    "max_hit": 3,
     "recognition": {
       "type": "And",
       "param": {
@@ -788,7 +800,12 @@
   },
   "0574-帮派活动挑战-帮派-挑战-准备-世界-首领-标题": {
     "recognition": "OCR",
-    "expected": "世界首领",
+    "expected": [
+      "世界首领",
+      "公会讨伐",
+      "幻境征讨",
+      "幻境行"
+    ],
     "roi": [
       60,
       0,
@@ -990,5 +1007,14 @@
     "action": "Custom",
     "custom_action": "FailTask",
     "Abort": true
+  },
+  "0610-帮派活动挑战-失败-返回主页": {
+    "recognition": "DirectHit",
+    "timeout": 30000,
+    "max_hit": 1,
+    "action": "Custom",
+    "custom_action": "ReturnToWorldHome",
+    "next": ["1365-公共-主页边界-失败"],
+    "on_error": ["1365-公共-主页边界-失败"]
   }
 }

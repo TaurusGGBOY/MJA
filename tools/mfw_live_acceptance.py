@@ -222,7 +222,12 @@ def _sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def _suffix_with_rotation(candidate: Path, filename: str, offset: int) -> bytes:
+def _suffix_with_rotation(
+    candidate: Path,
+    filename: str,
+    offset: int,
+    started_at: str | None = None,
+) -> bytes:
     """Read a fresh log suffix across one or more MAA log rotations."""
 
     debug = Path(candidate) / "debug"
@@ -231,13 +236,25 @@ def _suffix_with_rotation(candidate: Path, filename: str, offset: int) -> bytes:
         debug.glob(f"{filename[:-4]}.bak.*{filename[-4:]}"),
         key=lambda path: path.stat().st_mtime_ns,
     )
+    if started_at is not None:
+        try:
+            started_timestamp = datetime.fromisoformat(started_at).timestamp()
+        except ValueError:
+            started_timestamp = None
+        if started_timestamp is not None:
+            backups = [
+                path for path in backups if path.stat().st_mtime >= started_timestamp
+            ]
+    if backups:
+        # The ticket offset belongs to the pre-rotation main file.  The first
+        # backup contains its continuation; later backups are complete files.
+        chunks = [_suffix(backups[0], offset)]
+        chunks.extend(path.read_bytes() for path in backups[1:])
+        if current.exists():
+            chunks.append(current.read_bytes())
+        return b"".join(chunks)
     if current.exists() and current.stat().st_size >= offset:
         return _suffix(current, offset)
-    if backups:
-        # The ticket offset belongs to the pre-rotation main file.  The newest
-        # backup is that file's continuation boundary; append the live file.
-        source = backups[-1]
-        return _suffix(source, offset) + (current.read_bytes() if current.exists() else b"")
     return _suffix(current, offset) if current.exists() else b""
 
 
@@ -292,19 +309,27 @@ def finish_acceptance(ticket_path: Path, *, partial: bool = False) -> Path:
     maafw_slice = evidence / "maafw.log.slice"
     gui_slice.write_bytes(_suffix(candidate / "debug" / "gui.log", ticket.gui_offset))
     maafw_slice.write_bytes(
-        _suffix_with_rotation(candidate, "maafw.log", ticket.maafw_offset)
+        _suffix_with_rotation(
+            candidate,
+            "maafw.log",
+            ticket.maafw_offset,
+            ticket.started_at,
+        )
     )
     gui_text = gui_slice.read_text(encoding="utf-8", errors="replace")
     maafw_text = maafw_slice.read_text(encoding="utf-8", errors="replace")
     declared_names = set(formal_task_order(candidate))
     executed = tuple(name for name in GUI_TASK_PATTERN.findall(gui_text) if name in declared_names)
+    errors: list[str] = []
     if executed != ticket.expected_tasks:
-        raise ValueError(
+        message = (
             f"exact task order mismatch: expected={ticket.expected_tasks}, actual={executed}"
         )
+        if not partial:
+            raise ValueError(message)
+        errors.append(message)
     events = parse_native_terminal_events(maafw_text, ticket.entries)
     task_records: dict[str, dict[str, str]] = {}
-    errors: list[str] = []
     for task_id in ticket.expected_tasks:
         try:
             event = _event_for_task(task_id, ticket, events)

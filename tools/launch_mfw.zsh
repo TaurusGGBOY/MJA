@@ -4,6 +4,7 @@ set -euo pipefail
 script_dir="${0:A:h}"
 project_root="${MJA_PROJECT_ROOT:-${script_dir:h}}"
 candidate="${MJA_MFW_CANDIDATE:-$project_root/install/mfw-game-startup-maa-bbb-20260808-final-r14}"
+candidate="${candidate:A}"
 sdk_root="$project_root/install/android-sdk"
 adb="$sdk_root/platform-tools/adb"
 emulator="$sdk_root/emulator/emulator"

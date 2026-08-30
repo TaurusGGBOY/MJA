@@ -329,14 +329,16 @@
     "action": "DoNothing"
   },
   "0075-战令奖励-战斗-战令-打开": {
-    "recognition": "OCR",
-    "expected": "战令",
+    "recognition": "TemplateMatch",
+    "template": "daily/BATTLE_PASS_REWARD_DAILY/battle_pass_icon.png",
     "roi": [
-      760,
-      20,
-      140,
+      735,
+      10,
+      100,
       90
     ],
+    "threshold": 0.8,
+    "green_mask": true,
     "action": "DoNothing"
   },
   "0076-战令奖励-战斗-战令-页面": {

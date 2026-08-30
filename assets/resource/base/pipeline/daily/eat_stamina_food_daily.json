@@ -108,6 +108,9 @@
     "next": [
       "0392-吃体力食物-六次上限-成功",
       "0393-吃体力食物-食用-龙井虾仁"
+    ],
+    "on_error": [
+      "0405-吃体力食物-失败-返回主页"
     ]
   },
   "0392-吃体力食物-六次上限-成功": {
@@ -159,6 +162,7 @@
     },
     "next": [
       "0406-吃体力食物-吃得太撑-成功",
+      "0408-吃体力食物-六次上限-详情-成功",
       "[JumpBack]0399-吃体力食物-替换-确认-循环",
       "0385-吃体力食物-候选-循环"
     ],
@@ -190,7 +194,17 @@
         "target_name": "0432-吃体力食物-食物-替换-确认"
       }
     },
-    "next": []
+    "next": [],
+    "on_error": ["0405-吃体力食物-失败-返回主页"]
+  },
+  "0405-吃体力食物-失败-返回主页": {
+    "recognition": "DirectHit",
+    "timeout": 30000,
+    "max_hit": 1,
+    "action": "Custom",
+    "custom_action": "ReturnToWorldHome",
+    "next": ["1365-公共-主页边界-失败"],
+    "on_error": ["1365-公共-主页边界-失败"]
   },
   "0404-吃体力食物-关闭-背包": {
     "recognition": {
@@ -226,8 +240,33 @@
     "custom_action": "FoodTooFullTerminal",
     "custom_action_param": {
       "task_id": "EAT_STAMINA_FOOD_DAILY",
-      "min_successful_eats": 3
+      "min_successful_eats": 1
     },
+    "next": ["0407-吃体力食物-吃得太撑-关闭-背包"]
+  },
+  "0408-吃体力食物-六次上限-详情-成功": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0420-吃体力食物-食物-详情",
+          "0422-吃体力食物-食物-使用-目标",
+          "0423-吃体力食物-食物-当前拥有"
+        ],
+        "box_index": 2
+      }
+    },
+    "action": "Custom",
+    "custom_action": "FoodBudgetReached",
+    "custom_action_param": {
+      "task_id": "EAT_STAMINA_FOOD_DAILY",
+      "action_id": "eat_longjing_shrimp",
+      "limit": 6
+    },
+    "on_error": [
+      "0399-吃体力食物-替换-确认-循环",
+      "0385-吃体力食物-候选-循环"
+    ],
     "next": ["0407-吃体力食物-吃得太撑-关闭-背包"]
   },
   "0407-吃体力食物-吃得太撑-关闭-背包": {
@@ -379,27 +418,25 @@
     "action": "DoNothing"
   },
   "0431-吃体力食物-食物-替换-提示": {
-    "recognition": "TemplateMatch",
-    "template": "daily/EAT_STAMINA_FOOD_DAILY/food_buff_replace_prompt.png",
+    "recognition": "OCR",
+    "expected": "已存在",
     "roi": [
       250,
       130,
       800,
       500
     ],
-    "threshold": 0.35,
     "action": "DoNothing"
   },
   "0432-吃体力食物-食物-替换-确认": {
-    "recognition": "TemplateMatch",
-    "template": "daily/EAT_STAMINA_FOOD_DAILY/food_buff_replace_confirm.png",
+    "recognition": "OCR",
+    "expected": "^确认$",
     "roi": [
       780,
       450,
       250,
       100
     ],
-    "threshold": 0.28,
     "action": "DoNothing"
   },
   "0435-吃体力食物-食物-关闭": {

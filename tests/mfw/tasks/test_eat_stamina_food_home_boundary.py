@@ -35,7 +35,18 @@ def test_food_entry_uses_bottom_item_label_and_preserves_existing_use_flow() -> 
     assert open_resource["custom_action_param"]["action_id"] == "open_resource_page"
     assert open_resource["next"] == ["0383-吃体力食物-打开-分类"]
     assert scoped["0422-吃体力食物-食物-使用-目标"]["expected"] == "使用"
-    assert scoped["0432-吃体力食物-食物-替换-确认"]["threshold"] == 0.28
+    assert scoped["0431-吃体力食物-食物-替换-提示"] == {
+        "recognition": "OCR",
+        "expected": "已存在",
+        "roi": [250, 130, 800, 500],
+        "action": "DoNothing",
+    }
+    assert scoped["0432-吃体力食物-食物-替换-确认"] == {
+        "recognition": "OCR",
+        "expected": "^确认$",
+        "roi": [780, 450, 250, 100],
+        "action": "DoNothing",
+    }
     assert "ColorMatch" not in json.dumps(item_entry, ensure_ascii=False)
 
 
@@ -69,8 +80,10 @@ def test_food_graph_has_no_obsolete_home_color_entry() -> None:
 def test_food_has_native_success_terminals_for_budget_and_exact_fullness_toast() -> None:
     scoped = _scoped_nodes()
     budget = scoped["0392-吃体力食物-六次上限-成功"]
+    detail_budget = scoped["0408-吃体力食物-六次上限-详情-成功"]
     toast = scoped["0406-吃体力食物-吃得太撑-成功"]
     cleanup = scoped["0407-吃体力食物-吃得太撑-关闭-背包"]
+    failure_cleanup = scoped["0405-吃体力食物-失败-返回主页"]
 
     assert budget["custom_action"] == "FoodBudgetReached"
     assert budget["custom_action_param"] == {
@@ -80,13 +93,27 @@ def test_food_has_native_success_terminals_for_budget_and_exact_fullness_toast()
     }
     assert budget["on_error"] == ["0393-吃体力食物-食用-龙井虾仁"]
     assert budget["next"] == ["1371-公共-原生成功-主页边界"]
+    assert detail_budget["custom_action"] == "FoodBudgetReached"
+    assert detail_budget["custom_action_param"] == budget["custom_action_param"]
+    assert detail_budget["next"] == ["0407-吃体力食物-吃得太撑-关闭-背包"]
+    assert detail_budget["on_error"] == [
+        "0399-吃体力食物-替换-确认-循环",
+        "0385-吃体力食物-候选-循环",
+    ]
     assert toast["custom_action"] == "FoodTooFullTerminal"
+    assert toast["custom_action_param"] == {
+        "task_id": FOOD.task_id,
+        "min_successful_eats": 1,
+    }
     assert toast["expected"] == "^你吃得太"
     assert toast["roi"] == [300, 200, 700, 300]
     assert toast["next"] == ["0407-吃体力食物-吃得太撑-关闭-背包"]
     assert cleanup["custom_action"] == "GuardedInput"
     assert cleanup["custom_action_param"]["action_id"] == "close_bag"
     assert cleanup["next"] == ["1371-公共-原生成功-主页边界"]
+    assert failure_cleanup["custom_action"] == "ReturnToWorldHome"
+    assert failure_cleanup["next"] == ["1365-公共-主页边界-失败"]
+    assert failure_cleanup["on_error"] == ["1365-公共-主页边界-失败"]
 
 
 def test_food_preserves_longjing_shrimp_action_contract() -> None:
@@ -97,6 +124,19 @@ def test_food_preserves_longjing_shrimp_action_contract() -> None:
     assert action["kind"] == "click"
     assert action["evidence"]["target_index"] == 1
     assert scoped["0385-吃体力食物-候选-循环"]["max_hit"] == 6
+    assert scoped["0385-吃体力食物-候选-循环"]["on_error"] == [
+        "0405-吃体力食物-失败-返回主页",
+    ]
+    assert scoped["0393-吃体力食物-食用-龙井虾仁"]["next"] == [
+        "0406-吃体力食物-吃得太撑-成功",
+        "0408-吃体力食物-六次上限-详情-成功",
+        "[JumpBack]0399-吃体力食物-替换-确认-循环",
+        "0385-吃体力食物-候选-循环",
+    ]
+    assert scoped["0399-吃体力食物-替换-确认-循环"]["next"] == []
+    assert scoped["0399-吃体力食物-替换-确认-循环"]["on_error"] == [
+        "0405-吃体力食物-失败-返回主页",
+    ]
 
 
 def test_food_has_no_obsolete_recorder_or_custom_outcome() -> None:

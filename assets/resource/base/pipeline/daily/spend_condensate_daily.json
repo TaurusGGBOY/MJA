@@ -134,10 +134,11 @@
       }
     },
     "next": [
+      "1257-消耗凝结体-偃武-今日剩余为0-跳过",
       "1260-消耗凝结体-设置-偃武-最大"
     ],
     "on_error": [
-      "1264-消耗凝结体-选择-云州-之后-购买"
+      "1279-消耗凝结体-预算-不安全"
     ]
   },
   "1260-消耗凝结体-设置-偃武-最大": {
@@ -169,7 +170,7 @@
       "1261-消耗凝结体-购买-偃武"
     ],
     "on_error": [
-      "1315-消耗凝结体-关闭-偃武购买页面"
+      "1279-消耗凝结体-预算-不安全"
     ]
   },
   "1261-消耗凝结体-购买-偃武": {
@@ -202,7 +203,7 @@
       "1314-消耗凝结体-偃武奖励-点击空白关闭"
     ],
     "on_error": [
-      "1315-消耗凝结体-关闭-偃武购买页面"
+      "1279-消耗凝结体-预算-不安全"
     ]
   },
   "1314-消耗凝结体-偃武奖励-点击空白关闭": {
@@ -222,6 +223,27 @@
     "post_delay": 500,
     "next": [
       "1264-消耗凝结体-选择-云州-之后-购买"
+    ]
+  },
+  "1257-消耗凝结体-偃武-今日剩余为0-跳过": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "1295-消耗凝结体-凝结体-偃武-购买-页面",
+          "1296-消耗凝结体-凝结体-偃武-售罄"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "DoNothing",
+    "max_hit": 1,
+    "timeout": 5000,
+    "next": [
+      "1315-消耗凝结体-关闭-偃武购买页面"
+    ],
+    "on_error": [
+      "1260-消耗凝结体-设置-偃武-最大"
     ]
   },
   "1315-消耗凝结体-关闭-偃武购买页面": {
@@ -311,6 +333,7 @@
       }
     },
     "next": [
+      "1267-消耗凝结体-云州-今日剩余为0-跳过",
       "1270-消耗凝结体-设置-云州-最大-恢复"
     ],
     "on_error": [
@@ -343,7 +366,33 @@
         "target_name": "1307-消耗凝结体-凝结体-云州-关闭"
       }
     },
-    "next": []
+    "next": [
+      "1276-消耗凝结体-完成-收尾"
+    ],
+    "on_error": [
+      "1279-消耗凝结体-预算-不安全"
+    ]
+  },
+  "1267-消耗凝结体-云州-今日剩余为0-跳过": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "1305-消耗凝结体-凝结体-云州-购买-页面",
+          "1306-消耗凝结体-凝结体-云州-售罄"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "DoNothing",
+    "max_hit": 1,
+    "timeout": 5000,
+    "next": [
+      "1269-消耗凝结体-关闭-云州-恢复"
+    ],
+    "on_error": [
+      "1270-消耗凝结体-设置-云州-最大-恢复"
+    ]
   },
   "1270-消耗凝结体-设置-云州-最大-恢复": {
     "recognition": {
@@ -448,7 +497,179 @@
     "custom_action": "CloseKnownPaintingSurface",
     "post_delay": 1000,
     "next": [
+      "1320-消耗凝结体-完成-打开-面板"
+    ]
+  },
+  "1320-消耗凝结体-完成-打开-面板": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "1281-消耗凝结体-凝结体-主页-页面",
+          "1282-消耗凝结体-凝结体-面板-打开"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "max_hit": 1,
+    "custom_action_param": {
+      "task_id": "SPEND_CONDENSATE_DAILY",
+      "action_id": "open_function_panel",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "1281-消耗凝结体-凝结体-主页-页面",
+        "target_name": "1282-消耗凝结体-凝结体-面板-打开"
+      }
+    },
+    "next": [
+      "1321-消耗凝结体-完成-打开-日常"
+    ],
+    "on_error": [
+      "1279-消耗凝结体-预算-不安全"
+    ]
+  },
+  "1321-消耗凝结体-完成-打开-日常": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "1283-消耗凝结体-凝结体-面板-页面",
+          "1289-消耗凝结体-凝结体-日常-入口"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "max_hit": 1,
+    "custom_action_param": {
+      "task_id": "SPEND_CONDENSATE_DAILY",
+      "action_id": "open_daily_tasks_initial",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "1283-消耗凝结体-凝结体-面板-页面",
+        "target_name": "1289-消耗凝结体-凝结体-日常-入口"
+      }
+    },
+    "next": [
+      "1322-消耗凝结体-日常-消费完成-探测"
+    ],
+    "on_error": [
+      "1279-消耗凝结体-预算-不安全"
+    ]
+  },
+  "1322-消耗凝结体-日常-消费完成-探测": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "1288-消耗凝结体-凝结体-日常-页面",
+          {
+            "sub_name": "spend_condensate_daily_completion_row_1322",
+            "recognition": "OCR",
+            "expected": "^消耗\\s*10000\\s*凝晶[。.]?$",
+            "roi": [
+              100,
+              60,
+              700,
+              620
+            ]
+          },
+          {
+            "sub_name": "spend_condensate_daily_completion_state_1322",
+            "recognition": "OCR",
+            "expected": "^(?:领取|已领取)$",
+            "roi": "spend_condensate_daily_completion_row_1322",
+            "roi_offset": [
+              650,
+              -20,
+              450,
+              40
+            ]
+          }
+        ],
+        "box_index": 2
+      }
+    },
+    "timeout": 8000,
+    "action": "DoNothing",
+    "next": [
+      "1323-消耗凝结体-完成-关闭-日常"
+    ],
+    "on_error": [
+      "1279-消耗凝结体-预算-不安全"
+    ]
+  },
+  "1323-消耗凝结体-完成-关闭-日常": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "1288-消耗凝结体-凝结体-日常-页面",
+          "1290-消耗凝结体-凝结体-日常-关闭"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "max_hit": 1,
+    "custom_action_param": {
+      "task_id": "SPEND_CONDENSATE_DAILY",
+      "action_id": "close_daily_tasks",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "1288-消耗凝结体-凝结体-日常-页面",
+        "target_name": "1290-消耗凝结体-凝结体-日常-关闭"
+      }
+    },
+    "next": [
+      "1324-消耗凝结体-完成-关闭-面板"
+    ],
+    "on_error": [
+      "1279-消耗凝结体-预算-不安全"
+    ]
+  },
+  "1324-消耗凝结体-完成-关闭-面板": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "1283-消耗凝结体-凝结体-面板-页面",
+          "1284-消耗凝结体-凝结体-面板-关闭"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "max_hit": 1,
+    "custom_action_param": {
+      "task_id": "SPEND_CONDENSATE_DAILY",
+      "action_id": "close_function_panel",
+      "kind": "click",
+      "fixed_click_mode": "function_panel_close",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "1283-消耗凝结体-凝结体-面板-页面",
+        "target_name": "1284-消耗凝结体-凝结体-面板-关闭"
+      }
+    },
+    "post_delay": 1000,
+    "next": [
       "1371-公共-原生成功-主页边界"
+    ],
+    "on_error": [
+      "1279-消耗凝结体-预算-不安全"
     ]
   },
   "1279-消耗凝结体-预算-不安全": {
@@ -656,7 +877,10 @@
   },
   "1296-消耗凝结体-凝结体-偃武-售罄": {
     "recognition": "OCR",
-    "expected": "^0/12500$",
+    "expected": [
+      "(?:今日)?剩余数量\\s*[：:]?\\s*0(?:\\s*/\\s*12500)?",
+      "^0\\s*(?:/\\s*12500)?$"
+    ],
     "roi": [
       250,
       520,
@@ -687,6 +911,8 @@
       120
     ],
     "threshold": 0.4,
+    "order_by": "Score",
+    "index": 0,
     "action": "DoNothing"
   },
   "1299-消耗凝结体-凝结体-偃武-购买-确认": {
@@ -752,12 +978,12 @@
     "recognition": "TemplateMatch",
     "template": "daily/SPEND_CONDENSATE_DAILY/yunzhou_currency_icon.png",
     "roi": [
-      1012,
-      24,
-      36,
-      42
+      991,
+      25,
+      32,
+      40
     ],
-    "threshold": 0.8,
+    "threshold": 0.72,
     "green_mask": true,
     "action": "DoNothing"
   },
@@ -777,7 +1003,10 @@
   },
   "1306-消耗凝结体-凝结体-云州-售罄": {
     "recognition": "OCR",
-    "expected": "^0/12500$",
+    "expected": [
+      "(?:今日)?剩余数量\\s*[：:]?\\s*0(?:\\s*/\\s*12500)?",
+      "^0\\s*(?:/\\s*12500)?$"
+    ],
     "roi": [
       250,
       520,
@@ -808,6 +1037,8 @@
       120
     ],
     "threshold": 0.4,
+    "order_by": "Score",
+    "index": 0,
     "action": "DoNothing"
   },
   "1309-消耗凝结体-凝结体-云州-购买-确认": {

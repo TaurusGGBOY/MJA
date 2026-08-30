@@ -29,6 +29,11 @@ PIPELINE_PATH = (
     / CONDENSATE.pipeline_file
 )
 FAILURE = "1279-消耗凝结体-预算-不安全"
+VERIFY_OPEN_PANEL = "1320-消耗凝结体-完成-打开-面板"
+VERIFY_OPEN_DAILY = "1321-消耗凝结体-完成-打开-日常"
+VERIFY_COMPLETION = "1322-消耗凝结体-日常-消费完成-探测"
+VERIFY_CLOSE_DAILY = "1323-消耗凝结体-完成-关闭-日常"
+VERIFY_CLOSE_PANEL = "1324-消耗凝结体-完成-关闭-面板"
 
 
 def _scoped_nodes() -> dict[str, dict[str, object]]:
@@ -67,9 +72,10 @@ def test_currency_entry_uses_tight_green_masked_icon_templates_in_both_regions()
         target = nodes[target_name]
         assert target["recognition"] == "TemplateMatch"
         assert target["template"] == template
-        expected_roi = [1012, 24, 36, 42] if "云州" in target_name else [991, 25, 32, 40]
+        expected_roi = [991, 25, 32, 40]
         assert target["roi"] == expected_roi
-        assert target["threshold"] == 0.8
+        expected_threshold = 0.72 if "云州" in target_name else 0.8
+        assert target["threshold"] == expected_threshold
         assert target["green_mask"] is True
         assert target["action"] == "DoNothing"
         assert "expected" not in target
@@ -91,21 +97,65 @@ def test_currency_entry_uses_tight_green_masked_icon_templates_in_both_regions()
         }
 
 
-def test_first_region_purchase_failure_continues_to_the_second_region() -> None:
+def test_first_region_purchase_recognition_failure_is_not_treated_as_zero() -> None:
     nodes = _scoped_nodes()
 
-    assert nodes["1256-消耗凝结体-打开-偃武"]["on_error"] == [
-        "1264-消耗凝结体-选择-云州-之后-购买"
-    ]
-    assert nodes["1260-消耗凝结体-设置-偃武-最大"]["on_error"] == [
-        "1315-消耗凝结体-关闭-偃武购买页面"
-    ]
-    assert nodes["1261-消耗凝结体-购买-偃武"]["on_error"] == [
-        "1315-消耗凝结体-关闭-偃武购买页面"
-    ]
+    assert nodes["1256-消耗凝结体-打开-偃武"]["on_error"] == [FAILURE]
+    assert nodes["1260-消耗凝结体-设置-偃武-最大"]["on_error"] == [FAILURE]
+    assert nodes["1261-消耗凝结体-购买-偃武"]["on_error"] == [FAILURE]
     assert nodes["1315-消耗凝结体-关闭-偃武购买页面"]["next"] == [
         "1264-消耗凝结体-选择-云州-之后-购买"
     ]
+
+
+def test_zero_remaining_skips_only_that_region_and_requires_both_regions() -> None:
+    nodes = _scoped_nodes()
+
+    assert nodes["1256-消耗凝结体-打开-偃武"]["next"] == [
+        "1257-消耗凝结体-偃武-今日剩余为0-跳过",
+        "1260-消耗凝结体-设置-偃武-最大",
+    ]
+    assert nodes["1257-消耗凝结体-偃武-今日剩余为0-跳过"]["recognition"]["param"] == {
+        "all_of": [
+            "1295-消耗凝结体-凝结体-偃武-购买-页面",
+            "1296-消耗凝结体-凝结体-偃武-售罄",
+        ],
+        "box_index": 1,
+    }
+    assert nodes["1257-消耗凝结体-偃武-今日剩余为0-跳过"]["next"] == [
+        "1315-消耗凝结体-关闭-偃武购买页面"
+    ]
+    assert nodes["1260-消耗凝结体-设置-偃武-最大"]["on_error"] == [FAILURE]
+    assert nodes["1261-消耗凝结体-购买-偃武"]["on_error"] == [FAILURE]
+
+    assert nodes["1266-消耗凝结体-打开-云州-恢复"]["next"] == [
+        "1267-消耗凝结体-云州-今日剩余为0-跳过",
+        "1270-消耗凝结体-设置-云州-最大-恢复",
+    ]
+    assert nodes["1267-消耗凝结体-云州-今日剩余为0-跳过"]["recognition"]["param"] == {
+        "all_of": [
+            "1305-消耗凝结体-凝结体-云州-购买-页面",
+            "1306-消耗凝结体-凝结体-云州-售罄",
+        ],
+        "box_index": 1,
+    }
+    assert nodes["1267-消耗凝结体-云州-今日剩余为0-跳过"]["next"] == [
+        "1269-消耗凝结体-关闭-云州-恢复"
+    ]
+    assert nodes["1270-消耗凝结体-设置-云州-最大-恢复"]["on_error"] == [FAILURE]
+    assert nodes["1271-消耗凝结体-购买-云州-恢复"]["on_error"] == [FAILURE]
+    assert nodes["1269-消耗凝结体-关闭-云州-恢复"]["next"] == [
+        "1276-消耗凝结体-完成-收尾"
+    ]
+
+    for name in (
+        "1296-消耗凝结体-凝结体-偃武-售罄",
+        "1306-消耗凝结体-凝结体-云州-售罄",
+    ):
+        assert nodes[name]["expected"] == [
+            "(?:今日)?剩余数量\\s*[：:]?\\s*0(?:\\s*/\\s*12500)?",
+            "^0\\s*(?:/\\s*12500)?$",
+        ]
 
 
 def test_final_region_purchase_failure_is_the_only_condensate_business_failure() -> None:
@@ -118,6 +168,59 @@ def test_final_region_purchase_failure_is_the_only_condensate_business_failure()
     assert_reachable(nodes, "1271-消耗凝结体-购买-云州-恢复", FAILURE)
 
 
+def test_quantity_max_uses_the_highest_confidence_template_match() -> None:
+    nodes = _scoped_nodes()
+
+    for name in (
+        "1298-消耗凝结体-凝结体-偃武-最大-数量",
+        "1308-消耗凝结体-凝结体-云州-最大-数量",
+    ):
+        target = nodes[name]
+        assert target["recognition"] == "TemplateMatch"
+        assert target["order_by"] == "Score"
+        assert target["index"] == 0
+
+
+def test_native_success_requires_the_exact_daily_completion_postcondition() -> None:
+    nodes = _scoped_nodes()
+
+    assert nodes["1276-消耗凝结体-完成-收尾"]["next"] == [VERIFY_OPEN_PANEL]
+
+    expected_actions = {
+        VERIFY_OPEN_PANEL: "open_function_panel",
+        VERIFY_OPEN_DAILY: "open_daily_tasks_initial",
+        VERIFY_CLOSE_DAILY: "close_daily_tasks",
+        VERIFY_CLOSE_PANEL: "close_function_panel",
+    }
+    for name, action_id in expected_actions.items():
+        node = nodes[name]
+        assert node["custom_action"] == "GuardedInput"
+        assert node["custom_action_param"]["action_id"] == action_id
+        assert node["on_error"] == [FAILURE]
+
+    verifier = nodes[VERIFY_COMPLETION]
+    all_of = verifier["recognition"]["param"]["all_of"]
+    assert all_of[0] == "1288-消耗凝结体-凝结体-日常-页面"
+    task_row, completion_state = all_of[1:]
+    assert task_row["sub_name"] == "spend_condensate_daily_completion_row_1322"
+    assert task_row["recognition"] == "OCR"
+    assert task_row["expected"] == r"^消耗\s*10000\s*凝晶[。.]?$"
+    assert completion_state["sub_name"] == (
+        "spend_condensate_daily_completion_state_1322"
+    )
+    assert completion_state["recognition"] == "OCR"
+    assert completion_state["expected"] == r"^(?:领取|已领取)$"
+    assert completion_state["roi"] == task_row["sub_name"]
+    assert completion_state["roi_offset"] == [650, -20, 450, 40]
+    assert verifier["recognition"]["param"]["box_index"] == 2
+    assert verifier["on_error"] == [FAILURE]
+    assert verifier["next"] == [VERIFY_CLOSE_DAILY]
+    assert nodes[VERIFY_CLOSE_DAILY]["next"] == [VERIFY_CLOSE_PANEL]
+    assert nodes[VERIFY_CLOSE_PANEL]["next"] == [
+        "1371-公共-原生成功-主页边界"
+    ]
+
+
 def test_condensate_has_no_legacy_outcome_recorder_and_native_success_cleanup() -> None:
     nodes = _scoped_nodes()
     assert_no_custom_outcome_nodes(nodes)
@@ -128,9 +231,11 @@ def test_condensate_has_no_legacy_outcome_recorder_and_native_success_cleanup() 
             "1372-公共-原生成功-尝试返回",
         },
     )
-    assert nodes["1276-消耗凝结体-完成-收尾"]["next"] == [
-        "1371-公共-原生成功-主页边界"
-    ]
+    assert_reachable(
+        nodes,
+        "1276-消耗凝结体-完成-收尾",
+        "1371-公共-原生成功-主页边界",
+    )
 
 
 def test_consumptive_inputs_keep_policy_caps_and_no_replay() -> None:

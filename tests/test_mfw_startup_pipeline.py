@@ -86,6 +86,8 @@ def test_startup_button_flow_has_no_restart_aliases() -> None:
         "^[0-9一二三四五六七八九十]+月签到$",
     ]
     assert setting_probe["next"] == [
+        "[JumpBack]0038-公共-已知-点击空白关闭",
+        "[JumpBack]1359-启动-可选关闭公告页",
         "[JumpBack]1361-启动-可选关闭月签到奖励页",
         "[JumpBack]1370-启动-游戏启动后-进入按钮",
         "1362-启动-游戏就绪",

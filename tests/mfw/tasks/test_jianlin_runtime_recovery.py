@@ -219,6 +219,8 @@ def test_jianlin_page_proof_uses_live_ocr_controls_not_the_blank_template() -> N
                 "0974-剑林凝结体体力-剑林-页面-标题",
                 "1011-剑林凝结体体力-剑林-倍率-条",
                 "0996-剑林凝结体体力-剑林-次数-条",
+                "0998-剑林凝结体体力-剑林-次数-上限",
+                "1013-剑林凝结体体力-剑林-倍率-上限",
             ],
             "box_index": 0,
         },
@@ -341,9 +343,15 @@ def test_jianlin_live_multiplier_ocr_accepts_x_variants_with_spaces() -> None:
     assert any(re.search(pattern, "结算倍率 Xl") for pattern in expected)
     assert not any(re.search(pattern, "结算倍率") for pattern in expected)
 
-    for value in (1, 2, 3):
-        option = nodes[f"101{2 + value}-剑林凝结体体力-剑林-倍率-{value}"]["expected"]
-        assert any(re.search(pattern, f"结算倍率 X {value}") for pattern in option)
+    for node_name in (
+        "0998-剑林凝结体体力-剑林-次数-上限",
+        "1013-剑林凝结体体力-剑林-倍率-上限",
+    ):
+        limit_expected = nodes[node_name]["expected"]
+        assert re.search(limit_expected, "上限6")
+        assert re.search(limit_expected, "上限3")
+
+    assert any(re.search(pattern, "结算倍率 X 3") for pattern in expected)
 
 
 def test_jianlin_stamina_dialog_uses_the_live_refill_title_only() -> None:

@@ -155,7 +155,7 @@ class FoodBudgetReached(CustomAction):
 
 @AgentServer.custom_action("FoodTooFullTerminal")
 class FoodTooFullTerminal(CustomAction):
-    """Accept the exact too-full toast only from the fourth attempted food onward."""
+    """Accept an exact too-full toast after one controlled food-use attempt."""
 
     def run(self, context: Any, argv: CustomAction.RunArg) -> bool:
         del context
@@ -163,12 +163,12 @@ class FoodTooFullTerminal(CustomAction):
             params = _payload(argv)
             if (
                 params.get("task_id") != "EAT_STAMINA_FOOD_DAILY"
-                or params.get("min_successful_eats") != 3
+                or params.get("min_successful_eats") != 1
             ):
                 return False
             return _food_run_count(
                 "EAT_STAMINA_FOOD_DAILY", "eat_longjing_shrimp"
-            ) >= 3
+            ) >= 1
         except (KeyError, RuntimeError, TypeError, ValueError, json.JSONDecodeError):
             return False
 

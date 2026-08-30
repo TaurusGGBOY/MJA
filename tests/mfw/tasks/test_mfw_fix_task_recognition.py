@@ -65,6 +65,7 @@ def test_daily_reward_closes_when_no_unlocked_chest_remains() -> None:
     close_reward = nodes["0262-日常任务奖励-关闭-奖励"]
 
     assert close_reward["next"] == [
+        "0267-日常任务奖励-领取-行",
         "0268-日常任务奖励-领取-宝箱",
         "0280-日常任务奖励-关闭",
     ]

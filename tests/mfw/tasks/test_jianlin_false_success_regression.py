@@ -61,26 +61,38 @@ def test_replan_loop_is_bounded_and_exhaustion_enters_success_cleanup() -> None:
     assert 1 <= planner["max_hit"] <= 12
     assert planner["custom_action_param"]["insufficient_node"] == EXHAUSTED
     assert planner["custom_action_param"]["stop_stamina_at_or_below"] == 20
-    assert planner["custom_action_param"]["max_multiplier"] == 6
+    assert planner["custom_action_param"]["count_max_index"] == 2
+    assert planner["custom_action_param"]["multiplier_max_index"] == 3
+    assert planner["custom_action_param"]["stamina_per_attempt"] == 20
     assert "fixed_count" not in planner["custom_action_param"]
-    assert "count_slider_max" not in planner["custom_action_param"]
-    assert "0996-剑林凝结体体力-剑林-次数-条" not in nodes
-    assert "0997-剑林凝结体体力-剑林-次数-已选择" not in nodes
+    assert "max_multiplier" not in planner["custom_action_param"]
+    assert nodes["0996-剑林凝结体体力-剑林-次数-条"]["expected"] == "挑战次数"
+    assert nodes["0997-剑林凝结体体力-剑林-次数-已选择"]["expected"] == [
+        r"挑战次数\s*[:：]?\s*[x×X]?\d{1,2}",
+        r"[x×X]\s*[1-9]\d?",
+    ]
+    assert nodes["0998-剑林凝结体体力-剑林-次数-上限"]["expected"] == (
+        r"上限\s*[1-9]\d?"
+    )
+    assert nodes["1013-剑林凝结体体力-剑林-倍率-上限"]["expected"] == (
+        r"上限\s*[1-9]\d?"
+    )
 
     challenge = nodes["0934-剑林凝结体体力-挑战-凝结体"]
     assert challenge["recognition"]["param"] == {
         "all_of": [
             "0973-剑林凝结体体力-剑林-页面",
+            "0997-剑林凝结体体力-剑林-次数-已选择",
             "1012-剑林凝结体体力-剑林-倍率-已选择",
             "1016-剑林凝结体体力-剑林-挑战-按钮",
         ],
-        "box_index": 2,
+        "box_index": 3,
     }
-    assert challenge["custom_action_param"]["evidence"]["target_index"] == 2
+    assert challenge["custom_action_param"]["evidence"]["target_index"] == 3
     assert nodes["1012-剑林凝结体体力-剑林-倍率-已选择"]["expected"] == [
-        r"结算倍率\s*[:：]?\s*[xX×]\s*(?:[1-6]|[lI])",
-        r"[xX×]\s*(?:[1-6]|[lI])",
-        r"(?:[1-6]|[lI])\s*倍",
+        r"结算倍率\s*[:：]?\s*[xX×]\s*(?:[1-3]|[lI])",
+        r"[xX×]\s*(?:[1-3]|[lI])",
+        r"(?:[1-3]|[lI])\s*倍",
     ]
     assert nodes[EXHAUSTED]["next"] == [CLEANUP]
 

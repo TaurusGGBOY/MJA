@@ -86,8 +86,9 @@ def test_daily_rewards_keep_claim_and_chest_popup_cleanup_separate() -> None:
         "0262-日常任务奖励-关闭-奖励",
         "0268-日常任务奖励-领取-宝箱",
     ]
-    assert nodes["0262-日常任务奖励-关闭-奖励"]["next"] == [
-        "0268-日常任务奖励-领取-宝箱"
+    assert nodes["0262-日常任务奖励-关闭-奖励"]["next"][1:] == [
+        "0268-日常任务奖励-领取-宝箱",
+        "0280-日常任务奖励-关闭",
     ]
     assert nodes["0268-日常任务奖励-领取-宝箱"]["next"] == [
         "0305-日常任务奖励-关闭-宝箱奖励"
@@ -97,6 +98,16 @@ def test_daily_rewards_keep_claim_and_chest_popup_cleanup_separate() -> None:
     ]
     assert nodes["0282-日常任务奖励-关闭-面板"]["next"] == [
         "1371-公共-原生成功-主页边界"
+    ]
+
+
+def test_daily_rewards_rescan_completed_rows_after_each_reward_popup() -> None:
+    nodes = _nodes()
+
+    assert nodes["0262-日常任务奖励-关闭-奖励"]["next"] == [
+        "0267-日常任务奖励-领取-行",
+        "0268-日常任务奖励-领取-宝箱",
+        "0280-日常任务奖励-关闭",
     ]
 
 

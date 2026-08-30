@@ -195,6 +195,7 @@ def test_r22_reward_close_is_same_frame_guarded_and_every_input_is_capped_once()
         "0510-免费鉴定-鉴定-结果-弹窗",
         "0513-免费鉴定-鉴定-弹窗-关闭",
     ]
+    assert extra["next"][0] == "[JumpBack]0515-免费鉴定-额外-弹窗-关闭-额外"
 
     policy = TASK_POLICIES[APPRAISAL.task_id]
     assert policy.action_caps["claim_free_appraisal_once"] == 1

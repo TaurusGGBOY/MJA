@@ -504,10 +504,12 @@ _FIXED_CLICK_MODES: Mapping[tuple[str, str], tuple[int, int, int, int]] = {
         "shadow_stage_leave",
     ): (1080, 625, 150, 55),
     # Guild activity reward popups dismiss by tapping the same verified blank
-    # area.  Each business action still requires its own same-frame popup
+    # area. Keep the box inside the mid-lower blank band: the reward banner
+    # ends above y=465, while the close hint and device footer begin near
+    # y=663. Each business action still requires its own same-frame popup
     # evidence before this named click mode is accepted.
     **{
-        (action_id, "guild_activity_reward_blank"): (560, 620, 160, 80)
+        (action_id, "guild_activity_reward_blank"): (560, 510, 160, 80)
         for action_id in (
             "dismiss_guild_activity_reward_popup",
             "dismiss_guild_defeat_reward",

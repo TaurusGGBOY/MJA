@@ -42,9 +42,11 @@ def test_guild_activity_keeps_the_native_entry_and_cleanup_route() -> None:
 
 def test_guild_activity_clicks_challenge_then_start_and_waits_for_battle() -> None:
     nodes = _nodes()
+    title = nodes["0574-帮派活动挑战-帮派-挑战-准备-世界-首领-标题"]
     challenge = nodes["0533-帮派活动挑战-帮派-挑战-循环"]
     start = nodes["0537-帮派活动挑战-帮派-挑战-开始"]
 
+    assert title["expected"] == ["世界首领", "公会讨伐", "幻境征讨", "幻境行"]
     assert challenge["next"] == ["0537-帮派活动挑战-帮派-挑战-开始"]
     assert challenge["custom_action_param"]["action_id"] == "challenge_guild_activity"
     assert start["custom_action_param"]["action_id"] == "start_guild_challenge"
@@ -91,7 +93,7 @@ def test_guild_activity_checks_zero_after_battle_cleanup_and_retries_only_bounde
             "0547-帮派活动挑战-帮派-恭喜获得-关闭"
         ]
     close_reward = nodes["0547-帮派活动挑战-帮派-恭喜获得-关闭"]
-    assert close_reward["max_hit"] == 2
+    assert close_reward["max_hit"] == 3
     assert close_reward["next"] == [
         "0547-帮派活动挑战-帮派-恭喜获得-关闭",
         "0519-帮派活动挑战-零次-奖励检查",
@@ -102,6 +104,36 @@ def test_guild_activity_checks_zero_after_battle_cleanup_and_retries_only_bounde
         "[JumpBack]0533-帮派活动挑战-帮派-挑战-循环",
     ]
     assert nodes["0533-帮派活动挑战-帮派-挑战-循环"]["max_hit"] == 2
+
+
+def test_guild_activity_accepts_split_reward_popup_ocr() -> None:
+    nodes = _nodes()
+    assert nodes["0518-帮派活动挑战-帮派-恭喜获得-文案"]["expected"] == [
+        "^恭喜获得$",
+        "^喜获得$",
+        "^战斗胜利$",
+    ]
+
+    defeat_reward = nodes["0591-帮派活动挑战-打开-击破奖励"]
+    assert defeat_reward["next"] == [
+        "0547-帮派活动挑战-帮派-恭喜获得-关闭",
+        "0592-帮派活动挑战-关闭-击破奖励",
+        "0519-帮派活动挑战-零次-奖励检查",
+    ]
+    assert defeat_reward["on_error"] == [
+        "0610-帮派活动挑战-失败-返回主页",
+    ]
+    assert nodes["0592-帮派活动挑战-关闭-击破奖励"]["on_error"] == [
+        "0610-帮派活动挑战-失败-返回主页",
+    ]
+    assert nodes["0519-帮派活动挑战-零次-奖励检查"]["on_error"] == [
+        "0610-帮派活动挑战-失败-返回主页",
+    ]
+    assert nodes["0595-帮派活动挑战-关闭-征讨领取结果"]["post_delay"] >= 1000
+    failure_cleanup = nodes["0610-帮派活动挑战-失败-返回主页"]
+    assert failure_cleanup["custom_action"] == "ReturnToWorldHome"
+    assert failure_cleanup["next"] == ["1365-公共-主页边界-失败"]
+    assert failure_cleanup["on_error"] == ["1365-公共-主页边界-失败"]
 
 
 def test_guild_activity_unknown_battle_result_is_native_failure() -> None:

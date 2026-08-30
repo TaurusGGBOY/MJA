@@ -426,6 +426,7 @@ _POLICIES = {
         action_caps={
             "open_break_array_activity": 1,
             "open_break_array": 1,
+            "scroll_break_array_activity": 1,
             "resume_break_array": 1,
             "start_break_array_challenge": 9,
             "confirm_break_array_challenge": 9,

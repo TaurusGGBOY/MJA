@@ -10,6 +10,7 @@ from tests.mfw.pipeline_assertions import (
     assert_no_custom_outcome_nodes,
     assert_on_error_contract,
 )
+from agent.custom.support.policy import TASK_POLICIES
 from tests.mfw.task_contract import TaskContract, load_task_declaration
 from tools.check_mfw_resources import load_pipeline_nodes, validate_nodes
 
@@ -152,21 +153,22 @@ def test_challenge_battle_and_result_loops_keep_explicit_bounds() -> None:
         assert nodes[name]["retry_times"] == 0
 
 
-def test_only_zero_of_nine_can_finish_the_task() -> None:
+def test_zero_of_nine_or_defeat_threshold_can_finish_the_task() -> None:
     nodes = _load_pipeline()
 
-    assert "0106-破阵武学-已完成-探测" not in nodes
     assert "0122-破阵武学-已完成-之后-结果-探测" not in nodes
     assert "0158-破阵武学-突破-阵法-已完成" not in nodes
     assert nodes["0103-破阵武学-页面-探测"]["next"] == [
         "0104-破阵武学-安全-探测",
         "0105-破阵武学-不可用-探测",
+        "0190-破阵武学-当前击败人数-达到2500-探测",
         "0107-破阵武学-剩余-耗尽-探测",
         "0116-破阵武学-结果-探测",
         "0108-破阵武学-挑战-循环",
     ]
     assert nodes["0104-破阵武学-安全-探测"]["on_error"] == [
         "0105-破阵武学-不可用-探测",
+        "0190-破阵武学-当前击败人数-达到2500-探测",
         "0107-破阵武学-剩余-耗尽-探测",
         "0116-破阵武学-结果-探测",
         "0108-破阵武学-挑战-循环",
@@ -179,6 +181,25 @@ def test_only_zero_of_nine_can_finish_the_task() -> None:
         "(?:(?:今日)?剩余挑战次数|今日剩余|剩余|挑战次数)\\s*[:：]?\\s*0\\s*/\\s*9",
         "^0\\s*/\\s*9$",
     ]
+
+
+def test_2500_completion_marker_is_native_success() -> None:
+    nodes = _load_pipeline()
+
+    probe = nodes["0190-破阵武学-当前击败人数-达到2500-探测"]
+    marker = nodes["0191-破阵武学-当前击败人数"]
+
+    assert probe["next"] == ["0125-破阵武学-已完成"]
+    assert probe["on_error"] == ["0107-破阵武学-剩余-耗尽-探测"]
+    assert probe["recognition"] == {
+        "type": "And",
+        "param": {"all_of": ["0191-破阵武学-当前击败人数"]},
+    }
+    assert marker["recognition"] == "OCR"
+    assert re.fullmatch(marker["expected"], "2500")
+    assert re.fullmatch(marker["expected"], "2719")
+    assert not re.fullmatch(marker["expected"], "2450")
+    assert marker["roi"] == [160, 620, 200, 100]
 
 
 def test_prepare_fixture_matches_native_pipeline_recognizers() -> None:
@@ -274,7 +295,7 @@ def test_selected_break_array_label_roi_covers_live_720p_position() -> None:
     """The selected label moved up after the activity-list layout changed."""
     node = _load_pipeline()["0142-破阵武学-突破-阵法-已选择-入口"]
     rx, ry, rw, rh = node["roi"]
-    bx, by, bw, bh = (56, 346, 84, 23)
+    bx, by, bw, bh = (58, 467, 90, 24)
 
     assert rx <= bx and ry <= by
     assert bx + bw <= rx + rw and by + bh <= ry + rh
@@ -301,3 +322,28 @@ def test_fixture_archive_hashes_remain_read_only_evidence() -> None:
         archived = ROOT / fixture["source"]
         if archived.is_file():
             assert hashlib.sha256(archived.read_bytes()).hexdigest() == fixture["sha256"]
+
+
+def test_activity_probe_scrolls_once_when_break_array_is_below_visible_list() -> None:
+    nodes = _load_pipeline()
+    policy = TASK_POLICIES["BREAK_ARRAY_MARTIAL_DAILY"]
+    home_probe = nodes["0099-破阵武学-主页-探测"]
+    open_activity = nodes["0100-破阵武学-打开-活动"]
+    activity_probe = nodes["0101-破阵武学-活动-探测"]
+    scroll = nodes["0106-破阵武学-活动-滚动-一次"]
+
+    assert home_probe["on_error"] == ["0106-破阵武学-活动-滚动-一次"]
+    assert open_activity["next"] == ["0106-破阵武学-活动-滚动-一次"]
+    assert "on_error" not in activity_probe
+    assert nodes["0138-破阵武学-活动-入口"]["roi"] == [780, 20, 180, 100]
+    assert policy.action_caps["scroll_break_array_activity"] == 1
+    assert scroll["recognition"]["param"] == {
+        "all_of": [
+            "0180-破阵武学-活动-列表-页面",
+            "0181-破阵武学-活动-列表-滚动-目标",
+        ],
+        "box_index": 1,
+    }
+    assert scroll["custom_action_param"]["evidence"]["dy"] == -400
+    assert scroll["custom_action_param"]["evidence"]["duration_ms"] == 500
+    assert scroll["next"] == ["0101-破阵武学-活动-探测"]

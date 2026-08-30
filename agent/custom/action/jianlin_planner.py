@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import re
+import time
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from typing import Any
@@ -102,6 +103,13 @@ def _index(payload: Mapping[str, Any], field_name: str) -> int:
     return value
 
 
+def _ocr_amount(detail: Any) -> int:
+    match = _INTEGER.search(_ocr_text(detail))
+    if match is None:
+        raise ValueError("planner OCR result has no integer")
+    return _positive_int(int(match.group(1)), "OCR amount")
+
+
 def _and_results(reco_detail: Any) -> list[Any]:
     if not getattr(reco_detail, "hit", False):
         raise ValueError("planner recognition missed")
@@ -143,13 +151,43 @@ def _at(results: Sequence[Any], index: int) -> Any:
     return results[index]
 
 
+def _selected_plan(
+    results: Sequence[Any],
+    *,
+    stamina_index: int,
+    count_max_index: int,
+    multiplier_max_index: int,
+    stamina_per_attempt: int,
+) -> ChallengePlan:
+    """Calculate both Jianlin controls from the live page limits.
+
+    The page has two independent sliders: settlement multiplier and challenge
+    count.  The former is currently capped at 3 and the latter at 6.  They
+    must be treated as separate values because the displayed stamina cost is
+    ``stamina_per_attempt * multiplier * count``.
+    """
+
+    stamina = _ocr_nonnegative_amount(_at(results, stamina_index))
+    count_max = _ocr_amount(_at(results, count_max_index))
+    multiplier_max = _ocr_amount(_at(results, multiplier_max_index))
+    if not 1 <= multiplier_max <= 6 or not 1 <= count_max <= 12:
+        raise ValueError("unsafe Jianlin slider maximum")
+    return plan_safe_challenge(
+        stamina,
+        stamina_per_attempt,
+        count_max,
+        tuple(range(1, multiplier_max + 1)),
+    )
+
+
 @AgentServer.custom_action("PlanJianlinChallenge")
 class PlanJianlinChallenge(CustomAction):
-    """Choose and apply only the settlement multiplier from current stamina."""
+    """Choose and apply both Jianlin sliders from one live page."""
 
     _SLIDER_LEFT = 930
     _SLIDER_RIGHT = 1206
     _MULTIPLIER_Y = 427
+    _COUNT_Y = 504
 
     @classmethod
     def _slider_box(cls, value: int, maximum: int, y: int) -> tuple[int, int, int, int]:
@@ -161,17 +199,24 @@ class PlanJianlinChallenge(CustomAction):
         return position - 8, y - 14, 16, 28
 
     @classmethod
-    def _apply_multiplier(
+    def _apply_plan(
         cls,
         context: Any,
-        multiplier: int,
+        plan: ChallengePlan,
+        count_max: int,
         multiplier_max: int,
     ) -> None:
         controller = context.tasker.controller
         resolution = getattr(controller, "resolution", None)
         click_box(
             controller,
-            cls._slider_box(multiplier, multiplier_max, cls._MULTIPLIER_Y),
+            cls._slider_box(plan.count, count_max, cls._COUNT_Y),
+            resolution=resolution,
+        )
+        time.sleep(0.15)
+        click_box(
+            controller,
+            cls._slider_box(plan.multiplier, multiplier_max, cls._MULTIPLIER_Y),
             resolution=resolution,
         )
 
@@ -183,16 +228,12 @@ class PlanJianlinChallenge(CustomAction):
                 raise ValueError("dispatch_node must be a non-empty string")
             stamina_index = _index(payload, "stamina_index")
             results = _and_results(getattr(argv, "reco_detail", None))
-            stamina_per_multiplier = _positive_int(
-                payload.get("stamina_per_multiplier"),
-                "stamina_per_multiplier",
+            count_max_index = _index(payload, "count_max_index")
+            multiplier_max_index = _index(payload, "multiplier_max_index")
+            stamina_per_attempt = _positive_int(
+                payload.get("stamina_per_attempt"),
+                "stamina_per_attempt",
             )
-            max_multiplier = _positive_int(
-                payload.get("max_multiplier"),
-                "max_multiplier",
-            )
-            if max_multiplier != 6:
-                raise ValueError("Jianlin multiplier slider maximum must be 6")
             stop_stamina_at_or_below = payload.get("stop_stamina_at_or_below", 0)
             if (
                 isinstance(stop_stamina_at_or_below, bool)
@@ -207,8 +248,7 @@ class PlanJianlinChallenge(CustomAction):
                 return False
 
             stamina = _ocr_nonnegative_amount(_at(results, stamina_index))
-            multiplier = min(stamina // stamina_per_multiplier, max_multiplier)
-            if stamina <= stop_stamina_at_or_below or multiplier < 1:
+            if stamina <= stop_stamina_at_or_below:
                 insufficient_node = payload.get("insufficient_node")
                 if (
                     not isinstance(insufficient_node, str)
@@ -218,7 +258,19 @@ class PlanJianlinChallenge(CustomAction):
                 override_next = getattr(context, "override_next")
                 return bool(override_next(dispatch_node, [insufficient_node]))
 
-            type(self)._apply_multiplier(context, multiplier, max_multiplier)
+            plan = _selected_plan(
+                results,
+                stamina_index=stamina_index,
+                count_max_index=count_max_index,
+                multiplier_max_index=multiplier_max_index,
+                stamina_per_attempt=stamina_per_attempt,
+            )
+            type(self)._apply_plan(
+                context,
+                plan,
+                _ocr_amount(_at(results, count_max_index)),
+                _ocr_amount(_at(results, multiplier_max_index)),
+            )
             return True
         except (AttributeError, TypeError, ValueError, KeyError):
             return False
