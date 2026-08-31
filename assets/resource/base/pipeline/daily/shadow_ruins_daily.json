@@ -808,7 +808,8 @@
     },
     "action": "DoNothing",
     "next": [
-      "1511-MJA-影之遗迹地图推进-战斗胜利"
+      "1511-MJA-影之遗迹地图推进-战斗胜利",
+      "1512-MJA-影之遗迹地图推进-战斗失败"
     ],
     "retry_times": 0
   },
@@ -834,6 +835,36 @@
         "target_index": 1,
         "page_name": "1539-MJA-影之遗迹地图推进-识别-战斗结果页面",
         "target_name": "1540-MJA-影之遗迹地图推进-识别-战斗胜利"
+      }
+    },
+    "next": [
+      "1501-MJA-影之遗迹地图推进-前景三点循环"
+    ],
+    "retry_times": 0,
+    "timeout": 50000
+  },
+  "1512-MJA-影之遗迹地图推进-战斗失败": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "1539-MJA-影之遗迹地图推进-识别-战斗结果页面",
+          "1541-MJA-影之遗迹地图推进-识别-战斗失败"
+        ]
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "SHADOW_RUINS_DAILY",
+      "action_id": "dismiss_shadow_battle_failure",
+      "kind": "click",
+      "fixed_click_mode": "shadow_result_blank",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "1539-MJA-影之遗迹地图推进-识别-战斗结果页面",
+        "target_name": "1541-MJA-影之遗迹地图推进-识别-战斗失败"
       }
     },
     "next": [

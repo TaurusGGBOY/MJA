@@ -26,12 +26,26 @@
       "type": "And",
       "param": {
         "all_of": [
+          "1053-邮件奖励-邮件-关闭",
           "1049-邮件奖励-邮件-领取-全部"
         ],
-        "box_index": 0
+        "box_index": 1
       }
     },
-    "action": "Click",
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "MAIL_REWARD_DAILY",
+      "action_id": "claim_all_mail",
+      "kind": "click",
+      "fixed_click_mode": "mail_claim_all_button",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "1053-邮件奖励-邮件-关闭",
+        "target_name": "1049-邮件奖励-邮件-领取-全部"
+      }
+    },
     "max_hit": 1,
     "timeout": 5000,
     "next": [

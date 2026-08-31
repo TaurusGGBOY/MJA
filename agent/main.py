@@ -25,8 +25,6 @@ from agent.custom.action.convergence_lifecycle import (  # noqa: F401
 from agent.custom.action.fail_task import FailTask as _fail_task  # noqa: F401
 from agent.custom.action.food_progress import (  # noqa: F401
     FoodBudgetReached as _food_budget_reached,
-    FoodTooFullTerminal as _food_too_full_terminal,
-    VerifyFoodQuantityDecrease as _verify_food_quantity_decrease,
 )
 from agent.custom.action.guarded_input import GuardedInput as _guarded_input  # noqa: F401
 from agent.custom.action.jianlin_planner import (

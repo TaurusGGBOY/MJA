@@ -94,6 +94,13 @@ def test_collection_has_only_native_success_and_natural_failure_routes() -> None
     assert local["0230-采集部署-打开-采集"]["on_error"] == [
         "0237-采集部署-失败-返回主页",
     ]
+    assert local["0230-采集部署-打开-采集"]["max_hit"] == 2
+    assert local["0231-采集部署-一键部署"]["on_error"] == [
+        "0257-采集部署-误入商店-关闭恢复",
+    ]
+    assert local["0257-采集部署-误入商店-关闭恢复"]["next"] == [
+        "[JumpBack]0230-采集部署-打开-采集",
+    ]
     cleanup = local["0237-采集部署-失败-返回主页"]
     assert cleanup["custom_action"] == "ReturnToWorldHome"
     assert cleanup["timeout"] == 30000
@@ -143,6 +150,7 @@ def test_every_deployment_and_harvest_input_remains_single_shot_and_guarded() ->
         "close_reward_popup",
         "close_collection_deployment",
         "close_collection_painting",
+        "close_shop",
     }
     guarded = {
         node["custom_action_param"]["action_id"]: node
@@ -152,14 +160,21 @@ def test_every_deployment_and_harvest_input_remains_single_shot_and_guarded() ->
 
     assert set(guarded) == expected_actions
     for action_id, node in guarded.items():
-        assert node["max_hit"] == 1
+        expected_max_hit = 2 if action_id == "open_collection_deployment" else 1
+        assert node["max_hit"] == expected_max_hit
         assert node["retry_times"] == 0
         assert node["custom_action_param"]["kind"] == "click"
-        assert policy.action_caps[action_id] == 1
+        expected_cap = 2 if action_id == "open_collection_deployment" else 1
+        assert policy.action_caps[action_id] == expected_cap
 
     for action_id in ("open_painting_scroll", "deploy_all_collection", "claim_all_collection"):
         assert_no_side_effect_retry(local, action_id)
         assert len(guarded_nodes_for_action(local, action_id)) == 1
+
+    recovery = local["0257-采集部署-误入商店-关闭恢复"]
+    assert recovery["custom_action_param"]["action_id"] == "close_shop"
+    assert recovery["custom_action_param"]["fixed_click_mode"] == "function_panel_close"
+    assert recovery["max_hit"] == 1
 
 
 def test_r22_harvest_target_and_page_bounds_remain_unchanged() -> None:

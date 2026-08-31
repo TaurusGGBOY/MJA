@@ -58,6 +58,33 @@ def test_guarded_input_clicks_verified_target_box_inside_and_result():
     assert context.tasker.controller.actions == [("click", (170, 250))]
 
 
+def test_guarded_input_uses_mail_claim_button_center_instead_of_ocr_baseline():
+    context = FakeContext()
+    RUN_STORE.begin("MAIL_REWARD_DAILY")
+    payload = {
+        "task_id": "MAIL_REWARD_DAILY",
+        "action_id": "claim_all_mail",
+        "kind": "click",
+        "fixed_click_mode": "mail_claim_all_button",
+        "evidence": {
+            "page_index": 0,
+            "target_index": 1,
+            "page_name": "1053-邮件奖励-邮件-关闭",
+            "target_name": "1049-邮件奖励-邮件-领取-全部",
+        },
+    }
+    argv = FakeArgv(
+        json.dumps(payload),
+        reco_detail=and_reco(
+            hit_reco("1053-邮件奖励-邮件-关闭", (1053, 115, 45, 45)),
+            hit_reco("1049-邮件奖励-邮件-领取-全部", (245, 563, 68, 19)),
+        ),
+    )
+
+    assert GuardedInput().run(context, argv) is True
+    assert context.tasker.controller.actions == [("click", (280, 557))]
+
+
 def test_guarded_input_opens_painting_scroll_at_named_world_anchor():
     context = FakeContext()
     RUN_STORE.begin("BUY_TEA_DAILY")
@@ -353,17 +380,17 @@ def test_guarded_input_uses_mid_lower_blank_area_for_guild_reward_overlays():
         (
             "dismiss_guild_activity_reward_popup",
             "guild_activity_reward_blank",
-            (640, 550),
+            (640, 660),
         ),
         (
             "dismiss_guild_defeat_reward",
             "guild_activity_reward_blank",
-            (640, 550),
+            (640, 660),
         ),
         (
             "dismiss_guild_conquest_reward",
             "guild_activity_reward_blank",
-            (640, 550),
+            (640, 660),
         ),
         (
             "close_guild_conquest_reward",
@@ -419,7 +446,7 @@ def test_guarded_input_uses_separate_safe_blank_area_for_shadow_reward_dismissal
     )
 
     assert GuardedInput().run(context, argv) is True
-    assert context.tasker.controller.actions == [("click", (330, 620))]
+    assert context.tasker.controller.actions == [("click", (650, 677))]
 
 
 def test_guarded_input_accepts_named_same_index_shadow_reward_evidence():
@@ -444,7 +471,7 @@ def test_guarded_input_accepts_named_same_index_shadow_reward_evidence():
     )
 
     assert GuardedInput().run(context, argv) is True
-    assert context.tasker.controller.actions == [("click", (330, 620))]
+    assert context.tasker.controller.actions == [("click", (650, 677))]
 
 
 def test_guarded_input_uses_named_shadow_stage_entry_button():

@@ -226,10 +226,8 @@ def test_r22_post_close_accepts_only_used_once_state_or_explicit_home() -> None:
     assert "免费" not in used["expected"]
     home_entry = nodes["0501-免费鉴定-鉴定-主页-入口"]
     assert home_entry["expected"] == ["^鉴宝$", "^宝$"]
-    assert home_entry["roi"] == [850, 30, 130, 70]
-    # The failed 2026-08-24 run placed the complete label at x=868..942.
-    # Keep enough left context for OCR while preserving the previous right edge.
-    assert _contains(home_entry["roi"], [868, 63, 74, 19])
+    assert home_entry["roi"] == [890, 45, 55, 45]
+    assert nodes["0502-免费鉴定-鉴定-页面"]["roi"] == [0, 0, 300, 100]
     assert nodes["0493-MJA_APPRAISAL_VERIFY"]["recognition"]["param"] == {
         "all_of": ["0502-免费鉴定-鉴定-页面", "0509-appraisal.used"],
         "box_index": 1,

@@ -23,4 +23,7 @@ def test_r29_wait_keeps_existing_bounded_result_recovery() -> None:
         "param": {"all_of": ["1538-MJA-影之遗迹地图推进-识别-战斗中"]},
     }
     assert wait["timeout"] == 240000
-    assert wait["next"] == ["1511-MJA-影之遗迹地图推进-战斗胜利"]
+    assert wait["next"] == [
+        "1511-MJA-影之遗迹地图推进-战斗胜利",
+        "1512-MJA-影之遗迹地图推进-战斗失败",
+    ]

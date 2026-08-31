@@ -246,6 +246,21 @@ def test_martial_gift_reward_is_optional_red_dot_scoped_and_one_shot() -> None:
         "1087-武学突破-关闭-馈赠奖励页",
         "1062-武学突破-关闭-页面-用于-成功",
     ]
+    close_gift = nodes["1101-武学突破-馈赠奖励-关闭"]
+    assert close_gift == {
+        "recognition": "TemplateMatch",
+        "template": "daily/MARTIAL_STUDY_BREAKTHROUGH_DAILY/gift_reward_close.png",
+        "roi": [980, 100, 100, 100],
+        "threshold": 0.8,
+        "action": "DoNothing",
+    }
+    assert nodes["1087-武学突破-关闭-馈赠奖励页"]["recognition"]["param"] == {
+        "all_of": [
+            "1090-武学突破-馈赠奖励-页面",
+            "1101-武学突破-馈赠奖励-关闭",
+        ],
+        "box_index": 1,
+    }
     assert_reachable(nodes, "1084-武学突破-打开-馈赠奖励", "1371-公共-原生成功-主页边界")
 
 

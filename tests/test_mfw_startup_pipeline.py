@@ -21,7 +21,25 @@ def test_game_start_is_a_startup_only_pipeline_without_restart_named_nodes() -> 
     assert not any("重启" in name for name in startup)
     assert startup["0023-启动-游戏入口"]["next"] == ["1356-启动-游戏启动"]
     assert "on_error" not in startup["0023-启动-游戏入口"]
-    assert startup["1356-启动-游戏启动"]["on_error"] == ["关闭游戏"]
+    assert startup["1356-启动-游戏启动"]["on_error"] == [
+        "启动-游戏启动恢复",
+        "关闭游戏",
+    ]
+    recovery = startup["启动-游戏启动恢复"]
+    assert recovery["action"] == "Custom"
+    assert recovery["custom_action"] == "RestartGameSurface"
+    assert recovery["custom_action_param"] == {
+        "package": "com.hanjiasongshu.dr22",
+        "activity": "com.hanjiasongshu.dr22/.MainActivity",
+        "force_stop": True,
+        "cooldown_ms": 2000,
+        "start_repeat": 5,
+        "start_repeat_delay_ms": 1000,
+        "start_timeout_ms": 15000,
+    }
+    assert recovery["timeout"] == 30000
+    assert recovery["max_hit"] == 1
+    assert recovery["next"] == ["1356-启动-游戏启动"]
     assert "1371-公共-原生成功-主页边界" not in json.dumps(startup, ensure_ascii=False)
     assert "1358-公共-游戏启动失败" not in json.dumps(startup, ensure_ascii=False)
     assert "启动-世界页-探测" not in startup
@@ -69,7 +87,7 @@ def test_startup_button_flow_has_no_restart_aliases() -> None:
     assert setting_probe["recognition"] == "OCR"
     assert setting_probe["expected"] == "^12\\+?$"
     assert setting_probe["roi"] == [0, 560, 540, 160]
-    assert setting_probe["timeout"] == 200000
+    assert setting_probe["timeout"] == 300000
     assert announcement == {
         "recognition": "OCR",
         "expected": "公告|公|告",
@@ -85,6 +103,8 @@ def test_startup_button_flow_has_no_restart_aliases() -> None:
         "^本月.*可领取.*物品$",
         "^[0-9一二三四五六七八九十]+月签到$",
     ]
+    assert startup["1361-启动-可选关闭月签到奖励页"]["target"] == [1020, 100, 120, 100]
+    assert startup["1361-启动-可选关闭月签到奖励页"]["post_delay"] == 1000
     assert setting_probe["next"] == [
         "[JumpBack]0038-公共-已知-点击空白关闭",
         "[JumpBack]1359-启动-可选关闭公告页",

@@ -63,8 +63,18 @@ def test_startup_has_no_business_task_restart_handoff() -> None:
     }
     assert "启动-游戏启动-启动" not in pipeline
     assert pipeline["1357-启动-游戏启动成功-左下12探测"]["expected"] == "^12\\+?$"
-    assert pipeline["1357-启动-游戏启动成功-左下12探测"]["timeout"] == 200000
-    assert pipeline["1356-启动-游戏启动"]["on_error"] == ["关闭游戏"]
+    assert pipeline["1357-启动-游戏启动成功-左下12探测"]["timeout"] == 300000
+    assert pipeline["1356-启动-游戏启动"]["on_error"] == [
+        "启动-游戏启动恢复",
+        "关闭游戏",
+    ]
+    recovery = pipeline["启动-游戏启动恢复"]
+    assert recovery["action"] == "Custom"
+    assert recovery["custom_action"] == "RestartGameSurface"
+    assert recovery["custom_action_param"]["cooldown_ms"] == 2000
+    assert recovery["custom_action_param"]["start_repeat"] == 5
+    assert recovery["custom_action_param"]["start_repeat_delay_ms"] == 1000
+    assert recovery["next"] == ["1356-启动-游戏启动"]
     assert "on_error" not in pipeline["1357-启动-游戏启动成功-左下12探测"]
     assert pipeline["1357-启动-游戏启动成功-左下12探测"]["next"] == [
         "[JumpBack]0038-公共-已知-点击空白关闭",

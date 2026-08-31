@@ -76,11 +76,18 @@ def test_guild_activity_uses_only_zero_in_the_scoped_remaining_counter_as_comple
     assert "0570-帮派活动挑战-帮派-剩余-耗尽" in already_done[
         "recognition"
     ]["param"]["all_of"]
-    assert already_done["next"] == ["0529-帮派活动挑战-帮派-已完成-退出-帮派-主页"]
+    assert already_done["next"] == [
+        "0529-帮派活动挑战-帮派-已完成-退出-帮派-主页",
+        "0528-帮派活动挑战-已完成-活动页-返回主页",
+    ]
     assert already_done["max_hit"] == 2
     assert already_done["custom_action_param"]["fixed_click_mode"] == (
         "guild_activity_close"
     )
+    cleanup_fallback = nodes["0528-帮派活动挑战-已完成-活动页-返回主页"]
+    assert cleanup_fallback["custom_action"] == "ReturnToHome"
+    assert cleanup_fallback["next"] == ["1371-公共-原生成功-主页边界"]
+    assert cleanup_fallback["on_error"] == ["1365-公共-主页边界-失败"]
 
 
 def test_guild_activity_checks_zero_after_battle_cleanup_and_retries_only_bounded_challenge() -> None:
@@ -93,7 +100,8 @@ def test_guild_activity_checks_zero_after_battle_cleanup_and_retries_only_bounde
             "0547-帮派活动挑战-帮派-恭喜获得-关闭"
         ]
     close_reward = nodes["0547-帮派活动挑战-帮派-恭喜获得-关闭"]
-    assert close_reward["max_hit"] == 3
+    assert close_reward["max_hit"] == 4
+    assert close_reward["timeout"] == 8000
     assert close_reward["next"] == [
         "0547-帮派活动挑战-帮派-恭喜获得-关闭",
         "0519-帮派活动挑战-零次-奖励检查",
@@ -112,6 +120,10 @@ def test_guild_activity_accepts_split_reward_popup_ocr() -> None:
         "^恭喜获得$",
         "^喜获得$",
         "^战斗胜利$",
+    ]
+    assert nodes["0566-帮派活动挑战-帮派-活动-页面"]["expected"] == [
+        "幻境征讨",
+        "幻境征",
     ]
 
     defeat_reward = nodes["0591-帮派活动挑战-打开-击破奖励"]
@@ -227,18 +239,29 @@ def test_guild_zero_counter_claims_defeat_then_conquest_rewards_when_red_dots_ex
         assert action["max_hit"] == 1
         assert action["retry_times"] == 0
 
-    for result_name in (
-        "0592-帮派活动挑战-关闭-击破奖励",
-        "0595-帮派活动挑战-关闭-征讨领取结果",
-    ):
-        result = nodes[result_name]
-        assert result["recognition"]["param"] == {
-            "all_of": ["0038-公共-已知-点击空白关闭"],
-            "box_index": 0,
-        }
-        assert result["custom_action_param"]["evidence"]["page_name"] == (
-            "0038-公共-已知-点击空白关闭"
-        )
+    defeat_result = nodes["0592-帮派活动挑战-关闭-击破奖励"]
+    assert defeat_result["recognition"]["param"] == {
+        "all_of": ["0611-帮派活动挑战-击破奖励-点击空白关闭-文案"],
+        "box_index": 0,
+    }
+    assert defeat_result["custom_action_param"]["evidence"]["page_name"] == (
+        "0611-帮派活动挑战-击破奖励-点击空白关闭-文案"
+    )
+    assert nodes["0611-帮派活动挑战-击破奖励-点击空白关闭-文案"] == {
+        "recognition": "OCR",
+        "expected": [r"^点击空白处关(?:闭|团)$"],
+        "roi": [350, 580, 600, 140],
+        "action": "DoNothing",
+    }
+
+    conquest_result = nodes["0595-帮派活动挑战-关闭-征讨领取结果"]
+    assert conquest_result["recognition"]["param"] == {
+        "all_of": ["0038-公共-已知-点击空白关闭"],
+        "box_index": 0,
+    }
+    assert conquest_result["custom_action_param"]["evidence"]["page_name"] == (
+        "0038-公共-已知-点击空白关闭"
+    )
 
     claim = nodes["0594-帮派活动挑战-领取-征讨宝箱"]
     assert claim["recognition"]["param"] == {

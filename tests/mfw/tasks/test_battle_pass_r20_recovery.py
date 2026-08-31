@@ -91,7 +91,8 @@ def test_r20_home_ocr_proves_direct_top_level_battle_pass_entry() -> None:
     }
 
     assert _contains(entry["roi"], [824, 56, 30, 18])
-    assert _contains(nodes["0071-战令奖励-战斗-战令-主页-活动"]["roi"], [882, 58, 35, 14])
+    assert nodes["0071-战令奖励-战斗-战令-主页-活动"]["roi"] == [800, 20, 100, 90]
+    assert _contains(nodes["0071-战令奖励-战斗-战令-主页-活动"]["roi"], [832, 58, 35, 18])
     assert _contains(nodes["0072-战令奖励-战斗-战令-主页-祈福"]["roi"], [1001, 58, 31, 14])
     assert _contains(nodes["0073-战令奖励-战斗-战令-主页-副本"]["roi"], [1057, 58, 36, 14])
     assert _contains(nodes["0074-战令奖励-战斗-战令-主页-画卷"]["roi"], [1116, 58, 32, 14])

@@ -25,10 +25,32 @@ def test_r25_battle_wait_keeps_existing_bounded_edges() -> None:
     nodes = _nodes()
     battle = nodes["1509-MJA-影之遗迹地图推进-战斗等待"]
     assert battle["timeout"] == 240000
-    assert battle["next"] == ["1511-MJA-影之遗迹地图推进-战斗胜利"]
+    assert battle["next"] == [
+        "1511-MJA-影之遗迹地图推进-战斗胜利",
+        "1512-MJA-影之遗迹地图推进-战斗失败",
+    ]
     assert "on_error" not in battle
     assert nodes["1501-MJA-影之遗迹地图推进-前景三点循环"]["next"] == [
+        "1595-MJA-影之遗迹-确认退出",
+        "1594-MJA-影之遗迹-开始战斗",
         "[JumpBack]1509-MJA-影之遗迹地图推进-战斗等待",
         "[JumpBack]1515-MJA-影之遗迹地图推进-关闭胜利宝箱奖励",
         "1178-影之遗迹-离开-关卡",
+        "[JumpBack]1501-MJA-影之遗迹地图推进-前景三点循环",
     ]
+
+
+def test_r25_battle_failure_is_dismissed_with_same_frame_evidence() -> None:
+    node = _nodes()["1512-MJA-影之遗迹地图推进-战斗失败"]
+    assert node["recognition"]["param"]["all_of"] == [
+        "1539-MJA-影之遗迹地图推进-识别-战斗结果页面",
+        "1541-MJA-影之遗迹地图推进-识别-战斗失败",
+    ]
+    assert node["custom_action"] == "GuardedInput"
+    assert node["custom_action_param"]["action_id"] == (
+        "dismiss_shadow_battle_failure"
+    )
+    assert node["custom_action_param"]["fixed_click_mode"] == (
+        "shadow_result_blank"
+    )
+    assert node["next"] == ["1501-MJA-影之遗迹地图推进-前景三点循环"]

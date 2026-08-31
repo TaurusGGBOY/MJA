@@ -321,6 +321,14 @@ def _fixed_click_boxes(params: Mapping[str, Any]) -> tuple[tuple[int, int, int, 
 
 
 _FIXED_CLICK_MODES: Mapping[tuple[str, str], tuple[int, int, int, int]] = {
+    # OCR returns only the glyph box for “全部领取”.  Clicking a random point
+    # inside that short baseline can land on the lower edge of the Unity
+    # control and leave the mail unchanged.  Same-frame mail-close and label
+    # evidence gate this calibrated full-button click.
+    (
+        "claim_all_mail",
+        "mail_claim_all_button",
+    ): (205, 525, 150, 65),
     # The trial shortcut is a stable home-only anchor.  The current 1280x720
     # home capture places its visible 试剑 label at [1054, 540, 49, 21]; use
     # that calibrated label box so the click lands on the shortcut rather
@@ -503,13 +511,13 @@ _FIXED_CLICK_MODES: Mapping[tuple[str, str], tuple[int, int, int, int]] = {
         "leave_shadow_stage",
         "shadow_stage_leave",
     ): (1080, 625, 150, 55),
-    # Guild activity reward popups dismiss by tapping the same verified blank
-    # area. Keep the box inside the mid-lower blank band: the reward banner
-    # ends above y=465, while the close hint and device footer begin near
-    # y=663. Each business action still requires its own same-frame popup
-    # evidence before this named click mode is accepted.
+    # Guild activity reward popups dismiss from the lower blank area indicated
+    # by the in-game “点击空白处关闭” hint. The reward banner ends above
+    # y=465; the calibrated tap is just above the hint/footer band. Each
+    # business action still requires its own same-frame popup evidence before
+    # this named click mode is accepted.
     **{
-        (action_id, "guild_activity_reward_blank"): (560, 510, 160, 80)
+        (action_id, "guild_activity_reward_blank"): (560, 640, 160, 40)
         for action_id in (
             "dismiss_guild_activity_reward_popup",
             "dismiss_guild_defeat_reward",

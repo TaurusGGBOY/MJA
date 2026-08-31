@@ -68,6 +68,19 @@ def test_mail_reward_preserves_bounded_claim_and_cleanup_actions() -> None:
 
     assert nodes["1036-邮件奖励-领取"]["max_hit"] == 1
     assert nodes["1036-邮件奖励-领取"]["timeout"] == 5000
+    claim = nodes["1036-邮件奖励-领取"]
+    assert claim["recognition"]["param"] == {
+        "all_of": [
+            "1053-邮件奖励-邮件-关闭",
+            "1049-邮件奖励-邮件-领取-全部",
+        ],
+        "box_index": 1,
+    }
+    assert claim["custom_action"] == "GuardedInput"
+    assert claim["custom_action_param"]["action_id"] == "claim_all_mail"
+    assert claim["custom_action_param"]["fixed_click_mode"] == (
+        "mail_claim_all_button"
+    )
     assert nodes["1040-邮件奖励-关闭-奖励"]["max_hit"] == 1
     assert nodes["1041-邮件奖励-关闭"]["max_hit"] == 1
     assert nodes["1042-邮件奖励-关闭-面板"]["max_hit"] == 1

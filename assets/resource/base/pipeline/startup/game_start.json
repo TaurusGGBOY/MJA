@@ -32,7 +32,24 @@
       "1357-启动-游戏启动成功-左下12探测",
       "1362-启动-游戏就绪"
     ],
-    "on_error": ["关闭游戏"]
+    "on_error": ["启动-游戏启动恢复", "关闭游戏"]
+  },
+  "启动-游戏启动恢复": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "RestartGameSurface",
+    "custom_action_param": {
+      "package": "com.hanjiasongshu.dr22",
+      "activity": "com.hanjiasongshu.dr22/.MainActivity",
+      "force_stop": true,
+      "cooldown_ms": 2000,
+      "start_repeat": 5,
+      "start_repeat_delay_ms": 1000,
+      "start_timeout_ms": 15000
+    },
+    "timeout": 30000,
+    "max_hit": 1,
+    "next": ["1356-启动-游戏启动"]
   },
   "1385-启动-关闭帮会奖励预览残留页": {
     "recognition": {
@@ -276,7 +293,7 @@
     "recognition": "OCR",
     "expected": "^12\\+?$",
     "roi": [0, 560, 540, 160],
-    "timeout": 200000,
+    "timeout": 300000,
     "max_hit": 1,
     "action": "DoNothing",
     "next": [
@@ -318,7 +335,8 @@
     "timeout": 1500,
     "max_hit": 1,
     "action": "Click",
-    "target": [1060, 152, 16, 16]
+    "target": [1020, 100, 120, 100],
+    "post_delay": 1000
   },
   "1362-启动-游戏就绪": {
     "recognition": {

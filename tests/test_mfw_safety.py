@@ -58,6 +58,10 @@ def test_native_policies_are_complete_and_mfw_only_extensions_are_explicit():
     assert guild.action_caps["challenge_guild_activity"] == 2
     assert guild.action_caps["dismiss_guild_result"] == 2
     assert guild.action_caps["dismiss_guild_defeat_result"] == 1
+    assert guild.action_caps["dismiss_guild_activity_reward_popup"] == 4
+
+    food = TASK_POLICIES["EAT_STAMINA_FOOD_DAILY"]
+    assert food.action_caps["close_bag"] == 2
 
     jianlin = TASK_POLICIES["JIANLIN_RESOURCE_CONDENSATE_STAMINA_DAILY"]
     assert "dismiss_guild_defeat_result" not in jianlin.action_caps
@@ -100,6 +104,7 @@ def test_native_policies_are_complete_and_mfw_only_extensions_are_explicit():
         "resume_break_array": 1,
         "start_break_array_challenge": 9,
         "confirm_break_array_challenge": 9,
+        "scroll_break_array_activity": 1,
         "start_break_array_battle": 9,
         "wait_break_array_battle": 360,
         "wait_break_array_result": 9,

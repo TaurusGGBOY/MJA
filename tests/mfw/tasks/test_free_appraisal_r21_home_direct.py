@@ -134,7 +134,7 @@ def test_r21_ocr_boxes_are_covered_by_top_appraisal_target_variants() -> None:
     assert appraisal == {
         "recognition": "OCR",
         "expected": ["^鉴宝$", "^宝$"],
-        "roi": [850, 30, 130, 70],
+        "roi": [890, 45, 55, 45],
         "action": "DoNothing",
     }
 
@@ -147,8 +147,7 @@ def test_r21_ocr_boxes_are_covered_by_top_appraisal_target_variants() -> None:
         [1116, 58, 32, 14],  # 画卷
     ):
         assert _contains(home["roi"], box)
-    assert _contains(appraisal["roi"], [938, 58, 35, 14])
-    assert _contains(appraisal["roi"], [953, 61, 15, 10])
+    assert _contains(appraisal["roi"], [900, 63, 32, 18])
 
     # 秘宝 is only a function-panel boundary anchor. It is never an appraisal
     # click target and is outside the fixed top-level 鉴宝 ROI.
@@ -156,6 +155,17 @@ def test_r21_ocr_boxes_are_covered_by_top_appraisal_target_variants() -> None:
     assert "^秘宝$" in panel["expected"]
     assert "鉴宝" not in "".join(panel["expected"])
     assert appraisal["expected"] == ["^鉴宝$", "^宝$"]
+
+    page = nodes["0502-免费鉴定-鉴定-页面"]
+    assert page == {
+        "recognition": "OCR",
+        "expected": "^鉴宝$",
+        "roi": [0, 0, 300, 100],
+        "action": "DoNothing",
+    }
+    # The opened appraisal surface moves the title to the upper-left;
+    # reusing the home top-right ROI cannot recognize that page.
+    assert _contains(page["roi"], [63, 24, 60, 28])
 
 
 def test_r21_open_panel_recovery_closes_once_then_reenters_home_route() -> None:

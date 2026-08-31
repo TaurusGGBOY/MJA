@@ -390,7 +390,7 @@
       "param": {
         "all_of": [
           "1090-武学突破-馈赠奖励-页面",
-          "1076-武学突破-武学-关闭"
+          "1101-武学突破-馈赠奖励-关闭"
         ],
         "box_index": 1
       }
@@ -405,7 +405,7 @@
         "page_index": 0,
         "target_index": 1,
         "page_name": "1090-武学突破-馈赠奖励-页面",
-        "target_name": "1076-武学突破-武学-关闭"
+        "target_name": "1101-武学突破-馈赠奖励-关闭"
       }
     },
     "next": [
@@ -617,6 +617,13 @@
     "action": "DoNothing"
   },
   "1090-武学突破-馈赠奖励-页面": {
+    "recognition": "TemplateMatch",
+    "template": "daily/MARTIAL_STUDY_BREAKTHROUGH_DAILY/gift_reward_close.png",
+    "roi": [980, 100, 100, 100],
+    "threshold": 0.8,
+    "action": "DoNothing"
+  },
+  "1101-武学突破-馈赠奖励-关闭": {
     "recognition": "TemplateMatch",
     "template": "daily/MARTIAL_STUDY_BREAKTHROUGH_DAILY/gift_reward_close.png",
     "roi": [980, 100, 100, 100],
