@@ -34,3 +34,9 @@ under ignored paths or outside the repository.
 Describe the user-visible behavior, tests run, fixture changes, and any
 third-party assets or licenses involved. Never include private runtime logs or
 unredacted game screenshots in a pull request.
+
+## Branch workflow
+
+- Work on short-lived `feat/*`, `fix/*`, `docs/*`, or `chore/*` branches.
+- Merge into `main` through a squash pull request; do not push directly.
+- GitHub Actions is disabled, so run focused tests locally before opening a PR.
