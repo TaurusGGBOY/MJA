@@ -562,6 +562,7 @@ _POLICIES = {
             "claim_task_reward": 50,
             "close_reward_popup": 50,
             "open_battle_pass_rewards": 1,
+            "claim_basic_one_click_reward": 1,
             "claim_basic_red_dot_reward": 50,
             "close_battle_pass": 1,
         },
