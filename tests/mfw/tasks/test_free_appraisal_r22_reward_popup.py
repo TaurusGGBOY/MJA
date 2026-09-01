@@ -226,7 +226,7 @@ def test_r22_post_close_accepts_only_used_once_state_or_explicit_home() -> None:
     assert "免费" not in used["expected"]
     home_entry = nodes["0501-免费鉴定-鉴定-主页-入口"]
     assert home_entry["expected"] == ["^鉴宝$", "^宝$"]
-    assert home_entry["roi"] == [890, 45, 55, 45]
+    assert home_entry["roi"] == [850, 30, 130, 70]
     assert nodes["0502-免费鉴定-鉴定-页面"]["roi"] == [0, 0, 300, 100]
     assert nodes["0493-MJA_APPRAISAL_VERIFY"]["recognition"]["param"] == {
         "all_of": ["0502-免费鉴定-鉴定-页面", "0509-appraisal.used"],
@@ -244,7 +244,7 @@ def test_r22_post_close_accepts_only_used_once_state_or_explicit_home() -> None:
 
     reward_home = nodes["0496-免费鉴定-主页-之后-奖励"]
     assert reward_home["recognition"]["param"] == {
-        "all_of": ["0500-免费鉴定-鉴定-主页-页面", "0501-免费鉴定-鉴定-主页-入口"],
+        "all_of": ["0026-公共-游戏主页-页面", "0500-免费鉴定-鉴定-主页-页面"],
         "box_index": 0,
     }
     assert reward_home["next"] == ["0497-免费鉴定-主页成功"]

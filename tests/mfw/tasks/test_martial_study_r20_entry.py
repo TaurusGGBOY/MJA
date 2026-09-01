@@ -81,7 +81,7 @@ def test_r20_panel_action_is_same_frame_guarded_and_capped_once() -> None:
     assert open_panel["timeout"] == 8000
     assert TASK_POLICIES[MARTIAL.task_id].action_caps["open_function_panel"] == 1
 
-    assert nodes["1071-武学突破-武学-入口"]["roi"] == [650, 120, 600, 560]
+    assert nodes["1071-武学突破-武学-入口"]["roi"] == [720, 390, 120, 70]
     assert nodes["1072-武学突破-武学-页面"]["roi"] == [0, 0, 500, 420]
 
 
