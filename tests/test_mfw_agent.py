@@ -112,6 +112,33 @@ def test_guarded_input_opens_painting_scroll_at_named_world_anchor():
     assert context.tasker.controller.actions == [("click", (1130, 62))]
 
 
+def test_guarded_input_opens_appraisal_at_fixed_home_navigation_anchor():
+    context = FakeContext()
+    RUN_STORE.begin("FREE_APPRAISAL_DAILY")
+    payload = {
+        "task_id": "FREE_APPRAISAL_DAILY",
+        "action_id": "open_appraisal",
+        "kind": "click",
+        "fixed_click_mode": "appraisal_home_button",
+        "evidence": {
+            "page_index": 0,
+            "target_index": 1,
+            "page_name": "0026-公共-游戏主页-页面",
+            "target_name": "0500-免费鉴定-鉴定-主页-页面",
+        },
+    }
+    argv = FakeArgv(
+        json.dumps(payload),
+        reco_detail=and_reco(
+            hit_reco("0026-公共-游戏主页-页面", (1030, 565, 90, 14)),
+            hit_reco("0500-免费鉴定-鉴定-主页-页面", (970, 63, 32, 19)),
+        ),
+    )
+
+    assert GuardedInput().run(context, argv) is True
+    assert context.tasker.controller.actions == [("click", (917, 70))]
+
+
 def test_guarded_input_assigns_sweep_ticket_at_fixed_plus_anchor_without_ticket_ocr():
     context = FakeContext()
     RUN_STORE.begin("DUNGEON_SWEEP_DAILY")
@@ -380,17 +407,17 @@ def test_guarded_input_uses_mid_lower_blank_area_for_guild_reward_overlays():
         (
             "dismiss_guild_activity_reward_popup",
             "guild_activity_reward_blank",
-            (640, 660),
+            (640, 550),
         ),
         (
             "dismiss_guild_defeat_reward",
             "guild_activity_reward_blank",
-            (640, 660),
+            (640, 550),
         ),
         (
             "dismiss_guild_conquest_reward",
             "guild_activity_reward_blank",
-            (640, 660),
+            (640, 550),
         ),
         (
             "close_guild_conquest_reward",
