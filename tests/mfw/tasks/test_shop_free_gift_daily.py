@@ -31,9 +31,34 @@ def test_shop_has_explicit_available_and_already_claimed_candidates() -> None:
     pipeline = _pipeline()
 
     assert pipeline["1229-商店免费礼包-商店-页面"]["next"] == [
+        "1244-商店免费礼包-打开-周期-福利"
+    ]
+    open_period = pipeline["1244-商店免费礼包-打开-周期-福利"]
+    assert open_period["recognition"]["param"] == {
+        "all_of": [
+            "1229-商店免费礼包-商店-页面",
+            "1239-商店免费礼包-商店-周期-权益-页面",
+        ],
+        "box_index": 1,
+    }
+    assert open_period["custom_action"] == "GuardedInput"
+    assert open_period["custom_action_param"] == {
+        "task_id": "SHOP_FREE_GIFT_DAILY",
+        "action_id": "open_period_benefits",
+        "kind": "click",
+        "evidence": {
+            "page_index": 0,
+            "target_index": 1,
+            "page_name": "1229-商店免费礼包-商店-页面",
+            "target_name": "1239-商店免费礼包-商店-周期-权益-页面",
+        },
+    }
+    assert open_period["next"] == [
         "1230-商店免费礼包-已领取",
         "1232-商店免费礼包-领取",
     ]
+    assert open_period["max_hit"] == 1
+    assert open_period.get("retry_times", 0) == 0
     assert pipeline["1230-商店免费礼包-已领取"]["expected"] == [
         "已领取",
         "今日已领取",
@@ -129,6 +154,7 @@ def test_shop_preserves_navigation_evidence_and_action_bounds() -> None:
     action_ids = [
         "open_function_panel",
         "open_shop",
+        "open_period_benefits",
         "claim_free_gift",
         "dismiss_free_gift_reward",
         "close_shop",

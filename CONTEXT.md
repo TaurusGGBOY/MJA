@@ -105,7 +105,7 @@ After confirming the ticket conversion, close the conversion result surface and 
 _Avoid_: ending the task on the ring page or on an unresolved result dialog.
 
 **Condensate budget decision**:
-The resource budget for the condensate-spending task is `999999999` units of 凝晶. This changes only the configured resource quantity cap; action-count limits and page/recognition guards remain in force.
+The resource budget for the condensate-spending task is `9999999` units of 凝晶. This changes only the configured resource quantity cap; action-count limits and page/recognition guards remain in force.
 _Avoid_: interpreting the large quantity cap as permission to bypass action bounds or visual page checks.
 
 **Guild-activity completion counter**:

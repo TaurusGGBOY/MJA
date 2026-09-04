@@ -260,7 +260,7 @@ _POLICIES = {
             "buy_yunzhou_currency_max": 1,
             "dismiss_yunzhou_reward_popup": 1,
         },
-        resources={"凝晶": 999_999_999},
+        resources={"凝晶": 9_999_999},
     ),
     "MARTIAL_STUDY_BREAKTHROUGH_DAILY": _policy(
         "MARTIAL_STUDY_BREAKTHROUGH_DAILY",
@@ -427,8 +427,11 @@ _POLICIES = {
         max_steps=448,
         action_caps={
             "open_break_array_activity": 1,
+            "open_break_array_activity_item": 1,
             "open_break_array": 1,
             "scroll_break_array_activity": 1,
+            "scroll_break_array_activity_second": 1,
+            "scroll_break_array_activity_reverse": 1,
             "resume_break_array": 1,
             "start_break_array_challenge": 9,
             "confirm_break_array_challenge": 9,
