@@ -49,15 +49,10 @@ def test_r20_function_panel_entry_is_distinct_from_home_power_ocr() -> None:
     }
     assert panel["action"] == "DoNothing"
     assert panel_entry == {
-        "recognition": "ColorMatch",
-        "method": 4,
-        "lower": [165, 135, 75],
-        "upper": [255, 225, 180],
+        "recognition": "TemplateMatch",
+        "template": "home/panel_open.png",
         "roi": [1170, 10, 60, 60],
-        "connected": True,
-        "count": 50,
-        "order_by": "Area",
-        "index": 0,
+        "threshold": 0.9,
         "action": "DoNothing",
     }
 

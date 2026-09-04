@@ -77,6 +77,12 @@ def test_formal_imports_are_relative_and_point_at_checked_in_task_files() -> Non
         assert path.parent == TASK_ROOT / ("日常" if "日常" in relative else "")
 
 
+def test_break_array_task_is_retired_from_the_executable_catalog() -> None:
+    interface = _read(FORMAL_INTERFACE)
+
+    assert interface["retired_tasks"] == ["BREAK_ARRAY_MARTIAL_DAILY"]
+
+
 def test_embedded_agent_has_no_legacy_aggregate_registration() -> None:
     source = (ROOT / "agent/main.py").read_text(encoding="utf-8")
     tree = ast.parse(source)

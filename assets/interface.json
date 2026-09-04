@@ -1,7 +1,7 @@
 {
   "interface_version": 2,
   "name": "MJA",
-  "retired_tasks": [],
+  "retired_tasks": ["BREAK_ARRAY_MARTIAL_DAILY"],
   "controller": [
     {
       "name": "android",

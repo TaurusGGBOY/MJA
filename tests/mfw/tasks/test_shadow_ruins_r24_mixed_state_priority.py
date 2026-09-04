@@ -21,6 +21,23 @@ def test_r24_active_card_selection_keeps_existing_topology() -> None:
     }
 
 
+def test_r24_shadow_page_accepts_full_title_or_single_character_ocr() -> None:
+    nodes = _nodes()
+
+    for name in (
+        "1190-影之遗迹-影-入口",
+        "1191-影之遗迹-影-页面",
+    ):
+        assert nodes[name]["expected"] == ["蜃影武墟", "影", "武"]
+
+    assert nodes["1194-影之遗迹-影-关卡-页面"]["expected"] == [
+        "蜃影武墟",
+        "影",
+        "武",
+        "加速",
+    ]
+
+
 def test_r24_terminal_migration_keeps_original_node_set_and_explicit_failure() -> None:
     nodes = _nodes()
     assert all(node.get("custom_action") not in {"RecordTaskOutcome", "RecordActiveTaskFailure"} for node in nodes.values())

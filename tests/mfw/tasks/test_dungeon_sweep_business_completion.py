@@ -89,6 +89,7 @@ def test_dungeon_sweep_requires_text_and_enabled_button_color() -> None:
     }
 
     x, y, width, height = visual["roi"]
+    assert visual["roi"] == [860, 560, 220, 120]
     lower = visual["lower"]
     upper = visual["upper"]
     with Image.open(AVAILABLE_PAGE) as image:

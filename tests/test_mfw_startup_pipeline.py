@@ -103,7 +103,7 @@ def test_startup_button_flow_has_no_restart_aliases() -> None:
         "^本月.*可领取.*物品$",
         "^[0-9一二三四五六七八九十]+月签到$",
     ]
-    assert startup["1361-启动-可选关闭月签到奖励页"]["target"] == [1020, 100, 120, 100]
+    assert startup["1361-启动-可选关闭月签到奖励页"]["target"] == [1066, 160, 6, 8]
     assert startup["1361-启动-可选关闭月签到奖励页"]["post_delay"] == 1000
     assert setting_probe["next"] == [
         "[JumpBack]0038-公共-已知-点击空白关闭",
@@ -115,6 +115,7 @@ def test_startup_button_flow_has_no_restart_aliases() -> None:
     data_check = startup["1360-启动-数据校验失败-继续下载"]
     assert data_check["expected"] == ["允许下载", "继续下载"]
     assert data_check["roi"] == [630, 450, 330, 80]
+    assert data_check["max_hit"] == 3
     assert data_check["action"] == "Click"
     assert data_check["target"] == [650, 450, 300, 80]
     assert data_check["post_delay"] == 1000

@@ -135,6 +135,7 @@ def test_guild_activity_accepts_split_reward_popup_ocr() -> None:
     assert defeat_reward["on_error"] == [
         "0610-帮派活动挑战-失败-返回主页",
     ]
+    assert defeat_reward["post_delay"] == 10_000
     assert nodes["0592-帮派活动挑战-关闭-击破奖励"]["on_error"] == [
         "0610-帮派活动挑战-失败-返回主页",
     ]

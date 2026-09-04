@@ -179,7 +179,9 @@
       "param": {
         "all_of": [
           "1295-消耗凝结体-凝结体-偃武-购买-页面",
-          "1299-消耗凝结体-凝结体-偃武-购买-确认"
+          "1299-消耗凝结体-凝结体-偃武-购买-确认",
+          "1312-消耗凝结体-凝结体-货币",
+          "1300-消耗凝结体-凝结体-偃武-消耗-50000"
         ],
         "box_index": 1
       }
@@ -192,6 +194,12 @@
       "task_id": "SPEND_CONDENSATE_DAILY",
       "action_id": "buy_yanwu_currency_max",
       "kind": "click",
+      "resource_id": "凝晶",
+      "resource_evidence_name": "1312-消耗凝结体-凝结体-货币",
+      "resource_index": 2,
+      "amount_index": 3,
+      "observed_amount": 50000,
+      "budget_amount": 50000,
       "evidence": {
         "page_index": 0,
         "target_index": 1,
@@ -451,7 +459,9 @@
       "param": {
         "all_of": [
           "1305-消耗凝结体-凝结体-云州-购买-页面",
-          "1309-消耗凝结体-凝结体-云州-购买-确认"
+          "1309-消耗凝结体-凝结体-云州-购买-确认",
+          "1312-消耗凝结体-凝结体-货币",
+          "1310-消耗凝结体-凝结体-云州-消耗-50000"
         ],
         "box_index": 1
       }
@@ -464,6 +474,12 @@
       "task_id": "SPEND_CONDENSATE_DAILY",
       "action_id": "buy_yunzhou_currency_max",
       "kind": "click",
+      "resource_id": "凝晶",
+      "resource_evidence_name": "1312-消耗凝结体-凝结体-货币",
+      "resource_index": 2,
+      "amount_index": 3,
+      "observed_amount": 50000,
+      "budget_amount": 50000,
       "evidence": {
         "page_index": 0,
         "target_index": 1,

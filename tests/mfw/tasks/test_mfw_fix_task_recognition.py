@@ -402,7 +402,7 @@ def test_ring_sweep_confirms_the_ticket_conversion_before_result_cleanup() -> No
 def test_condensate_budget_uses_confirmed_large_cap_without_removing_action_guards() -> None:
     policy = TASK_POLICIES["SPEND_CONDENSATE_DAILY"]
 
-    assert policy.resource_caps["凝晶"] == 999_999_999
+    assert policy.resource_caps["凝晶"] == 9_999_999
     assert policy.action_caps["buy_yanwu_currency_max"] == 1
     assert policy.action_caps["buy_yunzhou_currency_max"] == 1
 

@@ -42,9 +42,10 @@ def test_food_entry_uses_bottom_item_label_and_preserves_existing_use_flow() -> 
         "action": "DoNothing",
     }
     assert scoped["0432-吃体力食物-食物-替换-确认"] == {
-        "recognition": "OCR",
-        "expected": "^确认$",
+        "recognition": "TemplateMatch",
+        "template": "daily/EAT_STAMINA_FOOD_DAILY/food_buff_replace_confirm.png",
         "roi": [780, 450, 250, 100],
+        "threshold": 0.28,
         "action": "DoNothing",
     }
     assert "ColorMatch" not in json.dumps(item_entry, ensure_ascii=False)
