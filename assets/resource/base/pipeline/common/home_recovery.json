@@ -41,7 +41,7 @@
     "recognition": "TemplateMatch",
     "template": "home/panel_open.png",
     "roi": [1170, 10, 60, 60],
-    "threshold": 0.9,
+    "threshold": 0.8,
     "action": "DoNothing"
   }
 }

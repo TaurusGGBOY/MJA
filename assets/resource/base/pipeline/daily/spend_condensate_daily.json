@@ -599,15 +599,27 @@
           },
           {
             "sub_name": "spend_condensate_daily_completion_state_1322",
-            "recognition": "OCR",
-            "expected": "^(?:领取|已领取)$",
+            "recognition": "ColorMatch",
+            "method": 4,
+            "lower": [
+              100,
+              160,
+              80
+            ],
+            "upper": [
+              180,
+              230,
+              170
+            ],
             "roi": "spend_condensate_daily_completion_row_1322",
             "roi_offset": [
-              650,
-              -20,
-              450,
-              40
-            ]
+              700,
+              -30,
+              300,
+              100
+            ],
+            "connected": true,
+            "count": 50
           }
         ],
         "box_index": 2
@@ -914,7 +926,7 @@
       100,
       100
     ],
-    "threshold": 0.78,
+    "threshold": 0.075,
     "action": "DoNothing"
   },
   "1298-消耗凝结体-凝结体-偃武-最大-数量": {
@@ -1040,7 +1052,7 @@
       100,
       100
     ],
-    "threshold": 0.78,
+    "threshold": 0.075,
     "action": "DoNothing"
   },
   "1308-消耗凝结体-凝结体-云州-最大-数量": {

@@ -11,9 +11,7 @@ DAILY_PIPELINES = ROOT / "assets/resource/base/pipeline/daily"
 
 def _entry(path: Path) -> dict[str, object]:
     payload = json.loads(path.read_text(encoding="utf-8"))
-    return next(
-        node for node in payload.values() if node.get("custom_action") == "BeginTask"
-    )
+    return next(node for node in payload.values() if node.get("custom_action") == "BeginTask")
 
 
 def test_every_daily_task_has_a_native_begin_task_entry() -> None:
@@ -27,15 +25,25 @@ def test_every_daily_task_has_a_native_begin_task_entry() -> None:
 
 
 def test_begin_task_failures_are_native_failures_or_local_recovery() -> None:
+    shared_recovery = json.loads(
+        (ROOT / "assets/resource/base/pipeline/common/task_entry_recovery.json").read_text(
+            encoding="utf-8"
+        )
+    )
     for path in sorted(DAILY_PIPELINES.glob("*.json")):
         payload = json.loads(path.read_text(encoding="utf-8"))
         entry = _entry(path)
         for target in entry.get("on_error", []):
             target = target.removeprefix("[JumpBack]")
-            assert target in payload or target in {
-                "1365-公共-主页边界-失败",
-                "1366-公共-通用中止",
-            }, (path.name, target)
+            assert (
+                target in payload
+                or target in shared_recovery
+                or target
+                in {
+                    "1365-公共-主页边界-失败",
+                    "1366-公共-通用中止",
+                }
+            ), (path.name, target)
         for name, node in payload.items():
             if name in {"1365-公共-主页边界-失败"} or node.get("custom_action") == "FailTask":
                 if node.get("custom_action") == "FailTask":

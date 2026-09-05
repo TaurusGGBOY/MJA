@@ -627,6 +627,18 @@
     "action": "DoNothing"
   },
   "0513-免费鉴定-鉴定-弹窗-关闭": {
+    "recognition": {
+      "type": "Or",
+      "param": {
+        "any_of": [
+          "MJA_APPRAISAL_REWARD_CLOSE_ICON",
+          "MJA_APPRAISAL_REWARD_DISMISS_PROMPT"
+        ]
+      }
+    },
+    "action": "DoNothing"
+  },
+  "MJA_APPRAISAL_REWARD_CLOSE_ICON": {
     "recognition": "ColorMatch",
     "lower": [
       150,
@@ -646,6 +658,20 @@
     ],
     "connected": true,
     "count": 250,
+    "action": "DoNothing"
+  },
+  "MJA_APPRAISAL_REWARD_DISMISS_PROMPT": {
+    "recognition": "OCR",
+    "expected": [
+      "点击空白处关闭",
+      "点击任意空白区域关闭"
+    ],
+    "roi": [
+      350,
+      580,
+      600,
+      140
+    ],
     "action": "DoNothing"
   },
   "0514-免费鉴定-奖励-碎片-文本": {
