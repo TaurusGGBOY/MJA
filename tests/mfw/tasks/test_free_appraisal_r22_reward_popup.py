@@ -17,7 +17,6 @@ from tests.mfw.task_contract import (
     load_task_nodes,
 )
 
-
 ROOT = Path(__file__).parents[3]
 APPRAISAL = TaskContract(
     "FREE_APPRAISAL_DAILY",
@@ -68,10 +67,7 @@ def _connected_components(points: list[tuple[int, int]]) -> list[set[tuple[int, 
             component.add(point)
             x, y = point
             neighbors = {
-                (x + dx, y + dy)
-                for dx in (-1, 0, 1)
-                for dy in (-1, 0, 1)
-                if (dx, dy) != (0, 0)
+                (x + dx, y + dy) for dx in (-1, 0, 1) for dy in (-1, 0, 1) if (dx, dy) != (0, 0)
             }
             found = neighbors & remaining
             remaining -= found
@@ -101,10 +97,23 @@ def test_r22_popup_uses_top_right_close_template_as_the_result_anchor() -> None:
     }
 
 
-def test_r22_top_right_close_target_is_real_and_cannot_hit_paid_buttons() -> None:
+def test_r22_reward_close_target_supports_icon_and_dismiss_prompt() -> None:
     nodes = load_task_nodes(APPRAISAL)
     target = nodes["0513-免费鉴定-鉴定-弹窗-关闭"]
     assert target == {
+        "recognition": {
+            "type": "Or",
+            "param": {
+                "any_of": [
+                    "MJA_APPRAISAL_REWARD_CLOSE_ICON",
+                    "MJA_APPRAISAL_REWARD_DISMISS_PROMPT",
+                ]
+            },
+        },
+        "action": "DoNothing",
+    }
+    close_icon = nodes["MJA_APPRAISAL_REWARD_CLOSE_ICON"]
+    assert close_icon == {
         "recognition": "ColorMatch",
         "lower": [150, 150, 130],
         "upper": [255, 255, 255],
@@ -113,34 +122,39 @@ def test_r22_top_right_close_target_is_real_and_cannot_hit_paid_buttons() -> Non
         "count": 250,
         "action": "DoNothing",
     }
+    assert nodes["MJA_APPRAISAL_REWARD_DISMISS_PROMPT"] == {
+        "recognition": "OCR",
+        "expected": ["点击空白处关闭", "点击任意空白区域关闭"],
+        "roi": [350, 580, 600, 140],
+        "action": "DoNothing",
+    }
 
     with Image.open(FIXTURE) as image:
-        x, y, width, height = target["roi"]
+        x, y, width, height = close_icon["roi"]
         pixels = image.crop((x, y, x + width, y + height)).load()
-        lower = target["lower"]
-        upper = target["upper"]
+        lower = close_icon["lower"]
+        upper = close_icon["upper"]
         matches = [
             (x + col, y + row)
             for row in range(height)
             for col in range(width)
             if all(
-                low <= channel <= high
-                for channel, low, high in zip(pixels[col, row], lower, upper)
+                low <= channel <= high for channel, low, high in zip(pixels[col, row], lower, upper)
             )
         ]
     components = _connected_components(matches)
     assert [len(component) for component in components] == [315]
-    assert len(components[0]) >= target["count"]
+    assert len(components[0]) >= close_icon["count"]
     xs = [point[0] for point in components[0]]
     ys = [point[1] for point in components[0]]
     close_box = [min(xs), min(ys), max(xs) - min(xs) + 1, max(ys) - min(ys) + 1]
     assert close_box == [1198, 30, 29, 25]
-    assert _contains(target["roi"], close_box)
+    assert _contains(close_icon["roi"], close_box)
     for paid_button in (
         [407, 564, 207, 78],
         [666, 564, 207, 78],
     ):
-        assert not _overlaps(target["roi"], paid_button)
+        assert not _overlaps(close_icon["roi"], paid_button)
         assert not _overlaps(close_box, paid_button)
 
 
@@ -232,15 +246,9 @@ def test_r22_post_close_accepts_only_used_once_state_or_explicit_home() -> None:
         "all_of": ["0502-免费鉴定-鉴定-页面", "0509-appraisal.used"],
         "box_index": 1,
     }
-    assert nodes["0493-MJA_APPRAISAL_VERIFY"]["next"] == [
-        "0494-免费鉴定-关闭-成功-页面"
-    ]
-    assert nodes["0494-免费鉴定-关闭-成功-页面"]["next"] == [
-        "0495-免费鉴定-主页成功后"
-    ]
-    assert nodes["0495-免费鉴定-主页成功后"]["next"] == [
-        "0498-免费鉴定-成功"
-    ]
+    assert nodes["0493-MJA_APPRAISAL_VERIFY"]["next"] == ["0494-免费鉴定-关闭-成功-页面"]
+    assert nodes["0494-免费鉴定-关闭-成功-页面"]["next"] == ["0495-免费鉴定-主页成功后"]
+    assert nodes["0495-免费鉴定-主页成功后"]["next"] == ["0498-免费鉴定-成功"]
 
     reward_home = nodes["0496-免费鉴定-主页-之后-奖励"]
     assert reward_home["recognition"]["param"] == {
@@ -303,9 +311,7 @@ def test_r22_never_targets_either_paid_appraisal_button() -> None:
         if node.get("custom_action") == "GuardedInput"
         and node.get("custom_action_param", {}).get("task_id") == APPRAISAL.task_id
     ]
-    target_names = {
-        node["custom_action_param"]["evidence"]["target_name"] for node in guarded
-    }
+    target_names = {node["custom_action_param"]["evidence"]["target_name"] for node in guarded}
     assert "appraisal.result.once_control" not in target_names
     assert "appraisal.result.ten_control" not in target_names
     assert "0509-appraisal.used" not in target_names

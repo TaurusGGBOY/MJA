@@ -12,7 +12,6 @@ from tests.mfw.task_contract import (
     assert_no_side_effect_retry,
 )
 
-
 ROOT = Path(__file__).parents[3]
 TRIAL = TaskContract("TRIAL_SWORD_DAILY", "daily/trial_sword_daily.json")
 
@@ -25,16 +24,13 @@ def _pipeline() -> dict[str, dict[str, object]]:
 def test_trial_r22_does_not_keep_the_obsolete_completion_marker() -> None:
     pipeline = _pipeline()
     assert "1318-试剑-已完成-探测" not in pipeline
-    assert "1330-试剑-试炼-敬请期待" not in pipeline
     assert "敬请期待" not in json.dumps(pipeline, ensure_ascii=False)
 
 
-def test_trial_r22_unknown_free_state_uses_native_failure() -> None:
+def test_trial_r22_unavailable_claim_checks_already_complete_state() -> None:
     pipeline = _pipeline()
-    assert pipeline["1317-试剑-领取-免费"]["on_error"] == [
-        "1323-试剑-记录-失败"
-    ]
-    assert_native_failure_node(pipeline["1323-试剑-记录-失败"])
+    assert pipeline["1317-试剑-领取-免费"]["on_error"] == ["1318-试剑-已领取-关闭"]
+    assert pipeline["1318-试剑-已领取-关闭"]["next"] == ["1324-试剑-关闭-成功"]
 
 
 def test_trial_r22_unknown_failure_is_stateless_native_fail_task() -> None:
@@ -49,14 +45,8 @@ def test_trial_r22_unknown_failure_is_stateless_native_fail_task() -> None:
 
 def test_trial_r22_confirmed_success_cleanup_never_becomes_failed() -> None:
     pipeline = _pipeline()
-    assert pipeline["1322-试剑-关闭-免费-奖励"]["on_error"] == [
-        "1369-公共-通用停止"
-    ]
-    assert pipeline["1324-试剑-关闭-成功"]["on_error"] == [
-        "1369-公共-通用停止"
-    ]
-    assert pipeline["1325-试剑-成功-主页-探测"]["on_error"] == [
-        "1372-公共-原生成功-尝试返回"
-    ]
+    assert pipeline["1322-试剑-关闭-免费-奖励"]["on_error"] == ["1369-公共-通用停止"]
+    assert pipeline["1324-试剑-关闭-成功"]["on_error"] == ["1369-公共-通用停止"]
+    assert pipeline["1325-试剑-成功-主页-探测"]["on_error"] == ["1372-公共-原生成功-尝试返回"]
     assert_no_side_effect_retry(pipeline, "close_reward_popup")
     assert_no_side_effect_retry(pipeline, "close_trial")

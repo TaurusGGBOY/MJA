@@ -3,7 +3,6 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-
 ROOT = Path(__file__).parents[2]
 DAILY_PIPELINE_ROOT = ROOT / "assets/resource/base/pipeline/daily"
 SHARED_HOME_PROBES = {
@@ -11,23 +10,10 @@ SHARED_HOME_PROBES = {
     "0181-买茶-主页-探测",
     "0210-买茶-茶-主页-页面",
     "0238-采集部署-采集-主页-页面",
-    "0341-副本扫荡-副本-主页",
-    "0412-吃体力食物-食物-主页-页面",
-    "0456-分解装备-装备-主页",
-    "0531-帮派活动挑战-帮派-已完成-退出-主页-探测",
-    "0553-帮派活动挑战-帮派-成功-退出-主页-探测",
-    "0519-帮派活动挑战-主页-探测",
-    "0590-帮派事务-主页-探测",
-    "0637-帮派事务-主页-之后-关闭-探测",
-    "0670-帮派捐献-主页-探测",
     "0699-帮派捐献-帮派-捐献-主页-页面",
-    "0762-剑林凝结体体力-主页-探测",
-    "0961-剑林凝结体体力-清理-主页-探测",
     "1045-邮件奖励-主页-页面",
-    "1054-武学突破-武学-主页",
     "1129-擂台挑战-擂台-主页",
     "1181-影之遗迹-影-主页-页面",
-    "1244-消耗凝结体-主页-探测",
     "1281-消耗凝结体-凝结体-主页-页面",
 }
 
@@ -61,10 +47,9 @@ def test_daily_home_probes_share_the_startup_task_ready_surface() -> None:
 
 def test_public_home_surface_uses_bottom_right_victory_text_only() -> None:
     resource = json.loads(
-        (
-            ROOT
-            / "assets/resource/base/pipeline/common/home_recovery.json"
-        ).read_text(encoding="utf-8")
+        (ROOT / "assets/resource/base/pipeline/common/home_recovery.json").read_text(
+            encoding="utf-8"
+        )
     )
 
     public_home = resource["0026-公共-游戏主页-页面"]

@@ -100,11 +100,14 @@ def test_native_policies_are_complete_and_mfw_only_extensions_are_explicit():
     assert break_array.max_steps == 448
     assert dict(break_array.action_caps) == {
         "open_break_array_activity": 1,
+        "open_break_array_activity_item": 1,
         "open_break_array": 1,
         "resume_break_array": 1,
         "start_break_array_challenge": 9,
         "confirm_break_array_challenge": 9,
         "scroll_break_array_activity": 1,
+        "scroll_break_array_activity_second": 1,
+        "scroll_break_array_activity_reverse": 1,
         "start_break_array_battle": 9,
         "wait_break_array_battle": 360,
         "wait_break_array_result": 9,
@@ -135,9 +138,7 @@ def test_jianlin_guarded_input_surface_keeps_all_budgeted_actions() -> None:
     ]
 
     assert len(guarded) == 16
-    assert {
-        node["custom_action_param"]["action_id"] for node in guarded
-    } >= {
+    assert {node["custom_action_param"]["action_id"] for node in guarded} >= {
         "buy_stamina_once",
         "confirm_jianlin_stamina_purchase",
         "challenge_condensate",
@@ -219,12 +220,8 @@ def test_dungeon_result_dismiss_is_visual_bound_and_preserves_postcondition():
         "target_name": "0373-副本扫荡-副本-结果-关闭",
     }
     assert TASK_POLICIES["DUNGEON_SWEEP_DAILY"].action_caps["dismiss_sweep_result"] == 20
-    assert nodes["0332-副本扫荡-关闭-结果"]["next"] == [
-        "0337-副本扫荡-成功-关闭"
-    ]
-    assert nodes["0337-副本扫荡-成功-关闭"]["next"] == [
-        "1371-公共-原生成功-主页边界"
-    ]
+    assert nodes["0332-副本扫荡-关闭-结果"]["next"] == ["0337-副本扫荡-成功-关闭"]
+    assert nodes["0337-副本扫荡-成功-关闭"]["next"] == ["1371-公共-原生成功-主页边界"]
     assert "0333-MJA_DUNGEON_POST_PROBE" not in nodes
 
 
@@ -257,10 +254,8 @@ def test_parse_action_params_accepts_mfw_run_arg_and_normalizes_ids():
 @pytest.mark.parametrize(
     "payload",
     [
-        '{"task_id":"UNKNOWN","action_id":"claim_all_mail",'
-        '"kind":"click","evidence":{}}',
-        '{"task_id":"MAIL_REWARD_DAILY","action_id":"unknown",'
-        '"kind":"click","evidence":{}}',
+        '{"task_id":"UNKNOWN","action_id":"claim_all_mail","kind":"click","evidence":{}}',
+        '{"task_id":"MAIL_REWARD_DAILY","action_id":"unknown","kind":"click","evidence":{}}',
     ],
 )
 def test_parse_action_params_rejects_unknown_policy_members(payload: str):
@@ -272,10 +267,8 @@ def test_parse_action_params_rejects_unknown_policy_members(payload: str):
     "payload",
     [
         "{}",
-        '{"task_id":"MAIL_REWARD_DAILY","action_id":"claim_all_mail","kind":"tap",'
-        '"evidence":{}}',
-        '{"task_id":"MAIL_REWARD_DAILY","action_id":"claim_all_mail","kind":"click",'
-        '"evidence":[]}',
+        '{"task_id":"MAIL_REWARD_DAILY","action_id":"claim_all_mail","kind":"tap","evidence":{}}',
+        '{"task_id":"MAIL_REWARD_DAILY","action_id":"claim_all_mail","kind":"click","evidence":[]}',
     ],
 )
 def test_parse_action_params_rejects_invalid_payload(payload: str):
@@ -337,9 +330,7 @@ def test_guild_activity_result_detection_is_read_only_exact_and_fail_closed() ->
 
     assert nodes["0583-帮派活动挑战-帮派-结果-胜利"]["expected"] == r"^战斗胜利$"
     assert nodes["0584-帮派活动挑战-帮派-结果-失败-2"]["expected"] == r"^战斗失败$"
-    assert nodes["0585-帮派活动挑战-帮派-结果-失败-提升"]["expected"] == (
-        r"^可以通过以下途径提升$"
-    )
+    assert nodes["0585-帮派活动挑战-帮派-结果-失败-提升"]["expected"] == (r"^可以通过以下途径提升$")
     assert nodes["0586-帮派活动挑战-帮派-结果-失败-页面"]["recognition"]["param"] == {
         "all_of": ["0584-帮派活动挑战-帮派-结果-失败-2", "0585-帮派活动挑战-帮派-结果-失败-提升"],
         "box_index": 0,
