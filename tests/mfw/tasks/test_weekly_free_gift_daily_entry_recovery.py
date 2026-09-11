@@ -85,6 +85,16 @@ def test_weekly_page_has_explicit_available_and_already_claimed_candidates() -> 
     assert claimed["next"] == ["1345-每周免费礼包-关闭"]
 
 
+def test_weekly_tab_probe_covers_observed_horizontal_positions() -> None:
+    node = _pipeline()["1349-每周免费礼包-商店-每周-必须-购买"]
+    assert node["roi"] == [300, 55, 430, 120]
+
+    rx, ry, rw, rh = node["roi"]
+    for bx, by, bw, bh in ((366, 100, 86, 16), (532, 94, 88, 23)):
+        assert rx <= bx and ry <= by
+        assert bx + bw <= rx + rw and by + bh <= ry + rh
+
+
 def test_weekly_success_candidates_use_native_cleanup() -> None:
     nodes = load_task_nodes(WEEKLY)
 

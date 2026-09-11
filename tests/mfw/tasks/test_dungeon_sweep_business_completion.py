@@ -6,7 +6,6 @@ from typing import Any
 
 from PIL import Image
 
-
 ROOT = Path(__file__).resolve().parents[3]
 PIPELINE_PATH = ROOT / "assets/resource/base/pipeline/daily/dungeon_sweep_daily.json"
 AVAILABLE_PAGE = ROOT / "tests/fixtures/DUNGEON_SWEEP_DAILY/archived_available_page.png"
@@ -44,29 +43,24 @@ def _component_sizes(points: set[tuple[int, int]]) -> list[int]:
     return sorted(sizes, reverse=True)
 
 
-def test_dungeon_targets_yanwang_and_has_no_zero_assignment_success() -> None:
+def test_dungeon_targets_fengxue_and_has_no_zero_assignment_success() -> None:
     nodes = _nodes()
     serialized = json.dumps(nodes, ensure_ascii=False)
 
     assert "数量为0-已完成" not in serialized
     assert "扫荡数量为0" not in serialized
-    wind_mentions = {
-        name
-        for name, node in nodes.items()
-        if "风雪神道" in json.dumps(node, ensure_ascii=False)
-    }
-    assert wind_mentions == {"0345-副本扫荡-副本-滚动-探测"}
+    assert "燕王" not in serialized
 
-    select = nodes["0317-副本扫荡-选择-燕王"]
+    select = nodes["0317-副本扫荡-选择-风雪"]
     assert select["recognition"]["param"]["all_of"] == [
         "0344-副本扫荡-副本-页面",
-        "0346-副本扫荡-副本-燕王-秘陵",
+        "0346-副本扫荡-副本-风雪-神道",
     ]
     assert select["custom_action_param"]["evidence"]["target_name"] == (
-        "0346-副本扫荡-副本-燕王-秘陵"
+        "0346-副本扫荡-副本-风雪-神道"
     )
-    assert nodes["0346-副本扫荡-副本-燕王-秘陵"]["expected"] == "燕王秘陵"
-    assert nodes["0347-副本扫荡-副本-燕王-秘陵-标题"]["expected"] == "燕王秘陵"
+    assert nodes["0346-副本扫荡-副本-风雪-神道"]["expected"] == "风雪神道"
+    assert nodes["0347-副本扫荡-副本-风雪-神道-标题"]["expected"] == "风雪神道"
 
 
 def test_dungeon_sweep_requires_text_and_enabled_button_color() -> None:
@@ -89,6 +83,7 @@ def test_dungeon_sweep_requires_text_and_enabled_button_color() -> None:
     }
 
     x, y, width, height = visual["roi"]
+    assert visual["roi"] == [860, 560, 220, 120]
     lower = visual["lower"]
     upper = visual["upper"]
     with Image.open(AVAILABLE_PAGE) as image:
@@ -120,28 +115,24 @@ def test_dungeon_unavailable_gate_requires_fresh_zero_ticket_evidence() -> None:
     }
     assert close["recognition"]["type"] == "And"
     assert close["recognition"]["param"]["all_of"] == [
-        "0347-副本扫荡-副本-燕王-秘陵-标题",
+        "0347-副本扫荡-副本-风雪-神道-标题",
         "0352-副本扫荡-副本-券-耗尽",
         "0349-副本扫荡-副本-扫荡-目标",
         "0374-副本扫荡-副本-关闭",
     ]
-    assert "0350-副本扫荡-副本-扫荡-目标-视觉" not in close[
-        "recognition"
-    ]["param"]["all_of"]
-    assert nodes["0321-副本扫荡-扫荡不可用-主页确认"]["next"] == [
-        "1371-公共-原生成功-主页边界"
-    ]
+    assert "0350-副本扫荡-副本-扫荡-目标-视觉" not in close["recognition"]["param"]["all_of"]
+    assert nodes["0321-副本扫荡-扫荡不可用-主页确认"]["next"] == ["1371-公共-原生成功-主页边界"]
     assert "0320-副本扫荡-扫荡-不可用" not in nodes
 
 
-def test_dungeon_scrolls_to_yanwang_with_a_finite_native_swipe_loop() -> None:
+def test_dungeon_scrolls_to_fengxue_with_a_finite_native_swipe_loop() -> None:
     nodes = _nodes()
     open_dungeon = nodes["0316-副本扫荡-打开-副本"]
-    scroll = nodes["0315-副本扫荡-滚动-寻找-燕王"]
+    scroll = nodes["0315-副本扫荡-滚动-寻找-风雪"]
 
     assert open_dungeon["next"] == [
-        "0317-副本扫荡-选择-燕王",
-        "0315-副本扫荡-滚动-寻找-燕王",
+        "0317-副本扫荡-选择-风雪",
+        "0315-副本扫荡-滚动-寻找-风雪",
     ]
     assert scroll["recognition"]["param"] == {
         "all_of": [
@@ -157,8 +148,8 @@ def test_dungeon_scrolls_to_yanwang_with_a_finite_native_swipe_loop() -> None:
     assert scroll["duration"] == 350
     assert 1 <= scroll["max_hit"] <= 4
     assert scroll["next"] == [
-        "0317-副本扫荡-选择-燕王",
-        "0315-副本扫荡-滚动-寻找-燕王",
+        "0317-副本扫荡-选择-风雪",
+        "0315-副本扫荡-滚动-寻找-风雪",
         "0314-副本扫荡-滚动-耗尽",
     ]
     assert nodes["0314-副本扫荡-滚动-耗尽"] == {
@@ -173,57 +164,50 @@ def test_dungeon_success_requires_master_assignment_start_confirm_and_result() -
     nodes = _nodes()
 
     open_sweep = nodes["0318-副本扫荡-打开-扫荡"]
-    assert open_sweep["recognition"]["param"]["all_of"][0] == (
-        "0347-副本扫荡-副本-燕王-秘陵-标题"
-    )
-    assert open_sweep["next"] == ["0324-副本扫荡-选择-面板-燕王"]
+    assert open_sweep["recognition"]["param"]["all_of"][0] == ("0347-副本扫荡-副本-风雪-神道-标题")
+    assert open_sweep["next"] == ["0324-副本扫荡-选择-面板-风雪"]
 
-    select_card = nodes["0324-副本扫荡-选择-面板-燕王"]
+    select_card = nodes["0324-副本扫荡-选择-面板-风雪"]
     assert select_card["next"] == ["0325-副本扫荡-选择-大师-80"]
     assert select_card["custom_action_param"]["evidence"]["target_name"] == (
-        "0357-副本扫荡-副本-扫荡-燕王-秘陵-卡片"
+        "0357-副本扫荡-副本-扫荡-风雪-神道-卡片"
     )
 
     select_master = nodes["0325-副本扫荡-选择-大师-80"]
-    assert select_master["action"] == "Click"
-    assert select_master["target"] is True
-    assert select_master["recognition"]["param"]["box_index"] == 2
-    assert select_master["next"] == ["0326-副本扫荡-分配-券-循环"]
-    assert nodes["0358-副本扫荡-副本-宗师-80"]["roi"] == [900, 380, 260, 100]
+    assert select_master["action"] == "DoNothing"
+    assert select_master["next"] == ["0326-副本扫荡-分配-第一张券"]
+    master = nodes["0358-副本扫荡-副本-宗师-80"]
+    assert master["recognition"]["param"]["all_of"] == [
+        "副本扫荡-风雪-大师文字",
+        "副本扫荡-风雪-80级文字",
+    ]
+    assert nodes["副本扫荡-风雪-大师文字"]["expected"] == "大师"
+    assert nodes["副本扫荡-风雪-80级文字"]["expected"] == "80级"
 
-    assign = nodes["0326-副本扫荡-分配-券-循环"]
-    assert assign["max_hit"] == 20
-    assert assign["recognition"]["param"] == {
-        "all_of": [
+    for name, following in [
+        ("0326-副本扫荡-分配-第一张券", "0327-副本扫荡-分配-第二张券"),
+        ("0327-副本扫荡-分配-第二张券", "0328-副本扫荡-开始-扫荡"),
+    ]:
+        assign = nodes[name]
+        assert assign["max_hit"] == 1
+        assert assign["retry_times"] == 0
+        assert assign["next"] == [following]
+        assert (
+            assign["custom_action_param"]["evidence"]["target_name"] == "0359-副本扫荡-副本-券-加号"
+        )
+        assert assign["recognition"]["param"]["all_of"] == [
             "0355-副本扫荡-副本-扫荡-面板",
-            "0357-副本扫荡-副本-扫荡-燕王-秘陵-卡片",
+            "0357-副本扫荡-副本-扫荡-风雪-神道-卡片",
             "0358-副本扫荡-副本-宗师-80",
-        ],
-        "box_index": 2,
-    }
-    assert assign["custom_action_param"]["fixed_click_mode"] == (
-        "dungeon_yanwang_master_plus"
-    )
-    assert assign["next"] == [
-        "0326-副本扫荡-分配-券-循环",
-        "0328-副本扫荡-开始-扫荡",
-    ]
-    assert "on_error" not in assign
-    assert "resource_id" not in assign["custom_action_param"]
-    assert "0327-副本扫荡-已分配-券-探测" not in nodes
-
+            "0359-副本扫荡-副本-券-加号",
+        ]
+    assert "0326-副本扫荡-分配-券-循环" not in nodes
     start = nodes["0328-副本扫荡-开始-扫荡"]
-    assert start["recognition"]["param"]["all_of"] == [
-        "0355-副本扫荡-副本-扫荡-面板",
-        "0357-副本扫荡-副本-扫荡-燕王-秘陵-卡片",
-        "0358-副本扫荡-副本-宗师-80",
-        "0367-副本扫荡-副本-开始",
-    ]
+    assert "0366-副本扫荡-副本-已分配-安全" in start["recognition"]["param"]["all_of"]
+    assert nodes["0366-副本扫荡-副本-已分配-安全"]["expected"] == "^2$"
     assert start["next"] == ["0330-副本扫荡-确认-扫荡"]
-
-    confirm = nodes["0330-副本扫荡-确认-扫荡"]
-    assert confirm["next"] == ["0332-副本扫荡-关闭-结果"]
-    assert "燕王秘陵" in nodes["0368-副本扫荡-副本-确认-页面"]["expected"]
+    assert nodes["0330-副本扫荡-确认-扫荡"]["next"] == ["0332-副本扫荡-关闭-结果"]
+    assert "风雪神道" in nodes["0368-副本扫荡-副本-确认-页面"]["expected"]
 
     result = nodes["0332-副本扫荡-关闭-结果"]
     assert result["recognition"]["param"]["all_of"] == [
@@ -231,10 +215,30 @@ def test_dungeon_success_requires_master_assignment_start_confirm_and_result() -
         "0373-副本扫荡-副本-结果-关闭",
     ]
     assert result["next"] == ["0337-副本扫荡-成功-关闭"]
-    assert _predecessors(nodes, "0337-副本扫荡-成功-关闭") == {
-        "0332-副本扫荡-关闭-结果"
-    }
-    assert nodes["0337-副本扫荡-成功-关闭"]["next"] == [
-        "1371-公共-原生成功-主页边界"
-    ]
+    assert _predecessors(nodes, "0337-副本扫荡-成功-关闭") == {"0332-副本扫荡-关闭-结果"}
+    assert nodes["0337-副本扫荡-成功-关闭"]["next"] == ["1371-公共-原生成功-主页边界"]
     assert "0338-副本扫荡-关闭后返回主页" not in nodes
+
+
+def test_fengxue_master_controls_stay_in_the_same_column_and_third_row():
+    nodes = _nodes()
+    # 2026-09-11 live 1280x720 panel: 精英 is y=417; 大师 is y=477.
+    # Quantity is x=737; the + is x=801. The former ROI clipped quantity 0.
+    controls = [
+        ("副本扫荡-风雪-大师文字", (510, 477)),
+        ("副本扫荡-风雪-80级文字", (591, 477)),
+        ("0359-副本扫荡-副本-券-加号", (801, 477)),
+        ("0366-副本扫荡-副本-已分配-安全", (737, 477)),
+    ]
+    for name, (cx, cy) in controls:
+        x, y, w, h = nodes[name]["roi"]
+        assert x <= cx < x + w and y <= cy < y + h
+        assert y > 431  # Never sample the elite row.
+    x, _, w, _ = nodes["0359-副本扫荡-副本-券-加号"]["roi"]
+    assert x > 750  # Excludes the zero quantity which previously matched.
+    for name in (
+        "0326-副本扫荡-分配-第一张券",
+        "0327-副本扫荡-分配-第二张券",
+        "0328-副本扫荡-开始-扫荡",
+    ):
+        assert nodes[name]["on_error"] == ["MJA-公共-原生失败-返回主页"]

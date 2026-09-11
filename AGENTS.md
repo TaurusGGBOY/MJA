@@ -37,6 +37,7 @@ unredacted game screenshots in a pull request.
 
 ## Branch workflow
 
-- Work on short-lived `feat/*`, `fix/*`, `docs/*`, or `chore/*` branches.
-- Merge into `main` through a squash pull request; do not push directly.
-- GitHub Actions is disabled, so run focused tests locally before opening a PR.
+- Work directly on `main` by default.
+- Do not create or switch to a branch or worktree unless the user explicitly
+  requests one.
+- GitHub Actions is disabled, so run focused tests locally before committing.

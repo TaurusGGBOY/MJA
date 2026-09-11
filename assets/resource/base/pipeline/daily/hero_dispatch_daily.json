@@ -16,7 +16,10 @@
       "task_id": "HERO_DISPATCH_DAILY"
     },
     "timeout": 5000,
-    "on_error": ["MJA-任务入口失败-HERO_DISPATCH_DAILY", "MJA-公共-任务入口-恢复耗尽"],
+    "on_error": [
+      "MJA-任务入口失败-HERO_DISPATCH_DAILY",
+      "MJA-公共-任务入口-恢复耗尽"
+    ],
     "next": [
       "0714-英雄派遣-主页-探测"
     ]
@@ -161,7 +164,6 @@
     "recognition": "DirectHit",
     "action": "DoNothing",
     "next": [
-      "0719-英雄派遣-初始-就已完成",
       "0720-英雄派遣-初始-决策中"
     ]
   },
@@ -175,9 +177,13 @@
         "box_index": 0
       }
     },
-    "action": "DoNothing",
+    "action": "Custom",
     "next": [
       "0731-英雄派遣-已完成-全部"
+    ],
+    "custom_action": "VerifyDispatchList",
+    "on_error": [
+      "MJA-公共-原生失败-返回主页"
     ]
   },
   "0721-英雄派遣-非初始-已完成": {
@@ -190,11 +196,15 @@
         "box_index": 0
       }
     },
-    "action": "DoNothing",
+    "action": "Custom",
     "max_hit": 12,
     "retry_times": 0,
     "next": [
       "0730-英雄派遣-成功-进度"
+    ],
+    "custom_action": "VerifyDispatchList",
+    "on_error": [
+      "MJA-公共-原生失败-返回主页"
     ]
   },
   "0720-英雄派遣-初始-决策中": {
@@ -205,8 +215,10 @@
       "[JumpBack]0722-英雄派遣-初始-领取",
       "[JumpBack]0724-英雄派遣-初始-选择",
       "英雄派遣-初始-无-任务",
-      "0721-英雄派遣-非初始-已完成",
-      "英雄派遣-之后-无-完成无耗时"
+      "0721-英雄派遣-非初始-已完成"
+    ],
+    "on_error": [
+      "MJA-公共-原生失败-返回主页"
     ]
   },
   "0722-英雄派遣-初始-领取": {
@@ -294,7 +306,8 @@
     },
     "next": [
       "0728-英雄派遣-配置"
-    ]
+    ],
+    "post_delay": 800
   },
   "0725-英雄派遣-领取-奖励-探测": {
     "recognition": "OCR",
@@ -339,7 +352,8 @@
     },
     "next": [
       "0727-英雄派遣-成功-领取"
-    ]
+    ],
+    "post_delay": 2000
   },
   "0727-英雄派遣-成功-领取": {
     "recognition": "DirectHit",
@@ -375,7 +389,8 @@
     ],
     "on_error": [
       "0729-英雄派遣-发送"
-    ]
+    ],
+    "post_delay": 800
   },
   "0729-英雄派遣-发送": {
     "recognition": {
@@ -401,7 +416,8 @@
         "page_name": "0742-英雄派遣-英雄-派遣-页面",
         "target_name": "0756-英雄派遣-英雄-派遣-按钮"
       }
-    }
+    },
+    "post_delay": 2000
   },
   "0730-英雄派遣-成功-进度": {
     "recognition": "DirectHit",
@@ -451,27 +467,6 @@
     "max_hit": 1,
     "next": [
       "英雄派遣-成功-无-任务"
-    ]
-  },
-  "英雄派遣-之后-无-完成无耗时": {
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": [
-          "0742-英雄派遣-英雄-派遣-页面",
-          "0745-英雄派遣-英雄-首个-任务-无完成派遣",
-          "0761-英雄派遣-英雄-首个-任务-无耗时"
-        ],
-        "box_index": 0
-      }
-    },
-    "timeout": 5000,
-    "action": "DoNothing",
-    "next": [
-      "0730-英雄派遣-成功-进度"
-    ],
-    "on_error": [
-      "0730-英雄派遣-成功-进度"
     ]
   },
   "英雄派遣-成功-无-任务": {
@@ -672,30 +667,6 @@
     "threshold": 0.75,
     "action": "DoNothing"
   },
-  "0745-英雄派遣-英雄-首个-任务-无完成派遣": {
-    "recognition": "OCR",
-    "expected": "完成",
-    "inverse": true,
-    "roi": [
-      20,
-      130,
-      300,
-      130
-    ],
-    "action": "DoNothing"
-  },
-  "0761-英雄派遣-英雄-首个-任务-无耗时": {
-    "recognition": "OCR",
-    "expected": "耗时",
-    "inverse": true,
-    "roi": [
-      20,
-      130,
-      300,
-      130
-    ],
-    "action": "DoNothing"
-  },
   "0746-英雄派遣-英雄-首个-任务-可派遣": {
     "recognition": "OCR",
     "expected": "耗时",
@@ -738,10 +709,10 @@
     "recognition": "OCR",
     "expected": "已完成\\s*[:：]?\\s*0",
     "roi": [
-      190,
-      150,
-      180,
-      70
+      215,
+      80,
+      110,
+      50
     ],
     "action": "DoNothing"
   },
@@ -751,7 +722,7 @@
       "param": {
         "all_of": [
           "0742-英雄派遣-英雄-派遣-页面",
-          "0744-英雄派遣-英雄-首个-任务-有时钟"
+          "0747-英雄派遣-英雄-首个-任务-中-进度"
         ],
         "box_index": 1
       }
@@ -880,6 +851,28 @@
     ],
     "threshold": 0.7,
     "green_mask": true,
+    "action": "DoNothing"
+  },
+  "英雄派遣-列表-计数": {
+    "recognition": "OCR",
+    "expected": ".+",
+    "roi": [
+      20,
+      80,
+      310,
+      50
+    ],
+    "action": "DoNothing"
+  },
+  "英雄派遣-列表-文字": {
+    "recognition": "OCR",
+    "expected": ".+",
+    "roi": [
+      20,
+      130,
+      300,
+      460
+    ],
     "action": "DoNothing"
   }
 }

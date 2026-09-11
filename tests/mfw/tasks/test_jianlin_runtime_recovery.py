@@ -26,7 +26,6 @@ JIANLIN = TaskContract(
 TASK_PREFIX = "剑林凝结体体力-"
 ROOT = Path(__file__).parents[3]
 START = "0014-剑林凝结体体力-任务入口"
-CLEANUP_ROUTE = "0958-剑林凝结体体力-终止-清理-路线"
 BATTLE_RESULT = "0953-剑林凝结体体力-战斗-结果-探测"
 BATTLE_WAIT = "0952-剑林凝结体体力-战斗-中-等待"
 BATTLE_PAGE = "0935-剑林凝结体体力-战斗-页面-探测"
@@ -48,9 +47,7 @@ def _targets(node: Mapping[str, Any]) -> list[str]:
     return result
 
 
-def _reachable_names(
-    nodes: Mapping[str, Mapping[str, Any]], source: str
-) -> set[str]:
+def _reachable_names(nodes: Mapping[str, Mapping[str, Any]], source: str) -> set[str]:
     pending = [source]
     visited: set[str] = set()
     while pending:
@@ -70,27 +67,20 @@ def test_jianlin_entry_is_home_visible_and_delegates_residual_recovery_to_startu
         "type": "And",
         "param": {"all_of": ["0026-公共-游戏主页-页面"], "box_index": 0},
     }
-    assert entry["next"] == [
-        "0761-剑林凝结体体力-关闭-奖励-弹窗",
-        "0762-剑林凝结体体力-主页-探测",
-    ]
+    assert entry["next"] == ["0763-剑林凝结体体力-打开-资源-入口"]
     assert entry["on_error"] == [
         "MJA-任务入口失败-JIANLIN_RESOURCE_CONDENSATE_STAMINA_DAILY",
         "MJA-公共-任务入口-恢复耗尽",
     ]
 
-    task_nodes = {
-        name: node for name, node in nodes.items() if name.startswith(TASK_PREFIX)
-    }
+    task_nodes = {name: node for name, node in nodes.items() if name.startswith(TASK_PREFIX)}
     assert all(node.get("action") not in {"StartApp", "StopApp"} for node in task_nodes.values())
     scoped = json.loads(
-        (ROOT / "assets/resource/base/pipeline" / JIANLIN.pipeline_file).read_text(
-            encoding="utf-8"
-        )
+        (ROOT / "assets/resource/base/pipeline" / JIANLIN.pipeline_file).read_text(encoding="utf-8")
     )
     assert "0963-剑林凝结体体力-记录-失败" not in scoped
     assert_native_failure_node(nodes["0962-剑林凝结体体力-预算-不安全"])
-    assert_reachable(nodes, START, "1369-公共-通用停止")
+    assert_reachable(nodes, START, "1371-公共-原生成功-主页边界")
     assert_no_custom_outcome_nodes(scoped)
     assert_on_error_contract(
         scoped,
@@ -150,61 +140,29 @@ def test_jianlin_battle_wait_is_read_only_bounded_and_result_first() -> None:
     assert TASK_POLICIES[JIANLIN.task_id].action_caps["wait_jianlin_battle"] == 12
 
 
-def test_jianlin_daily_page_uses_sibling_candidates_for_done_and_pending_rows() -> None:
+def test_jianlin_enters_resource_page_directly_from_home() -> None:
     nodes = load_task_nodes(JIANLIN)
-
-    page_probe = nodes["0768-剑林凝结体体力-日常-页面-探测"]
-    assert page_probe["next"] == [
-        "0769-剑林凝结体体力-日常-行-探测",
-        "0770-剑林凝结体体力-滚动-日常-剑林",
-    ]
-    assert "on_error" not in page_probe
-
-    row_probe = nodes["0769-剑林凝结体体力-日常-行-探测"]
-    assert row_probe["next"] == ["0772-剑林凝结体体力-打开-剑林"]
-    assert row_probe["on_error"] == ["0770-剑林凝结体体力-滚动-日常-剑林"]
-
-    scroll = nodes["0770-剑林凝结体体力-滚动-日常-剑林"]
-    assert scroll["next"] == ["0771-剑林凝结体体力-日常-页面-之后-滚动"]
-    assert "on_error" not in scroll
-    assert scroll["max_hit"] == 3
-
-    after_scroll = nodes["0771-剑林凝结体体力-日常-页面-之后-滚动"]
-    assert after_scroll["next"] == [
-        "0769-剑林凝结体体力-日常-行-探测",
-        "0770-剑林凝结体体力-滚动-日常-剑林",
-    ]
-    assert "on_error" not in after_scroll
+    open_menu = nodes["0763-剑林凝结体体力-打开-资源-入口"]
+    assert open_menu["recognition"]["param"]["all_of"] == ["0026-公共-游戏主页-页面"]
+    assert open_menu["next"] == ["0764-剑林凝结体体力-点击-资源"]
+    open_resource = nodes["0764-剑林凝结体体力-点击-资源"]
+    assert open_resource["recognition"]["param"]["all_of"] == ["0975-剑林凝结体体力-资源-入口"]
+    assert open_resource["next"] == ["0774-剑林凝结体体力-选择-凝结体"]
 
 
-def test_jianlin_entry_targets_the_live_go_button_after_row_probe() -> None:
+def test_jianlin_selects_condensate_only_on_proven_resource_page() -> None:
     nodes = load_task_nodes(JIANLIN)
-
-    row = nodes["0971-剑林凝结体体力-剑林-日常-行"]
-    assert row["recognition"] == "OCR"
-    assert row["expected"] == r"^战胜一次剑林的首领[。.]?$"
-    assert row["roi"] == [100, 60, 700, 620]
-    assert re.fullmatch(row["expected"], "战胜一次剑林的首领。")
-    assert not re.fullmatch(row["expected"], "各位大侠可前往剑林·对弈中参与")
-    assert not re.fullmatch(row["expected"], "消耗10000凝晶。")
-
-    entry = nodes["0972-剑林凝结体体力-剑林-入口"]
-    assert entry["recognition"] == "OCR"
-    assert entry["expected"] == r"^前往$"
-    assert entry["roi"] == [980, 500, 240, 130]
-    assert entry["roi"] != [0, 0, 1280, 720]
-
-    open_node = nodes["0772-剑林凝结体体力-打开-剑林"]
-    assert open_node["recognition"]["param"]["all_of"] == [
-        "0968-剑林凝结体体力-剑林-日常-页面",
-        "0972-剑林凝结体体力-剑林-入口",
+    select = nodes["0774-剑林凝结体体力-选择-凝结体"]
+    assert select["recognition"]["param"]["all_of"] == [
+        "0973-剑林凝结体体力-剑林-页面",
+        "0976-剑林凝结体体力-剑林-凝结体-资源",
     ]
-    assert open_node["recognition"]["param"]["box_index"] == 1
-    assert open_node["custom_action_param"]["evidence"] == {
+    assert select["recognition"]["param"]["box_index"] == 1
+    assert select["custom_action_param"]["evidence"] == {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "0968-剑林凝结体体力-剑林-日常-页面",
-        "target_name": "0972-剑林凝结体体力-剑林-入口",
+        "page_name": "0973-剑林凝结体体力-剑林-页面",
+        "target_name": "0976-剑林凝结体体力-剑林-凝结体-资源",
     }
 
 
@@ -231,13 +189,6 @@ def test_jianlin_page_proof_uses_live_ocr_controls_not_the_blank_template() -> N
         r"^剑林\s*/\s*资源$",
     ]
     assert nodes["0974-剑林凝结体体力-剑林-页面-标题"]["roi"] == [40, 0, 280, 100]
-
-    probe = nodes["0773-剑林凝结体体力-页面-探测"]
-    assert probe["recognition"]["param"]["all_of"] == [
-        "0973-剑林凝结体体力-剑林-页面"
-    ]
-    assert probe["recognition"]["param"]["box_index"] == 0
-    assert "template" not in probe
 
     serialized = json.dumps(nodes, ensure_ascii=False)
     assert "jianlin_page.png" not in serialized
@@ -270,49 +221,27 @@ def test_jianlin_recovery_cannot_replay_purchase_or_resource_actions() -> None:
 
 def test_jianlin_terminal_outcomes_use_bounded_best_effort_home_cleanup() -> None:
     nodes = load_task_nodes(JIANLIN)
-
-    for terminal in (
-        "0957-剑林凝结体体力-体力-以下-20-成功",
-        "0955-剑林凝结体体力-成功-之后-战斗",
-    ):
-        assert nodes[terminal]["next"] == [CLEANUP_ROUTE]
-        assert "on_error" not in nodes[terminal]
-        assert_reachable(nodes, terminal, "1369-公共-通用停止")
-
-    cleanup_route = nodes[CLEANUP_ROUTE]
-    assert cleanup_route["timeout"] == 10_000
-    assert cleanup_route["next"] == [
-        "0959-剑林凝结体体力-清理-页面-关闭",
-        "0960-剑林凝结体体力-清理-日常-关闭",
-        "0961-剑林凝结体体力-清理-主页-探测",
-    ]
-    assert cleanup_route["on_error"] == ["1372-公共-原生成功-尝试返回"]
+    assert nodes["0789-剑林凝结体体力-体力耗尽"]["next"] == ["0959-剑林凝结体体力-清理-页面-关闭"]
 
     page_close = nodes["0959-剑林凝结体体力-清理-页面-关闭"]
     assert page_close["custom_action_param"]["action_id"] == "close_jianlin_page"
-    assert page_close["custom_action_param"]["fixed_click_mode"] == (
-        "jianlin_page_close"
-    )
+    assert page_close["custom_action_param"]["fixed_click_mode"] == ("jianlin_page_close")
     assert page_close["retry_times"] == 0
     assert page_close["next"] == [
         "0960-剑林凝结体体力-清理-日常-关闭",
-        "0961-剑林凝结体体力-清理-主页-探测",
+        "1371-公共-原生成功-主页边界",
     ]
 
     daily_close = nodes["0960-剑林凝结体体力-清理-日常-关闭"]
     assert daily_close["custom_action_param"]["action_id"] == "close_daily_tasks"
     assert daily_close["retry_times"] == 0
-    assert daily_close["next"] == ["0961-剑林凝结体体力-清理-主页-探测"]
+    assert daily_close["next"] == ["1371-公共-原生成功-主页边界"]
     assert TASK_POLICIES[JIANLIN.task_id].action_caps["close_daily_tasks"] == 1
-
-    home_probe = nodes["0961-剑林凝结体体力-清理-主页-探测"]
-    assert home_probe["next"] == ["1371-公共-原生成功-主页边界"]
-    assert home_probe["on_error"] == ["1372-公共-原生成功-尝试返回"]
+    assert_reachable(nodes, "0789-剑林凝结体体力-体力耗尽", "1371-公共-原生成功-主页边界")
 
 
 def test_jianlin_business_guarded_nodes_have_explicit_failure_routes() -> None:
     nodes = load_task_nodes(JIANLIN)
-    cleanup_actions = {"close_jianlin_page", "close_daily_tasks"}
 
     guarded = [
         (name, node)
@@ -322,11 +251,7 @@ def test_jianlin_business_guarded_nodes_have_explicit_failure_routes() -> None:
     ]
     assert guarded
     for name, node in guarded:
-        action_id = node["custom_action_param"]["action_id"]
-        if action_id in cleanup_actions:
-            assert node["on_error"] == ["1372-公共-原生成功-尝试返回"]
-        else:
-            assert "on_error" not in node, name
+        assert "on_error" not in node, name
         assert node.get("retry_times", 0) == 0
 
 
@@ -357,11 +282,7 @@ def test_jianlin_live_multiplier_ocr_accepts_x_variants_with_spaces() -> None:
 def test_jianlin_stamina_dialog_uses_the_live_refill_title_only() -> None:
     nodes = load_task_nodes(JIANLIN)
 
-    for node_name in (
-        "0779-剑林凝结体体力-体力-购买-探测",
-        "0978-剑林凝结体体力-剑林-体力-购买-提示",
-    ):
-        expected = nodes[node_name]["expected"]
-        assert expected == "补充体力"
-        assert "购买体力" not in expected
-        assert "^" not in expected and "$" not in expected
+    expected = nodes["0978-剑林凝结体体力-剑林-体力-购买-提示"]["expected"]
+    assert expected == "补充体力"
+    assert "购买体力" not in expected
+    assert "^" not in expected and "$" not in expected

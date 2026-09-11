@@ -168,7 +168,41 @@
       }
     },
     "next": [
+      "0057-战令奖励-基础-一键领取",
       "0056-战令奖励-基础-领取",
+      "0063-战令奖励-关闭-成功"
+    ],
+    "retry_times": 0
+  },
+  "0057-战令奖励-基础-一键领取": {
+    "max_hit": 1,
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0085-战令奖励-战斗-战令-奖励",
+          "0089-战令奖励-战斗-战令-基础-一键领取"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "BATTLE_PASS_REWARD_DAILY",
+      "action_id": "claim_basic_one_click_reward",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "0085-战令奖励-战斗-战令-奖励",
+        "target_name": "0089-战令奖励-战斗-战令-基础-一键领取"
+      }
+    },
+    "next": [
+      "0060-战令奖励-基础-关闭-奖励"
+    ],
+    "on_error": [
       "0063-战令奖励-关闭-成功"
     ],
     "retry_times": 0
@@ -497,6 +531,22 @@
     "count": 80,
     "order_by": "Area",
     "index": 0,
+    "action": "DoNothing"
+  },
+  "0089-战令奖励-战斗-战令-基础-一键领取": {
+    "recognition": "OCR",
+    "expected": [
+      "^一键领取$",
+      "^一键领$",
+      "^键领取$",
+      "^领取$"
+    ],
+    "roi": [
+      600,
+      610,
+      280,
+      100
+    ],
     "action": "DoNothing"
   },
   "0092-战令奖励-战斗-战令-奖励-弹窗": {

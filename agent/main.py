@@ -22,6 +22,7 @@ from agent.custom.action.break_array_martial_daily import (  # noqa: F401
 from agent.custom.action.convergence_lifecycle import (  # noqa: F401
     ConvergenceLifecycle as _convergence_lifecycle,
 )
+from agent.custom.action.dispatch_review import VerifyDispatchList as _dispatch_review  # noqa: F401
 from agent.custom.action.fail_task import FailTask as _fail_task  # noqa: F401
 from agent.custom.action.food_progress import (  # noqa: F401
     FoodBudgetReached as _food_budget_reached,

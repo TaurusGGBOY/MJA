@@ -49,15 +49,10 @@ def test_r20_function_panel_entry_is_distinct_from_home_power_ocr() -> None:
     }
     assert panel["action"] == "DoNothing"
     assert panel_entry == {
-        "recognition": "ColorMatch",
-        "method": 4,
-        "lower": [165, 135, 75],
-        "upper": [255, 225, 180],
+        "recognition": "TemplateMatch",
+        "template": "home/panel_open.png",
         "roi": [1170, 10, 60, 60],
-        "connected": True,
-        "count": 50,
-        "order_by": "Area",
-        "index": 0,
+        "threshold": 0.8,
         "action": "DoNothing",
     }
 
@@ -81,7 +76,7 @@ def test_r20_panel_action_is_same_frame_guarded_and_capped_once() -> None:
     assert open_panel["timeout"] == 8000
     assert TASK_POLICIES[MARTIAL.task_id].action_caps["open_function_panel"] == 1
 
-    assert nodes["1071-武学突破-武学-入口"]["roi"] == [650, 120, 600, 560]
+    assert nodes["1071-武学突破-武学-入口"]["roi"] == [720, 390, 120, 70]
     assert nodes["1072-武学突破-武学-页面"]["roi"] == [0, 0, 500, 420]
 
 
@@ -94,14 +89,8 @@ def test_martial_error_routes_are_removed_except_bounded_local_recovery() -> Non
         shared_targets={"1365-公共-主页边界-失败"},
     )
     assert_all_cycles_bounded(nodes)
-    assert not any(
-        "1068-武学突破-记录-失败" in node.get("on_error", [])
-        for node in nodes.values()
-    )
-    assert not any(
-        "1068-武学突破-记录-失败" in node.get("next", [])
-        for node in nodes.values()
-    )
+    assert not any("1068-武学突破-记录-失败" in node.get("on_error", []) for node in nodes.values())
+    assert not any("1068-武学突破-记录-失败" in node.get("next", []) for node in nodes.values())
 
 
 def test_no_success_card_is_an_ordered_success_candidate() -> None:
@@ -115,9 +104,7 @@ def test_no_success_card_is_an_ordered_success_candidate() -> None:
         "1061-武学突破-无-成功-突破",
     ]
     assert nodes["1057-武学突破-打开-研习"]["next"] == selector
-    assert nodes["1060-武学突破-关闭-奖励"]["next"] == [
-        "1093-武学突破-关闭-研习详情"
-    ]
+    assert nodes["1060-武学突破-关闭-奖励"]["next"] == ["1093-武学突破-关闭-研习详情"]
     assert nodes["1093-武学突破-关闭-研习详情"]["next"] == selector
     assert no_card["recognition"] == {
         "type": "And",
@@ -153,9 +140,7 @@ def test_martial_checks_three_non_overlapping_success_templates_left_to_right() 
     for name, roi in slots:
         success = nodes[name]
         assert success["recognition"] == "TemplateMatch"
-        assert success["template"] == (
-            "daily/MARTIAL_STUDY_BREAKTHROUGH_DAILY/success.png"
-        )
+        assert success["template"] == ("daily/MARTIAL_STUDY_BREAKTHROUGH_DAILY/success.png")
         assert success["roi"] == roi
         assert success["threshold"] == 0.55
         assert success["action"] == "DoNothing"
@@ -183,9 +168,7 @@ def test_martial_checks_three_non_overlapping_success_templates_left_to_right() 
         "点击任意空白区域关闭",
     ]
     detail = nodes["1093-武学突破-关闭-研习详情"]
-    assert nodes["1060-武学突破-关闭-奖励"]["next"] == [
-        "1093-武学突破-关闭-研习详情"
-    ]
+    assert nodes["1060-武学突破-关闭-奖励"]["next"] == ["1093-武学突破-关闭-研习详情"]
     assert detail["recognition"]["param"] == {
         "all_of": [
             "1094-武学突破-研习详情-页面",
@@ -303,9 +286,10 @@ def test_martial_side_effect_limits_are_claim_only() -> None:
     assert nodes["1060-武学突破-关闭-奖励"]["custom_action_param"]["action_id"] == (
         "close_reward_popup"
     )
-    assert nodes["1062-武学突破-关闭-页面-用于-成功"]["custom_action_param"][
-        "action_id"
-    ] == "close_martial_page"
+    assert (
+        nodes["1062-武学突破-关闭-页面-用于-成功"]["custom_action_param"]["action_id"]
+        == "close_martial_page"
+    )
 
 
 def test_martial_missing_first_slot_marker_reaches_native_success_without_item_navigation() -> None:
@@ -318,9 +302,7 @@ def test_martial_missing_first_slot_marker_reaches_native_success_without_item_n
         "1062-武学突破-关闭-页面-用于-成功",
     ]
     assert close_page["next"] == ["1066-武学突破-成功-无-领取"]
-    assert nodes["1066-武学突破-成功-无-领取"]["next"] == [
-        "1100-武学突破-成功-关闭功能面板"
-    ]
+    assert nodes["1066-武学突破-成功-无-领取"]["next"] == ["1100-武学突破-成功-关闭功能面板"]
     serialized = json.dumps(nodes, ensure_ascii=False)
     assert "加号" not in serialized
     assert "道具" not in serialized

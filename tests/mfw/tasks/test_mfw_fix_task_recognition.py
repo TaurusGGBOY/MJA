@@ -198,7 +198,7 @@ def test_dungeon_zero_assignment_is_not_a_success_terminal() -> None:
     nodes = _load("daily/dungeon_sweep_daily.json")
     open_sweep = nodes["0318-副本扫荡-打开-扫荡"]
 
-    assert open_sweep["next"] == ["0324-副本扫荡-选择-面板-燕王"]
+    assert open_sweep["next"] == ["0324-副本扫荡-选择-面板-风雪"]
     assert "0321-副本扫荡-数量为0-已完成" not in nodes
     assert "0375-副本扫荡-副本-扫荡数量为0" not in nodes
 
@@ -402,7 +402,7 @@ def test_ring_sweep_confirms_the_ticket_conversion_before_result_cleanup() -> No
 def test_condensate_budget_uses_confirmed_large_cap_without_removing_action_guards() -> None:
     policy = TASK_POLICIES["SPEND_CONDENSATE_DAILY"]
 
-    assert policy.resource_caps["凝晶"] == 999_999_999
+    assert policy.resource_caps["凝晶"] == 9_999_999
     assert policy.action_caps["buy_yanwu_currency_max"] == 1
     assert policy.action_caps["buy_yunzhou_currency_max"] == 1
 

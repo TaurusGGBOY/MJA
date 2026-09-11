@@ -3,7 +3,6 @@ from __future__ import annotations
 from agent.custom.support.policy import TASK_POLICIES
 from tests.mfw.task_contract import TaskContract, load_task_nodes
 
-
 HERO = TaskContract("HERO_DISPATCH_DAILY", "daily/hero_dispatch_daily.json")
 
 
@@ -45,21 +44,23 @@ def test_cleanup_and_native_terminal_nodes_are_single_shot() -> None:
     }
 
 
-def test_no_completion_or_elapsed_marker_uses_bounded_native_success_fallback() -> None:
+def test_unknown_dispatch_state_has_no_native_success_fallback() -> None:
     nodes = load_task_nodes(HERO)
-    fallback = nodes["英雄派遣-之后-无-完成无耗时"]
+    assert "英雄派遣-之后-无-完成无耗时" not in nodes
+    conditions = nodes["0750-英雄派遣-英雄-全部-已派遣-等待中"]["recognition"]["param"]["all_of"]
+    assert "0747-英雄派遣-英雄-首个-任务-中-进度" in conditions
 
-    assert fallback["recognition"] == {
-        "type": "And",
-        "param": {
-            "all_of": [
-                "0742-英雄派遣-英雄-派遣-页面",
-                "0745-英雄派遣-英雄-首个-任务-无完成派遣",
-                "0761-英雄派遣-英雄-首个-任务-无耗时",
-            ],
-            "box_index": 0,
-        },
-    }
-    assert fallback["timeout"] == 5000
-    assert fallback["next"] == ["0730-英雄派遣-成功-进度"]
-    assert fallback["on_error"] == ["0730-英雄派遣-成功-进度"]
+
+def test_dispatch_waits_for_the_server_update_before_selecting_another_row():
+    import json
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parents[3]
+    nodes = json.loads(
+        (root / "assets/resource/base/pipeline/daily/hero_dispatch_daily.json").read_text()
+    )
+    assert nodes["0729-英雄派遣-发送"]["post_delay"] == 2000
+    assert nodes["0726-英雄派遣-关闭-奖励"]["post_delay"] == 2000
+    # The loop remains bounded: slower acknowledgement is not extra permission.
+    assert nodes["0729-英雄派遣-发送"]["max_hit"] == 12
+    assert nodes["0724-英雄派遣-初始-选择"]["max_hit"] == 12

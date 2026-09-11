@@ -56,8 +56,8 @@ def test_dungeon_entry_begins_task_before_opening_dungeon() -> None:
     assert open_dungeon["custom_action_param"]["action_id"] == "open_dungeon"
     assert open_dungeon["post_delay"] == 1500
     assert open_dungeon["next"] == [
-        "0317-副本扫荡-选择-燕王",
-        "0315-副本扫荡-滚动-寻找-燕王",
+        "0317-副本扫荡-选择-风雪",
+        "0315-副本扫荡-滚动-寻找-风雪",
     ]
 
 
@@ -74,7 +74,8 @@ def test_batch_c_keeps_bounded_battle_and_resource_loops() -> None:
     nodes = load_pipeline_nodes(PIPELINE_ROOT)
     assert_all_cycles_bounded(nodes)
     for name in (
-        "0326-副本扫荡-分配-券-循环",
+        "0326-副本扫荡-分配-第一张券",
+        "0327-副本扫荡-分配-第二张券",
         "1107-擂台挑战-战斗-循环",
     ):
         assert name in nodes

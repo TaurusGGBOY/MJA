@@ -30,8 +30,8 @@ def test_native_home_success_is_a_bounded_best_effort_cleanup() -> None:
     assert returning["custom_action"] == "ReturnToWorldHome"
     assert returning["timeout"] == 30000
     assert returning["max_hit"] == 1
-    assert returning["next"] == ["1369-公共-通用停止"]
-    assert returning["on_error"] == ["1369-公共-通用停止"]
+    assert returning["next"] == ["1363-公共-主页边界"]
+    assert returning["on_error"] == ["1365-公共-主页边界-失败"]
 
 
 def test_success_cleanup_never_persists_a_business_outcome() -> None:

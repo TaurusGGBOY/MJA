@@ -9,7 +9,6 @@ from tests.mfw.pipeline_assertions import (
 )
 from tests.mfw.task_contract import TaskContract, load_task_nodes
 
-
 ROOT = Path(__file__).parents[3]
 HERO = TaskContract("HERO_DISPATCH_DAILY", "daily/hero_dispatch_daily.json")
 PIPELINE_PATH = ROOT / "assets/resource/base/pipeline" / HERO.pipeline_file
@@ -53,9 +52,7 @@ def test_claim_branch_uses_the_visible_bottom_right_claim_button() -> None:
             "box_index": 1,
         },
     }
-    assert claim_button["custom_action_param"]["action_id"] == (
-        "claim_first_dispatch"
-    )
+    assert claim_button["custom_action_param"]["action_id"] == ("claim_first_dispatch")
     assert claim_button["next"] == ["0725-英雄派遣-领取-奖励-探测"]
     assert "on_error" not in claim_button
     assert nodes["0743-英雄派遣-英雄-首个-任务-可领取"]["expected"] == "完成"
@@ -89,20 +86,12 @@ def test_hero_pipeline_has_only_native_terminals_and_cleanup_on_error() -> None:
     assert_on_error_contract(
         pipeline,
         local_nodes=set(pipeline),
-        shared_targets={"1372-公共-原生成功-尝试返回"},
+        shared_targets={"1372-公共-原生成功-尝试返回", "MJA-公共-原生失败-返回主页"},
     )
 
     assert pipeline["0730-英雄派遣-成功-进度"]["action"] == "DoNothing"
     assert pipeline["0731-英雄派遣-已完成-全部"]["action"] == "DoNothing"
-    assert pipeline["0730-英雄派遣-成功-进度"]["next"] == [
-        "0733-英雄派遣-关闭-派遣"
-    ]
-    assert pipeline["0731-英雄派遣-已完成-全部"]["next"] == [
-        "0733-英雄派遣-关闭-派遣"
-    ]
-    assert pipeline["0735-英雄派遣-主页边界-探测"]["next"] == [
-        "1371-公共-原生成功-主页边界"
-    ]
-    assert pipeline["0735-英雄派遣-主页边界-探测"]["on_error"] == [
-        "1372-公共-原生成功-尝试返回"
-    ]
+    assert pipeline["0730-英雄派遣-成功-进度"]["next"] == ["0733-英雄派遣-关闭-派遣"]
+    assert pipeline["0731-英雄派遣-已完成-全部"]["next"] == ["0733-英雄派遣-关闭-派遣"]
+    assert pipeline["0735-英雄派遣-主页边界-探测"]["next"] == ["1371-公共-原生成功-主页边界"]
+    assert pipeline["0735-英雄派遣-主页边界-探测"]["on_error"] == ["1372-公共-原生成功-尝试返回"]

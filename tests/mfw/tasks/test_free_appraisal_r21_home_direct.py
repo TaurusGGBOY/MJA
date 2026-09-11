@@ -63,7 +63,7 @@ def test_r21_start_uses_home_top_appraisal_and_panel_recovery_as_siblings() -> N
         "MJA-公共-任务入口-恢复耗尽",
     ]
 
-    same_frame_home = ["0500-免费鉴定-鉴定-主页-页面", "0501-免费鉴定-鉴定-主页-入口"]
+    same_frame_home = ["0026-公共-游戏主页-页面", "0500-免费鉴定-鉴定-主页-页面"]
     home_probe = nodes["0483-免费鉴定-主页-探测"]
     assert home_probe["recognition"]["param"] == {
         "all_of": same_frame_home,
@@ -80,11 +80,12 @@ def test_r21_start_uses_home_top_appraisal_and_panel_recovery_as_siblings() -> N
         "task_id": APPRAISAL.task_id,
         "action_id": "open_appraisal",
         "kind": "click",
+        "fixed_click_mode": "appraisal_home_button",
         "evidence": {
             "page_index": 0,
             "target_index": 1,
-            "page_name": "0500-免费鉴定-鉴定-主页-页面",
-            "target_name": "0501-免费鉴定-鉴定-主页-入口",
+            "page_name": "0026-公共-游戏主页-页面",
+            "target_name": "0500-免费鉴定-鉴定-主页-页面",
         },
     }
     assert open_appraisal["next"] == ["0485-免费鉴定-页面-探测"]
@@ -134,7 +135,7 @@ def test_r21_ocr_boxes_are_covered_by_top_appraisal_target_variants() -> None:
     assert appraisal == {
         "recognition": "OCR",
         "expected": ["^鉴宝$", "^宝$"],
-        "roi": [890, 45, 55, 45],
+        "roi": [850, 30, 130, 70],
         "action": "DoNothing",
     }
 
@@ -291,7 +292,7 @@ def test_r21_free_claim_and_return_home_remain_bounded_and_truthful() -> None:
         assert close_node["custom_action_param"]["action_id"] == "close_appraisal_page"
         assert close_node["next"] == [home_name]
         assert nodes[home_name]["recognition"]["param"] == {
-            "all_of": ["0500-免费鉴定-鉴定-主页-页面", "0501-免费鉴定-鉴定-主页-入口"],
+            "all_of": ["0026-公共-游戏主页-页面", "0500-免费鉴定-鉴定-主页-页面"],
             "box_index": 0,
         }
         assert nodes[home_name]["next"] == [success_name]

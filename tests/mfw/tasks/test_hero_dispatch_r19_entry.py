@@ -14,7 +14,6 @@ from tests.mfw.task_contract import (
     load_task_nodes,
 )
 
-
 ROOT = Path(__file__).parents[3]
 HERO = TaskContract("HERO_DISPATCH_DAILY", "daily/hero_dispatch_daily.json")
 PIPELINE_PATH = ROOT / "assets/resource/base/pipeline" / HERO.pipeline_file
@@ -25,12 +24,7 @@ FRAME_HEIGHT = 720
 def _contains(roi: list[int], observed_box: list[int]) -> bool:
     rx, ry, rw, rh = roi
     bx, by, bw, bh = observed_box
-    return (
-        rx <= bx
-        and ry <= by
-        and bx + bw <= rx + rw
-        and by + bh <= ry + rh
-    )
+    return rx <= bx and ry <= by and bx + bw <= rx + rw and by + bh <= ry + rh
 
 
 def test_r19_home_entry_keeps_both_painting_entry_modes() -> None:
@@ -42,12 +36,8 @@ def test_r19_home_entry_keeps_both_painting_entry_modes() -> None:
 
     world_entry = nodes["0715-英雄派遣-打开-画卷-世界"]
     traditional_entry = nodes["英雄派遣-打开-画卷"]
-    assert world_entry["custom_action_param"]["action_id"] == (
-        "open_painting_scroll"
-    )
-    assert traditional_entry["custom_action_param"]["action_id"] == (
-        "open_painting_scroll"
-    )
+    assert world_entry["custom_action_param"]["action_id"] == ("open_painting_scroll")
+    assert traditional_entry["custom_action_param"]["action_id"] == ("open_painting_scroll")
     assert traditional_entry["custom_action_param"]["evidence"] == {
         "page_index": 0,
         "target_index": 1,
@@ -77,23 +67,15 @@ def test_r19_home_entry_keeps_both_painting_entry_modes() -> None:
 
 def test_initial_complete_and_actionable_entries_remain_distinct() -> None:
     nodes = load_task_nodes(HERO)
-    assert nodes["0718-英雄派遣-初始-已完成决策"]["next"] == [
-        "0719-英雄派遣-初始-就已完成",
-        "0720-英雄派遣-初始-决策中",
-    ]
+    assert nodes["0718-英雄派遣-初始-已完成决策"]["next"] == ["0720-英雄派遣-初始-决策中"]
     assert nodes["0720-英雄派遣-初始-决策中"]["next"] == [
         "[JumpBack]0722-英雄派遣-初始-领取",
         "[JumpBack]0724-英雄派遣-初始-选择",
         "英雄派遣-初始-无-任务",
         "0721-英雄派遣-非初始-已完成",
-        "英雄派遣-之后-无-完成无耗时",
     ]
-    assert nodes["0719-英雄派遣-初始-就已完成"]["next"] == [
-        "0731-英雄派遣-已完成-全部"
-    ]
-    assert nodes["0721-英雄派遣-非初始-已完成"]["next"] == [
-        "0730-英雄派遣-成功-进度"
-    ]
+    assert nodes["0719-英雄派遣-初始-就已完成"]["next"] == ["0731-英雄派遣-已完成-全部"]
+    assert nodes["0721-英雄派遣-非初始-已完成"]["next"] == ["0730-英雄派遣-成功-进度"]
 
 
 def test_no_dispatch_markers_are_same_frame_and_converge_on_native_cleanup() -> None:
@@ -111,20 +93,12 @@ def test_no_dispatch_markers_are_same_frame_and_converge_on_native_cleanup() -> 
             "box_index": 1,
         },
     }
-    assert nodes["0748-英雄派遣-英雄-零-派遣-任务"]["expected"] == (
-        r"任务\s*[:：]?\s*0\s*/\s*12"
-    )
-    assert nodes["0749-英雄派遣-英雄-零-已完成-派遣任务"]["expected"] == (
-        r"已完成\s*[:：]?\s*0"
-    )
-    assert nodes["0752-英雄派遣-英雄-无-已选择-派遣-任务"]["expected"] == (
-        "尚未选择派遣任务"
-    )
+    assert nodes["0748-英雄派遣-英雄-零-派遣-任务"]["expected"] == (r"任务\s*[:：]?\s*0\s*/\s*12")
+    assert nodes["0749-英雄派遣-英雄-零-已完成-派遣任务"]["expected"] == (r"已完成\s*[:：]?\s*0")
+    assert nodes["0752-英雄派遣-英雄-无-已选择-派遣-任务"]["expected"] == ("尚未选择派遣任务")
     for name in ("英雄派遣-初始-无-任务", "英雄派遣-之后-无-任务"):
         assert nodes[name]["next"] == ["英雄派遣-成功-无-任务"]
-    assert nodes["英雄派遣-成功-无-任务"]["next"] == [
-        "0733-英雄派遣-关闭-派遣"
-    ]
+    assert nodes["英雄派遣-成功-无-任务"]["next"] == ["0733-英雄派遣-关闭-派遣"]
 
 
 def test_dispatch_inputs_have_no_recorder_retry_and_keep_policy_caps() -> None:
@@ -155,7 +129,7 @@ def test_r19_pipeline_has_no_custom_outcome_or_legacy_abort_route() -> None:
     assert_on_error_contract(
         pipeline,
         local_nodes=set(pipeline),
-        shared_targets={"1372-公共-原生成功-尝试返回"},
+        shared_targets={"1372-公共-原生成功-尝试返回", "MJA-公共-原生失败-返回主页"},
     )
     encoded = json.dumps(pipeline, ensure_ascii=False)
     assert "RecordTaskOutcome" not in encoded

@@ -370,6 +370,14 @@ _FIXED_CLICK_MODES: Mapping[tuple[str, str], tuple[int, int, int, int]] = {
         "open_painting_scroll",
         "painting_scroll_button",
     ): (1105, 35, 50, 55),
+    # The top-level 鉴宝 label can disappear from OCR on the home HUD even
+    # while the neighboring navigation labels remain detectable. The home
+    # page and top-navigation OCR are still same-frame evidence; this fixed
+    # box only supplies the calibrated label click point.
+    (
+        "open_appraisal",
+        "appraisal_home_button",
+    ): (880, 45, 75, 50),
     # The arena sweep control is a stable lower-left button.  Its label can
     # be greyed out at 0/12 and then disappear from OCR, so the opponent-page
     # evidence gates this fixed click instead of the label OCR.
@@ -511,13 +519,12 @@ _FIXED_CLICK_MODES: Mapping[tuple[str, str], tuple[int, int, int, int]] = {
         "leave_shadow_stage",
         "shadow_stage_leave",
     ): (1080, 625, 150, 55),
-    # Guild activity reward popups dismiss from the lower blank area indicated
-    # by the in-game “点击空白处关闭” hint. The reward banner ends above
-    # y=465; the calibrated tap is just above the hint/footer band. Each
-    # business action still requires its own same-frame popup evidence before
-    # this named click mode is accepted.
+    # Guild activity reward popups dismiss from the blank band immediately
+    # below the reward banner. Keep the tap away from the close hint and
+    # device footer; each business action still requires its own same-frame
+    # popup evidence before this named click mode is accepted.
     **{
-        (action_id, "guild_activity_reward_blank"): (560, 640, 160, 40)
+        (action_id, "guild_activity_reward_blank"): (560, 510, 160, 80)
         for action_id in (
             "dismiss_guild_activity_reward_popup",
             "dismiss_guild_defeat_reward",

@@ -331,12 +331,15 @@ def test_activity_probe_scrolls_once_when_break_array_is_below_visible_list() ->
     open_activity = nodes["0100-破阵武学-打开-活动"]
     activity_probe = nodes["0101-破阵武学-活动-探测"]
     scroll = nodes["0106-破阵武学-活动-滚动-一次"]
+    activity_page = nodes["0180-破阵武学-活动-列表-页面"]
 
     assert home_probe["on_error"] == ["0106-破阵武学-活动-滚动-一次"]
     assert open_activity["next"] == ["0106-破阵武学-活动-滚动-一次"]
     assert "on_error" not in activity_probe
     assert nodes["0138-破阵武学-活动-入口"]["roi"] == [780, 20, 180, 100]
     assert policy.action_caps["scroll_break_array_activity"] == 1
+    assert activity_page["expected"] == ["成长基金", "成长", "装扮上新"]
+    assert activity_page["roi"] == [0, 0, 400, 600]
     assert scroll["recognition"]["param"] == {
         "all_of": [
             "0180-破阵武学-活动-列表-页面",
@@ -344,6 +347,100 @@ def test_activity_probe_scrolls_once_when_break_array_is_below_visible_list() ->
         ],
         "box_index": 1,
     }
-    assert scroll["custom_action_param"]["evidence"]["dy"] == -400
+    target = nodes["0181-破阵武学-活动-列表-滚动-目标"]
+    assert target["expected"] == [
+        "装扮上新",
+        "武库臻选",
+        "韬略演武",
+        "累充有礼",
+        "武道玄境",
+    ]
+    assert target["roi"] == [0, 320, 200, 280]
+    rx, ry, rw, rh = target["roi"]
+    for bx, by, bw, bh in (
+        (61, 347, 78, 21),  # observed 武库臻选
+        (61, 345, 79, 24),  # observed 韬略演武
+        (61, 424, 79, 27),  # observed 累充有礼
+        (63, 509, 75, 18),  # observed 武道玄境
+    ):
+        assert rx <= bx and ry <= by
+        assert bx + bw <= rx + rw and by + bh <= ry + rh
+        assert by + bh // 2 - 300 >= 0
+
+    assert scroll["custom_action_param"]["evidence"]["dy"] == -300
     assert scroll["custom_action_param"]["evidence"]["duration_ms"] == 500
-    assert scroll["next"] == ["0101-破阵武学-活动-探测"]
+    assert scroll["next"] == ["0192-破阵武学-活动-列表-打开-破阵演武"]
+    assert scroll["on_error"] == [
+        "0194-破阵武学-活动-列表-滚动-二次",
+        "0135-破阵武学-安全-停止",
+    ]
+
+    open_item = nodes["0192-破阵武学-活动-列表-打开-破阵演武"]
+    assert open_item["recognition"]["param"] == {
+        "all_of": [
+            "0180-破阵武学-活动-列表-页面",
+            "0193-破阵武学-活动-列表-破阵演武-入口",
+        ],
+        "box_index": 1,
+    }
+    assert open_item["custom_action_param"] == {
+        "task_id": "BREAK_ARRAY_MARTIAL_DAILY",
+        "action_id": "open_break_array_activity_item",
+        "kind": "click",
+        "evidence": {
+            "page_index": 0,
+            "target_index": 1,
+            "page_name": "0180-破阵武学-活动-列表-页面",
+            "target_name": "0193-破阵武学-活动-列表-破阵演武-入口",
+        },
+    }
+    assert open_item["next"] == ["0101-破阵武学-活动-探测"]
+    assert "on_error" not in open_item
+
+    activity_item = nodes["0193-破阵武学-活动-列表-破阵演武-入口"]
+    assert activity_item["expected"] == ["破阵演武", "破阵"]
+    assert activity_item["roi"] == [0, 0, 200, 600]
+
+    second_scroll = nodes["0194-破阵武学-活动-列表-滚动-二次"]
+    assert second_scroll["recognition"]["param"] == {
+        "all_of": [
+            "0180-破阵武学-活动-列表-页面",
+            "0195-破阵武学-活动-列表-二次滚动-底部锚点",
+        ],
+        "box_index": 1,
+    }
+    assert second_scroll["custom_action_param"]["action_id"] == (
+        "scroll_break_array_activity_second"
+    )
+    assert second_scroll["custom_action_param"]["evidence"]["target_name"] == (
+        "0195-破阵武学-活动-列表-二次滚动-底部锚点"
+    )
+    assert second_scroll["custom_action_param"]["evidence"]["dy"] == -300
+    assert second_scroll["next"] == ["0192-破阵武学-活动-列表-打开-破阵演武"]
+    assert second_scroll["on_error"] == [
+        "0197-破阵武学-活动-列表-反向滚动-一次",
+        "0135-破阵武学-安全-停止",
+    ]
+    assert policy.action_caps["open_break_array_activity_item"] == 1
+    assert policy.action_caps["scroll_break_array_activity_second"] == 1
+    assert policy.action_caps["scroll_break_array_activity_reverse"] == 1
+
+    bottom_anchor = nodes["0195-破阵武学-活动-列表-二次滚动-底部锚点"]
+    assert bottom_anchor["expected"] == "装扮上新"
+    assert bottom_anchor["roi"] == [0, 500, 200, 100]
+
+    reverse_scroll = nodes["0197-破阵武学-活动-列表-反向滚动-一次"]
+    assert reverse_scroll["recognition"]["param"] == {
+        "all_of": [
+            "0180-破阵武学-活动-列表-页面",
+            "0198-破阵武学-活动-列表-反向滚动-顶部锚点",
+        ],
+        "box_index": 1,
+    }
+    assert reverse_scroll["custom_action_param"]["evidence"]["dy"] == 300
+    assert reverse_scroll["next"] == ["0192-破阵武学-活动-列表-打开-破阵演武"]
+    assert reverse_scroll["on_error"] == ["0135-破阵武学-安全-停止"]
+
+    top_anchor = nodes["0198-破阵武学-活动-列表-反向滚动-顶部锚点"]
+    assert top_anchor["expected"] == ["江湖试炼", "启程基金", "江湖棋摊"]
+    assert top_anchor["roi"] == [0, 120, 200, 180]
