@@ -3,13 +3,12 @@ from pathlib import Path
 
 import pytest
 
+from tests.mfw.pipeline_assertions import assert_native_success_node
 from tools.check_mfw_resources import (
     load_pipeline_nodes,
     validate_guarded_input_evidence,
     validate_nodes,
 )
-from tests.mfw.pipeline_assertions import assert_native_success_node
-
 
 FIXTURE_ROOT = Path("tests/fixtures")
 MANIFEST_FIXTURES = (
@@ -102,8 +101,8 @@ def test_base_resource_contains_native_success_cleanup() -> None:
     assert home_boundary["next"] == ["1369-公共-通用停止"]
     assert home_boundary["on_error"] == ["1372-公共-原生成功-尝试返回"]
     assert home_return["custom_action"] == "ReturnToWorldHome"
-    assert home_return["next"] == ["1369-公共-通用停止"]
-    assert home_return["on_error"] == ["1369-公共-通用停止"]
+    assert home_return["next"] == ["1363-公共-主页边界"]
+    assert home_return["on_error"] == ["1365-公共-主页边界-失败"]
     assert_native_success_node(nodes["1369-公共-通用停止"])
 
 

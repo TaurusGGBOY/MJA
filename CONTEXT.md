@@ -146,3 +146,8 @@ _Avoid_: home-boundary status, cleanup failure as task failure
 - Declare `TASK_ID=Succeeded` or `TASK_ID=Failed` before launching MFW.
 - Treat only the fresh native terminal event as the verdict. Keep all other artifacts for diagnosis.
 - `WEEKLY_FREE_GIFT_DAILY` is runnable every day. If the game already shows the gift as claimed, the task still ends in native `Succeeded`.
+
+## 2026-09-11 user corrections
+
+- Hero dispatch must never depend on task names before/after scrolling. List review uses countdowns and actionable status markers; names may be missing or arbitrarily misrecognized without changing the result.
+- Dungeon history investigation: the user explicitly specified 风雪神道, 大师80级, two plus clicks and then 开始扫荡 on 2026-08-16. Commit ed71f10 (2026-08-23) replaced 风雪神道 with 燕王秘陵 while repairing false success, following an older workflow. That historical replacement contradicts the newer user instruction; do not treat the old 燕王秘陵 observations as current authorization. The dungeon pipeline is restored to 风雪神道 with exactly two master-row plus actions. Fresh native acceptance passed on 2026-09-11 at 09:53:58: two plus actions, recognized assigned count 2, start/confirm/reward-close, then home. Candidate: install/mfw-dungeon-fengxue-20260911-r2.

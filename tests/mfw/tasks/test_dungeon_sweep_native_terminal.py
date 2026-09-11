@@ -16,7 +16,6 @@ from tests.mfw.task_contract import (
     load_task_nodes,
 )
 
-
 DUNGEON = TaskContract("DUNGEON_SWEEP_DAILY", "daily/dungeon_sweep_daily.json")
 ROOT = Path(__file__).parents[3]
 PIPELINE_PATH = ROOT / "assets/resource/base/pipeline" / DUNGEON.pipeline_file
@@ -43,16 +42,14 @@ def test_dungeon_ticket_exhaustion_returns_home_before_native_success() -> None:
     close = nodes["0319-副本扫荡-扫荡不可用-关闭"]
     home = nodes["0321-副本扫荡-扫荡不可用-主页确认"]
 
-    assert nodes["0317-副本扫荡-选择-燕王"]["next"] == [
+    assert nodes["0317-副本扫荡-选择-风雪"]["next"] == [
         "0318-副本扫荡-打开-扫荡",
         "0319-副本扫荡-扫荡不可用-关闭",
     ]
-    assert nodes["0318-副本扫荡-打开-扫荡"]["on_error"] == [
-        "0319-副本扫荡-扫荡不可用-关闭"
-    ]
+    assert nodes["0318-副本扫荡-打开-扫荡"]["on_error"] == ["0319-副本扫荡-扫荡不可用-关闭"]
     assert close["recognition"]["param"] == {
         "all_of": [
-            "0347-副本扫荡-副本-燕王-秘陵-标题",
+            "0347-副本扫荡-副本-风雪-神道-标题",
             "0352-副本扫荡-副本-券-耗尽",
             "0349-副本扫荡-副本-扫荡-目标",
             "0374-副本扫荡-副本-关闭",
@@ -74,18 +71,12 @@ def test_dungeon_ticket_exhaustion_returns_home_before_native_success() -> None:
 
 def test_dungeon_sweep_success_is_only_reachable_after_result_evidence() -> None:
     nodes = _scoped_nodes()
-    assert nodes["0332-副本扫荡-关闭-结果"]["next"] == [
-        "0337-副本扫荡-成功-关闭"
-    ]
+    assert nodes["0332-副本扫荡-关闭-结果"]["next"] == ["0337-副本扫荡-成功-关闭"]
     predecessors = {
-        name
-        for name, node in nodes.items()
-        if "0337-副本扫荡-成功-关闭" in node.get("next", [])
+        name for name, node in nodes.items() if "0337-副本扫荡-成功-关闭" in node.get("next", [])
     }
     assert predecessors == {"0332-副本扫荡-关闭-结果"}
-    assert nodes["0337-副本扫荡-成功-关闭"]["next"] == [
-        "1371-公共-原生成功-主页边界"
-    ]
+    assert nodes["0337-副本扫荡-成功-关闭"]["next"] == ["1371-公共-原生成功-主页边界"]
     assert "0338-副本扫荡-关闭后返回主页" not in nodes
 
 
@@ -100,6 +91,7 @@ def test_dungeon_removes_recorder_routes_but_keeps_bounded_local_recovery() -> N
         shared_targets={
             "MJA-任务入口失败-DUNGEON_SWEEP_DAILY",
             "MJA-公共-任务入口-恢复耗尽",
+            "MJA-公共-原生失败-返回主页",
         },
     )
     assert_all_cycles_bounded(nodes)
@@ -107,8 +99,8 @@ def test_dungeon_removes_recorder_routes_but_keeps_bounded_local_recovery() -> N
 
 def test_dungeon_preserves_sweep_resource_and_retry_bounds() -> None:
     nodes = load_task_nodes(DUNGEON)
-    assert_action_limit(DUNGEON.task_id, "assign_sweep_ticket", 20)
-    assert_action_limit(DUNGEON.task_id, "start_yanwangling_master_sweep", 20)
+    assert_action_limit(DUNGEON.task_id, "assign_sweep_ticket", 2)
+    assert_action_limit(DUNGEON.task_id, "start_fengxue_master_sweep", 20)
     action_ids = {
         node.get("custom_action_param", {}).get("action_id")
         for node in _scoped_nodes().values()
@@ -117,5 +109,6 @@ def test_dungeon_preserves_sweep_resource_and_retry_bounds() -> None:
     for action_id in action_ids:
         assert isinstance(action_id, str)
         assert_no_side_effect_retry(nodes, action_id)
-    assert nodes["0315-副本扫荡-滚动-寻找-燕王"]["max_hit"] == 4
-    assert nodes["0326-副本扫荡-分配-券-循环"]["max_hit"] == 20
+    assert nodes["0315-副本扫荡-滚动-寻找-风雪"]["max_hit"] == 4
+    assert nodes["0326-副本扫荡-分配-第一张券"]["max_hit"] == 1
+    assert nodes["0327-副本扫荡-分配-第二张券"]["max_hit"] == 1

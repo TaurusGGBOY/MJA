@@ -118,77 +118,44 @@ class BeginTask(CustomAction):
         return True
 
 
+def _return_to_verified_home(context: Any) -> bool:
+    """Observe after each input and stop immediately at the home boundary."""
+    controller = context.tasker.controller
+    for attempt in range(9):
+        if not controller.post_screencap().wait().status.succeeded:
+            return False
+        frame = controller.cached_image
+        home = context.run_recognition("0026-公共-游戏主页-页面", frame)
+        if home is not None and home.hit:
+            return True
+        if attempt == 8:
+            return False
+        close = context.run_recognition("0037-公共-已知-画卷-关闭-图标", frame)
+        if close is not None and close.hit:
+            click_box(controller, _KNOWN_SURFACE_CLOSE_BOX,
+                      resolution=getattr(controller, "resolution", None))
+        else:
+            if not controller.post_click_key(4).wait().status.succeeded:
+                return False
+        sleep(0.7)
+    return False
+
+
 @AgentServer.custom_action("ReturnToHome")
 class ReturnToHome(CustomAction):
-    """Unwind nested game pages before the shared home-boundary check."""
+    """Unwind only until a fresh frame proves the actual home page."""
 
     def run(self, context: Any, argv: CustomAction.RunArg) -> bool:
         try:
-            controller = context.tasker.controller
-            post_key = getattr(controller, "post_click_key", None)
-            if not callable(post_key):
-                return False
-            # Some map/stage screens consume one BACK only to dismiss their
-            # transition layer. Keep unwinding until the common home-boundary
-            # detector can observe the actual game home.
-            for _ in range(8):
-                job = post_key(4)  # Android BACK; controller remains MFW-owned.
-                wait = getattr(job, "wait", None)
-                if not callable(wait) or not wait():
-                    return False
-                sleep(0.35)
-            # Back unwinds task-specific sheets, but the world HUD is a
-            # separate surface from the bottom-navigation home.  Once the
-            # nested pages are unwound, use the same fixed two-sword shortcut
-            # as startup recovery to open that home surface.
-            resolution = getattr(controller, "resolution", None)
-            click_box(controller, _WORLD_HOME_MENU_BOX, resolution=resolution)
-            sleep(1.5)
-            return True
+            return _return_to_verified_home(context)
         except Exception:
+            _LOGGER.exception("home cleanup failed")
             return False
 
 
 @AgentServer.custom_action("ReturnToWorldHome")
-class ReturnToWorldHome(CustomAction):
-    """Dismiss the world surface and unwind nested pages with Android BACK.
-
-    The world HUD's right-side icons are business entries whose positions vary
-    by surface; a fixed tap there can open 蜃影武墟 instead of returning home.
-    This cleanup action therefore only dismisses the calibrated close icon and
-    unwinds nested pages. The following boundary node owns the final proof.
-    """
-
-    def run(self, context: Any, argv: CustomAction.RunArg) -> bool:
-        try:
-            controller = context.tasker.controller
-            post_key = getattr(controller, "post_click_key", None)
-            if not callable(post_key):
-                return False
-            # The painting-scroll/world-map surface visibly has an upper-right
-            # close icon but consumes no Android BACK event.  A best-effort
-            # close is safe on pages without that icon (it lands on empty HUD
-            # space), while making the known surface dismissible before the
-            # bounded BACK unwind below.
-            resolution = getattr(controller, "resolution", None)
-            try:
-                click_box(
-                    controller,
-                    _KNOWN_SURFACE_CLOSE_BOX,
-                    resolution=resolution,
-                )
-                sleep(0.5)
-            except Exception:
-                _LOGGER.debug("known surface close icon was not actionable", exc_info=True)
-            for _ in range(8):
-                job = post_key(4)  # Android BACK; controller remains MFW-owned.
-                wait = getattr(job, "wait", None)
-                if not callable(wait) or not wait():
-                    return False
-                sleep(0.35)
-            return True
-        except Exception:
-            return False
+class ReturnToWorldHome(ReturnToHome):
+    """Use the same observed boundary for world and bottom-navigation home."""
 
 
 @AgentServer.custom_action("CloseKnownPaintingSurface")

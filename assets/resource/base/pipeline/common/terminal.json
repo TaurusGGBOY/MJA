@@ -50,5 +50,18 @@
     "Abort": true,
     "timeout": 1000,
     "max_hit": 1
+  },
+  "MJA-公共-原生失败-返回主页": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "ReturnToWorldHome",
+    "timeout": 30000,
+    "max_hit": 1,
+    "next": [
+      "1365-公共-主页边界-失败"
+    ],
+    "on_error": [
+      "1365-公共-主页边界-失败"
+    ]
   }
 }

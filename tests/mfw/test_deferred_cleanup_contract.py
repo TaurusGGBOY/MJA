@@ -12,6 +12,8 @@ PIPELINE_ROOT = ROOT / "assets/resource/base/pipeline"
 def test_all_success_paths_use_the_shared_native_cleanup() -> None:
     violations: list[str] = []
     for path in sorted((PIPELINE_ROOT / "daily").glob("*.json")):
+        if path.name.startswith("._"):
+            continue
         payload = json.loads(path.read_text(encoding="utf-8"))
         for name, node in payload.items():
             if not isinstance(node, dict):
@@ -33,6 +35,6 @@ def test_native_success_cleanup_does_not_persist_a_business_outcome() -> None:
         (PIPELINE_ROOT / "common/terminal.json").read_text(encoding="utf-8")
     )
     assert home["1372-公共-原生成功-尝试返回"]["on_error"] == [
-        "1369-公共-通用停止"
+        "1365-公共-主页边界-失败"
     ]
     assert_native_success_node(terminal["1369-公共-通用停止"])

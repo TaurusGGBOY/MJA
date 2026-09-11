@@ -3,17 +3,26 @@
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["0026-公共-游戏主页-页面"],
+        "all_of": [
+          "0026-公共-游戏主页-页面"
+        ],
         "box_index": 0
       }
     },
     "action": "Custom",
     "max_hit": 2,
     "custom_action": "BeginTask",
-    "custom_action_param": {"task_id": "DUNGEON_SWEEP_DAILY"},
+    "custom_action_param": {
+      "task_id": "DUNGEON_SWEEP_DAILY"
+    },
     "timeout": 5000,
-    "on_error": ["MJA-任务入口失败-DUNGEON_SWEEP_DAILY", "MJA-公共-任务入口-恢复耗尽"],
-    "next": ["0316-副本扫荡-打开-副本"],
+    "on_error": [
+      "MJA-任务入口失败-DUNGEON_SWEEP_DAILY",
+      "MJA-公共-任务入口-恢复耗尽"
+    ],
+    "next": [
+      "0316-副本扫荡-打开-副本"
+    ],
     "retry_times": 0
   },
   "0316-副本扫荡-打开-副本": {
@@ -44,10 +53,13 @@
     },
     "timeout": 5000,
     "post_delay": 1500,
-    "on_error": ["MJA-任务入口失败-DUNGEON_SWEEP_DAILY", "MJA-公共-任务入口-恢复耗尽"],
+    "on_error": [
+      "MJA-任务入口失败-DUNGEON_SWEEP_DAILY",
+      "MJA-公共-任务入口-恢复耗尽"
+    ],
     "next": [
-      "0317-副本扫荡-选择-燕王",
-      "0315-副本扫荡-滚动-寻找-燕王"
+      "0317-副本扫荡-选择-风雪",
+      "0315-副本扫荡-滚动-寻找-风雪"
     ],
     "retry_times": 0
   },
@@ -57,7 +69,7 @@
     "custom_action": "FailTask",
     "Abort": true
   },
-  "0315-副本扫荡-滚动-寻找-燕王": {
+  "0315-副本扫荡-滚动-寻找-风雪": {
     "recognition": {
       "type": "And",
       "param": {
@@ -71,23 +83,28 @@
     "action": "Swipe",
     "begin": true,
     "end": true,
-    "end_offset": [0, -260, 0, 0],
+    "end_offset": [
+      0,
+      -260,
+      0,
+      0
+    ],
     "duration": 350,
     "post_delay": 500,
     "max_hit": 4,
     "next": [
-      "0317-副本扫荡-选择-燕王",
-      "0315-副本扫荡-滚动-寻找-燕王",
+      "0317-副本扫荡-选择-风雪",
+      "0315-副本扫荡-滚动-寻找-风雪",
       "0314-副本扫荡-滚动-耗尽"
     ]
   },
-  "0317-副本扫荡-选择-燕王": {
+  "0317-副本扫荡-选择-风雪": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
           "0344-副本扫荡-副本-页面",
-          "0346-副本扫荡-副本-燕王-秘陵"
+          "0346-副本扫荡-副本-风雪-神道"
         ],
         "box_index": 1
       }
@@ -96,13 +113,13 @@
     "custom_action": "GuardedInput",
     "custom_action_param": {
       "task_id": "DUNGEON_SWEEP_DAILY",
-      "action_id": "select_yanwangling",
+      "action_id": "select_fengxue",
       "kind": "click",
       "evidence": {
         "page_index": 0,
         "target_index": 1,
         "page_name": "0344-副本扫荡-副本-页面",
-        "target_name": "0346-副本扫荡-副本-燕王-秘陵"
+        "target_name": "0346-副本扫荡-副本-风雪-神道"
       }
     },
     "next": [
@@ -116,7 +133,7 @@
       "type": "And",
       "param": {
         "all_of": [
-          "0347-副本扫荡-副本-燕王-秘陵-标题",
+          "0347-副本扫荡-副本-风雪-神道-标题",
           "0351-副本扫荡-副本-扫荡-可操作"
         ],
         "box_index": 1
@@ -131,11 +148,13 @@
       "evidence": {
         "page_index": 0,
         "target_index": 1,
-        "page_name": "0347-副本扫荡-副本-燕王-秘陵-标题",
+        "page_name": "0347-副本扫荡-副本-风雪-神道-标题",
         "target_name": "0351-副本扫荡-副本-扫荡-可操作"
       }
     },
-    "next": ["0324-副本扫荡-选择-面板-燕王"],
+    "next": [
+      "0324-副本扫荡-选择-面板-风雪"
+    ],
     "on_error": [
       "0319-副本扫荡-扫荡不可用-关闭"
     ],
@@ -146,7 +165,7 @@
       "type": "And",
       "param": {
         "all_of": [
-          "0347-副本扫荡-副本-燕王-秘陵-标题",
+          "0347-副本扫荡-副本-风雪-神道-标题",
           "0352-副本扫荡-副本-券-耗尽",
           "0349-副本扫荡-副本-扫荡-目标",
           "0374-副本扫荡-副本-关闭"
@@ -155,33 +174,44 @@
       }
     },
     "action": "Click",
-    "target": [1202, 30, 24, 24],
+    "target": [
+      1202,
+      30,
+      24,
+      24
+    ],
     "max_hit": 1,
     "post_delay": 1500,
     "timeout": 5000,
     "retry_times": 0,
-    "next": ["0321-副本扫荡-扫荡不可用-主页确认"]
+    "next": [
+      "0321-副本扫荡-扫荡不可用-主页确认"
+    ]
   },
   "0321-副本扫荡-扫荡不可用-主页确认": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["0026-公共-游戏主页-页面"],
+        "all_of": [
+          "0026-公共-游戏主页-页面"
+        ],
         "box_index": 0
       }
     },
     "action": "DoNothing",
     "timeout": 5000,
     "retry_times": 0,
-    "next": ["1371-公共-原生成功-主页边界"]
+    "next": [
+      "1371-公共-原生成功-主页边界"
+    ]
   },
-  "0324-副本扫荡-选择-面板-燕王": {
+  "0324-副本扫荡-选择-面板-风雪": {
     "recognition": {
       "type": "And",
       "param": {
         "all_of": [
           "0355-副本扫荡-副本-扫荡-面板",
-          "0357-副本扫荡-副本-扫荡-燕王-秘陵-卡片"
+          "0357-副本扫荡-副本-扫荡-风雪-神道-卡片"
         ],
         "box_index": 1
       }
@@ -190,17 +220,22 @@
     "custom_action": "GuardedInput",
     "custom_action_param": {
       "task_id": "DUNGEON_SWEEP_DAILY",
-      "action_id": "select_yanwangling_in_panel",
+      "action_id": "select_fengxue_in_panel",
       "kind": "click",
       "evidence": {
         "page_index": 0,
         "target_index": 1,
         "page_name": "0355-副本扫荡-副本-扫荡-面板",
-        "target_name": "0357-副本扫荡-副本-扫荡-燕王-秘陵-卡片"
+        "target_name": "0357-副本扫荡-副本-扫荡-风雪-神道-卡片"
       }
     },
-    "next": ["0325-副本扫荡-选择-大师-80"],
-    "retry_times": 0
+    "next": [
+      "0325-副本扫荡-选择-大师-80"
+    ],
+    "retry_times": 0,
+    "on_error": [
+      "MJA-公共-原生失败-返回主页"
+    ]
   },
   "0325-副本扫荡-选择-大师-80": {
     "recognition": {
@@ -208,49 +243,20 @@
       "param": {
         "all_of": [
           "0355-副本扫荡-副本-扫荡-面板",
-          "0357-副本扫荡-副本-扫荡-燕王-秘陵-卡片",
+          "0357-副本扫荡-副本-扫荡-风雪-神道-卡片",
           "0358-副本扫荡-副本-宗师-80"
         ],
         "box_index": 2
       }
     },
-    "action": "Click",
-    "target": true,
+    "action": "DoNothing",
     "post_delay": 500,
-    "next": ["0326-副本扫荡-分配-券-循环"]
-  },
-  "0326-副本扫荡-分配-券-循环": {
-    "max_hit": 20,
-    "recognition": {
-      "type": "And",
-      "param": {
-        "all_of": [
-          "0355-副本扫荡-副本-扫荡-面板",
-          "0357-副本扫荡-副本-扫荡-燕王-秘陵-卡片",
-          "0358-副本扫荡-副本-宗师-80"
-        ],
-        "box_index": 2
-      }
-    },
-    "action": "Custom",
-    "custom_action": "GuardedInput",
-    "custom_action_param": {
-      "task_id": "DUNGEON_SWEEP_DAILY",
-      "action_id": "assign_sweep_ticket",
-      "kind": "click",
-      "fixed_click_mode": "dungeon_yanwang_master_plus",
-      "evidence": {
-        "page_index": 0,
-        "target_index": 2,
-        "page_name": "0355-副本扫荡-副本-扫荡-面板",
-        "target_name": "0358-副本扫荡-副本-宗师-80"
-      }
-    },
     "next": [
-      "0326-副本扫荡-分配-券-循环",
-      "0328-副本扫荡-开始-扫荡"
+      "0326-副本扫荡-分配-第一张券"
     ],
-    "retry_times": 0
+    "on_error": [
+      "MJA-公共-原生失败-返回主页"
+    ]
   },
   "0328-副本扫荡-开始-扫荡": {
     "recognition": {
@@ -258,9 +264,10 @@
       "param": {
         "all_of": [
           "0355-副本扫荡-副本-扫荡-面板",
-          "0357-副本扫荡-副本-扫荡-燕王-秘陵-卡片",
+          "0357-副本扫荡-副本-扫荡-风雪-神道-卡片",
           "0358-副本扫荡-副本-宗师-80",
-          "0367-副本扫荡-副本-开始"
+          "0367-副本扫荡-副本-开始",
+          "0366-副本扫荡-副本-已分配-安全"
         ],
         "box_index": 3
       }
@@ -269,7 +276,7 @@
     "custom_action": "GuardedInput",
     "custom_action_param": {
       "task_id": "DUNGEON_SWEEP_DAILY",
-      "action_id": "start_yanwangling_master_sweep",
+      "action_id": "start_fengxue_master_sweep",
       "kind": "click",
       "evidence": {
         "page_index": 0,
@@ -281,7 +288,10 @@
     "next": [
       "0330-副本扫荡-确认-扫荡"
     ],
-    "retry_times": 0
+    "retry_times": 0,
+    "on_error": [
+      "MJA-公共-原生失败-返回主页"
+    ]
   },
   "0330-副本扫荡-确认-扫荡": {
     "recognition": {
@@ -298,7 +308,7 @@
     "custom_action": "GuardedInput",
     "custom_action_param": {
       "task_id": "DUNGEON_SWEEP_DAILY",
-      "action_id": "confirm_yanwangling_master_sweep",
+      "action_id": "confirm_fengxue_master_sweep",
       "kind": "click",
       "evidence": {
         "page_index": 0,
@@ -310,7 +320,10 @@
     "next": [
       "0332-副本扫荡-关闭-结果"
     ],
-    "retry_times": 0
+    "retry_times": 0,
+    "on_error": [
+      "MJA-公共-原生失败-返回主页"
+    ]
   },
   "0332-副本扫荡-关闭-结果": {
     "recognition": {
@@ -339,7 +352,10 @@
     "next": [
       "0337-副本扫荡-成功-关闭"
     ],
-    "retry_times": 0
+    "retry_times": 0,
+    "on_error": [
+      "MJA-公共-原生失败-返回主页"
+    ]
   },
   "0337-副本扫荡-成功-关闭": {
     "recognition": {
@@ -351,11 +367,18 @@
       }
     },
     "action": "Click",
-    "target": [1202, 30, 24, 24],
+    "target": [
+      1202,
+      30,
+      24,
+      24
+    ],
     "post_delay": 1500,
     "timeout": 5000,
     "retry_times": 0,
-    "next": ["1371-公共-原生成功-主页边界"]
+    "next": [
+      "1371-公共-原生成功-主页边界"
+    ]
   },
   "0343-副本扫荡-副本-入口": {
     "recognition": "OCR",
@@ -384,13 +407,18 @@
   },
   "0345-副本扫荡-副本-滚动-探测": {
     "recognition": "OCR",
-    "expected": "(贼寇山洞|楚家庄|风雪神道|沙匪营地|玄阙地宫|燕王秘陵)",
-    "roi": [0, 200, 1000, 520],
+    "expected": "(贼寇山洞|楚家庄|风雪神道|沙匪营地|玄阙地宫)",
+    "roi": [
+      0,
+      200,
+      1000,
+      520
+    ],
     "action": "DoNothing"
   },
-  "0346-副本扫荡-副本-燕王-秘陵": {
+  "0346-副本扫荡-副本-风雪-神道": {
     "recognition": "OCR",
-    "expected": "燕王秘陵",
+    "expected": "风雪神道",
     "roi": [
       0,
       300,
@@ -399,9 +427,9 @@
     ],
     "action": "DoNothing"
   },
-  "0347-副本扫荡-副本-燕王-秘陵-标题": {
+  "0347-副本扫荡-副本-风雪-神道-标题": {
     "recognition": "OCR",
-    "expected": "燕王秘陵",
+    "expected": "风雪神道",
     "roi": [
       300,
       300,
@@ -462,7 +490,12 @@
   "0352-副本扫荡-副本-券-耗尽": {
     "recognition": "OCR",
     "expected": "^0\\s*/\\s*7$",
-    "roi": [1040, 0, 130, 90],
+    "roi": [
+      1040,
+      0,
+      130,
+      90
+    ],
     "action": "DoNothing"
   },
   "0355-副本扫荡-副本-扫荡-面板": {
@@ -471,7 +504,7 @@
       "param": {
         "all_of": [
           "0356-副本扫荡-副本-扫荡-按钮",
-          "0357-副本扫荡-副本-扫荡-燕王-秘陵-卡片"
+          "0357-副本扫荡-副本-扫荡-风雪-神道-卡片"
         ]
       }
     },
@@ -491,26 +524,27 @@
     ],
     "action": "DoNothing"
   },
-  "0357-副本扫荡-副本-扫荡-燕王-秘陵-卡片": {
+  "0357-副本扫荡-副本-扫荡-风雪-神道-卡片": {
     "recognition": "OCR",
-    "expected": "燕王秘陵",
+    "expected": "风雪神道",
     "roi": [
-      880,
+      300,
       240,
-      400,
+      510,
       100
     ],
     "action": "DoNothing"
   },
   "0358-副本扫荡-副本-宗师-80": {
-    "recognition": "OCR",
-    "expected": "大师\\s*80级?",
-    "roi": [
-      900,
-      380,
-      260,
-      100
-    ],
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "副本扫荡-风雪-大师文字",
+          "副本扫荡-风雪-80级文字"
+        ]
+      }
+    },
     "action": "DoNothing"
   },
   "0359-副本扫荡-副本-券-加号": {
@@ -526,10 +560,10 @@
       230
     ],
     "roi": [
-      1200,
-      380,
-      80,
-      80
+      784,
+      460,
+      34,
+      36
     ],
     "connected": true,
     "count": 40,
@@ -560,12 +594,12 @@
   },
   "0366-副本扫荡-副本-已分配-安全": {
     "recognition": "OCR",
-    "expected": "^[1-9][0-9]*$",
+    "expected": "^2$",
     "roi": [
-      1160,
-      390,
-      65,
-      65
+      710,
+      450,
+      55,
+      50
     ],
     "action": "DoNothing"
   },
@@ -586,7 +620,7 @@
   "0368-副本扫荡-副本-确认-页面": {
     "recognition": "OCR",
     "expected": [
-      "燕王秘陵",
+      "风雪神道",
       "是否进行以下副本的扫荡"
     ],
     "roi": [
@@ -686,5 +720,99 @@
     ],
     "threshold": 0.075,
     "action": "DoNothing"
+  },
+  "副本扫荡-风雪-大师文字": {
+    "recognition": "OCR",
+    "expected": "大师",
+    "roi": [
+      450,
+      445,
+      105,
+      60
+    ],
+    "action": "DoNothing"
+  },
+  "副本扫荡-风雪-80级文字": {
+    "recognition": "OCR",
+    "expected": "80级",
+    "roi": [
+      555,
+      445,
+      90,
+      60
+    ],
+    "action": "DoNothing"
+  },
+  "0326-副本扫荡-分配-第一张券": {
+    "max_hit": 1,
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0355-副本扫荡-副本-扫荡-面板",
+          "0357-副本扫荡-副本-扫荡-风雪-神道-卡片",
+          "0358-副本扫荡-副本-宗师-80",
+          "0359-副本扫荡-副本-券-加号"
+        ],
+        "box_index": 3
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "DUNGEON_SWEEP_DAILY",
+      "action_id": "assign_sweep_ticket",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 3,
+        "page_name": "0355-副本扫荡-副本-扫荡-面板",
+        "target_name": "0359-副本扫荡-副本-券-加号"
+      }
+    },
+    "next": [
+      "0327-副本扫荡-分配-第二张券"
+    ],
+    "retry_times": 0,
+    "post_delay": 500,
+    "on_error": [
+      "MJA-公共-原生失败-返回主页"
+    ]
+  },
+  "0327-副本扫荡-分配-第二张券": {
+    "max_hit": 1,
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0355-副本扫荡-副本-扫荡-面板",
+          "0357-副本扫荡-副本-扫荡-风雪-神道-卡片",
+          "0358-副本扫荡-副本-宗师-80",
+          "0359-副本扫荡-副本-券-加号"
+        ],
+        "box_index": 3
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "DUNGEON_SWEEP_DAILY",
+      "action_id": "assign_sweep_ticket",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 3,
+        "page_name": "0355-副本扫荡-副本-扫荡-面板",
+        "target_name": "0359-副本扫荡-副本-券-加号"
+      }
+    },
+    "next": [
+      "0328-副本扫荡-开始-扫荡"
+    ],
+    "retry_times": 0,
+    "post_delay": 500,
+    "on_error": [
+      "MJA-公共-原生失败-返回主页"
+    ]
   }
 }

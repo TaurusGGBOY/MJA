@@ -9,7 +9,7 @@ Ordinary business-task failure does not stop the remaining MFW queue, matching M
 ## Consequences
 
 Legacy workflow and aggregate runners are retired after any still-used stateless recognition, input, or safety utilities are moved out. `on_error` is absent by default and is reserved for Maa_bbb-style, bounded, task-local recovery; it never routes to a custom outcome node, another business task, or `external`.
-Returning to the game home page after business success is best-effort cleanup; if that cleanup fails, the task uses `StopTask` and remains native `Succeeded`.
+Business success requires a task-local completion predicate, not merely a successful click. Refactored cleanup paths verify the home page before entering the native success leaf; an error before completion or an unsuccessful required handoff remains native `Failed`. Cleanup helpers perform UI recovery only and never write an alternative business status.
 Explicit business failure uses stateless `FailTask`, which returns false without accepting a status parameter or writing evidence. Manual or external stopping keeps MaaFramework's default semantics and is not reclassified from the last executed node.
 
 Every acceptance run declares its expected native terminal before launch. `WEEKLY_FREE_GIFT_DAILY` remains runnable every day, and an already-claimed gift is a native success.

@@ -11,7 +11,6 @@ from tests.mfw.pipeline_assertions import (
 )
 from tests.mfw.task_contract import TaskContract, load_task_nodes
 
-
 ROOT = Path(__file__).parents[3]
 HERO = TaskContract("HERO_DISPATCH_DAILY", "daily/hero_dispatch_daily.json")
 PIPELINE_PATH = ROOT / "assets/resource/base/pipeline" / HERO.pipeline_file
@@ -23,9 +22,7 @@ def _hero_edges(node: dict[str, Any]) -> tuple[str, ...]:
         value = node.get(field, ())
         if isinstance(value, list):
             edges.extend(
-                item
-                for item in value
-                if isinstance(item, str) and item.startswith("英雄派遣-")
+                item for item in value if isinstance(item, str) and item.startswith("英雄派遣-")
             )
     return tuple(edges)
 
@@ -44,9 +41,7 @@ def test_r21_painting_ocr_uses_tight_same_frame_markers() -> None:
     }
     assert nodes["0739-英雄派遣-画卷-页面-标题"]["expected"] == "画卷"
     assert nodes["0740-英雄派遣-画卷-页面-偃武-世界"]["expected"] == "偃武世界"
-    assert nodes["0741-英雄派遣-英雄-派遣-入口"]["expected"] == (
-        "(?:侠客派遣|俠客派遣)"
-    )
+    assert nodes["0741-英雄派遣-英雄-派遣-入口"]["expected"] == ("(?:侠客派遣|俠客派遣)")
 
 
 def test_r21_dispatch_entry_is_page_bounded_and_single_shot() -> None:
@@ -87,12 +82,8 @@ def test_r21_startup_and_page_recovery_have_no_recorder_cycle() -> None:
         "0715-英雄派遣-打开-画卷-世界",
         "英雄派遣-打开-画卷",
     ]
-    assert nodes["0715-英雄派遣-打开-画卷-世界"]["next"] == [
-        "0716-英雄派遣-打开-派遣"
-    ]
-    assert nodes["英雄派遣-打开-画卷"]["next"] == [
-        "0716-英雄派遣-打开-派遣"
-    ]
+    assert nodes["0715-英雄派遣-打开-画卷-世界"]["next"] == ["0716-英雄派遣-打开-派遣"]
+    assert nodes["英雄派遣-打开-画卷"]["next"] == ["0716-英雄派遣-打开-派遣"]
 
 
 def test_r21_native_success_cleanup_is_best_effort_and_bounded() -> None:
@@ -110,15 +101,9 @@ def test_r21_native_success_cleanup_is_best_effort_and_bounded() -> None:
         "0734-英雄派遣-关闭-画卷",
         "0735-英雄派遣-主页边界-探测",
     ]
-    assert nodes["0734-英雄派遣-关闭-画卷"]["on_error"] == [
-        "0735-英雄派遣-主页边界-探测"
-    ]
-    assert nodes["0735-英雄派遣-主页边界-探测"]["next"] == [
-        "1371-公共-原生成功-主页边界"
-    ]
-    assert nodes["0735-英雄派遣-主页边界-探测"]["on_error"] == [
-        "1372-公共-原生成功-尝试返回"
-    ]
+    assert nodes["0734-英雄派遣-关闭-画卷"]["on_error"] == ["0735-英雄派遣-主页边界-探测"]
+    assert nodes["0735-英雄派遣-主页边界-探测"]["next"] == ["1371-公共-原生成功-主页边界"]
+    assert nodes["0735-英雄派遣-主页边界-探测"]["on_error"] == ["1372-公共-原生成功-尝试返回"]
 
 
 def test_r21_pipeline_uses_native_terminal_contract() -> None:
@@ -127,7 +112,7 @@ def test_r21_pipeline_uses_native_terminal_contract() -> None:
     assert_on_error_contract(
         pipeline,
         local_nodes=set(pipeline),
-        shared_targets={"1372-公共-原生成功-尝试返回"},
+        shared_targets={"1372-公共-原生成功-尝试返回", "MJA-公共-原生失败-返回主页"},
     )
     assert pipeline["0727-英雄派遣-成功-领取"] == {
         "recognition": "DirectHit",

@@ -198,7 +198,7 @@ def test_dungeon_zero_assignment_is_not_a_success_terminal() -> None:
     nodes = _load("daily/dungeon_sweep_daily.json")
     open_sweep = nodes["0318-副本扫荡-打开-扫荡"]
 
-    assert open_sweep["next"] == ["0324-副本扫荡-选择-面板-燕王"]
+    assert open_sweep["next"] == ["0324-副本扫荡-选择-面板-风雪"]
     assert "0321-副本扫荡-数量为0-已完成" not in nodes
     assert "0375-副本扫荡-副本-扫荡数量为0" not in nodes
 
