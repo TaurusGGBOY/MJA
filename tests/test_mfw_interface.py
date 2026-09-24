@@ -117,13 +117,17 @@ def test_start_task_is_declared_exactly_once_with_mja_entry() -> None:
     }
 
 
-def test_game_start_entry_starts_the_game_before_readiness_checks() -> None:
+def test_game_start_entry_preserves_a_ready_home_before_starting_game() -> None:
     startup = _read_json(ROOT / "assets/resource/base/pipeline/startup/game_start.json")
     entry = startup["0023-启动-游戏入口"]
 
     assert entry["recognition"] == "DirectHit"
     assert entry["action"] == "DoNothing"
-    assert entry["next"] == ["1356-启动-游戏启动"]
+    assert entry["next"] == [
+        "[JumpBack]启动-Pixel启动器无响应-关闭",
+        "1362-启动-游戏就绪",
+        "1356-启动-游戏启动",
+    ]
     assert "on_error" not in entry
     assert entry["max_hit"] == 1
     assert entry["timeout"] == 1000

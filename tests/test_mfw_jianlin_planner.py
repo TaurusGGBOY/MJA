@@ -6,13 +6,12 @@ from types import SimpleNamespace
 
 import pytest
 
-from tests.mfw.fakes import FakeArgv, FakeContext, and_reco
-
 from agent.custom.action.jianlin_planner import (
     ChallengePlan,
     PlanJianlinChallenge,
     plan_safe_challenge,
 )
+from tests.mfw.fakes import FakeArgv, FakeContext, and_reco
 
 
 def _ocr(text: str) -> SimpleNamespace:

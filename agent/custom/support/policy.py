@@ -50,9 +50,7 @@ _POLICIES = {
             "close_mail": 1,
             "close_function_panel": 1,
         },
-        cleanup_actions=frozenset(
-            {"close_reward_popup", "close_mail", "close_function_panel"}
-        ),
+        cleanup_actions=frozenset({"close_reward_popup", "close_mail", "close_function_panel"}),
     ),
     "SHOP_FREE_GIFT_DAILY": _policy(
         "SHOP_FREE_GIFT_DAILY",
@@ -62,7 +60,7 @@ _POLICIES = {
         action_caps={
             "open_function_panel": 3,
             "open_shop": 3,
-            "open_period_benefits": 3,
+            "open_period_benefits": 1,
             "claim_free_gift": 1,
             "dismiss_free_gift_reward": 1,
             "close_shop": 1,
@@ -85,9 +83,7 @@ _POLICIES = {
             "close_shop": 1,
             "close_function_panel": 1,
         },
-        cleanup_actions=frozenset(
-            {"dismiss_weekly_reward", "close_shop", "close_function_panel"}
-        ),
+        cleanup_actions=frozenset({"dismiss_weekly_reward", "close_shop", "close_function_panel"}),
     ),
     "TRIAL_SWORD_DAILY": _policy(
         "TRIAL_SWORD_DAILY",
@@ -113,9 +109,11 @@ _POLICIES = {
             "close_function_panel": 1,
             "close_extra_reward_popup": 2,
             "open_appraisal": 1,
+            "open_appraisal_entry": 1,
             "claim_free_appraisal_once": 1,
             "close_appraisal_popup": 1,
             "close_appraisal_page": 1,
+            "close_appraisal_catalog": 1,
         },
         cleanup_actions=frozenset(
             {
@@ -123,6 +121,7 @@ _POLICIES = {
                 "close_extra_reward_popup",
                 "close_appraisal_popup",
                 "close_appraisal_page",
+                "close_appraisal_catalog",
             }
         ),
     ),
@@ -135,7 +134,8 @@ _POLICIES = {
             "open_painting_scroll": 1,
             "select_yanwu_world": 1,
             "open_universal_shop": 1,
-            "scroll_tea_list": 1,
+            "select_tea_material_category": 1,
+            "scroll_tea_list": 5,
             "open_tea_tab": 1,
             "open_tea_purchase": 1,
             "set_tea_quantity_max": 1,
@@ -181,8 +181,8 @@ _POLICIES = {
         action_caps={
             "open_painting_scroll": 1,
             "open_hero_dispatch": 1,
-            "claim_first_dispatch": 6,
-            "close_reward_popup": 6,
+            "claim_first_dispatch": 12,
+            "close_reward_popup": 12,
             # A row is selected once to claim its completed reward and once
             # again to start the newly empty task.  Six rows therefore need
             # twelve bounded selection clicks in the same run.
@@ -209,16 +209,16 @@ _POLICIES = {
         frozenset({"combat"}),
         max_steps=160,
         action_caps={
-            "open_painting_scroll": 2,
-            "open_shadow": 2,
-            "select_active_shadow_card": 3,
-            "enter_shadow_stage": 2,
+            "open_painting_scroll": 8,
+            "open_shadow": 8,
+            "select_active_shadow_card": 8,
+            "enter_shadow_stage": 8,
             "enable_shadow_skip_prepare": 3,
-            "dismiss_shadow_battle_result": 12,
+            "dismiss_shadow_battle_result": 48,
             "dismiss_shadow_battle_failure": 3,
             "dismiss_shadow_reward_popup": 12,
-            "confirm_shadow_teleport": 1,
-            "confirm_shadow_completion": 1,
+            "confirm_shadow_teleport": 4,
+            "confirm_shadow_completion": 4,
             "advance_shadow_foreground_triplet": 160,
             "move_shadow_foreground_left": 1,
             "move_shadow_foreground_center": 1,
@@ -415,7 +415,7 @@ _POLICIES = {
             "dismiss_ring_reward": 12,
             "dismiss_ring_result": 12,
             "close_ring_opponents": 1,
-            "close_ring_page": 1,
+            "close_ring_page": 2,
             "close_dueling_menu": 1,
         },
         resources={"擂台券": 12},
@@ -443,9 +443,7 @@ _POLICIES = {
             "close_break_array_page": 1,
             "close_break_array_activity": 1,
         },
-        cleanup_actions=frozenset(
-            {"close_break_array_page", "close_break_array_activity"}
-        ),
+        cleanup_actions=frozenset({"close_break_array_page", "close_break_array_activity"}),
     ),
     # MFW-only task.  The legacy workflow catalog intentionally remains
     # unchanged until the main agent integrates this task's control-plane

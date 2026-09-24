@@ -101,6 +101,8 @@ def test_embedded_agent_has_no_legacy_aggregate_registration() -> None:
 
 def test_base_pipelines_do_not_route_through_the_legacy_daily_action() -> None:
     for path in (ROOT / "assets/resource/base/pipeline").rglob("*.json"):
+        if path.name.startswith("._"):
+            continue
         text = path.read_text(encoding="utf-8")
         assert "Daily" + "WorkflowAction" not in text, path
         assert "Aggregate" + "Daily" + "WorkflowAction" not in text, path
@@ -123,7 +125,12 @@ def test_mfw_production_sources_do_not_reference_an_external_watchdog() -> None:
             text = path.read_text(encoding="utf-8", errors="replace")
             assert "mfw_runtime_watchdog.py" not in text, path
             if path == ROOT / "tools/launch_mfw.zsh":
-                assert "while kill -0" not in text, path
+                # Process cleanup after QEMU disappears is allowed; it must
+                # target only the launched GUI and never infer business results.
+                assert 'mfw_pid=$!' in text
+                assert 'kill -TERM "$mfw_pid"' in text
+                assert 'exit 1' in text
+                assert 'result.json' not in text
                 assert "adb_failure_streak" not in text, path
                 assert "kill -INT" not in text, path
 

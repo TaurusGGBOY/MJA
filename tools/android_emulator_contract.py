@@ -60,7 +60,10 @@ def _process_rows(
             ["ps", "-axo", "pid=,command="],
             capture_output=True,
             text=True,
-            timeout=3.0,
+            # Host process enumeration exceeded three seconds during a real
+            # cold boot under memory pressure. Keep verification mandatory,
+            # but allow the read-only probe a bounded startup-sized window.
+            timeout=30.0,
             check=False,
         )
     except (OSError, subprocess.TimeoutExpired) as exc:

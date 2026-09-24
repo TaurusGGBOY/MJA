@@ -16,7 +16,10 @@
     },
     "timeout": 5000,
     "max_hit": 2,
-    "on_error": ["MJA-任务入口失败-TRIAL_SWORD_DAILY", "MJA-公共-任务入口-恢复耗尽"],
+    "on_error": [
+      "MJA-任务入口失败-TRIAL_SWORD_DAILY",
+      "MJA-公共-任务入口-恢复耗尽"
+    ],
     "next": [
       "1314-试剑-打开-试炼"
     ],
@@ -259,7 +262,8 @@
     "next": [
       "1315-试剑-领取-奖励"
     ],
-    "retry_times": 0
+    "retry_times": 0,
+    "timeout": 60000
   },
   "1324-试剑-关闭-成功": {
     "recognition": {
@@ -317,12 +321,16 @@
   },
   "1326-试剑-试炼-主页-入口": {
     "recognition": "OCR",
-    "expected": "试剑",
+    "expected": [
+      "^已击破\\s*[:：]\\s*\\d+\\s*层?$",
+      "^击破$",
+      "^走破(?:[·.]\\s*\\d+)?$"
+    ],
     "roi": [
-      930,
-      540,
+      1000,
+      550,
       180,
-      70
+      45
     ],
     "action": "DoNothing"
   },

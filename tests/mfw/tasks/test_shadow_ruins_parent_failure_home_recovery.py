@@ -3,7 +3,6 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[3]
 PIPELINE = ROOT / "assets/resource/base/pipeline/daily/shadow_ruins_daily.json"
 

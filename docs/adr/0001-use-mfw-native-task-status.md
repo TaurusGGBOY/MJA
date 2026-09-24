@@ -2,9 +2,9 @@
 
 MJA reports task lifecycle only through MFW's native `Invalid`, `Pending`, `Running`, `Succeeded`, and `Failed` states. `Invalid` identifies an unknown task; `Pending` and `Running` describe progress; `Succeeded` and `Failed` are the only terminal states. Work completed during the run and work already complete both end as `Succeeded`; every other final business outcome ends as `Failed`.
 
-Native terminal events are the sole acceptance result. Screenshots, node history, logs, and postconditions remain diagnostic only. MJA does not persist or read a parallel result file or additional status enumeration.
+Native terminal events are the sole authority for lifecycle state. Acceptance also verifies that a reported success actually executed native nodes and satisfied the task's business and home-page predicates. Evidence validation never rewrites the raw native terminal. MJA does not persist or read a parallel business-result file or additional status enumeration.
 
-Ordinary business-task failure does not stop the remaining MFW queue, matching Maa_bbb. A failed `GAME_START` global prerequisite may stop the queue.
+Ordinary business-task failure does not stop the remaining MFW queue, matching Maa_bbb. After a failed `GAME_START`, later GUI submissions must not execute business actions. They run native `FailTask` at the entry and preserve `Failed`; the original entry is restored afterward. Calling `post_stop` at Starting is unsuitable because Maa 5.12.3 can report an unexecuted task as `Succeeded`.
 
 ## Consequences
 

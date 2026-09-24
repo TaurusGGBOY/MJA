@@ -262,7 +262,7 @@
       }
     },
     "action": "Custom",
-    "max_hit": 6,
+    "max_hit": 12,
     "custom_action": "GuardedInput",
     "custom_action_param": {
       "task_id": "HERO_DISPATCH_DAILY",
@@ -320,7 +320,7 @@
     ],
     "timeout": 8000,
     "action": "DoNothing",
-    "max_hit": 6,
+    "max_hit": 12,
     "next": [
       "0726-英雄派遣-关闭-奖励"
     ]
@@ -337,7 +337,7 @@
       }
     },
     "action": "Custom",
-    "max_hit": 6,
+    "max_hit": 12,
     "custom_action": "GuardedInput",
     "custom_action_param": {
       "task_id": "HERO_DISPATCH_DAILY",

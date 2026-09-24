@@ -20,7 +20,10 @@
       "1077-擂台挑战-打开-对弈"
     ],
     "retry_times": 0,
-    "on_error": ["MJA-任务入口失败-RING_CHALLENGE_DAILY", "MJA-公共-任务入口-恢复耗尽"]
+    "on_error": [
+      "MJA-任务入口失败-RING_CHALLENGE_DAILY",
+      "MJA-公共-任务入口-恢复耗尽"
+    ]
   },
   "1077-擂台挑战-打开-对弈": {
     "max_hit": 1,
@@ -293,15 +296,16 @@
         "box_index": 1
       }
     },
-    "timeout": 30000,
+    "timeout": 180000,
     "action": "Custom",
     "custom_action": "GuardedInput",
     "custom_action_param": {
       "task_id": "RING_CHALLENGE_DAILY",
       "action_id": "fight_ring_opponent",
       "kind": "click",
+      "fixed_click_mode": "ring_battle_start",
       "resource_id": "擂台券",
-      "resource_evidence_name": "擂台券",
+      "resource_evidence_name": "1150-擂台券",
       "resource_index": 3,
       "amount_index": 4,
       "budget_amount": 1,
@@ -313,8 +317,77 @@
       }
     },
     "next": [
+      "[JumpBack]1108-擂台挑战-战前准备-就绪",
       "[JumpBack]1110-擂台挑战-跳过",
       "1114-擂台挑战-战斗-关闭-结果"
+    ],
+    "retry_times": 0,
+    "on_error": [
+      "1181-擂台挑战-战前准备-失败收尾"
+    ]
+  },
+  "1181-擂台挑战-战前准备-失败收尾": {
+    "max_hit": 1,
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "1156-擂台挑战-擂台-战斗-准备-页面",
+          "1157-擂台挑战-擂台-就绪"
+        ],
+        "box_index": 1
+      }
+    },
+    "timeout": 8000,
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "RING_CHALLENGE_DAILY",
+      "action_id": "close_ring_page",
+      "kind": "click",
+      "fixed_click_mode": "ring_page_close",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "1156-擂台挑战-擂台-战斗-准备-页面",
+        "target_name": "1157-擂台挑战-擂台-就绪"
+      }
+    },
+    "next": [
+      "1182-擂台挑战-失败-对手页收尾",
+      "1121-擂台挑战-关闭-页面"
+    ],
+    "retry_times": 0
+  },
+  "1182-擂台挑战-失败-对手页收尾": {
+    "max_hit": 1,
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "1166-擂台挑战-擂台-对手-页面",
+          "1167-擂台挑战-擂台-对手-页面-证据"
+        ],
+        "box_index": 1
+      }
+    },
+    "timeout": 8000,
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "RING_CHALLENGE_DAILY",
+      "action_id": "close_ring_opponents",
+      "kind": "click",
+      "fixed_click_mode": "ring_opponents_close",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "1166-擂台挑战-擂台-对手-页面",
+        "target_name": "1167-擂台挑战-擂台-对手-页面-证据"
+      }
+    },
+    "next": [
+      "1121-擂台挑战-关闭-页面"
     ],
     "retry_times": 0
   },
@@ -330,7 +403,7 @@
         "box_index": 1
       }
     },
-    "timeout": 180000,
+    "timeout": 8000,
     "action": "Custom",
     "custom_action": "GuardedInput",
     "custom_action_param": {
@@ -345,9 +418,11 @@
       }
     },
     "next": [
-      "1111-擂台挑战-跳过-确定"
+      "1111-擂台挑战-跳过-确定",
+      "1128-擂台挑战-擂台-结果-页面"
     ],
-    "retry_times": 0
+    "retry_times": 0,
+    "pre_delay": 4000
   },
   "1111-擂台挑战-跳过-确定": {
     "max_hit": 12,
@@ -374,7 +449,10 @@
         "target_name": "1171-擂台挑战-跳过-确定"
       }
     },
-    "retry_times": 0
+    "retry_times": 0,
+    "next": [
+      "1128-擂台挑战-擂台-结果-页面"
+    ]
   },
   "1114-擂台挑战-战斗-关闭-结果": {
     "max_hit": 12,
@@ -901,10 +979,10 @@
     "recognition": "OCR",
     "expected": "跳过",
     "roi": [
+      1080,
       0,
-      0,
-      1280,
-      720
+      190,
+      100
     ],
     "action": "DoNothing"
   },
@@ -949,12 +1027,12 @@
   },
   "1158-擂台挑战-擂台-跳过": {
     "recognition": "OCR",
-    "expected": "跳过",
+    "expected": "^跳过$",
     "roi": [
-      900,
-      500,
-      330,
-      200
+      1090,
+      20,
+      110,
+      75
     ],
     "action": "DoNothing"
   },
@@ -969,10 +1047,10 @@
       "失败"
     ],
     "roi": [
-      150,
-      100,
-      980,
-      520
+      700,
+      80,
+      560,
+      230
     ],
     "action": "DoNothing"
   },
@@ -1133,7 +1211,7 @@
   },
   "1171-擂台挑战-跳过-确定": {
     "recognition": "OCR",
-    "expected": "确定",
+    "expected": "^确认$",
     "roi": [
       760,
       360,
@@ -1141,5 +1219,33 @@
       180
     ],
     "action": "DoNothing"
+  },
+  "1108-擂台挑战-战前准备-就绪": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "1156-擂台挑战-擂台-战斗-准备-页面",
+          "1157-擂台挑战-擂台-就绪"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "max_hit": 12,
+    "retry_times": 0,
+    "post_delay": 1500,
+    "custom_action_param": {
+      "task_id": "RING_CHALLENGE_DAILY",
+      "action_id": "start_ring_battle",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "1156-擂台挑战-擂台-战斗-准备-页面",
+        "target_name": "1157-擂台挑战-擂台-就绪"
+      }
+    }
   }
 }

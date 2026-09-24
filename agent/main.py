@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import sys
+import traceback
 from pathlib import Path
 
 # MaaPiCli launches this file by path (``agent/main.py``), so Python places
@@ -25,7 +26,7 @@ from agent.custom.action.convergence_lifecycle import (  # noqa: F401
 from agent.custom.action.dispatch_review import VerifyDispatchList as _dispatch_review  # noqa: F401
 from agent.custom.action.fail_task import FailTask as _fail_task  # noqa: F401
 from agent.custom.action.food_progress import (  # noqa: F401
-    FoodBudgetReached as _food_budget_reached,
+    FoodConsumptionConfirmed as _food_consumption_confirmed,
 )
 from agent.custom.action.guarded_input import GuardedInput as _guarded_input  # noqa: F401
 from agent.custom.action.jianlin_planner import (
@@ -43,12 +44,19 @@ from agent.custom.action.task_lifecycle import (  # noqa: F401
     ReturnToHome,
     ReturnToWorldHome,
 )
+from agent.custom.recognition.game_process import GameProcessExited as _game_process  # noqa: F401
+from agent.custom.recognition.home_panel import HomePanelGray as _home_panel_gray  # noqa: F401
 from agent.custom.recognition.martial_material import (  # noqa: F401
     MartialMaterialRelation as _martial_material_relation,
 )
+from agent.custom.recognition.weekly_receipt import (  # noqa: F401
+    WeeklyNativeClaimReceipt as _weekly_receipt,
+)
+from agent.custom.sink.diagnostics import DiagnosticContextSink as _diagnostics  # noqa: F401
 from agent.custom.sink.task_flow import (  # noqa: F401
     GlobalPrerequisiteStopSink as _global_prerequisite_stop_sink,
 )
+from agent.custom.support.crash_evidence import emit
 
 
 def main(socket_id: str) -> int:
@@ -69,12 +77,14 @@ def main(socket_id: str) -> int:
     except KeyboardInterrupt:
         result = 130
     except Exception as exc:
+        emit("agent_exception", error=repr(exc), traceback=traceback.format_exc())
         print(f"AgentServer failed: {exc}", file=sys.stderr)
         result = 3
     finally:
         try:
             AgentServer.shut_down()
         except Exception as exc:
+            emit("agent_shutdown_exception", error=repr(exc), traceback=traceback.format_exc())
             print(f"AgentServer shutdown failed: {exc}", file=sys.stderr)
     return result
 

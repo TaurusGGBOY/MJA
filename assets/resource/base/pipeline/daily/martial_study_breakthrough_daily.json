@@ -493,9 +493,10 @@
       "type": "And",
       "param": {
         "all_of": [
+          "0026-公共-游戏主页-页面",
           "0030-公共-游戏功能面板-入口"
         ],
-        "box_index": 0
+        "box_index": 1
       }
     },
     "action": "DoNothing"

@@ -45,14 +45,20 @@ def test_r20_function_panel_entry_is_distinct_from_home_power_ocr() -> None:
 
     assert panel["recognition"] == {
         "type": "And",
-        "param": {"all_of": ["0030-公共-游戏功能面板-入口"], "box_index": 0},
+        "param": {
+            "all_of": ["0026-公共-游戏主页-页面", "0030-公共-游戏功能面板-入口"],
+            "box_index": 1,
+        },
     }
     assert panel["action"] == "DoNothing"
     assert panel_entry == {
-        "recognition": "TemplateMatch",
-        "template": "home/panel_open.png",
-        "roi": [1170, 10, 60, 60],
-        "threshold": 0.8,
+        "recognition": "Custom",
+        "custom_recognition": "HomePanelGray",
+        "custom_recognition_param": {
+            "templates": ["home/panel_open.png", "home/panel_open_screen_badge.png"],
+            "roi": [1170, 10, 60, 60],
+            "threshold": 0.58,
+        },
         "action": "DoNothing",
     }
 

@@ -103,6 +103,7 @@ def test_guild_affairs_claims_or_starts_then_returns_to_the_four_row_scan() -> N
     assert nodes["0599-帮派事务-关闭-奖励"]["on_error"] == [
         "0670-帮派事务-统一-处理-循环"
     ]
+    assert nodes["0599-帮派事务-关闭-奖励"]["max_hit"] == 12
     for name in (
         "0601-帮派事务-开始-首个-行",
         "0607-帮派事务-行1-开始",

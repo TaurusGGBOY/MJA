@@ -8,6 +8,7 @@ from maa.agent.agent_server import AgentServer
 from maa.custom_action import CustomAction
 
 from agent.custom.support.controller_input import resolution_values
+from agent.custom.support.crash_evidence import observe_cached_frame
 
 
 def _has_property(instance: Any, name: str) -> bool:
@@ -22,6 +23,8 @@ class RuntimeHealth(CustomAction):
 
     def run(self, context: Any, argv: CustomAction.RunArg) -> bool:
         controller = context.tasker.controller
+        observe_cached_frame(controller, task_id=getattr(context, "task_id", None),
+                             node=getattr(argv, "node_name", None))
         if not controller.connected:
             return False
 

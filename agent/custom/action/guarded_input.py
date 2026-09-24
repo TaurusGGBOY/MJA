@@ -118,8 +118,7 @@ def _material_is_sufficient(results: Sequence[Any], params: Mapping[str, Any]) -
             return False
         marker = results[relation_index]
         return bool(
-            getattr(marker, "hit", False)
-            and getattr(marker, "name", None) == relation_name
+            getattr(marker, "hit", False) and getattr(marker, "name", None) == relation_name
         )
 
     material_id = params.get("material_id")
@@ -150,9 +149,7 @@ def _material_is_sufficient(results: Sequence[Any], params: Mapping[str, Any]) -
     owned_amount = _ocr_amount(owned_text)
     required_amount = _ocr_amount(required_text)
     return (
-        owned_amount is not None
-        and required_amount is not None
-        and owned_amount >= required_amount
+        owned_amount is not None and required_amount is not None and owned_amount >= required_amount
     )
 
 
@@ -206,13 +203,10 @@ def validate_and_evidence(
         or amount_index >= len(results)
     ):
         return False
-    if (
-        observed_amount is not None
-        and (
-            isinstance(observed_amount, bool)
-            or not isinstance(observed_amount, int)
-            or observed_amount <= 0
-        )
+    if observed_amount is not None and (
+        isinstance(observed_amount, bool)
+        or not isinstance(observed_amount, int)
+        or observed_amount <= 0
     ):
         return False
     resource_result = results[resource_index]
@@ -251,8 +245,7 @@ def _validate_input_shape(
         normalized = box_values(box)
         size = resolution_values(resolution)
         if size is not None and (
-            normalized[0] + normalized[2] > size[0]
-            or normalized[1] + normalized[3] > size[1]
+            normalized[0] + normalized[2] > size[0] or normalized[1] + normalized[3] > size[1]
         ):
             return False
         if kind == "click":
@@ -265,9 +258,7 @@ def _validate_input_shape(
             return False
         start_x = normalized[0] + normalized[2] // 2
         start_y = normalized[1] + normalized[3] // 2
-        if size is not None and not (
-            0 <= start_x + dx < size[0] and 0 <= start_y + dy < size[1]
-        ):
+        if size is not None and not (0 <= start_x + dx < size[0] and 0 <= start_y + dy < size[1]):
             return False
         return True
     except (TypeError, ValueError):
@@ -310,9 +301,11 @@ def _fixed_click_boxes(params: Mapping[str, Any]) -> tuple[tuple[int, int, int, 
     if params.get("kind") != "click":
         raise ValueError("fixed_click_boxes requires click kind")
     raw_boxes = params["fixed_click_boxes"]
-    if not isinstance(raw_boxes, Sequence) or isinstance(
-        raw_boxes, (str, bytes, bytearray)
-    ) or len(raw_boxes) != 3:
+    if (
+        not isinstance(raw_boxes, Sequence)
+        or isinstance(raw_boxes, (str, bytes, bytearray))
+        or len(raw_boxes) != 3
+    ):
         raise ValueError("fixed_click_boxes must contain exactly three boxes")
     try:
         return tuple(box_values(box) for box in raw_boxes)
@@ -370,14 +363,17 @@ _FIXED_CLICK_MODES: Mapping[tuple[str, str], tuple[int, int, int, int]] = {
         "open_painting_scroll",
         "painting_scroll_button",
     ): (1105, 35, 50, 55),
-    # The top-level 鉴宝 label can disappear from OCR on the home HUD even
-    # while the neighboring navigation labels remain detectable. The home
-    # page and top-navigation OCR are still same-frame evidence; this fixed
-    # box only supplies the calibrated label click point.
+    # The current home HUD exposes the appraisal entry as the bottom 秘宝
+    # shortcut. The pipeline still requires same-frame home, top-navigation,
+    # and bottom-label evidence before this calibrated icon tap.
     (
         "open_appraisal",
         "appraisal_home_button",
-    ): (880, 45, 75, 50),
+    ): (725, 610, 80, 95),
+    (
+        "open_appraisal_entry",
+        "appraisal_catalog_entry",
+    ): (980, 610, 290, 90),
     # The arena sweep control is a stable lower-left button.  Its label can
     # be greyed out at 0/12 and then disappear from OCR, so the opponent-page
     # evidence gates this fixed click instead of the label OCR.
@@ -385,6 +381,10 @@ _FIXED_CLICK_MODES: Mapping[tuple[str, str], tuple[int, int, int, int]] = {
         "sweep_ring",
         "ring_sweep_button",
     ): (0, 570, 250, 140),
+    (
+        "fight_ring_opponent",
+        "ring_battle_start",
+    ): (930, 620, 320, 90),
     # The opponent and arena pages both close through the stable upper-right
     # X.  Keep these taps action-specific and require page evidence in the
     # pipeline before allowing them.
@@ -469,7 +469,7 @@ _FIXED_CLICK_MODES: Mapping[tuple[str, str], tuple[int, int, int, int]] = {
     (
         "dismiss_shadow_reward_popup",
         "shadow_reward_blank",
-    ): (560, 645, 180, 65),
+    ): (560, 520, 180, 70),
     (
         "close_jianlin_for_food",
         "jianlin_page_close",
@@ -615,9 +615,7 @@ class GuardedInput(CustomAction):
             controller = context.tasker.controller
             resolution = getattr(controller, "resolution", None)
             input_box = _target_box(argv.reco_detail, params["evidence"], argv.box)
-            if not _validate_input_shape(
-                params["kind"], input_box, params["evidence"], resolution
-            ):
+            if not _validate_input_shape(params["kind"], input_box, params["evidence"], resolution):
                 _record_denial(context, params, "input_shape")
                 return False
             fixed_boxes = _fixed_click_boxes(params)
@@ -651,6 +649,14 @@ class GuardedInput(CustomAction):
                 RUN_STORE.set_marker(
                     params["task_id"], "food.longjing_shrimp.before_amount", before_amount
                 )
+                if not context.override_pipeline(
+                    {
+                        "0424-吃体力食物-食物-消耗后数量": {
+                            "expected": rf"^(?:当前拥有|拥有|有)?\s*{before_amount - 1}$"
+                        }
+                    }
+                ):
+                    raise RuntimeError("food quantity postcondition could not be installed")
             _LOGGER.debug(
                 "guarded input allowed task=%s action=%s",
                 params["task_id"],

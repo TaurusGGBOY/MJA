@@ -14,7 +14,6 @@ from tools.mfw_native_bundle import (
     verify_mfw_shared_runtime,
 )
 
-
 ROOT = Path(__file__).resolve().parents[1]
 BUNDLE = ROOT / "vendor/maafw/v5.12.3/macos-arm64"
 
@@ -43,7 +42,9 @@ def test_install_replaces_both_runtime_layouts(tmp_path: Path) -> None:
 
     install_mfw_native_bundle(candidate, BUNDLE)
     for relative in DESTINATION_RELATIVE:
-        assert (candidate / relative).read_bytes() == bundle.libraries[Path(relative).name].read_bytes()
+        assert (candidate / relative).read_bytes() == bundle.libraries[
+            Path(relative).name
+        ].read_bytes()
 
 
 def test_install_rejects_unrelated_base_library(tmp_path: Path) -> None:

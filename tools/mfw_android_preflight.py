@@ -5,12 +5,17 @@ Maa.  Direct MFW batch runs must use the same contract, but cannot require the
 game to be foreground yet because GAME_START is responsible for that.
 """
 
+# Imports intentionally follow sys.path setup for direct script execution.
+# ruff: noqa: E402
+
 from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from pathlib import Path
+from time import sleep
 from typing import Any, Callable
 
 # ``python tools/mfw_android_preflight.py`` puts ``tools/`` at sys.path[0].
@@ -25,8 +30,38 @@ sys.path.insert(0, str(PROJECT_ROOT))
 from agent.android.adb import AdbDevice
 from agent.android.config import DEFAULT_CONFIG_PATH, AndroidConfig
 from agent.android.sdk import AndroidSdk
-from agent.errors import MJAError
+from agent.errors import ErrorCode, MJAError
 from tools.android_emulator_contract import verify_emulator_contract
+
+
+def _retry_preflight_probe(probe: Callable[[], Any]) -> Any:
+    """Retry only transport failures in idempotent pre-game checks."""
+    for attempt in range(1, 4):
+        try:
+            return probe()
+        except MJAError as exc:
+            if exc.code is not ErrorCode.ADB_DEVICE_FAILED or attempt == 3:
+                raise
+            print(f"Android preflight probe {attempt}/3 failed; retrying: {exc}", file=sys.stderr)
+
+
+def ensure_default_network(device: Any) -> None:
+    """Reconnect the SDK emulator's open AP only when no network exists."""
+    connection_requested = False
+    for attempt in range(10):
+        state = device.shell("dumpsys", "connectivity")
+        if re.search(r"^Active default network:\s*\d+\s*$", state, re.MULTILINE):
+            return
+        if not connection_requested:
+            # This is the stock SDK virtual AP, not a user Wi-Fi credential.
+            scans = device.shell("cmd", "wifi", "list-scan-results")
+            if re.search(r"\bAndroidWifi\s+\[ESS\]", scans):
+                device.shell("cmd", "wifi", "connect-network", "AndroidWifi", "open")
+                connection_requested = True
+        if attempt < 9:
+            sleep(2)
+    raise MJAError(ErrorCode.ANDROID_EMULATOR_CONTRACT_FAILED,
+                   "Android has no default network; game startup has not begun")
 
 
 def run_preflight(
@@ -40,11 +75,12 @@ def run_preflight(
 
     paths = sdk_factory(config).ensure()
     device = device_factory(config, paths)
-    info = device.wait_ready()
-    phantom_process_monitor = device.ensure_phantom_process_monitor_disabled()
-    selinux = device.ensure_selinux_mode(config.selinux_mode)
+    info = _retry_preflight_probe(device.wait_ready)
+    _retry_preflight_probe(lambda: ensure_default_network(device))
+    phantom_process_monitor = _retry_preflight_probe(device.ensure_phantom_process_monitor_disabled)
+    selinux = _retry_preflight_probe(lambda: device.ensure_selinux_mode(config.selinux_mode))
     memory_health = getattr(device, "require_memory_health", None)
-    memory = memory_health() if callable(memory_health) else None
+    memory = _retry_preflight_probe(memory_health) if callable(memory_health) else None
     emulator = emulator_contract(config)
     sdk_version = getattr(info, "sdk", getattr(info, "sdk_version", ""))
     result: dict[str, Any] = {
@@ -88,9 +124,7 @@ def _parse_args() -> argparse.Namespace:
 def _write_json_atomic(path: Path, payload: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_name(f".{path.name}.tmp")
-    temporary.write_text(
-        json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
-    )
+    temporary.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     temporary.replace(path)
 
 

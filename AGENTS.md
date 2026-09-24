@@ -1,43 +1,25 @@
 # AGENTS.md
 
-This file contains the public development guidance for MJA contributors.
+## Workflow
 
-## Project scope
-
-MJA is a MaaFramework-based automation project for the Android version of
-《对决！剑之川》. The repository contains Python support code, Maa pipeline
-resources, tests, and optional native build helpers.
+- Work on `main`; create or switch branches/worktrees only when explicitly requested.
+- Run focused tests locally before committing; GitHub Actions is disabled.
+- Add or update focused tests for pipeline changes.
+- PRs must describe behavior changes, tests run, fixture updates, and third-party assets/licenses.
 
 ## Development rules
 
-- Keep runtime paths configurable and relative to the repository whenever
-  possible. Do not commit machine-specific absolute paths, hostnames, IP
-  addresses, account identifiers, credentials, or diagnostic dumps.
-- Treat screenshots and OCR fixtures as potentially sensitive. Redact account
-  names, user IDs, chat content, and other personal data before committing.
-- Keep task state in the native MFW state model. Do not introduce a second
-  business-result enum or result file.
-- For pipeline changes, add or update focused tests and run the relevant test
-  files before committing.
-- Keep Android emulator settings explicit. The supported GPU backend is
-  `host`; do not silently replace it with software or auto rendering.
-- Do not add payment, login, verification-code, or credential automation.
+- Use only native MFW task states; no parallel business-result enum or result file.
+- Configure emulator settings explicitly with GPU `host`; never substitute software or auto rendering.
+- Do not automate payments, login, verification codes, or credentials.
+- Keep runtime paths configurable and repository-relative where possible.
+- Keep local SDKs, virtual environments, build outputs, and runtime logs ignored or outside the repository.
+- Exclude machine-specific paths/hostnames/IPs, account identifiers, credentials, and diagnostic dumps from commits and PRs.
+- Redact personal data (account names, user IDs, chat) from screenshots and OCR fixtures before committing or sharing in PRs.
 
-## Local setup
+## References
 
-See [README.md](README.md) for dependencies and the supported MFW/ADB entry
-point. Put local SDKs, virtual environments, build outputs, and runtime logs
-under ignored paths or outside the repository.
-
-## Pull requests
-
-Describe the user-visible behavior, tests run, fixture changes, and any
-third-party assets or licenses involved. Never include private runtime logs or
-unredacted game screenshots in a pull request.
-
-## Branch workflow
-
-- Work directly on `main` by default.
-- Do not create or switch to a branch or worktree unless the user explicitly
-  requests one.
-- GitHub Actions is disabled, so run focused tests locally before committing.
+- [README.md](README.md): setup and MFW/ADB entry points.
+- [CONTRIBUTING.md](CONTRIBUTING.md): contribution workflow and checks.
+- [SECURITY.md](SECURITY.md): handling sensitive data and reports.
+- [Native task status](docs/adr/0001-use-mfw-native-task-status.md): MFW state semantics.

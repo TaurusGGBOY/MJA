@@ -155,9 +155,7 @@ def _find_mfw_archive_root(extracted: Path) -> Path:
             return _find_archive_root(extracted, required)
         except ValueError:
             continue
-    required_layouts = ", ".join(
-        f"{name}: {required}" for name, required in layouts
-    )
+    required_layouts = ", ".join(f"{name}: {required}" for name, required in layouts)
     raise ValueError(f"archive is missing a supported MFW layout: {required_layouts}")
 
 
@@ -285,9 +283,8 @@ def _disable_mfw_auto_update(output: Path) -> None:
     """
 
     path = Path(output) / "config/config.json"
-    if not path.is_file():
-        return
-    payload = json.loads(path.read_text(encoding="utf-8"))
+    path.parent.mkdir(parents=True, exist_ok=True)
+    payload = json.loads(path.read_text(encoding="utf-8")) if path.is_file() else {}
     update = payload.setdefault("Update", {})
     if not isinstance(update, dict):
         raise ValueError("MFW config Update section must be an object")

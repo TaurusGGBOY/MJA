@@ -6,7 +6,6 @@ from pathlib import Path
 from tests.mfw.pipeline_assertions import assert_no_custom_outcome_nodes
 from tests.mfw.task_contract import TaskContract, load_task_nodes
 
-
 APPRAISAL = TaskContract(
     "FREE_APPRAISAL_DAILY",
     "daily/free_appraisal_daily.json",

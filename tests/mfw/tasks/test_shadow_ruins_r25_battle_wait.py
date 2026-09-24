@@ -3,7 +3,10 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-PIPELINE = Path(__file__).resolve().parents[3] / "assets/resource/base/pipeline/daily/shadow_ruins_daily.json"
+PIPELINE = (
+    Path(__file__).resolve().parents[3]
+    / "assets/resource/base/pipeline/daily/shadow_ruins_daily.json"
+)
 
 
 def _nodes() -> dict[str, dict[str, object]]:
@@ -13,10 +16,20 @@ def _nodes() -> dict[str, dict[str, object]]:
 def test_r25_battle_recognition_and_roi_are_preserved() -> None:
     nodes = _nodes()
     assert nodes["1195-影之遗迹-影-战斗-页面"] == {
-        "recognition": "OCR", "expected": ["阵容", "挑战"], "roi": [0, 0, 500, 120], "action": "DoNothing"
+        "recognition": "OCR",
+        "expected": ["阵容", "挑战"],
+        "roi": [0, 0, 500, 120],
+        "action": "DoNothing",
     }
     assert nodes["1196-影之遗迹-影-战斗-中-进度"]["recognition"] == {
-        "type": "And", "param": {"all_of": ["1197-影之遗迹-影-战斗-中-进度-统计", "1198-影之遗迹-影-战斗-中-进度-状态", "1199-影之遗迹-影-战斗-中-进度-计时器"]}
+        "type": "And",
+        "param": {
+            "all_of": [
+                "1197-影之遗迹-影-战斗-中-进度-统计",
+                "1198-影之遗迹-影-战斗-中-进度-状态",
+                "1199-影之遗迹-影-战斗-中-进度-计时器",
+            ]
+        },
     }
     assert nodes["1199-影之遗迹-影-战斗-中-进度-计时器"]["roi"] == [190, 10, 85, 50]
 
@@ -47,10 +60,6 @@ def test_r25_battle_failure_is_dismissed_with_same_frame_evidence() -> None:
         "1541-MJA-影之遗迹地图推进-识别-战斗失败",
     ]
     assert node["custom_action"] == "GuardedInput"
-    assert node["custom_action_param"]["action_id"] == (
-        "dismiss_shadow_battle_failure"
-    )
-    assert node["custom_action_param"]["fixed_click_mode"] == (
-        "shadow_result_blank"
-    )
+    assert node["custom_action_param"]["action_id"] == ("dismiss_shadow_battle_failure")
+    assert node["custom_action_param"]["fixed_click_mode"] == ("shadow_result_blank")
     assert node["next"] == ["1501-MJA-影之遗迹地图推进-前景三点循环"]

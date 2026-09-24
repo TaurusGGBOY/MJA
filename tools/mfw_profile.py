@@ -7,15 +7,12 @@ import copy
 import hashlib
 import json
 import re
-import time
 import subprocess
+import time
 from pathlib import Path
 from typing import Any, Sequence
 
-
-_INFRASTRUCTURE_TASKS = frozenset(
-    {"PreTask", "Controller", "Resource", "Post-Action"}
-)
+_INFRASTRUCTURE_TASKS = frozenset({"PreTask", "Controller", "Resource", "Post-Action"})
 _CONTROL_TASKS = frozenset({"GAME_START", "GAME_STOP"})
 _PAIR_PROFILE_PREFIX = "MJA auto GAME_START+"
 _PAIR_CONFIG_PREFIX = "c_mja_pair_"
@@ -33,9 +30,7 @@ def _registered_config_ids(install_root: Path) -> list[str]:
     if not isinstance(config_list, list) or not all(
         isinstance(config_id, str) for config_id in config_list
     ):
-        raise ValueError(
-            f"MFW config registry must provide config_list in {path}"
-        )
+        raise ValueError(f"MFW config registry must provide config_list in {path}")
     return config_list
 
 
@@ -47,7 +42,7 @@ def _interface_path(install_root: Path) -> Path:
     raise ValueError(f"candidate has no interface declaration: {root}")
 
 
-def _declared_task_names(install_root: Path) -> tuple[str, ...]:
+def _declared_task_names(install_root: Path, *, include_inactive: bool = False) -> tuple[str, ...]:
     """Read task names without requiring the full selection machinery.
 
     Candidate builders also use this helper with small fixture interfaces that
@@ -86,6 +81,8 @@ def _declared_task_names(install_root: Path) -> tuple[str, ...]:
                 if name and name not in names:
                     names.append(name)
 
+    if include_inactive:
+        return tuple(names)
     retired = {
         item.strip()
         for item in interface.get("retired_tasks", [])
@@ -94,9 +91,7 @@ def _declared_task_names(install_root: Path) -> tuple[str, ...]:
     return tuple(
         name
         for name in names
-        if not name.startswith("GAME_")
-        and name not in _CONTROL_TASKS
-        and name not in retired
+        if not name.startswith("GAME_") and name not in _CONTROL_TASKS and name not in retired
     )
 
 
@@ -124,9 +119,7 @@ def _config_id_slug(task_id: str) -> str:
     return f"{_PAIR_CONFIG_PREFIX}{slug}"
 
 
-def _synthetic_task_item(
-    name: str, interface: dict[str, Any]
-) -> dict[str, Any]:
+def _synthetic_task_item(name: str, interface: dict[str, Any]) -> dict[str, Any]:
     """Create the minimal saved-task record when no historical one exists."""
 
     if name in _INFRASTRUCTURE_TASKS:
@@ -190,7 +183,12 @@ def _profile_template_data(
                 continue
             normalized = copy.deepcopy(item)
             normalized["name"] = name.strip()
-            task_items.setdefault(normalized["name"], normalized)
+            prior = task_items.get(normalized["name"])
+            if prior is None or (
+                normalized["name"] in _INFRASTRUCTURE_TASKS
+                and not prior.get("task_option") and normalized.get("task_option")
+            ):
+                task_items[normalized["name"]] = normalized
             names.add(normalized["name"])
         if not _INFRASTRUCTURE_TASKS - names or {
             "PreTask",
@@ -258,7 +256,7 @@ def ensure_pair_profiles(install_root: Path) -> dict[str, str]:
     if "Post-Action" in template_names:
         ordered_names.append("Post-Action")
     ordered_names.append("GAME_START")
-    for name in (*template_names, *active_tasks):
+    for name in (*template_names, *_declared_task_names(root, include_inactive=True)):
         if name not in ordered_names:
             ordered_names.append(name)
 
@@ -293,6 +291,24 @@ def ensure_pair_profiles(install_root: Path) -> dict[str, str]:
         ]
         if exact:
             config_id, payload = sorted(exact)[0]
+            # Old pair profiles can contain an empty controller placeholder.
+            # Reuse configured runtime options before cloning a new sequence;
+            # never overwrite an explicitly configured pair's own options.
+            for item in _config_tasks(payload):
+                name = item.get("name")
+                if name in _INFRASTRUCTURE_TASKS and not item.get("task_option"):
+                    options = task_items.get(name, {}).get("task_option")
+                    if options:
+                        item["task_option"] = copy.deepcopy(options)
+            # MFW adds missing declarations using default_check on load.
+            # Materialize unchecked rows even for retired/control tasks.
+            present = {item.get("name") for item in _config_tasks(payload)}
+            for name in ordered_names:
+                if name not in present:
+                    item = copy.deepcopy(task_items[name])
+                    item["is_checked"] = name in _INFRASTRUCTURE_TASKS
+                    payload["tasks"].append(item)
+            _write_json(config_dir / f"{config_id}.json", payload)
             if config_id not in registered:
                 registered.append(config_id)
             pair_profiles[task_id] = str(payload.get("name") or config_id)
@@ -302,11 +318,15 @@ def ensure_pair_profiles(install_root: Path) -> dict[str, str]:
         generated_name = f"{_PAIR_PROFILE_PREFIX}{task_id}"
         payload = config_payloads.get(generated_id)
         if payload is None:
-            payload = copy.deepcopy(template) if template is not None else {
-                "name": generated_name,
-                "item_id": generated_id,
-                "tasks": [],
-            }
+            payload = (
+                copy.deepcopy(template)
+                if template is not None
+                else {
+                    "name": generated_name,
+                    "item_id": generated_id,
+                    "tasks": [],
+                }
+            )
         tasks: list[dict[str, Any]] = []
         for name in ordered_names:
             item = copy.deepcopy(task_items[name])
@@ -360,9 +380,10 @@ def ensure_sequence_profile(
     if missing:
         raise ValueError(f"sequence contains unavailable task(s): {missing!r}")
 
-    ensure_pair_profiles(root)
+    profiles = ensure_pair_profiles(root)
     config_dir = root / "config" / "configs"
-    pair_path = config_dir / f"{_config_id_slug(requested[0])}.json"
+    pair_id = resolve_config_id(root, profiles[requested[0]])
+    pair_path = config_dir / f"{pair_id}.json"
     if not pair_path.is_file():
         raise ValueError(f"cannot find pair profile template: {pair_path}")
     template = json.loads(pair_path.read_text(encoding="utf-8"))
@@ -379,6 +400,10 @@ def ensure_sequence_profile(
     selected = {"GAME_START", *requested}
     output_tasks: list[dict[str, Any]] = []
     ordered_names = ["PreTask", "Controller", "Resource", "GAME_START", *requested]
+    for name in (*task_by_name, *_declared_task_names(root, include_inactive=True)):
+        if name not in ordered_names:
+            ordered_names.append(name)
+        task_by_name.setdefault(name, _synthetic_task_item(name, {}))
     for name in ordered_names:
         item = task_by_name[name]
         cloned = copy.deepcopy(item)
@@ -394,12 +419,26 @@ def ensure_sequence_profile(
     if checked_business != ("GAME_START", *requested):
         raise ValueError(
             "candidate profile template cannot materialize exact sequence: "
-            f"expected={("GAME_START", *requested)!r}, actual={checked_business!r}"
+            f"expected={('GAME_START', *requested)!r}, actual={checked_business!r}"
         )
 
     digest = hashlib.sha256(",".join(requested).encode("utf-8")).hexdigest()[:16]
     config_id = f"{_SEQUENCE_CONFIG_PREFIX}{digest}"
     name = profile_name or f"{_SEQUENCE_PROFILE_PREFIX}{'+'.join(requested)}"
+    # Distinct task subsets have distinct IDs. Reusing a human label must not
+    # leave two profiles that resolve_config_id can no longer distinguish.
+    other_names = set()
+    for path in config_dir.glob("c_*.json"):
+        if path.stem == config_id:
+            continue
+        saved = json.loads(path.read_text(encoding="utf-8"))
+        if isinstance(saved, dict) and isinstance(saved.get("name"), str):
+            other_names.add(saved["name"])
+    base_name = name
+    suffix = 2
+    while name in other_names:
+        name = f"{base_name}（{suffix}）"
+        suffix += 1
     payload = copy.deepcopy(template)
     payload["name"] = name
     payload["item_id"] = config_id
@@ -607,11 +646,7 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps(ensure_pair_profiles(args.install), ensure_ascii=False, indent=2))
         return 0
     if args.command == "ensure-sequence-profile":
-        print(
-            ensure_sequence_profile(
-                args.install, args.task, profile_name=args.profile_name
-            )
-        )
+        print(ensure_sequence_profile(args.install, args.task, profile_name=args.profile_name))
         return 0
     if args.command == "resolve":
         print(resolve_config_id(args.install, args.profile_name))

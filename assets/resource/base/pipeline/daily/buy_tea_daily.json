@@ -16,7 +16,10 @@
       "task_id": "BUY_TEA_DAILY"
     },
     "timeout": 5000,
-    "on_error": ["MJA-任务入口失败-BUY_TEA_DAILY", "MJA-公共-任务入口-恢复耗尽"],
+    "on_error": [
+      "MJA-任务入口失败-BUY_TEA_DAILY",
+      "MJA-公共-任务入口-恢复耗尽"
+    ],
     "next": [
       "0181-买茶-主页-探测",
       "0182-买茶-面板-探测",
@@ -205,10 +208,40 @@
       }
     },
     "next": [
+      "0230-买茶-选择-材料"
+    ]
+  },
+  "0230-买茶-选择-材料": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0216-买茶-茶-万用-商店-页面",
+          "0231-买茶-商店-材料-分类"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "max_hit": 1,
+    "custom_action_param": {
+      "task_id": "BUY_TEA_DAILY",
+      "action_id": "select_tea_material_category",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "0216-买茶-茶-万用-商店-页面",
+        "target_name": "0231-买茶-商店-材料-分类"
+      }
+    },
+    "next": [
       "0188-买茶-初始-物品-探测",
       "0189-买茶-售罄-列表-探测",
       "0190-买茶-滚动-探测"
-    ]
+    ],
+    "retry_times": 0
   },
   "0188-买茶-初始-物品-探测": {
     "recognition": {
@@ -263,7 +296,7 @@
     "action": "DoNothing"
   },
   "0190-买茶-滚动-探测": {
-    "max_hit": 1,
+    "max_hit": 5,
     "recognition": {
       "type": "And",
       "param": {
@@ -286,14 +319,16 @@
         "page_name": "0216-买茶-茶-万用-商店-页面",
         "target_name": "0218-买茶-茶-滚动-区域",
         "dx": 0,
-        "dy": -220,
-        "duration_ms": 350
+        "dy": -300,
+        "duration_ms": 1000
       }
     },
     "next": [
       "0192-买茶-打开-茶",
-      "0189-买茶-售罄-列表-探测"
-    ]
+      "0189-买茶-售罄-列表-探测",
+      "0190-买茶-滚动-探测"
+    ],
+    "post_delay": 700
   },
   "0192-买茶-打开-茶": {
     "recognition": {
@@ -326,10 +361,7 @@
   },
   "0193-买茶-详情-探测": {
     "recognition": "OCR",
-    "expected": [
-      "茶叶",
-      "当前拥有"
-    ],
+    "expected": "^茶叶$",
     "roi": [
       820,
       100,
@@ -703,35 +735,53 @@
     "action": "DoNothing"
   },
   "0217-买茶-茶-茶-物品": {
-    "recognition": "TemplateMatch",
-    "template": "daily/BUY_TEA_DAILY/tea_item.png",
+    "recognition": "OCR",
+    "expected": "^茶叶$",
     "roi": [
-      180,
+      225,
       130,
-      650,
-      400
+      560,
+      420
     ],
-    "threshold": 0.78,
     "action": "DoNothing"
   },
   "0218-买茶-茶-滚动-区域": {
     "recognition": "TemplateMatch",
     "template": "daily/BUY_TEA_DAILY/tea_shop_page.png",
     "roi": [
-      180,
-      300,
-      650,
-      230
+      460,
+      430,
+      120,
+      100
     ],
     "threshold": 0.7,
     "action": "DoNothing"
   },
+  "0231-买茶-商店-材料-分类": {
+    "recognition": "OCR",
+    "expected": "^材料$",
+    "roi": [
+      50,
+      300,
+      170,
+      100
+    ],
+    "action": "DoNothing"
+  },
+  "0232-买茶-商店-消耗品-分类": {
+    "recognition": "OCR",
+    "expected": "^消耗品$",
+    "roi": [
+      50,
+      220,
+      170,
+      100
+    ],
+    "action": "DoNothing"
+  },
   "0219-买茶-茶-详情": {
     "recognition": "OCR",
-    "expected": [
-      "茶叶",
-      "当前拥有"
-    ],
+    "expected": "^茶叶$",
     "roi": [
       820,
       100,

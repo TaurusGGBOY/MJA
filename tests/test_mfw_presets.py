@@ -65,7 +65,6 @@ def test_mfw_imports_startup_and_batch_a_tasks_separately() -> None:
             "DUNGEON_SWEEP_DAILY",
             "JIANLIN_RESOURCE_CONDENSATE_STAMINA_DAILY",
             "RING_CHALLENGE_DAILY",
-            "BREAK_ARRAY_MARTIAL_DAILY",
             "GUILD_ACTIVITY_CHALLENGE_DAILY",
             "GUILD_AFFAIRS_DAILY",
             "GUILD_DONATION_DAILY",

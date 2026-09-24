@@ -151,3 +151,35 @@ def test_buy_tea_painting_entry_uses_current_world_label_and_action_anchor() -> 
     assert entry["custom_action_param"]["fixed_click_mode"] == (
         "painting_scroll_button"
     )
+
+
+def test_buy_tea_selects_material_category_before_item_probe() -> None:
+    nodes = _scoped_nodes()
+    category = nodes["0230-买茶-选择-材料"]
+    assert category["custom_action_param"]["action_id"] == (
+        "select_tea_material_category"
+    )
+    assert category["custom_action_param"]["evidence"]["target_name"] == (
+        "0231-买茶-商店-材料-分类"
+    )
+    assert nodes["0231-买茶-商店-材料-分类"]["expected"] == "^材料$"
+
+
+def test_scroll_stays_inside_item_grid_and_search_is_bounded():
+    import json
+    nodes = json.loads(PIPELINE_PATH.read_text())
+    target = nodes["0218-买茶-茶-滚动-区域"]
+    x, y, w, h = target["roi"]
+    assert 233 <= x and x + w <= 775
+    assert 150 <= y and y + h <= 532
+    scroll = nodes["0190-买茶-滚动-探测"]
+    assert scroll["next"][0] == "0192-买茶-打开-茶"
+    assert scroll["next"][-1] == "0190-买茶-滚动-探测"
+    assert scroll["max_hit"] == 5
+    assert scroll["custom_action_param"]["evidence"]["duration_ms"] == 1000
+
+
+def test_purchase_requires_tea_name_not_generic_stock_text():
+    nodes = _scoped_nodes()
+    for name in ("0217-买茶-茶-茶-物品", "0193-买茶-详情-探测", "0219-买茶-茶-详情"):
+        assert nodes[name]["expected"] == "^茶叶$"

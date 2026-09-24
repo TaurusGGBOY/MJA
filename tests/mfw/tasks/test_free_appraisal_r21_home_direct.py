@@ -15,7 +15,6 @@ from tests.mfw.task_contract import (
     load_task_nodes,
 )
 
-
 ROOT = Path(__file__).parents[3]
 APPRAISAL = TaskContract(
     "FREE_APPRAISAL_DAILY",
@@ -66,15 +65,15 @@ def test_r21_start_uses_home_top_appraisal_and_panel_recovery_as_siblings() -> N
     same_frame_home = ["0026-公共-游戏主页-页面", "0500-免费鉴定-鉴定-主页-页面"]
     home_probe = nodes["0483-免费鉴定-主页-探测"]
     assert home_probe["recognition"]["param"] == {
-        "all_of": same_frame_home,
+        "all_of": [*same_frame_home, "0501-免费鉴定-鉴定-主页-入口"],
         "box_index": 0,
     }
     assert home_probe["next"] == ["0484-免费鉴定-打开-鉴定"]
 
     open_appraisal = nodes["0484-免费鉴定-打开-鉴定"]
     assert open_appraisal["recognition"]["param"] == {
-        "all_of": same_frame_home,
-        "box_index": 1,
+        "all_of": [*same_frame_home, "0501-免费鉴定-鉴定-主页-入口"],
+        "box_index": 2,
     }
     assert open_appraisal["custom_action_param"] == {
         "task_id": APPRAISAL.task_id,
@@ -83,12 +82,24 @@ def test_r21_start_uses_home_top_appraisal_and_panel_recovery_as_siblings() -> N
         "fixed_click_mode": "appraisal_home_button",
         "evidence": {
             "page_index": 0,
-            "target_index": 1,
+            "target_index": 2,
             "page_name": "0026-公共-游戏主页-页面",
-            "target_name": "0500-免费鉴定-鉴定-主页-页面",
+            "target_name": "0501-免费鉴定-鉴定-主页-入口",
         },
     }
-    assert open_appraisal["next"] == ["0485-免费鉴定-页面-探测"]
+    assert open_appraisal["next"] == ["0484b-免费鉴定-秘宝目录-入口探测"]
+
+    catalog = nodes["0484b-免费鉴定-秘宝目录-入口探测"]
+    assert catalog["custom_action_param"]["action_id"] == "open_appraisal_entry"
+    assert catalog["custom_action_param"]["fixed_click_mode"] == (
+        "appraisal_catalog_entry"
+    )
+    assert catalog["next"] == ["0485-免费鉴定-页面-探测"]
+    assert nodes["0520-免费鉴定-秘宝目录-页面"]["expected"] == [
+        "^秘宝$",
+        "获取秘宝",
+    ]
+    assert nodes["0521-免费鉴定-秘宝目录-获取入口"]["expected"] == "^获取秘宝$"
 
     # r21 proved that opening the function panel hides the real top-level
     # 鉴宝 entry. The old open-panel -> panel appraisal route must not return.
@@ -121,7 +132,7 @@ def test_r21_root_recovery_is_bounded_and_reuses_shared_startup_without_input() 
     assert "claim_free_appraisal_once" not in str(recovery)
 
 
-def test_r21_ocr_boxes_are_covered_by_top_appraisal_target_variants() -> None:
+def test_r21_ocr_boxes_are_covered_by_current_appraisal_target() -> None:
     nodes = load_task_nodes(APPRAISAL)
     home = nodes["0500-免费鉴定-鉴定-主页-页面"]
     appraisal = nodes["0501-免费鉴定-鉴定-主页-入口"]
@@ -134,8 +145,8 @@ def test_r21_ocr_boxes_are_covered_by_top_appraisal_target_variants() -> None:
     }
     assert appraisal == {
         "recognition": "OCR",
-        "expected": ["^鉴宝$", "^宝$"],
-        "roi": [850, 30, 130, 70],
+        "expected": "^秘宝$",
+        "roi": [700, 600, 140, 100],
         "action": "DoNothing",
     }
 
@@ -148,14 +159,14 @@ def test_r21_ocr_boxes_are_covered_by_top_appraisal_target_variants() -> None:
         [1116, 58, 32, 14],  # 画卷
     ):
         assert _contains(home["roi"], box)
-    assert _contains(appraisal["roi"], [900, 63, 32, 18])
+    assert _contains(appraisal["roi"], [748, 666, 42, 24])
 
-    # 秘宝 is only a function-panel boundary anchor. It is never an appraisal
-    # click target and is outside the fixed top-level 鉴宝 ROI.
+    # The current home surface exposes the appraisal entry as 秘宝; the
+    # function-panel marker remains an independent recovery boundary.
     panel = nodes["0504-免费鉴定-鉴定-面板-页面"]
     assert "^秘宝$" in panel["expected"]
     assert "鉴宝" not in "".join(panel["expected"])
-    assert appraisal["expected"] == ["^鉴宝$", "^宝$"]
+    assert appraisal["expected"] == "^秘宝$"
 
     page = nodes["0502-免费鉴定-鉴定-页面"]
     assert page == {
@@ -222,9 +233,11 @@ def test_r21_free_claim_and_return_home_remain_bounded_and_truthful() -> None:
         "close_function_panel",
         "close_extra_reward_popup",
         "open_appraisal",
+        "open_appraisal_entry",
         "claim_free_appraisal_once",
         "close_appraisal_popup",
         "close_appraisal_page",
+        "close_appraisal_catalog",
     }
 
     policy = TASK_POLICIES[APPRAISAL.task_id]
@@ -233,9 +246,11 @@ def test_r21_free_claim_and_return_home_remain_bounded_and_truthful() -> None:
         "close_function_panel",
         "close_extra_reward_popup",
         "open_appraisal",
+        "open_appraisal_entry",
         "claim_free_appraisal_once",
         "close_appraisal_popup",
         "close_appraisal_page",
+        "close_appraisal_catalog",
     }
     assert policy.action_caps["close_extra_reward_popup"] == 2
     assert all(
@@ -245,6 +260,7 @@ def test_r21_free_claim_and_return_home_remain_bounded_and_truthful() -> None:
             "claim_free_appraisal_once",
             "close_appraisal_popup",
             "close_appraisal_page",
+        "close_appraisal_catalog",
             "close_function_panel",
         )
     )
@@ -263,7 +279,7 @@ def test_r21_free_claim_and_return_home_remain_bounded_and_truthful() -> None:
         "all_of": ["0502-免费鉴定-鉴定-页面", "0508-免费鉴定-鉴定-免费-一次"],
         "box_index": 1,
     }
-    assert nodes["0508-免费鉴定-鉴定-免费-一次"]["expected"] == "免费鉴宝"
+    assert nodes["0508-免费鉴定-鉴定-免费-一次"]["expected"] == "^免费鉴宝$"
     assert "付费" not in str(claim)
 
     assert nodes["0486-MJA_APPRAISAL_STATUS_PROBE"]["next"] == [
@@ -290,7 +306,7 @@ def test_r21_free_claim_and_return_home_remain_bounded_and_truthful() -> None:
             "box_index": 1,
         }
         assert close_node["custom_action_param"]["action_id"] == "close_appraisal_page"
-        assert close_node["next"] == [home_name]
+        assert close_node["next"] == ["[JumpBack]0522-免费鉴定-关闭-秘宝目录", home_name]
         assert nodes[home_name]["recognition"]["param"] == {
             "all_of": ["0026-公共-游戏主页-页面", "0500-免费鉴定-鉴定-主页-页面"],
             "box_index": 0,

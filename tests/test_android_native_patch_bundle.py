@@ -41,7 +41,9 @@ def test_android_build_script_help_is_available() -> None:
     assert "--output" in result.stdout
 
 
-def test_android_build_script_rejects_reference_checkout(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_android_build_script_rejects_reference_checkout(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     reference = tmp_path / "reference"
     (reference / ".git").mkdir(parents=True)
     monkeypatch.setenv("MJA_MAAFRAME_REFERENCE", os.fspath(reference))

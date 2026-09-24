@@ -3,7 +3,10 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-PIPELINE = Path(__file__).resolve().parents[3] / "assets/resource/base/pipeline/daily/shadow_ruins_daily.json"
+PIPELINE = (
+    Path(__file__).resolve().parents[3]
+    / "assets/resource/base/pipeline/daily/shadow_ruins_daily.json"
+)
 
 
 def _nodes() -> dict[str, dict[str, object]]:

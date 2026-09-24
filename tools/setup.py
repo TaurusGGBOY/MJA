@@ -25,12 +25,8 @@ CHUNK_SIZE = 1024 * 1024
 MAAFW_VERSION = "5.12.2"
 MACOS_CONTROL_UNIT_LIBRARY = "libMaaMacOSControlUnit.dylib"
 ANDROID_CONTROL_UNIT_LIBRARY = "libMaaAdbControlUnit.dylib"
-ANDROID_MAAPI_BUILD_SCRIPT = (
-    ROOT / "native" / "maafw-android-cli" / "build.sh"
-)
-OFFICIAL_BASE_LIBRARY_SHA256 = (
-    "f9f341ca13db62ef6f8bd642862510d191efbfc55de896fdec523b5b507ffc9a"
-)
+ANDROID_MAAPI_BUILD_SCRIPT = ROOT / "native" / "maafw-android-cli" / "build.sh"
+OFFICIAL_BASE_LIBRARY_SHA256 = "f9f341ca13db62ef6f8bd642862510d191efbfc55de896fdec523b5b507ffc9a"
 OVERLAY_JOURNAL_NAME = ".mja-macos-control-unit-overlay.json"
 
 
@@ -361,7 +357,9 @@ def build_android_maapi_cli(
             if library.is_file() and (
                 library.stat().st_size != adb_size or sha256_file(library) != adb_sha256
             ):
-                raise RuntimeError(f"Android ADB control-unit library does not match the build manifest: {library}")
+                raise RuntimeError(
+                    f"Android ADB control-unit library does not match the build manifest: {library}"
+                )
 
 
 def _preserved_android_control_unit(install_root: Path) -> tuple[bytes, int] | None:
@@ -415,8 +413,7 @@ def _has_attested_android_maapi_cli(install_root: Path) -> bool:
         return (
             manifest.get("schema_version") == 1
             and manifest.get("upstream_tag") == "v5.12.2"
-            and manifest.get("upstream_commit")
-            == "f625a60edeccd4549f9a71c0f74628d827ade8fb"
+            and manifest.get("upstream_commit") == "f625a60edeccd4549f9a71c0f74628d827ade8fb"
             and manifest.get("maapi_cli_size") == cli.stat().st_size
             and manifest.get("maapi_cli_sha256") == sha256_file(cli)
         )
@@ -509,9 +506,13 @@ def _recover_overlay_journal(root: Path, destinations: tuple[Path, ...]) -> None
         if payload.get("schema_version") != 1 or not isinstance(backup_names, list):
             raise ValueError("invalid overlay journal")
         expected = {path.name for path in destinations}
-        if len(backup_names) != len(expected) or {
-            item.get("destination") if isinstance(item, dict) else None for item in backup_names
-        } != expected:
+        if (
+            len(backup_names) != len(expected)
+            or {
+                item.get("destination") if isinstance(item, dict) else None for item in backup_names
+            }
+            != expected
+        ):
             raise ValueError("invalid overlay journal destinations")
         for item in backup_names:
             if (
@@ -741,6 +742,7 @@ def _assemble_install_in_place(
     agent = project_root / "agent"
     if agent.is_dir():
         _replace_project_tree(agent, install_root / "agent")
+
 
 def assemble_install(
     install_root: Path,

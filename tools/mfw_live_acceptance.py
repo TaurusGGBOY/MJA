@@ -1,4 +1,4 @@
-"""Accept a live MFW run from native terminal task events only."""
+"""Accept a live MFW run from native execution and terminal task events."""
 
 from __future__ import annotations
 
@@ -57,8 +57,7 @@ def _read_object(path: Path) -> dict[str, Any]:
 
 def declarations(candidate: Path) -> tuple[TaskDeclaration, ...]:
     result = tuple(
-        TaskDeclaration(item.name, item.entry)
-        for item in selection_declarations(candidate)
+        TaskDeclaration(item.name, item.entry) for item in selection_declarations(candidate)
     )
     names = [item.name for item in result]
     if len(names) != len(set(names)) or "GAME_START" not in names:
@@ -84,9 +83,7 @@ def parse_expected_terminals(
 ) -> dict[str, NativeTaskState]:
     expected = {task.upper() for task in expected_tasks}
     seen: set[str] = set()
-    parsed: dict[str, NativeTaskState] = {
-        task.upper(): "Succeeded" for task in expected_tasks
-    }
+    parsed: dict[str, NativeTaskState] = {task.upper(): "Succeeded" for task in expected_tasks}
     for value in values:
         task_id, state = _parse_expected_terminal(value)
         if task_id not in expected:
@@ -163,8 +160,10 @@ def begin_acceptance(
         if isinstance(blockers, list) and blockers:
             raise ValueError(f"selection has scope blockers: {blockers!r}")
         raw_selected = selection.get("selected_tasks")
-        if not isinstance(raw_selected, list) or not raw_selected or not all(
-            isinstance(item, str) and item.strip() for item in raw_selected
+        if (
+            not isinstance(raw_selected, list)
+            or not raw_selected
+            or not all(isinstance(item, str) and item.strip() for item in raw_selected)
         ):
             raise ValueError("selection.selected_tasks must be a non-empty string list")
         snapshot = tuple(item.strip() for item in raw_selected)
@@ -242,9 +241,7 @@ def _suffix_with_rotation(
         except ValueError:
             started_timestamp = None
         if started_timestamp is not None:
-            backups = [
-                path for path in backups if path.stat().st_mtime >= started_timestamp
-            ]
+            backups = [path for path in backups if path.stat().st_mtime >= started_timestamp]
     if backups:
         # The ticket offset belongs to the pre-rotation main file.  The first
         # backup contains its continuation; later backups are complete files.
@@ -322,17 +319,27 @@ def finish_acceptance(ticket_path: Path, *, partial: bool = False) -> Path:
     executed = tuple(name for name in GUI_TASK_PATTERN.findall(gui_text) if name in declared_names)
     errors: list[str] = []
     if executed != ticket.expected_tasks:
-        message = (
-            f"exact task order mismatch: expected={ticket.expected_tasks}, actual={executed}"
-        )
+        message = f"exact task order mismatch: expected={ticket.expected_tasks}, actual={executed}"
         if not partial:
             raise ValueError(message)
         errors.append(message)
     events = parse_native_terminal_events(maafw_text, ticket.entries)
+    # Maa 5.12.3 can emit Succeeded when post_stop cancels a task before
+    # its first node. Preserve that raw terminal, but do not accept it as
+    # execution. This rejects the observed empty-success failure mode;
+    # task-specific business completion still needs its pipeline predicates.
+    action_task_ids = {
+        int(match.group(1))
+        for line in maafw_text.splitlines()
+        if "[msg=Node.Action.Succeeded]" in line
+        if (match := re.search(r'"task_id"\s*:\s*(\d+)', line))
+    }
     task_records: dict[str, dict[str, str]] = {}
     for task_id in ticket.expected_tasks:
         try:
             event = _event_for_task(task_id, ticket, events)
+            if event.state == "Succeeded" and event.native_task_id not in action_task_ids:
+                raise ValueError(f"{task_id}: native Succeeded without any successful node action")
         except ValueError as exc:
             if not partial:
                 raise

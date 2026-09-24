@@ -20,17 +20,13 @@ from tests.mfw.task_contract import (
     load_task_nodes,
 )
 
-
 EQUIPMENT = TaskContract(
     "EQUIPMENT_DECOMPOSE_DAILY",
     "daily/equipment_decompose_daily.json",
 )
 ROOT = Path(__file__).parents[3]
 PIPELINE_PATH = ROOT / "assets/resource/base/pipeline" / EQUIPMENT.pipeline_file
-FIXTURE_PATH = (
-    ROOT
-    / "tests/fixtures/EQUIPMENT_DECOMPOSE_DAILY/20260824_reward_popup.json"
-)
+FIXTURE_PATH = ROOT / "tests/fixtures/EQUIPMENT_DECOMPOSE_DAILY/20260824_reward_popup.json"
 
 
 def _local_nodes() -> dict[str, dict[str, object]]:
@@ -59,7 +55,11 @@ def test_equipment_decompose_task_has_the_native_terminal_contract() -> None:
     assert_on_error_contract(
         local,
         local_nodes=set(local),
-        shared_targets={"1365-公共-主页边界-失败", "1371-公共-原生成功-主页边界"},
+        shared_targets={
+            "1365-公共-主页边界-失败",
+            "1371-公共-原生成功-主页边界",
+            "MJA-公共-原生失败-返回主页",
+        },
     )
     assert_native_failure_node(local["0479-分解装备-记录-失败"])
     assert_native_success_node(nodes["1369-公共-通用停止"])
@@ -105,9 +105,7 @@ def test_equipment_success_closes_before_deferred_home_boundary() -> None:
         "box_index": 1,
     }
     assert reward_probe["next"] == ["0475-分解装备-关闭-奖励"]
-    assert reward_probe["on_error"] == [
-        "0451-分解装备-无可分解-已完成"
-    ]
+    assert reward_probe["on_error"] == ["MJA-公共-原生失败-返回主页"]
     reward_close = nodes["0475-分解装备-关闭-奖励"]
     assert reward_close["action"] == "Click"
     assert reward_close["recognition"]["param"] == {
@@ -192,9 +190,7 @@ def test_equipment_success_requires_reward_title_and_close_hint_in_one_frame() -
         "box_index": 1,
     }
     assert "点击空白处关闭" not in reward_title["expected"]
-    assert nodes["0475-分解装备-关闭-奖励"]["next"] == [
-        "0476-分解装备-关闭"
-    ]
+    assert nodes["0475-分解装备-关闭-奖励"]["next"] == ["0476-分解装备-关闭"]
 
 
 def test_equipment_20260824_reward_popup_matches_the_same_frame_contract() -> None:
@@ -220,12 +216,10 @@ def test_equipment_20260824_reward_popup_matches_the_same_frame_contract() -> No
         "0473-分解装备-装备-分解-成功",
         "0038-公共-已知-点击空白关闭",
     ]
-    assert nodes["0450-分解装备-之后-确认-探测"]["recognition"]["param"][
-        "all_of"
-    ] == expected_anchors
-    assert nodes["0475-分解装备-关闭-奖励"]["recognition"]["param"][
-        "all_of"
-    ] == expected_anchors
+    assert (
+        nodes["0450-分解装备-之后-确认-探测"]["recognition"]["param"]["all_of"] == expected_anchors
+    )
+    assert nodes["0475-分解装备-关闭-奖励"]["recognition"]["param"]["all_of"] == expected_anchors
 
 
 def test_equipment_without_eligible_items_is_already_complete_and_returns_home() -> None:

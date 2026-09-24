@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).parents[2]
@@ -20,6 +21,8 @@ SHARED_HOME_PROBES = {
 
 def test_daily_home_probes_share_the_startup_task_ready_surface() -> None:
     for path in sorted(DAILY_PIPELINE_ROOT.glob("*.json")):
+        if path.name.startswith("._"):
+            continue
         pipeline = json.loads(path.read_text(encoding="utf-8"))
         for name, node in pipeline.items():
             if name not in SHARED_HOME_PROBES:
@@ -39,6 +42,7 @@ def test_daily_home_probes_share_the_startup_task_ready_surface() -> None:
     discovered = {
         name
         for path in DAILY_PIPELINE_ROOT.glob("*.json")
+        if not path.name.startswith("._")
         for name in json.loads(path.read_text(encoding="utf-8"))
         if name in SHARED_HOME_PROBES
     }
@@ -55,7 +59,7 @@ def test_public_home_surface_uses_bottom_right_victory_text_only() -> None:
     public_home = resource["0026-公共-游戏主页-页面"]
     assert public_home == {
         "recognition": "OCR",
-        "expected": ["已击破", "侠客", "道具", "载具", "成就"],
+        "expected": ["已击破"],
         "roi": [920, 540, 220, 100],
         "action": "DoNothing",
     }
@@ -68,3 +72,18 @@ def test_public_home_surface_uses_bottom_right_victory_text_only() -> None:
     assert world_page["template"] == "home/home_marker.png"
     assert world_page["roi"] == [1040, 0, 240, 110]
     assert world_page != public_home
+
+
+def test_home_marker_rejects_function_panel_text_from_cleanup_failure() -> None:
+    resource = json.loads(
+        (ROOT / "assets/resource/base/pipeline/common/home_recovery.json").read_text()
+    )
+    expected = resource["0026-公共-游戏主页-页面"]["expected"]
+    # Native OCR in the same ROI: the open panel returned 帮会/载具,
+    # while the unobstructed world returned 已击破：600层/试剑.
+    def matches(texts: list[str]) -> bool:
+        return any(re.search(pattern, text) for pattern in expected for text in texts)
+
+    assert matches(["已击破：600层", "试剑"])
+    assert not matches(["帮会", "载具"])
+    assert not matches(["侠客", "道具", "成就"])

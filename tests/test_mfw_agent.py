@@ -122,21 +122,22 @@ def test_guarded_input_opens_appraisal_at_fixed_home_navigation_anchor():
         "fixed_click_mode": "appraisal_home_button",
         "evidence": {
             "page_index": 0,
-            "target_index": 1,
+            "target_index": 2,
             "page_name": "0026-公共-游戏主页-页面",
-            "target_name": "0500-免费鉴定-鉴定-主页-页面",
+            "target_name": "0501-免费鉴定-鉴定-主页-入口",
         },
     }
     argv = FakeArgv(
         json.dumps(payload),
         reco_detail=and_reco(
             hit_reco("0026-公共-游戏主页-页面", (1030, 565, 90, 14)),
-            hit_reco("0500-免费鉴定-鉴定-主页-页面", (970, 63, 32, 19)),
+                hit_reco("0500-免费鉴定-鉴定-主页-页面", (846, 66, 31, 14)),
+                hit_reco("0501-免费鉴定-鉴定-主页-入口", (748, 666, 42, 24)),
         ),
     )
 
     assert GuardedInput().run(context, argv) is True
-    assert context.tasker.controller.actions == [("click", (917, 70))]
+    assert context.tasker.controller.actions == [("click", (765, 657))]
 
 
 def test_guarded_input_assigns_sweep_ticket_at_fixed_plus_anchor_without_ticket_ocr():
@@ -473,7 +474,7 @@ def test_guarded_input_uses_separate_safe_blank_area_for_shadow_reward_dismissal
     )
 
     assert GuardedInput().run(context, argv) is True
-    assert context.tasker.controller.actions == [("click", (650, 677))]
+    assert context.tasker.controller.actions == [("click", (650, 555))]
 
 
 def test_guarded_input_accepts_named_same_index_shadow_reward_evidence():
@@ -498,7 +499,7 @@ def test_guarded_input_accepts_named_same_index_shadow_reward_evidence():
     )
 
     assert GuardedInput().run(context, argv) is True
-    assert context.tasker.controller.actions == [("click", (650, 677))]
+    assert context.tasker.controller.actions == [("click", (650, 555))]
 
 
 def test_guarded_input_uses_named_shadow_stage_entry_button():

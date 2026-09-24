@@ -186,6 +186,9 @@ def load_pipeline_nodes(root: Path) -> dict[str, dict[str, Any]]:
         raise FileNotFoundError(root)
     nodes: dict[str, dict[str, Any]] = {}
     for path in sorted(root.rglob("*.json")):
+        # macOS creates binary AppleDouble sidecars on external volumes.
+        if path.name.startswith("._"):
+            continue
         payload = json.loads(path.read_text(encoding="utf-8"))
         if not isinstance(payload, dict):
             raise ValueError(f"pipeline file must contain an object: {path}")
@@ -337,7 +340,10 @@ def _is_home_entry_node(name: str, node: Mapping[str, Any]) -> bool:
         return False
     if any(
         marker in upper
-        for marker in ("UNKNOWN", "FAIL", "ABORT", "CLOSE", "EXIT", "未知", "失败", "中止", "关闭", "退出")
+        for marker in (
+            "UNKNOWN", "FAIL", "ABORT", "CLOSE", "EXIT",
+            "未知", "失败", "中止", "关闭", "退出",
+        )
     ):
         return False
     if node.get("action") == "StopTask" or node.get("custom_action") in {
@@ -629,6 +635,8 @@ def check_task_entry_contracts(
     all_nodes = nodes if nodes is not None else load_pipeline_nodes(graph_root)
     diagnostics: list[TaskEntryDiagnostic] = []
     for path in sorted(daily_root.glob("*.json")):
+        if path.name.startswith("._"):
+            continue
         local_nodes = _load_task_file_nodes(path)
         task_file = path.relative_to(graph_root).as_posix()
         entry_nodes = _entry_candidates(local_nodes)
@@ -801,7 +809,7 @@ def validate_on_error_topology(pipeline_root: Path) -> list[str]:
     """Reject empty, external, or cross-task error routes in the resource tree."""
 
     pipeline_root = Path(pipeline_root)
-    files = sorted(pipeline_root.rglob("*.json"))
+    files = sorted(p for p in pipeline_root.rglob("*.json") if not p.name.startswith("._"))
     shared_names: set[str] = set()
     for path in files:
         if path.parent.name != "daily":

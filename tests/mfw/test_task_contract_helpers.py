@@ -2,16 +2,16 @@ from __future__ import annotations
 
 import pytest
 
+from tests.mfw.pipeline_assertions import assert_native_failure_node
 from tests.mfw.task_contract import (
     assert_battle_result_partition,
     assert_condition,
+    assert_loop_bound,
     assert_no_side_effect_retry,
     assert_ordered_actions,
     assert_resource_guard,
     assert_shared_resource_budget,
-    assert_loop_bound,
 )
-from tests.mfw.pipeline_assertions import assert_native_failure_node
 
 
 def _guarded(action_id: str, *, on_error: list[str] | None = None) -> dict:

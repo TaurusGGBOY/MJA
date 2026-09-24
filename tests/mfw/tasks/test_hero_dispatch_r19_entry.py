@@ -113,12 +113,13 @@ def test_dispatch_inputs_have_no_recorder_retry_and_keep_policy_caps() -> None:
         assert_no_side_effect_retry(nodes, action_id)
     assert nodes["0722-英雄派遣-初始-领取"]["max_hit"] == 12
     assert nodes["0724-英雄派遣-初始-选择"]["max_hit"] == 12
-    assert nodes["0723-英雄派遣-初始-领取-动作"]["max_hit"] == 6
+    assert nodes["0723-英雄派遣-初始-领取-动作"]["max_hit"] == 12
     assert nodes["0728-英雄派遣-配置"]["max_hit"] == 12
     assert nodes["0729-英雄派遣-发送"]["max_hit"] == 12
     assert nodes["0728-英雄派遣-配置"]["on_error"] == ["0729-英雄派遣-发送"]
     assert policy.action_caps["select_first_visible_dispatch"] == 12
-    assert policy.action_caps["claim_first_dispatch"] == 6
+    assert policy.action_caps["claim_first_dispatch"] == 12
+    assert policy.action_caps["close_reward_popup"] == 12
     assert policy.action_caps["smart_configure_team"] == 12
     assert policy.action_caps["dispatch_team"] == 12
 

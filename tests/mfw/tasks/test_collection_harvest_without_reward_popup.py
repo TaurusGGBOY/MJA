@@ -5,7 +5,6 @@ from pathlib import Path
 
 from tests.mfw.task_contract import TaskContract
 
-
 COLLECTION = TaskContract(
     "COLLECTION_DEPLOYMENT_DAILY",
     "daily/collection_deployment_daily.json",

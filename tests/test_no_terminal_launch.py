@@ -3,7 +3,6 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
-
 ROOT = Path(__file__).parents[1]
 RUNTIME_ROOTS = (ROOT / "agent", ROOT / "tools", ROOT / "native", ROOT / "assets")
 RUNTIME_SUFFIXES = {".json", ".plist", ".py", ".sh", ".toml", ".yaml", ".yml", ".zsh"}
