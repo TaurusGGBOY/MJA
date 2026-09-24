@@ -39,11 +39,9 @@ def test_r20_start_opens_battle_pass_directly_from_home() -> None:
 def test_r20_home_icon_is_gated_by_the_shared_home_surface() -> None:
     nodes = load_task_nodes(BATTLE_PASS)
     assert nodes["0075-战令奖励-战斗-战令-打开"] == {
-        "recognition": "TemplateMatch",
-        "template": "daily/BATTLE_PASS_REWARD_DAILY/battle_pass_icon.png",
-        "roi": [735, 10, 100, 90],
-        "threshold": 0.8,
-        "green_mask": True,
+        "recognition": "OCR",
+        "expected": "^战令$",
+        "roi": [820, 40, 120, 60],
         "action": "DoNothing",
     }
     opened = nodes["0044-战令奖励-打开-战斗-战令"]
@@ -52,6 +50,9 @@ def test_r20_home_icon_is_gated_by_the_shared_home_surface() -> None:
         "box_index": 1,
     }
     assert opened["next"] == ["0046-战令奖励-打开-任务"]
+
+    page = nodes["0070-战令奖励-战斗-战令-主页-页面"]
+    assert page["recognition"]["param"]["all_of"] == ["0026-公共-游戏主页-页面"]
 
 
 def test_r20_task_reward_claim_is_optional_and_bounded() -> None:

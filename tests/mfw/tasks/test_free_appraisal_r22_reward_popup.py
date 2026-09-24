@@ -199,8 +199,8 @@ def test_r22_reward_close_is_same_frame_guarded_and_every_input_is_capped_once()
         },
     }
     assert close["next"] == [
-        "[JumpBack]0499-免费鉴定-额外-弹窗-关闭",
         "0493-MJA_APPRAISAL_VERIFY",
+        "[JumpBack]0499-免费鉴定-额外-弹窗-关闭",
         "0496-免费鉴定-主页-之后-奖励",
     ]
 
@@ -233,21 +233,24 @@ def test_r22_post_close_accepts_only_used_once_state_or_explicit_home() -> None:
     used = nodes["0509-appraisal.used"]
     assert used == {
         "recognition": "OCR",
-        "expected": ["^鉴宝一次$", "^80$"],
-        "roi": [430, 540, 260, 130],
+        "expected": ["^鉴?宝一次$", "^80$"],
+        "roi": [430, 590, 260, 55],
         "action": "DoNothing",
     }
     assert "免费" not in used["expected"]
     home_entry = nodes["0501-免费鉴定-鉴定-主页-入口"]
-    assert home_entry["expected"] == ["^鉴宝$", "^宝$"]
-    assert home_entry["roi"] == [850, 30, 130, 70]
+    assert home_entry["expected"] == "^秘宝$"
+    assert home_entry["roi"] == [700, 600, 140, 100]
     assert nodes["0502-免费鉴定-鉴定-页面"]["roi"] == [0, 0, 300, 100]
     assert nodes["0493-MJA_APPRAISAL_VERIFY"]["recognition"]["param"] == {
         "all_of": ["0502-免费鉴定-鉴定-页面", "0509-appraisal.used"],
         "box_index": 1,
     }
     assert nodes["0493-MJA_APPRAISAL_VERIFY"]["next"] == ["0494-免费鉴定-关闭-成功-页面"]
-    assert nodes["0494-免费鉴定-关闭-成功-页面"]["next"] == ["0495-免费鉴定-主页成功后"]
+    assert nodes["0494-免费鉴定-关闭-成功-页面"]["next"] == [
+        "[JumpBack]0522-免费鉴定-关闭-秘宝目录",
+        "0495-免费鉴定-主页成功后",
+    ]
     assert nodes["0495-免费鉴定-主页成功后"]["next"] == ["0498-免费鉴定-成功"]
 
     reward_home = nodes["0496-免费鉴定-主页-之后-奖励"]
@@ -354,3 +357,16 @@ def test_r22_migrated_pipeline_has_native_terminals_and_local_recovery_only() ->
         "close_extra_reward_popup",
     ):
         assert_no_side_effect_retry(scoped, action_id)
+
+
+def test_free_button_does_not_match_daily_explanatory_text():
+    import re
+    nodes = load_task_nodes(APPRAISAL)
+    free = nodes["0508-免费鉴定-鉴定-免费-一次"]
+    assert re.search(free["expected"], "免费鉴宝")
+    for text in ("每日赠送一次免费鉴宝", "日赠送一次免费鉴宝", "鉴宝一次", "宝一次"):
+        assert not re.search(free["expected"], text)
+    assert free["roi"][1] > 589  # Exclude the observed explanatory label.
+    used = nodes["0509-appraisal.used"]["expected"]
+    assert any(re.search(pattern, "宝一次") for pattern in used)
+    assert not any(re.search(pattern, "免费鉴宝") for pattern in used)

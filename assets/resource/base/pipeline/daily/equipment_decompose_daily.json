@@ -12,10 +12,17 @@
     "action": "Custom",
     "max_hit": 2,
     "custom_action": "BeginTask",
-    "custom_action_param": {"task_id": "EQUIPMENT_DECOMPOSE_DAILY"},
+    "custom_action_param": {
+      "task_id": "EQUIPMENT_DECOMPOSE_DAILY"
+    },
     "timeout": 5000,
-    "on_error": ["MJA-任务入口失败-EQUIPMENT_DECOMPOSE_DAILY", "MJA-公共-任务入口-恢复耗尽"],
-    "next": ["0439-分解装备-打开-资源"],
+    "on_error": [
+      "MJA-任务入口失败-EQUIPMENT_DECOMPOSE_DAILY",
+      "MJA-公共-任务入口-恢复耗尽"
+    ],
+    "next": [
+      "0439-分解装备-打开-资源"
+    ],
     "retry_times": 0
   },
   "0439-分解装备-打开-资源": {
@@ -44,8 +51,13 @@
       }
     },
     "timeout": 5000,
-    "on_error": ["MJA-任务入口失败-EQUIPMENT_DECOMPOSE_DAILY", "MJA-公共-任务入口-恢复耗尽"],
-    "next": ["0440-分解装备-打开-库存"],
+    "on_error": [
+      "MJA-任务入口失败-EQUIPMENT_DECOMPOSE_DAILY",
+      "MJA-公共-任务入口-恢复耗尽"
+    ],
+    "next": [
+      "0440-分解装备-打开-库存"
+    ],
     "retry_times": 0
   },
   "0440-分解装备-打开-库存": {
@@ -294,8 +306,12 @@
     },
     "post_delay": 500,
     "timeout": 5000,
-    "next": ["0449-分解装备-确认-最终"],
-    "on_error": ["0448-分解装备-无可分解-探测"],
+    "next": [
+      "0449-分解装备-确认-最终"
+    ],
+    "on_error": [
+      "0448-分解装备-无可分解-探测"
+    ],
     "retry_times": 0
   },
   "0448-分解装备-无可分解-探测": {
@@ -310,18 +326,24 @@
       }
     },
     "action": "DoNothing",
-    "next": ["0451-分解装备-无可分解-已完成"]
+    "next": [
+      "0451-分解装备-无可分解-已完成"
+    ]
   },
   "0451-分解装备-无可分解-已完成": {
     "recognition": "DirectHit",
     "action": "DoNothing",
-    "next": ["0452-分解装备-无可分解-关闭"]
+    "next": [
+      "0452-分解装备-无可分解-关闭"
+    ]
   },
   "0452-分解装备-无可分解-关闭": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["0462-分解装备-装备-分解-页面"],
+        "all_of": [
+          "0462-分解装备-装备-分解-页面"
+        ],
         "box_index": 0
       }
     },
@@ -342,7 +364,9 @@
     },
     "post_delay": 500,
     "timeout": 30000,
-    "next": ["0480-分解装备-无可分解-关闭装备页"]
+    "next": [
+      "0480-分解装备-无可分解-关闭装备页"
+    ]
   },
   "0480-分解装备-无可分解-关闭装备页": {
     "recognition": {
@@ -372,16 +396,24 @@
     },
     "post_delay": 500,
     "timeout": 5000,
-    "next": ["0453-分解装备-无可分解-主页-探测"],
+    "next": [
+      "0453-分解装备-无可分解-主页-探测"
+    ],
     "retry_times": 0
   },
   "0453-分解装备-无可分解-主页-探测": {
     "recognition": {
       "type": "And",
-      "param": {"all_of": ["0456-分解装备-装备-主页"]}
+      "param": {
+        "all_of": [
+          "0456-分解装备-装备-主页"
+        ]
+      }
     },
     "action": "DoNothing",
-    "next": ["1371-公共-原生成功-主页边界"]
+    "next": [
+      "1371-公共-原生成功-主页边界"
+    ]
   },
   "0454-分解装备-无可分解-重启": {
     "recognition": "DirectHit",
@@ -405,14 +437,18 @@
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["0026-公共-游戏主页-页面"],
+        "all_of": [
+          "0026-公共-游戏主页-页面"
+        ],
         "box_index": 0
       }
     },
     "timeout": 30000,
     "max_hit": 1,
     "action": "DoNothing",
-    "next": ["1371-公共-原生成功-主页边界"]
+    "next": [
+      "1371-公共-原生成功-主页边界"
+    ]
   },
   "0449-分解装备-确认-最终": {
     "recognition": {
@@ -440,7 +476,9 @@
       }
     },
     "post_delay": 1000,
-    "next": ["0450-分解装备-之后-确认-探测"],
+    "next": [
+      "0450-分解装备-之后-确认-探测"
+    ],
     "retry_times": 0
   },
   "0450-分解装备-之后-确认-探测": {
@@ -455,14 +493,20 @@
       }
     },
     "action": "DoNothing",
-    "next": ["0475-分解装备-关闭-奖励"],
-    "on_error": ["0451-分解装备-无可分解-已完成"]
+    "next": [
+      "0475-分解装备-关闭-奖励"
+    ],
+    "on_error": [
+      "MJA-公共-原生失败-返回主页"
+    ]
   },
   "0478-分解装备-分解-成功": {
     "recognition": "DirectHit",
     "action": "DoNothing",
     "timeout": 8000,
-    "next": ["1371-公共-原生成功-主页边界"]
+    "next": [
+      "1371-公共-原生成功-主页边界"
+    ]
   },
   "0476-分解装备-关闭": {
     "recognition": {
@@ -491,7 +535,9 @@
       }
     },
     "post_delay": 500,
-    "next": ["0482-分解装备-成功-关闭装备页"],
+    "next": [
+      "0482-分解装备-成功-关闭装备页"
+    ],
     "retry_times": 0
   },
   "0482-分解装备-成功-关闭装备页": {
@@ -522,16 +568,24 @@
     },
     "post_delay": 500,
     "timeout": 5000,
-    "next": ["0477-分解装备-主页-之后-关闭"],
+    "next": [
+      "0477-分解装备-主页-之后-关闭"
+    ],
     "retry_times": 0
   },
   "0477-分解装备-主页-之后-关闭": {
     "recognition": {
       "type": "And",
-      "param": {"all_of": ["0456-分解装备-装备-主页"]}
+      "param": {
+        "all_of": [
+          "0456-分解装备-装备-主页"
+        ]
+      }
     },
     "action": "DoNothing",
-    "next": ["0478-分解装备-分解-成功"]
+    "next": [
+      "0478-分解装备-分解-成功"
+    ]
   },
   "0479-分解装备-记录-失败": {
     "recognition": "DirectHit",

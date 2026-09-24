@@ -226,6 +226,7 @@
       "0519-帮派活动挑战-零次-奖励检查"
     ],
     "timeout": 8000,
+    "pre_delay": 1000,
     "post_delay": 1000,
     "retry_times": 0
   },

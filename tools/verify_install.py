@@ -48,9 +48,7 @@ def _walk_strings(value: Any) -> Iterable[str]:
 
 def _referenced_paths(payload: Any) -> Iterable[str]:
     for value in _walk_strings(payload):
-        if value.startswith(("resource/", "resource\\")) or value.endswith(
-            (".png", ".json")
-        ):
+        if value.startswith(("resource/", "resource\\")) or value.endswith((".png", ".json")):
             yield value.replace("\\", "/")
 
 
@@ -153,7 +151,9 @@ def _template_contract_errors(resource_root: Path) -> list[str]:
                 (parent for parent in path.parents if parent.name == "pipeline"),
                 None,
             )
-            image_root = pipeline_root.parent / "image" if pipeline_root else resource_root / "image"
+            image_root = (
+                pipeline_root.parent / "image" if pipeline_root else resource_root / "image"
+            )
             image_path = image_root / template
             try:
                 with Image.open(image_path) as image:
@@ -272,8 +272,7 @@ def verify_patched_control_unit(
             )
         if digest != expected_digest:
             errors.append(
-                f"{label} control-unit SHA-256 mismatch: "
-                f"expected {expected_digest}, got {digest}"
+                f"{label} control-unit SHA-256 mismatch: expected {expected_digest}, got {digest}"
             )
 
     for label, path in present:

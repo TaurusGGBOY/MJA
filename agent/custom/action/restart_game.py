@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import traceback
 from collections.abc import Mapping
 from numbers import Integral
 from time import sleep
@@ -12,6 +13,7 @@ from maa.agent.agent_server import AgentServer
 from maa.custom_action import CustomAction
 
 from agent.custom.support.controller_input import _wait_job
+from agent.custom.support.crash_evidence import capture, emit
 
 GAME_PACKAGE = "com.hanjiasongshu.dr22"
 GAME_ACTIVITY = "com.hanjiasongshu.dr22/.MainActivity"
@@ -111,12 +113,10 @@ def _start_timeout_seconds(params: Mapping[str, Any]) -> float:
 class RestartGameSurface(CustomAction):
     """Relaunch only the configured game package.
 
-    Startup invariant: Android/Unity may kill the newly started surface about
-    0.7 seconds after ``post_start_app`` returns.  Therefore startup recovery
-    must use five starts spaced one second apart.  This is not an optional
-    retry optimization: one start can report success while the game process
-    has already been killed, so reducing the count can recreate the false
-    startup-success failure.
+    A successful controller launch only confirms that Android accepted the
+    request. The native startup pipeline must observe the game home before
+    declaring success. Repeated launches do not establish process liveness;
+    the startup flow uses one launch and at most one observed recovery.
 
     The action is intentionally narrow: it is used after the live
     ``蜃影武墟`` card-list surface has been recognized and has ignored both
@@ -140,13 +140,16 @@ class RestartGameSurface(CustomAction):
             start_timeout_seconds = _start_timeout_seconds(params)
             start_repeat = _start_repeat(params)
             start_repeat_delay_seconds = _start_repeat_delay_seconds(params)
-
             controller = context.tasker.controller
             stop_app = getattr(controller, "post_stop_app", None)
             start_app = getattr(controller, "post_start_app", None)
             if not callable(start_app) or (force_stop and not callable(stop_app)):
                 return False
 
+            capture("before_game_recovery", task_id=getattr(context, "task_id", None),
+                    node=getattr(argv, "node_name", None), force_stop=force_stop)
+            emit("game_recovery_requested", task_id=getattr(context, "task_id", None),
+                 force_stop=force_stop)
             if force_stop:
                 _wait_job(stop_app(package))
                 sleep(cooldown_seconds)
@@ -156,7 +159,8 @@ class RestartGameSurface(CustomAction):
                 _wait_job(
                     start_app(activity), timeout_seconds=start_timeout_seconds
                 )
-        except Exception:
+        except Exception as exc:
+            emit("game_recovery_exception", error=repr(exc), traceback=traceback.format_exc())
             return False
         return True
 

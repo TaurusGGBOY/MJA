@@ -19,6 +19,16 @@ from tools.mfw_profile import profile_task_order, resolve_config_id
 from tools.mfw_release import ReleaseAsset
 
 
+def test_fresh_archive_without_config_disables_gui_updates(tmp_path):
+    import json
+
+    from tools.mfw_install import _disable_mfw_auto_update
+
+    _disable_mfw_auto_update(tmp_path)
+    config = json.loads((tmp_path / "config/config.json").read_text())
+    assert config["Update"]["auto_update"] is False
+
+
 def _write_zip(path: Path, files: dict[str, bytes]) -> Path:
     with zipfile.ZipFile(path, "w") as bundle:
         for name, payload in files.items():
@@ -28,26 +38,18 @@ def _write_zip(path: Path, files: dict[str, bytes]) -> Path:
 
 def _assert_startup_payload(candidate: Path) -> None:
     startup = json.loads(
-        (candidate / "resource/base/pipeline/startup/game_start.json").read_text(
-            encoding="utf-8"
-        )
+        (candidate / "resource/base/pipeline/startup/game_start.json").read_text(encoding="utf-8")
     )
     shutdown = json.loads(
-        (candidate / "resource/base/pipeline/startup/game_stop.json").read_text(
-            encoding="utf-8"
-        )
+        (candidate / "resource/base/pipeline/startup/game_stop.json").read_text(encoding="utf-8")
     )
     task_file = json.loads((candidate / "tasks/游戏启动.json").read_text(encoding="utf-8"))
 
     assert "1356-启动-游戏启动" in startup
     assert "0024-启动-游戏停止" not in startup
-    assert not any(
-        key.startswith("MJA_GAME_BACK_") or "UNKNOWN_ABORT" in key for key in startup
-    )
+    assert not any(key.startswith("MJA_GAME_BACK_") or "UNKNOWN_ABORT" in key for key in startup)
     assert all(
-        node.get("action") != "StopApp"
-        for node in startup.values()
-        if isinstance(node, dict)
+        node.get("action") != "StopApp" for node in startup.values() if isinstance(node, dict)
     )
     assert shutdown["0024-启动-游戏停止"] == {
         "action": "StopApp",
@@ -176,8 +178,12 @@ def current_runtime_archives(
     return (
         mfw_archive,
         maa_archive,
-        ReleaseAsset("mfw/repo", "v-current", "MFW-current.zip", "https://example.test/MFW-current.zip"),
-        ReleaseAsset("maa/repo", "v-current", "MAA-current.zip", "https://example.test/MAA-current.zip"),
+        ReleaseAsset(
+            "mfw/repo", "v-current", "MFW-current.zip", "https://example.test/MFW-current.zip"
+        ),
+        ReleaseAsset(
+            "maa/repo", "v-current", "MAA-current.zip", "https://example.test/MAA-current.zip"
+        ),
     )
 
 
@@ -303,9 +309,7 @@ def test_build_install_generates_registered_pair_profiles_for_all_active_tasks(
         maa_archive=maa_archive,
     )
 
-    registry = json.loads(
-        (candidate / "config/multi_config.json").read_text(encoding="utf-8")
-    )
+    registry = json.loads((candidate / "config/multi_config.json").read_text(encoding="utf-8"))
     for task_id in active_tasks:
         profile_name = f"MJA auto GAME_START+{task_id}"
         config_id = resolve_config_id(candidate, profile_name)
@@ -433,7 +437,7 @@ def test_embedded_mfw_decorator_rewrite_does_not_break_payload_verification(
     action.write_text(
         "from maa.agent.agent_server import AgentServer\n"
         "from maa.custom_action import CustomAction\n\n"
-        "@AgentServer.custom_action(\"EmbeddedProbe\")\n"
+        '@AgentServer.custom_action("EmbeddedProbe")\n'
         "class EmbeddedProbe(CustomAction):\n"
         "    pass\n",
         encoding="utf-8",
@@ -475,7 +479,7 @@ def test_embedded_mfw_custom_recognition_rewrite_does_not_break_payload_verifica
     recognition.write_text(
         "from maa.agent.agent_server import AgentServer\n"
         "from maa.custom_recognition import CustomRecognition\n\n"
-        "@AgentServer.custom_recognition(\"EmbeddedProbe\")\n"
+        '@AgentServer.custom_recognition("EmbeddedProbe")\n'
         "class EmbeddedProbe(CustomRecognition):\n"
         "    pass\n",
         encoding="utf-8",
@@ -510,18 +514,21 @@ def test_embedded_mfw_custom_recognition_rewrite_does_not_break_payload_verifica
     assert verify_candidate(repo_fixture, candidate) == metadata
 
 
-def test_embedded_mfw_tasker_sink_rewrite_does_not_break_payload_verification(
+@pytest.mark.parametrize("kind", ["tasker", "context"])
+def test_embedded_mfw_sink_rewrite_does_not_break_payload_verification(
+    kind: str,
     repo_fixture: Path,
     runtime_archives: tuple[Path, Path, ReleaseAsset, ReleaseAsset],
     tmp_path: Path,
 ) -> None:
+    sink_class = "TaskerEventSink" if kind == "tasker" else "ContextEventSink"
     sink = repo_fixture / "agent/custom/sink/embedded_probe.py"
     sink.parent.mkdir(parents=True)
     sink.write_text(
         "from maa.agent.agent_server import AgentServer\n"
-        "from maa.tasker import TaskerEventSink\n\n"
-        "@AgentServer.tasker_sink()\n"
-        "class EmbeddedSink(TaskerEventSink):\n"
+        f"from maa.{kind} import {sink_class}\n\n"
+        f"@AgentServer.{kind}_sink()\n"
+        f"class EmbeddedSink({sink_class}):\n"
         "    pass\n",
         encoding="utf-8",
     )
@@ -544,12 +551,16 @@ def test_embedded_mfw_tasker_sink_rewrite_does_not_break_payload_verification(
             "from maa.agent.agent_server import AgentServer\n",
             "",
         )
-        .replace("@AgentServer.tasker_sink()\n", ""),
+        .replace(f"@AgentServer.{kind}_sink()\n", ""),
         encoding="utf-8",
     )
 
     assert hash_project_payload(repo_fixture) == hash_project_payload(candidate)
     assert verify_candidate(repo_fixture, candidate) == metadata
+
+    installed.write_text(installed.read_text().replace("    pass", "    changed = True"))
+    with pytest.raises(ValueError, match="payload"):
+        verify_candidate(repo_fixture, candidate)
 
 
 def test_derived_candidate_preserves_runtime_and_replaces_project_payload(

@@ -19,7 +19,6 @@ from tests.mfw.task_contract import (
     load_task_nodes,
 )
 
-
 COLLECTION = TaskContract(
     "COLLECTION_DEPLOYMENT_DAILY",
     "daily/collection_deployment_daily.json",

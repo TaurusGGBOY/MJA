@@ -35,7 +35,7 @@ A task-local, UI-observable condition that tells the pipeline whether the reques
 _Avoid_: treating the predicate as a new task status or accepting a click merely because it was issued
 
 **Hero dispatch rule**:
-Process dispatch rows individually: a visible completion marker leads to selecting that row and claiming it; a visible elapsed-time marker leads to smart configuration and dispatching. If neither marker is recognized, wait for the node timeout and let the task-local `on_error` path end the task as native `Succeeded`, even when the dispatch entry page itself was not recognized.
+Process dispatch rows individually: a visible completion marker leads to selecting that row and claiming it; a visible elapsed-time marker leads to smart configuration and dispatching. Waiting completion requires the dispatch page, a positive running/countdown marker, and no actionable completion or duration marker in the current row. An unknown page or unrecognized state must not become native `Succeeded`.
 _Avoid_: treating the first completed row as completion of the whole dispatch task
 
 **Free appraisal rule**:
@@ -61,6 +61,9 @@ _Avoid_: treating entry into the region or opening the shop as a successful purc
 **Martial study completion rule**:
 Keep the existing martial-study entry path. On the study page, inspect only the first slot on the left for a visible “成功”, “成”, or “功” marker. If the marker is absent, treat the martial-study task as already complete and exit with native `Succeeded`; do not click the plus sign or enter an item-selection page. The “道具” entry belongs to the stamina-food task, not martial study.
 _Avoid_: using the stamina-food navigation path for martial study or treating absence of the success marker as a failure
+
+**Stamina-food completion rule**:
+Read the same item and quantity before each use, then require an exact decrease of one before another use. Six verified decreases or the scoped “吃得太撑” notice permit native success cleanup; six clicks alone do not. Quantity mismatch, missing confirmation, or an unknown page follows native failure cleanup.
 
 **Stamina-food entry rule**:
 The food task enters through the bottom “道具” label, then keeps the existing food-category → “龙井虾仁” → “使用” flow. The old home-page ColorMatch resource-entry probe is not the entry contract.
@@ -137,8 +140,8 @@ A leaf node that ends naturally as native MFW `Succeeded`, whether work was perf
 _Avoid_: outcome recorder, shared success sink, separate already-complete terminal
 
 **Task cleanup**:
-A best-effort return to the game home page after business success is already established. Cleanup failure ends with `StopTask` and does not downgrade the task from native `Succeeded`.
-_Avoid_: home-boundary status, cleanup failure as task failure
+After business completion is established, return to the home page through bounded native recovery. Refactored paths reach the native success leaf only after the home-page predicate; failed cleanup must not masquerade as a successful handoff to the next daily task.
+_Avoid_: a parallel home-boundary status or converting an unverified business action into success during cleanup
 
 ## Run contract
 
@@ -147,7 +150,50 @@ _Avoid_: home-boundary status, cleanup failure as task failure
 - Treat only the fresh native terminal event as the verdict. Keep all other artifacts for diagnosis.
 - `WEEKLY_FREE_GIFT_DAILY` is runnable every day. If the game already shows the gift as claimed, the task still ends in native `Succeeded`.
 
+## Startup recovery observations
+
+- ADB `device` does not mean Android's framework is ready. The launcher checks both `sys.boot_completed` and the activity service for new and existing emulators, waits for a configurable elapsed-time window, and fails promptly if the emulator exits.
+- Startup preflight retries only ADB transport failures in idempotent checks, at most three times. Each retry must obtain and verify actual device state; persistent failures and emulator contract mismatches still block MFW startup.
+- A reproduced Pixel Launcher ANR can cover the game. The native startup pipeline matches the specific launcher title and the close-app button in the same frame, handles it at most once, then still requires the game-home predicate. Closing the Android dialog is not game-start success.
+
+## Native startup-block regression
+
+MaaFramework 5.12.3 can emit `Succeeded` when `post_stop` interrupts a newly submitted task before its first node. A real GUI run reproduced this for all queued daily tasks after failed `GAME_START`. The startup sink therefore temporarily routes subsequent entries through native `FailTask`, restores each original entry at its terminal event, and resets the block on an explicit new `GAME_START`. Ordinary business failures still allow later tasks. A real native no-input sentinel test checks Failed/zero business actions and recovery on a new run. Acceptance preserves raw native terminals but rejects `Succeeded` with no successful node action; this check does not replace task-specific business postconditions.
+
 ## 2026-09-11 user corrections
 
 - Hero dispatch must never depend on task names before/after scrolling. List review uses countdowns and actionable status markers; names may be missing or arbitrarily misrecognized without changing the result.
 - Dungeon history investigation: the user explicitly specified 风雪神道, 大师80级, two plus clicks and then 开始扫荡 on 2026-08-16. Commit ed71f10 (2026-08-23) replaced 风雪神道 with 燕王秘陵 while repairing false success, following an older workflow. That historical replacement contradicts the newer user instruction; do not treat the old 燕王秘陵 observations as current authorization. The dungeon pipeline is restored to 风雪神道 with exactly two master-row plus actions. Fresh native acceptance passed on 2026-09-11 at 09:53:58: two plus actions, recognized assigned count 2, start/confirm/reward-close, then home. Candidate: install/mfw-dungeon-fengxue-20260911-r2.
+
+## Tea shop category and monthly-card inventory
+
+Tea belongs to the **材料** category. A monthly card expands the inventory, so
+tea can be at the bottom of that list. Select 材料, search for the exact 茶叶
+label, and scroll inside the item grid with a bounded loop. Require the tea
+name again in the detail panel before opening its purchase control; generic
+当前拥有 text does not establish item identity. Keep the existing 500文 budget.
+
+## Appraisal and ring preparation cleanup
+
+After dismissing an appraisal reward, check the used/free-control state before
+trying another reward-close action: the regular page also displays 鉴宝一次.
+Closing the appraisal page may return to the 秘宝 catalog, which must also be
+closed before accepting the home boundary.
+
+A ring challenge can enter 战前准备. Recognize that page and 准备就绪 together,
+click readiness once per encounter, then resume the existing battle/result
+polling without issuing a second opponent challenge.
+
+The free-appraisal button must match `^免费鉴宝$` within its lower control
+region. The explanatory line 每日赠送一次免费鉴宝 is not a clickable free
+control. The used-state OCR accepts the observed 宝一次 missing-first-character
+variant only in that same button region, while retaining appraisal-page evidence.
+
+The ring battle's 跳过 control is at the upper right. The parent battle loop
+must wait through the visible two-minute combat timer (bounded at 180 seconds),
+rather than timing out after 30 seconds before the result can appear.
+
+Match the ring skip target with exact OCR 跳过. The skip dialog uses 确认,
+not 确定. After confirming, wait for the result page before returning to
+battle polling; otherwise the transition can queue another delayed skip
+click that lands on a different screen.

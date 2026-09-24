@@ -5,12 +5,12 @@ import json
 import re
 from pathlib import Path
 
+from agent.custom.support.policy import TASK_POLICIES
 from tests.mfw.pipeline_assertions import (
     assert_native_failure_node,
     assert_no_custom_outcome_nodes,
     assert_on_error_contract,
 )
-from agent.custom.support.policy import TASK_POLICIES
 from tests.mfw.task_contract import TaskContract, load_task_declaration
 from tools.check_mfw_resources import load_pipeline_nodes, validate_nodes
 
@@ -73,10 +73,13 @@ def test_entry_failure_uses_one_bounded_restart_before_native_failure() -> None:
     assert shared["MJA-公共-任务入口-恢复耗尽"]["Abort"] is True
 
     startup = json.loads(GAME_START_PATH.read_text(encoding="utf-8"))
-    assert startup["0023-启动-游戏入口"]["next"] == ["1356-启动-游戏启动"]
+    assert startup["0023-启动-游戏入口"]["next"][-2:] == [
+        "1362-启动-游戏就绪",
+        "1356-启动-游戏启动",
+    ]
     assert startup["1356-启动-游戏启动"]["action"] == "StartApp"
-    assert startup["1356-启动-游戏启动"]["repeat"] == 5
-    assert startup["1356-启动-游戏启动"]["next"][-1] == "1362-启动-游戏就绪"
+    assert startup["1356-启动-游戏启动"]["repeat"] == 1
+    assert startup["启动-等待游戏就绪"]["next"][-1] == "1362-启动-游戏就绪"
 
 
 def test_pipeline_has_native_terminals_and_no_legacy_outcome_routes() -> None:
@@ -106,18 +109,14 @@ def test_pipeline_has_native_terminals_and_no_legacy_outcome_routes() -> None:
         "next": ["0127-破阵武学-完成-收尾"],
     }
     assert nodes["0125-破阵武学-已完成"] == nodes["0124-破阵武学-成功"]
-    assert nodes["0130-破阵武学-完成-主页-探测"]["next"] == [
-        "1371-公共-原生成功-主页边界"
-    ]
+    assert nodes["0130-破阵武学-完成-主页-探测"]["next"] == ["1371-公共-原生成功-主页边界"]
 
     close_page = nodes["0128-破阵武学-完成-关闭-阵法"]
     assert close_page["recognition"]["param"] == {
         "all_of": ["0143-破阵武学-突破-阵法-页面"],
         "box_index": 0,
     }
-    assert close_page["custom_action_param"]["fixed_click_mode"] == (
-        "break_array_page_close"
-    )
+    assert close_page["custom_action_param"]["fixed_click_mode"] == ("break_array_page_close")
     assert close_page["custom_action_param"]["evidence"] == {
         "page_index": 0,
         "target_index": 0,
@@ -203,9 +202,7 @@ def test_2500_completion_marker_is_native_success() -> None:
 
 
 def test_prepare_fixture_matches_native_pipeline_recognizers() -> None:
-    fixture = json.loads(
-        (FIXTURE_ROOT / "r20_prepare_page.json").read_text(encoding="utf-8")
-    )
+    fixture = json.loads((FIXTURE_ROOT / "r20_prepare_page.json").read_text(encoding="utf-8"))
     nodes = _load_pipeline()
 
     for name in (
@@ -226,9 +223,7 @@ def test_prepare_fixture_matches_native_pipeline_recognizers() -> None:
 
 
 def test_confirm_transition_fixture_is_diagnostic_only() -> None:
-    fixture = json.loads(
-        (FIXTURE_ROOT / "r21_confirm_transition.json").read_text(encoding="utf-8")
-    )
+    fixture = json.loads((FIXTURE_ROOT / "r21_confirm_transition.json").read_text(encoding="utf-8"))
     observations = fixture["observations"]
     assert observations["dark_field_count"] >= observations["dark_field_threshold"]
     assert max(observations["rumor_glyph_counts"]) < observations["rumor_glyph_threshold"]
@@ -244,9 +239,7 @@ def test_confirm_transition_fixture_is_diagnostic_only() -> None:
 
 
 def test_victory_fixture_keeps_same_frame_anchors_and_native_cleanup() -> None:
-    fixture = json.loads(
-        (FIXTURE_ROOT / "r22_victory.json").read_text(encoding="utf-8")
-    )
+    fixture = json.loads((FIXTURE_ROOT / "r22_victory.json").read_text(encoding="utf-8"))
     nodes = _load_pipeline()
 
     for name in (
@@ -286,9 +279,7 @@ def test_victory_fixture_keeps_same_frame_anchors_and_native_cleanup() -> None:
             "target_name": "0168-破阵武学-突破-阵法-结果",
         },
     }
-    assert nodes["0130-破阵武学-完成-主页-探测"]["next"] == [
-        "1371-公共-原生成功-主页边界"
-    ]
+    assert nodes["0130-破阵武学-完成-主页-探测"]["next"] == ["1371-公共-原生成功-主页边界"]
 
 
 def test_selected_break_array_label_roi_covers_live_720p_position() -> None:

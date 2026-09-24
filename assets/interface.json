@@ -110,7 +110,6 @@
         {"name": "DUNGEON_SWEEP_DAILY", "enabled": true},
         {"name": "JIANLIN_RESOURCE_CONDENSATE_STAMINA_DAILY", "enabled": true},
         {"name": "RING_CHALLENGE_DAILY", "enabled": true},
-        {"name": "BREAK_ARRAY_MARTIAL_DAILY", "enabled": true},
         {"name": "GUILD_ACTIVITY_CHALLENGE_DAILY", "enabled": true},
         {"name": "GUILD_AFFAIRS_DAILY", "enabled": true},
         {"name": "GUILD_DONATION_DAILY", "enabled": true},

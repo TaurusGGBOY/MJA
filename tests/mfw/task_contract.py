@@ -9,11 +9,11 @@ from pathlib import Path
 from typing import Any
 
 from agent.custom.support.policy import TASK_POLICIES
-from tools.check_mfw_resources import load_pipeline_nodes
 from tests.mfw.pipeline_assertions import (
     assert_native_failure_node,
     assert_native_success_node,
 )
+from tools.check_mfw_resources import load_pipeline_nodes
 
 ROOT = Path(__file__).parents[2]
 

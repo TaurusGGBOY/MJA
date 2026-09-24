@@ -115,10 +115,12 @@ def _canonical_embedded_agent_source(relative: str, payload: bytes) -> bytes:
         return source.replace(resource_import, agent_import).replace(
             "@resource.custom_recognition(", "@AgentServer.custom_recognition("
         ).encode("utf-8")
-    if "@AgentServer.tasker_sink()" in source:
+    if any(f"@AgentServer.{kind}_sink()" in source for kind in ("tasker", "context")):
         return source.replace(f"    {agent_import}\n", "").replace(
             f"{agent_import}\n", ""
-        ).replace("@AgentServer.tasker_sink()\n", "").encode("utf-8")
+        ).replace("@AgentServer.tasker_sink()\n", "").replace(
+            "@AgentServer.context_sink()\n", ""
+        ).encode("utf-8")
     return payload
 
 

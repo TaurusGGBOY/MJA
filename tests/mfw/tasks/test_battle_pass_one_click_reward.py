@@ -7,7 +7,6 @@ from tests.mfw.task_contract import (
     load_task_nodes,
 )
 
-
 BATTLE_PASS = TaskContract(
     "BATTLE_PASS_REWARD_DAILY",
     "daily/battle_pass_reward_daily.json",

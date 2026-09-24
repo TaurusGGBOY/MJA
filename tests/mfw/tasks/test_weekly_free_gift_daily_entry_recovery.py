@@ -19,7 +19,6 @@ from tests.mfw.task_contract import (
 )
 from tools.mfw_task_selection import select_tasks
 
-
 ROOT = Path(__file__).resolve().parents[3]
 PIPELINE = ROOT / "assets/resource/base/pipeline/daily/weekly_free_gift_daily.json"
 WEEKLY = TaskContract("WEEKLY_FREE_GIFT_DAILY", "daily/weekly_free_gift_daily.json")
@@ -42,9 +41,7 @@ def test_weekly_gift_is_selectable_every_day() -> None:
 def test_weekly_entry_preserves_bounded_navigation_recovery() -> None:
     nodes = _pipeline()
 
-    assert nodes["0022-每周免费礼包-任务入口"]["next"] == [
-        "1336-每周免费礼包-打开-面板"
-    ]
+    assert nodes["0022-每周免费礼包-任务入口"]["next"] == ["1336-每周免费礼包-打开-面板"]
     assert nodes["0022-每周免费礼包-任务入口"]["timeout"] == 5000
     assert nodes["0022-每周免费礼包-任务入口"]["on_error"] == [
         "MJA-任务入口失败-WEEKLY_FREE_GIFT_DAILY",
@@ -58,9 +55,7 @@ def test_weekly_entry_preserves_bounded_navigation_recovery() -> None:
         assert nodes[name]["max_hit"] == 1
         assert nodes[name].get("retry_times", 0) == 0
         assert "on_error" not in nodes[name]
-    assert nodes["1339-每周免费礼包-打开-每周"]["on_error"] == [
-        "1345-每周免费礼包-关闭"
-    ]
+    assert nodes["1339-每周免费礼包-打开-每周"]["on_error"] == ["每周免费礼包-滚动查找免费卡"]
 
 
 def test_weekly_page_has_explicit_available_and_already_claimed_candidates() -> None:
@@ -80,7 +75,7 @@ def test_weekly_page_has_explicit_available_and_already_claimed_candidates() -> 
     claimed = nodes["1343-每周免费礼包-已完成"]
     assert claimed["recognition"]["param"]["all_of"] == [
         "1350-每周免费礼包-商店-每周-页面",
-        "1353-每周免费礼包-商店-每周-幸运-背包-已领取",
+        "每周免费礼包-已领取证据",
     ]
     assert claimed["next"] == ["1345-每周免费礼包-关闭"]
 
@@ -99,18 +94,11 @@ def test_weekly_success_candidates_use_native_cleanup() -> None:
     nodes = load_task_nodes(WEEKLY)
 
     assert nodes["1341-每周免费礼包-奖励-成功"]["action"] == "DoNothing"
-    assert nodes["1341-每周免费礼包-奖励-成功"]["next"] == [
-        "1342-每周免费礼包-关闭-奖励"
-    ]
-    assert nodes["1342-每周免费礼包-关闭-奖励"]["on_error"] == [
-        "1345-每周免费礼包-关闭"
-    ]
-    assert nodes["1345-每周免费礼包-关闭"]["next"] == [
-        "1346-每周免费礼包-完成-关闭-面板"
-    ]
-    assert nodes["1346-每周免费礼包-完成-关闭-面板"]["next"] == [
-        "1371-公共-原生成功-主页边界"
-    ]
+    assert nodes["1341-每周免费礼包-奖励-成功"]["next"] == ["1342-每周免费礼包-关闭-奖励"]
+    assert nodes["1342-每周免费礼包-关闭-奖励"]["on_error"] == ["1343-每周免费礼包-已完成"]
+    assert nodes["1345-每周免费礼包-关闭"]["next"] == ["1346-每周免费礼包-完成-关闭-面板"]
+    assert nodes["1346-每周免费礼包-完成-关闭-面板"]["next"] == ["1371-公共-原生成功-主页边界"]
+    assert nodes["1372-公共-原生成功-尝试返回"]["custom_action"] == "ReturnToWorldHome"
     assert_native_success_node(nodes["1369-公共-通用停止"])
 
 
@@ -122,31 +110,25 @@ def test_weekly_has_no_recorder_or_error_as_state_route() -> None:
     assert_on_error_contract(
         nodes,
         local_nodes=set(nodes),
-        shared_targets={"1369-公共-通用停止"},
+        shared_targets={"1372-公共-原生成功-尝试返回", "MJA-公共-原生失败-返回主页"},
     )
+    assert nodes["1343-每周免费礼包-已完成"]["on_error"] == ["MJA-公共-原生失败-返回主页"]
     for name in (
         "1340-每周免费礼包-免费-领取",
         "1341-每周免费礼包-奖励-成功",
-        "1343-每周免费礼包-已完成",
         "1336-每周免费礼包-打开-面板",
         "1337-每周免费礼包-打开-商店",
         "1338-每周免费礼包-打开-礼包-标签",
     ):
         assert "on_error" not in nodes[name]
-    assert nodes["1339-每周免费礼包-打开-每周"]["on_error"] == [
-        "1345-每周免费礼包-关闭"
-    ]
+    assert nodes["1339-每周免费礼包-打开-每周"]["on_error"] == ["每周免费礼包-滚动查找免费卡"]
 
 
-def test_weekly_cleanup_failure_stops_without_downgrading_success() -> None:
+def test_weekly_cleanup_failure_requires_verified_home() -> None:
     nodes = _pipeline()
 
-    assert nodes["1345-每周免费礼包-关闭"]["on_error"] == [
-        "1369-公共-通用停止"
-    ]
-    assert nodes["1346-每周免费礼包-完成-关闭-面板"]["on_error"] == [
-        "1369-公共-通用停止"
-    ]
+    assert nodes["1345-每周免费礼包-关闭"]["on_error"] == ["1372-公共-原生成功-尝试返回"]
+    assert nodes["1346-每周免费礼包-完成-关闭-面板"]["on_error"] == ["1372-公共-原生成功-尝试返回"]
     assert_no_side_effect_retry(load_task_nodes(WEEKLY), "claim_weekly_lucky_bag")
 
 
@@ -195,3 +177,12 @@ def test_weekly_preserves_guarded_actions_and_caps() -> None:
             continue
         assert node.get("retry_times", 0) == 0
         assert 1 <= node["max_hit"] <= policy.action_caps[action_id]
+
+
+def test_weekly_scroll_is_bounded_and_cannot_make_missing_free_gift_a_success():
+    node = _pipeline()["每周免费礼包-滚动查找免费卡"]
+    assert node["recognition"]["param"]["all_of"] == ["1350-每周免费礼包-商店-每周-页面"]
+    assert node["action"] == "Swipe"
+    assert node["max_hit"] == 4
+    assert node["next"][:2] == ["1340-每周免费礼包-免费-领取", "1343-每周免费礼包-已完成"]
+    assert node["on_error"] == ["MJA-公共-原生失败-返回主页"]

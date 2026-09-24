@@ -22,7 +22,6 @@ from tools.mfw_simulator_lock import (
     reclaim,
 )
 
-
 ROOT = Path(__file__).parents[1]
 LOCK_CLI = ROOT / "tools/mfw_simulator_lock.py"
 

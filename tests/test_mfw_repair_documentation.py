@@ -1,14 +1,13 @@
 from pathlib import Path
 
-
 ROOT = Path(__file__).parents[1]
 
 
 def test_agents_contains_public_contributor_guidance() -> None:
     text = (ROOT / "AGENTS.md").read_text(encoding="utf-8")
-    assert "Do not commit" in text
+    assert "Exclude machine-specific" in text
     assert "MFW/ADB" in text
-    assert "verification-code" in text
+    assert "Do not automate payments, login, verification codes, or credentials" in text
 
 
 def test_worker_guide_names_all_22_business_tasks() -> None:

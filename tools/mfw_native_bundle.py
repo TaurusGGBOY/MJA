@@ -28,9 +28,7 @@ PATCH_FILES = (
 )
 LIBRARIES = ("libMaaMacOSControlUnit.dylib", "libMaaToolkit.dylib")
 DESTINATION_RELATIVE = tuple(
-    f"{prefix}/{library}"
-    for prefix in ("maafw", "runtimes/osx-arm64")
-    for library in LIBRARIES
+    f"{prefix}/{library}" for prefix in ("maafw", "runtimes/osx-arm64") for library in LIBRARIES
 )
 SHARED_RUNTIME_RELATIVE = LIBRARIES
 # Existing MJA installs may contain the v5.12.2 archive libraries or the
@@ -179,7 +177,9 @@ def _load_manifest(path: Path) -> dict[str, Any]:
     for field, expected in literals.items():
         if type(payload[field]) is not str or payload[field] != expected:
             raise ValueError(f"manifest {field} must equal {expected!r}")
-    _exact_digest_map(payload["base_libraries_sha256"], "base_libraries_sha256", DESTINATION_RELATIVE)
+    _exact_digest_map(
+        payload["base_libraries_sha256"], "base_libraries_sha256", DESTINATION_RELATIVE
+    )
     _exact_digest_map(payload["patches_sha256"], "patches_sha256", PATCH_FILES)
     _exact_digest_map(payload["patched_libraries_sha256"], "patched_libraries_sha256", LIBRARIES)
     _exact_size_map(payload["patched_libraries_size"], "patched_libraries_size", LIBRARIES)

@@ -9,9 +9,11 @@ from tests.mfw.pipeline_assertions import (
     assert_no_custom_outcome_nodes,
     assert_on_error_contract,
 )
+from tests.mfw.task_contract import TaskContract, assert_guarded_actions
 
 ROOT = Path(__file__).resolve().parents[3]
 PIPELINE = ROOT / "assets/resource/base/pipeline/daily/mail_reward_daily.json"
+MAIL = TaskContract("MAIL_REWARD_DAILY", "daily/mail_reward_daily.json")
 
 
 def _mail_nodes() -> dict[str, dict[str, object]]:
@@ -61,6 +63,27 @@ def test_mail_reward_uses_stateless_failure_and_no_legacy_outcomes() -> None:
     assert "1037-邮件奖励-已完成" not in nodes
     assert_no_custom_outcome_nodes(nodes)
     assert_on_error_contract(nodes, local_nodes=set(nodes))
+
+
+def test_mail_reward_opens_function_panel_through_guarded_input() -> None:
+    nodes = _mail_nodes()
+
+    assert_guarded_actions(
+        nodes,
+        MAIL.task_id,
+        [
+            "open_function_panel",
+            "claim_all_mail",
+            "close_reward_popup",
+            "close_function_panel",
+        ],
+    )
+    assert nodes["1033-邮件奖励-打开-面板"]["custom_action_param"]["evidence"] == {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "0026-公共-游戏主页-页面",
+        "target_name": "0030-公共-游戏功能面板-入口",
+    }
 
 
 def test_mail_reward_preserves_bounded_claim_and_cleanup_actions() -> None:

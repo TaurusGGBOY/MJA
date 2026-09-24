@@ -25,7 +25,10 @@
       "0483-免费鉴定-主页-探测",
       "0482-免费鉴定-关闭-已恢复-面板"
     ],
-    "on_error": ["MJA-任务入口失败-FREE_APPRAISAL_DAILY", "MJA-公共-任务入口-恢复耗尽"],
+    "on_error": [
+      "MJA-任务入口失败-FREE_APPRAISAL_DAILY",
+      "MJA-公共-任务入口-恢复耗尽"
+    ],
     "retry_times": 0
   },
   "0480-免费鉴定-运行时-恢复-尝试": {
@@ -139,6 +142,7 @@
       }
     },
     "next": [
+      "[JumpBack]0522-免费鉴定-关闭-秘宝目录",
       "0488-MJA_APPRAISAL_HOME_AFTER_ALREADY_COMPLETE"
     ],
     "retry_times": 0
@@ -238,8 +242,8 @@
       }
     },
     "next": [
-      "[JumpBack]0499-免费鉴定-额外-弹窗-关闭",
       "0493-MJA_APPRAISAL_VERIFY",
+      "[JumpBack]0499-免费鉴定-额外-弹窗-关闭",
       "0496-免费鉴定-主页-之后-奖励"
     ],
     "timeout": 8000,
@@ -289,6 +293,7 @@
       }
     },
     "next": [
+      "[JumpBack]0522-免费鉴定-关闭-秘宝目录",
       "0495-免费鉴定-主页成功后"
     ],
     "timeout": 8000,
@@ -342,7 +347,8 @@
       "param": {
         "all_of": [
           "0026-公共-游戏主页-页面",
-          "0500-免费鉴定-鉴定-主页-页面"
+          "0500-免费鉴定-鉴定-主页-页面",
+          "0501-免费鉴定-鉴定-主页-入口"
         ],
         "box_index": 0
       }
@@ -360,9 +366,10 @@
       "param": {
         "all_of": [
           "0026-公共-游戏主页-页面",
-          "0500-免费鉴定-鉴定-主页-页面"
+          "0500-免费鉴定-鉴定-主页-页面",
+          "0501-免费鉴定-鉴定-主页-入口"
         ],
-        "box_index": 1
+        "box_index": 2
       }
     },
     "action": "Custom",
@@ -374,9 +381,41 @@
       "fixed_click_mode": "appraisal_home_button",
       "evidence": {
         "page_index": 0,
-        "target_index": 1,
+        "target_index": 2,
         "page_name": "0026-公共-游戏主页-页面",
-        "target_name": "0500-免费鉴定-鉴定-主页-页面"
+        "target_name": "0501-免费鉴定-鉴定-主页-入口"
+      }
+    },
+    "next": [
+      "0484b-免费鉴定-秘宝目录-入口探测"
+    ],
+    "retry_times": 0
+  },
+  "0484b-免费鉴定-秘宝目录-入口探测": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0520-免费鉴定-秘宝目录-页面",
+          "0521-免费鉴定-秘宝目录-获取入口"
+        ],
+        "box_index": 1
+      }
+    },
+    "timeout": 8000,
+    "action": "Custom",
+    "max_hit": 1,
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "FREE_APPRAISAL_DAILY",
+      "action_id": "open_appraisal_entry",
+      "kind": "click",
+      "fixed_click_mode": "appraisal_catalog_entry",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "0520-免费鉴定-秘宝目录-页面",
+        "target_name": "0521-免费鉴定-秘宝目录-获取入口"
       }
     },
     "next": [
@@ -467,22 +506,49 @@
   },
   "0501-免费鉴定-鉴定-主页-入口": {
     "recognition": "OCR",
-    "expected": [
-      "^鉴宝$",
-      "^宝$"
-    ],
+    "expected": "^秘宝$",
     "roi": [
-      850,
-      30,
-      130,
-      70
+      700,
+      600,
+      140,
+      100
     ],
     "action": "DoNothing"
   },
   "0502-免费鉴定-鉴定-页面": {
     "recognition": "OCR",
     "expected": "^鉴宝$",
-    "roi": [0, 0, 300, 100],
+    "roi": [
+      0,
+      0,
+      300,
+      100
+    ],
+    "action": "DoNothing"
+  },
+  "0520-免费鉴定-秘宝目录-页面": {
+    "recognition": "OCR",
+    "expected": [
+      "^秘宝$",
+      "获取秘宝"
+    ],
+    "roi": [
+      700,
+      0,
+      580,
+      720
+    ],
+    "action": "DoNothing"
+  },
+  "0521-免费鉴定-秘宝目录-获取入口": {
+    "recognition": "OCR",
+    "expected": "^获取秘宝$",
+    "roi": [
+      980,
+      600,
+      280,
+      100
+    ],
     "action": "DoNothing"
   },
   "0503-免费鉴定-鉴定-页面-关闭": {
@@ -553,26 +619,26 @@
   },
   "0508-免费鉴定-鉴定-免费-一次": {
     "recognition": "OCR",
-    "expected": "免费鉴宝",
+    "expected": "^免费鉴宝$",
     "roi": [
       430,
-      540,
+      590,
       260,
-      130
+      55
     ],
     "action": "DoNothing"
   },
   "0509-appraisal.used": {
     "recognition": "OCR",
     "expected": [
-      "^鉴宝一次$",
+      "^鉴?宝一次$",
       "^80$"
     ],
     "roi": [
       430,
-      540,
+      590,
       260,
-      130
+      55
     ],
     "action": "DoNothing"
   },
@@ -581,9 +647,9 @@
     "expected": "^80$",
     "roi": [
       430,
-      540,
+      590,
       260,
-      130
+      55
     ],
     "action": "DoNothing"
   },
@@ -716,6 +782,45 @@
   "0516-免费鉴定-额外-弹窗-关闭-返回": {
     "recognition": "DirectHit",
     "timeout": 8000,
+    "action": "DoNothing"
+  },
+  "0522-免费鉴定-关闭-秘宝目录": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "0520-免费鉴定-秘宝目录-页面",
+          "0523-免费鉴定-秘宝目录-关闭图标"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "max_hit": 1,
+    "retry_times": 0,
+    "custom_action_param": {
+      "task_id": "FREE_APPRAISAL_DAILY",
+      "action_id": "close_appraisal_catalog",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "0520-免费鉴定-秘宝目录-页面",
+        "target_name": "0523-免费鉴定-秘宝目录-关闭图标"
+      }
+    }
+  },
+  "0523-免费鉴定-秘宝目录-关闭图标": {
+    "recognition": "TemplateMatch",
+    "template": "daily/FREE_APPRAISAL_DAILY/catalog_close.png",
+    "roi": [
+      1170,
+      0,
+      110,
+      110
+    ],
+    "threshold": 0.8,
     "action": "DoNothing"
   }
 }

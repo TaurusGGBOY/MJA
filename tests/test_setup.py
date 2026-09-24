@@ -13,13 +13,13 @@ import pytest
 
 from tools.setup import (
     _assemble_install_in_place,
+    _preserved_android_control_unit,
     assemble_install,
     assert_supported_platform,
     build_android_maapi_cli,
     ensure_venv,
     extract_archive,
     overlay_patched_macos_control_unit,
-    _preserved_android_control_unit,
     stream_download,
     sync_project_payload,
     verify_download,

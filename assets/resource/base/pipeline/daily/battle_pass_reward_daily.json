@@ -305,10 +305,7 @@
       "type": "And",
       "param": {
         "all_of": [
-          "0071-战令奖励-战斗-战令-主页-活动",
-          "0072-战令奖励-战斗-战令-主页-祈福",
-          "0073-战令奖励-战斗-战令-主页-副本",
-          "0074-战令奖励-战斗-战令-主页-画卷"
+          "0026-公共-游戏主页-页面"
         ],
         "box_index": 0
       }
@@ -363,16 +360,14 @@
     "action": "DoNothing"
   },
   "0075-战令奖励-战斗-战令-打开": {
-    "recognition": "TemplateMatch",
-    "template": "daily/BATTLE_PASS_REWARD_DAILY/battle_pass_icon.png",
+    "recognition": "OCR",
+    "expected": "^战令$",
     "roi": [
-      735,
-      10,
-      100,
-      90
+      820,
+      40,
+      120,
+      60
     ],
-    "threshold": 0.8,
-    "green_mask": true,
     "action": "DoNothing"
   },
   "0076-战令奖励-战斗-战令-页面": {

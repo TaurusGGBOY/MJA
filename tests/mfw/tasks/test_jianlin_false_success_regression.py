@@ -3,12 +3,9 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-
 ROOT = Path(__file__).parents[3]
 PIPELINE = (
-    ROOT
-    / "assets/resource/base/pipeline/daily"
-    / "jianlin_resource_condensate_stamina_daily.json"
+    ROOT / "assets/resource/base/pipeline/daily" / "jianlin_resource_condensate_stamina_daily.json"
 )
 
 PRICE_FIFTY = "0790-剑林凝结体体力-购买-体力-80可选50"
@@ -30,9 +27,7 @@ def test_price_fifty_skips_only_purchase_and_still_enters_planning() -> None:
 
     assert optional["action"] == "Custom"
     assert optional["custom_action"] == "GuardedInput"
-    assert optional["custom_action_param"]["action_id"] == (
-        "dismiss_jianlin_stamina_purchase"
-    )
+    assert optional["custom_action_param"]["action_id"] == ("dismiss_jianlin_stamina_purchase")
     assert optional["max_hit"] == 1
     assert optional["post_delay"] == 1_000
     assert optional["next"] == [READ_STAMINA]
@@ -69,14 +64,10 @@ def test_replan_loop_is_bounded_and_exhaustion_enters_success_cleanup() -> None:
     assert nodes["0996-剑林凝结体体力-剑林-次数-条"]["expected"] == "挑战次数"
     assert nodes["0997-剑林凝结体体力-剑林-次数-已选择"]["expected"] == [
         r"挑战次数\s*[:：]?\s*[x×X]?\d{1,2}",
-        r"[x×X]\s*[1-9]\d?",
+        r"[x×X]\s*(?:[1-9]\d?|[lI])",
     ]
-    assert nodes["0998-剑林凝结体体力-剑林-次数-上限"]["expected"] == (
-        r"上限\s*[1-9]\d?"
-    )
-    assert nodes["1013-剑林凝结体体力-剑林-倍率-上限"]["expected"] == (
-        r"上限\s*[1-9]\d?"
-    )
+    assert nodes["0998-剑林凝结体体力-剑林-次数-上限"]["expected"] == (r"上限\s*[1-9]\d?")
+    assert nodes["1013-剑林凝结体体力-剑林-倍率-上限"]["expected"] == (r"上限\s*[1-9]\d?")
 
     challenge = nodes["0934-剑林凝结体体力-挑战-凝结体"]
     assert challenge["recognition"]["param"] == {
@@ -90,9 +81,9 @@ def test_replan_loop_is_bounded_and_exhaustion_enters_success_cleanup() -> None:
     }
     assert challenge["custom_action_param"]["evidence"]["target_index"] == 3
     assert nodes["1012-剑林凝结体体力-剑林-倍率-已选择"]["expected"] == [
-        r"结算倍率\s*[:：]?\s*[xX×]\s*(?:[1-3]|[lI])",
-        r"[xX×]\s*(?:[1-3]|[lI])",
-        r"(?:[1-3]|[lI])\s*倍",
+            r"结算倍率\s*[:：]?\s*[xX×]\s*(?:[1-6]|[lI])",
+            r"[xX×]\s*(?:[1-6]|[lI])",
+            r"(?:[1-6]|[lI])\s*倍",
     ]
     assert nodes[EXHAUSTED]["next"] == [CLEANUP]
 

@@ -62,7 +62,11 @@ def append_native_run(
         for native_id, task_id in enumerate(task_ids, start=10):
             state = (states or {}).get(task_id, "Succeeded")
             maafw.write(
-                f'[msg=Tasker.Task.{state}] '
+                '[msg=Node.Action.Succeeded] '
+                f'[details={{"task_id":{native_id},"name":"{ENTRIES[task_id]}"}}]\n'
+            )
+            maafw.write(
+                f"[msg=Tasker.Task.{state}] "
                 f'[details={{"task_id":{native_id},"entry":"{ENTRIES[task_id]}"}}]\n'
             )
 
@@ -85,19 +89,22 @@ def test_expected_terminal_defaults_to_succeeded_and_allows_one_failure() -> Non
 def test_begin_cli_persists_predeclared_expectation(
     candidate: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:
-    assert main(
-        [
-            "begin",
-            "--candidate",
-            str(candidate),
-            "--owner",
-            "worker:mail-failure",
-            "--task",
-            "MAIL_REWARD_DAILY",
-            "--expect-terminal",
-            "MAIL_REWARD_DAILY=Failed",
-        ]
-    ) == 0
+    assert (
+        main(
+            [
+                "begin",
+                "--candidate",
+                str(candidate),
+                "--owner",
+                "worker:mail-failure",
+                "--task",
+                "MAIL_REWARD_DAILY",
+                "--expect-terminal",
+                "MAIL_REWARD_DAILY=Failed",
+            ]
+        )
+        == 0
+    )
     ticket = Path(capsys.readouterr().out.strip())
     payload = load_json(ticket)
     assert payload["expected_terminals"]["MAIL_REWARD_DAILY"] == "Failed"
@@ -112,7 +119,7 @@ def test_expected_terminal_requires_selected_native_state(value: str) -> None:
         parse_expected_terminals((value,), ("GAME_START", "MAIL_REWARD_DAILY"))
 
 
-def test_pair_acceptance_uses_only_native_terminal_and_writes_native_summary(
+def test_pair_acceptance_uses_native_execution_and_writes_native_summary(
     candidate: Path,
 ) -> None:
     ticket = begin_acceptance(candidate, "worker:mail", "MAIL_REWARD_DAILY")
@@ -159,10 +166,7 @@ def test_acceptance_rejects_duplicate_native_terminal(candidate: Path) -> None:
     ticket = begin_acceptance(candidate, "worker:mail", "MAIL_REWARD_DAILY")
     append_native_run(candidate, ("GAME_START", "MAIL_REWARD_DAILY"))
     with (candidate / "debug/maafw.log").open("a", encoding="utf-8") as maafw:
-        maafw.write(
-            '[msg=Tasker.Task.Succeeded] '
-            '[details={"task_id":12,"entry":"MJA_MAIL"}]\n'
-        )
+        maafw.write('[msg=Tasker.Task.Succeeded] [details={"task_id":12,"entry":"MJA_MAIL"}]\n')
 
     with pytest.raises(ValueError, match="native terminal events"):
         finish_acceptance(ticket)
@@ -217,3 +221,24 @@ def test_acceptance_merges_native_log_rotation(candidate: Path) -> None:
     assert payload["result"] == "passed"
     assert payload["tasks"]["GAME_START"]["native_terminal"] == "Succeeded"
     assert payload["tasks"]["MAIL_REWARD_DAILY"]["native_terminal"] == "Succeeded"
+
+
+def test_empty_native_success_is_rejected_but_raw_terminal_is_preserved(candidate):
+    ticket = begin_acceptance(candidate, "empty-success-regression", "MAIL_REWARD_DAILY")
+    append_native_run(candidate, ("GAME_START", "MAIL_REWARD_DAILY"))
+    native = candidate / "debug/maafw.log"
+    native.write_text(
+        "\n".join(
+            line
+            for line in native.read_text().splitlines()
+            if not ("Node.Action.Succeeded" in line and '"task_id":11' in line)
+        )
+    )
+    with pytest.raises(ValueError, match="without any successful node action"):
+        finish_acceptance(ticket)
+    payload = load_json(finish_acceptance(ticket, partial=True))
+    assert payload["tasks"]["MAIL_REWARD_DAILY"]["native_terminal"] == "Succeeded"
+    assert any(
+        "MAIL_REWARD_DAILY" in error and "without any" in error for error in payload["errors"]
+    )
+    assert payload["result"] == "partial"

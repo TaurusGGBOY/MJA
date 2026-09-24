@@ -207,7 +207,10 @@ def test_dungeon_success_requires_master_assignment_start_confirm_and_result() -
     assert nodes["0366-副本扫荡-副本-已分配-安全"]["expected"] == "^2$"
     assert start["next"] == ["0330-副本扫荡-确认-扫荡"]
     assert nodes["0330-副本扫荡-确认-扫荡"]["next"] == ["0332-副本扫荡-关闭-结果"]
-    assert "风雪神道" in nodes["0368-副本扫荡-副本-确认-页面"]["expected"]
+    assert nodes["0368-副本扫荡-副本-确认-页面"]["expected"] == [
+        "副本结算券",
+        "是否确认扫荡",
+    ]
 
     result = nodes["0332-副本扫荡-关闭-结果"]
     assert result["recognition"]["param"]["all_of"] == [

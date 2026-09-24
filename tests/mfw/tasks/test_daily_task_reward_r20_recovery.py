@@ -28,12 +28,7 @@ def _nodes() -> dict[str, dict]:
 def _contains(roi: list[int], observed_box: list[int]) -> bool:
     rx, ry, rw, rh = roi
     bx, by, bw, bh = observed_box
-    return (
-        rx <= bx
-        and ry <= by
-        and bx + bw <= rx + rw
-        and by + bh <= ry + rh
-    )
+    return rx <= bx and ry <= by and bx + bw <= rx + rw and by + bh <= ry + rh
 
 
 def test_daily_rewards_enters_from_the_right_function_panel() -> None:
@@ -52,10 +47,12 @@ def test_daily_rewards_enters_from_the_right_function_panel() -> None:
     assert open_panel["next"] == ["0257-日常任务奖励-打开-日常"]
     assert open_daily["next"] == ["0286-日常任务奖励-日常-页面"]
     assert nodes["0285-日常任务奖励-日常-入口"]["expected"] == "日常"
+    assert nodes["0299-日常任务奖励-日常-主页-试炼"]["expected"] == [
+        "^试剑$",
+        r"^(?:已)?击破：\d+(?:层)?$",
+    ]
     assert _contains(nodes["0285-日常任务奖励-日常-入口"]["roi"], [1072, 291, 44, 28])
-    assert_reachable(
-        load_task_nodes(DAILY), DAILY.entry, "1371-公共-原生成功-主页边界"
-    )
+    assert_reachable(load_task_nodes(DAILY), DAILY.entry, "1371-公共-原生成功-主页边界")
 
 
 def test_daily_rewards_require_a_verified_page_before_claim_or_empty_success() -> None:
@@ -90,15 +87,9 @@ def test_daily_rewards_keep_claim_and_chest_popup_cleanup_separate() -> None:
         "0268-日常任务奖励-领取-宝箱",
         "0280-日常任务奖励-关闭",
     ]
-    assert nodes["0268-日常任务奖励-领取-宝箱"]["next"] == [
-        "0305-日常任务奖励-关闭-宝箱奖励"
-    ]
-    assert nodes["0305-日常任务奖励-关闭-宝箱奖励"]["next"] == [
-        "0280-日常任务奖励-关闭"
-    ]
-    assert nodes["0282-日常任务奖励-关闭-面板"]["next"] == [
-        "1371-公共-原生成功-主页边界"
-    ]
+    assert nodes["0268-日常任务奖励-领取-宝箱"]["next"] == ["0305-日常任务奖励-关闭-宝箱奖励"]
+    assert nodes["0305-日常任务奖励-关闭-宝箱奖励"]["next"] == ["0280-日常任务奖励-关闭"]
+    assert nodes["0282-日常任务奖励-关闭-面板"]["next"] == ["1371-公共-原生成功-主页边界"]
 
 
 def test_daily_rewards_rescan_completed_rows_after_each_reward_popup() -> None:

@@ -5,7 +5,6 @@ from pathlib import Path
 
 from tests.mfw.pipeline_assertions import assert_all_cycles_bounded, load_nodes
 
-
 ROOT = Path(__file__).parents[1]
 STARTUP_PATH = ROOT / "assets/resource/base/pipeline/startup/game_start.json"
 PUBLIC_HOME_ROI = [920, 540, 220, 100]
@@ -19,41 +18,61 @@ def test_game_start_is_a_startup_only_pipeline_without_restart_named_nodes() -> 
     startup = _startup()
 
     assert not any("重启" in name for name in startup)
-    assert startup["0023-启动-游戏入口"]["next"] == ["1356-启动-游戏启动"]
+    assert startup["0023-启动-游戏入口"]["next"] == [
+        "[JumpBack]启动-Pixel启动器无响应-关闭",
+        "1362-启动-游戏就绪",
+        "1356-启动-游戏启动",
+    ]
     assert "on_error" not in startup["0023-启动-游戏入口"]
     assert startup["1356-启动-游戏启动"]["on_error"] == [
         "启动-游戏启动恢复",
         "关闭游戏",
+        "1365-公共-主页边界-失败",
     ]
     recovery = startup["启动-游戏启动恢复"]
-    assert recovery["action"] == "Custom"
-    assert recovery["custom_action"] == "RestartGameSurface"
-    assert recovery["custom_action_param"] == {
-        "package": "com.hanjiasongshu.dr22",
-        "activity": "com.hanjiasongshu.dr22/.MainActivity",
-        "force_stop": True,
-        "cooldown_ms": 2000,
-        "start_repeat": 5,
-        "start_repeat_delay_ms": 1000,
-        "start_timeout_ms": 15000,
-    }
+    assert recovery["action"] == "StopApp"
+    assert recovery["package"] == "com.hanjiasongshu.dr22"
+    assert recovery["post_delay"] == 2000
+    relaunch = startup["启动-恢复后重新启动"]
+    assert relaunch["action"] == "StartApp"
+    assert relaunch["package"] == startup["1356-启动-游戏启动"]["package"]
+    assert relaunch["max_hit"] == 2
+    assert relaunch["next"] == ["启动-等待游戏就绪"]
     assert recovery["timeout"] == 30000
-    assert recovery["max_hit"] == 1
-    assert recovery["next"] == ["1356-启动-游戏启动"]
+    assert recovery["max_hit"] == 2
+    assert recovery["next"] == ["启动-恢复后重新启动"]
     assert "1371-公共-原生成功-主页边界" not in json.dumps(startup, ensure_ascii=False)
     assert "1358-公共-游戏启动失败" not in json.dumps(startup, ensure_ascii=False)
     assert "启动-世界页-探测" not in startup
     assert "启动-世界页-探测" not in json.dumps(startup, ensure_ascii=False)
 
 
-def test_game_start_keeps_the_five_start_reliability_contract() -> None:
+def test_game_start_launches_once_then_observes_a_bounded_state_scan() -> None:
     start = _startup()["1356-启动-游戏启动"]
     assert start["action"] == "StartApp"
     assert start["package"] == "com.hanjiasongshu.dr22/.MainActivity"
-    assert start["repeat"] == 5
-    assert start["repeat_delay"] == 1000
+    assert start["repeat"] == 1
+    assert start["max_hit"] == 1
+    assert start["timeout"] == 5000
+    assert start["next"] == ["启动-等待游戏就绪"]
+    # A waiting or absent game must not drive the full OCR list every second.
+    assert _startup()["启动-等待游戏就绪"]["rate_limit"] == 3000
+    exited = _startup()["启动-进程退出后恢复"]
+    recovery = _startup()["启动-游戏启动恢复"]
+    assert exited["max_hit"] == recovery["max_hit"] + 1
+    assert exited["next"] == [
+        "启动-游戏启动恢复", "关闭游戏", "1365-公共-主页边界-失败"
+    ]
+    assert _startup()["关闭游戏"]["next"] == ["1365-公共-主页边界-失败"]
+    start = _startup()["启动-等待游戏就绪"]
     assert start["timeout"] == 120000
+    assert start["max_hit"] == 3
     assert start["next"] == [
+        "[JumpBack]启动-Pixel启动器无响应-关闭",
+        "启动-进程退出后恢复",
+        "[JumpBack]启动-奖励弹窗-点击空白关闭",
+        "[JumpBack]启动-七星阵法引导-探寻",
+        "[JumpBack]启动-七星阵法引导-跳过",
         "[JumpBack]0038-公共-已知-点击空白关闭",
         "[JumpBack]1277-公共-已知-画卷-关闭",
         "[JumpBack]1394-启动-关闭武学研习详情残留页",
@@ -67,92 +86,64 @@ def test_game_start_keeps_the_five_start_reliability_contract() -> None:
         "[JumpBack]1373-启动-关闭剑林残留页",
         "[JumpBack]1359-启动-可选关闭公告页",
         "[JumpBack]1360-启动-数据校验失败-继续下载",
-        "[JumpBack]1361-启动-可选关闭月签到奖励页",
-        "1357-启动-游戏启动成功-左下12探测",
-        "1362-启动-游戏就绪",
-    ]
-
-
-def test_startup_button_flow_has_no_restart_aliases() -> None:
-    startup = _startup()
-    enter_button = startup["1370-启动-游戏启动后-进入按钮"]
-    setting_probe = startup["1357-启动-游戏启动成功-左下12探测"]
-    announcement = startup["1359-启动-可选关闭公告页"]
-
-    assert "启动-游戏启动后-开始按钮" not in startup
-    assert "启动-游戏启动-启动" not in startup
-    # The title flow has two distinct visible buttons: 点击开始游戏, then 进入游戏.
-    # Each receives one bounded tap inside their live overlapping text area.
-    assert enter_button["max_hit"] == 2
-    assert setting_probe["recognition"] == "OCR"
-    assert setting_probe["expected"] == "^12\\+?$"
-    assert setting_probe["roi"] == [0, 560, 540, 160]
-    assert setting_probe["timeout"] == 300000
-    assert announcement == {
-        "recognition": "OCR",
-        "expected": "公告|公|告",
-        "roi": [0, 0, 420, 520],
-        "timeout": 1500,
-        "max_hit": 1,
-        "action": "Click",
-        "target": [1160, 0, 120, 100],
-        "post_delay": 1000,
-    }
-    assert startup["1361-启动-可选关闭月签到奖励页"]["expected"] == [
-        "^本月可领取物品$",
-        "^本月.*可领取.*物品$",
-        "^[0-9一二三四五六七八九十]+月签到$",
-    ]
-    assert startup["1361-启动-可选关闭月签到奖励页"]["target"] == [1066, 160, 6, 8]
-    assert startup["1361-启动-可选关闭月签到奖励页"]["post_delay"] == 1000
-    assert setting_probe["next"] == [
-        "[JumpBack]0038-公共-已知-点击空白关闭",
-        "[JumpBack]1359-启动-可选关闭公告页",
         "[JumpBack]1361-启动-可选关闭月签到奖励页",
         "[JumpBack]1370-启动-游戏启动后-进入按钮",
         "1362-启动-游戏就绪",
     ]
-    data_check = startup["1360-启动-数据校验失败-继续下载"]
-    assert data_check["expected"] == ["允许下载", "继续下载"]
-    assert data_check["roi"] == [630, 450, 330, 80]
-    assert data_check["max_hit"] == 3
-    assert data_check["action"] == "Click"
-    assert data_check["target"] == [650, 450, 300, 80]
-    assert data_check["post_delay"] == 1000
-    assert "next" not in data_check
-    assert "on_error" not in data_check
-    assert "on_error" not in setting_probe
-    close_game = startup["关闭游戏"]
-    assert close_game["action"] == "StopApp"
-    assert close_game["package"] == "com.hanjiasongshu.dr22"
-    assert close_game["max_hit"] == 1
-    assert close_game["next"] == ["1356-启动-游戏启动"]
-    assert "启动-可选关闭奖励弹窗-图像" not in startup
-    assert "next" not in startup["1361-启动-可选关闭月签到奖励页"]
-    assert "next" not in enter_button
-    assert "on_error" not in enter_button
-    assert "启动-进入游戏后等待" not in startup
-    assert "启动-欢迎页-进入游戏" not in startup
-    assert _startup()["1356-启动-游戏启动"]["next"] == [
-        "[JumpBack]0038-公共-已知-点击空白关闭",
-        "[JumpBack]1277-公共-已知-画卷-关闭",
-        "[JumpBack]1394-启动-关闭武学研习详情残留页",
-        "[JumpBack]1385-启动-关闭帮会奖励预览残留页",
-        "[JumpBack]1388-启动-关闭帮会活动残留页",
-        "[JumpBack]1391-启动-关闭帮会主页残留页",
-        "[JumpBack]1393-启动-关闭功能面板残留页",
-        "[JumpBack]1382-启动-关闭武学研习残留页",
-        "[JumpBack]1379-启动-关闭装备残留页",
-        "[JumpBack]1376-启动-关闭副本残留页",
-        "[JumpBack]1373-启动-关闭剑林残留页",
-        "[JumpBack]1359-启动-可选关闭公告页",
-        "[JumpBack]1360-启动-数据校验失败-继续下载",
-        "[JumpBack]1361-启动-可选关闭月签到奖励页",
-        "1357-启动-游戏启动成功-左下12探测",
-        "1362-启动-游戏就绪",
+
+
+def test_startup_closes_residual_reward_overlay_before_ready_gate() -> None:
+    startup = _startup()
+    popup = startup["启动-奖励弹窗-点击空白关闭"]
+
+    assert popup["recognition"] == "OCR"
+    assert popup["expected"] == "^恭喜获得$"
+    assert popup["roi"] == [120, 180, 180, 360]
+    assert popup["action"] == "Click"
+    assert popup["target"] == [550, 665, 180, 45]
+    assert popup["post_delay"] == 1000
+    assert startup["启动-等待游戏就绪"]["next"].index(
+        "[JumpBack]启动-奖励弹窗-点击空白关闭"
+    ) < startup["启动-等待游戏就绪"]["next"].index("1362-启动-游戏就绪")
+
+
+def test_startup_advances_and_skips_the_seven_star_tutorial_overlay() -> None:
+    startup = _startup()
+    prompt = startup["启动-七星阵法引导-探寻"]
+    skip = startup["启动-七星阵法引导-跳过"]
+
+    assert prompt["expected"] == "^阁主，七星阵法已现世，点击$"
+    assert prompt["roi"] == [380, 390, 360, 110]
+    assert prompt["target"] == [640, 610, 140, 105]
+    assert skip["expected"] == "^跳过$"
+    assert skip["roi"] == [1040, 35, 160, 100]
+    assert skip["target"] == [1060, 45, 130, 75]
+
+
+def test_startup_button_flow_uses_the_visible_button_and_shared_recovery() -> None:
+    import re
+
+    startup = _startup()
+    enter_button = startup["1370-启动-游戏启动后-进入按钮"]
+    assert "1357-启动-游戏启动成功-左下12探测" not in startup
+    assert enter_button["max_hit"] == 6
+    assert enter_button["target"] is True
+    assert enter_button["roi"] == [350, 540, 580, 120]
+    patterns = enter_button["expected"]
+    for label in ("点击开始游戏！", "进入游戏", "点击进入游戏!"):
+        assert any(re.search(pattern, label) for pattern in patterns)
+    for label in ("12+", "游戏著作权人", "戏", "正在连接服务器"):
+        assert not any(re.search(pattern, label) for pattern in patterns)
+    # Every post-launch screen returns to the same bounded state scan.
+    assert "[JumpBack]1370-启动-游戏启动后-进入按钮" in startup["启动-等待游戏就绪"]["next"]
+    assert startup["1356-启动-游戏启动"]["on_error"] == [
+        "启动-游戏启动恢复",
+        "关闭游戏",
+        "1365-公共-主页边界-失败",
     ]
-    assert enter_button["target"] == [575, 620, 120, 25]
-    assert enter_button["post_delay"] == 10000
+    assert "next" not in enter_button
+    assert startup["1361-启动-可选关闭月签到奖励页"]["max_hit"] == 3
+    assert startup["1361-启动-可选关闭月签到奖励页"]["post_delay"] == 5000
     residual = startup["1373-启动-关闭剑林残留页"]
     assert residual["recognition"]["param"] == {
         "all_of": [
@@ -225,9 +216,7 @@ def test_startup_button_flow_has_no_restart_aliases() -> None:
     ]
     assert guild_home["max_hit"] == 1
     panel = startup["1393-启动-关闭功能面板残留页"]
-    assert panel["recognition"]["param"]["all_of"] == [
-        "0029-公共-游戏侧边面板-打开"
-    ]
+    assert panel["recognition"]["param"]["all_of"] == ["0029-公共-游戏侧边面板-打开"]
     assert panel["target"] == [1195, 10, 70, 70]
     assert panel["max_hit"] == 1
     martial_detail = startup["1394-启动-关闭武学研习详情残留页"]
@@ -247,7 +236,7 @@ def test_startup_confirms_the_single_public_home_boundary() -> None:
     home = nodes["0026-公共-游戏主页-页面"]
     assert home == {
         "recognition": "OCR",
-        "expected": ["已击破", "侠客", "道具", "载具", "成就"],
+        "expected": ["已击破"],
         "roi": PUBLIC_HOME_ROI,
         "action": "DoNothing",
     }
@@ -256,9 +245,7 @@ def test_startup_confirms_the_single_public_home_boundary() -> None:
 
 def test_startup_failures_are_stateless_native_failures() -> None:
     terminal = json.loads(
-        (ROOT / "assets/resource/base/pipeline/common/terminal.json").read_text(
-            encoding="utf-8"
-        )
+        (ROOT / "assets/resource/base/pipeline/common/terminal.json").read_text(encoding="utf-8")
     )
     for name in (
         "1358-公共-游戏启动失败",
@@ -275,3 +262,26 @@ def test_startup_failures_are_stateless_native_failures() -> None:
 
 def test_startup_graph_is_bounded() -> None:
     assert_all_cycles_bounded(load_nodes(ROOT / "assets/resource/base/pipeline"))
+
+
+def test_launcher_anr_recovery_is_scoped_bounded_and_cannot_finish_game_start():
+    import re
+
+    startup = _startup()
+    name = "启动-Pixel启动器无响应-关闭"
+    node = startup[name]
+    parts = node["recognition"]["param"]["all_of"]
+    title, button = (startup[part] for part in parts)
+    # Text observed in the native OCR replay of today's actual ANR screenshot.
+    assert re.fullmatch(title["expected"], "Pixel 启动器没有响应")
+    assert not re.fullmatch(title["expected"], "对决剑之川没有响应")
+    assert not re.fullmatch(title["expected"], "系统界面没有响应")
+    assert re.fullmatch(button["expected"], "关闭应用")
+    assert not re.fullmatch(button["expected"], "等待")
+    assert node["recognition"]["param"]["box_index"] == 1
+    assert node["action"] == "Click" and node["target"] is True
+    assert node["max_hit"] == 1
+    assert "next" not in node
+    for entry in ("0023-启动-游戏入口", "启动-等待游戏就绪"):
+        assert startup[entry]["next"][0] == "[JumpBack]" + name
+        assert "1362-启动-游戏就绪" in startup[entry]["next"]

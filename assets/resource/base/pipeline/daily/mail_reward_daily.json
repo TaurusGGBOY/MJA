@@ -123,7 +123,19 @@
         "box_index": 1
       }
     },
-    "action": "Click",
+    "action": "Custom",
+    "custom_action": "GuardedInput",
+    "custom_action_param": {
+      "task_id": "MAIL_REWARD_DAILY",
+      "action_id": "open_function_panel",
+      "kind": "click",
+      "evidence": {
+        "page_index": 0,
+        "target_index": 1,
+        "page_name": "0026-公共-游戏主页-页面",
+        "target_name": "0030-公共-游戏功能面板-入口"
+      }
+    },
     "max_hit": 1,
     "target": [1170, 10, 60, 60],
     "next": [

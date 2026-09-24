@@ -28,11 +28,6 @@ PIPELINE_PATH = (
     Path(__file__).parents[3] / "assets/resource/base/pipeline" / CONDENSATE.pipeline_file
 )
 FAILURE = "1279-消耗凝结体-预算-不安全"
-VERIFY_OPEN_PANEL = "1320-消耗凝结体-完成-打开-面板"
-VERIFY_OPEN_DAILY = "1321-消耗凝结体-完成-打开-日常"
-VERIFY_COMPLETION = "1322-消耗凝结体-日常-消费完成-探测"
-VERIFY_CLOSE_DAILY = "1323-消耗凝结体-完成-关闭-日常"
-VERIFY_CLOSE_PANEL = "1324-消耗凝结体-完成-关闭-面板"
 
 
 def _scoped_nodes() -> dict[str, dict[str, object]]:
@@ -50,7 +45,7 @@ def _targets(node: Mapping[str, object]) -> list[str]:
     return targets
 
 
-def test_currency_entry_uses_tight_green_masked_icon_templates_in_both_regions() -> None:
+def test_currency_entry_uses_bounded_green_masked_icon_templates_in_both_regions() -> None:
     nodes = load_task_nodes(CONDENSATE)
 
     pairs = (
@@ -59,19 +54,20 @@ def test_currency_entry_uses_tight_green_masked_icon_templates_in_both_regions()
             "1293-消耗凝结体-凝结体-偃武-页面",
             "1294-消耗凝结体-凝结体-偃武-货币-入口",
             "daily/SPEND_CONDENSATE_DAILY/yanwu_currency_icon.png",
+            [980, 20, 190, 50],
         ),
         (
             "1266-消耗凝结体-打开-云州-恢复",
             "1303-消耗凝结体-凝结体-云州-页面",
             "1304-消耗凝结体-凝结体-云州-货币-入口",
             "daily/SPEND_CONDENSATE_DAILY/yunzhou_currency_icon.png",
+            [960, 10, 80, 70],
         ),
     )
-    for action_name, page_name, target_name, template in pairs:
+    for action_name, page_name, target_name, template, expected_roi in pairs:
         target = nodes[target_name]
         assert target["recognition"] == "TemplateMatch"
         assert target["template"] == template
-        expected_roi = [991, 25, 32, 40]
         assert target["roi"] == expected_roi
         expected_threshold = 0.72 if "云州" in target_name else 0.8
         assert target["threshold"] == expected_threshold
@@ -251,44 +247,11 @@ def test_quantity_max_uses_the_highest_confidence_template_match() -> None:
         assert target["index"] == 0
 
 
-def test_native_success_requires_the_exact_daily_completion_postcondition() -> None:
+def test_native_success_follows_completed_home_cleanup() -> None:
     nodes = _scoped_nodes()
 
-    assert nodes["1276-消耗凝结体-完成-收尾"]["next"] == [VERIFY_OPEN_PANEL]
-
-    expected_actions = {
-        VERIFY_OPEN_PANEL: "open_function_panel",
-        VERIFY_OPEN_DAILY: "open_daily_tasks_initial",
-        VERIFY_CLOSE_DAILY: "close_daily_tasks",
-        VERIFY_CLOSE_PANEL: "close_function_panel",
-    }
-    for name, action_id in expected_actions.items():
-        node = nodes[name]
-        assert node["custom_action"] == "GuardedInput"
-        assert node["custom_action_param"]["action_id"] == action_id
-        assert node["on_error"] == [FAILURE]
-
-    verifier = nodes[VERIFY_COMPLETION]
-    all_of = verifier["recognition"]["param"]["all_of"]
-    assert all_of[0] == "1288-消耗凝结体-凝结体-日常-页面"
-    task_row, completion_state = all_of[1:]
-    assert task_row["sub_name"] == "spend_condensate_daily_completion_row_1322"
-    assert task_row["recognition"] == "OCR"
-    assert task_row["expected"] == r"^消耗\s*10000\s*凝晶[。.]?$"
-    assert completion_state["sub_name"] == ("spend_condensate_daily_completion_state_1322")
-    assert completion_state["recognition"] == "ColorMatch"
-    assert completion_state["method"] == 4
-    assert completion_state["lower"] == [100, 160, 80]
-    assert completion_state["upper"] == [180, 230, 170]
-    assert completion_state["roi"] == task_row["sub_name"]
-    assert completion_state["roi_offset"] == [700, -30, 300, 100]
-    assert completion_state["connected"] is True
-    assert completion_state["count"] == 50
-    assert verifier["recognition"]["param"]["box_index"] == 2
-    assert verifier["on_error"] == [FAILURE]
-    assert verifier["next"] == [VERIFY_CLOSE_DAILY]
-    assert nodes[VERIFY_CLOSE_DAILY]["next"] == [VERIFY_CLOSE_PANEL]
-    assert nodes[VERIFY_CLOSE_PANEL]["next"] == ["1371-公共-原生成功-主页边界"]
+    assert nodes["1276-消耗凝结体-完成-收尾"]["next"] == ["1371-公共-原生成功-主页边界"]
+    assert not any(name.startswith("132") for name in nodes)
 
 
 def test_condensate_has_no_legacy_outcome_recorder_and_native_success_cleanup() -> None:
@@ -334,3 +297,21 @@ def test_consumptive_inputs_keep_policy_caps_and_no_replay() -> None:
         for target in _targets(node)
         if target != FAILURE
     )
+
+
+def test_yunzhou_currency_icon_accepts_current_position_without_lowering_threshold():
+    import json
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parents[3]
+    nodes = json.loads(
+        (root / "assets/resource/base/pipeline/daily/spend_condensate_daily.json").read_text()
+    )
+    icon = nodes["1304-消耗凝结体-凝结体-云州-货币-入口"]
+    assert icon["roi"] == [960, 10, 80, 70]
+    assert icon["threshold"] == 0.72
+    assert icon["green_mask"] is True
+    assert nodes["1266-消耗凝结体-打开-云州-恢复"]["recognition"]["param"]["all_of"] == [
+        "1303-消耗凝结体-凝结体-云州-页面",
+        "1304-消耗凝结体-凝结体-云州-货币-入口",
+    ]

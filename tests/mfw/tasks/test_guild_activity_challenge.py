@@ -55,9 +55,7 @@ def test_guild_activity_clicks_challenge_then_start_and_waits_for_battle() -> No
         "0583-帮派活动挑战-帮派-结果-胜利",
         "0584-帮派活动挑战-帮派-结果-失败-2",
     ]
-    assert start["on_error"] == [
-        "0590-帮派活动挑战-战斗结果-未知-失败"
-    ]
+    assert start["on_error"] == ["0590-帮派活动挑战-战斗结果-未知-失败"]
 
 
 def test_guild_activity_uses_only_zero_in_the_scoped_remaining_counter_as_completion() -> None:
@@ -70,35 +68,32 @@ def test_guild_activity_uses_only_zero_in_the_scoped_remaining_counter_as_comple
     assert available["roi"] == [1000, 560, 280, 80]
     assert zero["expected"] == r"今日剩余征讨次数\s*[：:]\s*0\s*/\s*2"
     assert zero["roi"] == available["roi"]
-    assert "0569-帮派活动挑战-帮派-剩余-可用" in nodes[
-        "0533-帮派活动挑战-帮派-挑战-循环"
-    ]["recognition"]["param"]["all_of"]
-    assert "0570-帮派活动挑战-帮派-剩余-耗尽" in already_done[
-        "recognition"
-    ]["param"]["all_of"]
+    assert (
+        "0569-帮派活动挑战-帮派-剩余-可用"
+        in nodes["0533-帮派活动挑战-帮派-挑战-循环"]["recognition"]["param"]["all_of"]
+    )
+    assert "0570-帮派活动挑战-帮派-剩余-耗尽" in already_done["recognition"]["param"]["all_of"]
     assert already_done["next"] == [
         "0529-帮派活动挑战-帮派-已完成-退出-帮派-主页",
         "0528-帮派活动挑战-已完成-活动页-返回主页",
     ]
     assert already_done["max_hit"] == 2
-    assert already_done["custom_action_param"]["fixed_click_mode"] == (
-        "guild_activity_close"
-    )
+    assert already_done["custom_action_param"]["fixed_click_mode"] == ("guild_activity_close")
     cleanup_fallback = nodes["0528-帮派活动挑战-已完成-活动页-返回主页"]
     assert cleanup_fallback["custom_action"] == "ReturnToHome"
     assert cleanup_fallback["next"] == ["1371-公共-原生成功-主页边界"]
     assert cleanup_fallback["on_error"] == ["1365-公共-主页边界-失败"]
 
 
-def test_guild_activity_checks_zero_after_battle_cleanup_and_retries_only_bounded_challenge() -> None:
+def test_guild_activity_checks_zero_after_battle_cleanup_and_retries_only_bounded_challenge() -> (
+    None
+):
     nodes = _nodes()
     for name in (
         "0583-帮派活动挑战-帮派-结果-胜利",
         "0584-帮派活动挑战-帮派-结果-失败-2",
     ):
-        assert nodes[name]["next"] == [
-            "0547-帮派活动挑战-帮派-恭喜获得-关闭"
-        ]
+        assert nodes[name]["next"] == ["0547-帮派活动挑战-帮派-恭喜获得-关闭"]
     close_reward = nodes["0547-帮派活动挑战-帮派-恭喜获得-关闭"]
     assert close_reward["max_hit"] == 4
     assert close_reward["timeout"] == 8000
@@ -142,7 +137,9 @@ def test_guild_activity_accepts_split_reward_popup_ocr() -> None:
     assert nodes["0519-帮派活动挑战-零次-奖励检查"]["on_error"] == [
         "0610-帮派活动挑战-失败-返回主页",
     ]
-    assert nodes["0595-帮派活动挑战-关闭-征讨领取结果"]["post_delay"] >= 1000
+    conquest_result = nodes["0595-帮派活动挑战-关闭-征讨领取结果"]
+    assert conquest_result["pre_delay"] >= 1000
+    assert conquest_result["post_delay"] >= 1000
     failure_cleanup = nodes["0610-帮派活动挑战-失败-返回主页"]
     assert failure_cleanup["custom_action"] == "ReturnToWorldHome"
     assert failure_cleanup["next"] == ["1365-公共-主页边界-失败"]

@@ -12,7 +12,6 @@ from tests.mfw.pipeline_assertions import (
 )
 from tests.mfw.task_contract import TaskContract, load_task_nodes
 
-
 ROOT = Path(__file__).resolve().parents[3]
 RING = TaskContract("RING_CHALLENGE_DAILY", "daily/ring_challenge_daily.json")
 PIPELINE_PATH = ROOT / "assets/resource/base/pipeline" / RING.pipeline_file
@@ -54,13 +53,17 @@ def test_r20_start_and_result_candidates_keep_order() -> None:
         "1120-擂台挑战-关闭-对手",
     ]
     assert nodes["1107-擂台挑战-战斗-循环"]["next"] == [
+        "[JumpBack]1108-擂台挑战-战前准备-就绪",
         "[JumpBack]1110-擂台挑战-跳过",
         "1114-擂台挑战-战斗-关闭-结果",
     ]
     assert nodes["1110-擂台挑战-跳过"]["next"] == [
         "1111-擂台挑战-跳过-确定",
+        "1128-擂台挑战-擂台-结果-页面",
     ]
-    assert "next" not in ring_nodes["1111-擂台挑战-跳过-确定"]
+    assert ring_nodes["1111-擂台挑战-跳过-确定"]["next"] == [
+        "1128-擂台挑战-擂台-结果-页面"
+    ]
     assert "next" not in ring_nodes["1114-擂台挑战-战斗-关闭-结果"]
 
 
@@ -72,7 +75,6 @@ def test_r20_failtask_nodes_are_removed() -> None:
 
 
 def test_r20_confirmed_completion_uses_native_success_cleanup() -> None:
-    nodes = load_task_nodes(RING)
     ring_nodes = _load_pipeline()
 
     assert "1116-擂台挑战-已完成-关闭-页面" not in ring_nodes
@@ -144,12 +146,80 @@ def test_r20_battle_loops_are_bounded_and_resource_evidence_is_same_frame() -> N
         assert params["action_id"] in policy_caps
         assert all_of[params["resource_index"]] == "1150-擂台券"
         assert all_of[params["amount_index"]] == "1151-擂台挑战-擂台-券-数量"
-        assert params["resource_evidence_name"] == "擂台券"
+        assert params["resource_evidence_name"] == "1150-擂台券"
+        assert params["fixed_click_mode"] == "ring_battle_start"
         assert params["budget_amount"] == 1
         assert "observed_amount" not in params
+
+    assert nodes["1107-擂台挑战-战斗-循环"]["on_error"] == [
+        "1181-擂台挑战-战前准备-失败收尾"
+    ]
+    cleanup = nodes["1181-擂台挑战-战前准备-失败收尾"]
+    assert cleanup["custom_action_param"]["action_id"] == "close_ring_page"
+    assert TASK_POLICIES[RING.task_id].action_caps["close_ring_page"] == 2
+    assert cleanup["next"] == [
+        "1182-擂台挑战-失败-对手页收尾",
+        "1121-擂台挑战-关闭-页面",
+    ]
 
     assert nodes["1151-擂台挑战-擂台-券-数量"]["expected"] == [
         "^[1-9][0-9]?$",
         "^[1-9][0-9]?/12$",
     ]
     assert_all_cycles_bounded(nodes)
+
+
+def test_preparation_click_requires_both_page_and_ready_button():
+    nodes = _load_pipeline()
+    ready = nodes["1108-擂台挑战-战前准备-就绪"]
+    assert ready["recognition"]["param"]["all_of"] == [
+        "1156-擂台挑战-擂台-战斗-准备-页面", "1157-擂台挑战-擂台-就绪"
+    ]
+    assert ready["custom_action_param"]["action_id"] == "start_ring_battle"
+    assert "resource_id" not in ready["custom_action_param"]
+    assert ready["retry_times"] == 0
+    assert "next" not in ready  # Return to battle/result polling, not a second challenge.
+
+
+def test_battle_skip_uses_top_right_control_and_wait_covers_battle_timer():
+    nodes = _load_pipeline()
+    skip = nodes["1158-擂台挑战-擂台-跳过"]
+    assert skip["roi"] == [1090, 20, 110, 75]
+    assert nodes["1154-擂台挑战-擂台-战斗-页面"]["roi"] == [1080, 0, 190, 100]
+    assert nodes["1107-擂台挑战-战斗-循环"]["timeout"] == 180000
+
+
+def test_skip_text_click_waits_out_countdown_and_accepts_direct_result():
+    nodes = _load_pipeline()
+    assert nodes["1158-擂台挑战-擂台-跳过"]["recognition"] == "OCR"
+    assert nodes["1158-擂台挑战-擂台-跳过"]["expected"] == "^跳过$"
+    skip = nodes["1110-擂台挑战-跳过"]
+    assert skip["pre_delay"] == 4000
+    assert skip["timeout"] == 8000
+    assert skip["next"][-1] == "1128-擂台挑战-擂台-结果-页面"
+    # Merely detect direct results here; the parent owns the single dismissal.
+    assert nodes[skip["next"][-1]]["action"] == "DoNothing"
+    assert "next" not in nodes[skip["next"][-1]]
+
+
+def test_skip_confirmation_matches_observed_dialog_label():
+    nodes = _load_pipeline()
+    target = nodes["1171-擂台挑战-跳过-确定"]
+    assert target["expected"] == "^确认$"
+    assert target["roi"] == [760, 360, 460, 180]
+
+
+def test_skip_confirmation_waits_for_result_before_resuming_battle_poll():
+    nodes = _load_pipeline()
+    assert nodes["1111-擂台挑战-跳过-确定"]["next"] == [
+        "1128-擂台挑战-擂台-结果-页面"
+    ]
+
+
+def test_result_title_roi_contains_full_victory_and_defeat_labels():
+    nodes = _load_pipeline()
+    result = nodes["1159-擂台挑战-擂台-战斗-结果"]
+    x, y, width, height = result["roi"]
+    assert x <= 741 and x + width >= 1240
+    assert y <= 100 and y + height >= 250
+    assert "战斗失败" in result["expected"]

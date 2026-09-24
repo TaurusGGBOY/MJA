@@ -7,7 +7,6 @@ from types import SimpleNamespace
 
 import pytest
 
-
 MODULE_PATH = (
     Path(__file__).resolve().parents[1] / "agent/custom/action/restart_game.py"
 )
@@ -19,6 +18,17 @@ SPEC.loader.exec_module(restart_game)
 
 GAME_PACKAGE = "com.hanjiasongshu.dr22"
 GAME_ACTIVITY = "com.hanjiasongshu.dr22/.MainActivity"
+
+
+def test_evidence_and_intent_precede_force_stop(monkeypatch):
+    events = []
+    monkeypatch.setattr(restart_game, "capture", lambda *a, **k: events.append(("capture",)))
+    monkeypatch.setattr(restart_game, "emit", lambda event, **k: events.append((event,)))
+    monkeypatch.setattr(restart_game, "sleep", lambda *_: None)
+    assert restart_game.RestartGameSurface().run(
+        _context(events), FakeArgv(json.dumps({"package": GAME_PACKAGE, "activity": GAME_ACTIVITY}))
+    )
+    assert events[:3] == [("capture",), ("game_recovery_requested",), ("stop", GAME_PACKAGE)]
 
 
 class FakeArgv:
@@ -156,6 +166,7 @@ def test_restart_can_soft_relaunch_without_force_stopping(
         ("start", GAME_ACTIVITY),
         ("start_wait",),
     ]
+
 
 
 @pytest.mark.parametrize(

@@ -9,7 +9,6 @@ from tests.mfw.pipeline_assertions import (
 )
 from tests.mfw.task_contract import TaskContract, assert_no_side_effect_retry
 
-
 TRIAL = TaskContract("TRIAL_SWORD_DAILY", "daily/trial_sword_daily.json")
 ROOT = Path(__file__).parents[3]
 

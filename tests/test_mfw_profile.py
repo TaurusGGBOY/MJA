@@ -8,11 +8,98 @@ import pytest
 from tools.mfw_profile import (
     build_run_argv,
     ensure_pair_profiles,
+    ensure_sequence_profile,
     profile_task_order,
     resolve_config_id,
     run_profile,
     verify_profile_tasks,
 )
+
+
+def test_different_sequences_with_same_label_remain_uniquely_resolvable(tmp_path: Path):
+    (tmp_path / "interface.json").write_text(json.dumps({
+        "task": [{"name": name, "entry": name} for name in
+                 ("GAME_START", "MAIL_REWARD_DAILY", "SHOP_DAILY")],
+    }))
+    first = ensure_sequence_profile(tmp_path, ["MAIL_REWARD_DAILY"], "补跑")
+    second = ensure_sequence_profile(tmp_path, ["SHOP_DAILY"], "补跑")
+    assert first != second
+    assert profile_task_order(tmp_path, resolve_config_id(tmp_path, first)) == (
+        "GAME_START", "MAIL_REWARD_DAILY",
+    )
+    assert profile_task_order(tmp_path, resolve_config_id(tmp_path, second)) == (
+        "GAME_START", "SHOP_DAILY",
+    )
+    assert ensure_sequence_profile(tmp_path, ["SHOP_DAILY"], "补跑") == second
+
+
+@pytest.mark.parametrize("existing", [{}, {"controller_type": "explicit"}])
+def test_sequence_recovers_empty_controller_without_overwriting_configuration(tmp_path, existing):
+    (tmp_path / "interface.json").write_text(json.dumps({
+        "task": [{"name": name, "entry": name} for name in
+                 ("GAME_START", "MAIL_REWARD_DAILY")],
+    }))
+    configs = tmp_path / "config/configs"
+    configs.mkdir(parents=True)
+    (configs / "c_a_pair.json").write_text(json.dumps({
+        "name": "pair", "tasks": [
+            {"name": "Controller", "is_checked": True, "task_option": existing},
+            {"name": "GAME_START", "is_checked": True},
+            {"name": "MAIL_REWARD_DAILY", "is_checked": True},
+        ],
+    }))
+    configured = {"controller_type": "Adb", "Adb": {"screencap_methods": 64}}
+    (configs / "c_z_runtime.json").write_text(json.dumps({
+        "name": "runtime", "tasks": [
+            {"name": "Controller", "task_option": configured},
+        ],
+    }))
+    profile = ensure_sequence_profile(tmp_path, ["MAIL_REWARD_DAILY"])
+    saved = json.loads((configs / f"{resolve_config_id(tmp_path, profile)}.json").read_text())
+    controller = next(item for item in saved["tasks"] if item["name"] == "Controller")
+    assert controller["task_option"] == (existing or configured)
+
+
+@pytest.mark.parametrize("sequence", [False, True])
+def test_saved_profiles_do_not_enable_missing_default_checked_tasks(tmp_path: Path, sequence):
+    declarations = [
+        {"name": name, "entry": name, "default_check": True}
+        for name in ("GAME_START", "MAIL_REWARD_DAILY", "SHOP_DAILY", "RETIRED_DAILY", "GAME_STOP")
+    ]
+    (tmp_path / "interface.json").write_text(
+        json.dumps(
+            {
+                "retired_tasks": ["RETIRED_DAILY"],
+                "task": declarations,
+            }
+        )
+    )
+    configs = tmp_path / "config/configs"
+    configs.mkdir(parents=True)
+    (configs / "c_old.json").write_text(
+        json.dumps(
+            {
+                "name": "old pair",
+                "tasks": [
+                    {"name": "GAME_START", "is_checked": True},
+                    {"name": "MAIL_REWARD_DAILY", "is_checked": True},
+                ],
+            }
+        )
+    )
+    names = ensure_pair_profiles(tmp_path)
+    profile = (
+        ensure_sequence_profile(tmp_path, ["MAIL_REWARD_DAILY"])
+        if sequence
+        else names["MAIL_REWARD_DAILY"]
+    )
+    payload = json.loads((configs / f"{resolve_config_id(tmp_path, profile)}.json").read_text())
+    checked = {item["name"]: item["is_checked"] for item in payload["tasks"]}
+    # Model the GUI loading defaults for rows omitted by the profile.
+    actual = [
+        task["name"] for task in declarations if checked.get(task["name"], task["default_check"])
+    ]
+    assert actual == ["GAME_START", "MAIL_REWARD_DAILY"]
 
 
 def test_ensure_pair_profiles_materializes_and_registers_every_active_task(
@@ -47,9 +134,7 @@ def test_ensure_pair_profiles_materializes_and_registers_every_active_task(
             {"name": "EQUIPMENT_DECOMPOSE_DAILY", "is_checked": True},
         ],
     }
-    (config_dir / "c_full.json").write_text(
-        json.dumps(template), encoding="utf-8"
-    )
+    (config_dir / "c_full.json").write_text(json.dumps(template), encoding="utf-8")
     (tmp_path / "config/multi_config.json").write_text(
         json.dumps({"config_list": ["c_full"]}), encoding="utf-8"
     )
@@ -64,9 +149,7 @@ def test_ensure_pair_profiles_materializes_and_registers_every_active_task(
     for task_id, profile_name in profiles.items():
         config_id = resolve_config_id(tmp_path, profile_name)
         assert profile_task_order(tmp_path, config_id) == ("GAME_START", task_id)
-    registry = json.loads(
-        (tmp_path / "config/multi_config.json").read_text(encoding="utf-8")
-    )
+    registry = json.loads((tmp_path / "config/multi_config.json").read_text(encoding="utf-8"))
     assert set(registry["config_list"]) == {
         "c_full",
         "c_mja_pair_mail_reward_daily",
@@ -154,17 +237,13 @@ def test_ensure_pair_profiles_synthesizes_missing_task_item(tmp_path: Path):
     assert profiles == {
         "EQUIPMENT_DECOMPOSE_DAILY": "MJA auto GAME_START+EQUIPMENT_DECOMPOSE_DAILY"
     }
-    config_id = resolve_config_id(
-        tmp_path, "MJA auto GAME_START+EQUIPMENT_DECOMPOSE_DAILY"
-    )
+    config_id = resolve_config_id(tmp_path, "MJA auto GAME_START+EQUIPMENT_DECOMPOSE_DAILY")
     assert profile_task_order(tmp_path, config_id) == (
         "GAME_START",
         "EQUIPMENT_DECOMPOSE_DAILY",
     )
     generated = json.loads(
-        (config_dir / "c_mja_pair_equipment_decompose_daily.json").read_text(
-            encoding="utf-8"
-        )
+        (config_dir / "c_mja_pair_equipment_decompose_daily.json").read_text(encoding="utf-8")
     )
     names = {item["name"] for item in generated["tasks"]}
     assert "EQUIPMENT_DECOMPOSE_DAILY" in names
@@ -197,9 +276,7 @@ def test_ensure_pair_profiles_creates_config_tree_without_historical_profiles(
         "WEEKLY_FREE_GIFT_DAILY",
         "EQUIPMENT_DECOMPOSE_DAILY",
     }
-    registry = json.loads(
-        (tmp_path / "config/multi_config.json").read_text(encoding="utf-8")
-    )
+    registry = json.loads((tmp_path / "config/multi_config.json").read_text(encoding="utf-8"))
     for task_id, profile_name in profiles.items():
         config_id = resolve_config_id(tmp_path, profile_name)
         assert config_id in registry["config_list"]
@@ -334,6 +411,7 @@ def test_run_profile_uses_direct_argv_without_shell(tmp_path: Path, monkeypatch)
 
     class Process:
         returncode = 17
+
         def poll(self):
             return self.returncode
 
@@ -343,9 +421,7 @@ def test_run_profile_uses_direct_argv_without_shell(tmp_path: Path, monkeypatch)
 
     monkeypatch.setattr("subprocess.Popen", fake_popen)
     assert run_profile(tmp_path, "live-mail") == 17
-    assert calls == [
-        ([str(tmp_path / "MFW"), "--config-id=c_mail", "--direct-run"], tmp_path)
-    ]
+    assert calls == [([str(tmp_path / "MFW"), "--config-id=c_mail", "--direct-run"], tmp_path)]
 
 
 def test_run_profile_resolves_relative_install_before_changing_directory(
@@ -366,6 +442,7 @@ def test_run_profile_resolves_relative_install_before_changing_directory(
 
     class Process:
         returncode = 0
+
         def poll(self):
             return self.returncode
 

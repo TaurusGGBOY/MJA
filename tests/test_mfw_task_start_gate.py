@@ -15,7 +15,11 @@ def _entry(path: Path) -> dict[str, object]:
 
 
 def test_every_daily_task_has_a_native_begin_task_entry() -> None:
-    entries = [_entry(path) for path in sorted(DAILY_PIPELINES.glob("*.json"))]
+    entries = [
+        _entry(path)
+        for path in sorted(DAILY_PIPELINES.glob("*.json"))
+        if not path.name.startswith("._")
+    ]
     assert len(entries) == 22
     for entry in entries:
         assert entry["action"] == "Custom"
@@ -31,6 +35,8 @@ def test_begin_task_failures_are_native_failures_or_local_recovery() -> None:
         )
     )
     for path in sorted(DAILY_PIPELINES.glob("*.json")):
+        if path.name.startswith("._"):
+            continue
         payload = json.loads(path.read_text(encoding="utf-8"))
         entry = _entry(path)
         for target in entry.get("on_error", []):

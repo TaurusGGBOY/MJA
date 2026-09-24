@@ -4,52 +4,43 @@
     "action": "DoNothing",
     "max_hit": 1,
     "timeout": 1000,
-    "next": ["1356-启动-游戏启动"]
+    "next": [
+      "[JumpBack]启动-Pixel启动器无响应-关闭",
+      "1362-启动-游戏就绪",
+      "1356-启动-游戏启动"
+    ]
   },
   "1356-启动-游戏启动": {
     "recognition": "DirectHit",
     "action": "StartApp",
-    "package": "com.hanjiasongshu.dr22/.MainActivity",
-    "repeat": 5,
-    "repeat_delay": 1000,
-    "timeout": 120000,
-    "post_delay": 5000,
+    "repeat": 1,
+    "timeout": 5000,
+    "post_delay": 1000,
     "next": [
-      "[JumpBack]0038-公共-已知-点击空白关闭",
-      "[JumpBack]1277-公共-已知-画卷-关闭",
-      "[JumpBack]1394-启动-关闭武学研习详情残留页",
-      "[JumpBack]1385-启动-关闭帮会奖励预览残留页",
-      "[JumpBack]1388-启动-关闭帮会活动残留页",
-      "[JumpBack]1391-启动-关闭帮会主页残留页",
-      "[JumpBack]1393-启动-关闭功能面板残留页",
-      "[JumpBack]1382-启动-关闭武学研习残留页",
-      "[JumpBack]1379-启动-关闭装备残留页",
-      "[JumpBack]1376-启动-关闭副本残留页",
-      "[JumpBack]1373-启动-关闭剑林残留页",
-      "[JumpBack]1359-启动-可选关闭公告页",
-      "[JumpBack]1360-启动-数据校验失败-继续下载",
-      "[JumpBack]1361-启动-可选关闭月签到奖励页",
-      "1357-启动-游戏启动成功-左下12探测",
-      "1362-启动-游戏就绪"
+      "启动-等待游戏就绪"
     ],
-    "on_error": ["启动-游戏启动恢复", "关闭游戏"]
+    "on_error": [
+      "启动-游戏启动恢复",
+      "关闭游戏",
+      "1365-公共-主页边界-失败"
+    ],
+    "max_hit": 1,
+    "package": "com.hanjiasongshu.dr22/.MainActivity"
   },
   "启动-游戏启动恢复": {
     "recognition": "DirectHit",
-    "action": "Custom",
-    "custom_action": "RestartGameSurface",
-    "custom_action_param": {
-      "package": "com.hanjiasongshu.dr22",
-      "activity": "com.hanjiasongshu.dr22/.MainActivity",
-      "force_stop": true,
-      "cooldown_ms": 2000,
-      "start_repeat": 5,
-      "start_repeat_delay_ms": 1000,
-      "start_timeout_ms": 15000
-    },
+    "action": "StopApp",
     "timeout": 30000,
-    "max_hit": 1,
-    "next": ["1356-启动-游戏启动"]
+    "max_hit": 2,
+    "next": [
+      "启动-恢复后重新启动"
+    ],
+    "on_error": [
+      "关闭游戏",
+      "1365-公共-主页边界-失败"
+    ],
+    "package": "com.hanjiasongshu.dr22",
+    "post_delay": 2000
   },
   "1385-启动-关闭帮会奖励预览残留页": {
     "recognition": {
@@ -63,21 +54,44 @@
       }
     },
     "action": "Click",
-    "target": [1019, 138, 28, 28],
+    "target": [
+      1019,
+      138,
+      28,
+      28
+    ],
     "max_hit": 1,
     "post_delay": 1500
   },
   "1386-启动-帮会奖励预览残留页-累计征讨": {
     "recognition": "OCR",
     "expected": "累计征讨\\s*\\d+\\s*次",
-    "roi": [300, 150, 450, 450],
+    "roi": [
+      300,
+      150,
+      450,
+      450
+    ],
     "action": "DoNothing"
   },
   "1387-启动-帮会奖励预览残留页-关闭": {
     "recognition": "ColorMatch",
-    "lower": [0, 0, 0],
-    "upper": [125, 125, 125],
-    "roi": [990, 110, 90, 90],
+    "lower": [
+      0,
+      0,
+      0
+    ],
+    "upper": [
+      125,
+      125,
+      125
+    ],
+    "roi": [
+      990,
+      110,
+      90,
+      90
+    ],
     "connected": true,
     "count": 80,
     "order_by": "Area",
@@ -96,21 +110,44 @@
       }
     },
     "action": "Click",
-    "target": [1201, 27, 40, 39],
+    "target": [
+      1201,
+      27,
+      40,
+      39
+    ],
     "max_hit": 1,
     "post_delay": 1500
   },
   "1389-启动-帮会活动残留页-标题": {
     "recognition": "OCR",
     "expected": "^幻境征讨$",
-    "roi": [100, 0, 250, 100],
+    "roi": [
+      100,
+      0,
+      250,
+      100
+    ],
     "action": "DoNothing"
   },
   "1390-启动-帮会页面残留-关闭": {
     "recognition": "ColorMatch",
-    "lower": [0, 0, 0],
-    "upper": [125, 125, 125],
-    "roi": [1180, 0, 100, 100],
+    "lower": [
+      0,
+      0,
+      0
+    ],
+    "upper": [
+      125,
+      125,
+      125
+    ],
+    "roi": [
+      1180,
+      0,
+      100,
+      100
+    ],
     "connected": true,
     "count": 180,
     "action": "DoNothing"
@@ -127,26 +164,43 @@
       }
     },
     "action": "Click",
-    "target": [1201, 27, 40, 39],
+    "target": [
+      1201,
+      27,
+      40,
+      39
+    ],
     "max_hit": 1,
     "post_delay": 1500
   },
   "1392-启动-帮会主页残留页-标题": {
     "recognition": "OCR",
     "expected": "^浮生城$",
-    "roi": [0, 0, 380, 100],
+    "roi": [
+      0,
+      0,
+      380,
+      100
+    ],
     "action": "DoNothing"
   },
   "1393-启动-关闭功能面板残留页": {
     "recognition": {
       "type": "And",
       "param": {
-        "all_of": ["0029-公共-游戏侧边面板-打开"],
+        "all_of": [
+          "0029-公共-游戏侧边面板-打开"
+        ],
         "box_index": 0
       }
     },
     "action": "Click",
-    "target": [1195, 10, 70, 70],
+    "target": [
+      1195,
+      10,
+      70,
+      70
+    ],
     "max_hit": 1,
     "post_delay": 1500
   },
@@ -162,14 +216,24 @@
       }
     },
     "action": "Click",
-    "target": [1202, 30, 24, 24],
+    "target": [
+      1202,
+      30,
+      24,
+      24
+    ],
     "max_hit": 1,
     "post_delay": 1500
   },
   "1395-启动-武学研习详情残留页-研习按钮": {
     "recognition": "OCR",
     "expected": "^研习$",
-    "roi": [850, 500, 350, 110],
+    "roi": [
+      850,
+      500,
+      350,
+      110
+    ],
     "action": "DoNothing"
   },
   "1382-启动-关闭武学研习残留页": {
@@ -184,20 +248,35 @@
       }
     },
     "action": "Click",
-    "target": [1202, 30, 24, 24],
+    "target": [
+      1202,
+      30,
+      24,
+      24
+    ],
     "max_hit": 1,
     "post_delay": 1500
   },
   "1383-启动-武学研习残留页-标题": {
     "recognition": "OCR",
     "expected": "^武学研习$",
-    "roi": [40, 0, 280, 100],
+    "roi": [
+      40,
+      0,
+      280,
+      100
+    ],
     "action": "DoNothing"
   },
   "1384-启动-武学研习残留页-关闭": {
     "recognition": "TemplateMatch",
     "template": "home/modal_close.png",
-    "roi": [1160, 0, 100, 100],
+    "roi": [
+      1160,
+      0,
+      100,
+      100
+    ],
     "threshold": 0.075,
     "action": "DoNothing"
   },
@@ -213,20 +292,35 @@
       }
     },
     "action": "Click",
-    "target": [1202, 30, 24, 24],
+    "target": [
+      1202,
+      30,
+      24,
+      24
+    ],
     "max_hit": 1,
     "post_delay": 1500
   },
   "1380-启动-装备残留页-标题": {
     "recognition": "OCR",
     "expected": "^装备$",
-    "roi": [0, 0, 160, 100],
+    "roi": [
+      0,
+      0,
+      160,
+      100
+    ],
     "action": "DoNothing"
   },
   "1381-启动-装备残留页-关闭": {
     "recognition": "TemplateMatch",
     "template": "home/modal_close.png",
-    "roi": [1160, 0, 100, 100],
+    "roi": [
+      1160,
+      0,
+      100,
+      100
+    ],
     "threshold": 0.075,
     "action": "DoNothing"
   },
@@ -242,20 +336,35 @@
       }
     },
     "action": "Click",
-    "target": [1202, 30, 24, 24],
+    "target": [
+      1202,
+      30,
+      24,
+      24
+    ],
     "max_hit": 1,
     "post_delay": 1500
   },
   "1377-启动-副本残留页-标题": {
     "recognition": "OCR",
     "expected": "风雪神道",
-    "roi": [300, 240, 700, 240],
+    "roi": [
+      300,
+      240,
+      700,
+      240
+    ],
     "action": "DoNothing"
   },
   "1378-启动-副本残留页-关闭": {
     "recognition": "TemplateMatch",
     "template": "home/modal_close.png",
-    "roi": [1160, 0, 100, 100],
+    "roi": [
+      1160,
+      0,
+      100,
+      100
+    ],
     "threshold": 0.075,
     "action": "DoNothing"
   },
@@ -271,7 +380,12 @@
       }
     },
     "action": "Click",
-    "target": [1205, 33, 18, 18],
+    "target": [
+      1205,
+      33,
+      18,
+      18
+    ],
     "max_hit": 1,
     "post_delay": 1500
   },
@@ -282,46 +396,59 @@
       "^养成\\s*/\\s*资源$",
       "^剑林\\s*/\\s*资源$"
     ],
-    "roi": [40, 0, 280, 100],
+    "roi": [
+      40,
+      0,
+      280,
+      100
+    ],
     "action": "DoNothing"
   },
   "1375-启动-剑林残留页-关闭": {
     "recognition": "DirectHit",
     "action": "DoNothing"
   },
-  "1357-启动-游戏启动成功-左下12探测": {
-    "recognition": "OCR",
-    "expected": "^12\\+?$",
-    "roi": [0, 560, 540, 160],
-    "timeout": 300000,
-    "max_hit": 1,
-    "action": "DoNothing",
-    "next": [
-      "[JumpBack]0038-公共-已知-点击空白关闭",
-      "[JumpBack]1359-启动-可选关闭公告页",
-      "[JumpBack]1361-启动-可选关闭月签到奖励页",
-      "[JumpBack]1370-启动-游戏启动后-进入按钮",
-      "1362-启动-游戏就绪"
-    ]
-  },
   "1359-启动-可选关闭公告页": {
     "recognition": "OCR",
     "expected": "公告|公|告",
-    "roi": [0, 0, 420, 520],
+    "roi": [
+      0,
+      0,
+      420,
+      520
+    ],
     "timeout": 1500,
     "max_hit": 1,
     "action": "Click",
-    "target": [1160, 0, 120, 100],
+    "target": [
+      1160,
+      0,
+      120,
+      100
+    ],
     "post_delay": 1000
   },
   "1360-启动-数据校验失败-继续下载": {
     "recognition": "OCR",
-    "expected": ["允许下载", "继续下载"],
-    "roi": [630, 450, 330, 80],
+    "expected": [
+      "允许下载",
+      "继续下载"
+    ],
+    "roi": [
+      630,
+      450,
+      330,
+      80
+    ],
     "timeout": 3000,
     "max_hit": 3,
     "action": "Click",
-    "target": [650, 450, 300, 80],
+    "target": [
+      650,
+      450,
+      300,
+      80
+    ],
     "post_delay": 1000
   },
   "1361-启动-可选关闭月签到奖励页": {
@@ -331,12 +458,22 @@
       "^本月.*可领取.*物品$",
       "^[0-9一二三四五六七八九十]+月签到$"
     ],
-    "roi": [150, 100, 900, 520],
+    "roi": [
+      150,
+      100,
+      900,
+      520
+    ],
     "timeout": 1500,
-    "max_hit": 1,
+    "max_hit": 3,
     "action": "Click",
-    "target": [1066, 160, 6, 8],
-    "post_delay": 1000
+    "target": [
+      1066,
+      160,
+      6,
+      8
+    ],
+    "post_delay": 5000
   },
   "1362-启动-游戏就绪": {
     "recognition": {
@@ -352,31 +489,198 @@
     "action": "Custom",
     "custom_action": "RuntimeHealth"
   },
+  "启动-奖励弹窗-点击空白关闭": {
+    "recognition": "OCR",
+    "expected": "^恭喜获得$",
+    "roi": [
+      120,
+      180,
+      180,
+      360
+    ],
+    "timeout": 8000,
+    "max_hit": 2,
+    "action": "Click",
+    "target": [
+      550,
+      665,
+      180,
+      45
+    ],
+    "post_delay": 1000
+  },
+  "启动-七星阵法引导-探寻": {
+    "recognition": "OCR",
+    "expected": "^阁主，七星阵法已现世，点击$",
+    "roi": [
+      380,
+      390,
+      360,
+      110
+    ],
+    "timeout": 8000,
+    "max_hit": 1,
+    "action": "Click",
+    "target": [
+      640,
+      610,
+      140,
+      105
+    ],
+    "post_delay": 1000
+  },
+  "启动-七星阵法引导-跳过": {
+    "recognition": "OCR",
+    "expected": "^跳过$",
+    "roi": [
+      1040,
+      35,
+      160,
+      100
+    ],
+    "timeout": 8000,
+    "max_hit": 1,
+    "action": "Click",
+    "target": [
+      1060,
+      45,
+      130,
+      75
+    ],
+    "post_delay": 1500
+  },
   "关闭游戏": {
     "recognition": "DirectHit",
     "action": "StopApp",
     "package": "com.hanjiasongshu.dr22",
     "max_hit": 1,
-    "next": ["1356-启动-游戏启动"]
+    "next": [
+      "1365-公共-主页边界-失败"
+    ],
+    "timeout": 1000
   },
   "1370-启动-游戏启动后-进入按钮": {
     "recognition": "OCR",
     "expected": [
-      "开始游戏",
-      "点击开始游戏[！!]?",
-      "点击开始游戏",
-      "进入游戏[！!]?",
-      "点击进入游戏[！!]?",
-      "点击开始游戏[！!]?",
-      "进入游戏[！!?]?",
-      "点击进入游戏[！!?]?",
-      "戏"
+      "^(?:点击)?开始游戏[！!]?$",
+      "^(?:点击)?进入游戏[！!?]?$"
     ],
-    "roi": [350, 540, 580, 170],
+    "roi": [
+      350,
+      540,
+      580,
+      120
+    ],
     "timeout": 15000,
-    "max_hit": 2,
+    "max_hit": 6,
     "action": "Click",
-    "target": [575, 620, 120, 25],
+    "target": true,
     "post_delay": 10000
+  },
+  "启动-Pixel启动器无响应-关闭": {
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "启动-Pixel启动器无响应-标题",
+          "启动-系统无响应-关闭应用"
+        ],
+        "box_index": 1
+      }
+    },
+    "action": "Click",
+    "target": true,
+    "max_hit": 1,
+    "post_delay": 2000
+  },
+  "启动-Pixel启动器无响应-标题": {
+    "recognition": "OCR",
+    "expected": "^Pixel\\s*启动器没有响应$",
+    "roi": [
+      285,
+      285,
+      640,
+      85
+    ],
+    "action": "DoNothing"
+  },
+  "启动-系统无响应-关闭应用": {
+    "recognition": "OCR",
+    "expected": "^关闭应用$",
+    "roi": [
+      380,
+      390,
+      360,
+      85
+    ],
+    "action": "DoNothing"
+  },
+  "启动-等待游戏就绪": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "timeout": 120000,
+    "max_hit": 3,
+    "next": [
+      "[JumpBack]启动-Pixel启动器无响应-关闭",
+      "启动-进程退出后恢复",
+      "[JumpBack]启动-奖励弹窗-点击空白关闭",
+      "[JumpBack]启动-七星阵法引导-探寻",
+      "[JumpBack]启动-七星阵法引导-跳过",
+      "[JumpBack]0038-公共-已知-点击空白关闭",
+      "[JumpBack]1277-公共-已知-画卷-关闭",
+      "[JumpBack]1394-启动-关闭武学研习详情残留页",
+      "[JumpBack]1385-启动-关闭帮会奖励预览残留页",
+      "[JumpBack]1388-启动-关闭帮会活动残留页",
+      "[JumpBack]1391-启动-关闭帮会主页残留页",
+      "[JumpBack]1393-启动-关闭功能面板残留页",
+      "[JumpBack]1382-启动-关闭武学研习残留页",
+      "[JumpBack]1379-启动-关闭装备残留页",
+      "[JumpBack]1376-启动-关闭副本残留页",
+      "[JumpBack]1373-启动-关闭剑林残留页",
+      "[JumpBack]1359-启动-可选关闭公告页",
+      "[JumpBack]1360-启动-数据校验失败-继续下载",
+      "[JumpBack]1361-启动-可选关闭月签到奖励页",
+      "[JumpBack]1370-启动-游戏启动后-进入按钮",
+      "1362-启动-游戏就绪"
+    ],
+    "on_error": [
+      "启动-游戏启动恢复",
+      "关闭游戏",
+      "1365-公共-主页边界-失败"
+    ],
+    "rate_limit": 3000
+  },
+  "启动-恢复后重新启动": {
+    "recognition": "DirectHit",
+    "action": "StartApp",
+    "repeat": 1,
+    "timeout": 5000,
+    "post_delay": 1000,
+    "next": [
+      "启动-等待游戏就绪"
+    ],
+    "on_error": [
+      "关闭游戏",
+      "1365-公共-主页边界-失败"
+    ],
+    "max_hit": 2,
+    "package": "com.hanjiasongshu.dr22/.MainActivity"
+  },
+  "启动-读取游戏进程": {
+    "recognition": "DirectHit",
+    "action": "Shell",
+    "cmd": "if /system/bin/pidof com.hanjiasongshu.dr22 >/dev/null; then echo MJA_GAME_PROCESS_RUNNING; else echo MJA_GAME_PROCESS_EXITED; fi",
+    "shell_timeout": 3000
+  },
+  "启动-进程退出后恢复": {
+    "recognition": "Custom",
+    "custom_recognition": "GameProcessExited",
+    "action": "DoNothing",
+    "max_hit": 3,
+    "next": [
+      "启动-游戏启动恢复",
+      "关闭游戏",
+      "1365-公共-主页边界-失败"
+    ]
   }
 }
