@@ -228,11 +228,11 @@ def test_jianlin_routes_victory_result_before_prepare_page_detection():
     assert pipeline["1018-剑林凝结体体力-剑林-战斗-中"] == {
         "recognition": "OCR",
         "expected": [
-            "^自动战斗中$",
-            "^自动中(?:…|\\.\\.\\.)?$",
-            "^战斗中$",
+            "自动战斗中",
+            "自动中(?:…|\\.\\.\\.)?",
+            "战斗中",
         ],
-        "roi": [1030, 620, 240, 100],
+        "roi": [1000, 0, 280, 120],
         "action": "DoNothing",
     }
     assert all(
