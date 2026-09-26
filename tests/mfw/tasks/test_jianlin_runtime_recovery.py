@@ -123,11 +123,11 @@ def test_jianlin_battle_wait_is_read_only_bounded_and_result_first() -> None:
     marker = nodes["1018-剑林凝结体体力-剑林-战斗-中"]
     assert marker["recognition"] == "OCR"
     assert marker["expected"] == [
-        "^自动战斗中$",
-        "^自动中(?:…|\\.\\.\\.)?$",
-        "^战斗中$",
+        "自动战斗中",
+        "自动中(?:…|\\.\\.\\.)?",
+        "战斗中",
     ]
-    assert marker["roi"] == [1030, 620, 240, 100]
+    assert marker["roi"] == [1000, 0, 280, 120]
     assert marker["action"] == "DoNothing"
 
     assert nodes[BATTLE_RESULT]["next"] == ["0954-剑林凝结体体力-关闭-凝结体-结果"]
