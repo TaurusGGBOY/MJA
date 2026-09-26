@@ -1,0 +1,13 @@
+{
+  "task": [
+    {
+      "name": "CELEBRATION_MARTIAL_DAILY",
+      "label": "庆典演武",
+      "default_check": true,
+      "group": [
+        "日常"
+      ],
+      "entry": "0002-庆典演武-任务入口"
+    }
+  ]
+}

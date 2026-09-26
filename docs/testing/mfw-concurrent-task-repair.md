@@ -76,7 +76,8 @@ install/.venv/bin/python tools/mfw_live_acceptance.py finish \
 | dungeon | `GAME_START + DUNGEON_SWEEP_DAILY` |
 | jianlin | `GAME_START + JIANLIN_RESOURCE_CONDENSATE_STAMINA_DAILY` |
 | ring | `GAME_START + RING_CHALLENGE_DAILY` |
-| break-array | `GAME_START + BREAK_ARRAY_MARTIAL_DAILY` |
+| break-array（已退役，后续不默认进行） | `GAME_START + BREAK_ARRAY_MARTIAL_DAILY` |
+| celebration | `GAME_START + CELEBRATION_MARTIAL_DAILY` |
 | guild-activity | `GAME_START + GUILD_ACTIVITY_CHALLENGE_DAILY` |
 | guild-affairs | `GAME_START + GUILD_AFFAIRS_DAILY` |
 | guild-donation | `GAME_START + GUILD_DONATION_DAILY` |

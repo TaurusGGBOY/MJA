@@ -10,10 +10,10 @@ def test_agents_contains_public_contributor_guidance() -> None:
     assert "Do not automate payments, login, verification codes, or credentials" in text
 
 
-def test_worker_guide_names_all_22_business_tasks() -> None:
+def test_worker_guide_names_all_23_business_tasks() -> None:
     text = (ROOT / "docs/testing/mfw-concurrent-task-repair.md").read_text(
         encoding="utf-8"
     )
     expected = {path.stem for path in (ROOT / "assets/tasks/日常").glob("*.json")}
-    assert len(expected) == 22
+    assert len(expected) == 23
     assert all(task_id in text for task_id in expected)

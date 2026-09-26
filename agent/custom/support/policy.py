@@ -445,6 +445,31 @@ _POLICIES = {
         },
         cleanup_actions=frozenset({"close_break_array_page", "close_break_array_activity"}),
     ),
+    "CELEBRATION_MARTIAL_DAILY": _policy(
+        "CELEBRATION_MARTIAL_DAILY",
+        "庆典演武",
+        frozenset({"combat"}),
+        max_steps=448,
+        action_caps={
+            "open_break_array_activity": 1,
+            "open_break_array_activity_item": 1,
+            "open_break_array": 1,
+            "scroll_break_array_activity": 1,
+            "scroll_break_array_activity_second": 1,
+            "scroll_break_array_activity_reverse": 1,
+            "resume_break_array": 1,
+            "start_break_array_challenge": 9,
+            "confirm_break_array_challenge": 9,
+            "start_break_array_battle": 9,
+            "wait_break_array_battle": 360,
+            "wait_break_array_result": 9,
+            "resume_break_array_result": 1,
+            "dismiss_break_array_result": 9,
+            "close_break_array_page": 1,
+            "close_break_array_activity": 1,
+        },
+        cleanup_actions=frozenset({"close_break_array_page", "close_break_array_activity"}),
+    ),
     # MFW-only task.  The legacy workflow catalog intentionally remains
     # unchanged until the main agent integrates this task's control-plane
     # definition and interface import.

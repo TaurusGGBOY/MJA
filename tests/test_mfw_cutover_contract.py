@@ -56,6 +56,7 @@ def test_formal_interface_is_the_single_native_mfw_control_plane() -> None:
         "JIANLIN_RESOURCE_CONDENSATE_STAMINA_DAILY",
         "RING_CHALLENGE_DAILY",
         "BREAK_ARRAY_MARTIAL_DAILY",
+        "CELEBRATION_MARTIAL_DAILY",
         "GUILD_ACTIVITY_CHALLENGE_DAILY",
         "GUILD_AFFAIRS_DAILY",
         "GUILD_DONATION_DAILY",

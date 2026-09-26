@@ -30,7 +30,7 @@ def test_formal_interface_exposes_only_imported_native_mfw_tasks() -> None:
     assert len(names) == len(set(names))
     assert names[0] == "GAME_START"
     assert "GAME_STOP" in names
-    assert len([name for name in names if name.endswith("_DAILY")]) == 22
+    assert len([name for name in names if name.endswith("_DAILY")]) == 23
     assert "WEEKLY_FREE_GIFT_DAILY" in names
 
 

@@ -20,6 +20,9 @@ def test_game_start_is_a_startup_only_pipeline_without_restart_named_nodes() -> 
     assert not any("重启" in name for name in startup)
     assert startup["0023-启动-游戏入口"]["next"] == [
         "[JumpBack]启动-Pixel启动器无响应-关闭",
+        "庆典演武-结果就绪",
+        "庆典演武-准备就绪",
+        "[JumpBack]启动-关闭庆典演武残留页",
         "1362-启动-游戏就绪",
         "1356-启动-游戏启动",
     ]
@@ -69,6 +72,7 @@ def test_game_start_launches_once_then_observes_a_bounded_state_scan() -> None:
     assert start["max_hit"] == 3
     assert start["next"] == [
         "[JumpBack]启动-Pixel启动器无响应-关闭",
+        "[JumpBack]启动-关闭庆典演武残留页",
         "启动-进程退出后恢复",
         "[JumpBack]启动-奖励弹窗-点击空白关闭",
         "[JumpBack]启动-七星阵法引导-探寻",

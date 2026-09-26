@@ -48,6 +48,7 @@ def test_interface_targets_the_android_emulator_through_adb_controller() -> None
         "tasks/日常/JIANLIN_RESOURCE_CONDENSATE_STAMINA_DAILY.json",
         "tasks/日常/RING_CHALLENGE_DAILY.json",
         "tasks/日常/BREAK_ARRAY_MARTIAL_DAILY.json",
+        "tasks/日常/CELEBRATION_MARTIAL_DAILY.json",
         "tasks/日常/GUILD_ACTIVITY_CHALLENGE_DAILY.json",
         "tasks/日常/GUILD_AFFAIRS_DAILY.json",
         "tasks/日常/GUILD_DONATION_DAILY.json",
@@ -82,6 +83,7 @@ def test_interface_targets_the_android_emulator_through_adb_controller() -> None
             "JIANLIN_RESOURCE_CONDENSATE_STAMINA_DAILY",
             "RING_CHALLENGE_DAILY",
             "BREAK_ARRAY_MARTIAL_DAILY",
+            "CELEBRATION_MARTIAL_DAILY",
             "GUILD_ACTIVITY_CHALLENGE_DAILY",
             "GUILD_AFFAIRS_DAILY",
             "GUILD_DONATION_DAILY",
@@ -125,6 +127,9 @@ def test_game_start_entry_preserves_a_ready_home_before_starting_game() -> None:
     assert entry["action"] == "DoNothing"
     assert entry["next"] == [
         "[JumpBack]启动-Pixel启动器无响应-关闭",
+        "庆典演武-结果就绪",
+        "庆典演武-准备就绪",
+        "[JumpBack]启动-关闭庆典演武残留页",
         "1362-启动-游戏就绪",
         "1356-启动-游戏启动",
     ]

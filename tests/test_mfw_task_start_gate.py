@@ -20,7 +20,7 @@ def test_every_daily_task_has_a_native_begin_task_entry() -> None:
         for path in sorted(DAILY_PIPELINES.glob("*.json"))
         if not path.name.startswith("._")
     ]
-    assert len(entries) == 22
+    assert len(entries) == 23
     for entry in entries:
         assert entry["action"] == "Custom"
         assert entry["custom_action"] == "BeginTask"
