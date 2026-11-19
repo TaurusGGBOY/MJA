@@ -25,7 +25,9 @@ def test_r31_recovery_edges_stay_inside_existing_shadow_task() -> None:
     nodes = _nodes()
     recovery = nodes["1176-影之遗迹-跨图-确认"]
     assert recovery["next"] == [
+        "影之遗迹-服务器报错-重启应用",
+        "影之遗迹-服务器报错-终止",
         "1593-MJA-影之遗迹-进入-探索页",
         "1592-MJA-影之遗迹-自动寻路-等待-关卡",
     ]
-    assert "on_error" not in recovery
+    assert recovery["on_error"] == ["1221-影之遗迹-记录-失败"]

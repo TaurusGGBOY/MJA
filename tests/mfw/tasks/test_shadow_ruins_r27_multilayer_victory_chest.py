@@ -25,8 +25,11 @@ def test_r27_failure_partition_uses_existing_explicit_failure_node() -> None:
     for name in (
         "1180-影之遗迹-战斗未知结果-结果",
         "1216-影之遗迹-战斗-循环-耗尽",
-        "1221-影之遗迹-记录-失败",
     ):
         assert nodes[name]["custom_action"] == "FailTask"
         assert nodes[name]["Abort"] is True
         assert "next" not in nodes[name] and "on_error" not in nodes[name]
+
+
+def test_active_failure_path_preserves_failure_after_home_cleanup():
+    assert _nodes()["1221-影之遗迹-记录-失败"]["next"] == ["MJA-公共-原生失败-返回主页"]

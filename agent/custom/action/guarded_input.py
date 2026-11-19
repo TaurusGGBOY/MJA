@@ -13,6 +13,7 @@ from maa.custom_action import CustomAction
 from agent.custom.support.controller_input import (
     box_values,
     click_box,
+    drag_tap_box,
     resolution_values,
     swipe_box,
 )
@@ -631,6 +632,9 @@ class GuardedInput(CustomAction):
             ):
                 _record_denial(context, params, "fixed_mode_input_shape")
                 return False
+            if params["action_id"] == "dismiss_shadow_reward_popup" and fixed_mode_box is None:
+                _record_denial(context, params, "shadow_reward_blank_hitbox_required")
+                return False
             RUN_STORE.increment(params["task_id"], params["action_id"])
             if resource_id is not None:
                 RUN_STORE.consume_resource(params["task_id"], resource_id, budget_amount)
@@ -677,6 +681,8 @@ class GuardedInput(CustomAction):
                 return True
             fixed_mode_box = _fixed_click_mode_box(params)
             if fixed_mode_box is not None:
+                if params["action_id"] == "dismiss_shadow_reward_popup":
+                    return drag_tap_box(controller, fixed_mode_box, resolution=resolution)
                 return click_box(controller, fixed_mode_box, resolution=resolution)
             return click_box(
                 controller,

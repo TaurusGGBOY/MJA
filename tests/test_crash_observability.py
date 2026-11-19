@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import io
 import json
 import os
 import signal
@@ -7,6 +8,7 @@ import subprocess
 import sys
 import time
 from pathlib import Path
+from types import SimpleNamespace
 
 from PIL import Image
 
@@ -117,6 +119,52 @@ def test_image_measurement_is_diagnostic_only(tmp_path, monkeypatch):
     row = records(tmp_path)[-1]
     assert row["magenta_fraction"] == 1.0
     assert "native_terminal" not in row
+
+
+def test_game_request_capture_keeps_modal_and_sanitizes_transport_hints(tmp_path, monkeypatch):
+    monkeypatch.setenv("MJA_DEBUG_DIR", str(tmp_path))
+    monkeypatch.setenv("MJA_ANDROID_ADB", "adb-test")
+    monkeypatch.setenv("MJA_ANDROID_SERIAL", "selected-device")
+    monkeypatch.setenv("MJA_ANDROID_CONTAINER", "test-container")
+    frame = Image.new("RGB", (1280, 720), (32, 32, 32))
+    frame.paste((255, 0, 0), (1100, 660, 1280, 720))
+    encoded = io.BytesIO()
+    frame.save(encoded, format="PNG")
+
+    def read(command, **kwargs):
+        if command[:3] == ["sudo", "-n", "docker"]:
+            assert command[-2:] == ["--", "test-container"]
+            return subprocess.CompletedProcess(command, 0, "2468\n")
+        if command[:3] == ["sudo", "-n", "nsenter"]:
+            return subprocess.CompletedProcess(
+                command, 0,
+                'ESTAB 0 480 192.0.2.1:52000 198.51.100.1:19001 users:(("jiasongshu.dr22",pid=2500)) retrans:6/0\n'
+                'ESTAB 0 10 192.0.2.1:6000 198.51.100.2:443 users:(("other",pid=2501))\n',
+            )
+        assert command[:3] == ["adb-test", "-s", "selected-device"]
+        if command[3] == "exec-out":
+            return subprocess.CompletedProcess(command, 0, encoded.getvalue())
+        if command[3] == "shell":
+            return subprocess.CompletedProcess(command, 0, "123\n")
+        assert command[3:7] == ["logcat", "-d", "--pid", "123"]
+        return subprocess.CompletedProcess(command, 0, "SocketTimeoutException request credential=private\n")
+
+    monkeypatch.setattr(subprocess, "run", read)
+    args = SimpleNamespace(task_detail=SimpleNamespace(task_id=42), node_name="request-error", box=[530, 330, 260, 25])
+    evidence.capture_request_error(args)
+    event_file, = tmp_path.glob("request-errors/*/request.json")
+    event = json.loads(event_file.read_text())
+    assert event["task_id"] == 42
+    assert event["node"] == "request-error"
+    assert event["transport_hints"]["timeout"] == 1
+    assert event["game_tcp_sockets"] == [
+        {"state": "ESTAB", "send_queue_bytes": 480, "peer_port": "19001", "retransmits": "6/0"},
+    ]
+    assert "credential" not in event_file.read_text()
+    assert "198.51.100" not in event_file.read_text()
+    with Image.open(event_file.with_name("popup.png")) as popup:
+        assert popup.size == (750, 395)
+        assert popup.getpixel((749, 394)) == (32, 32, 32)
 
 
 def test_report_does_not_invent_crash_pc(tmp_path):
