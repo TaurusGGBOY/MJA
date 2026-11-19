@@ -3,9 +3,11 @@
 from __future__ import annotations
 
 import getpass
+import io
 import json
 import logging
 import os
+import re
 import shutil
 import subprocess
 import time
@@ -14,6 +16,104 @@ from pathlib import Path
 
 LOG = logging.getLogger(__name__)
 PACKAGE = "com.hanjiasongshu.dr22"
+REQUEST_LOG_HINTS = {
+    "dns": re.compile(r"UnknownHostException|EAI_AGAIN|EAI_NONAME", re.I),
+    "timeout": re.compile(r"SocketTimeoutException|ETIMEDOUT|connection timed out", re.I),
+    "connection": re.compile(r"ECONNREFUSED|ECONNRESET|connection refused|connection reset", re.I),
+    "tls": re.compile(r"SSLHandshakeException|certificate verify failed|TLS handshake failed", re.I),
+    "http_5xx": re.compile(r"(?:HTTP/[0-9.]+ |HTTP status[ :]+)5[0-9]{2}\b", re.I),
+}
+
+
+def _container_game_tcp_evidence(container: str) -> list[dict]:
+    """Read the Redroid namespace's game sockets without saving peer addresses."""
+    pid = subprocess.run(
+        ["sudo", "-n", "docker", "inspect", "--format={{.State.Pid}}", "--", container],
+        capture_output=True, text=True, timeout=1, check=True,
+    ).stdout.strip()
+    if not pid.isdecimal() or int(pid) <= 1:
+        return []
+    sockets = subprocess.run(
+        ["sudo", "-n", "nsenter", "--target", pid, "--net", "ss", "-HOntiope"],
+        capture_output=True, text=True, timeout=1, check=True,
+    ).stdout.splitlines()
+    summaries = []
+    for line in sockets:
+        if PACKAGE[-15:] not in line:
+            continue
+        fields = line.split(maxsplit=5)
+        if len(fields) != 6 or not fields[2].isdecimal():
+            continue
+        retransmits = re.search(r"\bretrans:([\d/]+)", fields[5])
+        summaries.append({
+            "state": fields[0],
+            "send_queue_bytes": int(fields[2]),
+            "peer_port": fields[4].rsplit(":", 1)[-1],
+            "retransmits": retransmits[1] if retransmits else None,
+        })
+    return summaries
+
+
+def capture_request_error(argv) -> None:
+    """Preserve the recognized error and app transport hints before recovery."""
+    root = os.environ.get("MJA_DEBUG_DIR")
+    if not root:
+        return
+    try:
+        from PIL import Image
+
+        now = datetime.now(timezone.utc)
+        output = Path(root) / "request-errors" / now.strftime("%Y%m%dT%H%M%S%fZ")
+        output.mkdir(parents=True, mode=0o700, exist_ok=False)
+        event = {
+            "time_utc": now.isoformat(),
+            "task_id": getattr(getattr(argv, "task_detail", None), "task_id", None),
+            "node": argv.node_name,
+            "ocr_box": argv.box,
+        }
+        adb = os.environ.get("MJA_ANDROID_ADB")
+        serial = os.environ.get("MJA_ANDROID_SERIAL")
+        try:
+            if not adb or not serial:
+                raise ValueError("launcher did not supply ADB and serial")
+            prefix = [adb, "-s", serial]
+            screenshot = subprocess.run(
+                prefix + ["exec-out", "screencap", "-p"], capture_output=True, timeout=2, check=True,
+            )
+            with Image.open(io.BytesIO(screenshot.stdout)) as image:
+                # Crop to the centered modal so the account overlay and HUD are omitted.
+                width, height = image.size
+                image.crop((width * 260 // 1280, height * 165 // 720,
+                            width * 1010 // 1280, height * 560 // 720)).save(output / "popup.png")
+        except (OSError, ValueError, subprocess.SubprocessError) as error:
+            event["screenshot_error"] = type(error).__name__
+
+        if adb and serial:
+            try:
+                pid = subprocess.run(
+                    prefix + ["shell", "pidof", PACKAGE], capture_output=True, text=True, timeout=1,
+                ).stdout.strip().split()
+                if pid and pid[0].isdecimal():
+                    log = subprocess.run(
+                        prefix + ["logcat", "-d", "--pid", pid[0], "-t", "300", "-v", "epoch"],
+                        capture_output=True, text=True, timeout=1.5, check=True,
+                    ).stdout.splitlines()
+                    event["android_pid"] = int(pid[0])
+                    event["app_log_lines"] = len(log)
+                    event["transport_hints"] = {
+                        name: sum(bool(pattern.search(line)) for line in log)
+                        for name, pattern in REQUEST_LOG_HINTS.items()
+                    }
+            except (OSError, ValueError, subprocess.SubprocessError) as error:
+                event["app_log_error"] = type(error).__name__
+        if container := os.environ.get("MJA_ANDROID_CONTAINER"):
+            try:
+                event["game_tcp_sockets"] = _container_game_tcp_evidence(container)
+            except (OSError, ValueError, subprocess.SubprocessError) as error:
+                event["socket_error"] = type(error).__name__
+        (output / "request.json").write_text(json.dumps(event, ensure_ascii=False, default=str) + "\n")
+    except Exception:
+        LOG.warning("Could not preserve game request error", exc_info=True)
 
 
 def emit(event: str, **detail) -> None:

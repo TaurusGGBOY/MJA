@@ -13,7 +13,7 @@ from maa.agent.agent_server import AgentServer
 from maa.custom_action import CustomAction
 
 from agent.custom.support.controller_input import _wait_job
-from agent.custom.support.crash_evidence import capture, emit
+from agent.custom.support.crash_evidence import capture, capture_request_error, emit
 
 GAME_PACKAGE = "com.hanjiasongshu.dr22"
 GAME_ACTIVITY = "com.hanjiasongshu.dr22/.MainActivity"
@@ -146,6 +146,8 @@ class RestartGameSurface(CustomAction):
             if not callable(start_app) or (force_stop and not callable(stop_app)):
                 return False
 
+            if params.get("capture_request_error") is True:
+                capture_request_error(argv)
             capture("before_game_recovery", task_id=getattr(context, "task_id", None),
                     node=getattr(argv, "node_name", None), force_stop=force_stop)
             emit("game_recovery_requested", task_id=getattr(context, "task_id", None),

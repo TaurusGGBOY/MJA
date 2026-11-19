@@ -480,17 +480,42 @@
   },
   "1362-启动-游戏就绪": {
     "recognition": {
-      "type": "And",
+      "type": "Or",
       "param": {
-        "all_of": [
-          "0026-公共-游戏主页-页面"
+        "any_of": [
+          "0026-公共-游戏主页-页面",
+          "1596-MJA-影之遗迹-退出确认-文案"
         ],
         "box_index": 0
       }
     },
-    "timeout": 10000,
+    "timeout": 15000,
+    "action": "DoNothing",
+    "post_delay": 5000,
+    "max_hit": 50,
+    "next": [
+      "[JumpBack]1361-启动-可选关闭月签到奖励页",
+      "[JumpBack]启动-奖励弹窗-点击空白关闭",
+      "启动-游戏就绪复核"
+    ],
+    "on_error": [
+      "启动-等待游戏就绪"
+    ]
+  },
+  "启动-游戏就绪复核": {
+    "recognition": {
+      "type": "Or",
+      "param": {
+        "any_of": [
+          "0026-公共-游戏主页-页面",
+          "1596-MJA-影之遗迹-退出确认-文案"
+        ],
+        "box_index": 0
+      }
+    },
     "action": "Custom",
-    "custom_action": "RuntimeHealth"
+    "custom_action": "RuntimeHealth",
+    "max_hit": 50
   },
   "启动-奖励弹窗-点击空白关闭": {
     "recognition": "OCR",

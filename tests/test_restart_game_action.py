@@ -31,6 +31,17 @@ def test_evidence_and_intent_precede_force_stop(monkeypatch):
     assert events[:3] == [("capture",), ("game_recovery_requested",), ("stop", GAME_PACKAGE)]
 
 
+def test_request_capture_runs_before_restarting_the_game(monkeypatch):
+    events = []
+    monkeypatch.setattr(restart_game, "capture_request_error", lambda _: events.append(("popup",)))
+    monkeypatch.setattr(restart_game, "sleep", lambda *_: None)
+    args = FakeArgv(json.dumps({
+        "package": GAME_PACKAGE, "activity": GAME_ACTIVITY, "capture_request_error": True,
+    }))
+    assert restart_game.RestartGameSurface().run(_context(events), args)
+    assert events[:2] == [("popup",), ("stop", GAME_PACKAGE)]
+
+
 class FakeArgv:
     def __init__(self, custom_action_param: str) -> None:
         self.custom_action_param = custom_action_param

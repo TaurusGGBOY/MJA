@@ -244,7 +244,13 @@ def test_startup_confirms_the_single_public_home_boundary() -> None:
         "roi": PUBLIC_HOME_ROI,
         "action": "DoNothing",
     }
-    assert "next" not in _startup()["1362-启动-游戏就绪"]
+    startup = _startup()
+    ready = startup["1362-启动-游戏就绪"]
+    confirm = startup["启动-游戏就绪复核"]
+    assert ready["next"][-1] == "启动-游戏就绪复核"
+    assert confirm["recognition"] == ready["recognition"]
+    assert confirm["custom_action"] == "RuntimeHealth"
+    assert "next" not in confirm
 
 
 def test_startup_failures_are_stateless_native_failures() -> None:

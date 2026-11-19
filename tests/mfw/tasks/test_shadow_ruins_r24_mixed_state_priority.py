@@ -58,7 +58,6 @@ def test_r24_terminal_migration_keeps_original_node_set_and_explicit_failure() -
     for name in (
         "1180-影之遗迹-战斗未知结果-结果",
         "1216-影之遗迹-战斗-循环-耗尽",
-        "1221-影之遗迹-记录-失败",
     ):
         assert nodes[name] == {
             "recognition": "DirectHit",
@@ -66,3 +65,7 @@ def test_r24_terminal_migration_keeps_original_node_set_and_explicit_failure() -
             "custom_action": "FailTask",
             "Abort": True,
         }
+
+
+def test_active_failure_path_preserves_failure_after_home_cleanup():
+    assert _nodes()["1221-影之遗迹-记录-失败"]["next"] == ["MJA-公共-原生失败-返回主页"]
